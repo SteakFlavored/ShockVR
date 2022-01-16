@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		ResMake.c		Resource making
 //		Rex E. Bradford
@@ -24,10 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Revision 1.2  1994/06/16  11:08:04  rex
  * Modified LRU list handling, lock resource made with ResMake() instead of
  * setting RDF_NODROP flag
- * 
+ *
  * Revision 1.1  1994/02/17  11:23:57  rex
  * Initial revision
- * 
+ *
 */
 
 #include <string.h>
@@ -54,7 +54,7 @@ void ResMake(Id id, void *ptr, long size, uchar type, short filenum, uchar flags
 	Handle		resHdl;
 	ResDesc 	*prd;
 	Str255		resName;
-	
+
 	// Check for resource at that id.  If the handle exists, then just change the
 	// handle (adjusting for size if needed, of course).
 
@@ -73,9 +73,9 @@ void ResMake(Id id, void *ptr, long size, uchar type, short filenum, uchar flags
 		// Make a handle out of the data and add the resource.
 
 		UseResFile(filenum);							// Use the res file indicated.
-	
+
 		PtrToHand(ptr, &resHdl, size);			// Turn the pointer into a handle.
-		
+
 		resName[0] = 1;
 		if ((flags & RDF_LZW) == 0)				// Figure out the resource name.
 		{
@@ -94,13 +94,13 @@ void ResMake(Id id, void *ptr, long size, uchar type, short filenum, uchar flags
 		AddResource(resHdl, resMacTypes[type], id, resName);
 		if (ResError())
 			DebugStr("\pResMake: Can't add a resource.\n");
-	
+
 		ResExtendDesc(id);								//	Extend res desc table if need to
-	
+
 	//	Spew(DSRC_RES_Make, ("ResMake: making resource $%x\n", id));
-	
+
 		//	Add us to the soup, set lock so doesn't get swapped out
-	
+
 		prd->hdl = resHdl;
 		prd->filenum = filenum;
 		prd->lock = 1;
@@ -179,7 +179,7 @@ void ResAddRef(Ref ref, void *pitem, long itemSize)
 		prt = (RefTable *)*prd->hdl;
 	}
 	hdlSize = GetHandleSize(prd->hdl);
-	
+
 	//	If index within current range of compound resource, replace or insert
 
 	index = REFINDEX(ref);
@@ -192,7 +192,7 @@ void ResAddRef(Ref ref, void *pitem, long itemSize)
 		if (itemSize == oldSize)
 		{
 //			Spew(DSRC_RES_Make, ("ResAddRef: replacing same size ref\n"));
-			LG_memcpy(REFPTR(prt,index), pitem, itemSize);
+			memcpy(REFPTR(prt,index), pitem, itemSize);
 		}
 
 //	Else if new item smaller, reduce offsets, shift data, insert new data
@@ -205,9 +205,9 @@ void ResAddRef(Ref ref, void *pitem, long itemSize)
 			for (i = index + 1; i <= prt->numRefs; i++)
 				prt->offset[i] -= sizeDiff;
 			hdlSize -= sizeDiff;
-			LG_memmove(REFPTR(prt,index + 1), REFPTR(prt,index + 1) + sizeDiff,
+			memmove(REFPTR(prt,index + 1), REFPTR(prt,index + 1) + sizeDiff,
 				prt->offset[prt->numRefs] - prt->offset[index + 1]);
-			LG_memcpy(REFPTR(prt,index), pitem, itemSize);
+			memcpy(REFPTR(prt,index), pitem, itemSize);
 
 			HUnlock(prd->hdl);
 			SetHandleSize(prd->hdl, hdlSize);
@@ -225,12 +225,12 @@ void ResAddRef(Ref ref, void *pitem, long itemSize)
 			SetHandleSize(prd->hdl, hdlSize);
 			HLock(prd->hdl);
 			prt = (RefTable *)*prd->hdl;
-			
-			LG_memmove(REFPTR(prt, index + 1) + sizeDiff, REFPTR(prt, index + 1),
+
+			memmove(REFPTR(prt, index + 1) + sizeDiff, REFPTR(prt, index + 1),
 				prt->offset[prt->numRefs] - prt->offset[index + 1]);
 			for (i = index + 1; i <= prt->numRefs; i++)
 				prt->offset[i] += sizeDiff;
-			LG_memcpy(REFPTR(prt,index), pitem, itemSize);
+			memcpy(REFPTR(prt,index), pitem, itemSize);
 		}
 	}
 
@@ -252,7 +252,7 @@ void ResAddRef(Ref ref, void *pitem, long itemSize)
 
 		//	Shift data upwards to make room for new offset(s)
 
-		LG_memmove(REFPTR(prt,0) + sizeItemOffsets, REFPTR(prt,0),
+		memmove(REFPTR(prt,0) + sizeItemOffsets, REFPTR(prt,0),
 			hdlSize - REFTABLESIZE(index + 1));
 
 		//	Advance old offsets, set new ones
@@ -265,10 +265,10 @@ void ResAddRef(Ref ref, void *pitem, long itemSize)
 
 		//	Copy data into place, set new numRefs
 
-		LG_memcpy(REFPTR(prt,index), pitem, itemSize);
+		memcpy(REFPTR(prt,index), pitem, itemSize);
 		prt->numRefs = index + 1;
 	}
-	
+
 	HUnlock(prd->hdl);
 }
 
@@ -284,7 +284,7 @@ void ResAddRef(Ref ref, void *pitem, long itemSize)
 //		id = id of resource to unmake
 //	--------------------------------------------------------
 //  For Mac version: use ReleaseResource to free the handle (the pointer that
-//  the handle was made from will still be around).  
+//  the handle was made from will still be around).
 
 void ResUnmake(Id id)
 {
@@ -295,7 +295,7 @@ void ResUnmake(Id id)
 	{
 		ReleaseResource(prd->hdl);
 //		prd->hdl = NULL;
-//		LG_memset(prd, 0, sizeof(ResDesc));
+//		memset(prd, 0, sizeof(ResDesc));
 	}
 }
 

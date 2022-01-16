@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/trigger.c $
@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objcrit.h"
 #include "objgame.h"
 #include "objsim.h"
-#include "objstuff.h"  
+#include "objstuff.h"
 #include "objuse.h"
 #include "olhext.h"
 #include "otrip.h"
@@ -89,8 +89,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-// As far as I can tell, these NEVER GET USED.  So I thought I'd move them out of the file 
-// to remove a dependency problem. 
+// As far as I can tell, these NEVER GET USED.  So I thought I'd move them out of the file
+// to remove a dependency problem.
 
 #define TRAP_NULL_CODE        0
 #define TRAP_TELEPORT_CODE    1
@@ -244,7 +244,7 @@ bool comparator_check(int comparator, ObjID obj, uchar *special_code)
    {
       cval = qdata_get(0x1000 | (comparator & 0xFFF)); // QUESTVAR_GET(comparator & 0xFFF);
    }
-   else 
+   else
       cval = (QUESTBIT_GET(comparator & 0xFFF) != 0);
    switch ((comparator & 0xE000) >> 13)
    {
@@ -274,7 +274,7 @@ bool comparator_check(int comparator, ObjID obj, uchar *special_code)
 #endif
       }
    }
-   
+
    return(truthval);
 }
 
@@ -309,8 +309,8 @@ errtype trigger_check_destroyed(ObjID id)
    errtype retval = OK;
    if ((objs[id].obclass == CLASS_FIXTURE) && (objs[id].subclass == FIXTURE_SUBCLASS_CYBER))
       retval = trap_activate(id, trap_use_message);
-   return(retval);             
-}   
+   return(retval);
+}
 
 errtype location_trigger_activate(ObjID id)
 {
@@ -340,7 +340,7 @@ errtype trap_transmogrify_func(int p1, int p2, int, int)
 {
    extern void slam_posture_meter_state(void);
    int source,dest,t1,t2;
-   
+
    if (!objs[p1].active)
    {
       return(ERR_NOEFFECT);
@@ -493,7 +493,7 @@ errtype trap_monster_func(int p1, int p2, int p3, int p4)
 
          tiletype=me_tiletype(pme);
          room=MAP_HEIGHTS-me_height_ceil(pme)-me_height_flr(pme);
-         
+
          if(tiletype>=TILE_SLOPEUP_N && tiletype<=TILE_SLOPECV_SW) {
             if(me_bits_mirror(pme)==MAP_FFLAT)
                room-=me_param(pme);
@@ -602,7 +602,7 @@ errtype trap_ai_func(int p1, int p2, int p3, int p4)
    ObjSpecID osid;
    ObjRefID oref;
    ObjID oid,o1,o2;
-                             
+
    if (p1 & 0x40000)
    {
       if ((objs[p1 & 0xFFFF].active) && (objs[p1 & 0xFFFF].obclass == CLASS_CRITTER))
@@ -697,7 +697,7 @@ errtype trap_scheduler_func(int p1, int p2, int p3, int p4)
    TrapSchedEvent new_event;
    uint *p;
 
-   if ((p3 >= 0xFFFF) || 
+   if ((p3 >= 0xFFFF) ||
        ((p3 > 0x1000) && (QUESTBIT_GET(p3 & 0xFFF))) ||
        ((p3 < 0x1000) && (p3 > 0)))
    {
@@ -913,7 +913,7 @@ errtype trap_lighting_func(bool floor, int p1, int p2, int p3, int p4)
          if (p3 != LIGHT_PLAIN_ALT)
             targ2 -= ((targ2 - otarg2) * (NUM_LIGHT_STEPS - num_steps) / NUM_LIGHT_STEPS);
      }
- 
+
       // Now go and crank through it...
       switch (p3)
       {
@@ -979,7 +979,7 @@ errtype trap_lighting_func(bool floor, int p1, int p2, int p3, int p4)
                   newval = 0;
                me_templight_ceil_set(pme, newval);
 #endif
-               me_templight_ceil_set(pme, setme);   
+               me_templight_ceil_set(pme, setme);
             }
             if (p3==LIGHT_EW_SMOOTH) {
                if (i == x2-1)
@@ -1015,11 +1015,11 @@ errtype trap_damage_func(int p1, int p2, int p3, int p4)
    dval = qdata_get(p1);
    if (dval > 0)
       damage_object(PLAYER_OBJ, EXPLOSION_TYPE, dval, 0);
-  
+
    dval = qdata_get(p2 & 0xFFFF);
    if (!(p2 & 0x10000))
       damage_object(PLAYER_OBJ, dval, p2 >> 24, 0x01);
-   else 
+   else
       player_struct.hit_points = min((short)player_struct.hit_points + dval, PLAYER_MAX_HP);
 
    dval = qdata_get(p3 & 0xFFFF);
@@ -1063,7 +1063,7 @@ errtype trap_sfx_func(int p1, int p2, int p3, int p4)
 
    switch(wacky)
    {
-      // Power Surge effect 
+      // Power Surge effect
       case 1:
          if (fr_surge_time == 0)
          {
@@ -1081,7 +1081,7 @@ errtype trap_sfx_func(int p1, int p2, int p3, int p4)
          fr_sfx_time = CIT_CYCLE * 4;  // 4 seconds of shake
          break;
 
-      // Fake endgame 
+      // Fake endgame
       case 3:
          {
             extern void physics_zero_all_controls();
@@ -1149,7 +1149,7 @@ errtype trap_create_obj_func(int p1, int p2, int p3, int p4)
    {
       return(ERR_NOEFFECT);
    }
-   
+
    // We are okay to go, so clone the darned thing
    if ((p1 > 0xFFFF) && !(p1 & 0x10000000))
       new_id = oid;
@@ -1191,16 +1191,16 @@ errtype trap_questbit_func(int p1, int p2, int p3, int p4)
 
    if ((p1 & 0xF000) == 0)
       p1 |= 0x2000;
-   
+
    if (p1 == 0x2091)					// KLC - special hack for auto shutoff of on-line help.
    {
        olh_active = FALSE;				// KLC - this is kept in a global now.
-       
+
        gShockPrefs.goOnScreenHelp = FALSE;		// Yeah, got to update this one too and
        SavePrefs(kPrefsResID);						// save the prefs out to disk.
        return (OK);
    }
-   
+
    if (p1 & 0x2000)
    {
       switch(qarg)
@@ -1406,10 +1406,10 @@ errtype trap_instance_func(int p1, int p2, int p3, int p4)
 void animate_callback_func(ObjID id, void *user_data)
 {
    int p3;
-   
+
    p3 = (int)user_data;
 
-   if(BIT_SET(p3,17)) 
+   if(BIT_SET(p3,17))
       do_multi_stuff(p3&0x7FFF);
    else
       real_animate_func(id,0,p3,0);
@@ -1480,7 +1480,7 @@ void hack_shodan_conquer_func(char)
    extern char thresh_fail;
    extern bool shodan_phase_in(uchar *bitmask, short x, short y, short w, short h, short num, bool dir);
    shodan_bitmask = tmap_static_mem;
-   LG_memset(shodan_bitmask, 0, SHODAN_BITMASK_SIZE / 8);
+   memset(shodan_bitmask, 0, SHODAN_BITMASK_SIZE / 8);
    shodan_draw_fs.bits = tmap_static_mem + (SHODAN_BITMASK_SIZE / 8);
    shodan_draw_normal.bits = shodan_draw_fs.bits + (320 * 200);
    load_res_bitmap(&shodan_draw_fs, SHODAN_FULLSCRN_CONQUER_REF, FALSE);
@@ -1511,7 +1511,7 @@ void hack_armageddon_func(int otrip, int x0, int y0, int r)
             // on each obj
             oid = objRefs[oref].obj;
             if ((objs[oid].ref == oref) && (objs[oid].obclass == CLASS_CRITTER)) {
-               if(ID2TRIP(oid)==otrip) 
+               if(ID2TRIP(oid)==otrip)
                   ADD_DESTROYED_OBJECT(oid);
             }
             oref = objRefs[oref].next;
@@ -1706,7 +1706,7 @@ errtype trap_hack_func(int p1, int p2, int p3, int p4)
       case REACTOR_DIGIT_HACK:
          if(objs[p2].obclass==CLASS_BIGSTUFF) {
             uint combo;
-            
+
             combo=(QUESTVAR_GET(REACTOR_COMBO_QVAR)<<12)|
                (QUESTVAR_GET(REACTOR_COMBO_QVAR+1));
 
@@ -1898,7 +1898,7 @@ errtype do_destroy(int victim_data)
    ObjID victim;
 
    victim = qdata_get(victim_data);
-         
+
    if (victim != OBJ_NULL)
       ADD_DESTROYED_OBJECT(victim);
    return(OK);
@@ -2009,7 +2009,7 @@ errtype trap_teleport_func(int targ_x, int targ_y, int targ_z, int targlevel)
    ObjLoc newloc;
    errtype errcode = OK;
    bool to_cyber = FALSE;
-   
+
    if (targlevel >= 0x1000)
       targlevel = player_struct.level;
 
@@ -2018,7 +2018,7 @@ errtype trap_teleport_func(int targ_x, int targ_y, int targ_z, int targlevel)
    {
       to_cyber = go_to_different_level(targlevel);
    }
-   if (errcode == OK) 
+   if (errcode == OK)
    {
       newloc = objs[PLAYER_OBJ].loc;
       if (targ_x < 0x4000)
@@ -2194,7 +2194,7 @@ bool trap_activate(ObjID id, bool *use_message)
       p2 = objTraps[objs[id].specID].p2;
       p3 = objTraps[objs[id].specID].p3;
       p4 = objTraps[objs[id].specID].p4;
-      break;                         
+      break;
    case CLASS_FIXTURE:
       traptype = objFixtures[objs[id].specID].trap_type;
       destroy_count_ptr = &(objFixtures[objs[id].specID].destroy_count);
@@ -2271,7 +2271,7 @@ errtype check_entrance_triggers(uchar old_x, uchar old_y, uchar new_x, uchar new
    uchar trap_x, trap_y;
    uchar rad;
    bool invert, in_rad_before, in_rad_now;
-  
+
    osid = objTraps[0].id;
    while (osid != OBJ_SPEC_NULL)
    {
@@ -2315,7 +2315,7 @@ errtype check_entrance_triggers(uchar old_x, uchar old_y, uchar new_x, uchar new
       }
       osid = objTraps[osid].next;
    }
-   return(OK);   
+   return(OK);
 }
 
 

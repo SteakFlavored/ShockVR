@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/init.c $
@@ -200,11 +200,11 @@ bool pause_for_input(ulong wait_time)
 		for (int i = 0; i < 4; i++)
 			if (theKeys[i] != 0)
 				gotInput = TRUE;
-		
+
 		if (Button())
 			gotInput = TRUE;
 	}
-	
+
 	// return if we got input
 	return(gotInput);
 }
@@ -275,7 +275,7 @@ void init_all(void)
    }
 */
 //   Spew(DSRC_SYSTEM_Memory, ("initial memory: %d\n",start_mem));
-/* 
+/*
    dofault = !config_get_raw(CFG_NOFAULT_VAR,NULL,0);
    DBG(DSRC_SYSTEM_FaultDisable,{ dofault = FALSE;});
    if (dofault)
@@ -311,7 +311,7 @@ void init_all(void)
    gr_set_mode(GRM_640x480x8, TRUE);
    cit_screen = gr_alloc_screen(grd_cap->w, grd_cap->h);
    gr_set_screen(cit_screen);
-   
+
    // set up low detail=clut lit always.
    gr_set_per_detail_level_param(3,4,16*FIX_UNIT,GR_LOW_PER_DETAIL);
 
@@ -345,7 +345,7 @@ void init_all(void)
 
 	// Initialize the palette effects (for fades and color cycling)
 	palfx_init();
-	
+
 	// Initialize animation callbacks
 	{
 		extern void init_animlist();
@@ -364,7 +364,7 @@ void init_all(void)
 	if (pal_fx_on)
 	{
 		uchar 	savep[768];
-		
+
 		mac_get_pal(0, 256, savep);
 		gr_set_pal(0, 256, savep);
 		palfx_fade_down();
@@ -375,9 +375,9 @@ void init_all(void)
 	fullscreen_init();
    amap_init();
 	init_side_icon_popups();	// KLC - new call.
-	
+
 	init_input();						// KLC - moved here, after uiInit (in screen_init)
-	
+
 	uiHideMouse(NULL);			// KLC - added to hide mouse cursor
 
    view360_init();
@@ -386,7 +386,7 @@ void init_all(void)
 	// Put up splash screen for US!
 	uiFlush();
 	DrawSplashScreen(9002, TRUE);
-	
+
 	// Set the wait time for our screen
 	pause_time = TickCount();
 	if (!speed_splash)
@@ -437,7 +437,7 @@ void init_all(void)
 
 	// Preload and lock resources that are used often in the game.
 	PreloadGameResources();
-	
+
 	// set the wait time for system shock title screen
 	pause_time = TickCount();
 	if (!speed_splash)
@@ -449,7 +449,7 @@ void init_all(void)
    {
 
 //¥¥¥¥¥ for now      object_data_load();
-      
+
 //¥¥¥      gr_clear(0xFF);
 //¥¥¥      gr_set_pal(0, 256, ppall);
    }
@@ -480,7 +480,7 @@ void DrawSplashScreen(short id, Boolean fadeIn)
 	extern byte palfx_start_fade_up(uchar *new_pal);
 
 	// First, clear the screen and load in the color table for this picture.
-	
+
 	gr_clear(0xFF);
 	ctab = GetCTable(id);														// Get the pict's CLUT
 	if (ctab)
@@ -489,7 +489,7 @@ void DrawSplashScreen(short id, Boolean fadeIn)
 		SetEntries(0, 255, (**(gMainColorHand)).ctTable);
 		ResetCTSeed();
 		DisposCTable(ctab);
-		
+
 #ifdef DO_FADES
 		if (fadeIn)																	// Get it in a form for palette fade
 		{
@@ -498,14 +498,14 @@ void DrawSplashScreen(short id, Boolean fadeIn)
 		}
 #endif
 		LoadPictShockBitmap(&gMainOffScreen, id);
-			
+
 #ifdef DO_FADES
 		if (fadeIn)
 			pal_id = palfx_start_fade_up(savep);
 #endif
 		gr_init_bm(&bits, (uchar *)gMainOffScreen.Address, BMT_FLAT8, 0, 640, 480);
 		gr_bitmap(&bits, 0, 0);
-		
+
 #ifdef DO_FADES
 		if (fadeIn)
 			finish_pal_effect(pal_id);
@@ -517,13 +517,13 @@ void PreloadGameResources(void)
 {
 	// Images
 	ResLockHi(RES_gamescrGfx);
-	
+
 	// Fonts
 	ResLockHi(RES_tinyTechFont);
 	ResLockHi(RES_doubleTinyTechFont);
 	ResLockHi(RES_citadelFont);
 	ResLockHi(RES_mediumLEDFont);
-	
+
 	// Strings
 	ResLockHi(RES_objlongnames);
 	ResLockHi(RES_traps);
@@ -579,8 +579,8 @@ errtype object_data_load(void)
 	AdvanceProgress();
 	obj_init();
 
-   // initialize player struct 
-	if (clear_player_data) 
+   // initialize player struct
+	if (clear_player_data)
 		init_player(&player_struct);
 	clear_player_data = TRUE;
 	AdvanceProgress();
@@ -613,7 +613,7 @@ errtype object_data_load(void)
    return(OK);
 }
 
-#ifdef DUMMY	///¥¥¥¥ 
+#ifdef DUMMY	///¥¥¥¥
 
 errtype init_kb()
 {
@@ -642,7 +642,7 @@ errtype load_da_palette()
 {
 	int 		pal_file;
 	FSSpec	fSpec;
-	
+
 	FSMakeFSSpec(gCDDataVref, gCDDataDirID, "\pgamepal.rsrc", &fSpec);
 	pal_file = ResOpenFile(&fSpec);
 	if (pal_file < 0)
@@ -657,21 +657,21 @@ errtype init_pal_fx()
 {
 	int i;
 	Handle	ipalHdl;
-	
+
 	i=1;
-	
+
 	gr_clear(0xFF);
-	
+
 	// Initialize the palette
 	load_da_palette();
-	
+
 	// if we arent doing tlucs from a file
 	gr_alloc_tluc8_spoly_table(16);
-	
+
 	// alloc ipal after the above - since we free ipal earlier
 	// prevents fragmenting a bit
 	ipalHdl = shock_alloc_ipal();
-	
+
 	for (i=0; i<16; i++)
 		gr_init_tluc8_spoly_table(i,fix_make(0,0xe000),fix_make(0,0x8000),
 						gr_bind_rgb(255,64,64),gr_bind_rgb(127+(i<<3), 127+(i<<3), 127+(i<<3)));
@@ -711,13 +711,13 @@ errtype init_pal_fx()
    _g3d_enable_blend = (start_mem >= BLEND_THRESHOLD);
    if (_g3d_enable_blend)
    {
-      LG_memcpy(tmppal_lower,ppall,32*3);
-      LG_memset(ppall,0,32*3);
+      memcpy(tmppal_lower,ppall,32*3);
+      memset(ppall,0,32*3);
       gr_set_pal(0, 256, ppall);
 
-      gr_init_blend(1);                // we want 2 tables, really, basically, and all 
+      gr_init_blend(1);                // we want 2 tables, really, basically, and all
 
-      LG_memcpy(ppall,tmppal_lower,32*3);
+      memcpy(ppall,tmppal_lower,32*3);
       gr_set_pal(0, 256, ppall);
    }
 }
@@ -733,14 +733,14 @@ errtype init_pal_fx()
 Handle shock_alloc_ipal()
 {
 	Handle temp;
-	
+
 	temp = GetResource('ipal',1000);
 	if (!temp)
 		return(NULL);
-	
+
 	HLockHi(temp);
 	grd_ipal = (uchar *) *temp;
-	
+
 	return(temp);
 }
 
@@ -748,13 +748,13 @@ Handle shock_alloc_ipal()
 errtype init_gamesys()
 {
 	extern void game_sched_init(void);
-	
+
 	// Load data for weapons, drugs, wares
 	drugs_init();
      init_all_side_icons();
 	//KLC wares_init();						doesn't do anything.  leave it out.
 	game_sched_init();
-	
+
 	return(OK);
 }
 
@@ -788,32 +788,32 @@ errtype obj_3d_shutdown()
 errtype init_load_resources()
 {
 	FSSpec	fSpec;
-	
-	// Open the screen resource stuff  
+
+	// Open the screen resource stuff
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pgamescr.rsrc", &fSpec);
 	if (ResOpenFile(&fSpec) < 0)
 		critical_error(CRITERR_RES|1);
-	
+
 	// Open the appropriate mfd art file
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pmfdart.rsrc", &fSpec);
-	if ((mfdart_res_file=ResOpenFile(&fSpec)) < 0) 
+	if ((mfdart_res_file=ResOpenFile(&fSpec)) < 0)
 		critical_error(CRITERR_RES|2);
-	
+
 	// Open the 3d objects
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pobj3d.rsrc", &fSpec);
 	if (ResOpenFile(&fSpec) < 0)
 		critical_error(CRITERR_RES|9);
-	
+
 	// Open the Citadel materials file
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pcitmat.rsrc", &fSpec);
 	if (ResOpenFile(&fSpec) < 0)
 		critical_error(CRITERR_RES|9);
-	
+
 	// Open the Digital sound FX file
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pdigifx.rsrc", &fSpec);
 	if (ResOpenFile(&fSpec) < 0)
 		critical_error(CRITERR_RES|9);
-	
+
 	return(OK);
 }
 

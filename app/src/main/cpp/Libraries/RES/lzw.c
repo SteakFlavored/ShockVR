@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		LZW.C		New improved super-duper LZW compressor & decompressor
 //		This module by Greg Travis and Rex Bradford
@@ -338,7 +338,7 @@ long LzwCompress(
 //	Set up for compress loop
 
 	lzwc.next_code = 256;             // skip over real 256 char values
-	LG_memset(lzwCodeValue, -1, sizeof(short) * LZW_TABLE_SIZE);
+	memset(lzwCodeValue, -1, sizeof(short) * LZW_TABLE_SIZE);
 
 	lzwc.lzwOutputSize = 0;
 	lzwc.lzwOutputBitCount = 0;
@@ -389,7 +389,7 @@ long LzwCompress(
 				{
 				LzwOutputCode(lzwc.string_code);
 				LzwOutputCode(FLUSH_CODE);
-				LG_memset(lzwCodeValue, -1, sizeof(short) * LZW_TABLE_SIZE);
+				memset(lzwCodeValue, -1, sizeof(short) * LZW_TABLE_SIZE);
 			   lzwc.string_code = lzwc.character;
 				lzwc.next_code = 256;
 				}

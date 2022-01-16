@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/wrapper.c $
@@ -190,7 +190,7 @@ typedef struct {
 // when the value changes, and is passed the new value.  The value is
 // updated continuously if smooth==TRUE; otherwise it is updated upon
 // mouse-up.
-// 
+//
 typedef struct {
    uchar color;
    uchar bvalcol;
@@ -258,7 +258,7 @@ typedef struct {
 // selecting and editing one.  A mask may be provided of what entries
 // on the list are valid candidates for selection, and a string resource
 // is given to display in the place of uninitialized selections.  Different
-// colors are provided for selectable text, currently selected text, 
+// colors are provided for selectable text, currently selected text,
 // and non-selectable text.  Note that the user is responsible for
 // providing space for one more line of text than the widget uses, for
 // the purposes of saving string information.
@@ -293,7 +293,7 @@ typedef struct {
 // to any keyboard events which actually reach them by calling their function
 // with their button id as an argument.  Thus, any keypress which is not
 // handled by another gadget is taken by the slorker.
-//                                                                                
+//
 typedef bool (*slorker)(uchar butid);
 
 #define OPT_SLIDER_BAR REF_IMG_BeamSetting
@@ -409,7 +409,7 @@ void slider_draw_func(uchar butid)
 
    gr_set_fcolor(st->color);
    ss_box(BR(butid).ul.x,BR(butid).ul.y,BR(butid).lr.x,BR(butid).lr.y);
-   
+
    if(!(st->active))
       draw_raw_resource_bm(OPT_SLIDER_BAR,BR(butid).ul.x+st->sliderpos+1-sw/2,BR(butid).ul.y);
 
@@ -423,7 +423,7 @@ void slider_deal(uchar butid, bool deal)
 {
    opt_slider_state* st=(opt_slider_state*)&(OButtons[butid].user);
    uint val;
-   
+
    deal=deal||st->smooth;
 
    val=(st->sliderpos*st->maxval)/(BR(butid).lr.x-BR(butid).ul.x-3);
@@ -507,7 +507,7 @@ void slider_init(uchar butid, Ref descrip, uchar type, bool smooth, void* var, u
    st->dealfunc=dealfunc;
    st->curval=var;
    st->smooth=smooth;
-   
+
    OButtons[butid].evmask=UI_EVENT_MOUSE|UI_EVENT_MOUSE_MOVE;
    OButtons[butid].drawfunc=slider_draw_func;
    OButtons[butid].handler=slider_handler;
@@ -594,7 +594,7 @@ void textwidget_init(uchar butid, uchar color, Ref descrip, Rect* r)
    OButtons[butid].handler=NULL;
    OButtons[butid].evmask=0;
 }
-   
+
 // a keywidget is just like a pushbutton, but invisible.
 //
 void keywidget_init(uchar butid, uchar keyeq, void (*pushfunc)(uchar butid))
@@ -686,7 +686,7 @@ bool multi_handler(uiEvent* ev, uchar butid)
    }
    else if (ev->type==UI_EVENT_KBD_COOKED) {
       uiCookedKeyEvent* kev=(uiCookedKeyEvent*)ev;
-      
+
       if(tolower(kev->code & 0xFF)==((opt_multi_state*)(&OButtons[butid].user))->keyeq) {
          if(isupper(kev->code & 0xFF))
             delta=st->num_opts-1;
@@ -742,13 +742,13 @@ bool keyslork_handler(uiEvent* ev, uchar butid)
 
 void slork_init(uchar butid, bool (*slork)(short code))
 {
-   LG_memset(&OButtons[butid].rect,0,sizeof(Rect));
+   memset(&OButtons[butid].rect,0,sizeof(Rect));
    *((slorker*)&(OButtons[butid].user))=slork;
    OButtons[butid].evmask=UI_EVENT_KBD_COOKED;
    OButtons[butid].drawfunc=NULL;
    OButtons[butid].handler=keyslork_handler;
 }
- 
+
 char* textlist_string(opt_textlist_state* st, int ind)
 {
    return(st->text+ind*(st->blocksiz));
@@ -929,7 +929,7 @@ bool textlist_handler(uiEvent* ev, uchar butid)
          }
          st->modified = TRUE;
          return TRUE;
-      }        
+      }
       switch(keycode) {
          case KEY_BS:
             if(st->editable && cur>=0) {
@@ -1084,7 +1084,7 @@ void clear_obuttons()
    uiGetSlabCursorStack(uiCurrentSlab,&cs);
    uiPopCursorEvery(cs,&slider_cursor);
    mouse_unconstrain();
-   LG_memset(OButtons,0,MAX_OPTION_BUTTONS*sizeof(opt_button));
+   memset(OButtons,0,MAX_OPTION_BUTTONS*sizeof(opt_button));
 }
 
 void opanel_redraw(bool back)
@@ -1202,9 +1202,9 @@ bool can_save()
    bool gp=game_paused;
    if (global_fullmap->cyber)
    {
-      // spoof the game as not being paused so that the message won't go to the 
+      // spoof the game as not being paused so that the message won't go to the
       // phantom message line in full screen mode, where it will stay only for a frame.
-      game_paused=FALSE;              
+      game_paused=FALSE;
       string_message_info(REF_STR_NoCyberSave);
       game_paused=gp;
       return(FALSE);
@@ -1289,14 +1289,14 @@ void wrapper_init(void)
    Rect r;
    int i;
    char* keyequivs;
-   
+
    keyequivs=get_temp_string(REF_STR_KeyEquivs0);
 
    clear_obuttons();
    for(i=0;i<8;i++) {
       standard_button_rect(&r,i,2,3,5);
       pushbutton_init(i,keyequivs[i],REF_STR_WrapperText+i,wrapper_pushbutton_func,&r);
-   }   
+   }
    if(!music_card && !sfx_card) {
       dim_pushbutton(AUDIO_BUTTON);
    }
@@ -1307,7 +1307,7 @@ void wrapper_init(void)
    opanel_redraw(TRUE);
 }
 
-// 
+//
 // THE VERIFY SCREEN: Initialization, handlers
 //
 
@@ -1344,7 +1344,7 @@ void verify_screen_init(void (*verify)(uchar butid), slorker slork)
 
    standard_button_rect(&r,1,2,2,5);
    pushbutton_init(0,tolower(get_temp_string(REF_STR_VerifyText)[0]),REF_STR_VerifyText,verify,&r);
-   
+
    standard_button_rect(&r,4,2,2,5);
    pushbutton_init(1,0,tolower(REF_STR_VerifyText+1),slork,&r);
 
@@ -1614,7 +1614,7 @@ void language_change(uchar lang)
    mfdart_res_file=ResOpenFile(mfdart_files[lang]);
    if(mfdart_res_file<0)
       critical_error(CRITERR_RES|2);
-   
+
    string_res_file=ResOpenFile(language_files[lang]);
    if(string_res_file<0)
       critical_error(CRITERR_RES|0);
@@ -1981,7 +1981,7 @@ void screenmode_screen_init(void)
    keys=get_temp_string(REF_STR_KeyEquivs4);
 
    clear_obuttons();
-   
+
    for (i=0; i < 4; i++)
    {
       extern short svga_mode_data[];
@@ -2152,7 +2152,7 @@ void wrapper_start(void (*init)(void))
    wrapper_panel_on = TRUE;
    suspend_game_time();
    opt_font=(grs_font*)ResLock(OPTIONS_FONT);
-#ifndef STATIC_BUTTON_STORE 
+#ifndef STATIC_BUTTON_STORE
    OButtons=(opt_button*)(_offscreen_mfd.bm.bits);
    fv=full_visible;
    full_visible=0;
@@ -2309,7 +2309,7 @@ void free_options_cursor(void)
 }
 
 errtype wrapper_create_mouse_region(Region* root)
-{ 
+{
    errtype err;
    int id;
    Rect r = { { 0, 0}, {STATUS_X,STATUS_HEIGHT}};

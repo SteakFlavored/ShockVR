@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		Res.C		Resource Manager primary access routines
 //		Rex E. Bradford (REX)
@@ -25,13 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: res.c $
  * Revision 1.24  1994/07/15  18:19:33  xemu
  * added ResShrinkResDescTable
- * 
+ *
  * Revision 1.23  1994/05/26  13:51:55  rex
  * Added ResInstallPager(ResDefaultPager) to ResInit()
- * 
+ *
  * Revision 1.22  1994/02/17  11:24:51  rex
  * Moved most funcs out into other .c files
- * 
+ *
 */
 
 //#include <io.h>
@@ -86,7 +86,7 @@ void ResInit()
 	gResDesc = (ResDesc *)NewPtrClear( (DEFAULT_RESMAX + 1) * sizeof(ResDesc) );
 	if (MemError())
 		DebugStr("\pResInit: Can't allocate the global resource descriptor table.\n");
-	
+
 //	gResDesc[ID_HEAD].prev = 0;
 //	gResDesc[ID_HEAD].next = ID_TAIL;
 //	gResDesc[ID_TAIL].prev = ID_HEAD;
@@ -172,7 +172,7 @@ long ResSize(Id id)
 			return (MaxSizeRsrc(prd->hdl));		// else return the res map size.
 	}
 	else
-		return (MaxSizeRsrc(prd->hdl));			// For normal resources, 
+		return (MaxSizeRsrc(prd->hdl));			// For normal resources,
 }																	// return the res map size.
 
 //	---------------------------------------------------------
@@ -212,7 +212,7 @@ void ResGrowResDescTable(Id id)
 		BlockMove(gResDesc, growPtr, currAmt * sizeof(ResDesc));
 		DisposePtr((Ptr)gResDesc);
 		gResDesc = (ResDesc *)growPtr;
-		LG_memset(gResDesc + currAmt, 0, (newAmt - currAmt) * sizeof(ResDesc));
+		memset(gResDesc + currAmt, 0, (newAmt - currAmt) * sizeof(ResDesc));
 		resDescMax = newAmt - 1;
 
 //	Grow cumulative stats table too

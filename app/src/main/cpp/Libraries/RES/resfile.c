@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		ResFile.C		Resource Manager file access
 //		Rex E. Bradford (REX)
@@ -23,13 +23,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: resfile.c $
  * Revision 1.3  1994/08/07  20:17:31  xemu
  * generate a warning on resource collision
- * 
+ *
  * Revision 1.2  1994/06/16  11:07:04  rex
  * Added item to tail of LRU when loadonopen
- * 
+ *
  * Revision 1.1  1994/02/17  11:23:23  rex
  * Initial revision
- * 
+ *
 */
 
 //#include <fcntl.h>
@@ -133,7 +133,7 @@ short ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool /*auxinfo*/)
 			}
 		}
 	}
-		
+
 	//	If create mode, or edit/create failed, try to create the file.
 
 	if (mode == ROM_CREATE)
@@ -142,7 +142,7 @@ short ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool /*auxinfo*/)
 		fd = FSpGetFInfo(specPtr, &fi);
 		if (fd == noErr)
 			FSpDelete(specPtr);
-		
+
 		// Create the file.
 		FSpCreateResFile(specPtr, 'Shok', 'Sgam', nil);
 		fd = ResError();
@@ -154,7 +154,7 @@ short ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool /*auxinfo*/)
 	}
 
 	// Finally, open the thang.
-	
+
 	if (mode == ROM_READ)
 		perm = fsRdPerm;
 	else
@@ -165,26 +165,26 @@ short ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool /*auxinfo*/)
 		DebugStr("\pResOpenResFile: Can't open file.\n");
 		return(-2);
 	}
-	
+
 	// Read in resource map info into the array of resource descriptions
 
 	numTypes =  Count1Types();
 	for (ti = 1; ti <= numTypes; ti++)
 	{
 		Get1IndType(&aResType, ti);
-		
+
 		numRes = Count1Resources(aResType);
 		SetResLoad(false);
 		for (ri = 1; ri <= numRes; ri++)
 		{
 			resHdl = Get1IndResource(aResType, ri);
 			GetResInfo(resHdl, &resID, &aResType, resName);
-			
+
 			AddResDesc(resHdl, resID, aResType, filenum, resName[1]);
 		}
 		SetResLoad(true);
 	}
-	
+
 	return(filenum);
 }
 
@@ -214,7 +214,7 @@ void AddResDesc(Handle resHdl, short resID, ResType macResType, short filenum, c
 	}
 
 	// Set the flags based on the cFlag character.
-	
+
 	switch (cFlag)
 	{
 		case 'c':
@@ -226,12 +226,12 @@ void AddResDesc(Handle resHdl, short resID, ResType macResType, short filenum, c
 		case 'x':
 			flags = RDF_COMPOUND | RDF_LZW;
 			break;
-	}	
+	}
 
 	for (ind = 0; ind < NUM_RESTYPENAMES; ind++)	// Find associated Shock type.
 		if (resMacTypes[ind] == macResType)
 			break;
-	
+
 	prd->hdl = resHdl;								// Fill in resource descriptor
 	prd->filenum = filenum;
 	prd->lock = 0;
@@ -264,16 +264,16 @@ void ResCloseFile(short filenum)
 	ResDesc	*prd;
 
 	CloseResFile(filenum);
-	
+
 	// Since CloseResFile free all the resource handles associated with that
 	// file, all we have to do is zero the refs in our ResDesc array for the
 	// associated file.
-	
+
 	for (id = ID_MIN; id <= resDescMax; id++)
 	{
 		prd = RESDESC(id);
 		if (prd->filenum == filenum)
-			LG_memset(prd, 0, sizeof(ResDesc));
+			memset(prd, 0, sizeof(ResDesc));
 	}
 /*
 //	Make sure file is open
@@ -339,7 +339,7 @@ void ResWriteDir(short filenum)
 			numRes++;
 	}
 
-	// Fill in the table and write it out.	
+	// Fill in the table and write it out.
 	tableHdl = NewHandle(numRes * sizeof(ResDirEntry));
 	HLock(tableHdl);
 	rdePtr = (ResDirEntry *)*tableHdl;
@@ -351,7 +351,7 @@ void ResWriteDir(short filenum)
 			rdePtr->id = id;
 			rdePtr->flags = prd->flags;
 			rdePtr->type = prd->type;
-			
+
 			rdePtr++;
 		}
 	}

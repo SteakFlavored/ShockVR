@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/tluctab.c $
@@ -27,20 +27,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: tluctab.c $
  * Revision 1.6  1994/01/17  22:13:15  baf
  * Redid tluc8 spolys (again).
- * 
+ *
  * Revision 1.5  1994/01/14  12:41:09  baf
  * Lit translucency reform.
- * 
+ *
  * Revision 1.4  1993/12/09  17:39:23  baf
  * Added lighting
- * 
+ *
  * Revision 1.3  1993/11/29  20:32:03  baf
  * General revisions and tidying/up of translucency
  * and shading routines
- * 
+ *
  * Revision 1.2  1993/11/15  15:01:27  baf
  * Added this RCS header
- * 
+ *
  *
  */
 
@@ -83,11 +83,11 @@ it will look brown, which is probably what you want.
 #include "tluctab.h"
 #include "lg.h"
 
-// convert red in a glomped rgb to a fixed point 
+// convert red in a glomped rgb to a fixed point
 #define rtof(b) ( ((b)&0x3ff)<<12)
-// convert green in a glomped rgb to a fixed point 
+// convert green in a glomped rgb to a fixed point
 #define gtof(b) ( ((b)&0x1ff800)<<1)
-// convert blue in a glomped rgb to a fixed point 
+// convert blue in a glomped rgb to a fixed point
 #define btof(b) ( ((b)&0xffc00000)>>10)
 
 #define WHITE (0x7fff)
@@ -173,13 +173,13 @@ int gr_dump_tluc8_table(uchar *buf, int nlit)
    p += sizeof(int);
    *(p++) = nlit;
    *(p++) = tluc8nstab;
-   LG_memcpy(p, tluc8stab, tluc8nstab*256);
+   memcpy(p, tluc8stab, tluc8nstab*256);
    for (k=0; k<256; k++) {
       if (tluc8tab[k]) {
          *(p++) = k;
-         LG_memcpy(p, tluc8tab[k], 256);
+         memcpy(p, tluc8tab[k], 256);
          p += 256;
-         LG_memcpy(p, tluc8ltab[k], lsize);
+         memcpy(p, tluc8ltab[k], lsize);
          p += lsize;
       }
    }

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/dstruct/RCS/pqueue.c $
@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: pqueue.c $
  * Revision 1.1  1993/08/09  20:30:58  mahk
  * Initial revision
- * 
+ *
  *
  */
  //---------------------------------------------------
@@ -63,9 +63,9 @@ void double_re_heapify(PQueue *q, int head);
 // ---------
 void swapelems(PQueue* q,int i, int j)
 {
-   LG_memcpy(swap_buffer,NTH(q,i),q->elemsize);
-   LG_memcpy(NTH(q,i),NTH(q,j),q->elemsize);
-   LG_memcpy(NTH(q,j),swap_buffer,q->elemsize);
+   memcpy(swap_buffer,NTH(q,i),q->elemsize);
+   memcpy(NTH(q,i),NTH(q,j),q->elemsize);
+   memcpy(NTH(q,j),swap_buffer,q->elemsize);
 }
 
 void re_heapify(PQueue *q)
@@ -73,7 +73,7 @@ void re_heapify(PQueue *q)
    uint head = 0;
    while (head < q->fullness)
    {
-      uint lchild = LCHILD(head); 
+      uint lchild = LCHILD(head);
       uint rchild = RCHILD(head);
       uint minchild = NULL_CHILD;
       if (rchild >= q->fullness)
@@ -101,7 +101,7 @@ void re_heapify(PQueue *q)
 
 void double_re_heapify(PQueue *q, int head)
 {
-   uint lchild = LCHILD(head); 
+   uint lchild = LCHILD(head);
    uint rchild = RCHILD(head);
    uint minchild = NULL_CHILD;
    uint maxchild = NULL_CHILD;
@@ -128,7 +128,7 @@ void double_re_heapify(PQueue *q, int head)
          double_re_heapify(q,maxchild);
    }
 }
-      
+
 // ---------
 // EXTERNALS
 // ---------
@@ -174,7 +174,7 @@ errtype pqueue_insert(PQueue* q, void* elem)
       q->size*=2;
    }
    n = q->fullness++;
-   LG_memcpy(NTH(q,n),elem,q->elemsize);
+   memcpy(NTH(q,n),elem,q->elemsize);
    while(n > 0)
    {
       if (LESS(q,PARENT(n),n))
@@ -188,8 +188,8 @@ errtype pqueue_insert(PQueue* q, void* elem)
 errtype pqueue_extract(PQueue* q, void* elem)
 {
    if (q->fullness == 0) return ERR_DUNDERFLOW;
-   LG_memcpy(elem,NTH(q,0),q->elemsize);
-   LG_memcpy(NTH(q,0),NTH(q,q->fullness-1),q->elemsize);
+   memcpy(elem,NTH(q,0),q->elemsize);
+   memcpy(NTH(q,0),NTH(q,q->fullness-1),q->elemsize);
    q->fullness--;
    re_heapify(q);
    return OK;
@@ -198,7 +198,7 @@ errtype pqueue_extract(PQueue* q, void* elem)
 errtype pqueue_least(PQueue* q, void* elem)
 {
    if (q->fullness == 0) return ERR_DUNDERFLOW;
-   LG_memcpy(elem,NTH(q,0),q->elemsize);
+   memcpy(elem,NTH(q,0),q->elemsize);
    return OK;
 }
 /*

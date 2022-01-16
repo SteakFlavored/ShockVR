@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		ResAcc.c		Resource access
 //		Rex E. Bradford
@@ -23,16 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: resacc.c $
  * Revision 1.4  1994/08/30  15:18:20  rex
  * Made sure ResGet() returns NULL if ResLoadResource() did
- * 
+ *
  * Revision 1.3  1994/08/30  15:14:32  rex
  * Put in check for NULL return from ResLoadResource
- * 
+ *
  * Revision 1.2  1994/06/16  11:06:05  rex
  * Modified routines to handle LRU list better (keep locked and nodrop stuff out)
- * 
+ *
  * Revision 1.1  1994/02/17  11:23:31  rex
  * Initial revision
- * 
+ *
 */
 
 #include <string.h>
@@ -100,12 +100,12 @@ void *ResLockHi(Id id)
 	prd = RESDESC(id);
 	if (ResLoadResource(id) == nil)
 		return(nil);
-	
+
 	// Lock the handle.
 	prd->lock++;
 	if (prd->lock == 1)
 		HLockHi(prd->hdl);
-	
+
 	return(*prd->hdl);
 }
 
@@ -131,7 +131,7 @@ void ResUnlock(Id id)
 //		Warning(("ResUnlock: id $%x already unlocked\n", id)); return;} });
 
 	//	Else decrement lock, if 0 move to tail and tally stats
-	
+
 	if (prd->lock > 0)
 		prd->lock--;
 	if (prd->lock == 0)
@@ -169,13 +169,13 @@ void *ResGet(Id id)
 
 	if (ResLoadResource(id) == NULL)
 		return(NULL);
-	
+
 //	ResAddToTail(prd);
 //	if (prd->lock == 0)
 //		ResMoveToTail(prd);
 
 	//	Return ptr
-	
+
 	HLock(prd->hdl);
 	return(*prd->hdl);
 }
@@ -198,12 +198,12 @@ void *ResExtract(Id id, void *buffer)
 
 	if (ResLoadResource(id) == NULL)
 		return(NULL);
-	
+
 	HLock(prd->hdl);
 	BlockMove(*prd->hdl, buffer, GetHandleSize(prd->hdl));
 	HUnlock(prd->hdl);
 	return(buffer);
-	
+
 /*
 	//	Retrieve the data into the buffer, please
 
@@ -304,7 +304,7 @@ void ResDelete(Id id)
 //			if (prd->lock == 0)
 //				ResRemoveFromLRU(prd);
 		}
-		LG_memset(prd, 0, sizeof(ResDesc));
+		memset(prd, 0, sizeof(ResDesc));
 //	}
 
 //	Else if not in use, spew to whoever's listening

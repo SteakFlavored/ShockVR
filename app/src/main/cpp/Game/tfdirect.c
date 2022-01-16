@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/tfdirect.c $
@@ -146,7 +146,7 @@ int   tf_talk=DEFAULT_TALK, tf_tmp;
 #define do_tf_Spew(flg,dat) mprintf dat
 #define tf_Spew(flg,dat)    if (tf_talk_check(flg)) do_tf_Spew(flg,dat)
 #else
-#define tf_talk_setup() 
+#define tf_talk_setup()
 #define tf_turn_on(flg)
 #define tf_talk_check(flg)  FALSE
 #define tf_undo_set(flg)
@@ -196,7 +196,7 @@ bool _tf_set_flet(int flags, fix att, fix dist, fix *norm)
       break;
    }
 
-   LG_memset(cur_fc->norm,0,3*4);	//  _memset32l(cur_fc->norm,0,3);
+   memset(cur_fc->norm,0,3*4);	//  _memset32l(cur_fc->norm,0,3);
    cur_fc->norm[pv]=full_norms[flags&SS_BCD_PRIM_NEG];
 #ifdef USE_OLD_PASSING
 i_hate_everyone:
@@ -267,13 +267,13 @@ fix _tf_border_check_2d(void)
          }
       }
       else       // is clock gnosis correct or not? who the hell knows...
-      {          
+      {
          tf_Spew(BordChk,("gc2: face %d simp case nrms %x %x\n",i,tf_norm_2d[i][0],tf_norm_2d[i][1]));
          if (tf_norm_2d[i][0]==0)     // north/south normal
             if (tf_norm_2d[i][1]>0)   // this is the east facing edge, north facing interior normal
              { set_n_chk_1(tf_pt[1]-tf_vert_2d[i][1]); _1d_pt[0]=tf_vert_2d[i][0]-tf_pt[0]; _1d_endpt[0]= tf_norm_2d[i][1]; }
             else                    // south facing normal, ie. invert everything, perhaps this could be cooler, eh?
-             { set_n_chk_1(tf_vert_2d[i][1]-tf_pt[1]); _1d_pt[0]=tf_pt[0]-tf_vert_2d[i][0]; _1d_endpt[0]=-tf_norm_2d[i][1]; } 
+             { set_n_chk_1(tf_vert_2d[i][1]-tf_pt[1]); _1d_pt[0]=tf_pt[0]-tf_vert_2d[i][0]; _1d_endpt[0]=-tf_norm_2d[i][1]; }
          else                       // east/west normal
             if (tf_norm_2d[i][0]>0)   // this is the south facing edge, east facing interior normal
              { set_n_chk_1(tf_pt[0]-tf_vert_2d[i][0]); _1d_pt[0]=tf_pt[1]-tf_vert_2d[i][1]; _1d_endpt[0]= tf_norm_2d[i][0]; }
@@ -360,7 +360,7 @@ fix tf_solve_2d_case(int flags)
          xd=tf_vert_2d[0][0]-tf_pt[0];                // off left side?
          if (xd<0) xd=tf_pt[0]-tf_vert_2d[2][0];      // if not, right?
          if (xd<0) xd=0;                              // in middle
-         yd=tf_vert_2d[2][1]-tf_pt[1];                // now top bottom 
+         yd=tf_vert_2d[2][1]-tf_pt[1];                // now top bottom
          if (yd<0) yd=tf_pt[1]-tf_vert_2d[0][1];      // note reverse of 2 and 0 since
          if (yd<0) yd=0;                              //  cartesian in lower left
 #ifndef SET_FLAGS_ON_BOX
@@ -492,7 +492,7 @@ int _stair_check(fix walls[4][2], int flags)
       }
    }
    return flags;
-}  
+}
 
 // note: if it turns out aligned > 2*multi, we should do set and reset in multi for rad, and no rad set here
 bool tf_solve_aligned_face(fix pt[3], fix walls[4][2], int flags, fix *norm)
@@ -572,7 +572,7 @@ bool tf_solve_cylinder(fix pt[3], fix irad, fix height)
          tf_Spew(Cylinder,("scyl in.."));
 		   if ((pt[2]<0)||(pt[2]>height))   // flat top+bottom
          {
-            LG_memset(nrm,0,3*4);	//            _memset32l(nrm,0,3);
+            memset(nrm,0,3*4);	//            _memset32l(nrm,0,3);
 
             if (r_dist>(rad>>1)) att=fix_div(r_dist-(urad>>1),(urad>>1));
             else                 att=fix_1;
@@ -593,7 +593,7 @@ bool tf_solve_cylinder(fix pt[3], fix irad, fix height)
             nrm[1]=fix_div(pt[1],r_dist);
             nrm[2]=0;
             if (r_dist>urad-tf_cur_rad)
-            {   
+            {
   		         _tf_set_flet(SS_BCD_PRIM_MULTI|SS_BCD_TYPE_WALL,att,urad-r_dist,nrm);
                tf_Spew(Cylinder,("AroundCyl"));
             }

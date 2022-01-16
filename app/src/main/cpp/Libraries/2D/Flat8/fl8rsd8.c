@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/fl8rsd8.c $
  * $Revision: 1.6 $
  * $Author: kevin $
  * $Date: 1994/10/27 18:26:56 $
- * 
+ *
  * Routines for drawing rsd bitmaps into a flat 8 canvas.
  *
  * This file is part of the 2d library.
@@ -29,23 +29,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: fl8rsd8.c $
  * Revision 1.6  1994/10/27  18:26:56  kevin
  * fixed gr_rsd8_blit prototype.
- * 
+ *
  * Revision 1.5  1994/10/25  15:13:14  kevin
  * Renamed funcs, use fast rsd blitter when possible.
- * 
+ *
  * Revision 1.4  1993/10/19  09:50:54  kaboom
  * Replaced #include <grd.h" with new headers split from grd.h.
- * 
+ *
  * Revision 1.3  1993/10/01  16:00:47  kaboom
  * Converted to include clpcon.h instead of clip.h
- * 
+ *
  * Revision 1.2  1993/07/13  17:47:13  kaboom
  * Fixed bugs in clipping case off right edge.  Updated for padded clipping
  * rectangle.
- * 
+ *
  * Revision 1.1  1993/02/16  14:17:21  kaboom
  * Initial revision
- * 
+ *
  ********************************************************************
  * Log from old flat8.c:
  * Revision 1.7  1992/12/14  18:08:40  kaboom
@@ -71,19 +71,19 @@ void gr_rsd8_blit (uchar *rsd_src, uchar *dst, int grd_bm_row, int bm_w)
  {
 	DebugStr("\pask mark");
  }
- 
+
 
 void gri_flat8_rsd8_ubitmap(grs_bitmap *bm, short x, short y)
 {
 /*   uchar *p_dst;
-   uchar *rsd_src;                     // rsd source buffer 
+   uchar *rsd_src;                     // rsd source buffer
 
    rsd_src = bm->bits;
    p_dst = grd_bm.bits + grd_bm.row*y + x;
    gr_rsd8_blit(rsd_src,p_dst,grd_bm.row,bm->w);*/
 	unpack_rsd8_ubitmap(bm,x,y);
 }
-          
+
 int gri_flat8_rsd8_bitmap (grs_bitmap *bm, short x_left, short y_top)
 {
    short x,y;                          /* current destination position */
@@ -230,13 +230,13 @@ int gri_flat8_rsd8_bitmap (grs_bitmap *bm, short x_left, short y_top)
          if (x+rsd_count <= x_right) {
             switch (rsd_code) {
             case RSD_RUN:
-               LG_memset (p_dst, *rsd_src, rsd_count);
+               memset (p_dst, *rsd_src, rsd_count);
                rsd_src++;
                break;
             case RSD_SKIP:
                break;
             default: /* RSD_DUMP */
-               LG_memcpy (p_dst, rsd_src, rsd_count);
+               memcpy (p_dst, rsd_src, rsd_count);
                rsd_src += rsd_count;
                break;
             }
@@ -248,12 +248,12 @@ int gri_flat8_rsd8_bitmap (grs_bitmap *bm, short x_left, short y_top)
             op_count = x_right-x;
             switch (rsd_code) {
             case RSD_RUN:
-               LG_memset (p_dst, *rsd_src, op_count);
+               memset (p_dst, *rsd_src, op_count);
                break;
             case RSD_SKIP:
                break;
             default: /* RSD_DUMP */
-               LG_memcpy (p_dst, rsd_src, op_count);
+               memcpy (p_dst, rsd_src, op_count);
                rsd_src += op_count;
                break;
             }

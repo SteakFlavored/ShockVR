@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/saveload.c $
@@ -143,7 +143,7 @@ void store_objects(char** buf, ObjID *obj_array, char obj_count)
          }
             *(Obj*)s = objs[id];
          s+= sizeof(Obj);
-         LG_memcpy(s,sh->data+sh->struct_size*objs[id].specID,sh->struct_size);
+         memcpy(s,sh->data+sh->struct_size*objs[id].specID,sh->struct_size);
          s+= sh->struct_size;
          ObjDel(id);
       }
@@ -180,7 +180,7 @@ void restore_objects(char* buf, ObjID *obj_array, char obj_count)
          {
             objs[id].info = next->info;
             spec = (sh->data+sh->struct_size*objs[id].specID);
-            LG_memcpy(spec+sizeof(ObjSpec),s+sizeof(ObjSpec),sh->struct_size-sizeof(ObjSpec));
+            memcpy(spec+sizeof(ObjSpec),s+sizeof(ObjSpec),sh->struct_size-sizeof(ObjSpec));
             obj_array[i] = id;
          }
          s+=sh->struct_size;
@@ -261,23 +261,23 @@ bool go_to_different_level(int targlevel)
    if (!in_cyber)
    {
       EDMS_get_state(objs[PLAYER_OBJ].info.ph, &player_state);
-      LG_memcpy(player_struct.edms_state, &player_state, sizeof (fix) * 12);
-   } 
+      memcpy(player_struct.edms_state, &player_state, sizeof (fix) * 12);
+   }
    else
    {
       extern errtype early_exit_cyberspace_stuff();
       early_exit_cyberspace_stuff();
    }
-      
+
    rv = write_level_to_disk(ResIdFromLevel(player_struct.level), TRUE);
    if (rv)
       critical_error(CRITERR_FILE|4);
-   
+
    rv = load_level_from_file(targlevel);
    // Hmm, should we criterr out on this case?
    restore_objects(buf,player_struct.inventory, NUM_GENERAL_SLOTS);
    obj_load_art(FALSE);
-   
+
    // reset renderer data
    game_fr_reparam(-1,-1,-1);
 
@@ -363,7 +363,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
 
 /* KLC - not needed for game
    if (id_num - LEVEL_ID_NUM < ANOTHER_DEFINE_FOR_NUM_LEVELS)
-   {  // were in the editor, so clear out game state hack stupid i suck kill me 
+   {  // were in the editor, so clear out game state hack stupid i suck kill me
       fr_compile_rect(global_fullmap,0,0,MAP_XSIZE,MAP_YSIZE,TRUE);
    }
 */
@@ -397,12 +397,12 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
 //KLC - just write the last one   REF_WRITE(SAVELOAD_VERIFICATION_ID, 0, verify_cookie);
 
    idx++;	//KLC - not used   REF_WRITE(id_num,idx++,vnum);
-   idx++;	//KLC - not used   REF_WRITE(id_num,idx++,ovnum);   
+   idx++;	//KLC - not used   REF_WRITE(id_num,idx++,ovnum);
    REF_WRITE(id_num,idx++,*global_fullmap);
 
    REF_WRITE_RAW(id_num,idx++,MAP_MAP,sizeof(MapElem) << (MAP_XSHF + MAP_YSHF));
 
-   // Here we are writing out the schedules.  It's only a teeny tiny rep exposure.  
+   // Here we are writing out the schedules.  It's only a teeny tiny rep exposure.
    for (i = 0; i < NUM_MAP_SCHEDULES; i++)
    {
       int sz = min(global_fullmap->sched[i].queue.fullness+1,global_fullmap->sched[i].queue.size);
@@ -467,7 +467,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    goof = amap_str_deref(amap_str_next());
    REF_WRITE(id_num, idx++, goof);
 #endif
-   idx++;	//KLC - no need to be saved.   REF_WRITE(id_num, idx++, player_edms); 
+   idx++;	//KLC - no need to be saved.   REF_WRITE(id_num, idx++, player_edms);
    REF_WRITE(id_num, idx++, paths);
    REF_WRITE(id_num, idx++, used_paths);
    REF_WRITE(id_num, idx++, animlist);
@@ -486,9 +486,9 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    verify_cookie = VERIFY_COOKIE_VALID;
    REF_WRITE(SAVELOAD_VERIFICATION_ID,0,verify_cookie);
    ResCloseFile(fd);
-   
+
    FlushVol(nil, fSpec->vRefNum);			// Make sure everything is saved.
-   
+
    if (make_player)
       obj_create_player(&plr_loc);
    trigger_check=TRUE;
@@ -593,7 +593,7 @@ void convert_cit_map(oFullMap *omp, FullMap **mp)
    if ((*mp)!=NULL)
     { Free((*mp)->map); Free(*mp); }
    *mp=Malloc(sizeof(FullMap));
-   LG_memcpy(*mp,omp,sizeof(oFullMap));
+   memcpy(*mp,omp,sizeof(oFullMap));
    (*mp)->map=Malloc(sizeof(MapElem)<<(omp->x_shft+omp->y_shft));
    for (ibase=0,i=0; i<(1<<omp->y_shft); i++, ibase+=(1<<(omp->x_shft)))
       for (j=0; j<(1<<omp->x_shft); j++)
@@ -739,7 +739,7 @@ errtype expand_old_class(char cl, short new_start)
 void load_level_data()
 {
    extern errtype load_small_texturemaps();
-	
+
 //¥¥¥KLC-removed from here	obj_load_art(FALSE);
 	AdvanceProgress();
 	load_small_texturemaps();
@@ -783,7 +783,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 	extern void reload_motion_cursors(bool cyber);
 	extern char old_bits;
 	extern int compare_events(void* e1, void* e2);
-   
+
 	int 			i, idx = 0, fd, version;
 	LGRect 		bounds;
 	errtype 		retval = OK;
@@ -795,7 +795,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 	curAMap 	saveAMaps[NUM_O_AMAP];
 	uchar 		savedMaps;
 	bool 			do_anims = FALSE;
-   
+
 //   _MARK_("load_current_map:Start");
 
 //KLC - Mac cursor showing at this time	begin_wait();
@@ -847,7 +847,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 	if (version != MAP_VERSION_NUMBER)
 	{
 		//Warning(("Old Map Version Number (%d)!!  Current V. Num = %d\n",version,MAP_VERSION_NUMBER));
-	
+
 		if (version != OLD_MAP_VERSION_NUMBER)
 		{
 			retval = ERR_NOEFFECT;
@@ -863,7 +863,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 		}
 	}
 */
-	
+
 	idx++;
 /* KLC - don't need to worry with older versions
 
@@ -873,22 +873,22 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 */
 	// Clear out old physics data and object data
 	ObjsInit();
-	physics_init();	
+	physics_init();
 
 	// Read in the global fullmap (without disrupting schedule vec ptr)
 	schedvec = global_fullmap->sched[0].queue.vec;		// KLC - Only one schedule, so just save it.
-	
+
 	// convert_from is the version we are coming from.
 	// for now, this is only defined for coming from version 9
 	{
 		REF_READ(id_num, idx++, *global_fullmap);
-				
+
 		MAP_MAP = (MapElem *)static_map;
 		ResExtract(id_num + (idx++), MAP_MAP);
 		AdvanceProgress();
 	}
 
-	// Load schedules, performing some voodoo.  
+	// Load schedules, performing some voodoo.
 	global_fullmap->sched[0].queue.vec = schedvec;			// KLC - Only one schedule, so restore it.
 	global_fullmap->sched[0].queue.comp = compare_events;
 	if (global_fullmap->sched[0].queue.fullness > 0)		// KLC - no need to read in vec if none there.
@@ -963,7 +963,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
    else
 #endif
 */
-	
+
 	// Read in object information.  For the Mac version, copy from the resource's 27-byte structs, then
 	// place it into an Obj struct (which is 28 bytes, due to alignment).  Swap bytes as needed.
 /*	{
@@ -973,7 +973,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 			BlockMoveData(op, &objs[i], 3);
 			BlockMoveData(op+3, &objs[i].specID, 24);
 			op += 27;
-			
+
 			SwapShortBytes(&objs[i].specID);
 			SwapShortBytes(&objs[i].ref);
 			SwapShortBytes(&objs[i].next);
@@ -997,7 +997,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		SwapShortBytes(&objRefs[i].next);
 		SwapShortBytes(&objRefs[i].nextref);
 	} */
-	
+
 	// Read in and convert the gun objects.
 	REF_READ(id_num, idx++, objGuns);
 /*	for (i=0; i < NUM_OBJECTS_GUN; i++)
@@ -1006,7 +1006,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		SwapShortBytes(&objGuns[i].next);
 		SwapShortBytes(&objGuns[i].prev);
 	}*/
-	
+
 	// Read in and convert the ammo objects.
 	REF_READ(id_num, idx++, objAmmos);
 /*	for (i=0; i < NUM_OBJECTS_AMMO; i++)
@@ -1015,7 +1015,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		SwapShortBytes(&objAmmos[i].next);
 		SwapShortBytes(&objAmmos[i].prev);
 	}*/
-	
+
 	// Read in and convert the physics objects.
 	REF_READ(id_num, idx++, objPhysicss);
 /*	for (i=0; i < NUM_OBJECTS_PHYSICS; i++)
@@ -1033,7 +1033,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		SwapShortBytes(&objPhysicss[i].p3.x);
 		SwapShortBytes(&objPhysicss[i].p3.y);
 	}*/
-	
+
 	// Read in and convert the grenades.
 	REF_READ(id_num, idx++, objGrenades);
 /*	for (i=0; i < NUM_OBJECTS_GRENADE; i++)
@@ -1044,7 +1044,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		SwapShortBytes(&objGrenades[i].flags);
 		SwapShortBytes(&objGrenades[i].timestamp);
 	}*/
-	
+
 	// Read in and convert the drugs.
 	REF_READ(id_num, idx++, objDrugs);
 /*	for (i=0; i < NUM_OBJECTS_DRUG; i++)
@@ -1053,7 +1053,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		SwapShortBytes(&objDrugs[i].next);
 		SwapShortBytes(&objDrugs[i].prev);
 	}*/
-	
+
 	// Read in and convert the hardwares.  Resource is array of 7-byte structs.  Ours are 8.
 /*	{
 		uchar	*hp = (uchar *)ResLock(id_num + idx);
@@ -1069,7 +1069,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		idx++;
 	}*/
 	REF_READ(id_num, idx++, objHardwares);
-	
+
 	// Read in and convert the softwares.  Resource is array of 9-byte structs.  Ours are 10.
 /*	{
 		uchar	*sp = (uchar *)ResLock(id_num + idx);
@@ -1086,7 +1086,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		ResUnlock(id_num + idx);
 		idx++;
 	}*/
-	REF_READ(id_num,idx++,objSoftwares);	
+	REF_READ(id_num,idx++,objSoftwares);
 
 	// Read in and convert the big stuff.
 	REF_READ(id_num, idx++, objBigstuffs);
@@ -1161,7 +1161,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 		SwapLongBytes(&objTraps[i].p3);
 		SwapLongBytes(&objTraps[i].p4);
 	}	*/
-	
+
 	// Read in and convert the containers.  Resource is array of 21-byte structs.  Ours are 22.
 /*	{
 		uchar	*sp = (uchar *)ResLock(id_num + idx);
@@ -1203,7 +1203,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 	//-------------------------------
 	//  Read in the default objects.
 	//-------------------------------
-	
+
 	// Convert the default gun.
 	REF_READ(id_num, idx++, default_gun);
 /*	SwapShortBytes(&default_gun.id);
@@ -1215,7 +1215,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 /*	SwapShortBytes(&default_ammo.id);
 	SwapShortBytes(&default_ammo.next);
 	SwapShortBytes(&default_ammo.prev);*/
-	
+
 	// Read in and convert the physics objects.
 	REF_READ(id_num, idx++, default_physics);
 /*	SwapShortBytes(&default_physics.id);
@@ -1230,7 +1230,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 	SwapShortBytes(&default_physics.p2.y);
 	SwapShortBytes(&default_physics.p3.x);
 	SwapShortBytes(&default_physics.p3.y);*/
-	
+
 	// Convert the default grenade.
 	REF_READ(id_num, idx++, default_grenade);
 /*	SwapShortBytes(&default_grenade.id);
@@ -1238,13 +1238,13 @@ global_fullmap->sched[0].queue.grow = TRUE;
 	SwapShortBytes(&default_grenade.prev);
 	SwapShortBytes(&default_grenade.flags);
 	SwapShortBytes(&default_grenade.timestamp);*/
-	
+
 	// Convert the default drug.
 	REF_READ(id_num, idx++, default_drug);
 /*	SwapShortBytes(&default_drug.id);
 	SwapShortBytes(&default_drug.next);
 	SwapShortBytes(&default_drug.prev);*/
-	
+
 	// Convert the default hardware.  Resource is array of 7-byte structs.  Ours is 8.
 /*	{
 		uchar	*hp = (uchar *)ResLock(id_num + idx);
@@ -1406,12 +1406,12 @@ global_fullmap->sched[0].queue.grow = TRUE;
 			amap_invalidate(i);
 		}
 	}
-	
+
 	// Get other level data at next id
 	REF_READ( id_num, idx++, level_gamedata);
 /*	{
 		uchar *ldp = (uchar *)ResLock(id_num + idx);
-		LG_memset(&level_gamedata, 0, sizeof(LevelData));
+		memset(&level_gamedata, 0, sizeof(LevelData));
 		BlockMoveData(ldp, &level_gamedata, 9);
 		BlockMoveData(ldp+9, &level_gamedata.exit_time, 4);
 		SwapShortBytes(&level_gamedata.size);
@@ -1490,7 +1490,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 	}
 	ResUnlock(id_num + idx);
 	idx++;*/
-	REF_READ(id_num, idx++, animlist);    
+	REF_READ(id_num, idx++, animlist);
 
 	REF_READ(id_num, idx++, anim_counter);
 //	SwapShortBytes(&anim_counter);
@@ -1519,7 +1519,7 @@ obj_out:
 				set_door_data(oid);
 				break;
 		}
-		
+
 		if (do_anims && ANIM_3D(ObjProps[OPNUM(oid)].bitmap_3d))
 		{
 			extern errtype obj_screen_animate(ObjID id);
@@ -1538,7 +1538,7 @@ obj_out:
 		objs[oid].info.ph = -1;
 		if (objs[oid].loc.x != 0xFFFF)
 			obj_move_to(oid, &objs[oid].loc,TRUE);
-		
+
 		// sleep the object (this may become "settle" the object)
 		if (objs[oid].info.ph != -1)
 		{
@@ -1576,7 +1576,7 @@ out:
 
 	load_dynamic_memory(dynmem_mask);
 	load_level_data();
-	
+
 	for(i=0;i<NUM_O_AMAP;i++)
 	{
 		if(!oAMap(i)->init && (savedMaps & (1<< i)))
@@ -1586,7 +1586,7 @@ out:
 		}
 	}
    reload_motion_cursors(global_fullmap->cyber);
-   
+
 //KLC   physics_warmup();
 
 //KLC   end_wait();

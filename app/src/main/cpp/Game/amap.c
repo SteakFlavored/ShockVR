@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/amap.c $
@@ -76,7 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FMK_INT_INT (1<<8)
 
 
-// actual dimensions of a typical monitor, 
+// actual dimensions of a typical monitor,
 // for calculating pixel ratio.
 #define STD_SCR_WID 11
 #define STD_SCR_HGT 8
@@ -295,7 +295,7 @@ void wall_draw(int xm, int ym, int wallcode, int size, MapElem *cur)
 {
    switch (wallcode)
    {
-   case FMK_INT_SW: am_hline(xm,ym,xm+size); break; 
+   case FMK_INT_SW: am_hline(xm,ym,xm+size); break;
    case FMK_INT_NW: am_hline(xm,ym-size,xm+size); break;
    case FMK_INT_WW: am_vline(xm,ym,ym-size); break;
    case FMK_INT_EW: am_vline(xm+size,ym,ym-size); break;
@@ -737,9 +737,9 @@ void amap_draw(curAMap *amptr, int expose)
          }  // if !tile_solid
 #ifdef AMAP_SENS_TILEBOUND
          if((drw & DRAW_MASK_RAD) && (drw & DRAW_MASK_SENS)) {
-            if (fix_fast_pyth_dist((xc<<8)+0x80-sensor_x,(yc<<8)+0x80-sensor_y)+(1<<8)>=amptr->sensor_rad) { 
+            if (fix_fast_pyth_dist((xc<<8)+0x80-sensor_x,(yc<<8)+0x80-sensor_y)+(1<<8)>=amptr->sensor_rad) {
                facemask=0;
-   
+
                if(fix_fast_pyth_dist((xc<<8)+0x80-sensor_x,((yc+1)<<8)+0x80-sensor_y)>=amptr->sensor_rad)
                   facemask|=(1<<NORTH);
                if(fix_fast_pyth_dist((xc<<8)+0x80-sensor_x,((yc-1)<<8)+0x80-sensor_y)>=amptr->sensor_rad)
@@ -775,7 +775,7 @@ void amap_draw(curAMap *amptr, int expose)
          }
 #endif
       }  // for y loop
-   
+
    for(pass=0;pass<NUM_OBJ_PASSES;pass++) {
       mapybase=init_mapybase; yc=init_yc;
       for (ym=crnr_y;yc<max_yc;yc++,ym-=tsize,mapybase+=MAP_XSIZE)
@@ -800,7 +800,7 @@ void amap_draw(curAMap *amptr, int expose)
       int r=amptr->sensor_rad;
       // accound for needing to see the center of square and
       // the fact that we're an octagon, not a circle.
-      r = (r*89)/100 - (1<<8)*707/1000; 
+      r = (r*89)/100 - (1<<8)*707/1000;
       draw_radius_obj(amptr,PLAYER_OBJ,GRAY_8_BASE,zeroscrx,zeroscry,r);
       r=amptr->sensor_rad + (1<<8)*707/1000;
       draw_radius_obj(amptr,PLAYER_OBJ,GRAY_8_BASE+4,zeroscrx,zeroscry,r);
@@ -818,7 +818,7 @@ void *amap_loc_to_sq(curAMap *amptr, int *x, int *y)
    int offsx, offsy;
    MapElem *curmp=MAP_MAP;
    fix tmpy;
-   
+
    if (amptr->flags&AMAP_TRACK_OBJ)
    {
       amptr->xf=objs[amptr->obj_to_follow].loc.x<<8;
@@ -901,7 +901,7 @@ hack_breakout:
    if (map_note!=NULL)
    {     // a note is there...
       *to_do=AMAP_HAVE_NOTE;
-      return map_note; 
+      return map_note;
    }
    else
    {
@@ -1019,7 +1019,7 @@ void amap_fixup_existing(int tolera, int delta)
 
 // simply recompact
 void amap_str_delete(char *toast_str)
-{  
+{
    int del_len=strlen(toast_str)+1;        // how much to delete
    char *s=toast_str+del_len;              // beginning of real data
    int recompact_len=amap_str_ptr-s;       // how much to copy around
@@ -1027,7 +1027,7 @@ void amap_str_delete(char *toast_str)
       amap_str_ptr=toast_str;              // we are freeing the last created string
    else
    {
-      LG_memmove(toast_str,s,recompact_len);  // move over the data
+      memmove(toast_str,s,recompact_len);  // move over the data
       amap_str_ptr-=del_len;               // move the next pointer back
       amap_fixup_existing(amap_str_deref(toast_str),del_len); // set current notes up right...
    }

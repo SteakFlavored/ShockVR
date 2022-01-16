@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/tfutil.c $
@@ -57,7 +57,7 @@ static tf_norm_set facets[3];
 // really, have to say this is a pretty simple one, really
 void facelet_clear(void)
 {
-   LG_memset(&facets[0], 0, sizeof(facets));	//   _memset32l(&facets[0],0,sizeof(facets)/sizeof(long));
+   memset(&facets[0], 0, sizeof(facets));	//   _memset32l(&facets[0],0,sizeof(facets)/sizeof(long));
 }
 
 // facelet_add adds to the current facelet arrays
@@ -127,7 +127,7 @@ void set_real_terrain_normal(int which, fix mag, fix norm[3])
 void set_dumb_terrain_normal(int which, fix norm[3])
 {  // we aint proud
    g3s_vector *targ_vec= (g3s_vector *) (&terrain_info.cx+(which*3));
-   
+
    *targ_vec = *(g3s_vector *)norm;		//   _memcpy12(targ_vec,norm);
 }
 #endif
@@ -146,7 +146,7 @@ void facelet_send(void)
    {
       if ((cur_face->ia.cnt|cur_face->ua.cnt)==0)
       {
-         LG_memset(&terrain_info.cx+(i*3),0,3*4);		//     _memset32l(&terrain_info.cx+(i*3),0,3);
+         memset(&terrain_info.cx+(i*3),0,3*4);		//     _memset32l(&terrain_info.cx+(i*3),0,3);
          continue;                 // nope not nothing here...
       }
       nrm=cur_face->ua.nrm;

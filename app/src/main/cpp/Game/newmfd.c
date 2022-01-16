@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #define __NEWMFD_SRC
 
@@ -131,7 +131,7 @@ void cap_mfds_with_func(uchar func, uchar max);
 // ------------------
 
 // ---------------------------------------------------------------------------
-// init_newmfd()               
+// init_newmfd()
 //
 // Initialize the MFD system (called from init_all() in init.c)
 
@@ -159,7 +159,7 @@ void init_newmfd()
          player_struct.mfd_func_status[i]|=1 << 4;
 
    chg_set_flg(MFD_UPDATE);
-   
+
    return;
 }
 
@@ -226,14 +226,14 @@ void screen_init_mfd(bool fullscrn)
 {
    static bool done_init = FALSE;
    FrameDesc *f;
-   int id;                     
+   int id;
    int lval, rval;
 
    lval = MFD_LEFT;                    // Screen callbacks need to know their
    rval = MFD_RIGHT;                   // left from their right, thusly
 
 // Set up the Rect structures for MFD screen-space
-   
+
 // Left View Window
    mfdL.rect.ul.x      = MFD_VIEW_LFTX;
    mfdL.rect.ul.y      = MFD_VIEW_Y;
@@ -265,12 +265,12 @@ void screen_init_mfd(bool fullscrn)
       macro_region_create(root_region, &(mfdR.reg), &(mfdR.rect));
       macro_region_create(root_region, &(mfdL.bttn.reg), &(mfdL.bttn.rect));
       macro_region_create(root_region, &(mfdR.bttn.reg), &(mfdR.bttn.rect));
-      
+
       uiInstallRegionHandler(&(mfdL.reg),      (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE),
          mfd_view_callback,   (void*)MFD_LEFT,  &id);
       uiInstallRegionHandler(&(mfdR.reg),      (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE),
          mfd_view_callback,   (void*)MFD_RIGHT, &id);
-   	
+
       uiInstallRegionHandler(&(mfdL.bttn.reg), (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE),
          mfd_button_callback, (void*)MFD_LEFT,  &id);
       uiInstallRegionHandler(&(mfdR.bttn.reg), (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE),
@@ -291,12 +291,12 @@ void screen_init_mfd(bool fullscrn)
       region_create(fullview_region, &(mfdR.bttn.reg2), &(mfdR.bttn.rect),2,0,REG_USER_CONTROLLED,NULL,NULL,NULL,NULL);
       uiGetRegionCursorStack(&(mfdR.bttn.reg),&cs);
       uiSetRegionCursorStack(&(mfdR.bttn.reg2),cs);
-      
+
       uiInstallRegionHandler(&(mfdL.reg2),      (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE),
          mfd_view_callback_full,   (void*)MFD_LEFT,  &id);
       uiInstallRegionHandler(&(mfdR.reg2),      (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE),
          mfd_view_callback_full,   (void*)MFD_RIGHT, &id);
-         
+
       uiInstallRegionHandler(&(mfdL.bttn.reg2), (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE),
          mfd_button_callback, (void*)MFD_LEFT,  &id);
       uiInstallRegionHandler(&(mfdR.bttn.reg2), (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE),
@@ -306,13 +306,13 @@ void screen_init_mfd(bool fullscrn)
    if (!done_init)
    {
       done_init = TRUE;
-      
+
       // Pull in the background bitmap
       f = (FrameDesc*)RefLock(REF_IMG_bmBlankMFD);
       mfd_background = f->bm;
 //KLC      mfd_background.bits = (uchar *)NewPtr(MAX_WD(MFD_VIEW_WID)*MAX_HT(MFD_VIEW_HGT));
       mfd_background.bits = (uchar *)NewPtr(f->bm.w * f->bm.h);
-      LG_memcpy(mfd_background.bits,(f+1),f->bm.w * f->bm.h);
+      memcpy(mfd_background.bits,(f+1),f->bm.w * f->bm.h);
       RefUnlock(REF_IMG_bmBlankMFD);
 
       gr_init_canvas(&_offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
@@ -359,7 +359,7 @@ errtype mfd_clear_all()
 // ---------------------------------------------
 // mfd_change_fullscreen(bool on);
 //
-// set up and clean up for fullscreen mode. 
+// set up and clean up for fullscreen mode.
 
 void mfd_change_fullscreen(bool on)
 {
@@ -374,11 +374,11 @@ void mfd_change_fullscreen(bool on)
    }
    else
    {
-      // we use the mfd background for the canvas, so 
+      // we use the mfd background for the canvas, so
       // put the background bitmap back
       grs_bitmap *bm = lock_bitmap_from_ref(REF_IMG_bmBlankMFD);
       RefUnlock(REF_IMG_bmBlankMFD);
-      LG_memcpy(_fullscreen_mfd.bm.bits,bm->bits,bm->w*bm->h);
+      memcpy(_fullscreen_mfd.bm.bits,bm->bits,bm->w*bm->h);
    }
 }
 
@@ -506,7 +506,7 @@ void mfd_notify_func(ubyte fnum, ubyte snum, bool Grab, MFD_Status stat, bool Fu
       for (i = 0; i < NUM_MFDS; i++)
       {
          for (j = 0; j < MFD_NUM_VIRTUAL_SLOTS; j++)
-         {         
+         {
             if (player_struct.mfd_virtual_slots[i][j] == snum)
             {
                mfd_but[i] = j;
@@ -519,16 +519,16 @@ void mfd_notify_func(ubyte fnum, ubyte snum, bool Grab, MFD_Status stat, bool Fu
             }
          }
       }
- 
+
       // Now redraw them
       if (_current_loop <= FULLSCREEN_LOOP && !global_fullmap->cyber)
          for (i = 0; i < NUM_MFDS; i++)
             if (mfd_but[i] != -1)
                mfd_draw_button(i, mfd_but[i]);
    }
-  
+
    chg_set_flg(MFD_UPDATE);
-  
+
    return;
 }
 
@@ -548,7 +548,7 @@ ubyte mfd_get_func(ubyte mfd_id, ubyte s)
    else
       return player_struct.mfd_all_slots[slot_num];
 }
- 
+
 // ---------------------------------------------------------------------------
 // mfd_set_slot()
 //
@@ -563,7 +563,7 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, bool OnOff)
 	ubyte f_id;
 	ubyte new_slot;
 	ubyte old_slot;
-	
+
 	old_index = player_struct.mfd_current_slots[mfd_id];
 	old_slot  = player_struct.mfd_virtual_slots[mfd_id][old_index];
 	new_slot  = player_struct.mfd_virtual_slots[mfd_id][newSlot];
@@ -585,7 +585,7 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, bool OnOff)
 	if (player_struct.mfd_slot_status[new_slot] == MFD_FLASH)
 	{
 		player_struct.mfd_slot_status[new_slot] = MFD_ACTIVE;
-		
+
 		// We have to tell other panel about this button change!
 		if (global_fullmap->cyber)
 			if (mfd_id == MFD_LEFT)
@@ -628,7 +628,7 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, bool OnOff)
 // ---------------------------------------------------------------------------
 // mfd_change_slot()
 //
-// Shifts an mfd over to a new slot. 
+// Shifts an mfd over to a new slot.
 
 void mfd_change_slot(ubyte mfd_id, ubyte new_slot)
 {
@@ -660,8 +660,8 @@ void mfd_change_slot(ubyte mfd_id, ubyte new_slot)
 // ---------------------------------------------------------------------------
 // mfd_grab()
 //
-// Picks an MFD to grab (i.e. the MFD whose information is 
-// lowest priority.  Returns the mfd id. 
+// Picks an MFD to grab (i.e. the MFD whose information is
+// lowest priority.  Returns the mfd id.
 
 int mfd_grab(void)
 {
@@ -686,12 +686,12 @@ int mfd_grab(void)
 // ---------------------------------------------------------------------------
 // mfd_grab_func()
 //
-// Like mfd_grab(), except specifies a func number.  If any mfd is already 
+// Like mfd_grab(), except specifies a func number.  If any mfd is already
 // set to that func, returns that mfd id instead of the lowest prority.
 // Otherwise, if there is already an mfd on the given slot, returns that
 // mfd.  If neither of these conditions holds, returns the mfd with the
 // lowest priority.  If other mfds are on the same slot as the one we
-// are grabbing for a new func, try to restore to them. 
+// are grabbing for a new func, try to restore to them.
 
 // mfd_choose_func() does the same thing as mfd_grab_func, but does not
 // assume we necessarily actually want to grab the mfd it returns, and
@@ -751,10 +751,10 @@ int mfd_grab_func(int my_func, int my_slot)
 //
 //   If no mfd has func as its current function, returns FALSE.  Otherwise,
 // if *mfd_id is NUM_MFDS, sets mfd_id to the lowest mfd id which has func as
-// its function and returns TRUE.  Otherwise, sets mfd_id to the lowest 
+// its function and returns TRUE.  Otherwise, sets mfd_id to the lowest
 // such id which is greater than the one provided and returns TRUE, or
 // returns FALSE if there is no such greater mfd.  Thus acts as an
-// iterator on mfd's with the given func.  
+// iterator on mfd's with the given func.
 //   Why, you may ask?  'Cause it's pretty much exactly as easy as a
 // function which just finds out if some mfd has this current function,
 // which is what I need, and it's loads more generally useful.  Har har.
@@ -770,13 +770,13 @@ bool mfd_yield_func(int func, int* mfd_id)
       }
    }
    return FALSE;
-}                                                                
+}
 
 // -----------------------------------------------------------
 // mfd_zoom_rect(Rect* start, int mfd)
 //
-// Zooms a rect from the specified starting point to the 
-// the indicated rect.  
+// Zooms a rect from the specified starting point to the
+// the indicated rect.
 
 void mfd_zoom_rect(LGRect* start, int mfdnum)
 {
@@ -796,7 +796,7 @@ void mfd_zoom_rect(LGRect* start, int mfdnum)
 
 // ------------------------------------------------------------------
 // mfd_object_cursor_handler() gets called for events in the MFD
-// region with an object on the cursor.  
+// region with an object on the cursor.
 
 
 extern bool inventory_add_object(ObjID,bool);
@@ -991,7 +991,7 @@ bool mfd_button_callback(uiEvent *e, LGRegion *r, void *udata)
       uiSetRegionDefaultCursor(r,NULL);
       return FALSE;
    }
-   else 
+   else
    {
       m           = (uiMouseEvent *) e;
       which_panel = (int)            udata;
@@ -1090,7 +1090,7 @@ void mfd_select_button(int which_panel, int which_button)
    {
       full_visible &= ~visible_mask(which_panel);
    }
-   else 
+   else
       mfd_change_slot((ubyte) which_panel, (ubyte) which_button);
 
    return;
@@ -1111,7 +1111,7 @@ void mfd_update()
    int    i, j;
    ubyte  slots[NUM_MFDS];
    ubyte   status_cache[NUM_MFDS];
-   
+
       Flash = (bool) ((player_struct.game_time/MFD_BTTN_FLASH_TIME) %2);
 
       if (!global_fullmap->cyber)
@@ -1138,7 +1138,7 @@ void mfd_update()
 #endif // BAD_BITS_BUG_FIXED
 
 
-// This code totally depends on our item func implementation. 
+// This code totally depends on our item func implementation.
    i = NUM_MFDS;
    if (mfd_yield_func(MFD_ITEM_FUNC,&i))
    {
@@ -1147,7 +1147,7 @@ void mfd_update()
    }
 
 
-   // Build the status cache. 
+   // Build the status cache.
    for(i = 0; i < NUM_MFDS; i++)
    {
       ubyte f_id = mfd_get_active_func(i);
@@ -1165,7 +1165,7 @@ void mfd_update()
    }
 
 
-   // Now update the stati that need it. 
+   // Now update the stati that need it.
    for (i = 0; i < NUM_MFDS; i++)
    {
       if ((status_cache[i] & (MFD_CHANGEBIT|MFD_CHANGEBIT_FULL)) || steps_cache[i] > 0)
@@ -1193,7 +1193,7 @@ bool mfd_update_current_slot(ubyte mfd_id,ubyte status,ubyte num_steps)
 
    extern ObjID check_panel_ref(bool puntme);
    extern bool mfd_distance_remove(ubyte func);
-  
+
    f_id = mfd_get_active_func(mfd_id);
    f    = &(mfd_funcs[f_id]);
    m    = &(mfd[mfd_id]);
@@ -1218,7 +1218,7 @@ bool mfd_update_current_slot(ubyte mfd_id,ubyte status,ubyte num_steps)
 
          // Okay, if we are in full screen mode, secretly switch the fine canvas
          // usually served in this restaurant with our own Folger's brand canvas
- 
+
          pmfd_canvas = (full_game_3d && mfd_id == MFD_RIGHT) ? &_fullscreen_mfd : &_offscreen_mfd;
          if (full_game_3d && (control & MFD_EXPOSE_FULL))
          {
@@ -1375,7 +1375,7 @@ void mfd_draw_button(ubyte mfd_id, ubyte b)
       r.lr.y = r.ul.y + MFD_BTTN_SZ;
 
       slot = player_struct.mfd_virtual_slots[mfd_id][b];
-   
+
       if      (player_struct.mfd_slot_status[slot] == MFD_EMPTY)  gr_set_fcolor(MFD_BTTN_EMPTY);
       else if (player_struct.mfd_slot_status[slot] == MFD_ACTIVE) gr_set_fcolor(MFD_BTTN_ACTIVE);
       else if (player_struct.mfd_slot_status[slot] == MFD_UNAVAIL) gr_set_fcolor(MFD_BTTN_UNAVAIL);
@@ -1482,7 +1482,7 @@ LGPoint mfd_full_draw_string(char *s, short x, short y, long c, int font, bool D
       draw_shadowed_string(s,x,y,border > 0);
    }
    mfd_add_rect(x-border,y-border,x+w+border,y+h+border);
-out: 
+out:
    if (mfd_string_wrap)
       unwrap_text(s);
    ResUnlock(font);
@@ -1505,8 +1505,8 @@ LGPoint mfd_draw_string(char *s, short x, short y, long c, bool DrawString)
 }
 
 // ----------------------------------------------------------------------
-// mfd_draw_bitmap() draws a bitmap and adds its rect to the 
-// update list.  
+// mfd_draw_bitmap() draws a bitmap and adds its rect to the
+// update list.
 
 void mfd_draw_bitmap(grs_bitmap* bmp, short x, short y)
 {
@@ -1535,8 +1535,8 @@ void mfd_partial_clear(LGRect *r)
 
 // -------------------------------------------------------------------
 // UPDATE RECT STUFF
-// 
-// Here we are collecting a list refresh rectangles which will be 
+//
+// Here we are collecting a list refresh rectangles which will be
 // updated from the off-screen mfd canvas
 
 #define NUM_MFD_RECTS 16
@@ -1555,7 +1555,7 @@ void mfd_clear_rects(void)
 
 // -------------------------------------------------------------------
 //
-// mfd_add_rect() adds a rect to the rect list. 
+// mfd_add_rect() adds a rect to the rect list.
 
 errtype mfd_add_rect(short x, short y, short x1, short y1)
 {
@@ -1580,13 +1580,13 @@ errtype mfd_add_rect(short x, short y, short x1, short y1)
    for (i = 0; i < mfd_num_updates; i++)
       if (RECT_TEST_SECT(&mfd_update_list[i],&r))
       {
-         // If we intersect with some existing rect, union it in to r and 
+         // If we intersect with some existing rect, union it in to r and
          // Delete it from the list
          RECT_UNION(&mfd_update_list[i],&r,&r);
          if (i != mfd_num_updates-1)
             mfd_update_list[i] = mfd_update_list[mfd_num_updates-1];
          mfd_num_updates--;
-         i = 0; // We might now intersect a previous one.  
+         i = 0; // We might now intersect a previous one.
       }
    if (mfd_num_updates >= NUM_MFD_RECTS)
       return ERR_DOVERFLOW;
@@ -1597,7 +1597,7 @@ errtype mfd_add_rect(short x, short y, short x1, short y1)
 // -------------------------------------------------------------------
 //
 // mfd_update_rects() Updates all rects in the update list, then clears
-// the update list. 
+// the update list.
 
 void mfd_update_rects(MFD* m)
 {
@@ -1637,7 +1637,7 @@ void mfd_update_display(MFD *m, short x0, short y0, short x1, short y1)
       r.lr.y = y1;
 
       RECT_OFFSETTED_RECT(&r,m->rect.ul,&r);
-      if (!RECT_TEST_SECT(&r,&m->rect)) return; 
+      if (!RECT_TEST_SECT(&r,&m->rect)) return;
       RectSect(&r,&m->rect,&r);
 
       gr_push_canvas(grd_screen_canvas);
@@ -1652,7 +1652,7 @@ void mfd_update_display(MFD *m, short x0, short y0, short x1, short y1)
       RESTORE_CLIP(a,b,c,d);
       gr_pop_canvas();
    }
-  
+
    return;
 }
 
@@ -1708,13 +1708,13 @@ void save_mfd_slot(int mfd_id)
 {
 	uchar func,mask;
 	int slot;
-	
+
 	if (global_fullmap->cyber)
 		return;
 	if (player_struct.mfd_save_slot[mfd_id] < 0)
 	{
 		slot = player_struct.mfd_current_slots[mfd_id];
-		
+
 		func = mfd_get_func(mfd_id,slot);
 		if (!(mfd_funcs[func].flags & MFD_NOSAVEREST))
 		{
@@ -1733,7 +1733,7 @@ void save_mfd_slot(int mfd_id)
 
 // sets mfd to given slot and func, unless the func passed in is MFD_EMPTY_FUNC
 // or some MFD already has that func.  In that case, set to some other slot
-// from a list of hopefully useful defaults. 
+// from a list of hopefully useful defaults.
 // note that if you pass in MFD_EMPTY_FUNC, a new setting is always selected,
 // so the slot argument is ignored.
 
@@ -1741,7 +1741,7 @@ void set_mfd_from_defaults(int mfd_id, uchar func, uchar slot)
 {
 	uchar def, mid;
 	bool check;
-	
+
 	def=0;
 	do
 	{

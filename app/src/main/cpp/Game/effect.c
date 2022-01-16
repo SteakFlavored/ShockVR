@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/effect.c $
@@ -79,7 +79,7 @@ ubyte effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES] = {
       // robot
       {BULLET_ROBOT,BULLET_ROBOT}, // projectile
       {BEAM_ROBOT_LT,BEAM_ROBOT_HVY},     // beam guns
-      {IMPACT,IMPACT},                    // hand-to-hand               
+      {IMPACT,IMPACT},                    // hand-to-hand
       {M_EXPL2,M_EXPL2}                  // grenades
    },
    {
@@ -183,7 +183,7 @@ ObjID do_special_effect_location(ObjID owner, ubyte effect, ubyte start, ObjLoc 
 ObjID do_special_effect(ObjID owner, ubyte effect, ubyte start, ObjID target_id, short location)
 {
    ObjLoc   loc= objs[target_id].loc;
-   
+
    return(do_special_effect_location(owner, effect, start, &loc, location));
 }
 
@@ -256,7 +256,7 @@ int anim_frames(ObjID id)
 //		prt = ResReadRefTable(door_id(id));
 		prt = (RefTable *)ResLock(door_id(id));
 		retval = prt->numRefs;
-//		ResFreeRefTable(prt);								
+//		ResFreeRefTable(prt);
 		ResUnlock(door_id(id));
 	      break;
       default:
@@ -316,7 +316,7 @@ errtype increment_anim(ulong num_units)
    ObjSpecID      osid;
    ObjID          id;
    uchar          anim_rem[MAX_ANIMLIST_SIZE];
-   uchar          cb_list[MAX_ANIMLIST_SIZE];   
+   uchar          cb_list[MAX_ANIMLIST_SIZE];
    int            triple,num_frames;
    char curr_frames;
    int post,i;
@@ -332,7 +332,7 @@ errtype increment_anim(ulong num_units)
 #endif
 
    // *************************************************************
-   //                   HAND ART 
+   //                   HAND ART
    // *************************************************************
 
    if (handart_show > 1)
@@ -347,7 +347,7 @@ errtype increment_anim(ulong num_units)
       handart_remainder = new_units % hand_speed;
       if (old_handart != handart_show)
          chg_set_flg(_current_3d_flag);
-      
+
       // check to see if we're going to skip the fire frame, if so, don't skip it!
       // - this is so we definitely show the fire frame, otherwise it would look very goooooofy - minman
 
@@ -484,8 +484,8 @@ errtype increment_anim(ulong num_units)
    }
 
    // Objects on the animation list
-   LG_memset(anim_rem,0,MAX_ANIMLIST_SIZE);
-   LG_memset(cb_list,0,MAX_ANIMLIST_SIZE);
+   memset(anim_rem,0,MAX_ANIMLIST_SIZE);
+   memset(cb_list,0,MAX_ANIMLIST_SIZE);
    for (i=0; i < anim_counter; i++)
    {
       id = animlist[i].id;
@@ -528,13 +528,13 @@ errtype increment_anim(ulong num_units)
                {
                   case CLASS_DOOR:
                      // if we are a kind of door that blocks the renderer, and we are closed, then
-                     // set our instance bit so that the renderer can know about it.   
+                     // set our instance bit so that the renderer can know about it.
                      if (RENDER_BLOCK & ObjProps[OPNUM(id)].flags)
                         objs[id].info.inst_flags |= RENDER_BLOCK_FLAG;
                      break;
                }
 	         }
-         }     
+         }
 	      else
 	         objs[id].info.current_frame -= interval;
       }
@@ -543,7 +543,7 @@ errtype increment_anim(ulong num_units)
          switch (objs[id].obclass)
          {
             case CLASS_DOOR:
-               if (((objs[id].loc.p != 0) || (objs[id].loc.b != 0)) && 
+               if (((objs[id].loc.p != 0) || (objs[id].loc.b != 0)) &&
                   (objs[id].info.current_frame < DOOR_OPEN_FRAME) && (objs[id].info.current_frame + interval >= DOOR_OPEN_FRAME))
                {
                   obj_physics_refresh_area(OBJ_LOC_BIN_X(objs[id].loc), OBJ_LOC_BIN_Y(objs[id].loc),TRUE);
@@ -607,7 +607,7 @@ errtype increment_anim(ulong num_units)
    //         SET_EFFECT_EIGHTH(id, (time/32));
     //     }
       }
-      if ((id != PLAYER_OBJ) && 
+      if ((id != PLAYER_OBJ) &&
          (!ai_critter_sleeping(osid) || (get_crit_posture(osid) == DEATH_CRITTER_POSTURE)))
       {
          new_units = num_units + objs[id].info.time_remainder;
@@ -634,12 +634,12 @@ errtype increment_anim(ulong num_units)
                if (pd > min_mojo)
                {
                   asp = fix_int(fix_mul_div(fix_make(asp,0), standard_critter_speed, pd));
-                  if (asp < min_critter_anim_speed) 
+                  if (asp < min_critter_anim_speed)
                      asp = min_critter_anim_speed;
-                  else if (asp > max_critter_anim_speed) 
+                  else if (asp > max_critter_anim_speed)
                      asp = max_critter_anim_speed;
                }
-            } 
+            }
             else if ((post == ATTACKING_CRITTER_POSTURE) || (post == ATTACKING2_CRITTER_POSTURE))
             {
                asp = attacking_anim_speed;
@@ -695,7 +695,7 @@ errtype increment_anim(ulong num_units)
 
 	            ADD_DESTROYED_OBJECT(id);
 	         }
-	         else if ((post == ATTACKING_CRITTER_POSTURE) || (post == ATTACKING2_CRITTER_POSTURE) || 
+	         else if ((post == ATTACKING_CRITTER_POSTURE) || (post == ATTACKING2_CRITTER_POSTURE) ||
                      (post == DISRUPT_CRITTER_POSTURE) || (post == KNOCKBACK_CRITTER_POSTURE))
 	         {
 	            set_posture(objs[id].specID, ATTACK_REST_CRITTER_POSTURE);
@@ -875,7 +875,7 @@ errtype remove_obj_from_animlist(ObjID id)
 
 errtype animlist_clear()
 {
-   LG_memset(animlist, 0, sizeof(AnimListing) * MAX_ANIMLIST_SIZE);
+   memset(animlist, 0, sizeof(AnimListing) * MAX_ANIMLIST_SIZE);
    anim_counter = 0;
    return(OK);
 }

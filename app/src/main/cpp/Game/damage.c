@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/damage.c $
@@ -221,7 +221,7 @@ int random_bell_modifier(bool attack_on_player)
       rval = RndRange(&damage_rnd, 0, die_value);
       rtotal += rval;
    }
- 
+
    if (rtotal <= 2)        retval = -12;     // 00-02
    else if (rtotal <= 8)   retval = -8;      // 03-08
    else if (rtotal <= 16)  retval = -6;      // 09-16
@@ -248,7 +248,7 @@ int randomize_damage(int damage,bool attack_on_player)
    int        i;
    ubyte  difficulty = (global_fullmap->cyber) ?
       player_struct.difficulty[CYBER_DIFF_INDEX] : player_struct.difficulty[COMBAT_DIFF_INDEX];
-   
+
    dtotal = damage/2;
    iterations = damage/8;
 
@@ -335,7 +335,7 @@ short fr_solidfr_time;
 short fr_sfx_time;
 
 
-// this is the voodoo threshold for shields, so that we have a reference 
+// this is the voodoo threshold for shields, so that we have a reference
 // to do effects with. (static)
 #define VOODOO_SHIELD_THRESHOLD     100
 
@@ -382,7 +382,7 @@ int shield_absorb_damage(int damage, ubyte, byte shield_absorb, ubyte shield_thr
       else
          shield_drain = 0;
    }
-   
+
    // Hud me baby
    // oh,and sound too.
 
@@ -519,7 +519,7 @@ void player_dies()
    physics_zero_all_controls();
 
    // clear edms_state
-   LG_memset(player_struct.edms_state, 0, sizeof(fix)*12);
+   memset(player_struct.edms_state, 0, sizeof(fix)*12);
 
    // reset the inventory page
    inventory_page = 0;
@@ -623,7 +623,7 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags)
                if ((player_struct.drug_status[DRUG_LSD] > 0) && (QUESTVAR_GET(COMBAT_DIFF_QVAR) < 3))
                   *cur_hp = 1;
                else
-#endif 
+#endif
                {
                   *cur_hp = 0;
                   dead = TRUE;
@@ -661,14 +661,14 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags)
    // makes sure gamescreen knows that it should be updated
    chg_set_flg(VITALS_UPDATE);
    return(dead);
-}   
+}
 
 // --------------------------------------------------
 // damage_object()
 //
 // return 0 - if object is still alive after damage
 // return 1 - if object has been destroyed
-// 
+//
 // also does the appropriate texture map change if
 // object is destroyed???????
 
@@ -681,7 +681,7 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags)
    short target_hp = ObjProps[OPNUM(target_id)].hit_points;
 
    // If we've already been destroyed, or don't care, thendon't bother us.
-   if ((objs[target_id].info.inst_flags & INDESTRUCT_FLAG) || 
+   if ((objs[target_id].info.inst_flags & INDESTRUCT_FLAG) ||
          ((target_id != player_struct.rep) && (objs[target_id].info.current_hp == 0)))
       return(0);
 
@@ -776,7 +776,7 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags)
 }
 
 // -----------------------------------------------
-// simple_damage_object() takes damage of a particular type with particular flags, 
+// simple_damage_object() takes damage of a particular type with particular flags,
 // and applies it to the object if it is vulnerable to the type.
 // returns whether the object was destroyed.
 
@@ -952,7 +952,7 @@ bool terrain_damage_object(physics_handle ph, fix raw_damage)
 // penet          penetration value of the attack
 // power_level    percentage of damage to be inflicted
 // *effect        returns the effect number to be played
-// *effect_row    a pointer to the effect row 
+// *effect_row    a pointer to the effect row
 
 int compute_damage(ObjID target,int damage_type,int damage_mod,ubyte offense,ubyte penet,int power_level,ubyte *effect,ubyte *effect_row, ubyte attack_effect_type)
 {
@@ -1012,7 +1012,7 @@ int compute_damage(ObjID target,int damage_type,int damage_mod,ubyte offense,uby
       }
 
       // take either the normal effect, unless we did lots of damage - then play bigger one
-      if ((effect_row != NULL) && (attack_effect_type != SPECIAL_TYPE) && (effect != NULL) && !global_fullmap->cyber) 
+      if ((effect_row != NULL) && (attack_effect_type != SPECIAL_TYPE) && (effect != NULL) && !global_fullmap->cyber)
       {
          // check to see if we did damage - if so - do appropriate hit effect
          // otherwise do a wall hit effect - MEANS NO DAMAGE/EFFECT
@@ -1104,8 +1104,8 @@ int get_damage_estimate(ObjSpecID osid)
 // flags          flags for the attack          (currently just to see if player's shields absorb damage)
 // power_level    percentage of damage to be inflicted
 // *effect        returns the effect number to be played
-// *effect_row    a pointer to the effect row 
-// 
+// *effect_row    a pointer to the effect row
+//
 // returns whether target died
 
 ubyte attack_object(ObjID target, int damage_type,int damage_mod, ubyte offense, ubyte penet, ubyte flags, int power_level, ubyte *effect_row, ubyte *effect, ubyte attack_effect_type, int *damage_inflicted)
@@ -1115,7 +1115,7 @@ ubyte attack_object(ObjID target, int damage_type,int damage_mod, ubyte offense,
 
    if (effect)
 	   *effect = 0;
-   // check to see if we have a valid target 
+   // check to see if we have a valid target
    if (target == OBJ_NULL)
       return(0);
    else if (is_obj_destroyed(target))
@@ -1137,7 +1137,7 @@ ubyte attack_object(ObjID target, int damage_type,int damage_mod, ubyte offense,
    else
    {
 #ifdef SELFRUN       // we do max damage if we're in self run
-      damage = ((objs[target].obclass == CLASS_CRITTER) && (target != PLAYER_OBJ)) ? 0xFF : 0; 
+      damage = ((objs[target].obclass == CLASS_CRITTER) && (target != PLAYER_OBJ)) ? 0xFF : 0;
 #else
       damage = compute_damage(target, damage_type, damage_mod, offense, penet, power_level, effect, effect_row, attack_effect_type);
 #endif
@@ -1185,7 +1185,7 @@ ubyte player_attack_object(ObjID target, int wpn_triple, int power_level, Combat
    ubyte effect_class = (objs[target].obclass == CLASS_CRITTER) ? CritterProps[CPNUM(target)].hit_effect : NON_CRITTER_EFFECT;
 
    // Special targeting ware hack
-   if ((objs[target].obclass == CLASS_CRITTER) && 
+   if ((objs[target].obclass == CLASS_CRITTER) &&
        (get_player_ware_version(WARE_HARD,HARDWARE_TARGET) > 3) && (player_struct.curr_target == OBJ_NULL)
        && (!global_fullmap->cyber))
    {
@@ -1243,7 +1243,7 @@ ubyte player_attack_object(ObjID target, int wpn_triple, int power_level, Combat
       case (CLASS_AMMO):
          damage_mod = AmmoProps[CPTRIP(wpn_triple)].damage_modifier;
          offense = AmmoProps[CPTRIP(wpn_triple)].offense_value;
-         dtype = AmmoProps[CPTRIP(wpn_triple)].damage_type; 
+         dtype = AmmoProps[CPTRIP(wpn_triple)].damage_type;
          penet = AmmoProps[CPTRIP(wpn_triple)].penetration;
          attack_effect_type = PROJ_TYPE;
          break;

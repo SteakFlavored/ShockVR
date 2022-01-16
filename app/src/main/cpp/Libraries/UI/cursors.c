@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/ui/RCS/cursors.c $
@@ -25,78 +25,78 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: cursors.c $
  * Revision 1.24  1994/08/24  08:55:41  mahk
  * Cursor stacks and invisible regions.
- * 
+ *
  * Revision 1.23  1994/08/22  04:19:08  mahk
  * Made real anal cursor_stack spew.
- * 
+ *
  * Revision 1.22  1994/02/10  08:15:25  mahk
  * Actually caused uiSetDefaultSlabCursor or whatever to actually work as specified instead
- * of obliterating the top of the cursor stack.  
- * 
+ * of obliterating the top of the cursor stack.
+ *
  * Revision 1.21  1994/02/07  16:14:43  mahk
  * Changed the canvas to be more renderer/compatible.
- * 
+ *
  * Revision 1.20  1994/02/06  06:05:03  mahk
  * Fixed stupid uiPopSlabCursor bug.
- * 
+ *
  * Revision 1.19  1994/01/19  20:52:11  mahk
  * Fixed black cursor bug yay.
- * 
+ *
  * Revision 1.18  1994/01/16  04:37:40  mahk
  * Fixed hide/show logic
- * 
+ *
  * Revision 1.17  1993/12/16  07:44:07  kaboom
  * Moved code actually called from interrupt handler to another
  * file and made relevant statics public.
- * 
+ *
  * Revision 1.16  1993/10/20  05:13:00  mahk
  * No longer do we push a canvas in an interrupt.
- * 
+ *
  * Revision 1.15  1993/10/11  20:26:32  dc
  * Angle is fun, fun fun fun
- * 
+ *
  * Revision 1.14  1993/09/09  19:20:10  mahk
  * Fixed heap trashage.
- * 
+ *
  * Revision 1.13  1993/08/16  18:24:28  xemu
  * fixed some spew
- * 
+ *
  * Revision 1.12  1993/08/02  14:21:10  mahk
  * Save under now grows whenever a bitmap cursor is made
- * 
+ *
  * Revision 1.11  1993/06/08  23:59:36  mahk
  * Cursors now clip.
- * 
+ *
  * Revision 1.10  1993/05/27  12:49:01  mahk
- * Lock out reentrance in interrupt mouse drawing.  
- * Mouse rectangle stack grows in size if necessary. 
- * 
+ * Lock out reentrance in interrupt mouse drawing.
+ * Mouse rectangle stack grows in size if necessary.
+ *
  * Revision 1.9  1993/05/26  16:33:55  mahk
  * Added REAL mouse tolerance.
- * 
+ *
  * Revision 1.8  1993/05/26  03:21:54  mahk
- * Added way-cool rectangle protection for mousehide, and pixel move tolerance for cursor 
+ * Added way-cool rectangle protection for mousehide, and pixel move tolerance for cursor
  * draw.
- * 
+ *
  * Revision 1.7  1993/05/25  19:55:14  mahk
  * Fixed mousehide and show to not leave droppings.
- * 
+ *
  * Revision 1.6  1993/04/28  15:59:23  mahk
  * conversion to libdbg
- * 
+ *
  * Revision 1.5  1993/04/28  14:39:52  mahk
  * Preparing for second exodus
- * 
+ *
  * Revision 1.4  1993/04/13  23:18:35  mahk
  * Added lots of debugging spews.
- * 
+ *
  * Revision 1.3  1993/04/08  17:52:07  mahk
- * The interrupt handler callback, now, in fact, no longer draws the 
+ * The interrupt handler callback, now, in fact, no longer draws the
  * mouse cursor when it is hidden.  Go Figure.
- * 
+ *
  * Revision 1.2  1993/04/05  23:36:01  unknown
- * Added hide/show and slab support.  
- * 
+ * Added hide/show and slab support.
+ *
  * Revision 1.1  1993/03/31  23:17:24  mahk
  * Initial revision
  */
@@ -106,7 +106,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lg.h"
 #include "2d.h"
-#include "cursors.h" 
+#include "cursors.h"
 #include "curtyp.h"
 #include "slab.h"
 //#include <libdbg.h>
@@ -136,7 +136,7 @@ LGRegion* CursorRegion  = NULL;
 LGCursor* CurrentCursor = NULL;
 
 
-// The last cursor region, for when we undraw. 
+// The last cursor region, for when we undraw.
 
 LGPoint LastCursorPos;
 LGRegion* LastCursorRegion = NULL;
@@ -159,7 +159,7 @@ grs_canvas* CursorCanvas = &DefaultCursorCanvas;
 
 
 // Number of pixels to move before interrupt handler draws
-int CursorMoveTolerance = 0; 
+int CursorMoveTolerance = 0;
 
 
 // ------------------
@@ -186,7 +186,7 @@ void ui_update_cursor(LGPoint pos);
 
 // KLC - now just allocates a bitmap at the beginning and never actually grows it.
 static errtype grow_save_under(short x, short y)
-{  
+{
 	int sz = MAPSIZE(x,y);
 	if (SaveUnder.mapsize >= sz) return ERR_NOEFFECT;
 
@@ -201,7 +201,7 @@ bool cursor_get_callback(LGRegion* reg, LGRect*, void *vp)
    cursor_stack* cs = (cursor_stack*)(reg->cursors);
    bool anal = FALSE;
    //DBG(DSRC_UI_Anal, { anal = TRUE;});
-   //if (anal) SPEW_ANAL(DSRC_UI_Cursor_Stack,("cursor_get_callback(%x,%x,%x)\n",reg,rect,s)); 
+   //if (anal) SPEW_ANAL(DSRC_UI_Cursor_Stack,("cursor_get_callback(%x,%x,%x)\n",reg,rect,s));
    if (cs == NULL) *(s->out) = NULL;
    else
    {
@@ -290,7 +290,7 @@ errtype uiPushCursor(cursor_stack* cs, LGCursor* c)
       LGCursor** tmp = (LGCursor**)NewPtr(cs->size*2*sizeof(LGCursor*));
       //SPEW_ANAL(DSRC_UI_Cursor_Stack,("cs_push(%x,%x), growing stack\n",cs,c));
       if (tmp == NULL) return ERR_NOMEM;
-      LG_memcpy(tmp,cs->stack,cs->size*sizeof(LGCursor*));
+      memcpy(tmp,cs->stack,cs->size*sizeof(LGCursor*));
       DisposePtr((Ptr)cs->stack);
       cs->stack = tmp;
       cs->size *= 2;
@@ -348,7 +348,7 @@ errtype uiPopCursorEvery(uiCursorStack* cs, LGCursor* c)
 
 
 #define get_region_stack uiGetRegionCursorStack
- 
+
 errtype get_region_stack(LGRegion*r, cursor_stack** cs)
 {
    cursor_stack* res = (cursor_stack*)(r->cursors);
@@ -487,7 +487,7 @@ void ui_update_cursor(LGPoint pos)
       MouseLock--;
    }
 }
-  
+
 
 // -------------
 // API FUNCTIONS

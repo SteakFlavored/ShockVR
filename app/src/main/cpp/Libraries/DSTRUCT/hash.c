@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/dstruct/RCS/hash.c $
@@ -25,25 +25,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: hash.c $
  * Revision 1.5  1994/01/18  08:16:06  mahk
  * Added hash_copy
- * 
+ *
  * Revision 1.4  1993/08/09  17:14:59  mahk
  * Fixed the libdbg.h thing.
- * 
+ *
  * Revision 1.3  1993/07/01  12:16:22  mahk
  * changed log2 to hashlog2 to avoid name conflict
- * 
+ *
  * Revision 1.2  1993/06/14  21:11:45  xemu
  * step func
- * 
+ *
  * Revision 1.1  1993/03/25  19:15:09  mahk
  * Initial revision
- * 
+ *
  *
  */
 
 #include <stdlib.h>
 #include <string.h>
-#include "hash.h" 
+#include "hash.h"
 
 //--------------------
 //  Defines
@@ -129,8 +129,8 @@ errtype hash_copy(Hashtable* t, Hashtable* s)
    if (t->statvec == NULL) return ERR_NOMEM;
    t->vec = NewPtr(t->elemsize*t->size);
    if (t->vec == NULL) return ERR_NOMEM;
-   LG_memcpy(t->vec,s->vec,t->size*t->elemsize);
-   LG_memcpy(t->statvec,s->statvec,t->size);
+   memcpy(t->vec,s->vec,t->size*t->elemsize);
+   memcpy(t->statvec,s->statvec,t->size);
    return OK;
 }
 
@@ -212,7 +212,7 @@ errtype hash_set(Hashtable* h, void* elem)
       grow(h,h->size*2);
    if (!find_elem(h,elem,&i))
       i = find_index(h,elem);
-   LG_memcpy(ELEM(h,i),elem,h->elemsize);
+   memcpy(ELEM(h,i),elem,h->elemsize);
    h->statvec[i] = HASH_FULL;
    h->fullness++;
    return OK;
@@ -225,7 +225,7 @@ errtype hash_insert(Hashtable* h, void* elem)
    if (h->fullness*100/h->size > FULLNESS_THRESHHOLD_PERCENT)
       grow(h,h->size*2);
    i = find_index(h,elem);
-   LG_memcpy(ELEM(h,i),elem,h->elemsize);
+   memcpy(ELEM(h,i),elem,h->elemsize);
    h->statvec[i] = HASH_FULL;
    h->fullness++;
    return OK;

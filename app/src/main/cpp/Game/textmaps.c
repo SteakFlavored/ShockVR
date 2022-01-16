@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/textmaps.c $
@@ -105,7 +105,7 @@ errtype load_small_texturemaps(void)
    ObjSpecID osid;
    uchar anim_used[MAX_SMALL_TMAPS/8];
 
-   LG_memset(anim_used, 0, MAX_SMALL_TMAPS/8);
+   memset(anim_used, 0, MAX_SMALL_TMAPS/8);
 
    // Figure out which animations are in use
    osid = objBigstuffs[0].id;
@@ -284,12 +284,12 @@ void load_textures(void)
    // Load in texture properties for all textures
    load_master_texture_properties();
    AdvanceProgress();
-   
+
    // Copy the appropriate things into textprops
    for (i=0; i < NUM_LOADED_TEXTURES; i ++)
       textprops[i] = texture_properties[loved_textures[i]];
    AdvanceProgress();
-   
+
    // Get rid of the big set
    unload_master_texture_properties();
    textures_loaded = TRUE;
@@ -317,7 +317,7 @@ errtype bitmap_array_unload(int *num_bitmaps, grs_bitmap *arr[])
    for (i=0; i<*num_bitmaps; i++)
    {
 //      Spew(DSRC_SYSTEM_Memory, ("%d ",i));
-      DisposePtr((Ptr)arr[i]->bits);   
+      DisposePtr((Ptr)arr[i]->bits);
       DisposePtr((Ptr)arr[i]);
    }
    *num_bitmaps = 0;
@@ -337,7 +337,7 @@ errtype Init_Lighting(void)
 {
    Handle	res;
    int		i;
-   
+
    // Read in the standard shading table
    res = GetResource('shad',1000);
    if (!res) return(ERR_FOPEN);
@@ -366,14 +366,14 @@ errtype Init_Lighting(void)
       //Warning(("Read only %d values from shading_table\n"));
    }
    close(fd);*/
-   
+
    for (i=0; i<256*16; i+=256)
    {
       shading_table[i]=0;  			// i love our shading table
       shading_table[i+255]=0xFF;  	// KLC - so do I
    }
- 
-   // Now choose this one as our normal shading table   
+
+   // Now choose this one as our normal shading table
    gr_set_light_tab(shading_table);
 
    // now read bw shading table
@@ -381,7 +381,7 @@ errtype Init_Lighting(void)
    if (!res) return(ERR_FOPEN);
    BlockMove(*res, bw_shading_table,(256 * 16));
    ReleaseResource(res);
-   
+
 // MLA- changed this to use resources
 /*   if (!DatapathFind(&DataDirPath,SHADING_TABLE_BW_FNAME,shad_path))
    {
@@ -403,7 +403,7 @@ errtype Init_Lighting(void)
    }
    close(fd);
    */
-   
+
    for (i=0; i<256*16; i+=256)
       bw_shading_table[i]=0;  // i love our shading table
 
@@ -416,12 +416,12 @@ errtype load_master_texture_properties(void)
 {
    int version,i;
    Handle res;
-      
+
    texture_properties = (TextureProp *)NewPtr(GAME_TEXTURES * sizeof(TextureProp));
 
    // Load Properties from disk
    clear_texture_properties();
-   
+
    res = GetResource('tprp',1000);
    if (res)
     {
@@ -432,7 +432,7 @@ errtype load_master_texture_properties(void)
        // copy out the structs, fixing the 11->12 byte size difference
        for (i=0; i<363; i++)
          texture_properties[i] = * (TextureProp *) (*res+4+(i*11));
-      	
+
        // fix shorts in texture_properties
        for (i=0; i<GAME_TEXTURES; i++)
         {
@@ -458,7 +458,7 @@ errtype load_master_texture_properties(void)
          close(fd);
       }
     }*/
-    
+
    return(OK);
 }
 
@@ -474,7 +474,7 @@ errtype clear_texture_properties(void)
    int i;
 
    // clear it all
-   LG_memset(texture_properties, 0, sizeof (TextureProp) * GAME_TEXTURES);
+   memset(texture_properties, 0, sizeof (TextureProp) * GAME_TEXTURES);
 
    // set the stuff that needs values besides zero
    for (i=0; i<GAME_TEXTURES; i++)
@@ -605,13 +605,13 @@ errtype texture_crunch_init(void)
       else
          tmap_crunch[i] = -1;
    }
-   return(OK);      
+   return(OK);
 }
 
 errtype texture_crunch_go(void)
 {
    int i;
-   
+
    for (i=0; i < NUM_LOADED_TEXTURES; i++)
    {
       //Warning(("%d=%d->%d->%d\n",i,loved_textures[i],tmap_convert[loved_textures[i]],tmap_crunch[tmap_convert[loved_textures[i]]]));
