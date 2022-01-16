@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/invent.c $
@@ -71,9 +71,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <i6dvideo.h>
 
 
-/***************************************/ 
+/***************************************/
 /* INVENTORY DISPLAY MODULE            */
-/*-------------------------------------*/ 
+/*-------------------------------------*/
 /*---------------------------------------------
 The inventory display is arranged into a number of
 /pages/, each of which can contain one or more
@@ -92,7 +92,7 @@ observe: "Why are these lists different, when the
 quantity of something is always zero if you have
 none of it, and thus the quantity array and the
 exists array could be the same?"  The answer is:
-because it's goofy. 
+because it's goofy.
 
 For each list, the inventory display maintains a
 state array describing what stuff was actually
@@ -102,7 +102,7 @@ elements of the array are structures of type
 
 A list can be divided onto different pages of the
 inventory, and each section of a list that
-appears on its own page is called a /display/. 
+appears on its own page is called a /display/.
 The inventory panel figures out what to display
 by looking through a huge list of all the
 displays in the game.  Adding a new display is as
@@ -142,7 +142,7 @@ And now, the code...
 #define RIGHT_MARGIN 3
 #define Y_STEP 6
 #define WEAPON_X LEFT_MARGIN
-#define AMMO_X 70 
+#define AMMO_X 70
 #define GRENADE_LEFT_X (AMMO_X + 4)
 #define GRENADE_RIGHT_X (GRENADE_LEFT_X+30)
 #define DRUG_RIGHT_X (INVENTORY_PANEL_WIDTH - RIGHT_MARGIN)
@@ -182,7 +182,7 @@ typedef enum {
              } invent_bttn_state;
 
 #define FlashOn(state) (((state) & 0x1) == 0)
-#define Flashing(state) ((state) >= BttnFlashOff && (state) <= BttnFlashOn)            
+#define Flashing(state) ((state) >= BttnFlashOff && (state) <= BttnFlashOn)
 
 // mapping from button states to colors
 ubyte _bttn_state2color[] = {
@@ -213,16 +213,16 @@ ubyte _bttn_state2color[] = {
 
 // Misc
 #define BUFSZ 50
-#define NULL_ACTIVE -1  // the null active 
+#define NULL_ACTIVE -1  // the null active
 
 // Object adding return codes
 
 typedef enum
-   { 
-      ADD_FAIL,        
-      ADD_POP,         
-      ADD_SWAP,        
-      ADD_REJECT,      
+   {
+      ADD_FAIL,
+      ADD_POP,
+      ADD_SWAP,
+      ADD_REJECT,
       ADD_NOROOM,
       ADD_NOEFFECT
    } AddResult;
@@ -234,18 +234,18 @@ typedef struct _quantity_state
 {
    ushort num;    // item number
    ubyte exist;  // do we have it;
-   ubyte quant;  // quantity   
+   ubyte quant;  // quantity
    byte pad;
 } quantity_state;
 
 // Get the correct color for an item, given its rank in the list.
 typedef uchar (*color_func)(void* dp, int num);
 
-// Get the string name of an item, given its rank in the 
+// Get the string name of an item, given its rank in the
 // list.
 typedef char* (*name_func)(void* dp, int num, char* buf);
 
-// Get the string quantity of an item, given its rank in the 
+// Get the string quantity of an item, given its rank in the
 // list,and its actual quantity.
 typedef char* (*quant_string_func)(struct _inventory_display_list* dp, int num, int quant, char* buf);
 
@@ -258,7 +258,7 @@ typedef bool (*select_func)(struct _inventory_display_list *dp, int itemnum);
 // Use an item given its rank in the list.
 typedef bool (*use_func)(struct _inventory_display_list *dp, int itemnum);
 
-// Add an object to a list 
+// Add an object to a list
 typedef ubyte (*add_func)(struct _inventory_display_list *dp, int itemnum, ObjID* obj,bool select);
 
 // Remove and object from a list
@@ -272,8 +272,8 @@ typedef struct _inventory_display_list
    short top;               // Top pixel margin
    ubyte titlecolor;        // Title color.  Duh.
    ubyte listcolor;         // color for list items. if greater than 239,
-                            // it's a color func. 
-   ushort first;             // first list item to start at. 
+                            // it's a color func.
+   ushort first;             // first list item to start at.
    ushort pgsize;            // Number of items in each list page
    ushort listlen;           // Number of total list items
    int titlenum;            // String number of title.
@@ -287,9 +287,9 @@ typedef struct _inventory_display_list
    use_func use;            // use a row
    int add_classes;         // Classes of objects that this list represents
    add_func add;            // function to add an object to this list.
-   drop_func drop;          // remove an object from a row.  
-   int basetrip;            // triple of item number zero.  
-   int (*toidx)(int);       // convert from a triple to an index  (NOT USED) 
+   drop_func drop;          // remove an object from a row.
+   int basetrip;            // triple of item number zero.
+   int (*toidx)(int);       // convert from a triple to an index  (NOT USED)
    // state data
    uchar dummy;             // used to be known_active
    quantity_state* lines;   // lines of state data
@@ -309,12 +309,12 @@ color_func color_func_list[] = { email_color_func };
 // GLOBALS
 // -------
 
-// The current inventory "page" 
+// The current inventory "page"
 
 short inventory_page = 0;
 bool show_all_actives=FALSE;
 
-// The last page we drew 
+// The last page we drew
 short inv_last_page = INV_BLANK_PAGE;
 
 LGRegion *inventory_region;
@@ -337,12 +337,12 @@ quantity_state generic_lines[48];
 // page button state
 invent_bttn_state page_button_state[NUM_PAGE_BUTTONS] = { BttnOff, BttnOff, BttnOff,BttnDummy,BttnDummy, BttnOff,
                                                          };
-// Last button state that was actually drawn. 
+// Last button state that was actually drawn.
 invent_bttn_state old_button_state[NUM_PAGE_BUTTONS] = { BttnDummy, BttnDummy, BttnDummy,BttnDummy,BttnDummy, BttnDummy
                                                          };
 
 LGRegion* pagebutton_region;
- 
+
 // DRAWING STUFF
 grs_bitmap inv_backgnd;
 grs_canvas inv_norm_canvas;
@@ -459,7 +459,7 @@ bool gen_inv_displays(int *i, inv_display** dp);
 
 
 // ---------------------
-// DISPLAY LIST ROUTINES 
+// DISPLAY LIST ROUTINES
 // ---------------------
 
 // --------
@@ -555,8 +555,8 @@ void clear_inventory_region(short x1,short y1,short x2,short y2)
 void draw_quant_line(char* name, char* quant, long color, bool active, short left, short right, short y)
 {
    short	ht, wd;
-   
-   gr_string_size(name, &wd, &ht); 
+
+   gr_string_size(name, &wd, &ht);
    wd = gr_string_width(quant);
    clear_inventory_region(left,y,right,y+ht);
    if (active)
@@ -593,7 +593,7 @@ void draw_quant_list(inv_display* dp, bool newpage)
       draw_inventory_string(buf,dp->left,dp->top,TRUE);
    }
    if (dp->first != 0) wtype = dp->first;
-   else 
+   else
       for(wtype = 0, cnt = 0; wtype < dp->listlen && cnt < dp->pgsize*dp->relnum; wtype++)
       {
          if (exist[wtype] > 0) cnt++;
@@ -734,8 +734,8 @@ char* weapon_quant_func(int num, char* buf)
       if (ws->ammo_type == EMPTY_WEAPON_SLOT)
       {
          ammo=0;
-      }   
-      
+      }
+
       get_available_ammo_type(ws->type,ws->subtype,&num_ammo_types,ammo_types,&ammo_subclass);
 
       triple = MAKETRIP(CLASS_AMMO,ammo_subclass,ws->ammo_type);
@@ -760,7 +760,7 @@ char* weapon_quant_func(int num, char* buf)
       else
          get_string(REF_STR_GunOK,buf,BUFSZ);
    }
-   return buf;                      
+   return buf;
 }
 
 void draw_weapons_list(inv_display *dp)
@@ -788,12 +788,12 @@ void draw_weapons_list(inv_display *dp)
       bool avail;
       bool newactive = weapon_list.active != player_struct.actives[ACTIVE_WEAPON];
       bool changed;
-      
+
       get_available_ammo_type(weapon_list.slots[s].type,weapon_list.slots[s].subtype,&num_ammo_types,dummy2,&dummy1);
       avail=(num_ammo_types>0);
       changed = newpage ||
                      (avail != weapon_list.ammo_available[s]) ||
-                     memcmp(&weapon_list.slots[s],&player_struct.weapons[s],sizeof(weapon_slot)) != 0 ||  
+                     memcmp(&weapon_list.slots[s],&player_struct.weapons[s],sizeof(weapon_slot)) != 0 ||
                      (newactive && s == weapon_list.active) ||
                      (newactive && s == player_struct.actives[ACTIVE_WEAPON]) ;
       weapon_list.slots[s] = player_struct.weapons[s];
@@ -836,8 +836,8 @@ bool inventory_select_weapon(inv_display* dp, int w)
    mfd_notify_func(NOTIFY_ANY_FUNC,MFD_ITEM_SLOT,FALSE,MFD_ACTIVE,TRUE);
    INVENT_CHANGED;
    retval = TRUE;
-out: 
-   return retval;   
+out:
+   return retval;
 }
 
 bool weapon_use_func(inv_display* dp, int w)
@@ -1044,13 +1044,13 @@ static char* generic_quant_func(inv_display* dp, int n, int q, char* buf)
 
 char* null_name_func(inv_display* dp, int n, char* buf)
 {
-#ifndef NO_DUMMIES   
+#ifndef NO_DUMMIES
    int goof; goof = (int)dp + n;
 #endif // NO_DUMMIES
    *buf = '\0';
    return buf;
 }
- 
+
 // -------------
 // GRENADE FUNCS
 // -------------
@@ -1141,7 +1141,7 @@ void push_live_grenade_cursor(ObjID obj)
 #ifdef SVGA_SUPPORT
    }
 #endif
-   ResUnlock(ITEM_FONT);            
+   ResUnlock(ITEM_FONT);
    gr_pop_canvas();
 #ifdef SVGA_SUPPORT
    ss_set_hack_mode(0,&temp);
@@ -1293,7 +1293,7 @@ static bool ware_use_func(inv_display* dp,int row)
    int waretype;
    int t = dp->lines[row].num;
    if (t >= dp->listlen) return FALSE;
-   switch(dp->activenum)  
+   switch(dp->activenum)
    {
    case ACTIVE_HARDWARE:
       waretype = WARE_HARD;
@@ -1374,7 +1374,7 @@ ubyte ware_add_func(inv_display* dp, int, ObjID* idP,bool select)
 {
    ObjID id = *idP;
    int trip = ID2TRIP(id);
-   bool oneshot; 
+   bool oneshot;
    bool bigstuff_fake=FALSE;
    int n;
    extern bool shameful_obselete_flag;
@@ -1418,7 +1418,7 @@ ubyte ware_add_func(inv_display* dp, int, ObjID* idP,bool select)
       if (select || n == player_struct.actives[dp->activenum])
          set_inventory_mfd(dp->mfdtype,n,TRUE);
       obj_destroy(id);
- 
+
       // Tell the side icons that things may no longer be what they were
 //      side_icon_expose_all();
 
@@ -1426,7 +1426,7 @@ ubyte ware_add_func(inv_display* dp, int, ObjID* idP,bool select)
       if (TRIP2CL(trip) == CLASS_HARDWARE)
       {
          hardware_add_specials(n,ver);
-      }                          
+      }
       return ADD_POP;
    }
    return ADD_REJECT;
@@ -1527,7 +1527,7 @@ char* computron_quant_func(inv_display* dp, int n, int q, char* buf)
 #ifdef REALLY_DO_COMPUTRONS
    ubyte exists, ctrons;
 
-   switch (dp->mfdtype)     
+   switch (dp->mfdtype)
    {
    case MFD_INV_SOFT_COMBAT:
       exists = player_struct.softs.combat[n];
@@ -1553,7 +1553,7 @@ char* computron_quant_func(inv_display* dp, int n, int q, char* buf)
 #endif // COMPUTRONS
 
 // ------------------------------
-// GENERAL INVENTORY -- FUN! FUN! 
+// GENERAL INVENTORY -- FUN! FUN!
 // ------------------------------
 
 #define GENERAL_CLASSES 0xFFFFFF80
@@ -1653,7 +1653,7 @@ ubyte inv_empty_trash(void)
       if (id != OBJ_NULL && (ObjProps[OPNUM(id)].flags & INVENTORY_GENERAL))
          break;
    }
-   // iterate through, destroying trash. 
+   // iterate through, destroying trash.
    for (; trash < NUM_GENERAL_SLOTS; trash++)
    {
       ObjID id = player_struct.inventory[trash];
@@ -1756,7 +1756,7 @@ ubyte add_access_card(inv_display* dp, ObjID* idP,bool select)
 ubyte general_add_func(inv_display* dp, int row, ObjID* idP,bool select)
 {
    play_digi_fx(SFX_INVENT_ADD, 1);
-   if ((objs[*idP].obclass == CLASS_SMALLSTUFF) && 
+   if ((objs[*idP].obclass == CLASS_SMALLSTUFF) &&
       ((objs[*idP].subclass == SMALLSTUFF_SUBCLASS_CARDS) || (ID2TRIP(*idP) == CYBERCARD_TRIPLE)))
       return add_access_card(dp,idP,select);
    if (player_struct.inventory[NUM_GENERAL_SLOTS-1] == OBJ_NULL)
@@ -1771,8 +1771,8 @@ ubyte general_add_func(inv_display* dp, int row, ObjID* idP,bool select)
    else
    {
       ObjID tmp = player_struct.inventory[row];
-      // if we're trying to swap with the "access cards" object, 
-      // use the next object instead.  Since there's only one "access cards" 
+      // if we're trying to swap with the "access cards" object,
+      // use the next object instead.  Since there's only one "access cards"
       // object, this works.
       if (ID2TRIP(tmp) == GENCARDS_TRIPLE)
       {
@@ -2025,7 +2025,7 @@ bool log_use_func(inv_display* dp, int row)
 
 
 // ---------
-// INTERNALS   
+// INTERNALS
 // ---------
 
 void inventory_draw_page(int pgnum)
@@ -2044,7 +2044,7 @@ void inventory_draw_page(int pgnum)
 
 ubyte add_to_some_page(ObjID obj,bool select)
 {
-   inv_display* dpy; 
+   inv_display* dpy;
    int i;
    for (i = 0; gen_inv_displays(&i,&dpy); i++)
    {
@@ -2118,7 +2118,7 @@ void draw_page_buttons(bool full)
       bool active = i == inventory_page;
 
       if (newstate == BttnDummy) continue;
-      // Figure out what the button state really is. 
+      // Figure out what the button state really is.
       if (active)
          newstate = BttnActive;
       else if (Flashing(newstate))
@@ -2176,7 +2176,7 @@ errtype inventory_clear(void)
       if (dirty_inv_canvas)
       {
          FrameDesc* f = (FrameDesc*)RefGet(REF_IMG_bmBlankInventoryPanel);
-         LG_memcpy(inv_backgnd.bits,f+1,f->bm.w*f->bm.h);
+         memcpy(inv_backgnd.bits,f+1,f->bm.w*f->bm.h);
          dirty_inv_canvas = FALSE;
       }
       uiHideMouse(&r);
@@ -2302,7 +2302,7 @@ void add_object_on_cursor(inv_display* dp, int row)
 		if (IS_POP_RESULT(pop) || pop == ADD_SWAP)
 			pop_cursor_object();
 		if (pop == ADD_SWAP)
-			push_cursor_object(obj);   
+			push_cursor_object(obj);
 		uiShowMouse(NULL);					// KLC - added to make sure the pointer changes.
 	}
 	if (pop == ADD_REJECT)
@@ -2354,7 +2354,7 @@ bool inventory_handle_rightbutton(uiEvent* ev, LGRegion* reg, inv_display* dp, i
       lastdp =dp;
       retval = TRUE;
    }
-   // Check to see if we've left the region and release focus.  
+   // Check to see if we've left the region and release focus.
    region_abs_rect(reg,reg->r,&r);
    if (!RECT_TEST_PT(&r,ev->pos))
    {
@@ -2467,7 +2467,7 @@ bool inventory_mouse_handler(uiEvent* ev, LGRegion* r, void*)
             gr_push_canvas(&inv_fullscrn_canvas);
             smx = SEARCH_MARGIN;
             smy = SEARCH_MARGIN;
-#ifdef SVGA_SUPPORT  
+#ifdef SVGA_SUPPORT
             ss_set_hack_mode(2, &temp);
             ss_point_convert(&smx,&smy,FALSE);
 #endif
@@ -2526,7 +2526,7 @@ bool inventory_mouse_handler(uiEvent* ev, LGRegion* r, void*)
    return retval;
 }
 
-      
+
 
 int last_invent_cnum = -1; // last cursor num set for region
 bool pagebutton_mouse_handler(uiMouseEvent* ev, LGRegion* r, void*)
@@ -2534,10 +2534,10 @@ bool pagebutton_mouse_handler(uiMouseEvent* ev, LGRegion* r, void*)
    LGPoint pos = ev->pos;
    int cnum;
 
-   if (full_game_3d 
+   if (full_game_3d
       && (ev->buttons & (1 << MOUSE_LBUTTON)) != 0
       && (ev->action & MOUSE_LDOWN) == 0
-      && uiLastMouseRegion[MOUSE_LBUTTON] != NULL 
+      && uiLastMouseRegion[MOUSE_LBUTTON] != NULL
       && uiLastMouseRegion[MOUSE_LBUTTON] != r)
    {
       uiSetRegionDefaultCursor(r,NULL);
@@ -2777,17 +2777,17 @@ LGRegion* create_invent_region(LGRegion* root, LGRegion **pbuttons, LGRegion **p
          invent_language_change();
          make_popup_cursor(c,bm,cursor_strings[0],POPUP_DOWN,TRUE,offset);
       }
-      
+
       // Pull in the background bitmap
       ResLockHi(RES_gamescrGfx);
       f = (FrameDesc*)RefLock(REF_IMG_bmBlankInventoryPanel);
       inv_backgnd = f->bm;
 
-      // This background is going to get used by the 360 ware 
-      // in fullscreen mode, so we need extra bits 
+      // This background is going to get used by the 360 ware
+      // in fullscreen mode, so we need extra bits
 //KLC      inv_backgnd.bits = (uchar *)NewPtr(MAX_INV_FULL_WD(INV_FULL_WD) * MAX_INV_FULL_HT(grd_cap->h - GAME_MESSAGE_Y));
       inv_backgnd.bits = (uchar *)NewPtr(290 * 136);					// KLC - I just happen to know what these are.
-      LG_memcpy(inv_backgnd.bits,(f+1),f->bm.w * f->bm.h);
+      memcpy(inv_backgnd.bits,(f+1),f->bm.w * f->bm.h);
       ResUnlock(RES_gamescrGfx);
       ResUnlock(RES_gamescrGfx);
 
@@ -2905,7 +2905,7 @@ void inv_update_fullscreen(bool full)
                   ss_noscale_bitmap(&(inv_fullscrn_canvas.bm),(320-inv_fullscrn_canvas.bm.w)/2,INVENTORY_PANEL_Y >> 1);
                   break;
             }
-         }   
+         }
          else
  */
             ss_noscale_bitmap(&(inv_fullscrn_canvas.bm),INVENTORY_PANEL_X,INVENTORY_PANEL_Y);
@@ -2964,7 +2964,7 @@ inv_display inv_display_list[] =
      DRUG_CLASSES, generic_add_func, generic_drop_func, DRUG_TRIP, triple2drug, 0, generic_lines+NUM_GRENADES},
 
 
-   // Page 1, Hardwares. 
+   // Page 1, Hardwares.
    { 1, 0, LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN, TITLE_COLOR, ITEM_COLOR, 0, ITEMS_PER_PAGE, NUM_HARDWAREZ,
      REF_STR_HardwareTitle, ACTIVE_HARDWARE, FIELD_OFFSET(hardwarez), MFD_INV_HARDWARE, ware_name_func, soft_quant_func,
      generic_draw_list,NULL, ware_use_func, HARD_CLASSES, ware_add_func, ware_drop_func, HARD_TRIP, NULL, 0, generic_lines},
@@ -2982,7 +2982,7 @@ inv_display inv_display_list[] =
 
 
 
-   // Page 2, Softwares.  
+   // Page 2, Softwares.
    { 5, 0, LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN, TITLE_COLOR, ITEM_COLOR, 0, NUM_COMBAT_SOFTS-1, NUM_COMBAT_SOFTS-1,
      REF_STR_SoftTitle, ACTIVE_COMBAT_SOFT, FIELD_OFFSET(softs.combat), MFD_INV_SOFT_COMBAT, ware_name_func, soft_quant_func,
      generic_draw_list, NULL, ware_use_func, SOFT_CLASSES, ware_add_func, ware_drop_func, COMSOFT_TRIP, NULL, 0, generic_lines},
@@ -2998,7 +2998,7 @@ inv_display inv_display_list[] =
      NUM_MISC_SOFTWARE, REF_STR_Null, ACTIVE_MISC_SOFT, FIELD_OFFSET(softs.misc), MFD_INV_SOFT_MISC, ware_name_func, null_quant_func,
      generic_draw_list,NULL, ware_use_func, SOFT_CLASSES, ware_add_func, ware_drop_func, MISCSOFT_TRIP, NULL, 0,
      generic_lines+NUM_COMBAT_SOFTS+NUM_DEFENSE_SOFTS+NUM_ONESHOT_SOFTWARE},
-                                                                                 
+
    // Page 7 main log page
    {  7, 0, LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN, TITLE_COLOR, ITEM_COLOR, 0, ITEMS_PER_PAGE, NUM_LOG_LEVELS,
       REF_STR_LogTitle, NULL_ACTIVE, FIELD_OFFSET(logs), MFD_INV_NULL, log_name_func, generic_quant_func, generic_draw_list,
@@ -3012,7 +3012,7 @@ inv_display inv_display_list[] =
       NUM_LOG_LEVELS-1, REF_STR_Null, NULL_ACTIVE, FIELD_OFFSET(logs), MFD_INV_NULL, log_name_func, generic_quant_func,
       generic_draw_list, log_use_func, log_use_func, SOFT_CLASSES, email_add_func, email_drop_func, EMAIL_TRIP, NULL, 0,
       generic_lines},
-#endif 
+#endif
 
    // Page 8, Data
    {  8, 0, LEFT_MARGIN, ONETHIRD_X - RIGHT_MARGIN, TOP_MARGIN, TITLE_COLOR, ITEM_COLOR, FIRST_DATA, ITEMS_PER_PAGE,
@@ -3028,7 +3028,7 @@ inv_display inv_display_list[] =
       email_use_func, email_use_func, SOFT_CLASSES, email_add_func, email_drop_func, EMAIL_TRIP, NULL, 0, generic_lines},
 
 
-   // Ammo page, off screen. 
+   // Ammo page, off screen.
    { 9, 0, AMMO_LEFT_1, AMMO_RIGHT_1, TOP_MARGIN, TITLE_COLOR, ITEM_COLOR, 0, NUM_AMMO_TYPES, NUM_AMMO_TYPES, REF_STR_PistolCartTitle,
      ACTIVE_CART, FIELD_OFFSET(cartridges), MFD_INV_AMMO, ammo_name_func, generic_quant_func, generic_draw_list,NULL, NULL,
      AMMO_CLASSES, generic_add_func, generic_drop_func, AMMO_TRIP, NULL, 0, generic_lines},
@@ -3098,7 +3098,7 @@ inv_display inv_display_list[] =
       NUM_EMAIL_PROPER+(i)*LOGS_PER_LEVEL+ITEMS_PER_PAGE, ITEMS_PER_PAGE, NUM_EMAIL_PROPER+(i)*LOGS_PER_LEVEL+2*ITEMS_PER_PAGE+1,                            \
       REF_STR_Null, NULL_ACTIVE, FIELD_OFFSET(email), MFD_INV_NULL, email_name_func, null_quant_func, generic_draw_list,                       \
       email_use_func, email_use_func, SOFT_CLASSES, email_add_func, email_drop_func, EMAIL_TRIP, NULL, 0, generic_lines}                          \
-   
+
    // Hey these pages MUST BE LAST.
    LOG_PAGE(0),
 #ifdef EXPLICIT_LOG_PAGES

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/movekeys.c $
@@ -29,16 +29,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "input.h"
 #include "player.h"
 #include "physics.h"
-#include "gamesys.h" 
+#include "gamesys.h"
 #include "weapons.h"
 
-// Here we go, it's gruesome keyboard polling code.  
+// Here we go, it's gruesome keyboard polling code.
 
 // -------
 // DEFINES
 // -------
 
-#define KBCOUNTRY_CFG "country" 
+#define KBCOUNTRY_CFG "country"
 
 
 #define KEYBD_CONTROL_BANK 1
@@ -81,19 +81,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define _J_			0x26 // j
 
 
-// Ok, these are cooked keycodes for all the motion keys.  
-// If you want to add a motion key for a motion function 
-// that already exists, just add it to the appropriate #define.  
-// Otherwise, create a new #define, and a new case in the parse_motion_key 
+// Ok, these are cooked keycodes for all the motion keys.
+// If you want to add a motion key for a motion function
+// that already exists, just add it to the appropriate #define.
+// Otherwise, create a new #define, and a new case in the parse_motion_key
 // switch statement.
 
 
 #define RUN_CASES				case _UP_|SHF: \
                         						case _UP_|ALT: \
                            						case _UP2_|SHF: \
-                           						case _UP2_|ALT: 
-#define JOG_THRUST_CASES	case  _S_:   
-#define RUN_THRUST_CASES	case  _S_|SHF:                           
+                           						case _UP2_|ALT:
+#define JOG_THRUST_CASES	case  _S_:
+#define RUN_THRUST_CASES	case  _S_|SHF:
 #define JOG_CASES          		case _UP_: \
 											case _UP2_:
 #define BACK_CASES				case _X_: \
@@ -106,10 +106,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  											case _DOWN2_|SHF:
 #define ROTL_CASES				case _LEFT_: \
 											case _A_:  \
-											case _LEFT2_: 
+											case _LEFT2_:
 #define ROTL_FAST_CASES		case _A_|SHF: \
 											case _LEFT_|SHF: \
-											case _LEFT2_|SHF: 
+											case _LEFT2_|SHF:
 #define ROTR_CASES				case _RIGHT_: \
 											case _D_: \
 											case _RIGHT2_:
@@ -125,15 +125,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 											case _RIGHT_|ALT: \
 											case _RIGHT2_|ALT: \
 											case _PGDN2_: \
-											case _C_|SHF: 
+											case _C_|SHF:
 #define LEANL_CASES				case _Q_: \
 											case _LEFT_|CTRL: \
 											case _LEFT2_|CTRL: \
-											case _Q_|SHF:  
+											case _Q_|SHF:
 #define LEANR_CASES				case _E_: \
 											case _RIGHT_|CTRL: \
 											case _RIGHT2_|CTRL: \
-											case _E_|SHF:  
+											case _E_|SHF:
 #define LEANUP_CASES			case _W_: \
 											case _W_|CTRL: \
 											case _W_|ALT: \
@@ -165,7 +165,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define THRUST_CASES			case _S_: \
 											case _S_|SHF: \
 											case _PAD5_: \
-//KLC									case _SPACE_: 
+//KLC									case _SPACE_:
 #define PITCH_UP_CASES		case _W_: \
 											case _W_|SHF: \
 											case _UP_:  \
@@ -224,7 +224,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 											case _C_|SHF:
 
 
-#define SLOW_TURN_RATE  (CONTROL_MAX_VAL/2)                   
+#define SLOW_TURN_RATE  (CONTROL_MAX_VAL/2)
 
 #define LEAN_CONTROL_NUM CONTROL_XZROT
 #define EYE_CONTROL_NUM  CONTROL_YZROT
@@ -270,7 +270,7 @@ bool parse_motion_key(ushort keycode, short* cnum, short* cval)
 	    *cval = CONTROL_MAX_VAL/2;
        break;
 
-   ROTL_FAST_CASES        
+   ROTL_FAST_CASES
          *cval = -(CONTROL_MAX_VAL-SLOW_TURN_RATE);
    turn_l:
    ROTL_CASES
@@ -278,7 +278,7 @@ bool parse_motion_key(ushort keycode, short* cnum, short* cval)
 	   *cval += -SLOW_TURN_RATE;
 	   break;
 
-   ROTR_FAST_CASES        
+   ROTR_FAST_CASES
          *cval = (CONTROL_MAX_VAL - SLOW_TURN_RATE);
    turn_r:
    ROTR_CASES
@@ -363,7 +363,7 @@ bool parse_motion_key_cyber(ushort keycode, short* cnum, short* cval)
       *cval = -CONTROL_MAX_VAL;
 	   break;
    bank_l:
-   BANK_L_CASES   
+   BANK_L_CASES
 	   *cnum = CONTROL_XYROT;
 	   *cval = -CONTROL_MAX_VAL;
       break;
@@ -433,7 +433,7 @@ void init_motion_polling(void)
 
 void setup_motion_polling(void)
 {
-   LG_memset(poll_controls,0,sizeof(poll_controls));
+   memset(poll_controls,0,sizeof(poll_controls));
 }
 
 void process_motion_keys(void)
@@ -447,16 +447,16 @@ extern Boolean	gKeypadOverride;
 bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 {
 	uiPollKeyEvent	*ke = (uiPollKeyEvent *)ev;
-	
+
 	// KLC - For Mac version, we'll cook our own, since we have the modifier information.
 	ushort	cooked = ke->scancode | ke->mods;
 
 	short cnum,cval;
-	
+
 	int	moveOK = TRUE;
-	
+
 /* KLC - this doesn't appear to help any
-	// Check for firing weapon first (if it hasn't fired already).	
+	// Check for firing weapon first (if it hasn't fired already).
 	if (ke->scancode == _SPACE_ || ke->scancode == _ENTER_ || ke->scancode == _ENTER2_)
 	{
 		if (!fire_slam)
@@ -468,7 +468,7 @@ bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 	      	fire_slam = TRUE;
 	    }
 	}
-	
+
 	// Check for motion keys
 	else
 */
@@ -477,7 +477,7 @@ bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 		if (ke->scancode >= 0x52 && ke->scancode <= 0x5C)		// and a keypad number was entered,
 			moveOK = FALSE;													// don't move.
 	}
-	
+
 	if (moveOK)
 	{
 		if (global_fullmap->cyber && parse_motion_key_cyber(cooked,&cnum,&cval)
@@ -491,9 +491,9 @@ bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 }
 
 
-// Here is the list of SCAN CODES for all the motion keys.  
+// Here is the list of SCAN CODES for all the motion keys.
 // If you want to add a motion key, you MUST PUT ITS SCANCODE HERE
-// or else the key will not get polled. 
+// or else the key will not get polled.
 
 uchar motion_key_scancodes[] =
    {
@@ -527,5 +527,5 @@ uchar motion_key_scancodes[] =
       _J_     , // j
 
       KBC_NONE, // end of list
-   }; 
-                                 
+   };
+

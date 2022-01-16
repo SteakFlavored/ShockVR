@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/render.c $
@@ -71,7 +71,7 @@ ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
 #define STATIC_HEIGHT   32
 #define STATIC_WIDTH    32
 
-#define FRAME_SKIP_MASK 0x03 
+#define FRAME_SKIP_MASK 0x03
 #define FRAME_PARITY_SHF 2 // skip every 4 frames when rendering screen images
 
 uchar hack_cameras_needed = 0;
@@ -117,10 +117,10 @@ errtype init_hack_cameras()
 //      hack_cam_frcs[i] = fr_place_view(FR_NEWVIEW, &hack_cam, &hack_cam_canvases[i],
 //      hack_cam_frcs[i] = fr_place_view(FR_NEWVIEW, &hack_cam, &hack_cam_bitmaps[i],
 
-//      Warning(("start_mem = %d, BIG_HACKCAM = %d!\n",start_mem,BIG_HACKCAM_THRESHOLD));  
+//      Warning(("start_mem = %d, BIG_HACKCAM = %d!\n",start_mem,BIG_HACKCAM_THRESHOLD));
 //      Warning(("HACK_CAMERA_WID = %d!\n",HACK_CAMERA_WIDTH));
       tmp_mem = (uchar *)NewPtr(HACK_CAMERA_WIDTH*HACK_CAMERA_HEIGHT);
-      hack_cam_frcs[i] = fr_place_view(FR_NEWVIEW, &hack_cam, tmp_mem, FR_DOUBLEB_MASK|FR_HACKCAM_FLAG, 
+      hack_cam_frcs[i] = fr_place_view(FR_NEWVIEW, &hack_cam, tmp_mem, FR_DOUBLEB_MASK|FR_HACKCAM_FLAG,
                                          0, 0, HACK_CAMERA_X, HACK_CAMERA_Y, HACK_CAMERA_WIDTH, HACK_CAMERA_HEIGHT);
       fr_set_callbacks(hack_cam_frcs[i], (frdraw)hack_camera_draw_callback, NULL, NULL);
       tmp_cnv = (grs_canvas *)fr_get_canvas(hack_cam_frcs[i]);
@@ -257,7 +257,7 @@ void update_cspace_tiles(void)
    uchar *tmp_ptr=(uchar *)big_buffer;
    MapElem *mmp;
 
-   LG_memset(tmp_ptr,0,64*64);
+   memset(tmp_ptr,0,64*64);
    mmp=MAP_GET_XY(0,0);
    for (i=0, cur_tp=0; i<64; i++)
       for (j=0; j<64; j++, cur_tp++, mmp++)

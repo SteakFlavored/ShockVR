@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //=======================================================================
 //
@@ -201,12 +201,12 @@ void DoTestBrowseImages(void)
 		StopAlert(1000, nil);
 		return;
 	}
-	
+
 	{
 		Id 				id;
 		ResDesc		*prd;
 		long			rfs;
-		
+
 		for (id = ID_MIN; id <= resDescMax; id++)
 		{
 			prd = RESDESC(id);
@@ -232,7 +232,7 @@ void DoTestBrowseImages(void)
 	MenuHandle	mh = GetMenu(mTests);
 	DisableItem(mh, 0);
 
-	GrafPtr	savePort;	
+	GrafPtr	savePort;
 	GetPort(&savePort);									// Clear out the offscreen bitmap and write
 	SetPort(gMainOffScreen.bits);						// font stats.
 	PaintRect(&gMainOffScreen.bounds);
@@ -240,7 +240,7 @@ void DoTestBrowseImages(void)
 
 	SetImage(p);												// Set the initial bitmap
 	DisposePtr(p);
-	
+
 	gCurrTest = 0;
 	InvalRect(&gMainWindow->portRect);
 }
@@ -257,13 +257,13 @@ void DoUpdateBrowseImages(WindowPtr)
  	r = gMainWindow->portRect;
  	r.bottom = r.top + 74;
  	EraseRect(&r);
- 	
+
  	x = (gMainWindow->portRect.right - gMainWindow->portRect.left - 230) / 2;
  	y = r.top+50;
  	TextFont(systemFont);
  	TextSize(12);
  	TextFace(0);
- 	
+
  	MoveTo(x, y);
  	DrawString("\pResource");
 
@@ -278,7 +278,7 @@ void DoUpdateBrowseImages(WindowPtr)
 		OffsetRect(&r, x+69, y-22);
 		DrawPicture(pic, &r);
 		pResourceBtns = r;
-		
+
 		OffsetRect(&r, 89, 0);
 		DrawPicture(pic, &r);
 		pItemBtns = r;
@@ -305,14 +305,14 @@ void SetImage(Ptr p)
 	RGBColor	black = {0, 0, 0};
 	RGBColor	white = {0xffff, 0xffff, 0xffff};
 	grs_bitmap	bm2;
-	
+
 	gr_set_fcolor(0xff);
 	gr_rect(0, 0, 640, 480);
 
 	sprintf(buff, "RES: %d, ITEM: %d of %d        IMAGE: %dx%d, r:%d, t:%d, a:%d",
 				REFID(pRefId), REFINDEX(pRefId)+1, pRefTbl->numRefs,
 				fd->bm.w, fd->bm.h, fd->bm.row, fd->bm.type, fd->bm.align);
-				
+
 	TextFont(geneva);
 	TextSize(9);
 	TextMode(srcOr);
@@ -344,7 +344,7 @@ void DoClickBrowseImages(Point localPt)
 	Ptr		p;
 	short		id = REFID(pRefId);
 	short		ind = REFINDEX(pRefId);
-	
+
 	if (PtInRect(localPt, &pDoneBtn))					// We're done.
 	{
 	   	ResFreeRefTable(pRefTbl);							// Free the existing refTable
@@ -358,13 +358,13 @@ void DoClickBrowseImages(Point localPt)
 		DrawMenuBar();
 		return;
 	}
-	
+
 	if (PtInRect(localPt, &pResourceBtns))			// Get the prev/next resource.
 	{
 		Id 				n;
 		ResDesc		*prd;
 		bool			found = FALSE;
-		
+
 		if (localPt.v <= pResourceBtns.top+19)		// If in upper button:
 		{
 			for (n = id-1; n >= 0; n--)
@@ -403,7 +403,7 @@ void DoClickBrowseImages(Point localPt)
 		else SysBeep(0);
 		return;
 	}
-	
+
 	if (PtInRect(localPt, &pItemBtns))					// Get the next image in the resource.
 	{
 		if (localPt.v <= pResourceBtns.top+19)		// If in upper button:
@@ -415,7 +415,7 @@ void DoClickBrowseImages(Point localPt)
 			if (ind >= 0)
 			{
 				pRefId = MKREF(id, ind);
-		
+
 				p = NewPtrClear(RefSize(pRefTbl,REFINDEX(pRefId)));
 				RefExtract(pRefTbl, pRefId, p);
 				SetImage(p);
@@ -433,7 +433,7 @@ void DoClickBrowseImages(Point localPt)
 			if (ind < pRefTbl->numRefs)
 			{
 				pRefId = MKREF(id, ind);
-		
+
 				p = NewPtrClear(RefSize(pRefTbl,REFINDEX(pRefId)));
 				RefExtract(pRefTbl, pRefId, p);
 				SetImage(p);
@@ -473,12 +473,12 @@ void DoTestBrowseFonts(void)
 		StopAlert(1000, nil);
 		return;
 	}
-	
+
 	{
 		Id 				id;
 		ResDesc		*prd;
 		long			rfs;
-		
+
 		for (id = ID_MIN; id <= resDescMax; id++)
 		{
 			prd = RESDESC(id);
@@ -506,7 +506,7 @@ void DoTestBrowseFonts(void)
 
 	SetFont(p);												// Set the initial bitmap
 	DisposePtr(p);
-	
+
 	gCurrTest = 1;
 	InvalRect(&gMainWindow->portRect);
 }
@@ -523,13 +523,13 @@ void DoUpdateBrowseFonts(WindowPtr)
  	r = gMainWindow->portRect;
  	r.bottom = r.top + 74;
  	EraseRect(&r);
- 	
+
  	x = (gMainWindow->portRect.right - gMainWindow->portRect.left - 230) / 2;
  	y = r.top+50;
  	TextFont(systemFont);
  	TextSize(12);
  	TextFace(0);
- 	
+
  	MoveTo(x, y);
  	DrawString("\pResource");
 
@@ -566,7 +566,7 @@ void SetFont(Ptr p)
 	char			buff[256];
 	RGBColor	black = {0, 0, 0};
 	RGBColor	white = {0xffff, 0xffff, 0xffff};
-	
+
 	GetPort(&savePort);									// Clear out the offscreen bitmap and write
 	SetPort(gMainOffScreen.bits);						// font stats.
 	PaintRect(&gMainOffScreen.bounds);
@@ -574,7 +574,7 @@ void SetFont(Ptr p)
 	sprintf(buff, "RES: %d       FONT: %d, min:%d, max:%d, %dx%d",
 				pResId,
 				fd->id, fd->min, fd->max, fd->w, fd->h);
-	
+
 	TextFont(geneva);
 	TextSize(9);
 	TextMode(srcOr);
@@ -584,7 +584,7 @@ void SetFont(Ptr p)
 	DrawText(buff, 0, strlen(buff));
 	RGBForeColor(&black);
 	SetPort(savePort);
-	
+
 	if (fd->id == 0xCCCC)			// If it's a color font.
 	{
 		imgp = (Ptr)fd;
@@ -629,7 +629,7 @@ void DoClickBrowseFonts(Point localPt)
 {
 	Ptr		p;
 	short		id = pResId;
-	
+
 	if (PtInRect(localPt, &pDoneBtn))					// We're done.
 	{
 		ResCloseFile(pResNum);								// Close the res file
@@ -642,13 +642,13 @@ void DoClickBrowseFonts(Point localPt)
 		DrawMenuBar();
 		return;
 	}
-	
+
 	if (PtInRect(localPt, &pResourceBtns))			// Get the prev/next resource.
 	{
 		Id 				n;
 		ResDesc		*prd;
 		bool			found = FALSE;
-		
+
 		if (localPt.v <= pResourceBtns.top+19)		// If in upper button:
 		{
 			for (n = id-1; n >= 0; n--)
@@ -715,12 +715,12 @@ void DoTestLoadPalette(void)
 		StopAlert(1000, nil);
 		return;
 	}
-	
+
 	{
 		Id 				id;
 		ResDesc		*prd;
 		long			rfs;
-		
+
 		for (id = ID_MIN; id <= resDescMax; id++)
 		{
 			prd = RESDESC(id);
@@ -748,7 +748,7 @@ void DoTestLoadPalette(void)
 
  	gr_set_pal(0, 256, (uchar *)p);
 	DisposePtr(p);
-	
+
 	gCurrTest = 2;
 	InvalRect(&gMainWindow->portRect);
 }
@@ -760,7 +760,7 @@ void DoClickLoadPalette(Point localPt)
 {
 	Ptr		p;
 	short		id = pResId;
-	
+
 	if (PtInRect(localPt, &pDoneBtn))					// We're done.
 	{
 		ResCloseFile(pResNum);								// Close the res file
@@ -773,13 +773,13 @@ void DoClickLoadPalette(Point localPt)
 		DrawMenuBar();
 		return;
 	}
-	
+
 	if (PtInRect(localPt, &pResourceBtns))			// Get the prev/next resource.
 	{
 		Id 				n;
 		ResDesc		*prd;
 		bool			found = FALSE;
-		
+
 		if (localPt.v <= pResourceBtns.top+19)		// If in upper button:
 		{
 			for (n = id-1; n >= 0; n--)
@@ -836,7 +836,7 @@ void DoTestMoveKeys(void)
 	RGBColor	black = {0, 0, 0};
 	RGBColor	white = {0xffff, 0xffff, 0xffff};
 	Boolean		done;
-	
+
 	GetPort(&savePort);									// Clear out the offscreen bitmap
 	SetPort(gMainOffScreen.bits);
 	PaintRect(&gMainOffScreen.bounds);
@@ -851,7 +851,7 @@ void DoTestMoveKeys(void)
 	SetPort(savePort);										// Blit to the screen.
   	CopyBits(&gMainOffScreen.bits->portBits, &gMainWindow->portBits,
   				  &gOffActiveArea, &gActiveArea, srcCopy, 0L);
-	
+
 	TextFont(geneva);										// Draw some instructions.
 	TextSize(9);
 	TextMode(srcOr);
@@ -900,7 +900,7 @@ void MoveSquare(short x, short y)
 	GetPort(&savePort);									// Erase the old rect
 	SetPort(gMainOffScreen.bits);
 	PaintRect(&gSquare);
-	
+
 	OffsetRect(&gSquare, x, y);
 	RGBForeColor(&gSqColor);
 	PaintRect(&gSquare);									// Draw the new rect
@@ -926,7 +926,7 @@ void DoTestMouse(void)
 	RGBColor	white = {0xffff, 0xffff, 0xffff};
 	Boolean		done;
 	int			callbackid = -1;
-	
+
 	GetPort(&savePort);									// Clear out the offscreen bitmap
 	SetPort(gMainOffScreen.bits);
 	PaintRect(&gMainOffScreen.bounds);
@@ -936,7 +936,7 @@ void DoTestMouse(void)
 	SetPort(savePort);										// Blit to the screen.
   	CopyBits(&gMainOffScreen.bits->portBits, &gMainWindow->portBits,
   				  &gOffActiveArea, &gActiveArea, srcCopy, 0L);
-	
+
 	TextFont(geneva);										// Draw some instructions.
 	TextSize(9);
 	TextMode(srcOr);
@@ -955,7 +955,7 @@ void DoTestMouse(void)
 		errtype err = mouse_next(&e);
 		char	buff[256];
 		Rect	r;
-		
+
 		if (err == OK)
 		{
 			if (e.type ==2 && (e.modifiers & 0x08))		// If option-click, quit
@@ -966,7 +966,7 @@ void DoTestMouse(void)
 				SetPort(gMainOffScreen.bits);
 				SetRect(&r, 0, 16, gMainOffScreen.bounds.right, 28);
 				PaintRect(&r);
-			
+
 				if (e.type == 2)
 					sprintf(buff, "CLICK: (%d, %d)  t:%d, ts:%d",
 								e.x, e.y, e.type, e.timestamp);
@@ -976,11 +976,11 @@ void DoTestMouse(void)
 				else if (e.type == 1)
 					sprintf(buff, "MOVE: (%d, %d)  t:%d",
 								e.x, e.y, e.type);
-							
+
 				TextFont(geneva);
 				TextSize(9);
 				TextMode(srcOr);
-			
+
 				MoveTo(1, 26);
 				RGBForeColor(&white);
 				DrawText(buff, 0, strlen(buff));
@@ -1011,7 +1011,7 @@ void show_coords(mouse_event* e, void* )
 	PaintRect(&r);
 
 	sprintf(buff, "POS: (%d, %d)", e->x, e->y);
-				
+
 	TextFont(geneva);
 	TextSize(9);
 	TextMode(srcOr);
@@ -1048,7 +1048,7 @@ void DoPlayMovie(short cmd)
 #endif
 
 	EnterMovies();
-	
+
 	typeList[0] = 'MooV';
 	StandardGetFilePreview(nil, 1, typeList, &reply);
 	if (!reply.sfGood)
@@ -1057,17 +1057,17 @@ void DoPlayMovie(short cmd)
 		return;
 	}
 
-	// Get the movie.	
+	// Get the movie.
 	{
 		short 	movieResFile;
-		
+
 		err = OpenMovieFile(&reply.sfFile, &movieResFile, fsRdPerm);
-		if (err == noErr) 
+		if (err == noErr)
 		{
 			short 		movieResID = 0;		// get first movie
 			Str255 		movieName;
 			Boolean 		wasChanged;
-		
+
 			err = NewMovieFromFile(&aMovie, movieResFile, &movieResID,
 							movieName, newMovieActive, &wasChanged);
 			CloseMovieFile (movieResFile);
@@ -1083,7 +1083,7 @@ void DoPlayMovie(short cmd)
 //	SetEntries(0, 255, gOriginalColors);
 	RGBForeColor(&black);
 	PaintRect(&gMainWindow->portRect);
-	
+
 	{
 		Rect 					movieBox, r;
 		EventRecord		theEvent;
@@ -1105,8 +1105,8 @@ void DoPlayMovie(short cmd)
 		Track				vidTrack;
 		Media				vidMedia;
 
-		
-		GetMovieBox (aMovie, &movieBox);		
+
+		GetMovieBox (aMovie, &movieBox);
 		OffsetRect (&movieBox, -movieBox.left, -movieBox.top);
 		if (cmd == testPlayMovie2x)
 		{
@@ -1126,9 +1126,9 @@ void DoPlayMovie(short cmd)
 		//¥¥¥ Load movie into RAM
 //		err = LoadMovieIntoRam(aMovie, 0, GetMovieDuration(aMovie), keepInRam);
 		GoToBeginningOfMovie(aMovie);
-		
+
 		// Get movie info.
-		
+
 		mr = GetMoviePreferredRate(aMovie);
 		if (cmd == testPlayMovieDblSpd)
 		{
@@ -1145,15 +1145,15 @@ void DoPlayMovie(short cmd)
 		mv = GetMoviePreferredVolume(aMovie);
 		tc = GetMovieTrackCount(aMovie);
 		mt = GetMovieCreationTime(aMovie);
-		LG_memset(mtStr, 0, 255);
+		memset(mtStr, 0, 255);
 		IUDateString(mt, shortDate, mtStr);
 		ms = GetMovieDataSize(aMovie, 0, tv);
-		
+
 		// Get track and media information.
 		{
 			Track	track;
 			Media	media;
-			
+
 			long	tc = GetMovieTrackCount(aMovie);
 			for (long t = 1; t <= tc; t++)
 			{
@@ -1164,36 +1164,36 @@ void DoPlayMovie(short cmd)
 					if (media)
 					{
 						OSType	medType;
-						
+
 						GetMediaHandlerDescription(media, &medType, nil, nil);
 						if (medType == VideoMediaType)
 						{
 							vidTrack = track;
 							vidMedia = media;
-							
+
 							ImageDescriptionHandle	idh = (ImageDescriptionHandle)NewHandle(sizeof(ImageDescription));
-							
+
 							long	sdc = GetMediaSampleDescriptionCount(media);
 							for (long s = 1; s <= sdc; s++)
 							{
 								GetMediaSampleDescription(media, s, (SampleDescriptionHandle)idh);
 								GetImageDescriptionCTable(idh, &ctab[s]);
 							}
-							
+
 							DisposeHandle((Handle)idh);
 						}
 					}
 				}
 			}
 		}
-		
+
 		// Draw movie information.
-			
+
 		TextFont(geneva);
 		TextSize(9);
 		TextMode(srcOr);
-		
-		sprintf(buff, "MOVIE:  box(%d, %d, %d, %d), size:%dK, dur:%d sec, rate:0x%x, vol:0x%x, tracks:%d, created:%s", 
+
+		sprintf(buff, "MOVIE:  box(%d, %d, %d, %d), size:%dK, dur:%d sec, rate:0x%x, vol:0x%x, tracks:%d, created:%s",
 							movieBox.left, movieBox.top, movieBox.right, movieBox.bottom,
 							ms/1024, tv/ts, mr, mv, tc, &mtStr[1]);
 
@@ -1202,9 +1202,9 @@ void DoPlayMovie(short cmd)
 		DrawText(buff, 0, strlen(buff));
 		RGBForeColor(&black);
 		SetRect(&r, 50, -17, 100, 0);
-		
+
 		// Setup a time base call-back routine.
-		
+
 		tb = GetMovieTimeBase(aMovie);
 		qtb = NewCallBack(tb, callBackAtTime);
 		if (qtb)
@@ -1216,23 +1216,23 @@ void DoPlayMovie(short cmd)
 			SysBeep(0);
 
 		// Preroll the movie to make it play mo' better.
-		
+
 		PrerollMovie(aMovie, 0, mr);
-		
+
 		// Movie playing event loop.
-		
-		StartMovie (aMovie);	
+
+		StartMovie (aMovie);
 		HideCursor();
 		done = FALSE;
-		while(!IsMovieDone(aMovie) && !done) 
+		while(!IsMovieDone(aMovie) && !done)
 		{
-			if (WaitNextEvent (everyEvent, &theEvent, 0, nil)) 
+			if (WaitNextEvent (everyEvent, &theEvent, 0, nil))
 			{
-				switch ( theEvent.what ) 
+				switch ( theEvent.what )
 				{
-					case updateEvt:	
+					case updateEvt:
 						whichWindow = (WindowPtr)theEvent.message;
-						if (whichWindow == gMainWindow) 
+						if (whichWindow == gMainWindow)
 						{
 							BeginUpdate (whichWindow);
 							UpdateMovie(aMovie);
@@ -1249,7 +1249,7 @@ void DoPlayMovie(short cmd)
 				}
 			}
 			MoviesTask (aMovie, 0);
-			
+
 			tv = GetMovieTime(aMovie, NULL);
 //tv = TrackTimeToMediaTime(tv, vidTrack);
 			sprintf(buff, "Movie Time: %d", tv);
@@ -1284,7 +1284,7 @@ pascal void TestCallbackProc(QTCallBack cb, long refCon)
 	RGBColor	purple = {0xFFFF, 0x3333, 0x3333};
 	TimeBase	cbtb;
 	TimeValue	tv;
-	
+
 	cbtb = GetCallBackTimeBase(cb);
 	tv = GetTimeBaseTime(cbtb, 600, NULL);
 
@@ -1318,7 +1318,7 @@ void DoPlayCutScene(short cmd)
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pEndgame", &fSpec);
 			PlayCutScene(&fSpec, TRUE, FALSE);
 			break;
-		
+
 		//------ VMAIL ------
 		case testPlayCitadelVM:
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pCitadel Status", &fSpec);
@@ -1331,30 +1331,30 @@ void DoPlayCutScene(short cmd)
 			PaintRect(&gMainWindow->portRect);
 			PlayVMail(&fSpec, 100, 100);
 			break;
-		
+
 		case testPlayJettisonVM:
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pJettison Pod", &fSpec);
 			PaintRect(&gMainWindow->portRect);
 			PlayVMail(&fSpec, 100, 100);
 			break;
-		
+
 		case testPlayLaserMalVM:
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pLaser Malfunction", &fSpec);
 			PaintRect(&gMainWindow->portRect);
 			PlayVMail(&fSpec, 100, 100);
 			break;
-		
+
 		case testPlayShieldsVM:
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pShields On", &fSpec);
 			PaintRect(&gMainWindow->portRect);
 			PlayVMail(&fSpec, 100, 100);
 			break;
-		
+
 		case testPlayAutoDesVM:
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pAuto-destruct", &fSpec);
 			PaintRect(&gMainWindow->portRect);
 			PlayVMail(&fSpec, 100, 100);
-			break;		
+			break;
 	}
 }
 
@@ -1395,7 +1395,7 @@ void DoLoadLevelMap(short cmd)
 
 	FSMakeFSSpec(gDataVref, gDataDirID, "\parchive.data", &fSpec);
 //	object_data_load();
-	
+
 	switch (cmd)
 	{
 		case testLoadLevelR:
@@ -1411,7 +1411,7 @@ void DoLoadLevelMap(short cmd)
 			load_current_map(4302, &fSpec);
 			break;
 	}
-	
+
 	load_da_palette();
 	amap_draw(oAMap(MFD_FULLSCR_MAP), TRUE);
 }
@@ -1463,10 +1463,10 @@ void RenderTest(void)
 	extern 	frc 			*svga_render_context;
 	extern void _fr_change_detail(int det);
 	extern char _g3d_enable_blend;
-	
+
 	object_data_load();
 	HideCursor();
-	
+
 	// start in slot view, full res
 	size_left = SCREEN_VIEW_X<<1;
 	size_top = SCREEN_VIEW_Y*2.4;
@@ -1479,12 +1479,12 @@ void RenderTest(void)
 																																				// 	FR_DOUBLEB_MASK
 	_frc = (fauxrend_context *) fr_place_view((frc *) FR_NEWVIEW, (void *) FR_DEFCAM,0L, 0|FR_WINDOWD_MASK|FR_CURVIEW_STRT, 0, 0, size_left, size_top, size_wide, size_high);
 	_frc->detail = 2;
-	
+
 	FSMakeFSSpec(gDataVref, gDataDirID, "\parchive.data", &fSpec);
 	load_current_map(4102, &fSpec);
 	load_da_palette();
 	gr_clear(0xff);
- 	
+
  	pic = GetPicture(19010);
  	if (pic)
  	  {
@@ -1494,14 +1494,14 @@ void RenderTest(void)
 	 	DrawPicture(pic,&r);
 	 	ReleaseResource((Handle) pic);
  	  }
- 	  
+
 	_frc->camptr=NULL;
 	fr_camera_create(&test_cam,CAMTYPE_ABS,eye,NULL);
 	fr_camera_setdef(&test_cam);
 
 	detailCheck = time = QuickTickCount();
  	while (!Button())
- 	  {		
+ 	  {
 #if __profile__
  	  	if (kb_state(0x23) && !profileOn)	// P
  	  	 	{ProfilerInit(collectDetailed, bestTimeBase, 300, 30); profileOn = true;}
@@ -1512,20 +1512,20 @@ void RenderTest(void)
 			profileOn = false;
  	  	  }
 #endif
- 	  	 
+
  	  	if (kb_state(0x38))
  	  		moveAmt = 0x1000;
  	  	else
  	  		moveAmt = 0x2400;
- 	  		
+
 		// forward
 		if (kb_state(0x5B) || kb_state(0x22))
-			 {	
+			 {
 				fix_sincos(eye[3],&sinEye,&cosEye);
 			   	eye[0]+=fix_mul(sinEye,moveAmt);
 				eye[1]+=fix_mul(cosEye,moveAmt);
 			 }
-			 
+
 		// back
 		if (kb_state(0x54) || kb_state(0x28))
 			 {
@@ -1539,7 +1539,7 @@ void RenderTest(void)
 			eye[EYE_H]-=(0x1400>>1);
 		if (kb_state(0x58) || kb_state(0x25))
 			eye[EYE_H]+=(0x1400>>1);
-		
+
 		// look up, down
 		if (kb_state(0x57) || kb_state(0x17))
 			eye[EYE_P] = 0;
@@ -1547,13 +1547,13 @@ void RenderTest(void)
 			eye[EYE_P]+=(moveAmt>>1);
 		if (kb_state(0x7D))
 			eye[EYE_P]-=(moveAmt>>1);
-		
+
 		// tilt head
 		if (kb_state(0x59))
 			eye[EYE_B]-=(moveAmt>>1);
 		if (kb_state(0x53))
 			eye[EYE_B]+=(moveAmt>>1);
-				
+
 		// move up, down
 		if (kb_state(0x55) || kb_state(0x29))
 			eye[2]-=moveAmt;
@@ -1562,27 +1562,27 @@ void RenderTest(void)
 
 		// blending
 		if ((QuickTickCount()-detailCheck>20L) && kb_state(0x0B)) {_g3d_enable_blend = !_g3d_enable_blend; detailCheck = QuickTickCount();}
-		
+
 		// debugger
 		if (kb_state(0x32)) Debugger();
-		
+
 		// double size
 		if (kb_state(0x12))
 		 {
 		 	DoubleSize = !DoubleSize;
-		 	
+
  			change_svga_screen_mode();
 			_frc = (fauxrend_context *) svga_render_context;
 			gr_clear(0xff);
 		 }
-		
+
 		// skip lines
 		if (kb_state(0x13))
 		  {
 		 	SkipLines = !SkipLines;
 	         	gr_clear(0xff);
 		  }
-		  		  
+
 		 // slot/full
 		if (kb_state(1))	// slot
 		  {
@@ -1590,7 +1590,7 @@ void RenderTest(void)
 			change_svga_screen_mode();
 			_frc = (fauxrend_context *) svga_render_context;
 			gr_clear(0xff);
-		  
+
 		 	pic = GetPicture(19010);
 		 	if (pic)
 		 	  {
@@ -1621,17 +1621,17 @@ void RenderTest(void)
 			time = QuickTickCount();
 			frames = 0L;
 		 }
-		 
-		 
+
+
 		// detail
 		if ((QuickTickCount()-detailCheck>20L) && kb_state(2))
 			{detailCheck = QuickTickCount(); _frc->detail++; if (_frc->detail>=4) _frc->detail = 0;}
-		
+
 		if (frames & 1)
-			palette_advance_all_fx(QuickTickCount());		
+			palette_advance_all_fx(QuickTickCount());
 		fr_camera_update(&test_cam,eye,CAM_UPDATE_NONE,NULL);
 		fr_rend(_frc);
-		
+
 		frames++;
 		if (showFrames && (QuickTickCount()-time>=60))
 		 {
@@ -1642,7 +1642,7 @@ void RenderTest(void)
 		 	str[strlen((char *) str)-1] += _frc->detail;
 		 	MoveTo(2,418);
 		 	drawstring((char *) str);
-		 	
+
 		 	frames = 0;
 		 	time = QuickTickCount();
 		 }
@@ -1653,7 +1653,7 @@ void RenderTest(void)
 
 	gr_clear(0xff);
 	ctab = GetCTable(9003);														// Get the title screen CLUT
-	if (ctab)	
+	if (ctab)
 	 {
 		BlockMove(*ctab, *gMainColorHand, 8 + (sizeof(ColorSpec) * 256));
 		SetEntries(1, 253, &(**(gMainColorHand)).ctTable[1]);
@@ -1662,6 +1662,6 @@ void RenderTest(void)
 	}
 }
 	DrawMenuBar();
-	InvalRect(&gMainWindow->portRect); 
+	InvalRect(&gMainWindow->portRect);
 	ShowCursor();
  }

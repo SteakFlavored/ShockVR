@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/faceobj.c $
@@ -132,7 +132,7 @@ bool _axial_relativize(fix *src_pts, fix *targ_pts, bool vec) // (fixang l_h, fi
    else
 
    * (g3s_vector *) targ_pts = * (g3s_vector *) src_pts; // _memcpy32l(targ_pts,src_pts,3);
-      
+
 //   mprintf("Rtv'd %x %x %x to %x %x %x from %x %x %x\n",
 //      src_pts[0],src_pts[1],src_pts[2],targ_pts[0],targ_pts[1],targ_pts[2],l_h,l_p,l_b);
    return TRUE;
@@ -150,7 +150,7 @@ bool setup_cube_face(fix ndist, fix xp, fix yp, fix xhlf, fix yhlf, int nrm_cmp)
    walls[3][0]=-xhlf; walls[3][1]=-yhlf;
    l_pt[0]=xp; l_pt[1]=yp; l_pt[2]=ndist;
 
-   LG_memset(unit_norm,0,3*4);	//  _memset32l(unit_norm,0,3);
+   memset(unit_norm,0,3*4);	//  _memset32l(unit_norm,0,3);
    if (nrm_cmp<0)
       unit_norm[(-nrm_cmp)-1] = -fix_1;
    else
@@ -158,7 +158,7 @@ bool setup_cube_face(fix ndist, fix xp, fix yp, fix xhlf, fix yhlf, int nrm_cmp)
    _axial_relativize(unit_norm,nrm,TRUE);
    if (nrm[2]>fix_make(0,0xC000))   // sure, why not...
       flg|=SS_BCD_TYPE_FLOOR;
-   else 
+   else
       flg|=SS_BCD_TYPE_WALL;
 //   mprintf("SCF: dist %x, pos %x %x, size %x %x, norm %x %x %x f %d\n",ndist,xp,yp,xhlf,yhlf,nrm[0],nrm[1],nrm[2],nrm_cmp);
    return tf_solve_aligned_face(l_pt,walls,flg,nrm);
@@ -196,7 +196,7 @@ void _face_secret_repulsor_hack(void)
    uchar special;
 
    if (tf_ph==-1) return;                                            // dont fuck with bullets or L-O-Sight
-   if ((tf_loc_pt[0]<0)||(tf_loc_pt[1]<0)||                          // if we are not in the main square for 
+   if ((tf_loc_pt[0]<0)||(tf_loc_pt[1]<0)||                          // if we are not in the main square for
        (tf_loc_pt[0]>=fix_1)||(tf_loc_pt[1]>=fix_1)) return;         //   the object, dont repulse it..
 
    if (!comparator_check(comparator, OBJ_NULL, &special)) return;    // make sure the repulsor is active
@@ -225,7 +225,7 @@ void facelet_obj(ObjID cobjid)
    bool tfimp = FALSE;
 
    // This should do something to distinguish between wall-like terrain and complex terrain
-   // values, but I'm not sure what.  Right now they just both keep cranking, although in 
+   // values, but I'm not sure what.  Right now they just both keep cranking, although in
    // reality we probably want to filter out everything but the complex terrain type, but hey
    // that's easy.  -- Rob
    objtrip=OPNUM(cobjid);
@@ -239,7 +239,7 @@ void facelet_obj(ObjID cobjid)
 
    _n_o_rad=fix_make(ObjProps[objtrip].physics_xr,0)/96;      // for reanchoring
 
-   // I just ripped out all the types for which it is meaningless to generate terrain data 
+   // I just ripped out all the types for which it is meaningless to generate terrain data
    // from/about, that you had already just had them break immediately. -- Rob
    switch (obj_type)
    {
@@ -283,7 +283,7 @@ void facelet_obj(ObjID cobjid)
    // I dunno whether or not you think this is a little too hardwired...this should
    // probably be a gamerend call, I think, but for now here's a hook you can use.
    // If you have suggestions, etc. for how to do it better, I bet you know how to
-   // get me.... 
+   // get me....
       switch(ID2TRIP(cobjid))
       {
       case TRIPBEAM_TRIPLE:
@@ -340,7 +340,7 @@ void facelet_obj(ObjID cobjid)
             if (objs[cobjid].info.current_frame >= DOOR_OPEN_FRAME)   // the door is open
                return;                                  // which means no facelets for now
          fix_xoff=fix_make(0,0x0200)<<6; fix_yoff=fix_make(0,0x0200)<<6;
-         if (scale > 0)  { fix_xoff<<=scale; fix_yoff<<=scale; } 
+         if (scale > 0)  { fix_xoff<<=scale; fix_yoff<<=scale; }
          else            { fix_xoff>>=-scale; fix_yoff>>=-scale; }
          localize_object(loc_pts);   // fill in local frame
          if (_axial_relativize(loc_pts,door_pts,FALSE))

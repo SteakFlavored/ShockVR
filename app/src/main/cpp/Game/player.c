@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/player.c $
@@ -102,15 +102,15 @@ errtype init_player(Player *pplr)
    extern int _fr_global_detail;
    extern uchar which_lang;
 
-   LG_memcpy(tmp,pplr->name,sizeof(tmp));				// Save these so they won't be cleared.
+   memcpy(tmp,pplr->name,sizeof(tmp));				// Save these so they won't be cleared.
    tmpdiff = *(long *)pplr->difficulty;
 
    // Zero out whole structure
-   LG_memset(pplr, 0, sizeof(Player));
+   memset(pplr, 0, sizeof(Player));
 
-   LG_memcpy(pplr->name,tmp,sizeof(pplr->name));	// Now restore them.
+   memcpy(pplr->name,tmp,sizeof(pplr->name));	// Now restore them.
    BlockMoveData(&tmpdiff, pplr->difficulty, 4);
-   
+
    // Set appropriate non-zero things.
    pplr->detail_level = _fr_global_detail;
    pplr->level = 1;
@@ -124,7 +124,7 @@ errtype init_player(Player *pplr)
    pplr->cspace_hp        = PLAYER_MAX_HP;
    pplr->cspace_time_base = BASE_CSPACE_TIME;
    pplr->hit_points_regen = 0;
-   LG_memset(pplr->hit_points_lost,0,NUM_DAMAGE_TYPES*sizeof(pplr->hit_points_lost[0]));
+   memset(pplr->hit_points_lost,0,NUM_DAMAGE_TYPES*sizeof(pplr->hit_points_lost[0]));
    pplr->accuracy         = MAX_ACCURACY;
    pplr->energy           = MAX_ENERGY;
    pplr->shield_absorb_rate = 0;
@@ -280,10 +280,10 @@ errtype player_create_initial()
    return(OK);
 }
 
-#define CFG_PLAYER_VAR "eye" 
+#define CFG_PLAYER_VAR "eye"
 errtype player_startup(void)
 {
-   return OK;      
+   return OK;
 //      return player_create_initial();
 }
 
@@ -309,6 +309,6 @@ ubyte set_player_energy_spend(ubyte new_val)
 Boolean IsFullscreenWareOn(void)
 {
 	ubyte		status = player_struct.hardwarez_status[CPTRIP(FULLSCR_HARD_TRIPLE)];
-	
+
 	return ((Boolean)(status & WARE_ON));
 }

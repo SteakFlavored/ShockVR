@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * the texttool, a generic text editor shell sort of thing
@@ -167,7 +167,7 @@ void _tt_build_cheat(long line_num)
    loc->chr[0]=x_chr; loc->pix[0]=x_pix;
    // find right edge
 
-// bug if string width is 1, basically   
+// bug if string width is 1, basically
 
    x_pix+=CharWid(*s++); x_chr++;
    while ((x_pix<_tt->disp_x+_tt->scr_loc.w)&&(x_chr<loc->stl))
@@ -191,8 +191,8 @@ void _tt_new_line(long line_num)
    _tt->line_info = (TTCheats *)NewPtr(sizeof(TTCheats)*_tt->max_h);
    if (line_num<_tt->max_h-1)                 /* insert case */
    {
-      LG_memmove(&_tt->line_info[line_num+1],&_tt->line_info[line_num],sizeof(TTCheats)*(_tt->max_h-line_num-1));
-      LG_memmove(&_tt->lines[line_num+1],&_tt->lines[line_num],sizeof(char *)*(_tt->max_h-line_num-1));
+      memmove(&_tt->line_info[line_num+1],&_tt->line_info[line_num],sizeof(TTCheats)*(_tt->max_h-line_num-1));
+      memmove(&_tt->lines[line_num+1],&_tt->lines[line_num],sizeof(char *)*(_tt->max_h-line_num-1));
    }
    _tt->line_info[line_num].wid=TTL_INIT;     		/* totally empty at first */
    _tt->line_info[line_num].flg|=TTC_FLG_RET; 		/* should be a return there */
@@ -207,7 +207,7 @@ void _tt_new_line(long line_num)
 // based on the string in l_n
 bool _tt_pix_cnv(long l_n, long p_l, long p_r, long *c_l, long *c_r)
 {
-      
+
 
 }
 #endif
@@ -222,7 +222,7 @@ void _tt_display_line(long line_num, long p_left, long p_right)
 {
    LGRect disp_rect;
    int llin;
- 
+
    long dummy;
    dummy = p_left;
    dummy = p_right;
@@ -233,7 +233,7 @@ void _tt_display_line(long line_num, long p_left, long p_right)
    disp_rect.lr.x = _tt->scr_loc.w - 1;
    disp_rect.lr.y = disp_rect.ul.y + _tt->lfont->height;
 //   mprintf ("disp_rect = (%d, %d)(%d, %d)\n",disp_rect.ul.x, disp_rect.ul.y, disp_rect.lr.x, disp_rect.lr.y);
-   tt_display_all(_tt, &disp_rect);  
+   tt_display_all(_tt, &disp_rect);
 }
 
 // for real, display a partial (or full) line
@@ -259,7 +259,7 @@ void _tt_show_line(long line_num, long p_left, long p_right)
       {
          char *st_base, *s, c;
          long wid;
-	
+
   	      st_base=_tt->lines[cy];
   	      s=st_base+_tt->line_info[cy].chr[1]+1;
   	      c=*s; *s='\0';
@@ -357,8 +357,8 @@ void tt_fill_line(TextTool *tt, int how, long line_num, char *s)
    case TTF_INSWHOLE: strcpy(_tt->lines[line_num],s); break;
    case TTF_INSEND:   strcat(_tt->lines[line_num],s); break;
    case TTF_INSFRONT:
-      LG_memmove(_tt->lines[line_num]+strlen(s)+1,_tt->lines[line_num],_tt->line_info[line_num].stl+1);
-      LG_memmove(_tt->lines[line_num],s,strlen(s));     /* dont need this \0 */
+      memmove(_tt->lines[line_num]+strlen(s)+1,_tt->lines[line_num],_tt->line_info[line_num].stl+1);
+      memmove(_tt->lines[line_num],s,strlen(s));     /* dont need this \0 */
       _tt->lines[line_num][strlen(s)]=' ';
       break;
    }
@@ -382,7 +382,7 @@ void _tt_rem_front(long line_num, long rem_pos)
 {
    int lin_len=_tt->line_info[line_num].stl;
    if (rem_pos>=lin_len) return;
-   LG_memmove(_tt->lines[line_num],_tt->lines[line_num]+rem_pos, lin_len-rem_pos);
+   memmove(_tt->lines[line_num],_tt->lines[line_num]+rem_pos, lin_len-rem_pos);
    _tt_resize_line(line_num,lin_len-rem_pos+1);
    _tt_build_cheat(line_num);
    _tt_display_line(line_num,-1,-1);
@@ -392,7 +392,7 @@ void _tt_rem_mid(long line_num, long left_c, long right_c)
 {
    int lin_len=_tt->line_info[line_num].stl, rem_cnt=right_c-left_c+1;
    if ((rem_cnt>=lin_len)||(left_c>right_c)) return;
-   LG_memmove(_tt->lines[line_num]+left_c,_tt->lines[line_num]+right_c, lin_len-right_c);
+   memmove(_tt->lines[line_num]+left_c,_tt->lines[line_num]+right_c, lin_len-right_c);
    _tt_resize_line(line_num,lin_len-rem_cnt);
    _tt_build_cheat(line_num);
    _tt_display_line(line_num,-1,-1);
@@ -442,11 +442,11 @@ bool _tt_add_char(long *line_num, long *cur_pos, char c)
 {
    long new_stl=_tt->line_info[*line_num].stl, new_pos=*cur_pos;
    char *s=_tt->lines[*line_num];
-   bool add_at_end=TRUE; 
+   bool add_at_end=TRUE;
 
    if (new_stl>*cur_pos)                         // insert
       if ((_tt->es.mode&TTS_OVER)==0)            // actually have to insert
-         LG_memmove(&s[*(cur_pos)+1],&s[*cur_pos],new_stl-*cur_pos);
+         memmove(&s[*(cur_pos)+1],&s[*cur_pos],new_stl-*cur_pos);
       else
          add_at_end=FALSE;                       // just a punch in
    if (add_at_end&&(_tt->es.max_w>0)&&(new_stl>=_tt->es.max_w))
@@ -475,7 +475,7 @@ bool _tt_del_chars(long *line_num, long *cur_pos, int cnt)
    if (cnt<0) nlpos+=cnt; else nrpos+=cnt;
    if ((nlpos>=0)&&(nrpos<=lin_wid))
    {                                   /* easy case... all on the line */
-      LG_memmove(s+nlpos,s+nrpos,lin_wid-nrpos+1);
+      memmove(s+nlpos,s+nrpos,lin_wid-nrpos+1);
       _tt->line_info[*line_num].stl-=cnt;
       *cur_pos=nlpos;
       _tt_display_line(*line_num,-1,-1);
@@ -490,7 +490,7 @@ bool _tt_del_chars(long *line_num, long *cur_pos, int cnt)
 //      _tt_chg_line(dir);
 //      if (cnt>0) _tt->cur_w=0; else _tt->cur_w=_tt->line_info[_tt->cur_h].stl;
 //      _tt_chg_colu(cnt-dir);           /* extra bonus wrap character there... */
-   }      
+   }
    return TRUE;
 }
 
@@ -629,7 +629,7 @@ int _tt_do_event(long tt_event)
 // returns -1 or the line selected (w/return)
 long tt_parse_char(TextTool *tt, ushort key_code)
 {
-   char c = (key_code & 0xFF); 
+   char c = (key_code & 0xFF);
    int ret;
    int event = TTEV_NULL;
    _tt_top(tt);
@@ -675,7 +675,7 @@ long tt_parse_char(TextTool *tt, ushort key_code)
 //   mprintf ("event = %d\n  TTEV_RET = %d  TTEV_NULL = %d\n",event,TTEV_RET,TTEV_NULL);
    if (event == TTEV_NULL)
    {
-      if (isprint(c)) event=c; 
+      if (isprint(c)) event=c;
    }
    ret=_tt_do_event(event);
    if (ret&TTCHG_CURSOR) LGCursor(_tt->scr_loc.crn.pt.x+_tt->cur_w,_tt->scr_loc.crn.pt.y+_tt->cur_h-_tt->disp_y);

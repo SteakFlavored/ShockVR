@@ -6,19 +6,19 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
 ** $Header: r:/prj/cit/src/RCS/objects.c 1.13 1994/08/31 16:27:36 tjs Exp $
- * 
+ *
 */
 
 ////////////////////////////////////////////////////////////
@@ -141,12 +141,12 @@ void ObjsInit (void)
 //	SpewReport (("ObjsInit ()\n"));
 
 	// clear out everything
-	LG_memset ((void *) objs, 0, sizeof (Obj) * NUM_OBJECTS);
-	LG_memset ((void *) objRefs, 0, sizeof (ObjRef) * NUM_REF_OBJECTS);
+	memset ((void *) objs, 0, sizeof (Obj) * NUM_OBJECTS);
+	memset ((void *) objRefs, 0, sizeof (ObjRef) * NUM_REF_OBJECTS);
 	for (c = CLASS_FIRST; c < NUM_CLASSES; c++)
 	{
 		head = &objSpecHeaders[c];
-		LG_memset ((void *) head->data, 0, head->size * head->struct_size);
+		memset ((void *) head->data, 0, head->size * head->struct_size);
 	}
 
 	// set up the free chains for objects
@@ -175,7 +175,7 @@ void ObjsInit (void)
 
 #ifdef HASH_OBJECTS
 	// set up the free chains for the hash table
-	LG_memset ((void *) objHashTable, 0, sizeof (ObjHashElem) * OBJ_HASH_ENTRIES);
+	memset ((void *) objHashTable, 0, sizeof (ObjHashElem) * OBJ_HASH_ENTRIES);
 	for (i = 0; i < OBJ_HASH_HEAD_ENTRIES_START - 1; i++)
 		objHashTable[i].next = i + 1;
 	objHashTable[OBJ_HASH_HEAD_ENTRIES_START - 1].next = 0;
@@ -353,7 +353,7 @@ bool ObjDel (ObjID obj)
 
 //////////////////////////////
 //
-// Updates the location of a moving object. 
+// Updates the location of a moving object.
 // Returns whether it was successful in doing so.
 //
 // The given ObjLocState contains information about the new location of the
@@ -440,7 +440,7 @@ bool ObjUpdateLocs (ObjLocState *olsp)
 
 		// this bin was not in out[], so we add it to in[].
 		in[incount++] = *stCur;
-		
+
 found_bin_in_out: ;
 	}
 
@@ -500,7 +500,7 @@ void ObjFreeHashEntry (ObjHashElemID elem)
 // If create is true, then return an entry even if once doesn't exist now.
 // It will then have a ref field of NULL, signifying that it was just
 // created.  You must immediately set the ref's StateBin correctly.
-// 
+//
 #ifdef USE_FUNCTION_FOR_HASH_GET
 ObjHashElemID ObjGetHashElem (ObjRefStateBin bin, bool create)
 {
@@ -706,7 +706,7 @@ bool ObjSysOkay (void)
 	// 1. Every Obj is in either the free chain or the used chain,
 	// and does not appear twice in any chain.
 
-	LG_memset (usedObj, 0, NUM_OBJECTS);
+	memset (usedObj, 0, NUM_OBJECTS);
 
 //	SpewAnal (("Free Objs: "));
 //	DBG_Anal ({RangeInit ();})
@@ -779,7 +779,7 @@ bool ObjSysOkay (void)
 
 	// 3. No ObjRef occurs twice in the free chain.
 
-	LG_memset (usedRef, 0, NUM_REF_OBJECTS);
+	memset (usedRef, 0, NUM_REF_OBJECTS);
 
 	cur = objRefs[OBJ_REF_NULL].next;
 
@@ -811,9 +811,9 @@ bool ObjSysOkay (void)
 
 	for (i = CLASS_FIRST; i < NUM_CLASSES; i++)
 	{
-		LG_memset (usedObj, 0, NUM_OBJECTS);
+		memset (usedObj, 0, NUM_OBJECTS);
 		head = &objSpecHeaders[i];
-		cur = ((ObjSpec *) head->data)->next;		
+		cur = ((ObjSpec *) head->data)->next;
 		while (cur)
 		{
 			if (cur < 0 || cur >= head->size)
@@ -829,7 +829,7 @@ bool ObjSysOkay (void)
 			usedObj[cur] = OBJ_FREE;
 			cur = ((ObjSpec *) (head->data + cur * head->struct_size))->next;
 		}
-		cur = ((ObjSpec *) head->data)->bits.id;		
+		cur = ((ObjSpec *) head->data)->bits.id;
 		while (cur)
 		{
 			if (cur < 0 || cur >= head->size)
@@ -859,7 +859,7 @@ bool ObjSysOkay (void)
 			}
 		}
 	}
-	
+
 	// 4. All active ObjRefs occur exactly once in the map.
 	// 5. All active ObjRefs point to the map element in which they occur.
 	// 6. All active ObjRefs point to active Objs.
@@ -937,7 +937,7 @@ bool ObjSysOkay (void)
 			ref = objRefs[ref].next;
 		}
 	}
-	
+
 	// 7. All ObjRefs referring to a single Obj reside in distinct map elements.
 	// 8. The links between an Obj and its ObjSpec are valid.
 	// 9. The links between an Obj and its ObjRefs are valid.
@@ -1001,7 +1001,7 @@ done_checking_refs:
 				return FALSE;
 			}
 		}
-	
+
 done_checking_obj:
 
 		cur = objs[cur].next;
@@ -1074,7 +1074,7 @@ ObjID ObjGrab (void)
 static
 bool ObjFree (ObjID obj)
 {
-//	SpewReport (("ObjFree (obj %d)\n", obj));	
+//	SpewReport (("ObjFree (obj %d)\n", obj));
 
 //DBG_Check ({
 //	// Check if something still depends on this to be valid
@@ -1181,7 +1181,7 @@ ObjSpecID ObjSpecGrab (ObjClass obclass)
 
 	head = &objSpecHeaders[obclass];
 	data = head->data;
-	spec0 = (ObjSpec *) data;	
+	spec0 = (ObjSpec *) data;
 
 	if (spec0->next == OBJ_SPEC_NULL)
 		return OBJ_SPEC_NULL;
@@ -1218,7 +1218,7 @@ DBG_Check ({
 })
 
 	data = head->data;
-	spec0 = (ObjSpec *) data;	
+	spec0 = (ObjSpec *) data;
 
 	if (spec0->next == OBJ_SPEC_NULL)
 		return OBJ_SPEC_NULL;
@@ -1262,9 +1262,9 @@ bool ObjSpecFree (ObjClass obclass, ObjSpecID id)
 
 	head = &objSpecHeaders[obclass];
 	data = head->data;
-	spec0 = (ObjSpec *) &data[0];	
+	spec0 = (ObjSpec *) &data[0];
 	thisspec = (ObjSpec *) (data + head->struct_size * id);
-	
+
 	// take this out of the used chain
 	if (thisspec->prev == OBJ_SPEC_NULL)
 		spec0->headused = thisspec->next;
@@ -1298,9 +1298,9 @@ DBG_Check ({
 })
 
 	data = head->data;
-	spec0 = (ObjSpec *) &data[0];	
+	spec0 = (ObjSpec *) &data[0];
 	thisspec = (ObjSpec *) (data + head->struct_size * id);
-	
+
 	// take this out of the used chain
 	if (thisspec->prev == OBJ_SPEC_NULL)
 		spec0->headused = thisspec->next;
@@ -1345,7 +1345,7 @@ DBG_Check ({
 
 	if ((size = head->struct_size - sizeof(ObjSpec)) > 0)
 	{
-		LG_memcpy (data + head->struct_size * new + sizeof(ObjSpec),
+		memcpy (data + head->struct_size * new + sizeof(ObjSpec),
 				  data + head->struct_size * old + sizeof(ObjSpec), size);
 	}
 	return TRUE;
@@ -1372,7 +1372,7 @@ void ObjRefRem (ObjRefID ref)
 		Warning (("Tried to remove ref %d not in hash table in ObjRefRem\n", ref));
 		return;
 	}
-	
+
 	if (objHashTable[hash_entry].ref == ref)
 	{
 		if (objRefs[ref].next == OBJ_REF_NULL)
@@ -1482,7 +1482,7 @@ ObjID ObjRefLinkDel (ObjRefID ref)
 	{
 		// run around the circular list until we reach ourselves
 		// and splice ourselves out
-		curref = ref;		
+		curref = ref;
 		while (objRefs[curref].nextref != ref)
 			curref = objRefs[curref].nextref;
 		objRefs[curref].nextref = objRefs[ref].nextref;
@@ -1631,7 +1631,7 @@ bool ObjAndSpecFree (ObjID obj)
 //		Warning (("ObjSpecFree (%d, %d) failed in ObjAndSpecFree\n", obclass, specID));
 //		return FALSE;
 //	}
-//})	
+//})
 
 	return TRUE;
 }

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/musicai.c $
@@ -60,7 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern void grind_music_ai();
 
 
-uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE]; 
+uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
 uchar transition_table[NUM_TRANSITIONS];
 uchar layering_table[NUM_LAYERS][MAX_KEYS];
 uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
@@ -164,7 +164,7 @@ void mlimbs_do_ai()
 
 /*¥¥¥ Is this really necessary?  It's already called twice in fr_rend().
 #ifdef AUDIOLOGS
-	audiolog_loop_callback();	
+	audiolog_loop_callback();
 #endif
 */
 	// Play any queued sound effects, or damage SFX that have yet to get flushed
@@ -210,13 +210,13 @@ void mlimbs_do_ai()
 				mlimbs_peril = DEFAULT_PERIL_MAX;
 			}
 		}
-		
+
 		// KLC - moved here from grind_music_ai, so it can do this check at all times.
 		if (global_fullmap->cyber)
 		{
 			MapElem 	*pme;
 			int			play_me;
-		
+
 			pme = MAP_GET_XY(PLAYER_BIN_X, PLAYER_BIN_Y);				// Determine music for this
 			if (!me_bits_peril(pme))														// location in cyberspace.
 				play_me = NUM_NODE_THEMES + me_bits_music(pme);
@@ -233,7 +233,7 @@ void mlimbs_do_ai()
 				make_request(0, play_me);												// otherwise just queue up next tune.
 			cyber_play = play_me;
 		}
-		
+
 		// This is all pretty temporary right now, but here's what's happening.
 		// If the gReadyToQueue flag is set, that means the 6-second timer has
 		// fired.  So we call check_asynch_ai() to determine the next tune to play
@@ -251,7 +251,7 @@ void mlimbs_do_ai()
 				gReadyToQueue = FALSE;
 			}
 		}
-		
+
 		// If a tune has finished playing, then another has just started, so prime the
 		// timer to do the next tune calc.
 		if (gTuneDone)
@@ -361,7 +361,7 @@ errtype mlimbs_AI_init(void)
    current_zone = HOSPITAL_ZONE;
 //   mlimbs_AI = &music_ai;
    cyber_play = 255;
-   
+
    return(OK);
 }
 
@@ -408,7 +408,7 @@ errtype make_request(int chunk_num, int piece_ID)
 {
 	current_request[chunk_num] = default_request;
 	current_request[chunk_num].pieceID = piece_ID;
-	
+
 	// These get set all around differently and stuff
 	current_request[chunk_num].crossfade = curr_crossfade;
 	current_request[chunk_num].ramp_time = curr_ramp_time;
@@ -422,7 +422,7 @@ errtype load_score_from_cfg(FSSpec *specPtr)
 	short  	filenum;
 	Handle	binHdl;
 	Ptr		p;
-	
+
 	filenum = FSpOpenResFile(specPtr, fsRdPerm);
 	if (filenum == -1)
 		return (ERR_FOPEN);
@@ -437,10 +437,10 @@ errtype load_score_from_cfg(FSSpec *specPtr)
 	BlockMoveData(p, transition_table, NUM_TRANSITIONS);
 	p += NUM_TRANSITIONS;
 	BlockMoveData(p, layering_table, NUM_LAYERS * MAX_KEYS);
-	p += NUM_LAYERS * MAX_KEYS;	
+	p += NUM_LAYERS * MAX_KEYS;
 	BlockMoveData(p, key_table, NUM_LAYERABLE_SUPERCHUNKS * KEY_BAR_RESOLUTION);
 	HUnlock(binHdl);
-	
+
 	CloseResFile(filenum);
 	return(OK);
 }
@@ -451,13 +451,13 @@ int old_score;
 errtype fade_into_location(int x, int y)
 	{
 	MapElem *pme;
-	
+
 	new_x = x;
 	new_y = y;
 	new_theme = 2;
 	pme = MAP_GET_XY(new_x,new_y);
 	score_playing = me_bits_music(pme);
-	
+
 	// For going into/outof elevator and cyberspace, don't do any crossfading.
 	if ((score_playing == ELEVATOR_ZONE) || (score_playing > CYBERSPACE_SCORE_BASE) ||
 		 (old_score == ELEVATOR_ZONE) || (old_score > CYBERSPACE_SCORE_BASE))
@@ -482,10 +482,10 @@ errtype fade_into_location(int x, int y)
 /*KLC - don't need
 errtype blank_theme_data()
 {
-   LG_memset(track_table, 255, NUM_SCORES * SUPERCHUNKS_PER_SCORE * sizeof(uchar));
-   LG_memset(transition_table, 255, NUM_TRANSITIONS * sizeof(uchar));
-   LG_memset(layering_table, 255, NUM_LAYERS * MAX_KEYS * sizeof(uchar));
-   LG_memset(key_table, 255, NUM_LAYERABLE_SUPERCHUNKS * KEY_BAR_RESOLUTION * sizeof(uchar));
+   memset(track_table, 255, NUM_SCORES * SUPERCHUNKS_PER_SCORE * sizeof(uchar));
+   memset(transition_table, 255, NUM_TRANSITIONS * sizeof(uchar));
+   memset(layering_table, 255, NUM_LAYERS * MAX_KEYS * sizeof(uchar));
+   memset(key_table, 255, NUM_LAYERABLE_SUPERCHUNKS * KEY_BAR_RESOLUTION * sizeof(uchar));
    return(OK);
 }
 */
@@ -497,7 +497,7 @@ void load_score_guts(char score_playing)
 	int 		rv;
 	char 		base[20], temp[30];
 	FSSpec	themeSpec;
-	
+
 	strcpy(base, "Theme");							// Get the theme file name.
 	numtostring(score_playing, temp);
 	strcat(base, temp);
@@ -551,21 +551,21 @@ errtype load_score_for_location(int x, int y)
 #define DEV_CARD  0
 #define DEV_IRQ   1
 #define DEV_DMA   2
-#define DEV_IO    3 
-#define DEV_DRQ   4 
+#define DEV_IO    3
+#define DEV_DRQ   4
 #define DEV_PARMS 5
 
 // doug gets sneaky, film at 11
 #define MIDI_CARD MIDI_TYPE][DEV_CARD
-#define MIDI_IRQ  MIDI_TYPE][DEV_IRQ 
-#define MIDI_DMA  MIDI_TYPE][DEV_DMA 
-#define MIDI_IO   MIDI_TYPE][DEV_IO  
-#define MIDI_DRQ  MIDI_TYPE][DEV_DRQ 
+#define MIDI_IRQ  MIDI_TYPE][DEV_IRQ
+#define MIDI_DMA  MIDI_TYPE][DEV_DMA
+#define MIDI_IO   MIDI_TYPE][DEV_IO
+#define MIDI_DRQ  MIDI_TYPE][DEV_DRQ
 #define DIGI_CARD DIGI_TYPE][DEV_CARD
-#define DIGI_IRQ  DIGI_TYPE][DEV_IRQ 
-#define DIGI_DMA  DIGI_TYPE][DEV_DMA 
-#define DIGI_IO   DIGI_TYPE][DEV_IO  
-#define DIGI_DRQ  DIGI_TYPE][DEV_DRQ 
+#define DIGI_IRQ  DIGI_TYPE][DEV_IRQ
+#define DIGI_DMA  DIGI_TYPE][DEV_DMA
+#define DIGI_IO   DIGI_TYPE][DEV_IO
+#define DIGI_DRQ  DIGI_TYPE][DEV_DRQ
 
 #define SFX_BUFFER_SIZE 8192
 //#define SFX_BUFFER_SIZE 4096
@@ -588,7 +588,7 @@ short music_get_config(char *pre, char *suf)
 audio_card *fill_audio_card(audio_card *cinf, short *dinf)
 {
    cinf->type=dinf[DEV_CARD];      cinf->dname=NULL;
-   cinf->io=dinf[DEV_IO];          cinf->irq=dinf[DEV_IRQ];	
+   cinf->io=dinf[DEV_IO];          cinf->irq=dinf[DEV_IRQ];
    cinf->dma_8bit=dinf[DEV_DMA];   cinf->dma_16bit=-1;      // who knows, eh?
    return cinf;
 }
@@ -656,12 +656,12 @@ errtype music_init()
    {
 //      mprintf("hey, path = %s\n",path);
       DatapathAdd(&music_dpath, path);
-      if (gm) 
+      if (gm)
          { strcat(path,"\\genmidi"); }
       else
          { strcat(path,"\\sblaster"); }
 //      mprintf("now, path = %s\n",path);
-      DatapathAdd(&music_dpath,path);  
+      DatapathAdd(&music_dpath,path);
    }
 
    // add contents of CFG_CD_SOUNDVAR
@@ -669,12 +669,12 @@ errtype music_init()
    {
 //      mprintf("hey, path = %s\n",path);
       DatapathAdd(&music_dpath, path);
-      if (gm) 
+      if (gm)
          { strcat(path,"\\genmidi"); }
       else
          { strcat(path,"\\sblaster"); }
 //      mprintf("now, path = %s\n",path);
-      DatapathAdd(&music_dpath,path);  
+      DatapathAdd(&music_dpath,path);
    }
 
 #ifdef PLAYTEST
@@ -683,7 +683,7 @@ errtype music_init()
    DatapathAdd(&music_dpath,s);
 #endif
 
-   if (gm) 
+   if (gm)
       { strcat(s,"\\genmidi"); }
    else
       { strcat(s,"\\sblaster"); }
@@ -758,10 +758,10 @@ errtype music_init()
 	}
    else
       curr_sfx_vol = 0;
-  
-   if (sfx_card)   
-   { 
-      sfx_on=TRUE; 
+
+   if (sfx_card)
+   {
+      sfx_on=TRUE;
 #ifdef AUDIOLOGS
       audiolog_init();
 #endif

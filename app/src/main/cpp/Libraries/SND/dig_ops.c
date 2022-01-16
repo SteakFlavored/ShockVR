@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //===========================================================================
 // $Source: r:/prj/lib/src/snd/RCS/dig_ops.c $
@@ -89,12 +89,12 @@ static void cdecl smp_EOB_callback(SAMPLE *S)
 void snd_end_sample(int hnd_id)
 {
 	SndCommand	sc;
-	
+
 	sc.cmd = flushCmd;														// Flush any remaining commands.
 	sc.param1 = 0;
 	sc.param2 = 0;
 	SndDoImmediate(_snd_smp_prm[hnd_id].sndChan, &sc);
-	
+
 	sc.cmd = quietCmd;														// Turn off the current command.
 	sc.param1 = 0;
 	sc.param2 = 0;
@@ -165,23 +165,23 @@ void snd_sample_reload_parms(snd_digi_parms *sdp)
 	ourSC = sdp->sndChan;
 
 	// Set the pan values.
-	
+
 	ls = rs = 0x100;
 	if (sdp->pan < 0x40)
 		rs = sdp->pan * 4;
 	else if (sdp->pan > 0x40)
 		ls = (0x7F - sdp->pan) * 4;
-	
+
 	// Set the volume.
-	
+
 	if (sdp->vol < 0x100)
 	{
 		ls = ls * sdp->vol / 0x100;
 		rs = rs * sdp->vol / 0x100;
 	}
-	
+
 	// Issue volume/pan command.
-	
+
 	sc.cmd = volumeCmd;
 	sc.param1 = 0;
 	sc.param2 = (rs << 16) + ls;
@@ -223,28 +223,28 @@ int snd_sample_play(int snd_ref, int len, uchar *smp, snd_digi_parms *dprm)
 //   mprintf("SSP: %x at %x, l %x... ",snd_ref,smp,len);
 	if (dprm != NULL)
 		lpri = dprm->pri;
-	
+
 	if ((hnd_id = snd_find_free_handle(lpri, FALSE)) == SND_PERROR )
 	{
 		snd_error = SND_NO_HANDLE;
 //      mprintf("no free handle error %d\n",snd_error);
-		return SND_PERROR; 
+		return SND_PERROR;
 	}
-	
+
 	hnd_parm = &_snd_smp_prm[hnd_id];
 	ourSC = hnd_parm->sndChan;
 	if (dprm != NULL)
-		LG_memcpy(hnd_parm, dprm, sizeof(snd_digi_parms));
+		memcpy(hnd_parm, dprm, sizeof(snd_digi_parms));
 	else
 	{
-		LG_memset(hnd_parm, 0, sizeof(snd_digi_parms));
+		memset(hnd_parm, 0, sizeof(snd_digi_parms));
 		hnd_parm->pan = SND_DEF_PAN;
 		hnd_parm->vol = 0x100;
 		hnd_parm->pri = lpri;
 		hnd_parm->loops = 1;
 	}
 	hnd_parm->sndChan = ourSC;
-	
+
 	// For Mac version, return an error if there is no sample data.  Doesn't support
 	// double-buffered sound.
 	if (smp != NULL)
@@ -256,21 +256,21 @@ int snd_sample_play(int snd_ref, int len, uchar *smp, snd_digi_parms *dprm)
 	else
 	{
 		snd_error = SND_OUT_OF_MEMORY;
-		return SND_PERROR; 
+		return SND_PERROR;
 	}
 	hnd_parm->snd_ref = snd_ref;
 
 	// Set up pan and volume.
-	
+
 	snd_sample_reload_parms(hnd_parm);
 
 	// Play the sound.
-	
+
 	HLock(sndHdl);
 	SndPlay(ourSC, (SndListHandle)sndHdl, TRUE);
-	
+
 	// Call our call-back routine when the sound is done playing.
-	
+
 	sc.cmd = callBackCmd;
 	sc.param1 = 1;							// Sound complete
 	sc.param2 = (long)hnd_parm;		// Ptr to current sound parameters

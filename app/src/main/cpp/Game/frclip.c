@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrClip.c
@@ -27,38 +27,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Citadel Renderer
  *  various clippers for terrain, including basic cone clip and the later day
  *   tile based clipper
- *  
+ *
  * $Log: frclip.c $
  * Revision 1.12  1994/09/10  00:30:09  dc
  * this time i really think i fixed the malloc's
- * 
+ *
  * Revision 1.11  1994/09/06  03:14:58  dc
  * do cspace a little more correctly, eh?
- * 
+ *
  * Revision 1.10  1994/09/05  08:33:35  dc
  * hey how about not forgetting about cyberspace this time, eh?
- * 
+ *
  * Revision 1.9  1994/09/05  06:43:26  dc
  * span parse fixes, clear as we go
- * 
+ *
  * Revision 1.8  1994/08/30  05:51:01  dc
  * fix vanish if home square not drawn bug, othe rstuff
- * 
+ *
  * Revision 1.7  1994/08/21  03:10:06  dc
  * duh.
- * 
+ *
  * Revision 1.6  1994/08/21  03:06:55  dc
  * parameterize spawn_check, save a bit of code space
- * 
+ *
  * Revision 1.5  1994/07/28  05:53:42  dc
  * protection from span clip nightmare, what is cone doing...
- * 
+ *
  * Revision 1.4  1994/03/13  17:18:04  dc
  * doors take 38, still doesnt do minimal inclusion clips right
- * 
+ *
  * Revision 1.3  1994/03/10  00:11:03  dc
  * better door stuff, still need some stuff, though....
- * 
+ *
  * Revision 1.2  1994/01/22  18:57:39  dc
  * fix objclip to set correct bits of subclip, next switch it to flick_qclip
  */
@@ -141,7 +141,7 @@ int fr_clip_frame_start(void)
 // setup real obj stack
 //   _fr_init_vecwork();
    // hmm... is this really necessary????
-   LG_memset(cone_span_list,0xff,fr_map_y*2*sizeof(uchar));
+   memset(cone_span_list,0xff,fr_map_y*2*sizeof(uchar));
    _fr_sdbg(SANITY,_fr_init_vecwork());   // hey, why not?
    _fr_ret;
 }
@@ -363,8 +363,8 @@ int fr_clip_cone(void)
 	      mprintf("y %d-%d have none\n",lc,i-1);
       mprintf("left (%x,%x), right (%x,%x)\n",span_intersect[0],span_intersect[1],span_intersect[2],span_intersect[3]);
       mprintf("vec tl (%x,%x), vec tr (%x,%x)\n",
-         span_lines[2],span_lines[3],     
-         span_lines[4],span_lines[5]);    
+         span_lines[2],span_lines[3],
+         span_lines[4],span_lines[5]);
       mprintf("vec bl (%x,%x), vec br (%x,%x)\n",
          span_lines[0],span_lines[1],
          span_lines[6],span_lines[7]);
@@ -583,7 +583,7 @@ bool _fr_move_ccv_x(struct _nVecWork *nvp)
          move_in_x=move_in_y=FALSE;
 	      ccv->mptr-=nvp->mapstep[0];
          _fr_sdbg(VECSPEW,mprintf("move_x top: hit other tile\n"));
-      }   
+      }
       else
       {  // correct for new setup
          ccv->loc[0]+=nvp->remx+rmmod[nvp->dircode];
@@ -623,7 +623,7 @@ bool _fr_move_ccv_x(struct _nVecWork *nvp)
 		      tt=me_tiletype(ccv->mptr);
             if ((_face_nxtedge[tt<<2]==0xff)||(me_clearsolid(ccv->mptr)&_face_nxtmask)||out_of_cone(ccv->mptr))
             {  // these really have to get wacky and learn about partial obscuration
-	            move_in_x=move_in_y=FALSE; 
+	            move_in_x=move_in_y=FALSE;
 	   	      ccv->mptr-=nvp->mapstep[0];
                _fr_sdbg(VECSPEW,mprintf("move_x(while): hit other tile\n"));
 	         }
@@ -671,7 +671,7 @@ void _fr_move_along_dcode(int dircode)
 		   case nVW_NXNY: nvp->move_x=(-nvp->remx*ccv->deltas[1] > (fix_frac(ccv->loc[1]))*(ccv->deltas[0])); break;           // flip sign for --
 		   case nVW_NXPY: nvp->move_x=( nvp->remx*ccv->deltas[1] > (_fixp1-1-fix_frac(ccv->loc[1]))*(ccv->deltas[0])); break; // flip xd, sign
  		   case nVW_PXNY: nvp->move_x=(-nvp->remx*ccv->deltas[1] < (fix_frac(ccv->loc[1]))*ccv->deltas[0]); break;          // flip yd, sign
-		   case nVW_PXPY: nvp->move_x=( nvp->remx*ccv->deltas[1] < (_fixp1-1-fix_frac(ccv->loc[1]))*ccv->deltas[0]); break;    // all things good   
+		   case nVW_PXPY: nvp->move_x=( nvp->remx*ccv->deltas[1] < (_fixp1-1-fix_frac(ccv->loc[1]))*ccv->deltas[0]); break;    // all things good
 	      }
       else nvp->move_x=TRUE;
       if (nvp->move_x)
@@ -772,10 +772,10 @@ static uchar *_face_topedge, *_face_botedge;
 // note how pretty this looks till you look at the is_solid macro
 bool _fr_skip_solid_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step)
 {
-   if (is_solid()) 
+   if (is_solid())
    {
       cv->loc[0]&=0xffff0000;
-      cv->loc[0]+=_fixp1;  
+      cv->loc[0]+=_fixp1;
       cv->mptr+=1;
       while (is_solid()&&(cv->loc[0]<max_loc))
        { cv->loc[0]+=_fixp1; cv->mptr+=1; }
@@ -785,10 +785,10 @@ bool _fr_skip_solid_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step)
 
 bool _fr_skip_space_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step)
 {
-   if (is_space()) 
+   if (is_space())
    {
       cv->loc[0]&=0xffff0000;
-      cv->loc[0]+=_fixp1;  
+      cv->loc[0]+=_fixp1;
       cv->mptr+=1;
       while (is_space()&&(cv->loc[0]<max_loc))
        { cv->loc[0]+=_fixp1; cv->mptr+=1; }
@@ -798,7 +798,7 @@ bool _fr_skip_space_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step)
 
 bool _fr_skip_solid_left_n_back(FrClipVec *cv, fix min_loc, int y_map_step)
 {
-   if (is_solid()) 
+   if (is_solid())
    {
       cv->loc[0]|=0x0000ffff;
       cv->loc[0]+=_fixn1;
@@ -1049,12 +1049,12 @@ int fr_clip_tile(void)
 	         _fr_move_along_hn_p(northward);
 		         // at each square, code objects
 		         // keep a right edge for internal? ick!
-	
+
 		      // move out right vector
 	         _v2=ccv=allclipv+ccv->nxtv;
 	         nxtvec=ccv->nxtv;                 // so if we new_dels more vecs, or kill our vec, we have the next ptr ready, eh?
 	         _fr_move_along_hn_p(northward);	 // do same things, but in reverse
-	
+
 	         if (!_fr_move_new_dels(_v1,_v2,northward)) // kill off the vectors
 	         {  // wow, can we do multiple here... i guess so
 	            _fr_sdbg(VECSPEW,{mprintf("clip_tile(while): killing vector pair\n");print_fcv(_v1,2);print_fcv(_v2,2);});
@@ -1067,7 +1067,7 @@ int fr_clip_tile(void)
 	         }
 #if _fr_defdbg(VECTRACK)
             _fr_sdbg(VECTRACK,_fr_show_veclist());
-#endif	
+#endif
 		      // store off new base span
 		      // spawn/collect vectors
 		      // move to next span line

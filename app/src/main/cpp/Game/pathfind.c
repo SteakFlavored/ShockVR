@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/pathfind.c $
@@ -66,7 +66,7 @@ uchar pf_obj_height(MapElem *pme, uchar old_z);
 #define SET_PATH_STEP(pathid,stepnum,newval)  do {PATH_CHAR(pathid,stepnum) = \
       PATH_CHAR(pathid,stepnum) & ~(0x3 << (LOW_STEP(stepnum) << 1)) | ((newval) << (LOW_STEP(stepnum) << 1)); \
       }  while (0)
-#define CLEAR_PATH(pathid) do {LG_memset ((void *)(paths[(pathid)].moves), 0, NUM_PATH_STEPS/4); } while (0)
+#define CLEAR_PATH(pathid) do {memset ((void *)(paths[(pathid)].moves), 0, NUM_PATH_STEPS/4); } while (0)
 
 
 
@@ -94,7 +94,7 @@ char request_pathfind(LGPoint source, LGPoint dest, uchar dest_z, uchar start_z,
    used_paths |= (1 << i);
 
    // Init the path struct
-   paths[i].source = source; 
+   paths[i].source = source;
    paths[i].dest = dest;
    // Path height units and API height units are the same, so don't
    paths[i].dest_z = dest_z;
@@ -165,7 +165,7 @@ char next_step_on_path(char path_id, LGPoint *next, char *steps_left)
 
 #define LOOKAHEAD_STEPS 3
 // Checks whether or not we have skipped ahead to some square within LOOKAHEAD_STEPS
-// of the "current" location for the specified path.  If so, jumps the path to that point and 
+// of the "current" location for the specified path.  If so, jumps the path to that point and
 // returns TRUE.
 bool check_path_cutting(LGPoint new_sq, char path_id)
 {
@@ -201,7 +201,7 @@ bool check_path_cutting(LGPoint new_sq, char path_id)
 
 #define PATHFIND_INTERVAL  (CIT_CYCLE >> 2)
 
-// We could probably save a ulong by just doing this strictly on 
+// We could probably save a ulong by just doing this strictly on
 // the clock rather than actually doing it right.
 ulong last_pathfind_time =0;
 // priority means only check priority requests, but always check
@@ -212,7 +212,7 @@ errtype check_requests(bool priority_only)
    if (priority_only || (player_struct.game_time > last_pathfind_time))
    {
       // If it is time to check, go through all the paths, find the
-      // unfilled requests among them, and go satisfy them.  
+      // unfilled requests among them, and go satisfy them.
       for (i=0; i < MAX_PATHS; i++)
       {
          if (paths[i].num_steps == -2)
@@ -237,7 +237,7 @@ errtype delete_path(char path_id)
    // To delete, just mark the path as unused and zero out its data
    if ((path_id < 0) || (path_id >= MAX_PATHS))
       return(ERR_NOEFFECT);
-   LG_memset(&paths[path_id],0,sizeof(Path));
+   memset(&paths[path_id],0,sizeof(Path));
    used_paths &= ~(1 << path_id);
    return(OK);
 }
@@ -257,7 +257,7 @@ errtype reset_pathfinding()
 // spt is a "point" which only has 8 bits each for x & y.
 typedef short spt;
 #define SPT_X(s)   ((s) & 0xFF)
-#define SPT_Y(s)   ((s) >> 8)   
+#define SPT_Y(s)   ((s) >> 8)
 #define SPT_X_SET(s,newx) ((s) = ((s) & 0xFF00) | (newx))
 #define SPT_Y_SET(s,newy) ((s) = ((s) & 0x00FF) | ((newy) << 8))
 #define PT2SPT(pt)   ((((pt).y & 0xFF) << 8) | ((pt).x & 0xFF))
@@ -266,7 +266,7 @@ typedef short spt;
    SPT_X(pspt[i]) != 0; i++, iter = pspt[i])
 
 //#define CLEARSPTLIST(pspt, num, loop) do { for (loop=0; loop < num; loop++) { pspt[loop] = 0; } } while (0)
-#define CLEARSPTLIST(pspt, num) LG_memset(pspt,0,sizeof(spt)*num)
+#define CLEARSPTLIST(pspt, num) memset(pspt,0,sizeof(spt)*num)
 
 // A given element in the pathfind buffer is 8 bits
 // 5 bits of Z
@@ -274,9 +274,9 @@ typedef short spt;
 // 1 bit  of whether or not it's been visited
 #define PFE_Z_MASK   0x1F
 #define PFE_DIR_MASK 0x60
-#define PFE_USE_MASK 0x80       
+#define PFE_USE_MASK 0x80
 #define PFE_DIR_SHIFT   5
-#define PFE_USE_SHIFT   7     
+#define PFE_USE_SHIFT   7
 
 #define PFE_OBJ_ZSHIFT  3
 // PFE_Z just returns the raw stored z value (5 bits)
@@ -302,7 +302,7 @@ typedef short spt;
 #define PFE_USED_SET(ppfe,d) (*(ppfe) = (*(ppfe) & ~PFE_USE_MASK) | ((d) << PFE_USE_SHIFT))
 
 // Hmm, I think this will work.... pathfind_buffer is a big chunk
-// of memory, and we want to access it like a big array of uchars...      
+// of memory, and we want to access it like a big array of uchars...
 #define PFE_GET_XY(x,y) ((uchar *)pathfind_buffer + x + (y * MAP_XSIZE))
 
 // l1 and l2 are two lists of spts, and expand_into_list gets
@@ -403,7 +403,7 @@ bool pf_check_doors(MapElem *pme, char dir, ObjID *open_door)
       {
 //         Warning(("contemplating id %x, loc = %x, %x, dir = %d\n",id,objs[id].loc.x,objs[id].loc.y,dir));
          switch(dir)
-         {   
+         {
             case 0: // N
                if (((objs[id].loc.y & 0xFF) >= 0x80) && !(objs[id].loc.h & 0x40))
                   which_obj = id;
@@ -428,7 +428,7 @@ bool pf_check_doors(MapElem *pme, char dir, ObjID *open_door)
    {
       // If there is a door in the way, and it is closed, and
       // it is either locked or requires access, we can't get through
-      if ((DOOR_CLOSED(which_obj)) && ((ObjProps[OPNUM(which_obj)].flags & TERRAIN_OBJECT)!=0) && 
+      if ((DOOR_CLOSED(which_obj)) && ((ObjProps[OPNUM(which_obj)].flags & TERRAIN_OBJECT)!=0) &&
           ((QUESTBIT_GET(objDoors[objs[which_obj].specID].locked)) ||
            (objDoors[objs[which_obj].specID].access_level)))
       {
@@ -457,8 +457,8 @@ bool pf_obj_doors(MapElem *pme1, MapElem *pme2, char dir, ObjID *open_door)
 }
 
 
-// Returns the height (not downshifted) attainable by entering the 
-// square at height old_z (downshifted).  Specifically, accounts for 
+// Returns the height (not downshifted) attainable by entering the
+// square at height old_z (downshifted).  Specifically, accounts for
 // bridges and repulsorlifts keeping the player elevated.
 
 // Wow, this really doesn't deal with bridges right at all, I don't think
@@ -488,7 +488,7 @@ uchar pf_obj_height(MapElem *pme, uchar )
 //            Spew(DSRC_AI_Pathfind, ("pf_o_ht: repulsor retval = %x\n",retval));
          }
       }
-      else 
+      else
 #endif
       if (ObjProps[OPNUM(id)].flags & TERRAIN_OBJECT)
       {
@@ -510,7 +510,7 @@ uchar pf_obj_height(MapElem *pme, uchar )
 
 // Tells whether or not we can get from one square (at a given z)
 // to a new square, and if so, what our new z will be.  This will
-// start out very very stupid and hopefully get smarter as it 
+// start out very very stupid and hopefully get smarter as it
 // needs to.
 
 #define PF_HEIGHT 1
@@ -562,7 +562,7 @@ bool expand_one_square(spt sq, char path_id)
    spt newsq, dest = PT2SPT(paths[path_id].dest);
    char i;
    uchar *ppfe, *ppfe2;
-   
+
    ppfe2 = PFE_GET_XY(SPT_X(sq),SPT_Y(sq));
 //   Spew(DSRC_AI_Pathfind, ("expanding %x\n",sq));
    for (i=0; i < 4; i++)
@@ -602,7 +602,7 @@ bool expand_one_square(spt sq, char path_id)
 }
 
 // Go through the list of last-iteration's reached squares, and
-// generate a new list of places to go to. 
+// generate a new list of places to go to.
 // Returns whether or not we reached the destination.
 bool expand_fill_list(char path_id)
 {
@@ -638,11 +638,11 @@ bool expand_fill_list(char path_id)
 // being our destination, and failing finding our target, assemble a new list
 // of old squares to expand on the next iteration.
 
-// When we find the target, we just follow the from-directionality backwards to 
+// When we find the target, we just follow the from-directionality backwards to
 // get the shortest path.  I fully admit this is far from the best, fastest,
-// or cleverest algorithm in the world.  
+// or cleverest algorithm in the world.
 
-// I don't think this algorithm deals at all with being able to jump over 
+// I don't think this algorithm deals at all with being able to jump over
 // one-square pits.  In fact, I worry whether or not 2 bits of directionality
 // is sufficient to the task.  I guess we'll find out.
 
@@ -662,12 +662,12 @@ errtype find_path(char path_id)
    // Clear the lists
    CLEARSPTLIST(exp_l1,EXPAND_LIST_SIZE);
    CLEARSPTLIST(exp_l2,EXPAND_LIST_SIZE);
-   LG_memset(pathfind_buffer, 0, MAP_XSIZE * MAP_YSIZE * sizeof(uchar));
+   memset(pathfind_buffer, 0, MAP_XSIZE * MAP_YSIZE * sizeof(uchar));
 #ifdef REALLY_SLOW_PATHFIND_CLEARING
    for (i=0; i < MAP_XSIZE; i++)
    {
       for (j=0; j < MAP_YSIZE; j++)
-      {   
+      {
          PFE_USED_SET(PFE_GET_XY(i,j),FALSE);
       }
    }
@@ -677,7 +677,7 @@ errtype find_path(char path_id)
    expand_into_list = exp_l1;
    expand_from_list = exp_l2;
 
-   // Prep the first one to be our source   
+   // Prep the first one to be our source
    expand_from_list[0] = PT2SPT(paths[path_id].source);
    ppfe = PFE_GET_XY(paths[path_id].source.x, paths[path_id].source.y);
    PFE_Z_SET_OBJHT(ppfe, paths[path_id].start_z);
@@ -709,7 +709,7 @@ errtype find_path(char path_id)
          step_count++;
       }
       else
-      // If we HAVE found it, go poke in the right info into the path          
+      // If we HAVE found it, go poke in the right info into the path
       {
          LGPoint currpt;
          i=0;

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/citres.c $
@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "statics.h"
 
 // Internal Prototypes
-errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable *rt, bool tmp_mem, 
+errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable *rt, bool tmp_mem,
 															LGRect *anchor, uchar *p);
 
 
@@ -109,7 +109,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable 
       p = (uchar *)(f+1);
 
    memcount += f->bm.w * f->bm.h * sizeof(uchar);
-   if (!tmp_mem) LG_memcpy(p,f+1,f->bm.w * f->bm.h * sizeof(uchar));
+   if (!tmp_mem) memcpy(p,f+1,f->bm.w * f->bm.h * sizeof(uchar));
 //¥¥¥
 if (bmp == NULL)
 	DebugStr("\pTrying to assign to a null bmp pointer!");
@@ -169,7 +169,7 @@ errtype load_res_bitmap(grs_bitmap* bmp, Ref rid,bool alloc)
       bits = Malloc(sz);
       if (bits == NULL) { retval = ERR_NOMEM; goto out; }
    }
-   LG_memcpy(bits,(char*)(f+1),sz);
+   memcpy(bits,(char*)(f+1),sz);
    *bmp = f->bm;
    bmp->bits = bits;
 out:
@@ -187,7 +187,7 @@ errtype simple_load_res_bitmap(grs_bitmap* bmp, Ref rid)
 
 errtype load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc)
 {
-   errtype retval = OK;  
+   errtype retval = OK;
    LGRect anchor;
    extern int memcount;
 
@@ -200,7 +200,7 @@ errtype load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc
    grs_canvas temp_canv;
    uchar old_over = gr2ss_override;
    ss_set_hack_mode(2,&temp);
-   
+
    gr2ss_override = OVERRIDE_ALL;
    master_load_bitmap_from_res(&temp_bmp, REFID(rid), REFINDEX(rid), rt, FALSE, &anchor,NULL);
    w = temp_bmp.w;
@@ -244,9 +244,9 @@ errtype simple_load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid)
 
 errtype load_hires_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc)
 {
-	errtype retval = OK;  
+	errtype retval = OK;
 	LGRect anchor;
-	
+
 	RefTable *rt = ResReadRefTable(REFID(rid));
 	retval = master_load_bitmap_from_res(bmp, REFID(rid), REFINDEX(rid), rt, FALSE, &anchor,
 															   (alloc) ? NULL : bmp->bits);

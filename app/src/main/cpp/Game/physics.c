@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/physics.c $
  * $Revision: 1.259 $
  * $Author: xemu $
  * $Date: 1994/11/10 16:05:25 $
- *  
+ *
 */
 
 #define __PHYSICS_SRC
@@ -123,12 +123,12 @@ Dirac_frame standard_dirac = { STANDARD_MASS, STANDARD_HARDNESS, STANDARD_ROUGHN
                         standard_corner, standard_corner, standard_corner, standard_corner, standard_corner,
                         standard_corner, standard_corner, standard_corner, standard_corner, standard_corner,
 #endif
-                        };   
+                        };
 
 extern ObjID physics_handle_id[];
 extern int   physics_handle_max;
 
-#define check_up(num) 
+#define check_up(num)
 
 cams *motion_cam=NULL;     // what to move, default null is the default camera
 
@@ -169,7 +169,7 @@ short edms_delete_queue[MAX_EDMS_DELETE_OBJS];
 
 
 bool safety_net_wont_you_back_me_up(ObjID oid)
-{ 
+{
    obj_move_to(oid, &objs[oid].loc, TRUE);
    if (safety_fail_oid==oid)
    {
@@ -249,7 +249,7 @@ void get_phys_state(int ph, State *new_state, ObjID id)
 
 void physics_zero_all_controls()
 {
-   LG_memset(player_controls,0,sizeof(player_controls));
+   memset(player_controls,0,sizeof(player_controls));
 }
 
 errtype physics_set_player_controls(int bank, byte xvel, byte yvel, byte zvel, byte xyrot, byte yzrot, byte xzrot)
@@ -302,7 +302,7 @@ errtype compare_locs(void)
       oldElem = MAP_GET_XY(old_x, old_y);
 
       // Change music
-      if (music_on) 
+      if (music_on)
       {
          if (!global_fullmap->cyber)
          {
@@ -436,10 +436,10 @@ void state_to_objloc(State *s, ObjLoc *l)
 #define NO_DEFAULT_FORWARD_IN_CSPACE
 
 #define CYB_VEL_DELTA 32
-#define CYB_VEL_DELTA2 16   
+#define CYB_VEL_DELTA2 16
 ubyte old_head=0, old_pitch=0;
 short last_deltap=0, last_deltah=0;
-                                 
+
 errtype physics_run(void)
 {
    int i;
@@ -461,8 +461,8 @@ errtype physics_run(void)
 
    // Here we are computing the values of the player's controls
    // from the values of the original control banks.  The value
-   // of each control is the average of its non-zero control 
-   // values from each control bank, or zero if all are zero.  
+   // of each control is the average of its non-zero control
+   // values from each control bank, or zero if all are zero.
    for (i=0; i<DEGREES_OF_FREEDOM; i++)
    {
       int b, n=0;
@@ -489,7 +489,7 @@ errtype physics_run(void)
    {
       int i;
       ObjID oid;
-      int damp; 
+      int damp;
       fix plr_side;
       fix plr_lean;
       ObjSpecID   osid;
@@ -513,7 +513,7 @@ errtype physics_run(void)
       }
 
       if (motionware_mode == MOTION_SKATES && damp > 1) damp--;
-      // Here' s where we do leaning.  
+      // Here' s where we do leaning.
       if (player_struct.foot_planted)
       {
          plr_y = plr_alpha = plr_side = 0;
@@ -573,7 +573,7 @@ errtype physics_run(void)
             break;
       }
 
-      
+
       time_diff = fix_make(deltat, 0);      // do this here for constant length kickback hack
       if (time_diff>fix_make(CIT_CYCLE,0)/MIN_FRAME_RATE) time_diff=fix_make(CIT_CYCLE,0)/MIN_FRAME_RATE;
 
@@ -595,7 +595,7 @@ errtype physics_run(void)
          eye = min(FIXANG_PI/2,max(eye+delta*deltat/CIT_CYCLE,-FIXANG_PI/2));
          player_set_eye_fixang(eye);
       }
-         
+
       plr_lean = fix_make((int)player_struct.leanx,0)/3;
       if (player_struct.controls[CONTROL_ZVEL] > 0)
       {
@@ -614,7 +614,7 @@ errtype physics_run(void)
          jumpjets_active = FALSE;
       }
 
-      if (global_fullmap->cyber) 
+      if (global_fullmap->cyber)
       {
          MapElem *pme = MAP_GET_XY(PLAYER_BIN_X, PLAYER_BIN_Y);
          if (me_light_flr(pme))
@@ -715,9 +715,9 @@ errtype physics_run(void)
             // reverie, either hack camera or automap induced.
             if (oid == PLAYER_OBJ)
             {
-               if (hack_takeover && 
-                   (some_move || (abs(newloc.x - objs[oid].loc.x) + abs(newloc.y - objs[oid].loc.y) + abs(newloc.z - objs[oid].loc.z) 
-                     > PLAYER_JIGGLE_THRESHOLD))) 
+               if (hack_takeover &&
+                   (some_move || (abs(newloc.x - objs[oid].loc.x) + abs(newloc.y - objs[oid].loc.y) + abs(newloc.z - objs[oid].loc.z)
+                     > PLAYER_JIGGLE_THRESHOLD)))
                   hack_camera_relinquish();
             }
 
@@ -793,9 +793,9 @@ errtype physics_run(void)
 #ifdef WACKY_OLD_TERR_FUNC
 
 /// ---------------------------------------------------
-/// HERE COMES THE TERRAIN FUNCTION 
+/// HERE COMES THE TERRAIN FUNCTION
 
-/// 9/20 ML  I ain't tellin' you a secret... 
+/// 9/20 ML  I ain't tellin' you a secret...
 ///          I ain't tellin' you goodBIYEYE...
 
 
@@ -807,7 +807,7 @@ errtype physics_run(void)
    store the squares
    -------------------------------- */
 
-typedef fix  wacky; 
+typedef fix  wacky;
 
 // Our own special 8-24 fixmul
 wacky wacky_mul (fix a, fix b);
@@ -855,7 +855,7 @@ typedef fix pt3d[3];
 }
 
 
-bool vec_equal(fix* v1,fix *v2)    
+bool vec_equal(fix* v1,fix *v2)
 {
    if (*(v1++) == *(v2++) && *(v1++) == *(v2++) && *(v1++) == *(v2++))
       return TRUE;
@@ -863,7 +863,7 @@ bool vec_equal(fix* v1,fix *v2)
 }
 
 
-#define wacky2fix(m2)  (m2 >> 8) 
+#define wacky2fix(m2)  (m2 >> 8)
 #define fix2wacky(m)   (m << 8)
 #define wacky_float(w) fix_float(wacky2fix(w))
 
@@ -888,7 +888,7 @@ int compute_normal_code(pt3d norm)
    }
 }
 
-#define PHYS_SPEW(x,y) 
+#define PHYS_SPEW(x,y)
 
 
 #define crossprod(v1,v2,out)  \
@@ -902,7 +902,7 @@ int compute_normal_code(pt3d norm)
    *(o++) = fix_mul((*++a1),(*++b2)) - fix_mul((*++a2),(*++b1));\
    *(o++) = fix_mul((*++a1),*(v2)) - fix_mul(*(v1),(*++b1)); \
    *(o++) = z;  \
-}                                                                    
+}
 
 fix project_onto_facelet(pt3d in, pt3d out, pt3d flet[NUM_POINTS])
 {
@@ -921,8 +921,8 @@ fix project_onto_facelet(pt3d in, pt3d out, pt3d flet[NUM_POINTS])
 
 int normcode_indices[3][2] = {{ 1,2},{0,2},{0,1}};
 
-// Takes a point on the plane of a facelet, and computes 
-// the distance from the projection to the facelet.  Returns 
+// Takes a point on the plane of a facelet, and computes
+// the distance from the projection to the facelet.  Returns
 // zero if the point projects onto the interior of the facelet.
 fix facelet_distance_sq_4points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
 {
@@ -1057,7 +1057,7 @@ fix facelet_distance_sq_4points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
       else return 0;
 
    }
-   
+
 }
 
 #define mod3(x) (((x) > 2) ? (x) - 3 : (x))
@@ -1100,7 +1100,7 @@ fix facelet_distance_sq_3points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
          {
             best_dsq = result;
             best_vert = i;
-         }   
+         }
       }
    }
    PHYS_SPEW(DSRC_PHYSICS_Terrain,("Closest vertex %d\n",best_vert));
@@ -1217,7 +1217,7 @@ fix facelet_distance_sq_3points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
       else return 0;
 
    }
-   
+
 }
 
 
@@ -1289,8 +1289,8 @@ void full_3d_facelet_action(fix (*fleto)[3], int which) // fix (*norm)[3], int *
       dist = facelet_distance_sq_4points(projpt,flet,compute_normal_code(flet[NORM_IDX]));
 
 //   PHYS_SPEW(DSRC_PHYSICS_Terrain,("Distance from facelet %d is %q, proj %q \n",i,fix_float(dist),fix_float(proj)));
-   // if we're closer than our radius, 
-   // scale and add to wall gradient.  
+   // if we're closer than our radius,
+   // scale and add to wall gradient.
    if ( -proj <= tfunc_rad - dist)
    {
       tfunc_cnt[which] ++;
@@ -1319,7 +1319,7 @@ errtype physics_init()
 	EDMS_startup(&init_data);
 
 	// Create some defaults
-	LG_memset(&standard_state,0,sizeof(State));	// _memset32l(&standard_state,0,12);
+	memset(&standard_state,0,sizeof(State));	// _memset32l(&standard_state,0,12);
 
 	return(OK);
 }
@@ -1378,7 +1378,7 @@ errtype apply_gravity_to_one_object(ObjID oid, fix new_grav)
 
 
 // ----------------------------------------------------------------
-// Yucky coordinate transformation code.  
+// Yucky coordinate transformation code.
 
 #define SIN(x) fix_sin(x)
 #define COS(x) fix_cos(x)
@@ -1405,7 +1405,7 @@ fix ID2radius(ObjID id)
 #define THROW_RAYCAST_MASS  fix_make(0,0x2000)
 #define THROW_RAYCAST_SPEED fix_make(1,0)
 
-bool player_throw_object(ObjID proj_id,  int x, int y, int lastx, int lasty, fix vel) 
+bool player_throw_object(ObjID proj_id,  int x, int y, int lastx, int lasty, fix vel)
 {
    LGPoint pos = MakePoint(x,y);
    LGPoint lastpos = MakePoint(lastx,lasty);
@@ -1446,16 +1446,16 @@ bool player_throw_object(ObjID proj_id,  int x, int y, int lastx, int lasty, fix
    if (scale_mag < THROW_DISPLACE_RANGE+radius)
    {
       g3_vec_scale((g3s_vector*)&locvec,(g3s_vector*)&vector,max(0,scale_mag - radius/2));
-      loc.x =  obj_coord_from_fix(new_state.X+locvec.x);  
-      loc.y =  obj_coord_from_fix(new_state.Y+locvec.y);  
+      loc.x =  obj_coord_from_fix(new_state.X+locvec.x);
+      loc.y =  obj_coord_from_fix(new_state.Y+locvec.y);
       loc.z = obj_height_from_fix(new_state.Z+locvec.z+radius);
       scale_mag = 0;
    }
    else
    {
       g3_vec_scale((g3s_vector*)&locvec,(g3s_vector*)&vector,max(0,THROW_DISPLACE_RANGE));
-      loc.x =  obj_coord_from_fix(new_state.X+locvec.x);  
-      loc.y =  obj_coord_from_fix(new_state.Y+locvec.y);  
+      loc.x =  obj_coord_from_fix(new_state.X+locvec.x);
+      loc.y =  obj_coord_from_fix(new_state.Y+locvec.y);
       loc.z = obj_height_from_fix(new_state.Z+locvec.z+radius);
       scale_mag = FIX_UNIT;
    }
@@ -1818,8 +1818,8 @@ errtype assemble_physics_object(ObjID id, State *pnew_state)
 
 
 // -------------------------------------------
-// instantiate_robot() fills in the fields of a robot 
-// structure from object properties specified by triple, 
+// instantiate_robot() fills in the fields of a robot
+// structure from object properties specified by triple,
 // and level properties.
 
 void instantiate_robot(int triple, Robot* new_robot)
@@ -1865,7 +1865,7 @@ void instantiate_robot(int triple, Robot* new_robot)
 
 // -------------------------------------------
 // instantiate_pelvis() fills in the fields of a pelvis
-// structure from object properties specified by triple, 
+// structure from object properties specified by triple,
 // and level properties.
 
 void instantiate_pelvis(int triple, Pelvis* new_pelvis)
@@ -1907,7 +1907,7 @@ void instantiate_pelvis(int triple, Pelvis* new_pelvis)
 
 // -------------------------------------------
 // instantiate_dirac() fills in the fields of a Dirac_frame
-// structure from object properties specified by triple, 
+// structure from object properties specified by triple,
 // and level properties.
 
 void instantiate_dirac(int triple, Dirac_frame* new_dirac)

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/cone.c $
@@ -45,7 +45,7 @@ extern uint _fr_curflags;
 #define MAP_Y        (fix_make(MAP_YSIZE, 0)-fix_make(0,1))
 #define FIX_ZERO     (fix_make(0, 0))
 #define MAX_PTS      8
- 
+
 #define FIX_EPSILON (0x00000010)
 
 #define FIX_SQRT_MAX 0x005a8279
@@ -111,12 +111,12 @@ void reverse_poly_list(int index, fix *new_pts)
    int   n;
 
    // Copy over the raw data to the temp list
-   LG_memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
+   memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
 
    // copy the data back, but in reverse order
    // (fastest way????)
    for (i=0,n=(index-1); i< index; i++, n--)
-   { 
+   {
       new_pts[i*2] = temp_pts[n*2];
       new_pts[i*2+1] = temp_pts[n*2+1];
    }
@@ -128,8 +128,8 @@ void reverse_poly_list(int index, fix *new_pts)
 // Returns TRUE if polygon's verticies are in clockwise order.
 // Special cases: If there are less than 3 verticies, will return TRUE.
 // If there are three colinear points, returns TRUE.
-// 
-// Note: Does not handle points that are really really close together. 
+//
+// Note: Does not handle points that are really really close together.
 
 bool clockwise_poly(int index, fix *poly_pts)
 {
@@ -143,7 +143,7 @@ bool clockwise_poly(int index, fix *poly_pts)
    if (index <3)
       return(TRUE);  // Is a point or line clockwise??? - hmmmmmm, why not?
 
-   LG_memcpy(temp_pts, poly_pts, sizeof(fix) * 2 * index);
+   memcpy(temp_pts, poly_pts, sizeof(fix) * 2 * index);
    while (extra_div)
    {
       int      i;
@@ -194,9 +194,9 @@ bool clockwise_poly(int index, fix *poly_pts)
 
 // --------------------------------------------------------------------
 // insert_viewer_position()
-// 
+//
 // Inserts the viewer_point into the polygon, if the viewer_point does
-// not lie within the polygon. 
+// not lie within the polygon.
 //
 // Requires: verticies of polygon to be in clockwise order
 
@@ -209,16 +209,16 @@ int insert_viewer_position(int index, fix *new_pts, fix_point viewer_point)
    fix         cross_prd;
    int         i;
    int         insert;
-   
+
    bool        extra_div = TRUE;
    bool        inside = FALSE;
 
    // Reduce values to a reasonable number, so cross product is happy
    // Copy over the raw data to the temp list
-   LG_memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
+   memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
    vpoint.x = viewer_point.x;
    vpoint.y = viewer_point.y;
-      
+
    while (extra_div)
    {
       extra_div = FALSE;
@@ -309,7 +309,7 @@ int insert_viewer_position(int index, fix *new_pts, fix_point viewer_point)
 
          local_inside = (IN_BETWEEN(poly_line.start.x, interx, poly_line.end.x) &&
                IN_BETWEEN(poly_line.start.y, intery, poly_line.end.y));
-         
+
          if (inside)
          {
             if (local_inside)
@@ -341,7 +341,7 @@ int insert_viewer_position(int index, fix *new_pts, fix_point viewer_point)
       // shift data over, so we can insert the viewer point
 
       current_pt = new_pts + (insert*2);
-      LG_memmove(current_pt+2, current_pt, sizeof(fix) * 2 * (index - insert));
+      memmove(current_pt+2, current_pt, sizeof(fix) * 2 * (index - insert));
       *(current_pt) = viewer_point.x;
       *(current_pt+1) = viewer_point.y;
       insert = index + 1;
@@ -414,7 +414,7 @@ int radius_fix(int index, fix *new_pts, fix_point viewer)
    }
 
    // Check for overlap
-   LG_memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
+   memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
    for (i=1, j=0; i<index; i++)
    {
       if (pt_ang[i-1] >= FIXANG_PI)
@@ -470,13 +470,13 @@ int radius_fix(int index, fix *new_pts, fix_point viewer)
    // If we only have three verticies, and we have already removed
    // one vertex, we do not need to do the following since the last
    // vertex does not belong to a pair.
-   // Unless of course, we did not remove a vertex, and therefore 
+   // Unless of course, we did not remove a vertex, and therefore
    // the middle vertex joins the last vertex as the pair.
    if ((index != 3) || middle)
    {
       x = *(current_pt);      y = *(current_pt+1);
       x2 = *(current_pt+2);   y2 = *(current_pt+3);
-   
+
       // Again, check if we have a vertex on the same axis, and punt if the
       // "first" is inward of the second one(outer most).
       if ((x==x2) || (y==y2))
@@ -510,7 +510,7 @@ int radius_fix(int index, fix *new_pts, fix_point viewer)
 
       second = third = TRUE;
 
-      LG_memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
+      memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
 
       // shrink down values to compensate for fix-point limitations
       while (extra_div)
@@ -542,7 +542,7 @@ int radius_fix(int index, fix *new_pts, fix_point viewer)
       {
          poly_line.end.x = temp_pts[6];
          poly_line.end.y = temp_pts[7];
-      
+
          cross_prd = FIX_CROSS_DIRECTION(poly_line, test_pt);
          if (cross_prd >= FIX_ZERO)
             second = FALSE;
@@ -573,7 +573,7 @@ int radius_fix(int index, fix *new_pts, fix_point viewer)
          *(insert_pt++) = new_pts[5];
          counter++;
       }
-      
+
       if (new_index == 4)
       {
          *(insert_pt++) = new_pts[6];
@@ -591,7 +591,7 @@ int radius_fix(int index, fix *new_pts, fix_point viewer)
 // ----------------------------------------------------------------
 // find_view_area()
 //
-// modifies an array of points to represents the view area in clockwise order 
+// modifies an array of points to represents the view area in clockwise order
 // *count will have the number of points in the array.
 
 bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int *count, fix radius)
@@ -627,7 +627,7 @@ bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int *count, fix
    g3_get_view_pyramid(my_view);
 
    if (((_fr_curflags & FR_CURVIEW_MASK) == FR_CURVIEW_STRT) && !(_fr_curflags & FR_HACKCAM_FLAG))
-      LG_memcpy(main_view_vectors, my_view, sizeof(g3s_vector) * 4);
+      memcpy(main_view_vectors, my_view, sizeof(g3s_vector) * 4);
 
    // check if we're looking completely up, or completely down
    // if so, we can do something fast
@@ -735,7 +735,7 @@ bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int *count, fix
             {
                tx = 0;          ratiox = FIX_MIN;
             }
-           
+
             if (my_view[i].gZ < FIX_ZERO)
             {
                tz = FIX_ZERO;   ratioz = fix_div(FIX_ZERO - viewer_position.gZ, my_view[i].gZ);
@@ -794,7 +794,7 @@ bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int *count, fix
 
       if (index < 2)
          ; // Warning(("HEY - Only one point for cone - this is bad....\n"));
- 
+
       index = radius_fix(index, new_pts, viewer_point);
       reverse_poly_list(index, new_pts);
    }
@@ -947,26 +947,26 @@ void simple_cone_clip_pass(void)
 {
    int      n;
    int      i;
-   byte     v_min;                     // vertex with smallest y coord 
-   byte     v_max;                     // vertex with largest y coord 
+   byte     v_min;                     // vertex with smallest y coord
+   byte     v_max;                     // vertex with largest y coord
    byte     v_left, v_right;           // current left & right vertices
 //   byte     v_prev;                    // previous vertex
-   int      y;                         // current scanline 
+   int      y;                         // current scanline
    int      y_top;
-   fix      left, right;               // the left and right values on scan line, making sure scan line does not go past end points 
-   fix      y_min, y_max;              // min & max vertex y coords 
-   fix      y_left, y_right;           // ending y for left & right edges 
-   fix      x_min, x_max;              // min & max x coords 
-   fix      x_left, x_right;           // scanline x intersections 
+   fix      left, right;               // the left and right values on scan line, making sure scan line does not go past end points
+   fix      y_min, y_max;              // min & max vertex y coords
+   fix      y_left, y_right;           // ending y for left & right edges
+   fix      x_min, x_max;              // min & max x coords
+   fix      x_left, x_right;           // scanline x intersections
    fix      m_prev;                    // previous slopes
    fix      m_left=fix_make(-1,0);
    fix      m_right=fix_make(1,0);           // look - slopes for right/left edges
    fix      d;                         // difference for slope computations
-   fix      x_abs_left, x_abs_right;   // min or max value of endpoint for that line of the polygon 
+   fix      x_abs_left, x_abs_right;   // min or max value of endpoint for that line of the polygon
    fix      x_outer_left, x_outer_right; // used to determine if that line is horizontal
    fix      x_shift;
    bool     right_line, left_line;     // looking for line
-   bool     right_repeat, left_repeat; // looking for repeat on the line 
+   bool     right_repeat, left_repeat; // looking for repeat on the line
 
    // get the view polygon - if there's not a valid cone, then just return.
    if (!find_view_area(view_cone_list, fix_make(0,0), GAME_HEIGHT, &n, fix_make(_frp.view.radius,0)))
@@ -989,9 +989,9 @@ void simple_cone_clip_pass(void)
    x_max = y_max = 0;
 
    // find the y coordinate of the highest and lowest vertices; save the
-   // vertex number of the highest. 
+   // vertex number of the highest.
    for (i=0; i<n; i++)
-   {   
+   {
       if (view_cone_list[2*i] < x_min)  x_min = view_cone_list[2*i];
       if (view_cone_list[2*i] > x_max)  x_max = view_cone_list[2*i];
       if (view_cone_list[2*i+1] < y_min)
@@ -1046,7 +1046,7 @@ void simple_cone_clip_pass(void)
          {
             x_outer_left = min(x_outer_left, x_left);
             left_line = TRUE;
-         }   
+         }
          else
          {
             x_outer_left = x_left;
@@ -1058,12 +1058,12 @@ void simple_cone_clip_pass(void)
 
             left_repeat = TRUE;            // signal that if we do this again - we've repeated
          }
-         x_abs_left = min(view_cone_list[2*v_left], x_left);       
+         x_abs_left = min(view_cone_list[2*v_left], x_left);
          d = view_cone_list[2*v_left+1]-y_left;
 
          // if the next point is above the current - calculate the slope
          if (fix_int (view_cone_list[2*v_left+1]) > fix_int (y_left))
-         {   
+         {
             m_left = fix_div (view_cone_list[2*v_left]-x_left, d);
 
             x_shift = 0;

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/status.c $
@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // bar graphs
 
 #include <math.h>
- 
+
 #include "player.h"
 #include "status.h"
 #include "tools.h"
@@ -76,7 +76,7 @@ typedef struct {
    int      counter;
    int      max_value;
    uchar    special;
-   bool     active; 
+   bool     active;
 } bio_data_block;
 
 
@@ -158,7 +158,7 @@ bool under_bio(int x)
 
 // ---------------------------------------------------------
 // bio_set_pixel(int color, int x, int y)
-// 
+//
 // calls gr_set_pixel as normal, unless the biorhythms is
 // going "under" something
 
@@ -210,11 +210,11 @@ void bio_restore_pixel(grs_bitmap *bmp, short x, short y)
 	int		x1, y1;
 	uchar	*pp;
 	int		i, j;
-	
+
 	// Determine where x and y really are on the Mac screen.
 	x0 = SCONV_X(x); y0 = SCONV_Y(y);
 	x1 = SCONV_X(x+1); y1 = SCONV_Y(y+1);
-	
+
 	// OK, this sets a pointer to the background bitmap at the same location.  I just happen
 	// to know that the difference between the on-screen and offscreen bitmaps is (10,2).
 	pp = bmp->bits + (bmp->row * (y0-2) + (x0-10));
@@ -230,7 +230,7 @@ void bio_restore_pixel(grs_bitmap *bmp, short x, short y)
 
 // ---------------------------------------------------------
 // bio_vline(int x, int y, int y1)
-// 
+//
 // calls bio_vline as normal, unless the biorhythms is
 // going "under" something
 
@@ -290,12 +290,12 @@ void status_bio_set(short bio_mode)
 #endif
 
    curr_bio_mode = bio_mode;
-      
+
    // Assuming there are only 8 bio tracks!!!!!
    /* set biorhythm positions & clipping rectangle. */
-   curr_bio_x = bios_x[bio_mode];  
+   curr_bio_x = bios_x[bio_mode];
    curr_bio_y = bios_y[bio_mode];
-   curr_bio_w = bios_w[bio_mode];  
+   curr_bio_w = bios_w[bio_mode];
    curr_bio_h = bios_h[bio_mode];
 #ifdef SVGA_SUPPORT
    gr2ss_override = OVERRIDE_ALL;
@@ -313,7 +313,7 @@ void status_bio_set(short bio_mode)
    // let's try to do the right thing!
    bio_background_bitmap.bits = status_background;
 
-   LG_memcpy(bio_background_bitmap.bits,(char *)(f+1),sizeof(char) * f->bm.w * f->bm.h);
+   memcpy(bio_background_bitmap.bits,(char *)(f+1),sizeof(char) * f->bm.w * f->bm.h);
 
    bio_data = (bio_data_block *) bio_data_buffer;
    for (i=0; i<NUM_BIO_TRACKS; i++)
@@ -347,10 +347,10 @@ void status_bio_start(void)
 {
    if (!full_game_3d)
       gBioInited = TRUE;
-   
+
 #ifndef TIMING_PROCEDURES_OFF
    tm_activate_process(bio_time_id);
-#endif 
+#endif
 }
 
 void status_bio_end(void)
@@ -374,7 +374,7 @@ void status_bio_draw(void)
    // Draw the background map
 //KLC - chg for new art   ss_bitmap(&bio_background_bitmap, STATUS_BIO_X, STATUS_BIO_Y);
 	gr_bitmap(&bio_background_bitmap, SCONV_X(STATUS_BIO_X), SCONV_Y(STATUS_BIO_Y));
-	
+
    // Go from left to right and draw all the tracks
    for (i=0; i < STATUS_BIO_LENGTH; i++)
       draw_one_location_tracks(i);
@@ -382,7 +382,7 @@ void status_bio_draw(void)
 
 
 // -----------------------------------------------
-// Accessors for the "active" field. 
+// Accessors for the "active" field.
 
 bool status_track_free(int track)
 {
@@ -399,7 +399,7 @@ void status_track_activate(int track, bool active)
    bio_data[track].active = active;
 }
 
-// 
+//
 // ----------------------------------------------------------------------
 // status_bio_add()
 //
@@ -410,7 +410,7 @@ void status_track_activate(int track, bool active)
 // tail_length    - length of tail (value * STATUS_BIO_TAIL)
 // special        - special characteristics of this biorhythm
 //
-// Add a variable to be tracked by the biorhythm monitor.  
+// Add a variable to be tracked by the biorhythm monitor.
 // Track the NULL pointer to clear out a track slot.
 //
 
@@ -445,11 +445,11 @@ errtype status_bio_add(int *var, int max_value, int update_time, int track_numbe
       new_block = bio_data + track_number;
       new_block->free = FALSE;
       new_block->data = var;
-      LG_memset(&(new_block->height), INVALID_HEIGHT, sizeof(uchar) * MAX_BIO_LENGTH);
+      memset(&(new_block->height), INVALID_HEIGHT, sizeof(uchar) * MAX_BIO_LENGTH);
 
       // We must first check if the variable is greater than max value, if so make it max_value
       var_value = (*var > max_value) ? max_value : *var;
-      
+
       // Then check that it's not below 0
       if (var_value < 0)
    	 var_value = 0;
@@ -528,12 +528,12 @@ void status_bio_update(void)
    int               draw_location;
    int               var_value;
    static grs_canvas* old_canvas;
-   
+
    if (!gBioInited)
       return;
-   
+
    MouseLock++;
-   if (MouseLock > 1) { MouseLock--; return; } 
+   if (MouseLock > 1) { MouseLock--; return; }
    change_bio_vars();
    old_canvas = grd_canvas;
    gr_set_canvas(&bio_canvas);
@@ -565,24 +565,24 @@ void status_bio_update(void)
             curr_blk->height[the_head] = (var_value <= 0) ? 0 : (var_value * STATUS_BIO_PEAK) / curr_blk->max_value;
 
             if (curr_blk->special & BOTTOMLESS && curr_blk->height[the_head] == 0)
-               curr_blk->height[the_head] = INVALID_HEIGHT;           
-	    
+               curr_blk->height[the_head] = INVALID_HEIGHT;
+
 	         // draw the head
 	         draw_lower_tracks(i, the_head);
-	 
+
 	         // Draw the first trailer pixel - We know that this pixel must exist because we drew the first pixel
 	         // when we started the biorhythm
 
 	         draw_location = FIND_OVERLAP(the_head, 1);
 	         curr_blk->height[draw_location] |= COLOR_BIT_SHIFT(1); // shift color
 	         draw_lower_tracks(i, draw_location);
-	 
+
 	         if (curr_blk->tail == FALSE)
 	         {
-	            // Since we don't have a tail - 
-	            // we don't know how long the biorhythm is 
+	            // Since we don't have a tail -
+	            // we don't know how long the biorhythm is
 	            // Let's find out what we have to dim!!!!
-	    
+
 	            for (j=0, draw_location=the_head-curr_blk->color_length;
                     j < the_head/curr_blk->color_length;
                     j++, draw_location -= curr_blk->color_length)
@@ -593,15 +593,15 @@ void status_bio_update(void)
 		               curr_blk->height[draw_location] &= HEIGHT_BIO_MASK;
 		               curr_blk->height[draw_location] |= COLOR_BIT_SHIFT(j+2);
 		               draw_lower_tracks(i, draw_location);
-		            }   
+		            }
                }
 
 	            // Have we gotten to the point where we can see the end of the tail????
-	    
+
 	            if (the_head == curr_blk->tail_length)
 	            {
 		            curr_blk->tail = TRUE;     // start the tail
-		            clear_tail(i, 0);          // clear the first spot 
+		            clear_tail(i, 0);          // clear the first spot
                }
 	         }
             else
@@ -713,16 +713,16 @@ void clear_tail(int track_number, int delete_location)
 	int         height;
 	int         x, y, y1;
 	int         i, delta, base;
-	
+
 	curr_blk = bio_data + track_number;
 	prevLocation = FIND_OVERLAP(delete_location, 1);
-	
+
 	prevHeight = curr_blk->height[prevLocation] & HEIGHT_BIO_MASK;
 	height = curr_blk->height[delete_location] & HEIGHT_BIO_MASK;
-	
+
 	x = STATUS_BIO_X_BASE + delete_location;
 	y = STATUS_BIO_Y_BASE - height;
-	
+
 	// First, check to see if we're restoring for a v-line spike.
 	delta = abs(height-prevHeight);
 	if ((delta >= SPIKE_THRESHOLD) &&
@@ -742,17 +742,17 @@ void clear_tail(int track_number, int delete_location)
 	{
 		bio_restore_pixel(&bio_background_bitmap, x, y);
 	}
-	
+
 	// Invalidate the height at the delete location
 	curr_blk->height[delete_location] |= INVALID_HEIGHT;
-	
+
 	draw_one_location_tracks(delete_location);
 }
 
 // ------------------------------------------------------
 // draw_one_location_tracks()
 //
-// procedure draws all tracks at a location along 
+// procedure draws all tracks at a location along
 // the biorhythm
 // use this to draw to preserve ordering of tracks (overlapping)
 
@@ -822,10 +822,10 @@ void gamescr_bio_func(void)
    int i;
 
    clear_bio_tracks();
-   
+
    // KLC - the "update_time" parameter is halved for Mac version, because we're only
    // getting called 70 times/sec rather than 140.
-   
+
    status_bio_add(&bio_energy_var, MAX_ENERGY, 2, ENERGY_TRACK, 2, 0);
    {
       short ver = player_struct.hardwarez[CPTRIP(ENV_HARD_TRIPLE)];
@@ -875,7 +875,7 @@ void change_bio_vars(void)
       switch (heart_beat)
       {
       case 0:
-         
+
          {
             int f = max(0,(player_struct.fatigue - (CIT_CYCLE*fatigue_threshold))/CIT_CYCLE);
             int heart_ratio = 3400/(f+7);
@@ -892,7 +892,7 @@ void change_bio_vars(void)
             }
          }
          break;
-         
+
       case 1:
          heart_beat = 2;
          test_bio_var = 20;
@@ -966,7 +966,7 @@ void change_bio_vars(void)
 
    chi_per=chi_amp;
    if(player_struct.drug_status[CPTRIP(LSD_DRUG_TRIPLE)])
-      chi_per<<=1;               
+      chi_per<<=1;
    if(player_struct.drug_status[CPTRIP(GENIUS_DRUG_TRIPLE)])
       chi_per>>=2;
    if (chi_per<2) {

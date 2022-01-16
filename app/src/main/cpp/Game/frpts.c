@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrPts.c
@@ -26,17 +26,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Citadel Renderer
  *  point allocation, delta list maintenance, so on
- *  
+ *
  * $Log: frpts.c $
  * Revision 1.3  1994/09/05  06:43:59  dc
  * diamond pipe, second wrong pipe, various fixes
- * 
+ *
  * Revision 1.2  1994/04/21  06:34:09  dc
  * this might fix the wacky memory trash problem
- * 
+ *
  * Revision 1.1  1994/01/02  17:12:08  dc
  * Initial revision
- * 
+ *
  */
 
 #include <string.h>
@@ -71,8 +71,8 @@ g3s_phandle *_fr_ptbase, *_fr_ptnext;  /* global place to get points from */
 // round and round the block i walked, pretending you were with me
 int fr_pts_frame_start(void)
 {
-   LG_memset(*(pt_rowv+0),0xffff,_fr_pt_wid*sizeof(ushort));
-   LG_memset(*(pt_rowv+1),0xffff,_fr_pt_wid*sizeof(ushort));
+   memset(*(pt_rowv+0),0xffff,_fr_pt_wid*sizeof(ushort));
+   memset(*(pt_rowv+1),0xffff,_fr_pt_wid*sizeof(ushort));
    _fr_ret;
 }
 

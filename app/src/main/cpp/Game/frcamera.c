@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrCamera.c
@@ -33,53 +33,53 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * fix    *fr_camera_getpos (cams *cam)
  * void    fr_camera_setdef (cams *cam)
  * void    fr_camera_slewcam(cams *cam, int which, int how)
- *  
+ *
  * $Log: frcamera.c $
  * Revision 1.15  1994/07/15  13:58:34  dc
  * check for cameras off the map at getpos time
- * 
+ *
  * Revision 1.14  1994/06/28  20:07:16  dc
  * allow null cameras without default cameras without crashing the game
- * 
+ *
  * Revision 1.13  1994/05/03  15:58:57  dc
  * flatten other 360 side views....
- * 
+ *
  * Revision 1.12  1994/04/10  05:15:26  dc
  * support for cyberman, vfx1, other 6d control structure, inc. HEAD_H
- * 
+ *
  * Revision 1.11  1994/04/02  03:43:07  dc
  * clean up errors, so on
- * 
+ *
  * Revision 1.10  1994/01/31  05:31:37  dc
  * various hacks for reality, new actual use of camera system
- * 
+ *
  * Revision 1.9  1994/01/06  10:35:40  xemu
  * self/run
- * 
+ *
  * Revision 1.8  1994/01/02  17:11:25  dc
  * New renderer
- * 
+ *
  * Revision 1.7  1993/12/08  22:01:36  unknown
  * yea yea yea
- * 
+ *
  * Revision 1.6  1993/12/08  21:38:08  unknown
  * player model
- * 
+ *
  * Revision 1.5  1993/09/19  19:09:49  xemu
  * made _def_cam externally accessible
- * 
+ *
  * Revision 1.4  1993/09/17  16:57:47  mahk
  * Added 360 support
- * 
+ *
  * Revision 1.3  1993/09/16  23:54:54  dc
  * Yo, use cameras for real, allow type mods on the fly
- * 
+ *
  * Revision 1.2  1993/09/05  20:54:06  dc
  * new regieme for real
- * 
+ *
  * Revision 1.1  1993/09/05  20:21:57  dc
  * Initial revision
- * 
+ *
  */
 
 #define __FRCAMERA_SRC
@@ -95,7 +95,7 @@ fix    fr_camera_last[CAM_COOR_CNT]={0,0,0,0,0,0};
 fix    cam_slew_scale[CAM_COOR_CNT]={fix_make(4,0),fix_make(4,0),fix_make(4,0),128,128,128};
 cams  *_def_cam=NULL;
 
-#define _cam_top(cam) cams *_cam=(cam==NULL)?_def_cam:cam; if (_cam==NULL) return 
+#define _cam_top(cam) cams *_cam=(cam==NULL)?_def_cam:cam; if (_cam==NULL) return
 
 void    fr_camera_setdef (cams *cam)
  { _def_cam=cam; }
@@ -110,8 +110,8 @@ bool    fr_camera_create (cams *cam, int camtype, void *arg1, void *arg2)
    if (camtype&CAMBIT_OBJ)
       _cam->obj_id=(ushort)arg1;
    else
-      LG_memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
-   LG_memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
+      memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
+   memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
    return TRUE;
 }
 
@@ -130,9 +130,9 @@ int     fr_camera_update (cams *cam, void *arg1, int whicharg, void *arg2)
 {
    _cam_top(cam) FALSE;
    if (arg1!=NULL)
-	   if (_cam->type&CAMBIT_OBJ) _cam->obj_id=(ushort)arg1; else LG_memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
+	   if (_cam->type&CAMBIT_OBJ) _cam->obj_id=(ushort)arg1; else memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
    if (whicharg==CAM_UPDATE_ALL)
-	   LG_memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
+	   memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
    else if (whicharg<CAM_ARGS_CNT)
       _cam->args[whicharg]=(fix)arg2;
    return TRUE;
@@ -140,7 +140,7 @@ int     fr_camera_update (cams *cam, void *arg1, int whicharg, void *arg2)
 
 void    fr_camera_setone(cams *cam, int which, int newone)
 {
-   _cam_top(cam); 
+   _cam_top(cam);
    if (_cam->type&CAMBIT_OBJ)
       fr_objslew_setone(which,newone);
    else
@@ -209,7 +209,7 @@ fix    *fr_camera_getpos (cams *cam)
    if (_cam->type&CAMBIT_OBJ)   /* set fix x,y,z etc from the object positions */
       fr_camera_getobjloc(_cam->obj_id,_cam->coor);
 
-   LG_memcpy(fr_camera_last,_cam->coor,sizeof(fix)*CAM_COOR_CNT);
+   memcpy(fr_camera_last,_cam->coor,sizeof(fix)*CAM_COOR_CNT);
    if (_cam->type&CAMBIT_MOD)
 	   fr_camera_last[3]=(fr_camera_last[3]+eye_mods[0])&0xffff;
    if ((_cam->type&(CAMBIT_OFF|CAMBIT_ANG))!=0)

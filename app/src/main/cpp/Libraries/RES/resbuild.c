@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		RESBUILD.C		Resource-file building routines
 //		Rex E. Bradford (REX)
@@ -23,10 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: resbuild.c $
  * Revision 1.10  1994/06/16  11:06:30  rex
  * Got rid of RDF_NODROP flag
- * 
+ *
  * Revision 1.9  1994/02/17  11:25:32  rex
  * Moved some stuff out to resmake.c and resfile.c
- * 
+ *
 */
 
 //#include <io.h>
@@ -83,7 +83,7 @@ void ResSetComment(int /*filenum*/, char* /*comment*/)
 //
 //		id = id to write
 //	-------------------------------------------------------
-//	For Mac version:  This is why we're using the Mac Resource Mgr. 
+//	For Mac version:  This is why we're using the Mac Resource Mgr.
 //	Simply get the resource handle and write it out.  If resource is compressed,
 // do that first before writing.
 #define EXTRA 250
@@ -96,7 +96,7 @@ int ResWrite(Id id)
 	long 			sizeTable = 0;
 	Handle		compHdl = NULL;
 	Ptr			srcPtr, compPtr;
-	
+
 	prd = RESDESC(id);
 	if (prd->hdl)
 	{
@@ -123,13 +123,13 @@ int ResWrite(Id id)
 					srcPtr += sizeTable;
 					compPtr += sizeTable;
 				}
-				
+
 				if (size > 0)											// Compress it!
 					compsize = LzwCompressBuff2Buff(srcPtr, size, compPtr, size);
 
 				HUnlock(compHdl);
 				HUnlock(prd->hdl);
-	
+
 				if (compsize > 0)												// If compressed okay, then
 				{
 					SetHandleSize(prd->hdl, compsize+sizeTable);	// set resource handle to the compressed size,
@@ -142,7 +142,7 @@ int ResWrite(Id id)
 				}
 			}
 		}
-				
+
 		// Now write out the changed resource.
 		ChangedResource(prd->hdl);
 		WriteResource(prd->hdl);
@@ -279,14 +279,14 @@ void ResKill(Id id)
 	if (prd->hdl)
 	{
 		resHdl = prd->hdl;
-			
+
 		RmveResource(resHdl);							// RmveResource turns it into a normal handle.
 		DisposeHandle(resHdl);							// that we can dispose of.
 
 //		if (prd->lock == 0)
 //			ResRemoveFromLRU(prd);
 	}
-	LG_memset(prd, 0, sizeof(ResDesc));
+	memset(prd, 0, sizeof(ResDesc));
 
 /*
 	//	Check for valid id

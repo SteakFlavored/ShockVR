@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/objsim.c $
@@ -44,8 +44,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lvldata.h"
 #include "mapflags.h"
 #include "objart.h"
-#include "objart2.h"  
-#include "objart3.h"  
+#include "objart2.h"
+#include "objart3.h"
 #include "objects.h"
 #include "objapp.h"
 #include "objbit.h"
@@ -198,14 +198,14 @@ errtype obj_init()
    uchar c_class, c_subclass;
    int i,j,count,class_count=0;
    Id ids;
-   
+
    // Create the word-buffer bitmap
    for (i=0; i < NUM_TEXT_BITMAPS; i++)
    {
       text_bitmap_ptrs[i] = gr_alloc_bitmap(BMT_FLAT8,text_bitmap_flags[i],text_bitmaps_x[i], text_bitmaps_y[i]);
       gr_make_canvas(text_bitmap_ptrs[i], &text_canvases[i]);
    }
-   
+
    // initialize physics handle mapping to objID
    for (i=0;i<MAX_OBJ;i++)
       physics_handle_id[i]=OBJ_NULL;
@@ -249,11 +249,11 @@ errtype obj_init()
       }
    }
    obj_set_secondary_properties();
-   
+
    return(OK);
 }
 
-Id posture_bases[] = { 
+Id posture_bases[] = {
    // Full direction postures
    CRITTER_STAND_BASE, CRITTER_MOVE_BASE,
    // Front-only postures
@@ -314,10 +314,10 @@ Ref ref_from_critter_data(ObjID, int triple, ubyte posture, ubyte frame, ubyte v
          curr_frames = CritterProps[CPTRIP(triple)].frames[posture];
       else
       {
-//         prt = ResReadRefTable(our_id);		
-         prt = (RefTable *)ResLock(our_id); 
+//         prt = ResReadRefTable(our_id);
+         prt = (RefTable *)ResLock(our_id);
          curr_frames = prt->numRefs;
-//         ResFreeRefTable(prt);					
+//         ResFreeRefTable(prt);
          ResUnlock(our_id);
       }
       if (frame >= curr_frames)
@@ -326,7 +326,7 @@ Ref ref_from_critter_data(ObjID, int triple, ubyte posture, ubyte frame, ubyte v
    }
 
    // See if we're loaded from all views, if not load us!
-   // This may slow down the universe a bit too much...if so then 
+   // This may slow down the universe a bit too much...if so then
    // we'll need to streamline & optimize it some.
    old_ticks = *tmd_ticks;
 
@@ -422,7 +422,7 @@ grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *
          {
             *use_ref = MKREF(CUSTOM_MATERIAL_BASE + *index, 0);
             return(lock_bitmap_from_ref_anchor(*use_ref, NULL));
-         }   
+         }
          break;
       case TPOLY_TYPE_TEXT_BITMAP:
          // style=style?2:3;
@@ -515,13 +515,13 @@ grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *
 #define EXTENDED_FRAMES 32
 
 
-// hack_foo is the amount of the full object to show.  
-// hack_type is the kind of hack == 
-// 0 is extending out from one side, 
+// hack_foo is the amount of the full object to show.
+// hack_type is the kind of hack ==
+// 0 is extending out from one side,
 // 1 is expanding out from center
 // 2 is rising from the floor/descending from the ceiling
 errtype obj_model_hack(ObjID id, uchar *hack_x, uchar *hack_y, uchar *hack_z, uchar *hack_type)
-{  
+{
    switch (ID2TRIP(id))
    {
       case FORCE_BRIJ2_TRIPLE:
@@ -559,8 +559,8 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
    }
    switch (objs[id].obclass)
    {
-      case CLASS_BIGSTUFF: 
-         pval = objBigstuffs[objs[id].specID].data1;  
+      case CLASS_BIGSTUFF:
+         pval = objBigstuffs[objs[id].specID].data1;
          p1 = pval & 0xF;
          p2 = (pval & 0xF0) >> 4;
          p3 = (pval & 0xFF00) >> 8;
@@ -568,7 +568,7 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
          p5 = (pval & 0xFF000000) >> 24;
          break;
       case CLASS_SMALLSTUFF:
-         pval = objSmallstuffs[objs[id].specID].data1;  
+         pval = objSmallstuffs[objs[id].specID].data1;
          p1 = pval & 0xF;
          p2 = (pval & 0xF0) >> 4;
          p3 = (pval & 0xFF00) >> 8;
@@ -671,13 +671,13 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
          *x = p1 << CONTAINER_MODEL_SHF;
          *y = p2 << CONTAINER_MODEL_SHF;
          *z = p3 << CONTAINER_MODEL_SHF;
-         break;   
+         break;
    }
 
    // if bm2 is NULL then we basically don't need to get the texture map
    if (bm2==NULL)
    {
-      // a NON-NULL pointer 
+      // a NON-NULL pointer
       return((grs_bitmap *) 1);
    }
 
@@ -688,9 +688,9 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
    // we return has to have been done the most recently.
    if (p5 & 0x80)
    {
-      if ((p5 & 0x7F) >= NUM_LOADED_TEXTURES)  
+      if ((p5 & 0x7F) >= NUM_LOADED_TEXTURES)
          { temp_bm=SAFE_TEXTURE; *bm2 = *temp_bm; Warning(("Bogus Tmap")); } // doofy you screwed up thing
-      else 
+      else
       {
          temp_bm = get_texture_map(p5 & 0x7F,TEXTURE_64_INDEX);
          *bm2 = *temp_bm;
@@ -748,16 +748,16 @@ errtype obj_shutdown()
 {
 	int	i;
 	extern errtype obj_load_art(bool flush_all);
-	
+
 	// Free the word-buffer bitmap
 	for (i=0; i < NUM_TEXT_BITMAPS; i++)
 	{
 		if (text_bitmap_ptrs[i] != NULL)
 			DisposePtr((Ptr)text_bitmap_ptrs[i]);
 	}
-	
+
 	obj_load_art(TRUE);
-	
+
 	return(OK);
 }
 
@@ -782,7 +782,7 @@ void spew_contents(ObjID id, int d1, int d2)
 bool obj_is_useless(ObjID oid)
 {
 	bool useless;
-	
+
 	useless = (ObjProps[OPNUM(oid)].flags & USELESS_FLAG)!=0;
 #ifdef OBSELETE_WARES_USELESS
 	if(!useless && objs[oid].obclass==CLASS_HARDWARE)
@@ -815,7 +815,7 @@ ObjID obj_create_base(int triple)
          ObjLoc ploc = objs[PLAYER_OBJ].loc;
          ObjLoc killobjloc;
          int *d1, *d2, content, dist, obclass, maxdist = 0;
-         
+
 //         Warning(("ObjAndSpecGrab could not find ObjSpec for this class: %d.\n", TRIP2CL(triple)));
 
          FORALLOBJS(oid)
@@ -842,14 +842,14 @@ ObjID obj_create_base(int triple)
             else if (is_container(oid,&d1,&d2))
             {
                if (!(((ID2TRIP(oid) >= MUT_CORPSE1_TRIPLE) && (ID2TRIP(oid) <= OTH_CORPSE8_TRIPLE)) ||
-                     ((ID2TRIP(oid) >= CORPSE1_TRIPLE) && (ID2TRIP(oid) <= CORPSE8_TRIPLE)))        
+                     ((ID2TRIP(oid) >= CORPSE1_TRIPLE) && (ID2TRIP(oid) <= CORPSE8_TRIPLE)))
                   && (objs[oid].info.inst_flags & CLASS_INST_FLAG))
                {
                   num_objs=container_extract(idlist,*d1,(d2 == NULL) ? 0 : *d2);
                   for(content=0;content<num_objs;content++) {
                      if(idlist[content]==OBJ_NULL) continue;
                      if(objs[idlist[content]].obclass != TRIP2CL(triple)) continue;
-                  
+
                      if(obj_is_useless(idlist[content])) {
                         killobjloc=objs[oid].loc;
                         dist=long_fast_pyth_dist(killobjloc.x - ploc.x, killobjloc.y - ploc.y);
@@ -907,9 +907,9 @@ ObjID obj_create_base(int triple)
          }
          break;
       case CLASS_PHYSICS:
-         LG_memset(&objPhysicss[new_specid].p1, 0, (sizeof (ObjLoc)));
-         LG_memset(&objPhysicss[new_specid].p2, 0, (sizeof (ObjLoc)));
-         LG_memset(&objPhysicss[new_specid].p3, 0, (sizeof (ObjLoc)));
+         memset(&objPhysicss[new_specid].p1, 0, (sizeof (ObjLoc)));
+         memset(&objPhysicss[new_specid].p2, 0, (sizeof (ObjLoc)));
+         memset(&objPhysicss[new_specid].p3, 0, (sizeof (ObjLoc)));
          break;
       case CLASS_DOOR:
          if (ObjProps[OPTRIP(triple)].flags & RENDER_BLOCK)
@@ -955,7 +955,7 @@ ObjID obj_create_clone(ObjID dna)
    ObjID new_obj;
    ubyte *pspec, *pdef;
    ObjSpecID specid, osi;
-   ObjSpecHeader *spec_hdr = &objSpecHeaders[objs[dna].obclass]; 
+   ObjSpecHeader *spec_hdr = &objSpecHeaders[objs[dna].obclass];
 
    if (dna == OBJ_NULL)
    {
@@ -989,7 +989,7 @@ ObjID obj_create_clone(ObjID dna)
   }
 
    // copy instance data from default
-   LG_memcpy(pspec + sizeof(ObjSpec),pdef + sizeof(ObjSpec),spec_hdr->struct_size - sizeof(ObjSpec));
+   memcpy(pspec + sizeof(ObjSpec),pdef + sizeof(ObjSpec),spec_hdr->struct_size - sizeof(ObjSpec));
 
    // Give back the object ID of the fresh clone
    return(new_obj);
@@ -997,9 +997,9 @@ ObjID obj_create_clone(ObjID dna)
 
 
 // ------------------------------------------------------
-// place_obj_at_objloc() puts an object down in the map, 
-// adding the appropriate refs for placing an object with the 
-// specified xsize and ysize in object coordinates. 
+// place_obj_at_objloc() puts an object down in the map,
+// adding the appropriate refs for placing an object with the
+// specified xsize and ysize in object coordinates.
 #define MAX_PLACE_SIZE  0x100
 
 void place_obj_at_objloc(ObjID id, ObjLoc *newloc, ushort xsize, ushort ysize)
@@ -1103,7 +1103,7 @@ errtype obj_move_to_vel(ObjID id, ObjLoc *newloc, bool phys_tel, fix x_dot, fix 
 		else
 			EDMS_holistic_teleport(objs[id].info.ph, &new_state);
 	}
-   
+
    if (objs[id].loc.x == -1)
    {
       ObjRefState newref;
@@ -1231,7 +1231,7 @@ errtype obj_move_to_vel(ObjID id, ObjLoc *newloc, bool phys_tel, fix x_dot, fix 
    }
    place_obj_at_objloc(id,newloc,xsize,ysize);
 
-   // If the camera is on the object we are moving, then hey  
+   // If the camera is on the object we are moving, then hey
    if ((_def_cam != NULL) && (_def_cam->obj_id == id))
       chg_set_flg(_current_3d_flag);
 
@@ -1252,9 +1252,9 @@ bool obj_destroy(ObjID id)
 	extern void check_panel_ref(bool puntme);
 	short x,y;
 	bool  terrain_object = FALSE;
-	
+
 	decrement_shodan_value(id, TRUE);
-	if (id != OBJ_NULL) 
+	if (id != OBJ_NULL)
 	{
 		if (player_struct.panel_ref==id)
 		{
@@ -1282,7 +1282,7 @@ bool obj_destroy(ObjID id)
 			{
 				EDMS_kill_object(objs[id].info.ph);
 				physics_handle_id[objs[id].info.ph]=OBJ_NULL;
-				
+
 				if (objs[id].info.ph==physics_handle_max)       // are we the last valid ph?
 					while (physics_handle_id[--physics_handle_max]==OBJ_NULL)
 					;  // count down through physics_handles till we find an object
@@ -1333,7 +1333,7 @@ errtype obj_create_player(ObjLoc *plr_loc)
    if ((player_struct.edms_state[0]) && (!global_fullmap->cyber))
    {
       extern void state_to_objloc(State *s, ObjLoc *l);
-      LG_memcpy(&new_state, player_struct.edms_state, sizeof(fix)*12);
+      memcpy(&new_state, player_struct.edms_state, sizeof(fix)*12);
       state_to_objloc(&new_state,plr_loc);
       use_new = TRUE;
    }
@@ -1384,7 +1384,7 @@ errtype obj_create_player(ObjLoc *plr_loc)
 errtype ObjClassInit(ObjID id, ObjSpecID specid, int subclass)
 {
    ubyte *pspec, *pdef;
-   ObjSpecHeader *spec_hdr = &objSpecHeaders[objs[id].obclass]; 
+   ObjSpecHeader *spec_hdr = &objSpecHeaders[objs[id].obclass];
 
    objs[id].subclass = subclass;
    objs[id].active = TRUE;
@@ -1413,7 +1413,7 @@ errtype ObjClassInit(ObjID id, ObjSpecID specid, int subclass)
    }
 
    // copy instance data from default
-   LG_memcpy(pspec + sizeof(ObjSpec),pdef + sizeof(ObjSpec),spec_hdr->struct_size - sizeof(ObjSpec));
+   memcpy(pspec + sizeof(ObjSpec),pdef + sizeof(ObjSpec),spec_hdr->struct_size - sizeof(ObjSpec));
    return(OK);
 }
 
@@ -1448,42 +1448,42 @@ errtype obj_load_properties()
        critical_error(CRITERR_MISC|0);
 #else // !PLAYTEST
        Warning(("Bad Object Properties version number.\n"));
-#endif 
+#endif
     }
 */
-	
+
 	// Read in the Object Properties resource.
-	
+
 	res = GetResource('oprp',1000);
 	if (!res) return(ERR_FOPEN);
 	HLock(res);
 	cp = *res;
-	
+
 	// Check to make sure we have the right version.
 	version = *(int *)cp;
 	cp += 4;
 	SwapLongBytes(&version);
 	if (version != OBJPROP_VERSION_NUMBER)
 		critical_error(CRITERR_MISC|0);
-	
+
 	// Copy the data to the various global arrays, converting as needed.
-	
+
 	//-------------
 	// GUNS
 	//-------------
 	BlockMoveData(cp, GunProps, sizeof(GunProps));
 	cp += sizeof(GunProps);
-	
+
 	//BlockMoveData(cp, PistolGunProps, NUM_PISTOL_GUN);		Dummies
 	cp += NUM_PISTOL_GUN;
-	
+
 	//BlockMoveData(cp, AutoGunProps, NUM_AUTO_GUN);				Dummies
 	cp += NUM_AUTO_GUN;
-	
+
 	for (i = 0; i < NUM_SPECIAL_GUN; i++)
 	{
 		SpecialGunProp *sgp = &SpecialGunProps[i];
-		
+
 		sgp->damage_modifier = *(short *)cp;
 		cp += 2;
 		SwapShortBytes(&sgp->damage_modifier);
@@ -1492,7 +1492,7 @@ errtype obj_load_properties()
 		cp += 4;
 		SwapLongBytes(&sgp->damage_type);
 		sgp->penetration = *cp++;
-		
+
 		sgp->speed = *cp++;
 		sgp->proj_triple = *(int *)cp;
 		cp += 4;
@@ -1502,11 +1502,11 @@ errtype obj_load_properties()
 		cp += 2;
 		SwapShortBytes(&sgp->attack_speed);
 	}
-	
+
 	for (i = 0; i < NUM_HANDTOHAND_GUN; i++)
 	{
 		HandtohandGunProp *hhgp = &HandtohandGunProps[i];
-		
+
 		hhgp->damage_modifier = *(short *)cp;
 		cp += 2;
 		SwapShortBytes(&hhgp->damage_modifier);
@@ -1515,7 +1515,7 @@ errtype obj_load_properties()
 		cp += 4;
 		SwapLongBytes(&hhgp->damage_type);
 		hhgp->penetration = *cp++;
-		
+
 		hhgp->energy_use = *cp++;
 		hhgp->attack_mass = *cp++;
 		hhgp->attack_range = *cp++;
@@ -1523,11 +1523,11 @@ errtype obj_load_properties()
 		cp += 2;
 		SwapShortBytes(&hhgp->attack_speed);
 	}
-	
+
 	for (i = 0; i < NUM_BEAM_GUN; i++)
 	{
 		BeamGunProp *bgp = &BeamGunProps[i];
-		
+
 		bgp->damage_modifier = *(short *)cp;
 		cp += 2;
 		SwapShortBytes(&bgp->damage_modifier);
@@ -1536,7 +1536,7 @@ errtype obj_load_properties()
 		cp += 4;
 		SwapLongBytes(&bgp->damage_type);
 		bgp->penetration = *cp++;
-		
+
 		bgp->max_charge = *cp++;
 		bgp->attack_mass = *cp++;
 		bgp->attack_range = *cp++;
@@ -1544,11 +1544,11 @@ errtype obj_load_properties()
 		cp += 2;
 		SwapShortBytes(&bgp->attack_speed);
 	}
-	
+
 	for (i = 0; i < NUM_BEAMPROJ_GUN; i++)
 	{
 		BeamprojGunProp *bgp = &BeamprojGunProps[i];
-		
+
 		bgp->damage_modifier = *(short *)cp;
 		cp += 2;
 		SwapShortBytes(&bgp->damage_modifier);
@@ -1557,7 +1557,7 @@ errtype obj_load_properties()
 		cp += 4;
 		SwapLongBytes(&bgp->damage_type);
 		bgp->penetration = *cp++;
-		
+
 		bgp->max_charge = *cp++;
 		bgp->attack_mass = *cp++;
 		bgp->attack_speed = *(short *)cp;
@@ -1576,7 +1576,7 @@ errtype obj_load_properties()
 	for (i = 0; i < NUM_AMMO; i++)
 	{
 		AmmoProp *ap = &AmmoProps[i];
-		
+
 		ap->damage_modifier = *(short *)cp;
 		cp += 2;
 		SwapShortBytes(&ap->damage_modifier);
@@ -1585,7 +1585,7 @@ errtype obj_load_properties()
 		cp += 4;
 		SwapLongBytes(&ap->damage_type);
 		ap->penetration = *cp++;
-		
+
 		ap->cartridge_size = *cp++;
 		ap->bullet_mass = *cp++;
 		ap->bullet_speed = *(short *)cp;
@@ -1619,21 +1619,21 @@ errtype obj_load_properties()
 	//-------------
 	//  PHYSICS
 	//-------------
-	
+
 	for (i = 0; i < NUM_PHYSICS; i++)
 		PhysicsProps[i].flags = *cp++;
 
 	for (i = 0; i < NUM_TRACER_PHYSICS; i++)
 	{
 		TracerPhysicsProp *tpp = &TracerPhysicsProps[i];
-		
+
 		BlockMoveData(cp, tpp->xcoords, 4*2);
 		cp += 4*2;
 		BlockMoveData(cp, tpp->ycoords, 4*2);
 		cp += 4*2;
 		BlockMoveData(cp, tpp->zcoords, 4);
 		cp += 4;
-		
+
 		for (j = 0; j < 4; j++)
 		{
 			SwapShortBytes(&tpp->xcoords[j]);
@@ -1654,7 +1654,7 @@ errtype obj_load_properties()
 	for (i = 0; i < NUM_GRENADE; i++)
 	{
 		GrenadeProp *gp = &GrenadeProps[i];
-		
+
 		gp->damage_modifier = *(short *)cp;
 		cp += 2;
 		SwapShortBytes(&gp->damage_modifier);
@@ -1663,7 +1663,7 @@ errtype obj_load_properties()
 		cp += 4;
 		SwapLongBytes(&gp->damage_type);
 		gp->penetration = *cp++;
-		
+
 		gp->touchiness = *cp++;
 		gp->radius = *cp++;
 		gp->radius_change = *cp++;
@@ -1680,7 +1680,7 @@ errtype obj_load_properties()
 	for (i = 0; i < NUM_TIMED_GRENADE; i++)
 	{
 		TimedGrenadeProp *tgp = &TimedGrenadeProps[i];
-		
+
 		tgp->min_time_set = *cp++;
 		tgp->max_time_set = *cp++;
 		tgp->timing_deviation = *cp++;
@@ -1691,10 +1691,10 @@ errtype obj_load_properties()
 	//-------------
 	// For Mac version:  The data for these are all zero (I don't think they're used at all), so don't worry about
 	// converting, just zero the arrays.
-	
-	LG_memset(DrugProps, 0, sizeof(DrugProps));
+
+	memset(DrugProps, 0, sizeof(DrugProps));
 	cp += NUM_DRUG * 17;
-	LG_memset(StatsDrugProps, 0, sizeof(StatsDrugProps));
+	memset(StatsDrugProps, 0, sizeof(StatsDrugProps));
 	cp += NUM_STATS_DRUG * 7;
 
 	//-------------
@@ -1702,12 +1702,12 @@ errtype obj_load_properties()
 	//-------------
 	// For Mac version:  The data for these are all zero, so don't worry about
 	// converting, just zero the arrays.
-	
-	LG_memset(HardwareProps, 0, sizeof(HardwareProps));
+
+	memset(HardwareProps, 0, sizeof(HardwareProps));
 	cp += NUM_HARDWARE * 2;
-	LG_memset(GoggleHardwareProps, 0, sizeof(GoggleHardwareProps));
+	memset(GoggleHardwareProps, 0, sizeof(GoggleHardwareProps));
 	cp += NUM_GOGGLE_HARDWARE;
-	LG_memset(HardwareHardwareProps, 0, sizeof(HardwareHardwareProps));
+	memset(HardwareHardwareProps, 0, sizeof(HardwareHardwareProps));
 	cp += NUM_HARDWARE_HARDWARE * 2;
 
 	//-------------
@@ -1715,8 +1715,8 @@ errtype obj_load_properties()
 	//-------------
 	// For Mac version:  The data for these are all zero, so don't worry about
 	// converting, just zero the arrays.
-	
-	LG_memset(SoftwareProps, 0, sizeof(SoftwareProps));
+
+	memset(SoftwareProps, 0, sizeof(SoftwareProps));
 	cp += NUM_SOFTWARE * 2;
 	cp += NUM_OFFENSE_SOFTWARE;
 	cp += NUM_DEFENSE_SOFTWARE;
@@ -1729,8 +1729,8 @@ errtype obj_load_properties()
 	//-------------
 	// For Mac version:  The data for these are all zero, so don't worry about
 	// converting, just zero the arrays.
-	
-	LG_memset(BigstuffProps, 0, sizeof(BigstuffProps));
+
+	memset(BigstuffProps, 0, sizeof(BigstuffProps));
 	cp += NUM_BIGSTUFF * 4;
 	cp += NUM_ELECTRONIC_BIGSTUFF;
 	cp += NUM_FURNISHING_BIGSTUFF;
@@ -1746,21 +1746,21 @@ errtype obj_load_properties()
 	//-------------
 	// For Mac version:  Most of this data is all zeros, so in those cases don't worry about
 	// converting, just zero the arrays.
-	
-	LG_memset(SmallstuffProps, 0, sizeof(SmallstuffProps));
+
+	memset(SmallstuffProps, 0, sizeof(SmallstuffProps));
 	cp += NUM_SMALLSTUFF * 2;
 	cp += NUM_USELESS_SMALLSTUFF;
 	cp += NUM_BROKEN_SMALLSTUFF;
 	cp += NUM_CORPSELIKE_SMALLSTUFF;
 	cp += NUM_GEAR_SMALLSTUFF;
 	cp += NUM_CARDS_SMALLSTUFF;
-	
+
 	BlockMoveData(cp, CyberSmallstuffProps, sizeof(CyberSmallstuffProps));
 	cp += sizeof(CyberSmallstuffProps);
 
 	cp += NUM_ONTHEWALL_SMALLSTUFF;
 
-	LG_memset(PlotSmallstuffProps, 0, sizeof(PlotSmallstuffProps));
+	memset(PlotSmallstuffProps, 0, sizeof(PlotSmallstuffProps));
 	cp += NUM_PLOT_SMALLSTUFF * 2;
 
 	//-------------
@@ -1768,8 +1768,8 @@ errtype obj_load_properties()
 	//-------------
 	// For Mac version:  The data for these are all zero, so don't worry about
 	// converting, just zero the arrays.
-	
-	LG_memset(FixtureProps, 0, sizeof(FixtureProps));
+
+	memset(FixtureProps, 0, sizeof(FixtureProps));
 	cp += NUM_FIXTURE;
 	cp += NUM_CONTROL_FIXTURE;
 	cp += NUM_RECEPTACLE_FIXTURE;
@@ -1783,21 +1783,21 @@ errtype obj_load_properties()
 	//-------------
 	// For Mac version:  The data for these are all zero, so don't worry about
 	// converting, just zero the arrays.
-	
-	LG_memset(DoorProps, 0, sizeof(DoorProps));
+
+	memset(DoorProps, 0, sizeof(DoorProps));
 	cp += NUM_DOOR;
 	cp += NUM_NORMAL_DOOR;
 	cp += NUM_DOORWAYS_DOOR;
 	cp += NUM_FORCE_DOOR;
 	cp += NUM_ELEVATOR_DOOR;
 	cp += NUM_SPECIAL_DOOR;
-	
+
 	cp -= 2;											//¥¥¥ We got off here somehow.  Check into it!!!
 
 	//----------------
 	//  ANIMATING OBJECTS
 	//----------------
-	
+
 	BlockMoveData(cp, AnimatingProps, sizeof(AnimatingProps));
 	cp += sizeof(AnimatingProps);
 
@@ -1811,7 +1811,7 @@ errtype obj_load_properties()
 	//  TRAPS
 	//----------------
 	// For Mac version:  These are all dummy arrays, so just skip over the data here.
-	
+
 	cp += NUM_TRAP;
 	cp += NUM_TRIGGER_TRAP;
 	cp += NUM_FEEDBACKS_TRAP;
@@ -1822,8 +1822,8 @@ errtype obj_load_properties()
 	//----------------
 	// For Mac version:  The data for these are all zero, so don't worry about
 	// converting, just zero the arrays.
-	
-	LG_memset(ContainerProps, 0, sizeof(ContainerProps));
+
+	memset(ContainerProps, 0, sizeof(ContainerProps));
 	cp += NUM_CONTAINER * 3;
 	cp += NUM_ACTUAL_CONTAINER;
 	cp += NUM_WASTE_CONTAINER;
@@ -1836,11 +1836,11 @@ errtype obj_load_properties()
 	//----------------
 	//  CRITTERS
 	//----------------
-	
+
 	for (i = 0; i < NUM_CRITTER; i++)
 	{
 		CritterProp *crp = &CritterProps[i];
-		
+
 		crp->intelligence = *cp++;
 		for (j = 0; j < NUM_ALTERNATE_ATTACKS; j++)
 		{
@@ -1897,7 +1897,7 @@ errtype obj_load_properties()
 	for (i = 0; i < NUM_CYBER_CRITTER; i++)
 	{
 		CyberCritterProp *ccp = &CyberCritterProps[i];
-		
+
 		for (j = 0; j < NUM_VCOLORS; j++)
 			ccp->vcolors[j] = *cp++;
 		for (j = 0; j < NUM_VCOLORS; j++)
@@ -1913,7 +1913,7 @@ errtype obj_load_properties()
 	for (i = 0; i < NUM_OBJECT; i++)
 	{
 		ObjProp *op = &ObjProps[i];
-		
+
 		BlockMoveData(cp, op, 27);
 		cp += 27;
 
@@ -1937,7 +1937,7 @@ errtype obj_set_secondary_properties()
 	char 			i, j;
 	RefTable 	*prt;
 	int 			fn, fn2;
-	
+
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pobjart2.rsrc", &fSpec);
 	fn = ResOpenFile(&fSpec);
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pobjart3.rsrc", &fSpec);
@@ -1947,7 +1947,7 @@ errtype obj_set_secondary_properties()
 //		Warning(("Problem opening object art cache!\n"));
 		return(ERR_NOEFFECT);
 	}
-	
+
 	// Now go and set specific computed data, like frame counts
 	for (i=0; i < NUM_CRITTER; i++)
 	{
@@ -1973,7 +1973,7 @@ errtype obj_set_secondary_properties()
 //				Warning (("Could not read RefTable for creature type %d (j = %d) (id = %d + %d = %d (0x%x))!\n",i,j,
 //				critter_id_table[i],posture_bases[j],critter_id_table[i] + posture_bases[j], critter_id_table[i] + posture_bases[j]));
 				else
-				{                
+				{
 					CritterProps[i].frames[j] = prt->numRefs;
 					ResFreeRefTable(prt);
 //					ResUnlock(id);
@@ -1996,7 +1996,7 @@ errtype obj_zero_unused(void)
    ObjSpecID specid;
    int counters[2][2];
 
-   LG_memset(counters,0,4*sizeof(int));
+   memset(counters,0,4*sizeof(int));
    for (cl= CLASS_GUN; cl<NUM_CLASSES; cl++)
    {
       ObjSpecHeader *curHead=&objSpecHeaders[cl]; /* get our special class header data */
@@ -2004,18 +2004,18 @@ errtype obj_zero_unused(void)
       {  /* find the base of our obj and cast it to a ObjSpec common header struct */
     ObjSpec *curSpec=(ObjSpec*)(curHead->data+(curHead->struct_size*specid));
     if (!objs[id=curSpec->bits.id].active)         /* toast all but the Spec part */
-       LG_memset(((char *) curSpec)+sizeof(ObjSpec),0,curHead->struct_size-sizeof(ObjSpec));
+       memset(((char *) curSpec)+sizeof(ObjSpec),0,curHead->struct_size-sizeof(ObjSpec));
     counters[0][objs[id].active?1:0]++;
       }
    }
    for (id = 0; id < NUM_OBJECTS; id++) /* go through all objects, though i bet they are all seen above */
       if (!objs[id].active)             /* and thus we should be able to skip this, i bet */
       {
-    LG_memset(&objs[id].active,0,((uchar *)&objs[id].ref)-((uchar *)&objs[id].active));
-    LG_memset(&objs[id].loc,0,sizeof(ObjLoc)+sizeof(ObjInfo));
+    memset(&objs[id].active,0,((uchar *)&objs[id].ref)-((uchar *)&objs[id].active));
+    memset(&objs[id].loc,0,sizeof(ObjLoc)+sizeof(ObjInfo));
     counters[1][0]++;
       }
-      else counters[1][1]++; 
+      else counters[1][1]++;
 //   mprintf("Counters were %d %d and %d %d\n",counters[0][0],counters[0][1],counters[1][0],counters[1][1]);
    return OK;
 }
@@ -2032,7 +2032,7 @@ ObjID physics_handle_to_id(physics_handle p)
 bool get_obj_radii(Obj *objp, fix *rad)
 {
    Robot temp_robot;
-   
+
    if (objp->info.ph != -1)
    {
       EDMS_get_robot_parameters(objp->info.ph, &temp_robot);
@@ -2095,9 +2095,9 @@ grs_bitmap *get_text_bitmap_from_string(int d1, char dest_type, char *s, bool sc
 
    gr_push_canvas(&text_canvases[dest_type]);
 
-   // hack MLA 
-   if (clearwithFF) 
-   		gr_clear(0xff); 
+   // hack MLA
+   if (clearwithFF)
+   		gr_clear(0xff);
    else
    		gr_clear(0);
 
@@ -2198,7 +2198,7 @@ void diego_teleport_callback(ObjID id, void *)
 bool death_check(ObjID id, bool*)
 {
    extern char damage_sound_fx;
-   if(ID2TRIP(id)==DIEGO_TRIPLE && player_struct.level!=DIEGO_DEATH_BATTLE_LEVEL) 
+   if(ID2TRIP(id)==DIEGO_TRIPLE && player_struct.level!=DIEGO_DEATH_BATTLE_LEVEL)
    {
       damage_sound_fx = -1;
       play_digi_fx_obj(SFX_TELEPORT, 1, id);
@@ -2209,7 +2209,7 @@ bool death_check(ObjID id, bool*)
 }
 
 
-// An object has been destroyed -- now we must consider doing some 
+// An object has been destroyed -- now we must consider doing some
 // special stuff.  Returns TRUE if the regular destruction process
 // should continue.
 bool obj_combat_destroy(ObjID id)
@@ -2471,7 +2471,7 @@ bool check_objsys_func(short keycode, ulong context, void* data)
          else
             Warning(("%d: %s\n",i, get_object_lookname(player_struct.inventory[i],buf,64)));
       }
-   }   
+   }
    if (ObjSysOkay())
       message_info("ObjSys OKAY");
    else
@@ -2479,7 +2479,7 @@ bool check_objsys_func(short keycode, ulong context, void* data)
    return(FALSE);
 }
 
-// Just compile in whichever hack it is you want to 
+// Just compile in whichever hack it is you want to
 // use to munge all the objects on the level
 
 //#define TEXTURE_CRUNCH_HACK
@@ -2692,7 +2692,7 @@ errtype obj_level_munge()
    ObjSpecID osid;
    ObjID id;
    osid = objCritters[0].id;
-   while (osid != OBJ_SPEC_NULL) 
+   while (osid != OBJ_SPEC_NULL)
    {
       id = objCritters[osid].id;
       objCritters[osid].flags = 0;
@@ -2723,7 +2723,7 @@ errtype obj_level_munge()
 
 #ifdef CLEAR_CREATURE_PATHFIND
    osid = objCritters[0].id;
-   while (osid != OBJ_SPEC_NULL) 
+   while (osid != OBJ_SPEC_NULL)
    {
       id = objCritters[osid].id;
       objCritters[osid].path_id = -1;
@@ -2830,7 +2830,7 @@ errtype obj_level_munge()
    FILE *f;
    short i,sc;
    char temp1[50];
-   fix old_ht;   
+   fix old_ht;
    ObjID oid;
 
    // Fill it up with vomitous spew
@@ -2854,7 +2854,7 @@ errtype obj_level_munge()
          if (sc != 0)
          {
             count++;
-      
+
             old_ht = fix_from_obj_height(oid);
             objs[oid].loc.z = obj_height_from_fix(old_ht + (fix_make(sc,0) / PHYSICS_RADIUS_UNIT));
          }

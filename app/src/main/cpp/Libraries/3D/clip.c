@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/3d/RCS/clip.c $
@@ -67,7 +67,7 @@ int g3_clip_line(g3s_point *src[],g3s_point *dest[])
    // assume 10 points max
    g3s_point *tmp0[10];
    g3s_point *tmp1[10];
-   int b;               // current destination buffer 
+   int b;               // current destination buffer
    g3s_point **tmps;    // pointer to the tmp buffer
    g3s_point **tmpd;    // pointer to dest buffer
 
@@ -77,7 +77,7 @@ int g3_clip_line(g3s_point *src[],g3s_point *dest[])
    // if all the same, leave
    if (cc==0) {
       // copy src to dest
-      LG_memcpy(dest,src,2*sizeof(g3s_point *));
+      memcpy(dest,src,2*sizeof(g3s_point *));
       return CLIP_NONE;
    }
    if (ca!=0)
@@ -244,7 +244,7 @@ int g3_clip_line(g3s_point *src[],g3s_point *dest[])
    // if its been clipped it needs it
 
    // final copy to tmp
-   LG_memcpy(dest,tmps,2*sizeof(g3s_point *));
+   memcpy(dest,tmps,2*sizeof(g3s_point *));
 
    for (i=0;i<2;i++) {
       _tmp = dest[i];
@@ -273,7 +273,7 @@ int g3_clip_polygon(int n,g3s_point *src[],g3s_point *dest[])
    // assume 10 points max
    g3s_point *tmp0[10];
    g3s_point *tmp1[10];
-   int b;               // current destination buffer 
+   int b;               // current destination buffer
    g3s_point **tmps;    // pointer to the tmp buffer
    g3s_point **tmpd;    // pointer to dest buffer
 
@@ -282,7 +282,7 @@ int g3_clip_polygon(int n,g3s_point *src[],g3s_point *dest[])
    // if all the same, leave
    if (cc == 0) {
       // copy src to dest
-      LG_memcpy(dest,src,n*sizeof(g3s_point *));
+      memcpy(dest,src,n*sizeof(g3s_point *));
       return n;
    }
 
@@ -432,7 +432,7 @@ int g3_clip_polygon(int n,g3s_point *src[],g3s_point *dest[])
    // if its been clipped it needs it
 
    // final copy to tmp
-   LG_memcpy(dest,tmps,n*sizeof(g3s_point *));
+   memcpy(dest,tmps,n*sizeof(g3s_point *));
 
    for (i=0;i<n;i++) {
       _tmp = dest[i];
@@ -509,7 +509,7 @@ void g3_back_intersect(void)
 
    _tmp->codes = ((_tmp->gX >= _tmp->gZ) ? CC_OFF_RIGHT : ((_tmp->gX <= -_tmp->gZ) ? CC_OFF_LEFT : 0))
       | ((_tmp->gY >= _tmp->gZ) ? CC_OFF_TOP: ((_tmp->gY <= -_tmp->gZ) ? CC_OFF_BOT :  0));
-      
+
    g3_intersect();
 }
 

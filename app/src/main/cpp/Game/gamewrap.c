@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/gamewrap.c $
@@ -97,7 +97,7 @@ errtype copy_file(FSSpec *srcFile, FSSpec *destFile, Boolean saveGameFile)
 	long 		size, count;
 	errtype	retv=OK;
 
-	// If the output file is already there, delete it first.	
+	// If the output file is already there, delete it first.
 	err = FSpGetFInfo(destFile, &fi);
 	if (err == noErr)
 		FSpDelete(destFile);
@@ -106,7 +106,7 @@ errtype copy_file(FSSpec *srcFile, FSSpec *destFile, Boolean saveGameFile)
 	FSpCreateResFile(destFile, 'Shok', (saveGameFile) ? 'Sgam' : '????', 0);
 	if (ResError())
 		return (ERR_FOPEN);
-	
+
 	if (FSpOpenRF(destFile, fsRdWrPerm, &destRefNum) != noErr)
 		return(ERR_FOPEN);
 
@@ -177,7 +177,7 @@ void startup_game(bool visible)
    }
 }
 
-#ifdef NOT_YET 
+#ifdef NOT_YET
 
 void check_save_game_wackiness(void)
 {
@@ -196,11 +196,11 @@ void check_save_game_wackiness(void)
 //         else
 //            Warning(("You have obj %d a %d as the %d element of geninv ok %x\n",cur_test,OPNUM(cur_test),i,ObjProps[OPNUM(cur_test)].flags));
       }
-#endif 
+#endif
    }
 }
 
-#endif //NOT_YET 
+#endif //NOT_YET
 
 extern int flush_resource_cache();
 
@@ -218,7 +218,7 @@ errtype save_game(FSSpec *saveSpec)
    //KLC  do it the Mac way						i = flush_resource_cache();
 	Size	dummy;
 	MaxMem(&dummy);
-	
+
 	// Open the current game file to save some more resources into it.
 	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 	filenum = ResEditFile(&currSpec, FALSE);
@@ -240,7 +240,7 @@ errtype save_game(FSSpec *saveSpec)
 	player_struct.version_num = PLAYER_VERSION_NUMBER;
 	player_struct.realspace_loc = objs[player_struct.rep].loc;
 	EDMS_get_state(objs[PLAYER_OBJ].info.ph, &player_state);
-	LG_memcpy(player_struct.edms_state, &player_state, sizeof (fix) * 12);
+	memcpy(player_struct.edms_state, &player_state, sizeof (fix) * 12);
 //¥¥¥ LZW later		ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum, RDF_LZW);
 	ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum, 0);
 	ResWrite(idx);
@@ -256,7 +256,7 @@ errtype save_game(FSSpec *saveSpec)
 	ResUnmake(idx);
 	idx++;
 	AdvanceProgress();
-	
+
 	// Save game schedule vec info (resource #591)
 //¥¥¥ LZW later		ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent)*GAME_SCHEDULE_SIZE, RTYPE_APP, filenum, RDF_LZW);
 	ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent)*GAME_SCHEDULE_SIZE, RTYPE_APP, filenum, 0);
@@ -264,10 +264,10 @@ errtype save_game(FSSpec *saveSpec)
 	ResUnmake(idx);
 	idx++;
 	AdvanceProgress();
- 	
+
  	ResCloseFile(filenum);
 	AdvanceProgress();
-	
+
 	// Save current level
 	retval = write_level_to_disk(ResIdFromLevel(player_struct.level), TRUE);
 	if (retval)
@@ -372,13 +372,13 @@ errtype load_game(FSSpec *loadSpec)
 //KLC - don't do this here   stop_music();
 
 // KLC - user will not be able to open current game file in Mac version, so skip this check.
-//   rv = DatapathFind(&savegame_dpath, CURRENT_GAME_FNAME, dpath_fn);   
+//   rv = DatapathFind(&savegame_dpath, CURRENT_GAME_FNAME, dpath_fn);
 //   if (strcmp(fname, CURRENT_GAME_FNAME))
    {
       errtype	retval;
 
 	 FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
-      
+
       // Copy game to load to the current file game.
       retval = copy_file(loadSpec, &currSpec, FALSE);
       if (retval != OK)
@@ -446,7 +446,7 @@ errtype load_level_from_file(int level_num)
 	if (retval == OK)
 	{
 		player_struct.level = level_num;
-		
+
 		compute_shodometer_value(FALSE);
 
 		// if this is the first time the level is loaded, compute the inital shodan security level
@@ -477,7 +477,7 @@ void check_and_update_initial(void)
          critical_error(CRITERR_RES|0x10);
       if (copy_file(archive_fname, dpath_fn) != OK)
          critical_error(CRITERR_FILE|0x7);
-   }   
+   }
 
 }
 
@@ -488,7 +488,7 @@ bool create_initial_game_func(short , ulong , void* )
 {
 	FSSpec	archiveSpec, currSpec;
 	OSErr	err;
-	
+
 	int i;
 	extern int actual_score;
 	byte plrdiff[4];
@@ -497,7 +497,7 @@ bool create_initial_game_func(short , ulong , void* )
 	extern errtype do_level_entry_triggers();
 
 	free_dynamic_memory(DYNMEM_ALL);
-	
+
 	// Copy archive into local current game file.
 
 	// First, make sure the archive file is actually there.
@@ -507,7 +507,7 @@ bool create_initial_game_func(short , ulong , void* )
 		load_dynamic_memory(DYNMEM_ALL);
 		return(TRUE);
 	}
-	
+
 	// Next, copy the archive file to an untitled game.
 	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 
@@ -516,7 +516,7 @@ bool create_initial_game_func(short , ulong , void* )
 
 /* KLC - I don't think you actually have to load the player in for a new game, since "init_player"
                 zeroes it out anyway.
-                
+
    // Load in player and current level
    filenum = ResOpenFile(&fSpec);
    if (filenum < 0)
@@ -528,7 +528,7 @@ bool create_initial_game_func(short , ulong , void* )
    plr_obj = PLAYER_OBJ;
    for (i=0; i<4; i++)
       plrdiff[i] = player_struct.difficulty[i];
-   LG_memcpy(tmpname,player_struct.name,sizeof(tmpname));
+   memcpy(tmpname,player_struct.name,sizeof(tmpname));
 
 	//KLC - don't need this anymore.  ResExtract(SAVE_GAME_ID_BASE + 1, (void *)&player_struct);
 
@@ -542,13 +542,13 @@ bool create_initial_game_func(short , ulong , void* )
    amap_reset();
    player_create_initial();
 
-   LG_memcpy(player_struct.name,tmpname,sizeof(player_struct.name));
+   memcpy(player_struct.name,tmpname,sizeof(player_struct.name));
    for (i=0; i<4; i++)
       player_struct.difficulty[i] = plrdiff[i];
 
    // KLC - not needed any longer ResCloseFile(filenum);
 
-   // Reset MFDs to be consistent with starting setup  
+   // Reset MFDs to be consistent with starting setup
    init_newmfd();
 
    // No time elapsed, really, honest
@@ -573,12 +573,12 @@ bool create_initial_game_func(short , ulong , void* )
    // Hmm, do we actually want to call this any time we restore
    // a saved game or whatever?  No, probably not....hmmm.....
    do_level_entry_triggers();
-   
+
    // KLC - if not already on, turn on-line help on.
    if (!olh_active)
       toggle_olh_func(0, 0, NULL);
-   
-   // turn on help overlay. 
+
+   // turn on help overlay.
    olh_overlay_on = TRUE;
 
    // Plot timers
@@ -594,6 +594,6 @@ errtype write_level_to_disk(int idnum, bool flush_mem)
    // the save game resource, but for now we will always do so...
 
 	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
-	
+
 	return(save_current_map(&currSpec, idnum, flush_mem,TRUE));
 }

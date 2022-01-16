@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/fl8fl8.c $
  * $Revision: 1.5 $
  * $Author: kaboom $
  * $Date: 1993/10/19 09:50:21 $
- * 
+ *
  * Routines for drawing flat 8 bitmaps into a flat 8 canvas.
  *
  * This file is part of the 2d library.
@@ -29,19 +29,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: fl8fl8.c $
  * Revision 1.5  1993/10/19  09:50:21  kaboom
  * Replaced #include <grd.h" with new headers split from grd.h.
- * 
+ *
  * Revision 1.4  1993/10/08  01:15:13  kaboom
  * Changed quotes in #include liness to angle brackets for Watcom problem.
- * 
+ *
  * Revision 1.3  1993/07/12  23:30:56  kaboom
  * Inline memmove() uses movs.
- * 
+ *
  * Revision 1.2  1993/03/29  18:22:11  kaboom
  * Changed to inline version of memmove.
- * 
+ *
  * Revision 1.1  1993/02/16  14:14:16  kaboom
  * Initial revision
- * 
+ *
  ********************************************************************
  * Log from old flat8.c:
  * Revision 1.7  1992/12/14  18:08:40  kaboom
@@ -55,7 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "flat8.h"
 #include "lg.h"
 
-#if (defined(powerc) || defined(__powerc))	
+#if (defined(powerc) || defined(__powerc))
 void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 {
 	uchar 	*m_src;
@@ -64,14 +64,14 @@ void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	int 		h = bm->h;
 	int 		i;
 	int			brow,grow;
-	
-	
+
+
 	brow = bm->row;
 	grow = grd_bm.row;
-	
+
 	m_src = bm->bits;
 	m_dst = grd_bm.bits + grow*y + x;
-	
+
 	if (bm->flags & BMF_TRANS)
 		while (h--) {
 		 for (i=0; i<w; i++)
@@ -81,8 +81,8 @@ void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 		}
 	else
 		while (h--) {
-		 LG_memmove (m_dst, m_src, w);
-		 
+		 memmove (m_dst, m_src, w);
+
 		 m_src += brow;
 		 m_dst += grow;
 		}
@@ -95,23 +95,23 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
  	move.l	4(sp),a0				// get bm
  	move.w	8(sp),d1				// get x
  	move.w	10(sp),d2				// get y
- 	
+
  	movem.l	d3-d7/a2,-(sp)
- 	
+
  	move.l	(a0),a1					// src
  	move.w	12(a0),d3				// src rowbytes
  	move.w	8(a0),d5				// width
  	move.w	10(a0),d6				// height
- 	
+
  	move.l	a0,d7
  	move.l	grd_canvas,a0
  	move.l	(a0),a2					// dest
  	move.w	12(a0),d4				// dest rowbytes
- 	
+
  	add.w		d1,a2						// dest + x
  	mulu.w	d4,d2
  	add.l		d2,a2						// dest + x + grow*y
- 	
+
  	move.l	d7,a0
  	move.w	6(a0),d0				// get flags
  	andi.w	#BMF_TRANS,d0		// trans?
@@ -135,7 +135,7 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	asr.w		#1,d7
 	andi.w	#0xfffE,d7			// clear low bit (4 bytes per move, 2 bytes per move instruction)
 	sub.w		d7,a0						// address to jump to
-	
+
 @SLoop:
 	tst.w		d1
 	beq.s		@alignOK
@@ -153,7 +153,6 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -163,7 +162,6 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -173,7 +171,9 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
+	move.l	(a1)+,(a2)+
+	move.l	(a1)+,(a2)+
+	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -194,7 +194,6 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -204,7 +203,6 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -214,7 +212,9 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
+	move.l	(a1)+,(a2)+
+	move.l	(a1)+,(a2)+
+	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -235,7 +235,6 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -245,7 +244,6 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -255,7 +253,9 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
+	move.l	(a1)+,(a2)+
+	move.l	(a1)+,(a2)+
+	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -266,7 +266,7 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+		// 120
-	
+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -276,7 +276,6 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -286,7 +285,6 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -296,7 +294,9 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		
+	move.l	(a1)+,(a2)+
+	move.l	(a1)+,(a2)+
+	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+
@@ -308,12 +308,12 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.l	(a1)+,(a2)+
 	move.l	(a1)+,(a2)+		// 160
 
-	bra.s		@SInLoop	
+	bra.s		@SInLoop
 @SLLoop:
 	move.b	(a1)+,(a2)+
 @SInLoop:
 	dbra		d5,@SLLoop
-	
+
 	add.w		d3,a1				// add rowbytes
 	add.w		d4,a2
 	move.w	d0,d5				// get left over
@@ -336,11 +336,11 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	move.b	d0,(a2)+
 	dbra		d5,@TLoop
 	bra.s		@out
-		
+
 @TSkipLoop:
 	move.b	(a1)+,d0
 	bne.s		@TCopy
-	
+
 @skip:
 	addq.w	#1,a2
 	dbra		d5,@TSkipLoop
@@ -350,7 +350,7 @@ asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 	add.w		d4,a2
 	move.w	d7,d5				// get count again
 	dbra		d6,@TLoop
- 	
+
  	movem.l	(sp)+,d3-d7/a2
  	rts
  }

@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/rsdcvt.c $
  * $Revision: 1.2 $
  * $Author: kevin $
  * $Date: 1994/05/19 15:10:27 $
- * 
+ *
  * Routine for unpacking an rsd bitmap to a flat8 bitmap.
  * Uses memory provided externally.
  *
@@ -31,10 +31,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Revision 1.2  1994/05/19  15:10:27  kevin
  * Check if BMF_TLUC8 flag is set and if so, set
  * uncompressed bitmap type to BMT_TLUC8.
- * 
+ *
  * Revision 1.1  1993/12/28  16:32:09  kevin
  * Initial revision
- * 
+ *
  */
 
 #include <string.h>
@@ -64,7 +64,7 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
 
    if (grd_unpack_buf==NULL) return GR_UNPACK_RSD8_NOBUF;
    if (sbm->type != BMT_RSD8) return GR_UNPACK_RSD8_NOTRSD;
-   *dbm = *sbm;	// LG_memcpy (dbm, sbm, sizeof (*sbm));
+   *dbm = *sbm;	// memcpy (dbm, sbm, sizeof (*sbm));
    if (sbm->flags&BMF_TLUC8)
       dbm->type = BMT_TLUC8;
    else
@@ -78,7 +78,7 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
       y_bot = sbm->h;
       p_dst = dbm->bits;
       over_run=dbm->row-sbm->w;
-     
+
       /* process each scanline, keeping track of x and splitting opcodes that
          span across more than one line. */
       while (y < y_bot) {
@@ -90,14 +90,14 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
                /* current code is all on this scanline. */
                switch (rsd_code) {
                case RSD_RUN:
-                  LG_memset (p_dst, *rsd_src, rsd_count);
+                  memset (p_dst, *rsd_src, rsd_count);
                   rsd_src++;
                   break;
                case RSD_SKIP:
-                  LG_memset (p_dst, kSkipColor, rsd_count);
+                  memset (p_dst, kSkipColor, rsd_count);
                   break;
                default: /* RSD_DUMP */
-                  LG_memcpy (p_dst, rsd_src, rsd_count);
+                  memcpy (p_dst, rsd_src, rsd_count);
                   rsd_src += rsd_count;
                   break;
                }
@@ -111,13 +111,13 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
                op_count = x_right-x;
                switch (rsd_code) {
                case RSD_RUN:
-                  LG_memset (p_dst, *rsd_src, op_count);
+                  memset (p_dst, *rsd_src, op_count);
                   break;
                case RSD_SKIP:
-                  LG_memset (p_dst, kSkipColor, op_count);
+                  memset (p_dst, kSkipColor, op_count);
                   break;
                default: /* RSD_DUMP */
-                  LG_memcpy (p_dst, rsd_src, op_count);
+                  memcpy (p_dst, rsd_src, op_count);
                   rsd_src += op_count;
                   break;
                }
@@ -130,7 +130,7 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
          /* reset x to be beginning of line and set y to next scanline. */
          x -= sbm->w;
          if (over_run) {
-            LG_memset (p_dst, kSkipColor, over_run);
+            memset (p_dst, kSkipColor, over_run);
             p_dst += over_run;
          }
          y++;
@@ -138,7 +138,7 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
    }
 rsd_done:
    if (over_run=(dbm->bits+dbm->row*dbm->h)-p_dst)
-      LG_memset (p_dst, kSkipColor, over_run);
+      memset (p_dst, kSkipColor, over_run);
    return GR_UNPACK_RSD8_OK;
 }
-   
+

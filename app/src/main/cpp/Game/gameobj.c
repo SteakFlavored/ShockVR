@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/gameobj.c $
@@ -134,7 +134,7 @@ int munge_val(int val, int range, int delta)
  cface[0]=cube_pt[a]; cface[0]->uv.u=0;     cface[0]->uv.v=0;     \
  cface[1]=cube_pt[b]; cface[1]->uv.u=0x100; cface[1]->uv.v=0;     \
  cface[2]=cube_pt[c]; cface[2]->uv.u=0x100; cface[2]->uv.v=0x100; \
- cface[3]=cube_pt[d]; cface[3]->uv.u=0;     cface[3]->uv.v=0x100 
+ cface[3]=cube_pt[d]; cface[3]->uv.u=0;     cface[3]->uv.v=0x100
 
 #define setup_rface(a,b,c,d) \
  cface[0]=cube_pt[a]; cface[0]->uv.u=0x100; cface[0]->uv.v=0;     \
@@ -158,7 +158,7 @@ void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int x, int y, i
 #ifdef NO_ANTIGRAV_CRATES
    cube_vec.gY-=_o_rad;
 #endif
-   _fdt_pbase=0; cube_pt[0]->i=_sq_lght;  // _fr_do_light(cube_pt[0],FRPTSZFLR_DN); 
+   _fdt_pbase=0; cube_pt[0]->i=_sq_lght;  // _fr_do_light(cube_pt[0],FRPTSZFLR_DN);
    x+=x; y+=y; z=-(z+z);       // go from radius to real
    cube_pt[1]=g3_copy_add_delta_z(cube_pt[0],y); cube_pt[1]->p3_flags|=PF_U|PF_V;
    cube_pt[2]=g3_copy_add_delta_x(cube_pt[1],x); cube_pt[2]->p3_flags|=PF_U|PF_V;
@@ -189,7 +189,7 @@ void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int x, int y, i
 }
 
 #define setup_poly_face(a,b,c,d) \
- cface[0]=cube_pt[a]; cface[1]=cube_pt[b]; cface[2]=cube_pt[c]; cface[3]=cube_pt[d] 
+ cface[0]=cube_pt[a]; cface[1]=cube_pt[b]; cface[2]=cube_pt[c]; cface[3]=cube_pt[d]
 
 #define setup_poly_rface(a,b,c,d) \
  cface[0]=cube_pt[a]; cface[1]=cube_pt[b]; cface[2]=cube_pt[c]; cface[3]=cube_pt[d];
@@ -213,10 +213,10 @@ void _fr_draw_poly_cube(int p_color, int x, int y, int z)
    g3_start_object_angles_xyz(&_fr_p,_fr_cobj->loc.p<<8,_fr_cobj->loc.h<<8,_fr_cobj->loc.b<<8,ANGLE_ORDER);
    cube_vec.gX=-x; cube_vec.gY=0; cube_vec.gZ=-y;
    cube_pt[0]=g3_transform_point(&cube_vec);     cube_pt[0]->p3_flags|=PF_I; cube_pt[0]->i=0x0100;
-   _fdt_pbase=0; // cube_pt[0]->i=_sq_lght;  // _fr_do_light(cube_pt[0],FRPTSZFLR_DN); 
+   _fdt_pbase=0; // cube_pt[0]->i=_sq_lght;  // _fr_do_light(cube_pt[0],FRPTSZFLR_DN);
    x+=x; y+=y; z=-(z+z);       // go from radius to real
    if (haktype==0)
-      y=(y*(haky+1))>>8; 
+      y=(y*(haky+1))>>8;
    cube_pt[1]=g3_copy_add_delta_z(cube_pt[0],y); cube_pt[1]->p3_flags|=PF_I; cube_pt[1]->i=0x0200;
    cube_pt[2]=g3_copy_add_delta_x(cube_pt[1],x); cube_pt[2]->p3_flags|=PF_I; cube_pt[2]->i=0x0300;
    cube_pt[3]=g3_copy_add_delta_x(cube_pt[0],x); cube_pt[3]->p3_flags|=PF_I; cube_pt[3]->i=0x0400;
@@ -360,7 +360,7 @@ void draw_ice(void)
    // should do color based on ice, do separate for outer and inner
    gen_tetra(xplo_pts,size,deviant,-BLUE_8_BASE);
    gen_tetra(xplo_pts+4,-(size<<2),deviant,-BLUE_8_BASE-4);
-         
+
 #ifndef NOT_REAL
    g3_draw_cline(xplo_pts[0],xplo_pts[6]);
    g3_draw_cline(xplo_pts[1],xplo_pts[6]);
@@ -441,11 +441,11 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, bool d
          g3_draw_tmap(4,plst,draw_bm);
    else
       if (col_val!=0xFF)
-      { 
+      {
          int cur_ft = gr_get_fill_type();
          gr_set_fill_type(FILL_CLUT);
          gr_set_fill_parm(_fr_clut_list[curr_clut_table]+(_sq_lght&0xf00));
-         fpoly_rend(col_val,4,plst); 
+         fpoly_rend(col_val,4,plst);
          gr_set_fill_type(cur_ft);
       }
       else
@@ -455,7 +455,7 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, bool d
    if (dblface)  // draw the bleeding backside, nudge nudge
    {
       g3s_phandle tmp;
-      tmp=plst[0]; plst[0]=plst[1]; plst[1]=tmp; 
+      tmp=plst[0]; plst[0]=plst[1]; plst[1]=tmp;
       tmp=plst[2]; plst[2]=plst[3]; plst[3]=tmp;   // and if you thought that was obscure
 	   if (_fr_curflags&FR_PICKUPM_MASK)
          if ((draw_bm==NULL)||(_fr_curflags&FR_NOTRANS_MASK)||((draw_bm->flags&BMF_TRANS)==0))
@@ -465,11 +465,11 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, bool d
 	   else
       {
          if (col_val!=0xFF)
-   	   { 
+   	   {
             int cur_ft = gr_get_fill_type();
             gr_set_fill_type(FILL_CLUT);
             gr_set_fill_parm(_fr_clut_list[curr_clut_table]+(_sq_lght&0xf00));
-            fpoly_rend(col_val,4,plst); 
+            fpoly_rend(col_val,4,plst);
             gr_set_fill_type(cur_ft);
          }
          else
@@ -554,7 +554,7 @@ short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type)
    // and other bigstuffs presumbably wanting to use it as a default.
    // only indirect through data2 if it is nonzero OR if we're
    // animating.
-   if ((cobj->obclass == CLASS_BIGSTUFF) && (obj_is_display(ID2TRIP(cobjid))) && 
+   if ((cobj->obclass == CLASS_BIGSTUFF) && (obj_is_display(ID2TRIP(cobjid))) &&
       ((objBigstuffs[cobj->specID].data2 != 0) || anim_data_from_id(cobjid,NULL,NULL)))
    {
       int d2 = objBigstuffs[cobj->specID].data2;
@@ -566,7 +566,7 @@ short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type)
       else
    	   o3drep=objBigstuffs[cobj->specID].data2 + cobj->info.current_frame;
    }
-   else 
+   else
    {
       switch(obj_type)
       {
@@ -589,9 +589,9 @@ short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type)
       	         o3drep += cobj->info.current_frame;
             }
             break;
-      }   
+      }
    }
-   if ((cobj->obclass == CLASS_BIGSTUFF) && (cobj->subclass == BIGSTUFF_SUBCLASS_FURNISHING) && 
+   if ((cobj->obclass == CLASS_BIGSTUFF) && (cobj->subclass == BIGSTUFF_SUBCLASS_FURNISHING) &&
       (objBigstuffs[cobj->specID].data2 == 0))
          o3drep = SECRET_FURNITURE_DEFAULT_O3DREP;
    return(o3drep);
@@ -671,11 +671,11 @@ void show_obj(ObjID cobjid)
          fix fx,fy,fz;
          int sc,v;
 //         static long ltime=0;
-         
+
          switch (_fr_cobj->obclass)
          {
          case CLASS_HARDWARE:
-            col=0x48-(objHardwares[_fr_cobj->specID].version<<1); if (col<0x45) col=0x42; 
+            col=0x48-(objHardwares[_fr_cobj->specID].version<<1); if (col<0x45) col=0x42;
             break;
          case CLASS_BIGSTUFF:
             sc = objBigstuffs[_fr_cobj->specID].data1;
@@ -758,7 +758,7 @@ void show_obj(ObjID cobjid)
 
    switch (obj_type)
    {
-   case FAUBJ_BITMAP:    
+   case FAUBJ_BITMAP:
          if ((anchors_3d[o3drep].x > 0) || (anchors_3d[o3drep].y > 0))
             _o_rad = 0;
       _fr_draw_bitmap(bitmaps_3d[o3drep],_fdt_dist,ObjProps[objtrip].flags&MY_IM_LARGE,anchors_3d[o3drep].x,anchors_3d[o3drep].y);
@@ -766,7 +766,7 @@ void show_obj(ObjID cobjid)
 		   if (obj_ICE_ICE_BABY(_fr_cobj))
             draw_ice();
       break;
-      
+
    case FAUBJ_SPECIAL:
       switch(ID2TRIP(cobjid))
       {
@@ -832,7 +832,7 @@ void show_obj(ObjID cobjid)
             if (tluc_val!=0xFF)
             {
                // Note that we do all this here, instead of in draw_poly_cube, since
-               // most poly cubes, namely cyberspace stuff, don't wanna be lit.  
+               // most poly cubes, namely cyberspace stuff, don't wanna be lit.
                // Maybe this is the wrong way to do it, tho' -- X
                int cur_ft;
                cur_ft = gr_get_fill_type();
@@ -889,7 +889,7 @@ void show_obj(ObjID cobjid)
             switch(ID2TRIP(cobjid))
             {
                case DIEGO_TRIPLE:
-                  if ((get_crit_posture(_fr_cobj->specID) == DEATH_CRITTER_POSTURE) && 
+                  if ((get_crit_posture(_fr_cobj->specID) == DEATH_CRITTER_POSTURE) &&
                       (player_struct.level != DIEGO_DEATH_BATTLE_LEVEL))
                   {
                      grs_bitmap tele_bm;
@@ -897,15 +897,15 @@ void show_obj(ObjID cobjid)
 		               tpdata=get_critter_bitmap_fast(cobjid, ID2TRIP(cobjid),get_crit_posture(_fr_cobj->specID),0,(ubyte)view,&ref,&anch);
                      gr_rsd8_convert(tpdata, &tpdata_temp);
                      tpdata = &tpdata_temp;
-                     LG_memcpy(&tele_bm, tpdata, sizeof(grs_bitmap));
+                     memcpy(&tele_bm, tpdata, sizeof(grs_bitmap));
                      tele_bm.bits = big_buffer + 32768;
-                     LG_memset(tele_bm.bits, 0, tele_bm.w * tele_bm.h);
+                     memset(tele_bm.bits, 0, tele_bm.w * tele_bm.h);
                      line = fix_int(fix_mul_div(fix_make(_fr_cobj->info.current_frame,0), fix_make(tele_bm.h,0),
                         fix_make(MAX_TELEPORT_FRAME,0)));
                      for (srcp=tpdata->bits,dstp=tele_bm.bits,trgp=tpdata->bits+line*tele_bm.w; srcp<trgp; srcp++,dstp++)
                         if (*srcp!=0) *dstp=TELEPORT_COLOR + (rand()&0x3);
                      trgp=tpdata->bits+tele_bm.h*tele_bm.w;
-                     LG_memcpy(dstp,srcp,trgp-srcp);
+                     memcpy(dstp,srcp,trgp-srcp);
 
                      _fr_draw_bitmap(&tele_bm,_fdt_dist,FALSE,anch.ul.x,anch.ul.y);
                      release_critter_bitmap_fast(ref);
@@ -924,7 +924,7 @@ void show_obj(ObjID cobjid)
 #else
                   gr_rsd8_convert(tpdata, &tpdata_temp);
                   tpdata = &tpdata_temp;
-                  tpdata->type = BMT_TLUC8;   
+                  tpdata->type = BMT_TLUC8;
 #endif
 #endif
                   break;
@@ -939,14 +939,14 @@ void show_obj(ObjID cobjid)
 	      }
       }
       break;
-      
+
    case FAUBJ_VOX:
       {           // wait, cant we just keep vvv around, and stuff the two bitmaps, w+h each time, save some here
          vxs_vox vvv;
          fix damage_factor = fix_div(fix_make(_fr_cobj->info.current_hp,0), fix_make(ObjProps[objtrip].hit_points,0));
          fix pdist = VOXEL_PIX_DIST_BASE;
          fix psize = VOXEL_PIX_SIZE_BASE + fix_mul(VOXEL_PIX_SIZE_DELTA, damage_factor);
-            
+
          g3_start_object_angles_xyz(&_fr_p,_fr_cobj->loc.p<<8,_fr_cobj->loc.h<<8,_fr_cobj->loc.b<<8,ANGLE_ORDER);
          vx_init_vox(&vvv, pdist, psize, VOXEL_DEPTH, bitmaps_3d[o3drep], bitmaps_3d[o3drep+1]);
          vx_render(&vvv);
@@ -959,7 +959,7 @@ void show_obj(ObjID cobjid)
       tpdata=NULL;
    case FAUBJ_TEXBITMAP:
    case FAUBJ_TPOLY:
-	   { 
+	   {
          g3s_phandle corn[4];
          g3s_vector ul;
          fix fix_xoff, fix_yoff;
@@ -1007,7 +1007,7 @@ void show_obj(ObjID cobjid)
                switch (ID2TRIP(cobjid))
                {
                   case WORDS_TRIPLE:
-            		   tpdata = get_text_bitmap_obj(cobjid, 0, &scale); // C is for magic cookie, it's good enough for me   
+            		   tpdata = get_text_bitmap_obj(cobjid, 0, &scale); // C is for magic cookie, it's good enough for me
                      ref = 0xFFFFFFFF;
                      break;
                   default:
@@ -1040,7 +1040,7 @@ void show_obj(ObjID cobjid)
 	         fix_yoff=fix_xoff=fix_make(0,0x8000);
 	      else        // here is where to scale up and all.....
 	       { fix_xoff=tpdata->w<<9; fix_yoff=tpdata->h<<9; }
-	      if (scale>0)      { fix_xoff<<=scale;  fix_yoff<<=scale;  } 
+	      if (scale>0)      { fix_xoff<<=scale;  fix_yoff<<=scale;  }
          else if (scale<0) { fix_xoff>>=-scale; fix_yoff>>=-scale; }
 	      ul.gX=-fix_xoff; ul.gY=-fix_yoff;
          ul.gZ=0; // ul.gZ=fix_make(0,0x0080);
@@ -1048,12 +1048,12 @@ void show_obj(ObjID cobjid)
          // gruesome hack of destruction!!!
          if ((_fr_p.gX&0xffff)==0xff00) _fr_p.gX+=0x100;
          if ((_fr_p.gZ&0xffff)==0xff00) _fr_p.gZ+=0x100;
-//         mprintf("Door at %x %x %x\n",_fr_p.gX,_fr_p.gY,_fr_p.gZ); 
+//         mprintf("Door at %x %x %x\n",_fr_p.gX,_fr_p.gY,_fr_p.gZ);
 
          g3_start_object_angles_xyz(&_fr_p,_fr_cobj->loc.p<<8,_fr_cobj->loc.h<<8,_fr_cobj->loc.b<<8,ANGLE_ORDER);
-	      corn[0]=g3_transform_point(&ul);                   
-	      corn[1]=g3_copy_add_delta_x(corn[0],fix_xoff<<1);  
-	      corn[2]=g3_copy_add_delta_y(corn[1],fix_yoff<<1);  
+	      corn[0]=g3_transform_point(&ul);
+	      corn[1]=g3_copy_add_delta_x(corn[0],fix_xoff<<1);
+	      corn[2]=g3_copy_add_delta_y(corn[1],fix_yoff<<1);
 	      corn[3]=g3_copy_add_delta_y(corn[0],fix_yoff<<1);
          _fr_draw_tmtile(tpdata,tluc_val,corn,(_fr_cobj->obclass==CLASS_DOOR),light_me);
 	      if (use_cache)
@@ -1080,7 +1080,7 @@ void show_obj(ObjID cobjid)
                {
                   for (foog =0; foog < NUM_VCOLORS; foog++)
                   {
-                     if ((objCritters[_fr_cobj->specID].mood == AI_MOOD_HOSTILE)|| 
+                     if ((objCritters[_fr_cobj->specID].mood == AI_MOOD_HOSTILE)||
                          (objCritters[_fr_cobj->specID].mood == AI_MOOD_ATTACKING))
                      {
                         uchar c = CyberCritterProps[SCNUM(cobjid)].alt_vcolors[foog], nc;
@@ -1098,7 +1098,7 @@ void show_obj(ObjID cobjid)
             case CLASS_SMALLSTUFF:
                // Yes, arbitrariness....
                for (foog = 0; foog < NUM_SMALLSTUFF_VCOLORS; foog++)
-               {   
+               {
                   g3_set_vcolor(foog+1,CyberSmallstuffProps[SCNUM(cobjid)].vcolors[foog]);
 //                  Warning(("setting vcolor %d to 0x%x!\n",foog+1,CyberSmallstuffProps[SCNUM(cobjid)].vcolors[foog]));
                }
