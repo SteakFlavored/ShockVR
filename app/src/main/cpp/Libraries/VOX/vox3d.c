@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/vox/RCS/vox3d.c $
@@ -28,20 +28,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: vox3d.c $
  * Revision 1.5  1994/08/16  05:45:42  jaemz
  * Found fix overflow problem and fixed it
- * 
+ *
  * Revision 1.4  1994/08/11  22:53:20  jaemz
  * Made fill mode work and put pix_size in real 3d points.
- * 
+ *
  * Revision 1.3  1994/07/15  21:13:20  jaemz
  * Added self clipping
- * 
+ *
  * Revision 1.2  1994/04/21  12:00:36  jaemz
  * Changed interface to vox2d to facilitate bounds checking in
  * the debug version.
- * 
+ *
  * Revision 1.1  1994/04/21  10:52:42  jaemz
  * Initial revision
- * 
+ *
  */
 
 
@@ -147,7 +147,7 @@ void vx_render(vxs_vox *vx)
    gr_bitmap(vx->ht,fix_rint(tmp[0]->sx)-vx->w,fix_rint(tmp[0]->sy)-vx->h);
 #endif
 
-   //calculate pixel size 
+   //calculate pixel size
    psy = fix_div(grd_bm.w * vx->pix_size,tmp[0]->gZ)>>1;
    psx = fix_mul(psy,grd_cap->aspect);
 
@@ -186,15 +186,15 @@ void vx_render(vxs_vox *vx)
    mprintf("minus tx/tz = %g ty/tz = %g\n",(float)fix_div(tx- vx->pix_dist * vx->w,tz)/65536.0,
       (float)fix_div(ty- vx->pix_dist * vx->h,tz)/65536.0);
    #endif
-                           
+
    if ( (tx-(vx->pix_dist * vx->w) > tz ) || (ty-(vx->pix_dist * vx->h) > tz)) {
       #ifdef BBOX
       mprintf("vox: punting due to out of view cone\n");
       #endif
       g3_free_list(4,tmp);
-      return;                              
+      return;
    }
-    
+
 #ifdef BBOX
    // different color when clipping
    gr_set_fcolor(0x4c+clip*0x10);
@@ -206,12 +206,12 @@ void vx_render(vxs_vox *vx)
    y[2] = y[1]+(vx->h)*(tmp[2]->sy);
    x[3] = a+(vx->h)*(tmp[2]->sx);
    y[3] = b+(vx->h)*(tmp[2]->sy);
-   
+
    gr_fix_line(x[0],y[0],x[1],y[1]);
    gr_fix_line(x[1],y[1],x[2],y[2]);
    gr_fix_line(x[2],y[2],x[3],y[3]);
    gr_fix_line(x[3],y[3],x[0],y[0]);
-   
+
    for (i=0;i<4;++i) {
       x[i] += (vx->d)*(tmp[3]->sx);
       y[i] += (vx->d)*(tmp[3]->sy);

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/popups.c $
@@ -50,7 +50,7 @@ LGPoint			popup_hotspots[NUM_POPUPS] = 	// in 0-16 dimension-independent units
 {
    { 0,8},
    { 16,8},
-   { 8,16},   
+   { 8,16},
    { 0,8},
    { 16,8},
 };
@@ -83,10 +83,10 @@ void make_popup_cursor(LGCursor* c, grs_bitmap* bm, char* s, uint tmplt,bool all
 	uchar *bptr;
 	uchar* bits = bm->bits;
 	extern void ss_scale_string(char *s, short x, short y);
-	
+
 	MouseLock++;
 	*bm = *pbm;
-		
+
 	if (allocate)
 	{
 		bptr = (uchar *)NewPtr(bm->w*bm->h);
@@ -117,7 +117,7 @@ void make_popup_cursor(LGCursor* c, grs_bitmap* bm, char* s, uint tmplt,bool all
 	p.x = (bm->w*ph.x)>>4;
 	p.y = (bm->h*ph.y)>>4;
 	uiMakeBitmapCursor(c,bm,p);
-		
+
 	MouseLock--;
 }
 
@@ -197,4 +197,4 @@ void make_email_cursor(LGCursor* c, grs_bitmap* bm, uchar page, bool init)
 #endif
 }
 
-    
+

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #include "midi.h"
 
@@ -33,30 +33,30 @@ long			*gOffsets;
 OSErr snd_load_theme(FSSpec *specPtr, TunePlayer thePlayer)
 {
 	OSErr	err;
-	
+
 	short	refNum = FSpOpenResFile(specPtr, fsRdPerm);
 	if (refNum >= 0)
 	{
 		gHeaderHdl = GetResource('thdr', 128);
 		gTuneHdl = GetResource('them', 128);
 		gOfsHdl = GetResource('tofs', 128);
-	
-		DetachResource(gHeaderHdl);	
-		DetachResource(gTuneHdl);	
+
+		DetachResource(gHeaderHdl);
+		DetachResource(gTuneHdl);
 		DetachResource(gOfsHdl);
-		
+
 		CloseResFile(refNum);
 
 		// Set the tune header.
 		HLock(gHeaderHdl);
 		err = TuneSetHeader(thePlayer, (unsigned long *)*gHeaderHdl);
 		err = TunePreroll(thePlayer);
-		
+
 		// Lock down the offsets and data.
 		HLock(gTuneHdl);
 		HLock(gOfsHdl);
 		gOffsets = (long *)*gOfsHdl;
-		
+
 		return(0);
 	}
 	else

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __MFDEXT_H
 #define __MFDEXT_H
@@ -51,7 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MFD_INV_NOTYPE        0xFF
 
 // Which MFD?
-#define MFD_LEFT         0 
+#define MFD_LEFT         0
 #define MFD_RIGHT        1
 
 // Flags for MFD Functions
@@ -79,11 +79,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MFD_MAP_FUNC       2
 #define MFD_TARGET_FUNC    3
 #define MFD_ANIM_FUNC      4
-#define MFD_WEAPON_FUNC    5 
+#define MFD_WEAPON_FUNC    5
 #define MFD_BIOWARE_FUNC   6
 #define MFD_LANTERN_FUNC   7
 #define MFD_3DVIEW_FUNC    8
-#define MFD_ELEV_FUNC      9 
+#define MFD_ELEV_FUNC      9
 #define MFD_GRENADE_FUNC   10
 #define MFD_HUD_FUNC       11
 #define MFD_FIXTURE_FUNC   12
@@ -105,7 +105,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MFD_CSPACE_FUNC    28
 #define MFD_VIEWHELP_FUNC  29
 #define MFD_GEAR_FUNC      30
-      
+
 // -------
 // Externs
 // -------

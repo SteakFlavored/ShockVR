@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __WEAPONS_H
 #define __WEAPONS_H
@@ -90,9 +90,9 @@ char* get_weapon_long_name(int type, int subtype, char *buf);
 #define weapon_fire_rate(WTYPE, SUBTYPE) (GunProps[CPTRIP(MAKETRIP(CLASS_GUN, WTYPE, SUBTYPE))].fire_rate)
 
 // Fire the player's current weapon.  Pos is the cursor position,
-// the routine will translate by itself into the x & y angles of 
-// direction to fire, 
-// in units of -100-+100 spanning the view cone. 
+// the routine will translate by itself into the x & y angles of
+// direction to fire,
+// in units of -100-+100 spanning the view cone.
 // pull is true if the  trigger was just pulled.
 // returns - TRUE if player fired weapon
 bool fire_player_weapon(LGPoint *pos,LGRegion *r,bool pull);

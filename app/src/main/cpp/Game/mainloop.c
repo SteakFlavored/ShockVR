@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/mainloop.c $
@@ -125,7 +125,7 @@ void ShockMain(void)
 		if (!(_change_flag&(ML_CHG_BASE<<1)))
 			loopLine(ML|1,input_chk());        			// go get the UI stuff going
 		(*citadel_loops[_current_loop])();
-		if (globalChanges)										// really, only loopmode_switch (the <<3 case) 
+		if (globalChanges)										// really, only loopmode_switch (the <<3 case)
 		{  																// will be in the game
 			if (_change_flag&(ML_CHG_BASE<<0)) { loopLine(ML|0x10,loop_debug()); }
 			if (_change_flag&(ML_CHG_BASE<<3)) { loopLine(ML|0x13,loopmode_switch(&_current_loop)); }

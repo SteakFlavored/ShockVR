@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/hud.c $
@@ -69,15 +69,15 @@ ubyte hud_colors[HUD_COLOR_BANKS][HUD_COLORS_PER_BANK] =
    { WHITE, RED_BASE + 3, GREEN_BASE, 0x41, RED_CYCLING_COLOR },
    { 0x38, GREEN_BASE, 0x41,  WHITE, RED_CYCLING_COLOR },
    { GREEN_BASE, 0x41, WHITE, RED_BASE + 3, RED_CYCLING_COLOR },
-}; 
+};
 
 
-#ifndef STORE_CLIP 
+#ifndef STORE_CLIP
 #define STORE_CLIP(a,b,c,d) a = gr_get_clip_l(); \
    b = gr_get_clip_t();  c = gr_get_clip_r(); d = gr_get_clip_b()
 #endif // !STORE_CLIP
 
-#ifndef RESTORE_CLIP 
+#ifndef RESTORE_CLIP
 #define RESTORE_CLIP(a,b,c,d) gr_set_cliprect(a,b,c,d)
 #endif // !RESTORE_CLIP
 
@@ -88,7 +88,7 @@ ubyte hud_colors[HUD_COLOR_BANKS][HUD_COLORS_PER_BANK] =
 
 typedef struct _hudline
 {
-   int strid;           // String ID to load string from if null.  
+   int strid;           // String ID to load string from if null.
    ubyte color;         // what color should it be?
    ulong mask;          // when should I draw?
    char hudvar_id;      // hud variable to display
@@ -116,8 +116,8 @@ HudLine hud_lines[] =
 {
    { REF_STR_GametimeLeft,       0, HUD_GAMETIME,        6 },
    { REF_STR_Null,               0, HUD_MSGLINE,         5, HUDLINE_X_CENTER },
-   { REF_STR_InfraredOn,         0, HUD_INFRARED,        0 }, 
-   { REF_STR_RadiationZone,      0, HUD_RADIATION,       0 }, 
+   { REF_STR_InfraredOn,         0, HUD_INFRARED,        0 },
+   { REF_STR_RadiationZone,      0, HUD_RADIATION,       0 },
    { REF_STR_BiohazardZone,      0, HUD_BIOHAZARD,       0 },
    { REF_STR_Null,               0, HUD_SHODOMETER,      1, X_MARGIN, 90},
    { REF_STR_HighFatigue,        1, HUD_FATIGUE,         0},
@@ -252,13 +252,13 @@ void compute_hud_var(HudLine* hl)
          len += strlen(s);
          break;
       }
-         
+
 
       case 16: // 16-23 are reserved for damage exposure notices
       case 19:
       case 23:
          {
-            int lvl = player_struct.hit_points_lost[hl->hudvar_id - 16] >> 1; 
+            int lvl = player_struct.hit_points_lost[hl->hudvar_id - 16] >> 1;
             numtostring(lvl,s);
             len += strlen(s); s+= strlen(s);
             get_string(REF_STR_ExposureUnit,s,HUD_STRING_SIZE - len);
@@ -333,7 +333,7 @@ void hud_update_lines(short x, short* y, short , short )
                use_y += FULLSCREEN_Y_OFFSET;
          }
 #ifdef STEREO_SUPPORT
-         {   
+         {
             short temp;
             if (convert_use_mode == 5)
                use_x = 12;
@@ -409,7 +409,7 @@ static struct _damage_report
 
 #define NUM_HUD_CRITTERS (sizeof(hud_critters)/sizeof(struct _damage_report))
 
-#define TSTAMP_CUTOFF   (CIT_CYCLE/2) // how old can a damage report get before we nuke it. 
+#define TSTAMP_CUTOFF   (CIT_CYCLE/2) // how old can a damage report get before we nuke it.
 
 #define TARG_EFF_VERSION   3
 
@@ -544,7 +544,7 @@ void update_damage_report(struct _hudobj_data* dat,bool reverse)
 
 //-------------------------------------------
 // hud_do_objs()
-// 
+//
 // Deals with all hudobjs.
 
 #define NUM_TARG_FRAMES 5
@@ -586,7 +586,7 @@ void hud_do_objs(short xtop, short ytop, short , short , bool reverse)
          target_screen_rect.ul = MakePoint(dat->xl,dat->yl);
          target_screen_rect.lr = MakePoint(dat->xh,dat->yh);
          RECT_MOVE(&target_screen_rect,MakePoint(xtop,ytop));
-      // Do other targeting stuff here. 
+      // Do other targeting stuff here.
       }
    }
    current_num_hudobjs = 0;
@@ -628,8 +628,8 @@ if (nextTime == 0)
 else if (*tmd_ticks > nextTime)
 {
 	fix_sprint(msg, fix_div(fix_make(numFrames, 0), fix_make(2,0)));
-	
-	nextTime = *tmd_ticks + 560;	
+
+	nextTime = *tmd_ticks + 560;
 	numFrames = 0;
 }
 else

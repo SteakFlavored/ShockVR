@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #include <string.h>
 
@@ -71,7 +71,7 @@ errtype tng_menu_init(void *ui_data, TNG *ptng, TNGStyle *sty, LGPoint coord, in
    return(OK);
 }
 
-// Deallocate all memory used by the TNG 
+// Deallocate all memory used by the TNG
 errtype tng_menu_destroy(TNG *ptng)
 {
    MenuElement *pnode,*pnode_next;
@@ -282,7 +282,7 @@ errtype tng_menu_selection(TNG *ptng)
    MenuElement *c =  TNG_MN(ptng)->current_selection;
 
    //Spew(DSRC_UI_Menu, ("doing menu_selection...\n"));
-   TNG_MN(ptng)->popdown_func(ptng); 
+   TNG_MN(ptng)->popdown_func(ptng);
    if (c->submenu == NULL)
    {
       if (c->keycode == 0)
@@ -293,7 +293,7 @@ errtype tng_menu_selection(TNG *ptng)
    else
    {
       tng_menu_popup_at_mouse(c->submenu);
-//      TNG_MN(ptng)->popup_func(c->submenu);      
+//      TNG_MN(ptng)->popup_func(c->submenu);
    }
    return(OK);
 }
@@ -343,7 +343,7 @@ MenuElement *tng_menu_add_basic(TNG *ptng, char *label)
    TNG_MN(ptng)->num_lines++;
    if (TNG_MN(ptng)->current_selection == NULL)
       TNG_MN(ptng)->current_selection = newelem;
-   return(newelem);      
+   return(newelem);
 }
 
 errtype tng_menu_popup(TNG *ptng)

@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/target.c $
  * $Revision: 1.48 $
  * $Author: tjs $
  * $Date: 1994/11/09 01:03:30 $
- * 
+ *
  *
  */
 
@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cit2d.h"
 #include "gr2ss.h"
 
-#define sqr(x) ((x)*(x)) 
+#define sqr(x) ((x)*(x))
 
 // -------------
 //  PROTOTYPES
@@ -73,9 +73,9 @@ bool mfd_targetware_handler(MFD *m, uiEvent *e);
 // ==============================================
 //               TARGET MFD CODE
 // ==============================================
-                               
+
 #define LEFT_MARGIN    0
-#define RNG_FIELD     30  
+#define RNG_FIELD     30
 #define TOP_MARGIN     2
 #define STATUS_TEXT_Y 35
 #define MOOD_Y        27
@@ -193,7 +193,7 @@ void mfd_target_expose(MFD *m, ubyte control)
       else
       {
          LGPoint siz;
-         short x; 
+         short x;
          short y;
          int triple = ID2TRIP(objCritters[target].id);
          char buf[TBUFSIZ];
@@ -252,7 +252,7 @@ void mfd_target_expose(MFD *m, ubyte control)
             siz = mfd_full_draw_string(buf, LEFT_MARGIN, y, TEXT_COLOR, TARGET_FONT, TRUE, TRUE);
             y += siz.y;
 
-            // draw target name. 
+            // draw target name.
             get_object_long_name(triple,buf,TBUFSIZ);
             string_replace_char(buf,'\n',CHAR_SOFTSP);
             siz = mfd_full_draw_string(buf, LEFT_MARGIN, y, TEXT_COLOR, TARGET_FONT, TRUE, TRUE);
@@ -277,7 +277,7 @@ void mfd_target_expose(MFD *m, ubyte control)
             ObjLoc ploc = objs[PLAYER_OBJ].loc;
             long mapdist;
             fix dist;
-            
+
             mapdist = long_fast_pyth_dist(loc.x - ploc.x,loc.y - ploc.y);
             mapdist = mapdist*100*8*12/(39*256); // convert to centimeters.
             dist=fix_mul(FIX_UNIT/100,fix_make(mapdist,0)); // fix meters, 2d
@@ -304,7 +304,7 @@ void mfd_target_expose(MFD *m, ubyte control)
             mfd_add_rect(x,y,TEXT_RIGHT_X,y+siz.y);
             mfd_notify_func(MFD_TARGET_FUNC,MFD_TARGET_SLOT,FALSE,MFD_ACTIVE,FALSE);
             ResUnlock(TARGET_FONT);
-         }         
+         }
 
          // Draw the target's mood
          if (version >= 2)
@@ -331,14 +331,14 @@ void mfd_target_expose(MFD *m, ubyte control)
 
          if (version >= 2)
          {
-            // draw target status 
+            // draw target status
             y = STATUS_TEXT_Y;
             dmg = get_damage_estimate(target);
             if (dmg < DAMAGE_MIN || dmg > DAMAGE_MAX)
                dmg = DAMAGE_CRITICAL;
             if (full || dmg != LAST_STATUS(m->id))
             {
-               get_string(GET_DAMAGE_STRING(TRIP2SC(triple),dmg),buf,TBUFSIZ);            
+               get_string(GET_DAMAGE_STRING(TRIP2SC(triple),dmg),buf,TBUFSIZ);
 
 //             siz = mfd_draw_string(get_temp_string(REF_STR_Condition), LEFT_MARGIN, y, TEXT_COLOR, TRUE);
 //             y += siz.y + 1;
@@ -377,8 +377,8 @@ void select_current_target(ObjID id, bool force_mfd)
    if (objs[id].info.current_hp <= 0)
       return;
 
-   hudobj_set_id(player_struct.curr_target,FALSE); 
-   player_struct.curr_target = id; 
+   hudobj_set_id(player_struct.curr_target,FALSE);
+   player_struct.curr_target = id;
    hudobj_set_id(id,TRUE);
    targ_frame = NUM_TARG_FRAMES;
    if (force_mfd)
@@ -395,19 +395,19 @@ void select_current_target(ObjID id, bool force_mfd)
 #ifdef ANNOY_PLAYERS_TRYING_TO_TARGET_THINGS
    change_current(objs[id].ref);
 #endif
-} 
+}
 
 
-#define ELIGIBLE_TARGET_RANGE 20 
+#define ELIGIBLE_TARGET_RANGE 20
 #define ELIGIBLE_TARGET_RANGE_SQUARED (ELIGIBLE_TARGET_RANGE*ELIGIBLE_TARGET_RANGE)
 // ---------------------------------------------------
-// iter_eligible_targets() 
-// takes a pointer to an objSpecId for a creature.  If there is a later creature in the level's creature 
-// list that is a valid target, modifies the specid to point to that target and returns TRUE, otherwise, 
-// returns FALSE, setting the specID to OBJ_SPEC_NULL.  If *sid is OBJ_SPEC_NULL, sets *sid to the first 
-// eligible critter, or returns FALSE if none exists. 
+// iter_eligible_targets()
+// takes a pointer to an objSpecId for a creature.  If there is a later creature in the level's creature
+// list that is a valid target, modifies the specid to point to that target and returns TRUE, otherwise,
+// returns FALSE, setting the specID to OBJ_SPEC_NULL.  If *sid is OBJ_SPEC_NULL, sets *sid to the first
+// eligible critter, or returns FALSE if none exists.
 
-bool iter_eligible_targets(ObjSpecID *sid) 
+bool iter_eligible_targets(ObjSpecID *sid)
 {
    ObjLoc ploc = objs[PLAYER_OBJ].loc;
    LGPoint plr;
@@ -428,7 +428,7 @@ bool iter_eligible_targets(ObjSpecID *sid)
       if (oid == PLAYER_OBJ)
          continue;
 
-      if (get_crit_posture(*sid) == DEATH_CRITTER_POSTURE || 
+      if (get_crit_posture(*sid) == DEATH_CRITTER_POSTURE ||
             objs[PLAYER_OBJ].specID == *sid) continue;
       if (dsq > ELIGIBLE_TARGET_RANGE_SQUARED)
          continue;

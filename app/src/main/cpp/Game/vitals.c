@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/vitals.c $
@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <math.h>
- 
+
 #include "player.h"
 #include "status.h"
 #include "tools.h"
@@ -57,7 +57,7 @@ void draw_status_bar(ushort x0, ushort x1, ushort cutoff, ushort y);
 // ---------------------------------------------------------------------------
 // status_vitals_init()
 //
-// Initially draws the background art for the vitals display, and loads in 
+// Initially draws the background art for the vitals display, and loads in
 // appropriate bitmaps so we don't hit disk randomly.
 
 #define NUM_STATUS_ARROWS 4
@@ -104,8 +104,8 @@ void status_vitals_end()
 
 errtype status_vitals_update(bool Full_Redraw)
 {
-   static short last_health_x = 0;   
-   static short last_energy_x = 0;    
+   static short last_health_x = 0;
+   static short last_energy_x = 0;
    grs_bitmap *icon_bmp;
    extern bool full_game_3d;
    Ref ref;
@@ -121,7 +121,7 @@ errtype status_vitals_update(bool Full_Redraw)
       health_value = player_struct.hit_points;
 
    if (health_value < 0) health_value = 0;
-   
+
    energy_value = player_struct.energy;
 
    // So the scale is 0-VITALS_MAX, which is # of angles to draw
@@ -200,7 +200,7 @@ errtype draw_status_arrow(int x_coord, int y)
    else
       index = 2;
 //KLC - chg for new art   ss_bitmap(&status_arrows[index], STATUS_VITALS_X_BASE + (x_coord * STATUS_ANGLE_SIZE), y);
-   gr_bitmap(&status_arrows[index], 
+   gr_bitmap(&status_arrows[index],
    					SCONV_X(STATUS_VITALS_X_BASE + (x_coord * STATUS_ANGLE_SIZE)),
    					SCONV_Y(y));
    return(OK);
@@ -219,7 +219,7 @@ void draw_status_bar(ushort x0, ushort x1, ushort cutoff, ushort y)
 
    r.ul = MakePoint(STATUS_VITALS_X_BASE + (x0 * STATUS_ANGLE_SIZE),y);
    r.lr = MakePoint(STATUS_VITALS_X_BASE + (x1 * STATUS_ANGLE_SIZE),y + status_arrows[0].h);
- 
+
    uiHideMouse(&r);
 //   mprintf ("draw_bar x0=%d x1=%d cutoff = %d\n",x0,x1,cutoff);
    // Do the drawing

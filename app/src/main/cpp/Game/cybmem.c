@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/cybmem.c $
@@ -75,13 +75,13 @@ int flush_resource_cache(void)
 
 errtype free_dynamic_memory(int mask)
 {
-   // Release textures   
+   // Release textures
    if (loadcount & DYNMEM_TEXTURES & mask)
    {
       free_textures();
       ResCloseFile(texture_fnum);
    }
-   
+
    if (loadcount & mask & DYNMEM_SIDEICONS)
    {
       side_icon_free_bitmaps();
@@ -91,13 +91,13 @@ errtype free_dynamic_memory(int mask)
    {
  	 ResCloseFile(hand_fnum);
    }
-   
+
    // digifx used to be fhandle 2
    if (loadcount & mask & DYNMEM_FHANDLE_3)
    {
       ResCloseFile(critter_fnum);
    }
-   
+
    if (loadcount & mask & DYNMEM_FHANDLE_4)
    {
       ResCloseFile(critter_fnum2);
@@ -111,7 +111,7 @@ errtype load_dynamic_memory(int mask)
 {
    FSSpec	fSpec;
    extern short _new_mode;
-	
+
   FSMakeFSSpec(gDataVref, gDataDirID, "\ptexture.rsrc", &fSpec);
    if (_new_mode != -1)
    {
@@ -128,7 +128,7 @@ errtype load_dynamic_memory(int mask)
          side_icon_load_bitmaps();
       }
 	 AdvanceProgress();
-      
+
       if ((~loadcount) & mask & DYNMEM_FHANDLE_1)
       {
   		FSMakeFSSpec(gDataVref, gDataDirID, "\phandart.rsrc", &fSpec);
@@ -137,7 +137,7 @@ errtype load_dynamic_memory(int mask)
 			critical_error(CRITERR_RES|3);
       }
 	 AdvanceProgress();
-      
+
       // digifx used to be FHANDLE_2
       if ((~loadcount) & mask & DYNMEM_FHANDLE_3)
       {
@@ -147,7 +147,7 @@ errtype load_dynamic_memory(int mask)
 			critical_error(CRITERR_RES|8);
       }
 	 AdvanceProgress();
-      
+
       if ((~loadcount) & mask & DYNMEM_FHANDLE_4)
       {
   		FSMakeFSSpec(gDataVref, gDataDirID, "\pobjart3.rsrc", &fSpec);

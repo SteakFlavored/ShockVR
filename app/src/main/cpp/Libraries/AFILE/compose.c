@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		COMPOSEW.C		Routines for handling wide8 compose buffer
 //		Rex E. Bradford (REX)
@@ -24,16 +24,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: compose.c $
  * Revision 1.4  1994/10/18  08:19:13  rex
  * Added BMF_TRANS flag to computed RSD bitmaps, so they'll work properly with 2d.
- * 
+ *
  * Revision 1.3  1994/09/13  12:23:27  rex
  * Push and pop stack canvas, instead of just set
- * 
+ *
  * Revision 1.2  1994/09/06  18:02:56  rex
  * Fixed check for same size bitmap as compose buffer (no need for row to match)
- * 
+ *
  * Revision 1.1  1994/07/22  13:20:04  rex
  * Initial revision
- * 
+ *
 */
 
 #include <stdlib.h>

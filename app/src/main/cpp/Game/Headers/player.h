@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __PLAYER_H
 #define __PLAYER_H
@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "map.h"
 
 // Defines
-#define DEGREES_OF_FREEDOM 6 // number of physics control axes.  
+#define DEGREES_OF_FREEDOM 6 // number of physics control axes.
 
 // Basic quantities, of MFD's, slots, buttons, functions
 #define NUM_MFDS              2
@@ -152,7 +152,7 @@ typedef struct _Player {
    byte leanx, leany;               // leaning, -100-+100
 
    // not used - eye postion - lower in struct!!!!
-   fixang eye;                      // eye position 
+   fixang eye;                      // eye position
 
    // Gamesys stuff
    ubyte hit_points;                // I bet we will want these.
@@ -175,7 +175,7 @@ typedef struct _Player {
    ushort   fatigue_spend;          // Current rate of fatigue expenditure in pts/sec
    ushort   fatigue_regen;          // Current rate of fatigue regeneration
    ushort   fatigue_regen_base;     // base fatigue regen rate
-   ushort   fatigue_regen_max;      // max fatigue regen rate 
+   ushort   fatigue_regen_max;      // max fatigue regen rate
    byte  accuracy;
    ubyte  shield_absorb_rate;       // % of damage shields absorb
    ubyte   shield_threshold;        // Level where shields turn off
@@ -195,7 +195,7 @@ typedef struct _Player {
    char      mfd_save_slot[NUM_MFDS];
 
    // Inventory stuff, in general, a value of zero will indicate an empty slot
-   // indices are drug/grenade/ware "types" 
+   // indices are drug/grenade/ware "types"
    ubyte hardwarez[NUM_HARDWAREZ];  // Which warez do we have? (level of each type?)
    softs_data softs;
    ubyte cartridges[NUM_AMMO_TYPES];// Cartridges for each ammo type.
@@ -204,16 +204,16 @@ typedef struct _Player {
    ubyte grenades[NUM_GRENADEZ];    // Quantity of each grenade.
 
    bool email[NUM_EMAIL];  // Which email messages do you have.
-   ubyte logs[NUM_LOG_LEVELS]; // on which levels do we have logs. 
+   ubyte logs[NUM_LOG_LEVELS]; // on which levels do we have logs.
 
-   // Weapons are arranged into "slots" 
+   // Weapons are arranged into "slots"
    weapon_slot weapons[NUM_WEAPON_SLOTS]; // Which weapons do you have?
 
    // Inventory status
    ubyte hardwarez_status[NUM_HARDWAREZ];    // Status of active wares (on/off, activation time, recharge time?)
    struct _softs softs_status;
    ubyte jumpjet_energy_fraction;  // fractional units of energy spent on jumpjets.
-   ubyte email_sender_counts[32];  // who has sent how many emails 
+   ubyte email_sender_counts[32];  // who has sent how many emails
    byte drug_status[NUM_DRUGZ];     // Time left on active drugs, 0 if inactive
    ubyte drug_intensity[NUM_DRUGZ];  // Intensity of active drugs, 0 if inactive
    ushort grenades_time_setting[NUM_GRENADEZ];      // Time setting for each grenade
@@ -249,7 +249,7 @@ typedef struct _Player {
    // let's hope State stays at 12 fixes
    fix   edms_state[12];
 
-   // the player's actively selected inventory category.  
+   // the player's actively selected inventory category.
    ubyte current_active;
    ubyte active_bio_tracks;
 

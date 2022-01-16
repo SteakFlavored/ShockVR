@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/weapons.c $
@@ -75,7 +75,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern Boolean	DoubleSize;
 
-// char ammo_type_letters[] = "stnths mphssb  "; 
+// char ammo_type_letters[] = "stnths mphssb  ";
 
 bool muzzle_fire_light;
 short mouse_attack_x = -1;
@@ -138,7 +138,7 @@ char* get_weapon_name(int type, int subtype, char* buf)
    {
       return(NULL);
    }
-   
+
    get_object_short_name(MAKETRIP(CLASS_GUN, type, subtype), name, 50);
    strcpy(buf, name);
    return buf;
@@ -156,7 +156,7 @@ char* get_weapon_long_name(int type, int subtype, char *buf)
    {
       return(NULL);
    }
-   
+
    get_object_long_name(MAKETRIP(CLASS_GUN, type, subtype), name, 50);
    strcpy(buf, name);
 
@@ -362,7 +362,7 @@ bool player_fire_handtohand(LGPoint *, ubyte, ObjID *what_hit,int gun_triple)
    // let's iterate through the three attempts we're going to do
    for (i=(HITLOCS-1); i >= 0 ; i--)
    {
-      // restore the origin of the attack - this is because 
+      // restore the origin of the attack - this is because
       // raycast changes the origin
       origin = save_origin;
 
@@ -379,7 +379,7 @@ bool player_fire_handtohand(LGPoint *, ubyte, ObjID *what_hit,int gun_triple)
          ss_point_convert(&(hand_pos.x),&(hand_pos.y),FALSE);
       find_fire_vector(&hand_pos, &vector);
 
-      // shift the origin point for the last attack which is right 
+      // shift the origin point for the last attack which is right
       // in front of you
       if (!i)
          origin.z = view_pt.z;
@@ -427,7 +427,7 @@ bool player_fire_handtohand(LGPoint *, ubyte, ObjID *what_hit,int gun_triple)
    {
       ubyte    val = HandtohandGunProps[SCTRIP(gun_triple)].energy_use;
       int      use;
-   
+
       if (val && !player_struct.energy)
       {
          use = 0;
@@ -453,7 +453,7 @@ bool player_fire_handtohand(LGPoint *, ubyte, ObjID *what_hit,int gun_triple)
          attack_mass, RAYCAST_ATTACK_SIZE,
          fix_make(HandtohandGunProps[SCTRIP(gun_triple)].attack_speed, 0),
          fix_make(HandtohandGunProps[SCTRIP(gun_triple)].attack_range, 0));
- 
+
       // see - if we hit an object - the hitting of the object will do an effect
       // so if we hit a wall - let's do the DARN sound effect
       if (target == OBJ_NULL)
@@ -500,7 +500,7 @@ bool decrease_ammo(ubyte slot, int shots)
       weapon_mfd_for_reload();
       return FALSE;
    }
-   
+
    player_struct.weapons[slot].ammo -= shots;
 
    if(player_struct.weapons[slot].ammo == 0)
@@ -550,7 +550,7 @@ bool player_fire_projectile(LGPoint *pos, LGRegion *r, ubyte slot, int gun_tripl
       bullet_mass, RAYCAST_ATTACK_SIZE,
       fix_make(AmmoProps[CPTRIP(ammo_triple)].bullet_speed, 0),
       fix_make(AmmoProps[CPTRIP(ammo_triple)].range, 0));
- 
+
    // check if we hit something on the wall
    if (target == OBJ_NULL)
       target = do_wall_hit(&origin, vector, ammo_triple,pos->x, pos->y,TRUE);
@@ -603,7 +603,7 @@ bool weapon_energy_drain(weapon_slot *ws, ubyte charge, ubyte max_charge)
    }
    else
       overload_beam = FALSE;
-   
+
    energy_used = (ubyte) ((((int) max_charge) * charge)/100);
 
    // energy_expulsion is used for lighting values
@@ -625,9 +625,9 @@ bool weapon_energy_drain(weapon_slot *ws, ubyte charge, ubyte max_charge)
 }
 
 // -------------------------------------------------------------------------------
-// player_fire_energy() 
-// 
-// Fires the energy weapon in the specified slot returns true 
+// player_fire_energy()
+//
+// Fires the energy weapon in the specified slot returns true
 // iff the weapon actually got a shot off.
 
 bool player_fire_energy(LGPoint *pos, ubyte slot, int gun_triple)
@@ -650,7 +650,7 @@ bool player_fire_energy(LGPoint *pos, ubyte slot, int gun_triple)
    // do the ray cast here
    get_phys_state(objs[PLAYER_OBJ].info.ph, &new_state,PLAYER_OBJ);
    origin.x = new_state.X;   origin.y = new_state.Y;   origin.z = new_state.Z;
- 
+
    find_fire_vector(pos, &vector);
    bullet_mass = fix_make(BeamGunProps[SCTRIP(gun_triple)].attack_mass, 0) * 30;
 
@@ -704,7 +704,7 @@ bool player_fire_slow_projectile_weapon(LGPoint *pos, ubyte slot, int gun_triple
 
 
 // here we actually generate the slow projectile and send it on it's way
-// note that this actually takes in the relevant low-level data, so that 
+// note that this actually takes in the relevant low-level data, so that
 // the source of the shot need not be a Weapon(tm) but can be a software, etc... -- Rob
 
 extern ubyte old_head, old_pitch;
@@ -775,7 +775,7 @@ bool player_fire_slow_projectile(int proj_triple, int fire_triple,fix proj_mass,
    loc.z = obj_height_from_fix(new_state.Z);
 
    // let's get the heading of the shot
-   head = obj_angle_from_fixang(fix_atan2(vector.y, vector.x)); 
+   head = obj_angle_from_fixang(fix_atan2(vector.y, vector.x));
    loc.h = (ubyte) ((320L-head) % 256);
 
    // let's get the pitch
@@ -783,7 +783,7 @@ bool player_fire_slow_projectile(int proj_triple, int fire_triple,fix proj_mass,
    loc.p = obj_angle_from_fixang(fix_atan2(vector.z, dist));
 
    // for slow projectiles - we don't care about the bank
-   loc.b = 0; 
+   loc.b = 0;
 
    // let's move it a little in front of the player
    if (global_fullmap->cyber)
@@ -797,8 +797,8 @@ bool player_fire_slow_projectile(int proj_triple, int fire_triple,fix proj_mass,
    }
 
    // get state gets the velocity - this from shamu the pirate!
-   EDMS_get_state(objs[PLAYER_OBJ].info.ph, &new_state); 
-                                                                                                    
+   EDMS_get_state(objs[PLAYER_OBJ].info.ph, &new_state);
+
    vector.x = (vector.x * proj_speed) + (obj_coord_from_fix(new_state.X_dot)*PHYSICS_RADIUS_UNIT)*2;
    vector.y = (vector.y * proj_speed) + (obj_coord_from_fix(new_state.Y_dot)*PHYSICS_RADIUS_UNIT)*2;
    vector.z = (vector.z * proj_speed) + (obj_height_from_fix(new_state.Z_dot)*PHYSICS_RADIUS_UNIT)*2;
@@ -896,8 +896,8 @@ bool fire_player_software(LGPoint *pos, LGRegion *, bool pull)
    switch (soft)
    {
       case SOFTWARE_DRILL:
-      case SOFTWARE_PULSER: 
-      case SOFTWARE_DISC: 
+      case SOFTWARE_PULSER:
+      case SOFTWARE_DISC:
       case SOFTWARE_SPEW:
          retval = player_fire_slow_projectile(cspace_slow_projs[soft], player_struct.softs.combat[soft], 0, FIX_UNIT, 3, pos);
          break;
@@ -912,9 +912,9 @@ bool handart_flash = FALSE;
 // fire_player_weapon()
 //
 
-char weapon_combat_fxs[] = { 
-SFX_GUN_MINIPISTOL    , 
-SFX_GUN_DARTPISTOL    , 
+char weapon_combat_fxs[] = {
+SFX_GUN_MINIPISTOL    ,
+SFX_GUN_DARTPISTOL    ,
 SFX_GUN_MAGNUM        ,
 SFX_GUN_ASSAULT       ,
 SFX_GUN_RIOT          ,
@@ -981,7 +981,7 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
       realpos.y = r->abs_y + RectHeight(r->r)/2;
 
 //¥¥¥      ui_mouse_put_xy(realpos.x,realpos.y);
-      // Heck we know this is the first time you're firing. 
+      // Heck we know this is the first time you're firing.
       pull = TRUE;
    }
 
@@ -1007,7 +1007,7 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
       {
          extern uiSlab fullscreen_slab;
          extern uiSlab main_slab;
-		
+
 		if (full_game_3d)
 	         uiPopSlabCursor(&fullscreen_slab);
 	     else
@@ -1254,7 +1254,7 @@ bool change_ammo_type(ubyte ammo_type)
 //--------------------------------------------------------------------
 // unload_current_weapon()
 //
-// removes all ammo and stuffs it in a partial clip. 
+// removes all ammo and stuffs it in a partial clip.
 
 void unload_current_weapon(void)
 {
@@ -1262,7 +1262,7 @@ void unload_current_weapon(void)
    int         subclass;
    int         type;
    int         triple;
-   int         clipsize; 
+   int         clipsize;
 
    ws = &player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]];
    triple = MAKETRIP(CLASS_GUN, ws->type, ws->subtype);
@@ -1348,7 +1348,7 @@ void cool_off_beam_weapons(void)
                   mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,FALSE,MFD_ACTIVE,TRUE);
                   check_temperature(ws, FALSE);
                }
-            }   
+            }
          }
       }
    }
@@ -1376,7 +1376,7 @@ void randomize_cursor_pos(LGPoint *cpos, LGRegion *reg, ubyte p)
 #ifdef SVGA_SUPPORT
    ss_mouse_convert(&(r.ul.x),&(r.ul.y),FALSE);
    ss_mouse_convert(&(r.lr.x),&(r.lr.y),FALSE);
-#endif   
+#endif
    cpos->x = max(r.ul.x,(min(newx,r.lr.x)));
    cpos->y = max(r.ul.y,(min(newy,r.lr.y)));
 
@@ -1426,7 +1426,7 @@ ubyte drain_energy(ubyte e)
    chg_set_flg(VITALS_UPDATE);
    if (ret > 0)
       bio_energy_var += ret*ENERGY_VAR_RATE;
-   
+
    return ret;
 }
 
@@ -1463,7 +1463,7 @@ ubyte weapon_colors[NUM_SC_GUN] = {RED_BASE+4,        // pistol
                               extern ubyte handart_count;
 // -----------------------------------------------------------------------------
 // change_selected_weapon()
-// 
+//
 // deals with changing cursor color
 //
 

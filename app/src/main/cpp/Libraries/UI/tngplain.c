@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #include "tngplain.h"
 //#include <_ui.h>
@@ -58,7 +58,7 @@ errtype tng_plain_init(void *ui_data, TNG *ptng, LGPoint size)
    return(OK);
 }
 
-// Deallocate all memory used by the TNG 
+// Deallocate all memory used by the TNG
 errtype tng_plain_destroy(TNG *ptng)
 {
    GUI_DEALLOC(ptng->ui_data, ptng->type_data);

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __MFDINT_H
 #define __MFDINT_H
@@ -28,40 +28,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: mfdint.h $
  * Revision 1.12  1994/09/10  23:48:52  tjs
  * proto panel_ref_unexpose.
- * 
+ *
  * Revision 1.11  1994/09/10  04:18:45  mahk
  * panel ref unexpose
- * 
+ *
  * Revision 1.10  1994/08/26  00:49:11  mahk
  * new mfd_string_shadow regime.
- * 
+ *
  * Revision 1.9  1994/04/25  01:43:28  xemu
  * color for unavails
- * 
+ *
  * Revision 1.8  1994/04/18  04:09:35  tjs
  * Added level overlays for map.
- * 
+ *
  * Revision 1.7  1994/03/31  02:06:08  mahk
  * Changed proto.
- * 
+ *
  * Revision 1.6  1994/02/15  11:07:42  mahk
  * Fixed a stupid typo.
- * 
+ *
  * Revision 1.5  1994/02/07  23:43:58  mahk
  * Hey, maybe you'll need this to compile.
- * 
+ *
  * Revision 1.4  1994/02/07  16:12:29  mahk
  * Transparent mfd stuff.
- * 
+ *
  * Revision 1.3  1993/12/15  13:52:39  mahk
  * Added mfd_string wrapping bool
- * 
+ *
  * Revision 1.2  1993/12/08  10:50:17  mahk
  * Added some useful stuff for mfdfunc.c
- * 
+ *
  * Revision 1.1  1993/12/08  10:32:09  mahk
  * Initial revision
- * 
+ *
  *
  */
 
@@ -91,7 +91,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MFD_BTTN_FLASH_TIME 256
 
 // From the MFD art resource
-#define MFD_ART_HUMAN 0       
+#define MFD_ART_HUMAN 0
 #define MFD_ART_TRIOP 1
 #define MFD_ART_DRUGS 2
 #define MFD_ART_CHIPS 3
@@ -110,7 +110,7 @@ extern ObjID panel_ref_unexpose(int mfd_id, int func);
 // Structures
 // ----------
 
-// An MFD points to an arbitrary number of slots, which can 
+// An MFD points to an arbitrary number of slots, which can
 // be shared by other MFD's.  A slot points to a expose/handler
 // function pair, which can be shared by multiple slots.
 
@@ -136,21 +136,21 @@ typedef struct {                             // Button panel structure
    LGRect       rect;
    LGRegion     reg;
    LGRegion     reg2;
-} MFD_bPanel;          
+} MFD_bPanel;
 
 typedef struct _MFD {
-  ubyte       id;     
+  ubyte       id;
   MFD_bPanel  bttn;                          // The button panel
   LGRect        rect;
   LGRegion      reg;
   LGRegion      reg2;
-} MFD; 
+} MFD;
 
 
 typedef struct _mfd_func {
 //   ubyte      id;
    void       (*expose)(MFD *mfd, ubyte control);
-   MFD_SimpHandler simp; // Retained for compatibility.  
+   MFD_SimpHandler simp; // Retained for compatibility.
    errtype    (*init)(struct _mfd_func*);
    uchar      priority;  // one is highest, zero is infinitely low
    // The following stuff is most likely to want to be zero.  so nyah
@@ -159,7 +159,7 @@ typedef struct _mfd_func {
    int        handler_count;
    MFDhandler handlers[NUM_MFD_HANDLERS];
 } MFD_Func;
-      
+
 
 extern void init_mfd_funcs();
 extern bool mfd_view_callback_full(uiEvent *e, LGRegion *r, void *udata);

@@ -6,20 +6,20 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __TEXTTOOL_H
 #define __TEXTTOOL_H
 
-// defines 
+// defines
 #include "lg_types.h"
 #include "rect.h"
 
@@ -46,11 +46,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #define TEXTTOOL_KB_DOWN_SHF     8
-#define TEXTTOOL_KB_CTRL_SHF     9 
+#define TEXTTOOL_KB_CTRL_SHF     9
 #define TEXTTOOL_KB_ALT_SHF     10
-#define TEXTTOOL_KB_SPECIAL_SHF 11 
+#define TEXTTOOL_KB_SPECIAL_SHF 11
 #define TEXTTOOL_KB_SHIFT_SHF   12
-#define TEXTTOOL_KB_2ND_SHF     13 
+#define TEXTTOOL_KB_2ND_SHF     13
 
 // okay, real text tool defines now...
 #define TTF_REPLACE    0x01    // replace any existing text (overwrite)
@@ -59,7 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TTF_INSWHOLE   0x08    // insert the text as a whole new line
 
 #define TTFI_FIXED     0x01    // For TextToolFontInfo
-#define TTFI_SPACE     0x02  
+#define TTFI_SPACE     0x02
 #define TTFI_PROP      0x04
 #define TTFI_FREE      0x80    // should tt_toast free the TTFI
 
@@ -141,10 +141,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TTEV_KILL      (0x1F|_NORO_M)
 #define TTEV_WRAP      (0x20|_FULL_M)
 
-//#define TTEV_          
+//#define TTEV_
 
-//#define TTEV_UNDO      
-//#define TTEV_REDO      
+//#define TTEV_UNDO
+//#define TTEV_REDO
 
 // structs
 typedef struct {
@@ -165,7 +165,7 @@ typedef struct {
 
 typedef struct {
    long wid, stl;              // malloced width of line, length of string
-   long chr[2];                // l/r edge of screen char off 
+   long chr[2];                // l/r edge of screen char off
    long pix[2];                // actual pix width there
    uchar flg;                  // various text flags
 } TTCheats;

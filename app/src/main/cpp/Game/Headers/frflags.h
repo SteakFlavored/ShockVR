@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // flags
 #define FR_HACKCAM_SHFT   31
@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FR_WINDOWD_MASK   (0xf<<FR_WINDOWD_SHFT)
 #define FR_CURFREE_SHFT   20
 #define FR_CURFREE_MASK   (0xf<<FR_CURFREE_SHFT)
-#define FR_NOTRANS_SHFT   19           // 
+#define FR_NOTRANS_SHFT   19           //
 #define FR_NOTRANS_MASK   (0x1<<FR_NOTRANS_SHFT)
 #define FR_OVERLAY_SHFT   16           // what is being overlayed/ie. hand art or pings
 #define FR_OVERLAY_MASK   (0x7<<FR_OVERLAY_SHFT)

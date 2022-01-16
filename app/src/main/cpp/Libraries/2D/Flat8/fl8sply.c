@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/fl8sply.c $
@@ -48,19 +48,19 @@ int gri_spoly_loop (grs_tmap_loop_info *ti)
 	fix 		xl,xr;
 	uchar 	*ti_d;
 	fix			ti_li,ti_ri;
-	
+
 	xl=ti->left.x;
 	xr=ti->right.x;
 	ti_li = ti->left.i;
 	ti_ri = ti->right.i;
 	ti_d = ti->d;
-	
-	
+
+
 	do {
 	  i=ti_li;
 	  di=fix_div(ti_ri-i,xr-xl);
 	  i+=fix_mul(fix_ceil(xl)-xl,di);
-	
+
 	  if ((d=fix_cint(xr)-fix_cint(xl)) > 0) {
 	     switch (ti->bm.hlog) {
 	        int x;
@@ -103,7 +103,7 @@ int gri_spoly_loop (grs_tmap_loop_info *ti)
 	  ti_li+=ti->left.di;
 	  ti_ri+=ti->right.di;
 	} while ((--(ti->n))>0);
-	
+
 	ti->d = ti_d;
 	ti->left.x = xl;
 	ti->right.x = xr;

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/blend.c $
@@ -91,7 +91,7 @@ bool gr_init_blend(int log_blend_levels)
    if (log_blend_levels>0)
    {
       int fac=GR_BLEND_TABLE_RES>>log_blend_levels;   /* base blend factor*/
-      int tab_cnt=(1<<log_blend_levels)-1, i;         /* number of tables, loop control */ 
+      int tab_cnt=(1<<log_blend_levels)-1, i;         /* number of tables, loop control */
 
       if (grd_blend!=NULL) if (!gr_free_blend()) return FALSE; /* something went horribly wrong */
 //	   if ((grd_blend=(uchar *) gr_malloc(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return FALSE; /* x 64k tables */

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/cardmfd.c $
@@ -59,7 +59,7 @@ void mfd_accesscard_expose(MFD* mfd, ubyte control);
 #define Y_STEP 5
 #define DISPLAY_TOP_MARGIN 15
 #define LEFT_X 2
-#define RIGHT_X (MFD_VIEW_WID - 2) 
+#define RIGHT_X (MFD_VIEW_WID - 2)
 #define CODES_WID (RIGHT_X - LEFT_X + 1)
 #define LAST_BITS(mfd) (*(ulong*)&(player_struct.mfd_func_data[MFD_CARD_FUNC][mfd*sizeof(int)]))
 #define ITEM_COLOR 0x5A
@@ -69,7 +69,7 @@ void mfd_accesscard_expose(MFD* mfd, ubyte control)
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
    {
-      // Do unexpose stuff here.  
+      // Do unexpose stuff here.
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
    {
@@ -106,7 +106,7 @@ void mfd_accesscard_expose(MFD* mfd, ubyte control)
       }
 
       // I wonder if the ||= operator exists.
-      full = full || bits != lastbits; 
+      full = full || bits != lastbits;
       // Lets see what access codes we have.
       if (full)
       {
@@ -144,12 +144,12 @@ void mfd_accesscard_expose(MFD* mfd, ubyte control)
 
       // Pop the canvas
       gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the 
-      // updated mfd to screen 
+      // Now that we've popped the canvas, we can send the
+      // updated mfd to screen
       mfd_update_rects(mfd);
 
    }
-  
+
 }
 
 

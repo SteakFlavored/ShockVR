@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __OBJAPP_H
 #define __OBJAPP_H
 
 /*
 ** $Header: r:/prj/cit/src/inc/RCS/objapp.h 1.25 1994/08/30 07:15:21 xemu Exp $
- * 
+ *
 */
 
 //////////////////////////////
@@ -67,7 +67,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // so that the object system can take the address of the result.
 
 ////////////////////////////// HERE IS THE STUFF YOU MUST CHANGE
-//                          //  
+//                          //
 //                          ////////////////////////////////
 
 //#include <map.h>
@@ -143,7 +143,7 @@ typedef struct {
 #define SIZEOF_AN_OBJLOC 8
 typedef struct {
 	ushort x, y;								// high 8 bits: what square      low 8 bits: where within square
-   ubyte z;	
+   ubyte z;
    ubyte p, h, b;
 } ObjLoc;
 
@@ -154,13 +154,13 @@ typedef struct {
 #ifdef SAFE_FIX
 #define OBJ_LOC_VAL_TO_FIX(value) (fix_make((value >> 8), ((value & 0xFF) << 8)))
 #else
-#define OBJ_LOC_VAL_TO_FIX(value) (((fix)value)<<8)				
+#define OBJ_LOC_VAL_TO_FIX(value) (((fix)value)<<8)
 #endif
 
 typedef struct {
 	char ph;
    byte type;
-   short current_hp;       
+   short current_hp;
    ubyte make_info;                    // maker, as in Zortech MK III laser rifle or whatever
    ubyte current_frame;                // animdata
    ubyte time_remainder;               // animdata
@@ -170,7 +170,7 @@ typedef struct {
 typedef struct {
 	int ph;
    byte type;
-   short current_hp;       
+   short current_hp;
    ubyte make_info;                    // maker, as in Zortech MK III laser rifle or whatever
    ubyte current_frame;                // animdata
    ubyte time_remainder;               // animdata
@@ -188,7 +188,7 @@ typedef struct {
 #endif
 
 //                          ////////////////////////////////
-//                          //  
+//                          //
 ////////////////////////////// WASN'T THAT EASY?
 
 typedef struct {
@@ -232,7 +232,7 @@ typedef struct {
 #endif
 
 #if (SIZEOF_AN_OBJLOC==4)
-#define ObjLocEqual(bin1, bin2)        (*((int *)(&bin1))==*((int *)(&bin2))) 
+#define ObjLocEqual(bin1, bin2)        (*((int *)(&bin1))==*((int *)(&bin2)))
 #elif (SIZEOF_AN_OBJLOC==2)
 #define ObjLocEqual(bin1, bin2)        (*((short *)(&bin1))==*((short *)(&bin2)))
 #elif (SIZEOF_AN_OBJLOC==1)
@@ -259,7 +259,7 @@ typedef struct {
 #define ObjInfoSprint(str,info)
 
 //                          ////////////////////////////////
-//                          //  
+//                          //
 ////////////////////////////// END OF STUFF YOU MUST CHANGE
 
 ////////////////////////////////////////////////////////////

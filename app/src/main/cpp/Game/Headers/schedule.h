@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __SCHEDULE_H
 #define __SCHEDULE_H
@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "schedtyp.h"
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-   DER SCHEDUMIFIERINEN 
+   DER SCHEDUMIFIERINEN
    -----------------------------------------
    The game has a number of schedules, probably one
    in the map and another in the player struct.
@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    function array indexed on event type.
    Each schedule can have a different notion of time;
    although typically we will schedule on player_struct.game_time.
-   
+
 */
 
 // -----------------------------
@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct _sched_event
 {
    ushort timestamp;
-   ushort type; 
+   ushort type;
    char data[SCHED_DATASIZ];
 } SchedEvent;
 
@@ -66,7 +66,7 @@ typedef void (*SchedHandler)(Schedule* s, SchedEvent* ev);
 // Convert a tmd_ticks time to a scheduler timestamp
 // When building an event for a schedule that uses
 // player_struct.game_time or .real_time, use these
-// macros to get scheduler stamps.  
+// macros to get scheduler stamps.
 #define TICKS2TSTAMP(t) ((ushort)(((t) >> 4) & 0xFFFF))
 #define TSTAMP2TICKS(t) ((t) << 4)
 
@@ -88,23 +88,23 @@ typedef struct _expose_data
    ubyte type;
    ubyte tsecs;
    ubyte count;
-} SchedExposeData; 
+} SchedExposeData;
 
 // Prototypes
 errtype schedule_init(Schedule* s,int size, bool grow);
 // Initialize a schedule.  If grow is true, the schedule
-// will realloc memory when it needs space for more events. 
+// will realloc memory when it needs space for more events.
 // size is the number of events the shedule can hold.
 
 errtype schedule_free(Schedule* s);
 // Free a schedule.
 
 errtype schedule_event(Schedule* s, SchedEvent* ev);
-// Add an event to the specified schedule.  
+// Add an event to the specified schedule.
 
 errtype schedule_run(Schedule* s, ushort time);
 // Run the schedule to the specified time, dispatching all events
-// which are scheduled for earlier than time.  
+// which are scheduled for earlier than time.
 
 errtype schedule_reset(Schedule* s);
 // Removes all events from the schedule without dispatching them.

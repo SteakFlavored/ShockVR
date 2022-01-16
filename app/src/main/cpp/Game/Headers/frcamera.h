@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrCamera.h
@@ -26,26 +26,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Citadel Renderer
  *  camera position/modification/creation system
- *  
+ *
  * $Log: frcamera.h $
  * Revision 1.6  1994/04/10  05:16:16  dc
  * support for cyberman, vfx1, other 6d control structure, inc. HEAD_H
- * 
+ *
  * Revision 1.5  1994/01/31  05:37:27  dc
  * yea yea yea
- * 
+ *
  * Revision 1.4  1994/01/02  17:16:19  dc
  * Initial revision
- * 
+ *
  * Revision 1.3  1993/09/17  17:00:31  mahk
  * Added 360 support
- * 
+ *
  * Revision 1.2  1993/09/16  23:55:06  dc
  * support for fr internal camera view changing
- * 
+ *
  * Revision 1.1  1993/09/05  20:58:57  dc
  * Initial revision
- * 
+ *
  */
 
 #ifndef __FRCAMERA_H

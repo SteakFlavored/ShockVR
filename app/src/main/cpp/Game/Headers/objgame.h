@@ -6,17 +6,17 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
-#ifndef __OBJGAME_H 
+#ifndef __OBJGAME_H
 #define __OBJGAME_H
 
 /*
@@ -39,7 +39,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
    ubyte trap_type;
@@ -57,15 +57,15 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   short locked;     
+   short locked;
    ubyte stringnum;
    ubyte cosmetic_value;
    ubyte access_level;
    ubyte autoclose_time;
-   ObjID other_half;    
+   ObjID other_half;
 } ObjDoor;
 
 typedef struct {
@@ -76,7 +76,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
    ubyte start_frame;
@@ -92,7 +92,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
    ubyte trap_type;
@@ -109,7 +109,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
    int contents1;
@@ -283,7 +283,7 @@ typedef struct _OtherCorpseContainerProp {
 #define NUM_DOOR	(NUM_NORMAL_DOOR + NUM_DOORWAYS_DOOR + NUM_FORCE_DOOR + NUM_ELEVATOR_DOOR + NUM_SPECIAL_DOOR)
 #define NUM_ANIMATING	(NUM_OBJECT_ANIMATING + NUM_TRANSITORY_ANIMATING + NUM_EXPLOSION_ANIMATING)
 #define NUM_TRAP	(NUM_TRIGGER_TRAP + NUM_FEEDBACKS_TRAP + NUM_SECRET_TRAP)
-#define NUM_CONTAINER	(NUM_ACTUAL_CONTAINER + NUM_WASTE_CONTAINER + NUM_LIQUID_CONTAINER + NUM_MUTANT_CORPSE_CONTAINER + NUM_ROBOT_CORPSE_CONTAINER + NUM_CYBORG_CORPSE_CONTAINER + NUM_OTHER_CORPSE_CONTAINER) 
+#define NUM_CONTAINER	(NUM_ACTUAL_CONTAINER + NUM_WASTE_CONTAINER + NUM_LIQUID_CONTAINER + NUM_MUTANT_CORPSE_CONTAINER + NUM_ROBOT_CORPSE_CONTAINER + NUM_CYBORG_CORPSE_CONTAINER + NUM_OTHER_CORPSE_CONTAINER)
 
 // Enumeration of subclasses
 // Fixture
@@ -318,7 +318,7 @@ typedef struct _OtherCorpseContainerProp {
 #define CONTAINER_SUBCLASS_MUTANT_CORPSE 3
 #define CONTAINER_SUBCLASS_ROBOT_CORPSE 4
 #define CONTAINER_SUBCLASS_CYBORG_CORPSE 5
-#define CONTAINER_SUBCLASS_OTHER_CORPSE 6 
+#define CONTAINER_SUBCLASS_OTHER_CORPSE 6
 
 #ifdef __OBJSIM_SRC
 FixtureProp	FixtureProps[NUM_FIXTURE];

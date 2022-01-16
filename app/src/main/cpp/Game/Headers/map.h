@@ -6,64 +6,64 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __MAP_H
 #define __MAP_H
 
 /*
- * 
+ *
  *
  * $Source: r:/prj/cit/src/inc/RCS/map.h $
  * $Revision: 1.41 $
  * $Author: minman $
  * $Date: 1994/08/28 02:38:51 $
- *  
+ *
  * $Log: map.h $
  * Revision 1.41  1994/08/28  02:38:51  minman
  * hey / we have a correct macro for changing fixang to objang
- * 
+ *
  * Revision 1.40  1994/07/21  16:28:25  dc
  * im a moron, forgot to add reshifting to flags and all last night
  * now ALL MUST PAY
  * AND PAY
  * BLOOD
  * HAH HAH HAH HAH GURGLE
- * 
+ *
  * Revision 1.39  1994/07/21  01:51:20  dc
  * wanted to change some #defines
- * 
+ *
  * Revision 1.38  1994/01/26  23:34:08  mahk
  * Changed hazard bit stuff.
- * 
+ *
  * Revision 1.37  1994/01/22  18:56:59  dc
  * new map regieme, take 4
- * 
+ *
  * Revision 1.36  1994/01/02  17:17:09  dc
  * indoor terrain renderer
- * 
+ *
  * Revision 1.35  1993/10/18  03:35:49  dc
  * adding dumb-o @ifndef __SPEW
- * 
+ *
  * Revision 1.34  1993/09/08  00:59:21  xemu
  * increase map number...EIT!
  * sorry, had to do it for loved_textures
- * 
+ *
  * Revision 1.33  1993/09/06  05:57:19  mahk
  * Map has been packed.
- * 
+ *
  * Revision 1.31  1993/09/05  21:01:52  dc
  * added the great "pile of translations"
  * soon tilenames will get taken out, but not yet
- * 
+ *
  */
 #include "schedtyp.h"
 
@@ -360,7 +360,7 @@ void map_free(void);
 #else
 #define fm_x_sz(fm_ptr)     ((fm_ptr)->x_size)
 #define fm_y_sz(fm_ptr)     ((fm_ptr)->y_size)
-#define fm_x_shft(fm_ptr)   ((fm_ptr)->x_shft)                              
+#define fm_x_shft(fm_ptr)   ((fm_ptr)->x_shft)
 #define fm_y_shft(fm_ptr)   ((fm_ptr)->y_shft)
 #endif
 
@@ -375,7 +375,7 @@ void map_free(void);
 #define MAP_XSIZE           (fm_x_sz(global_fullmap))
 #define MAP_YSHF            (fm_y_shft(global_fullmap))
 #define MAP_XSHF            (fm_x_shft(global_fullmap))
-#define MAP_ZSHF            (fm_z_shft(global_fullmap)) 
+#define MAP_ZSHF            (fm_z_shft(global_fullmap))
 
 #define fm_map(fm_ptr)      ((fm_ptr)->map)
 #define MAP_MAP             (fm_map(global_fullmap))
@@ -387,7 +387,7 @@ void map_free(void);
 #define MAP_ROWS 64
 #define MAP_COLS 64
 
-#define SLOPE_TOTAL   5 
+#define SLOPE_TOTAL   5
 #define SLOPE_SHIFT   MAP_ZSHF
 #define SLOPE_SHIFT_U SLOPE_SHIFT
 #define SLOPE_SHIFT_D (SLOPE_TOTAL-SLOPE_SHIFT_U)

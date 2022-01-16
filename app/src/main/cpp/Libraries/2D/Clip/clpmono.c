@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/clpmono.c $
  * $Revision: 1.4 $
  * $Author: kaboom $
  * $Date: 1993/10/19 09:50:10 $
- * 
+ *
  * Routines for clipping monochrome bitmaps to a rectangle.
  *
  * This file is part of the 2d library.
@@ -29,13 +29,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: clpmono.c $
  * Revision 1.4  1993/10/19  09:50:10  kaboom
  * Replaced #include <grd.h" with new headers split from grd.h.
- * 
+ *
  * Revision 1.3  1993/10/01  15:38:56  kaboom
  * Cleaned up code some; converted to using clpcon.h instead of clip.h.
- * 
+ *
  * Revision 1.2  1993/05/17  13:45:11  kaboom
  * Now handles padded clipping rectangle correctly.
- * 
+ *
  * Revision 1.1  1993/02/22  14:41:36  kaboom
  * Initial revision
  */

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __OBJCRIT_H
 #define __OBJCRIT_H
@@ -40,7 +40,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
    fix des_heading, des_speed, urgency;
@@ -73,7 +73,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
    fix des_heading, des_speed, urgency;
@@ -123,10 +123,10 @@ typedef struct CritterProp {
    ubyte perception;        // each ai interval that player is seeable, this is percent of detection
    ubyte defense;
    ubyte proj_offset;      // slow projectile offset (y)
-//   int speed;            
+//   int speed;
    int   flags;            // flying??, shield??, fixed point?, does it move??
    bool mirror;            // should it's views be mirrored?
-   ubyte frames[NUM_CRITTER_POSTURES];           // number of animation frames.  
+   ubyte frames[NUM_CRITTER_POSTURES];           // number of animation frames.
    ubyte anim_speed;
    ubyte attack_sound;     // play this when attacking.  -1 for no sound.
    ubyte near_sound;       // play when creature is nearby
@@ -208,10 +208,10 @@ typedef struct RobobabeCritterProp {
 #define ATTACK_REST_CRITTER_POSTURE   3
 #define KNOCKBACK_CRITTER_POSTURE     4
 #define DEATH_CRITTER_POSTURE         5
-#define DISRUPT_CRITTER_POSTURE       6  
+#define DISRUPT_CRITTER_POSTURE       6
 #define ATTACKING2_CRITTER_POSTURE    7
 
-#define FIRST_FRONT_POSTURE           ATTACKING_CRITTER_POSTURE 
+#define FIRST_FRONT_POSTURE           ATTACKING_CRITTER_POSTURE
 #define DEFAULT_CRITTER_POSTURE       STANDING_CRITTER_POSTURE
 
 // single-view postures

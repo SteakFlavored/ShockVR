@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/clplin.c $
  * $Revision: 1.4 $
  * $Author: kaboom $
  * $Date: 1993/10/19 09:50:06 $
- * 
+ *
  * Routines for clipping fixed-point lines to a rectangle.
  *
  * This file is part of the 2d library.
@@ -29,16 +29,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: clplin.c $
  * Revision 1.4  1993/10/19  09:50:06  kaboom
  * Replaced #include <grd.h" with new headers split from grd.h.
- * 
+ *
  * Revision 1.3  1993/10/01  15:38:55  kaboom
  * Cleaned up code some; converted to using clpcon.h instead of clip.h.
- * 
+ *
  * Revision 1.2  1993/06/15  20:16:51  kaboom
  * Fixed clipper to deal with padded clipping region.
- * 
+ *
  * Revision 1.1  1993/02/22  14:41:22  kaboom
  * Initial revision
- * 
+ *
  ********************************************************************
  * Log from old clip.c:
  *
@@ -51,7 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Fixed bug in fixed-point line clipper which was causing hangs.
  * Several of the clipping region values were being read as integers,
  * not fixed-point numbers.
- */ 
+ */
 
 #include "grs.h"
 #include "clpcon.h"

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #include "tngapp.h"
 #include "tngslidr.h"
@@ -52,7 +52,7 @@ errtype tng_slider_full_init(void *ui_data, TNG *ptng, TNGStyle *sty, int alignm
    psltng->increm = increm;
    psltng->size = size;
    psltng->dragging = FALSE;
-   
+
    psltng->left_id = left_id;
    psltng->right_id = right_id;
    psltng->up_id = up_id;
@@ -73,7 +73,7 @@ errtype tng_slider_destroy(TNG *ptng)
 errtype tng_slider_2d_draw(TNG *ptng, ushort partmask, LGPoint loc)
 {
    LGPoint size;
-   Ref decid, incid;   
+   Ref decid, incid;
    LGPoint incsize, decsize,slidsize;
    LGPoint p1,p2,p3;
    TNG_slider *psltng;

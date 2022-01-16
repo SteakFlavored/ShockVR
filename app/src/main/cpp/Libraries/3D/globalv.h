@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //
 // $Source: r:/prj/lib/src/3d/RCS/globv.h $
@@ -27,20 +27,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // $Log: globv.asm $
 // Revision 1.5  1994/11/06  19:10:28  jaemz
 // Allow stereo to be externed even in non stereo version to test
-// 
+//
 // Revision 1.4  1994/09/28  19:01:00  jaemz
-// Fixed stereo bug 
-// 
+// Fixed stereo bug
+//
 // Revision 1.3  1994/09/20  13:29:08  jaemz
 // Added globals for lighting
-// 
+//
 // Revision 1.2  1994/08/18  03:46:56  jaemz
 // Changed stereo glob names to have underscore for c
-// 
+//
 // Revision 1.1  1994/08/04  17:47:21  jaemz
 // Initial revision
-// 
-// 
+//
+//
 
 
 #include "lg.h"
@@ -73,7 +73,7 @@ extern fix 				pixel_ratio;    		//  fix     ?       ;copy from 2d drv_cap
 extern long				window_width;  		//  dd      ?
 extern long				window_height; 		//  dd      ?
 
-extern long				ww2;  							//  dd      ?       ;one-half widht,height 
+extern long				ww2;  							//  dd      ?       ;one-half widht,height
 extern long				wh2; 							//  dd      ?       ;..for texture mapper
 
 extern long				_scrw; 						//  dd      ?       ;need to do double-word mul
@@ -105,14 +105,14 @@ extern char			axis_neg_flag;   //			db      ?
 // Lighting globals
 extern char 			_g3d_light_type;		// db      0       ; The lighting type, see above
 
-extern fix				_g3d_amb_light;  				// fix    0       ; amount of ambient light 
+extern fix				_g3d_amb_light;  				// fix    0       ; amount of ambient light
 extern fix				_g3d_diff_light; 	// fix    10000h  ; intensity of light source
 extern fix				_g3d_spec_light; 				// fix    0       ; amount of spec light
 extern fix				_g3d_flash;       			// fix    0       ; specular flash point below which none is applied
 // note that specular light is used to provide a "flash" mostly
 // so you can artificially inflate it a bit, or we could try
 // funny functions to make it "flash" only within a certain
-// range.  
+// range.
 
 extern g3s_vector	_g3d_light_src;			//  g3s_vector      <>      ; light source, either local or vector
 extern g3s_vector	_g3d_light_trans;		//  g3s_vector   		<>      ; point source in view coords
@@ -124,7 +124,7 @@ extern fix					_g3d_ldotv;  				//  fix     ?       ; light vector dotted with v
 extern fix					_g3d_sdotl;    			//  fix     ?       ; surface vector dotted with light vector (for diffuse and spec)
 extern fix					_g3d_sdotv;    			//  fix     ?       ; surface vector dotted with view vector (ostensibly jnorm)
 
-extern long				_g3d_light_tab;		//  dd      0       ; lighting table with 32 or 24 entries.  Should go from black to white, 
+extern long				_g3d_light_tab;		//  dd      0       ; lighting table with 32 or 24 entries.  Should go from black to white,
 
 
 // stereo globals, read em and weep

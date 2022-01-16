@@ -6,29 +6,29 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/fl8lp.c $
  * $Revision: 1.23 $
  * $Author: kevin $
  * $Date: 1994/11/02 19:39:45 $
- * 
+ *
  * lit full perspective texture mapper.
- * 
+ *
 */
 
 // ************************************************************************************
 // ************************************************************************************
-// 
+//
 //  MLA - don't think we need to optimize this, its in C on the PC too
 //
 // ************************************************************************************
@@ -126,7 +126,7 @@ void gri_lit_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_set
       pi.i=vpl[n_left]->i;
       if (pi.xr-pi.x) pi.di=(vpl[n_right]->i-pi.i)/(pi.xr-pi.x);
       else {pi.di = 0x7fffffff; if (vpl[n_right]->i-pi.i < 0) pi.di = -pi.di;}
-      
+
       pi.cl=fix_mul(pi.dxl,vpl[n_left]->y)-fix_mul(pi.dyl,vpl[n_left]->x);
       if (pi.x * pi.dyl - fix_mul(fix_make(pi.yp-1,0) + pi.x * pi.scan_slope,pi.dxl) + pi.cl<0) {
          pi.dyl=-pi.dyl;

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __TNGQBOX_H
 #define __TNGQBOX_H
@@ -28,46 +28,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: tngqbox.h $
  * Revision 1.13  1994/03/10  04:31:20  xemu
  * uint slots
- * 
+ *
  * Revision 1.12  1993/12/31  18:01:38  xemu
  * rename slots
- * 
+ *
  * Revision 1.11  1993/10/11  20:27:41  dc
  * Angle is fun, fun fun fun
- * 
+ *
  * Revision 1.10  1993/09/16  14:58:06  mahk
  * Added QB_FIX_SLOT
- * 
+ *
  * Revision 1.9  1993/08/11  11:11:06  xemu
  * stringset display option
- * 
+ *
  * Revision 1.8  1993/06/24  10:26:47  xemu
  * QB_ADDCLOSE
- * 
+ *
  * Revision 1.7  1993/06/23  18:56:11  xemu
  * byte, hex, octal, binary
- * 
+ *
  * Revision 1.6  1993/06/16  02:22:38  xemu
  * new options
- * 
+ *
  * Revision 1.5  1993/06/10  13:34:49  xemu
  * added QB_GRABFOCUS
- * 
+ *
  * Revision 1.4  1993/04/30  11:40:00  xemu
  * slider_size to aux_size
- * 
+ *
  * Revision 1.3  1993/04/29  19:02:51  xemu
  * support options
- * 
+ *
  * Revision 1.2  1993/04/28  14:40:26  mahk
  * Preparing for second exodus
- * 
+ *
  * Revision 1.1  1993/04/27  16:37:18  xemu
  * Initial revision
- * 
+ *
  * Revision 1.1  1993/04/22  15:09:55  xemu
  * Initial revision
- * 
+ *
  *
  */
 
@@ -128,7 +128,7 @@ typedef struct {
 // will close it down.  If you want your own code to get run
 // when quickbox closed, don't use this option!
 #define QB_ADDCLOSE     0x08
-  
+
 // ********************
 // *** SLOT OPTIONS ***
 // ********************
@@ -136,11 +136,11 @@ typedef struct {
 // no options for this slot, plain vanilla
 #define QB_NO_OPTION    0x0000
 
-// the var can be toggled up and down with clickable arrows. 
+// the var can be toggled up and down with clickable arrows.
 // SUPPORTED TYPES:  INT_SLOT, SHORT_SLOT, BYTE_SLOT, BOOL_SLOT
-#define QB_ARROWS       0x0001UL   
+#define QB_ARROWS       0x0001UL
 
-// the var has an associated slider which can be used to set it's value.  Requires parameters 
+// the var has an associated slider which can be used to set it's value.  Requires parameters
 // which are the max and min values of the variable.  If variables not provided, default to 0 and 100
 // for minimum and maximum.
 // SUPPORTED TYPES:  INT_SLOT, SHORT_SLOT, BYTE_SLOT
@@ -148,7 +148,7 @@ typedef struct {
 
 // the var is for output purposes only and should not be allowed to be changed.
 // SUPPORTED TYPES:  ALL
-#define QB_RD_ONLY      0x0004UL                               
+#define QB_RD_ONLY      0x0004UL
 
 // limit the upper and lower limit of the start to p1 min and p2 max.
 // SUPPORTED TYPES:  INT_SLOT, SHORT_SLOT, BYTE_SLOT
@@ -183,12 +183,12 @@ typedef struct {
 
 // Prototypes
 
-// Initializes the TNG 
+// Initializes the TNG
 errtype tng_quickbox_init(void *ui_data, TNG *ptng, TNGStyle *sty, ushort options, LGPoint slot_size, LGPoint spacing, LGPoint border,
    Ref left_id, Ref right_id);
 
 // Add a line to a quickbox.  slot_type describes the type of slot, var is a pointer to the variable to be
-// displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o 
+// displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o
 // combinations of options and types might not be implemented.
 errtype tng_quickbox_add(char *label, int slot_type, void *var, ulong slot_options);
 
@@ -196,7 +196,7 @@ errtype tng_quickbox_add(char *label, int slot_type, void *var, ulong slot_optio
 // this form of accessing.
 errtype tng_quickbox_add_parm(char *label, int slot_type, void *var, ulong slot_options, void *parm1, void *parm2);
 
-// Deallocate all memory used by the TNG 
+// Deallocate all memory used by the TNG
 errtype tng_quickbox_destroy(TNG *ptng);
 
 // This represents that the quickbox is done being created and is ready for display, input, etc.
@@ -206,7 +206,7 @@ errtype tng_quickbox_end();
 // assumes all appropriate setup has already been done!
 errtype tng_quickbox_2d_draw(TNG *ptng, ushort partmask, LGPoint loc);
 
-// Fill in ppt with the size of the TNG 
+// Fill in ppt with the size of the TNG
 errtype tng_quickbox_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG

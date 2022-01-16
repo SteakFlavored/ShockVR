@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/fl8cnv.c $
  * $Revision: 1.78 $
  * $Author: kevin $
  * $Date: 1994/11/12 02:21:59 $
- * 
+ *
  * General-purpose routines for drawing into straight-8 bitmaps.
  * This file is part of the 2d library.
  *
@@ -51,19 +51,19 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
    (ptr_type) temp_point,
    (ptr_type) flat8_set_upixel,          /* 8-bit pixel set/get */
    (ptr_type) gen_set_pixel_interrupt,
-   gr_null, 		
-   gr_null, 		
+   gr_null,
+   gr_null,
    (ptr_type) gen_urect,
    (ptr_type) gen_rect,
    (ptr_type) gen_ubox,
    (ptr_type) gen_box,
 
    gr_null,                   /* fixed-point rendering primitives */
-   gr_null,       
-   gr_null, 		
-   gr_null, 		
-   gr_null, 		
-   gr_null, 		
+   gr_null,
+   gr_null,
+   gr_null,
+   gr_null,
+   gr_null,
    (ptr_type) temp_upoly,
    (ptr_type) temp_poly,
    (ptr_type) temp_uspoly,
@@ -385,7 +385,7 @@ gr_not_imp, //   (ptr_type) gen_roll_bitmap,   MLA - not used?
 
    (ptr_type) gen_font_ustring,               /* text/font functions. */
    (ptr_type) gen_font_string,
-   (ptr_type) gen_font_scale_ustring,	
+   (ptr_type) gen_font_scale_ustring,
    (ptr_type) gen_font_scale_string,
    (ptr_type) gen_font_uchar,
    (ptr_type) gen_font_char,

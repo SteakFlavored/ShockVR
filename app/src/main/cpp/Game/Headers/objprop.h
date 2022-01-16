@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __OBJPROP_H
 #define __OBJPROP_H
@@ -42,7 +42,7 @@ typedef struct ObjProp {
    ubyte render_type;
    ubyte physics_model;
    ubyte hardness;
-   ubyte pep; 
+   ubyte pep;
    ubyte physics_xr;
    ubyte physics_y;
    ubyte physics_z;
@@ -81,7 +81,7 @@ typedef struct ObjProp {
 #define NUM_SC_CONTAINER   7
 #define NUM_SC_CRITTER     5
 
-#define NUM_SUBCLASSES  NUM_SC_GUN + NUM_SC_AMMO + NUM_SC_PHYSICS + NUM_SC_GRENADE + NUM_SC_DRUG + NUM_SC_HARDWARE + NUM_SC_SOFTWARE + NUM_SC_BIGSTUFF + NUM_SC_SMALLSTUFF + NUM_SC_FIXTURE + NUM_SC_DOOR + NUM_SC_ANIMATING + NUM_SC_TRAP + NUM_SC_CONTAINER + NUM_SC_CRITTER 
+#define NUM_SUBCLASSES  NUM_SC_GUN + NUM_SC_AMMO + NUM_SC_PHYSICS + NUM_SC_GRENADE + NUM_SC_DRUG + NUM_SC_HARDWARE + NUM_SC_SOFTWARE + NUM_SC_BIGSTUFF + NUM_SC_SMALLSTUFF + NUM_SC_FIXTURE + NUM_SC_DOOR + NUM_SC_ANIMATING + NUM_SC_TRAP + NUM_SC_CONTAINER + NUM_SC_CRITTER
 
 #ifdef __OBJSIM_SRC
 uchar num_subclasses[NUM_CLASSES] = {

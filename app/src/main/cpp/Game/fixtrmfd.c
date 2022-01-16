@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/fixtrmfd.c $
@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ============================================================
 
 
-/* This is the MFD for buttons that zoom into the MFD. */ 
+/* This is the MFD for buttons that zoom into the MFD. */
 
 
 // -------
@@ -86,10 +86,10 @@ bool mfd_fixture_handler(MFD* m, uiEvent* e);
 // ---------------
 
 /* This gets called whenever the MFD needs to redraw or
-   undraw.  
+   undraw.
    The control value is a bitmask with the following bits:
    MFD_EXPOSE: Update the mfd, if MFD_EXPOSE_FULL is not set,
-               update incrementally.  
+               update incrementally.
    MFD_EXPOSE_FULL: Fully redraw the mfd, implies MFD_EXPOSE
 
    if no bits are set, the mfd is being "unexposed;" its display
@@ -140,7 +140,7 @@ void mfd_fixture_expose(MFD* mfd, ubyte control)
          fd->last_obj = player_struct.panel_ref;
          mfd_string_wrap = wrap;
       }
-      // this is button code. 
+      // this is button code.
       FIXTURE_STATE = objs[player_struct.panel_ref].info.current_frame;
       if (objs[player_struct.panel_ref].info.inst_flags & CLASS_INST_FLAG2)
          FIXTURE_STATE = !FIXTURE_STATE;
@@ -158,18 +158,18 @@ void mfd_fixture_expose(MFD* mfd, ubyte control)
       }
 
       // on a full expose, make sure to draw everything
- 
+
       if (full)
          mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
       // Pop the canvas
       gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the 
+      // Now that we've popped the canvas, we can send the
       // updated mfd to screen
       mfd_update_rects(mfd);
 
    }
-  
+
 }
 
 // ----------------

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #include <stdio.h>
 #include <string.h>
@@ -71,7 +71,7 @@ errtype tng_buttonarray_destroy(TNG *ptng)
    return(OK);
 }
 
-// Initializes the TNG 
+// Initializes the TNG
 errtype tng_buttonarray_init(void *ui_data, TNG *ptng, TNGStyle *sty, ushort options, LGPoint msize, LGPoint wsize, LGPoint bsize,
    int num_sel)
 {
@@ -198,7 +198,7 @@ errtype tng_buttonarray_draw_button(TNG *ptng, int i, int j)
    LGRect clip;
 
    r.ul.x = loc.x + TNG_BA_BORDER_WIDTH;
-   r.ul.y = loc.y + TNG_BA_BORDER_WIDTH; 
+   r.ul.y = loc.y + TNG_BA_BORDER_WIDTH;
    r.lr.x = r.ul.x + pbatng->size.x;
    r.lr.y = r.ul.y + pbatng->size.y;
    ci = i + pbatng->offset.x;
@@ -372,7 +372,7 @@ bool tng_buttonarray_keycooked(TNG *ptng, ushort key)
    }
    IF_SET_RV(tng_cb_keycooked(ptng, key));
 
-   return(retval);   
+   return(retval);
 }
 
 // React appropriately for receiving the specified mouse button event
@@ -510,7 +510,7 @@ errtype tng_buttonarray_select(TNG *ptng)
    return(OK);
 }
 
-// Assumes that lastkey contains the hex code of the 
+// Assumes that lastkey contains the hex code of the
 // appropriate kind of scroll key.
 errtype tng_buttonarray_scroll(TNG *ptng)
 {
@@ -611,7 +611,7 @@ errtype tng_buttonarray_move(TNG *ptng, short code)
    {
       TNG_DRAWPART(ptng, TNG_ALLPARTS);
    }
-   
+
    return(OK);
 }
 

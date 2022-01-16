@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/icanvas.h $
@@ -30,85 +30,85 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Revision 1.27  1994/11/12  02:23:37  kevin
  * replaced obsolete (u)hline constants with interrupt
  * crunchy set pixel constants.
- * 
+ *
  * Revision 1.26  1994/10/19  16:27:41  kevin
  * Replaced obsolete line drawing indices with state push/pop entries.
- * 
+ *
  * Revision 1.25  1994/04/09  07:27:15  lmfeeney
  * added enum for new scaled string primiives
  * ,
- * 
+ *
  * Revision 1.24  1994/03/14  11:01:59  kevin
  * Added bitmap doubling placeholders and clut UNscaled bitmap placeholders.
- * 
+ *
  * Revision 1.23  1994/02/14  22:15:34  baf
  * Pruned vestigial 16/bit translucency
- * 
+ *
  * Revision 1.22  1993/12/30  11:04:31  baf
  * non/span solid filled polygons
- * 
+ *
  * Revision 1.21  1993/12/28  22:04:39  baf
  * Added solid RSD stuff
- * 
+ *
  * Revision 1.20  1993/12/04  11:51:47  kevin
  * Added placeholders for all kinds of texture mappers.
- * 
+ *
  * Revision 1.19  1993/11/29  20:31:37  baf
  * General revisions and tidying/up of translucency
  * and shading routines
- * 
+ *
  * Revision 1.18  1993/11/24  01:47:01  kevin
  * Added wall and floor texture mapping primitive placeholders.
- * 
+ *
  * Revision 1.17  1993/11/23  17:52:48  baf
  * Added tluc/8 interpolation
- * 
+ *
  * Revision 1.16  1993/11/19  17:29:20  baf
  * Added 8/bit translucent bitmaps
- * 
+ *
  * Revision 1.15  1993/11/15  03:32:11  baf
  * Added primitiveless chains.
- * 
+ *
  * Revision 1.14  1993/10/26  02:05:19  kevin
  * Reorganized scaling and clut-scaling entries to allow versions for
  * all bitmap types.
- * 
+ *
  * Revision 1.13  1993/10/21  01:14:40  baf
  * Added scaled translucent bitmaps and
  * translucent linear texture maps.
- * 
+ *
  * Revision 1.11  1993/10/15  12:06:39  baf
  * Added translucent bitmap functions
- * 
+ *
  * Revision 1.10  1993/10/06  13:41:56  kevin
  * added constants for CLUT_LIN_{U}MAP and CLUT_HFLIP_*.
- * 
+ *
  * Revision 1.9  1993/09/02  20:16:08  kaboom
  * Added table constants for 24-bit pixels and lin_{u}map dispatching.
- * 
+ *
  * Revision 1.8  1993/08/19  21:51:24  jaemz
  * Added bitmap scale clut and voxel functions
- * 
+ *
  * Revision 1.7  1993/08/10  19:16:49  kaboom
  * Added constants for LIT_PER_{U}MAP.
- * 
+ *
  * Revision 1.6  1993/07/20  16:24:55  jaemz
  * Added interp2 and filterw2
- * 
+ *
  * Revision 1.5  1993/06/22  19:59:14  spaz
  * Added slots for goroud-shaded lines:
  * FIX_USLINE, SLINE, UCLINE, and CLINE.
- * 
+ *
  * Revision 1.4  1993/06/14  14:12:23  kaboom
  * New constants for lin_{u}map and lin_lit_lin_{u}map routines.  Also
  * changed names of old tmappers to per_map, etc.
- * 
+ *
  * Revision 1.3  1993/06/06  15:13:42  kaboom
  * Added constants for horizontally flipped bitmap entries.
- * 
+ *
  * Revision 1.2  1993/06/01  13:50:35  kaboom
  * Added constants for lit perspective tmappers.
- * 
+ *
  * Revision 1.1  1993/05/03  13:45:46  kaboom
  * Initial revision
  */
@@ -140,7 +140,7 @@ enum {
    DRAW_UBOX,
    DRAW_BOX,
 
-   PUSH_STATE,              
+   PUSH_STATE,
    POP_STATE,
 
    FIX_USLINE,             /* fixed-point rendering primitives */

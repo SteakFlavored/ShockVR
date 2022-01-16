@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/hkeyfunc.c $
@@ -244,7 +244,7 @@ extern Boolean	DoubleSize;
 bool change_mode_func(short , ulong , void* data)
 {
    int newm = (int)data;
-   
+
    if ((newm == AUTOMAP_LOOP) && ((!player_struct.hardwarez[HARDWARE_AUTOMAP]) || (global_fullmap->cyber)))
       return TRUE;
    _new_mode = newm;
@@ -273,7 +273,7 @@ bool move_handart(short keycode, ulong context, void *data)
 
    if (foo & 0x08)
       amt = 10;
-   foo &=0x7F;   
+   foo &=0x7F;
    dir = (foo&0x02) ? &hdx : &hdy;
 
    if (foo & 0x01)
@@ -326,7 +326,7 @@ void start_music(void)
 void stop_music(void)
 {
 	extern bool mlimbs_on;
-	
+
 	MacTuneShutdown();
 	music_on = FALSE;
 	mlimbs_on = FALSE;
@@ -349,10 +349,10 @@ bool toggle_music_func(short, ulong, void*)
 		else
 			message_info("Not enough memory to start music.");
 	}
-	
+
 	gShockPrefs.soBackMusic = music_on;
 	SavePrefs(kPrefsResID);
-	
+
 	return (FALSE);
 }
 
@@ -377,7 +377,7 @@ bool arm_grenade_hotkey(short , ulong , void* )
    if(activate_grenade_on_cursor())
       return TRUE;
    act=player_struct.actives[ACTIVE_GRENADE];
-   for(i=row=0;i<act;i++) 
+   for(i=row=0;i<act;i++)
       if(player_struct.grenades[i]) row++;
    super_drop_func(ACTIVE_GRENADE,row);
    return TRUE;
@@ -438,7 +438,7 @@ bool use_drug_hotkey(short , ulong , void* )
       return TRUE;
    }
    act=player_struct.actives[ACTIVE_DRUG];
-   for(i=row=0;i<act;i++) 
+   for(i=row=0;i<act;i++)
       if(player_struct.drugs[i]) row++;
    super_use_func(ACTIVE_DRUG,row);
    return TRUE;
@@ -448,10 +448,10 @@ bool clear_fullscreen_func(short , ulong , void* )
 {
    extern char last_message[128];
    extern MFD mfd[2];
-   
+
    full_lower_region(&mfd[MFD_RIGHT].reg2);
    full_lower_region(&mfd[MFD_LEFT].reg2);
-   full_lower_region(inventory_region_full); 
+   full_lower_region(inventory_region_full);
    full_visible = 0;
    strcpy(last_message, "");
    chg_unset_sta(FULLSCREEN_UPDATE);
@@ -464,11 +464,11 @@ bool clear_fullscreen_func(short , ulong , void* )
 bool zoom_func(short keycode, ulong context, void* data)
 {
    ushort zoom;
-   
+
    TileMapGetZoom(NULL,&zoom);
    if ((int)data == ZOOM_IN)
    {
-     zoom++; 
+     zoom++;
    }
    else zoom = (zoom == 1) ? 1 : zoom-1;
    TileMapSetZoom(NULL,zoom);
@@ -695,7 +695,7 @@ bool tilemap_mode_func(short keycode, ulong context, void* data)
             break;
 
       }
-   }   
+   }
    return(TRUE);
 }
 
@@ -717,7 +717,7 @@ bool clear_highlight_func(short keycode, ulong context, void* data)
 bool texture_selection_func(short keycode, ulong context, void* data)
 {
 #ifdef TEXTURE_SELECTION
-   textpal_create_selector();   
+   textpal_create_selector();
 #endif
    return(TRUE);
 }
@@ -728,7 +728,7 @@ bool lighting_func(short keycode, ulong context, void* data)
 {
    panel_create_lighting();
    return(TRUE);
-}                    
+}
 
 bool inp6d_panel_func(short keycode, ulong context, void* data)
 {
@@ -815,7 +815,7 @@ bool do_find_func(short keycode, ulong context, void* data)
          generic_tile_eyedropper(NULL);
          texture_palette_update();
          break;
-         
+
       default:
          generic_tile_eyedropper(NULL);
          break;
@@ -1197,7 +1197,7 @@ bool convert_all_levels_func(short keycode, ulong context, void* data)
    extern errtype obj_level_munge();
 #ifdef TEXTURE_CRUNCH_HACK
    extern errtype texture_crunch_init();
- 
+
    texture_crunch_init();
 #endif
 
@@ -1296,7 +1296,7 @@ bool pause_game_func(short, ulong, void*)
 {
 	extern bool game_paused, redraw_paused;
 	extern LGRegion *inventory_region;
-	
+
 	game_paused = TRUE;
 	redraw_paused=TRUE;
 /* KLC - not needed for Mac version
@@ -1324,7 +1324,7 @@ bool unpause_game_func(short, ulong, void*)
 {
 	extern bool game_paused;
 	extern LGRegion *inventory_region;
-	
+
 	if (game_paused)
 	{
 		game_paused = !game_paused;
@@ -1352,7 +1352,7 @@ bool save_hotkey_func(short, ulong, void *)
 	uiHideMouse(NULL);
 	ShowCursor();
 	CopyBits(&gMainWindow->portBits, &gMainOffScreen.bits->portBits, &gActiveArea, &gOffActiveArea, srcCopy, 0L);
-	
+
 	if (gIsNewGame)									// Do the save thang.
 	{
 		status_bio_end();
@@ -1363,12 +1363,12 @@ bool save_hotkey_func(short, ulong, void *)
 	}
 	else
 	 	DoSaveGame();
-	
+
 	HideCursor();									// Go back to Shock.
 	uiShowMouse(NULL);
 	if (music_on)
 		MacTuneStartCurrentTheme();
-	
+
 	return TRUE;
 }
 

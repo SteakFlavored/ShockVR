@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 
 
@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/08/19 02:39:22 $
  */
 
-/* wrapping and unwrapping routines moved into the 2d library, other 
+/* wrapping and unwrapping routines moved into the 2d library, other
    routines already present in 2d
 */
 
@@ -36,26 +36,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //		text in a font, including automatic wrapping.
 
 
-/* log from /project/ff/code/gfx/font.c 
+/* log from /project/ff/code/gfx/font.c
 
  * Revision 1.6  1993/11/18  11:15:50  rex
  * Changed Font* to grs_font*
- * 
+ *
  * Revision 1.5  1993/11/04  21:37:40  kaboom
  * Changed quotes to angle brackets in includes for watcom
- * 
+ *
  * Revision 1.4  1993/05/04  13:47:45  rex
  * Fixed return value in FontWrapText()
- * 
+ *
  * Revision 1.3  1993/04/22  19:37:14  rex
  * Removed FontSetFont, added pfont param to other funcs
- * 
+ *
  * Revision 1.2  1993/02/04  12:24:09  rex
  * Converted to new debug system
- * 
+ *
  * Revision 1.1  1992/08/31  16:16:53  unknown
  * Initial revision
- * 
+ *
 */
 
 #include "lg_types.h"

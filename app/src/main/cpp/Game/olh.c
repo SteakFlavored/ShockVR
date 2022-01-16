@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/olh.c $
@@ -112,7 +112,7 @@ bool olh_candidate(ObjID obj)
    case CLASS_DOOR:
       if ((ID2TRIP(obj) == LABFORCE_TRIPLE) || (ID2TRIP(obj) == RESFORCE_TRIPLE))
          return FALSE;
-      check_dist = !door_locked(obj) && !door_moving(obj,FALSE) 
+      check_dist = !door_locked(obj) && !door_moving(obj,FALSE)
                && DOOR_REALLY_CLOSED(obj);
       break;
    case CLASS_BIGSTUFF:
@@ -152,7 +152,7 @@ bool olh_candidate(ObjID obj)
             check_dist = TRUE;
          break;
       }
-      // smallstuff falls through to default. 
+      // smallstuff falls through to default.
    default:
       if (USE_MODE(obj) == PICKUP_USE_MODE
          || USE_MODE(obj) == USE_USE_MODE)
@@ -188,15 +188,15 @@ short weap_subclass_idx[] =
    REFINDEX(REF_STR_helpAttackGun),
    REFINDEX(REF_STR_helpAttackGun),
 };
-         
+
 
 
 extern bool is_container(ObjID id, int** d1, int ** d2);
 
 
-// basically we chose a string id for a string 
+// basically we chose a string id for a string
 // that has  %s, and lg_strintf the name into the
-// the string.                     
+// the string.
 char* get_olh_string(ObjID obj,char* buf)
 {
 
@@ -265,7 +265,7 @@ extern Boolean	DoubleSize;
 //-----------------------------
 // olh_scan_objects()
 //
-// This gets called to detect objects in front of the player that have 
+// This gets called to detect objects in front of the player that have
 // help strings.  It sets up for olh_do_hudobjs.
 
 extern void olh_scan_objs(void);
@@ -281,7 +281,7 @@ void olh_scan_objects(void)
    static uint last_scan = 0;
 
    if (*tmd_ticks >> SCAN_FREQ_SHF <= last_scan)
-      return;  	
+      return;
    if (input_cursor_mode == INPUT_OBJECT_CURSOR)
       return;
    if (player_struct.panel_ref != OBJ_NULL)
@@ -393,7 +393,7 @@ void olh_do_callout(short xl, short yl)
          }
       }
       /* perhaps in studlier versions we'll do computations
-         to decide whether we're no longer a candidate, 
+         to decide whether we're no longer a candidate,
          rather than just blow away its candidacy */
       hudobj_set_id(obj,FALSE);
       if (best_rect == -1)
@@ -424,7 +424,7 @@ void olh_do_callout(short xl, short yl)
 }
 
 
-// A "compound use" object is one of those nasty objects 
+// A "compound use" object is one of those nasty objects
 // that used on another object by double clicking on that
 // object.
 
@@ -449,7 +449,7 @@ bool is_compound_use_obj(ObjID obj)
 void olh_do_cursor(short xl, short yl)
 {
    ObjID obj = object_on_cursor;
-   // this should be a different string if the cursor is 
+   // this should be a different string if the cursor is
    // a live grenade.
    char buf[80];
    if (objs[obj].obclass == CLASS_GRENADE && objGrenades[objs[obj].specID].flags & GREN_ACTIVE_FLAG
@@ -469,8 +469,8 @@ void olh_do_cursor(short xl, short yl)
 }
 
 // -------------------------------------------------
-// olh_do_hudobjs is called by the hud system to 
-// draw olh hud.  
+// olh_do_hudobjs is called by the hud system to
+// draw olh hud.
 
 void olh_do_hudobjs(short xl,short yl)
 {
@@ -540,7 +540,7 @@ void olh_overlay(void)
    {
       ushort 				key;
       mouse_event		me;
-      
+
       tight_loop(FALSE);
       if (mouse_next(&me) == OK)
       {

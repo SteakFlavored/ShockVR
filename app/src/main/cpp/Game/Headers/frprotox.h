@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __FRPROTOX_H
 #define __FRPROTOX_H
@@ -30,25 +30,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: frprotox.h $
  * Revision 1.11  1994/08/05  03:06:45  xemu
  * look, fr_get_at with transparency
- * 
+ *
  * Revision 1.10  1994/04/23  09:56:24  xemu
  * new params1
- * 
+ *
  * Revision 1.9  1994/04/14  15:00:33  kevin
  * New detail stuff.
- * 
+ *
  * Revision 1.8  1994/03/13  17:18:33  dc
  * more fields for obj_block
- * 
+ *
  * Revision 1.7  1994/03/03  12:18:27  dc
  * place view takes a canvas now
- * 
+ *
  * Revision 1.6  1994/02/13  05:48:00  dc
  * rend_start
- * 
+ *
  * Revision 1.5  1994/01/02  17:16:34  dc
  * Initial revision
- * 
+ *
  */
 
 #ifndef __FRTYPESX_H
@@ -88,12 +88,12 @@ void   *fr_get_canvas (frc *view);                                // really retu
 int     fr_set_view (frc *view);
 int     fr_free_view (frc *view);
 void    fr_set_cluts(uchar *base, uchar *bwclut, uchar *greenclut, uchar *amberclut);
-int    fr_set_callbacks(frc *view, 
+int    fr_set_callbacks(frc *view,
 								int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
-                     				void (*horizon)(void *dstbm, int flg), 
+                     				void (*horizon)(void *dstbm, int flg),
                      				void (*render)(void *dstbm, int flg));
 int    fr_set_global_callbacks( int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
-                     							void (*horizon)(void *dstbm, int flg), 
+                     							void (*horizon)(void *dstbm, int flg),
               								void (*render)(void *dstbm, int flg) );
 
 //======== From frcompil.c

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/plotware.c $
@@ -65,7 +65,7 @@ extern short qdata_get(short);
 
 typedef struct _plot_display
 {
-   ubyte page;          // Page number of this display. 
+   ubyte page;          // Page number of this display.
    int name;            // string id of name.
    ubyte color;         // color to display in
    int baseval;         // base string id for val, zero means display as int
@@ -100,7 +100,7 @@ plot_display PlotDisplays[] =
    { 0, REF_STR_pwLifePods,      ITEM_COLOR, REF_STR_pwEnabled,         0x2014  },
    { 0, REF_STR_pwShield,        ITEM_COLOR, REF_STR_pwShield0,         0x2006  },
    { 0, REF_STR_pwCooling,       ITEM_COLOR, REF_STR_pwCooling0,        0x2014  },
-   { 0, REF_STR_pwDestructTime,  ITEM_COLOR, HACK_TYPE,                 1}, 
+   { 0, REF_STR_pwDestructTime,  ITEM_COLOR, HACK_TYPE,                 1},
 
    { 1, REF_STR_pwNodes,         ITEM_COLOR, HACK_TYPE,                 6  },
 //   { 1, REF_STR_pwMulti,         ITEM_COLOR, INT_TYPE,                  0x1000  },
@@ -119,7 +119,7 @@ plot_display PlotDisplays[] =
    { 2, REF_STR_pwGamma,         ITEM_COLOR, REF_STR_pwGamma0,          0 },
    { 2, REF_STR_pwDelta,         ITEM_COLOR, HACK_TYPE,                 9 },
 
-   { NULL_PAGE } 
+   { NULL_PAGE }
 };
 
 void fill_time(short val, char* vbuf)
@@ -176,7 +176,7 @@ bool do_plotware_hack(int hack_num, char* vbuf)
       case 2:
          if (player_struct.level >= SHODOMETER_LEVELS)
             return FALSE;
-         else 
+         else
          {
             short val = QUESTVAR_GET(0x10 + player_struct.level) * 100 / player_struct.initial_shodan_vals[player_struct.level];
             numtostring(val,vbuf);
@@ -184,9 +184,9 @@ bool do_plotware_hack(int hack_num, char* vbuf)
             return TRUE;
          }
          break;
-      // There is nooooooooooooooooooo case 3.  
+      // There is nooooooooooooooooooo case 3.
       // Mostly because we haven't necessarily loaded the other levels to figure
-      // out what their shodometer levels were.  
+      // out what their shodometer levels were.
       case 4:
          if (qdata_get(MAIN_PROGRAM_QDATA) != BRIDGE_PROGNUM)
             return FALSE;
@@ -246,7 +246,7 @@ bool do_plotware_hack(int hack_num, char* vbuf)
 
 #define DISPLAY_TOP_MARGIN 10
 #define LEFT_X 2
-#define RIGHT_X (MFD_VIEW_WID - 2) 
+#define RIGHT_X (MFD_VIEW_WID - 2)
 #define PLOTWARE_PAGENUM (player_struct.mfd_func_data[PLOTWARE_MFD_FUNC][0])
 
 #define BUTTON_Y (MFD_VIEW_HGT - res_bm_height(REF_IMG_PrevPage) - 2)
@@ -257,7 +257,7 @@ void mfd_plotware_expose(MFD* mfd, ubyte control)
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
    {
-      // Do unexpose stuff here.  
+      // Do unexpose stuff here.
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
    {
@@ -324,18 +324,18 @@ void mfd_plotware_expose(MFD* mfd, ubyte control)
 
       ResUnlock(MFD_FONT);
       // on a full expose, make sure to draw everything
- 
+
       if (full)
          mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
       // Pop the canvas
       gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the 
+      // Now that we've popped the canvas, we can send the
       // updated mfd to screen
       mfd_update_rects(mfd);
 
    }
-  
+
 }
 
 void plotware_showpage(uchar page)
@@ -368,7 +368,7 @@ errtype mfd_plotware_init(MFD_Func* f)
 {
    int cnt = 0;
    LGPoint bsize;
-   LGPoint bdims;                                     
+   LGPoint bdims;
    LGRect r;
    errtype err;
    bsize.x = res_bm_width(REF_IMG_PrevPage);

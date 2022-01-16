@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/screen.c $
@@ -93,7 +93,7 @@ LGRect fscrn_rect={{0,0},{320,200}};
 LGRect svga_rect = {{0,0},{1024,768}};
 
 LGRegion root_region_data;
-LGRegion *root_region=&root_region_data;	
+LGRegion *root_region=&root_region_data;
 
 // prototypes
 errtype load_misc_cursors(void);
@@ -204,7 +204,7 @@ errtype screen_init(void)
    // Install basic input handlers
    uiInstallRegionHandler(root_region,UI_EVENT_KBD_COOKED, &main_kb_callback, NULL, &callid);
 
-   install_motion_keyboard_handler(root_region);   
+   install_motion_keyboard_handler(root_region);
 
    // we already do this in generic_reg_init
    // Grab all input!
@@ -227,12 +227,12 @@ void screen_start()
    // Check the config system to see if time should automatically be running
    if (config_get_raw(CFG_TIME_VAR, NULL, 0)) time_passes = TRUE;
 */
-  
+
 	HotkeyContext = DEMO_CONTEXT;
 	uiSetCurrentSlab(&main_slab);
 	inventory_region = inventory_region_game;
 	pagebutton_region = pagebutton_region_game;
-	
+
 	// A rather strange function for a Mac program, but we'll keep it.
 	change_svga_screen_mode();
 
@@ -254,7 +254,7 @@ void screen_start()
 
 void screen_exit()
 {
-   extern wrapper_panel_close(); 
+   extern wrapper_panel_close();
 #ifdef SVGA_SUPPORT
    uchar cur_pal[768];
    extern grs_screen *cit_screen;
@@ -283,7 +283,7 @@ void screen_exit()
 
 /* KLC
 #ifdef PALFX_FADES
-   if (pal_fx_on) 
+   if (pal_fx_on)
       palfx_fade_down();
    else {
       gr_set_fcolor(BLACK);
@@ -303,7 +303,7 @@ void screen_exit()
 
 // Draw the whole durned screen!
 // Note that this algorithm does NOT draw the main view area,
-// or the associated HUD -- 
+// or the associated HUD --
 // that is handled by direct calls from the main loop
 
 errtype screen_draw(void)
@@ -311,7 +311,7 @@ errtype screen_draw(void)
    extern void update_meters(bool);
    // Just go through and draw all the component parts....
    // In theory, they should all be clever enough to redraw
-   // efficiently.  Alternatively, this should only be called 
+   // efficiently.  Alternatively, this should only be called
    // very few times, and in general just the changing parts
    // get a signal to draw themselves.
    uiHideMouse(NULL);
@@ -381,7 +381,7 @@ errtype load_misc_cursors(void)
 errtype _screen_init_mouse(LGRegion* r, uiSlab* slab, bool do_init)
 {
    extern errtype ui_init_cursors(void);
-   
+
    ui_init_cursors();			// KLC - do this here, take out of uiInit.
    load_misc_cursors();
 

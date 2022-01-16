@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Header: r:/prj/lib/src/fixpp/RCS/fixpp.h 1.45 1994/08/08 18:27:45 ept Exp $
@@ -177,7 +177,7 @@ public:
 
 
    Fixpoint operator-( void ) const ;
-   
+
    Fixpoint operator+( void ) const ;
 
 
@@ -203,7 +203,7 @@ public:
    // Fast comparisons with zero (maybe... perhaps Q(0) isn't so slow after all)
    // (and a trip down memory lane for FORTRAN-ites)
    // ====================================
-     
+
    int gt_zero() const;
 
    int ge_zero() const;
@@ -440,7 +440,7 @@ inline Fixpoint& Fixpoint::operator>>=(unsigned int n)
 inline Fixpoint& operator+(const Fixpoint& a, const Fixpoint& b)
 {
 //  CLICK (Fixpoint::binary_add);
-   
+
    Fixpoint	c;
    c.val = a.val + b.val;
    return c;
@@ -667,7 +667,7 @@ inline int Fixpoint::operator!= ( const Fixpoint & fp2 ) const
 //
 // Comparisons with zero
 //
-// ====================================== 
+// ======================================
 
 inline int Fixpoint::gt_zero() const
 {  return (val>0);

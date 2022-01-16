@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		MOVINFO		Dump info about movie
 //		Rex E. Bradford
@@ -27,19 +27,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: movinfo.c $
  * Revision 1.5  1994/10/24  12:53:52  rex
  * Added chunk numbers
- * 
+ *
  * Revision 1.4  1994/10/20  14:11:54  rex
  * Added chunk # to printout
- * 
+ *
  * Revision 1.3  1994/10/18  20:15:52  rex
  * Reduced flags to 4 bits, adjusted tables accordingly
- * 
+ *
  * Revision 1.2  1994/09/01  11:07:46  rex
  * Print out PALETTE chunk now
- * 
+ *
  * Revision 1.1  1994/08/22  17:38:12  rex
  * Initial revision
- * 
+ *
 */
 
 #include <stdio.h>
@@ -125,7 +125,7 @@ static char *tableNames[] = {
 	mh.audioNumChans = SwapShortBytes(mh.audioNumChans);
 	mh.audioSampleSize = SwapShortBytes(mh.audioSampleSize);
 	mh.audioSampleRate = SwapLongBytes(mh.audioSampleRate);
-	
+
 //	Dump movie header
 
 	printf("Movie header:\n");
@@ -154,14 +154,14 @@ static char *tableNames[] = {
 		while (TRUE)
 		{
 			uchar	s1, s2;
-			
+
 			// Swap bytes around.
 			s1 = *((uchar *)pmc);
 			s2 = *(((uchar *)pmc)+2);
 			*(((uchar*)pmc)+2) = s1;
 			*((uchar*)pmc) = s2;
  			pmc->offset = SwapLongBytes(pmc->offset);
-			
+
 			// Print info for each chunk type.
 			if (pmc->chunkType != MOVIE_CHUNK_END)
  			{

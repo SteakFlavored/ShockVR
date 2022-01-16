@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Shock.h"
 #include "InitMac.h"
-#include "criterr.h" 
+#include "criterr.h"
 
 /*
  * $Source: r:/prj/cit/src/RCS/criterr.c $
@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------
 // DEFINES
 // -------
-#define GAME_NAME "System Shock" 
+#define GAME_NAME "System Shock"
 #define CLASS(x) ((x) >> 12)
 #define TYPE(x) ((x) & 0xFFF)
 
@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 static char* criterr_type_messages[CRITERR_CLASSES] =
    {
-      "Test", 
+      "Test",
       "Configuration error",
       "Resource error",
       "Memory error",
@@ -176,18 +176,18 @@ void critical_error(short code)
 	char		explain[256];
 	char		*s;
 	int		i, len;
-	
+
 	if (code == NO_CRITICAL_ERROR)
 		return;
 
 	if (gExtraMemory)
 		DisposHandle(gExtraMemory);			// free our extra space
-	
+
 	sprintf(buf, "A fatal error has occurred in System Shock.  Error code %d.", code);
 	len = strlen(buf);																	// Convert to p-string.
 	BlockMove(buf, buf+1, 255);
 	buf[0] = len;
-	
+
 	s = criterr_type_messages[CLASS(code)];									// Specific error message.
 	if (s != NULL)
 		strcpy(explain, s);
@@ -197,7 +197,7 @@ void critical_error(short code)
 	len = strlen(explain);																// Convert to p-string.
 	BlockMove(explain, explain+1, 255);
 	explain[0] = len;
-	
+
 	ParamText((uchar *)buf, (uchar *)explain, "\p", "\p");			// Show the error.
 	if (len > 0)
 		StopAlert(1001, nil);

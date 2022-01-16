@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/minimax.c $
@@ -40,7 +40,7 @@ static bool (*generate_position)(void* parent, int index, bool minimizer_moves);
 static int (*static_evaluator)(void* position);
 static bool (*extend_horizon)(void* position);
 
-#define StackSpew(x) 
+#define StackSpew(x)
 
 void fstack_push(void* data, uint siz);
 void fstack_pop(void* data, uint siz);
@@ -135,7 +135,7 @@ void minimax_step(void)
    char next_child, which_child;
    uchar depth;
    bool minimize;
-   
+
    FSTACK_POPVAR(value);  // get value from previous recursive call
    fstack_flush(sizeof(which_child));  // flush which child gave best value
 

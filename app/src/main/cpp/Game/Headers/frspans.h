@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/cit/src/inc/RCS/frspans.h $
@@ -40,8 +40,8 @@ void store_x_span (int y, int lx, int rx);
 #define MAX_SPANS  7
 #define SPAN_MEM  (2*MAX_SPANS+2)
 #define SPAN_SHIFT 4 // 8 spans, each 2 entries, 16 values
-#define SPAN_LEFT  0 
-#define SPAN_RIGHT 1 
+#define SPAN_LEFT  0
+#define SPAN_RIGHT 1
 
 #define span_count(y)         (x_span_lists[(y<<SPAN_SHIFT)+(MAX_SPANS<<1)])
 #define span_left(y,s)        (x_span_lists[((y)<<SPAN_SHIFT)+(s<<1)+SPAN_LEFT])

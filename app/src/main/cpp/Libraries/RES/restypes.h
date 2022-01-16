@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		Restypes.H		Resource types
 //		Rex E. Bradford (REX)
@@ -24,40 +24,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: restypes.h $
  * Revision 1.11  1994/09/01  12:00:22  rex
  * Added RTYPE_MOVIE
- * 
+ *
  * Revision 1.10  1994/05/02  17:47:02  rex
  * Added RTYPE_STENCIL
- * 
+ *
  * Revision 1.9  1994/05/02  14:49:23  rex
  * Added RTYPE_SHADTAB
- * 
+ *
  * Revision 1.8  1994/02/17  11:26:54  rex
  * Changed #ifdef to use double-underscores
- * 
+ *
  * Revision 1.7  1993/09/23  16:43:50  rex
  * Added RTYPE_OBJ3D
- * 
+ *
  * Revision 1.6  1993/07/23  16:41:17  rex
  * Added RTYPE_B2HEADER
- * 
+ *
  * Revision 1.5  1993/07/22  19:17:30  rex
  * Added B2xxx types
- * 
+ *
  * Revision 1.4  1993/06/17  10:00:41  rex
  * Added RTYPE_PICT
- * 
+ *
  * Revision 1.3  1993/06/02  13:50:42  dfan
  * Added SHAPE types
- * 
+ *
  * Revision 1.2  1993/05/11  18:51:02  rex
  * Added RTYPE_VOC
- * 
+ *
  * Revision 1.1  1993/03/04  18:48:04  rex
  * Initial revision
- * 
+ *
  * Revision 1.1  1993/03/02  18:42:05  rex
  * Initial revision
- * 
+ *
 */
 
 #ifndef __RESTYPES_H

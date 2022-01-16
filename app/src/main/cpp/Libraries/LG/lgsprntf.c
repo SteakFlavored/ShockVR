@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // lgsprntf.c -- no-floats baby sprintf
 
@@ -26,38 +26,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: lgsprntf.c $
  * Revision 1.12  1994/08/15  16:52:29  tjs
  * length specifiers 'l' & 'h' supported, as far as that goes.
- * 
+ *
  * Revision 1.11  1994/08/15  13:12:33  jak
  * Don't write though null pointer.
- * 
+ *
  * Revision 1.10  1994/08/14  15:48:51  tjs
  * Precision support for strings.
- * 
+ *
  * Revision 1.9  1994/08/12  02:27:56  tjs
  * Let's try that again.
- * 
+ *
  * Revision 1.8  1994/08/12  02:17:32  tjs
  * %x=%p
- * 
+ *
  * Revision 1.7  1994/02/27  02:25:58  tjs
  * Changed format to const
- * 
+ *
  * Revision 1.6  1994/02/01  05:57:36  tjs
  * Added binary numbers, optimization for small decimal integers.
- * 
+ *
  * Revision 1.5  1993/12/17  12:10:16  tjs
  * Fixed bug with %%
- * 
+ *
  * Revision 1.4  1993/11/04  14:08:17  tjs
  * Added alternate form for bools.
- * 
+ *
  * Revision 1.3  1993/11/04  11:46:11  tjs
  * Added error message for %S if function not installed, precision
  * handling for fixed-point numbers.
- * 
+ *
  * Revision 1.2  1993/11/04  09:42:35  tjs
  * Fixed bug with decimal point placement in fixed-point numbers.
- * 
+ *
  *
  *
  *
@@ -110,10 +110,10 @@ typedef enum { SMALL, DEFAULT, BIG } bigness;
 
 // lg_sprintf()
 // should have the save behaviour as sprintf(), but supports only the
-// %d, %u, %s, %c, %x, %X, %o, %n, and %% conversion characters, and does not 
+// %d, %u, %s, %c, %x, %X, %o, %n, and %% conversion characters, and does not
 // support the space and + flags.
-// In addition, instead of supporting floats, we support formatting 
-// of fixes and fix24's, using the conversion characters %f and %F, 
+// In addition, instead of supporting floats, we support formatting
+// of fixes and fix24's, using the conversion characters %f and %F,
 // respectively.  These are currently always formatted with four digits
 // after the decimal place.  Also supports %b conversion characters for
 // boolean values, formatting them as "TRUE" or "FALSE".  For those of you
@@ -353,7 +353,7 @@ string_copy:
                   buf[dest_ind+newchars]='.';
                   newchars++;
                }
-               break;               
+               break;
             }
 
          if(isalpha(src_char) && !this_is_len) {
@@ -424,7 +424,7 @@ void lg_sprintf_install_stringfunc(char *(*func)(ulong strnum))
 
 // ==== static functions follow =======================
 
-// private local functions used for writing integers and uints into 
+// private local functions used for writing integers and uints into
 // strings.  The int version calls the uint version after doing any
 // necessary setup for negative numbers.  The uint version does the
 // real work, writing the integer into the string in reverse digit
@@ -456,7 +456,7 @@ static int int_to_str(char *buf, int val)
          }
          buf[2+len]='\0';
          return(2+len);
-      }         
+      }
       return(1+int_to_str(buf+1,-val));
    }
 

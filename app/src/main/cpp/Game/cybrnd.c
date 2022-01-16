@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/cit/src/RCS/cybrnd.c $
@@ -27,22 +27,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * added config vars for the random seeds and
  * does a random selection of seeds if seeds are
  * not specified
- * 
+ *
  * Revision 1.5  1993/12/15  22:57:49  minman
  * added effect var
- * 
+ *
  * Revision 1.4  1993/09/02  23:00:21  xemu
  * angle!
- * 
+ *
  * Revision 1.3  1993/08/17  14:17:23  minman
  * added make-info random number
- * 
+ *
  * Revision 1.2  1993/08/12  19:44:56  minman
  * added grenade random no
- * 
+ *
  * Revision 1.1  1993/08/12  19:22:41  minman
  * Initial revision
- * 
+ *
  *
  */
 

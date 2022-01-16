@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/input/RCS/kbcook.c $
@@ -43,24 +43,24 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
 {
 	// On the Mac, since modifiers by themselves don't produce an event,
 	// you always have a "cooked" result.
-	
+
 	*results = TRUE;
 	*cooked = ev.ascii;
-	
+
 	*cooked |= (short)ev.state << KB_DOWN_SHF; // Add in the key-down state.
 
 	if (ev.modifiers & 0x01)		// If command-key was down,
 		*cooked |= KB_FLAG_CTRL;	// simulate a control key
-		
+
 	if (ev.modifiers & 0x02)		// If shift-key was down
 		*cooked |= KB_FLAG_SHIFT;
-		
+
 	if (ev.modifiers & 0x08)		// If option-key was down,
 	{								// simulate an alt key.
 		Handle	kHdl;
 		long	tk;
 		UInt32	state = 0;
-		
+
 		// Unfortunately, option-key changes the character that was
 		// pressed.  So we need to find out what the unmodified
 		// character is.
@@ -68,12 +68,12 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
 		HLock(kHdl);
 		tk = KeyTranslate(*kHdl, ev.code, &state);
 		HUnlock(kHdl);
-		
+
 		// We've got the character, so or it into the "cooked" short.
 		*cooked &= 0xFF00;
 		*cooked |= (ushort)(tk & 0x00FF) | KB_FLAG_ALT;
 	}
-		
+
 	return OK;
 /*
    ushort flags = KB_CNV(ev.code,0);
@@ -132,9 +132,9 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
    if (!*results) return OK;
 
    if ((cnv & CNV_NUM) && !(kbd_modifier_state & KBM_NUM))
-      *cooked = ev.code|KB_FLAG_SPECIAL; 
+      *cooked = ev.code|KB_FLAG_SPECIAL;
 
-   *cooked |= (short)ev.state << KB_DOWN_SHF; 
+   *cooked |= (short)ev.state << KB_DOWN_SHF;
 
    *cooked |= (((kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF))
       | (kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF-1)))
@@ -144,7 +144,7 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
       | (kbd_modifier_state << (KB_ALT_SHF - KBM_ALT_SHF-1)))
          & KB_FLAG_ALT) & cnv;
 
-   // if KB_FLAG_SPECIAL is set, then let set the shifted 
+   // if KB_FLAG_SPECIAL is set, then let set the shifted
    // flag according to shifted
    *cooked |= (shifted << KB_SHIFT_SHF) & cnv;
    return OK;

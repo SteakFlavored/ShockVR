@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/tmapint.h $
@@ -29,37 +29,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: tmapint.h $
  * Revision 1.10  1994/08/24  18:45:56  kevin
  * Added scanline func field.
- * 
+ *
  * Revision 1.9  1994/07/26  00:22:23  kevin
  * imbedded entire grs_bitmap structure into grs_tmap_loop_info.
- * 
+ *
  * Revision 1.8  1994/07/18  17:09:59  kevin
  * Eliminated per_setup structure (superceded by grs_per_setup in pertyp.h).
  * Changed tmap_edge_info and tmap_loop_info structures to reduce size.
  * Added new aliases in same.
- * 
+ *
  * Revision 1.7  1994/06/17  10:39:15  kevin
  * Changed redefinitions of fix_ceil and fix_cint so that they don't break.
- * 
+ *
  * Revision 1.6  1994/06/03  20:33:27  kevin
  * Added l3d pointer to per_setup struct so it can be freed in the right order.
- * 
+ *
  * Revision 1.5  1994/02/26  22:45:41  kevin
  * made p_src_off signed to enable proper storage of negative values for v.
- * 
+ *
  * Revision 1.4  1994/02/09  23:27:16  kevin
  * Changed grs_loop_info structure for use with new wacky edges.
- * 
+ *
  * Revision 1.3  1994/01/18  13:11:26  kevin
  * Added optimized ulong_min,max pragmas.  Also sides for edge calculations.
- * 
+ *
  * Revision 1.2  1994/01/13  12:21:10  kevin
  * changed tmap_inner_loop prototype to take flags parameter.
- * 
+ *
  * Revision 1.1  1994/01/03  22:03:06  kevin
  * Initial revision
- * 
- * 
+ *
+ *
 */
 
 #ifndef __TMAPINT_H

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/ammomfd.c $
@@ -25,39 +25,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: ammomfd.c $
  * Revision 1.11  1994/10/13  15:38:10  xemu
  * SVGA interface
- * 
+ *
  * Revision 1.10  1994/08/17  03:07:49  xemu
  * dont' be affected by font change
- * 
+ *
  * Revision 1.9  1994/06/02  03:39:54  mahk
  * Fixes due to dummymfd bug.
- * 
+ *
  * Revision 1.8  1994/05/31  18:38:24  tjs
  * Fixed running/out/of/rectangles problem.
- * 
+ *
  * Revision 1.7  1994/05/24  20:10:25  minman
  * got rid of warning message whenever ammo page is drawn
  * ,
- * 
+ *
  * Revision 1.6  1994/05/19  13:41:21  tjs
  * Ammo MFD interface revision.
- * 
+ *
  * Revision 1.5  1994/05/19  04:01:46  tjs
  * Eliminated separate ammo mfd func.
- * 
+ *
  * Revision 1.4  1994/05/12  16:11:38  tjs
  * use string_replace_char
  * use AMMO_TYPE_LETTER for consistency.
- * 
+ *
  * Revision 1.3  1994/05/12  11:53:45  tjs
  * Actually allocate enough space for "minibuf"
- * 
+ *
  * Revision 1.2  1994/05/12  11:51:48  tjs
  * Fixed RCS log.
- * 
+ *
  * Revision 1.1  1994/05/10  02:52:34  tjs
  * Initial revision
- * 
+ *
  */
 
 #include <string.h>
@@ -128,7 +128,7 @@ uchar player_has_weapon(int trip)
    }
    return(retval);
 }
-                                    
+
 #define HARDWIRED_HEIGHT_CONSTANT   5
 void mfd_ammo_expose(ubyte control)
 {
@@ -161,7 +161,7 @@ void mfd_ammo_expose(ubyte control)
          }
          ypos+=HARDWIRED_HEIGHT_CONSTANT;
          y_list = ypos+HARDWIRED_HEIGHT_CONSTANT;
- 
+
          // iterate through gun types
          for (num=0;num<NUM_GUN;num++) {
             guntrip=get_triple_from_class_nth_item(CLASS_GUN,num);
@@ -206,12 +206,12 @@ void mfd_ammo_expose(ubyte control)
       }
 
       // on a full expose, make sure to draw everything
- 
+
       if (full)
          mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
    }
-  
+
 }
 
 bool mfd_ammo_handler(MFD* m, uiEvent* ev)
@@ -237,7 +237,7 @@ bool mfd_ammo_handler(MFD* m, uiEvent* ev)
    }
    return FALSE;
 }
-   
-      
+
+
 
 

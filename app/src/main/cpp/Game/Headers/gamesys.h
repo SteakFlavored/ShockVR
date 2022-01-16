@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __GAMESYS_H
 #define __GAMESYS_H
@@ -28,59 +28,59 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: gamesys.h $
  * Revision 1.18  1993/12/29  16:16:52  mahk
  * Added some more fatigue defines
- * 
+ *
  * Revision 1.17  1993/11/24  21:04:57  mahk
  * Added a new game time schedule.
- * 
+ *
  * Revision 1.16  1993/11/15  19:33:51  xemu
  * level control box params
- * 
+ *
  * Revision 1.15  1993/11/14  18:51:00  minman
  * got rid of MAX_HP -cause we're using PLAYER_MAX_HP now
- * 
+ *
  * Revision 1.14  1993/10/21  21:25:32  xemu
  * MAX_ENERGY = 2555
  * errr, 255 that is
- * 
+ *
  * Revision 1.13  1993/09/02  23:07:41  xemu
  * angle me baby
- * 
+ *
  * Revision 1.12  1993/08/11  20:53:59  spaz
  * #define'd maximum energy,hp,accuracy
- * 
+ *
  * Revision 1.11  1993/08/06  16:01:41  minman
  * modified software numbers
- * 
+ *
  * Revision 1.10  1993/08/05  14:13:09  minman
  * forgot objwpn.h
- * 
+ *
  * Revision 1.9  1993/08/05  14:04:12  minman
  * changed to new object properties order
- * 
+ *
  * Revision 1.8  1993/07/29  20:16:42  minman
  * made it rely on objprop.h
- * 
+ *
  * Revision 1.7  1993/07/23  12:14:45  mahk
  * Changed numbers of combat & defense softs
- * 
+ *
  * Revision 1.6  1993/07/19  11:39:57  mahk
  * Moved #defines for numbers of things back here.
- * 
+ *
  * Revision 1.5  1993/07/02  14:16:23  mahk
  * Removed NUM_WEAPONZ
- * 
+ *
  * Revision 1.4  1993/07/01  17:18:58  spaz
  * Removed double definition of NUM_DRUGZ (now in drugs.h)
- * 
+ *
  * Revision 1.3  1993/06/29  09:53:46  mahk
  * Modes for fatigue
- * 
+ *
  * Revision 1.2  1993/06/16  23:01:45  xemu
  * more #defines
- * 
+ *
  * Revision 1.1  1993/05/12  14:20:51  xemu
  * Initial revision
- * 
+ *
  *
  */
 
@@ -100,11 +100,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NUM_WEAPONZ           16
 
 #define NUM_AMMO_TYPES        NUM_AMMO             // Steal from Objwpn.h
-                                           
-// just so you don't screw up. 
+
+// just so you don't screw up.
 #define NUM_GRENADES NUM_GRENADEZ
 #define NUM_LEVELS NUM_LEVELZ
-#define NUM_DRUGS NUM_DRUGZ   
+#define NUM_DRUGS NUM_DRUGZ
 #define NUM_WEAPONS NUM_WEAPONZ
 
 #define SPRINT_CONTROL_THRESHOLD 70 // threshold between sprint and jog

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/cit/src/RCS/mfdgadg.c $
@@ -25,19 +25,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: mfdgadg.c $
  * Revision 1.5  1994/02/16  09:26:50  mahk
  * Hey, fixed my goofy bugs.
- * 
+ *
  * Revision 1.4  1994/02/16  09:19:57  mahk
  * Wrote goofy resizing code.
- * 
+ *
  * Revision 1.3  1994/01/15  15:12:04  mahk
- * Changed buttonarray spacing. 
- * 
+ * Changed buttonarray spacing.
+ *
  * Revision 1.2  1993/10/20  05:41:33  mahk
  * Added a slider gadget.
- * 
+ *
  * Revision 1.1  1993/09/15  10:54:30  mahk
  * Initial revision
- * 
+ *
  *
  */
 
@@ -62,7 +62,7 @@ typedef struct _mfd_bttnarray
 {
    LGPoint bdims;  // Diminsions of button array
    LGPoint bspace; // pixel spacing between buttons.
-   LGPoint bsize;   // pixel size of buttons.  
+   LGPoint bsize;   // pixel size of buttons.
    MFDBttnCallback cb;
    void* cbdata;
 }  MFDBttnArray;
@@ -77,7 +77,7 @@ bool mfd_buttonarray_handlerproc(MFD* mfd, uiEvent* ev, MFDhandler* h)
       return FALSE;
    pos.x = ev->pos.x - mfd->rect.ul.x - h->r.ul.x;
    pos.y = ev->pos.y - mfd->rect.ul.y - h->r.ul.y;
-   // Make sure its on a button, not a space. 
+   // Make sure its on a button, not a space.
    if (pos.x % (ba->bspace.x + ba->bsize.x) >= ba->bsize.x
     || pos.y % (ba->bspace.y + ba->bsize.y) >= ba->bsize.y)
       return FALSE;
@@ -148,7 +148,7 @@ typedef struct _mfd_slider
 {
    MFDSliderCallback cb;
    void* data;
-   bool bttndown; 
+   bool bttndown;
 }  MFDSlider;
 
 

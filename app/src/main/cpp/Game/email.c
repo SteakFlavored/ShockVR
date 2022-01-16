@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/email.c $
@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Author: xemu $
  * $Date: 1994/11/25 08:14:55 $
  */
- 
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -190,9 +190,9 @@ char* get_email_string(int id, char *text, int siz)
 
 #define NULL_SENDER MAX_SENDERS
 
-// scan through the mugshot for the super-secret "sender" code, which 
-// starts with an S and is followed by a decimal number.  
-// if we don't find one, return NULL_SENDER.  
+// scan through the mugshot for the super-secret "sender" code, which
+// starts with an S and is followed by a decimal number.
+// if we don't find one, return NULL_SENDER.
 
 int get_sender_emailnum(int num)
 {
@@ -205,7 +205,7 @@ int get_sender_emailnum(int num)
          return (sid < MAX_SENDERS && sid >= 0) ? sid : NULL_SENDER;
       }
    return NULL_SENDER;
-}     
+}
 
 void set_email_flags(int n)
 {
@@ -360,7 +360,7 @@ char* email_draw_string(char* text,short* x, short* y,bool last)
       if (*text == '\n') {
          *y += h, *x = 0;
       }
-      else 
+      else
          *x += gr_char_width(*text);
       text++;
    }
@@ -588,7 +588,7 @@ void email_draw_text(short email_id, bool really_an_email)
          remains = buf;
       }
    }
-   // Print the "more" message.  
+   // Print the "more" message.
  more:
    if (remains != NULL)
    {
@@ -752,7 +752,7 @@ void parse_email_mugs(char* mug, uchar* mcolor, ushort mugnums[NUM_MFDS], bool s
    }
    if(setup)
       cap_mfds_with_func(MFD_EMAILMUG_FUNC,different);
-   
+
 }
 
 void mfd_emailmug_expose(MFD* mfd, ubyte control)
@@ -811,7 +811,7 @@ void mfd_emailmug_expose(MFD* mfd, ubyte control)
 //KLC - chg for new art         ss_bitmap(&mfd_background, 0, 0);
          gr_bitmap(&mfd_background, 0, 0);
 
-      // Slam in the mug shot, centered.  
+      // Slam in the mug shot, centered.
       if ((mugnum<BASE_VMAIL)
 #ifdef PLAYTEST
   && RefIndexValid((RefTable*)ResGet(REFID(mug)),REFINDEX(mug)))
@@ -849,7 +849,7 @@ void mfd_emailmug_expose(MFD* mfd, ubyte control)
          get_email_string(MKREF(msg,SUBJECT_IDX),sub,sizeof(buf)-strlen(buf));
          // draw subject field only if subject string is non-null.
          if(*sub) {
-            wrap_text(buf,MFD_VIEW_WID-1); 
+            wrap_text(buf,MFD_VIEW_WID-1);
             gr_string_size(buf,&w,&h);
             unwrap_text(buf);
             mfd_full_draw_string(buf,0,EMAIL_SUBJECT_Y-h,mcolor,email_font,TRUE,TRUE);
@@ -865,14 +865,14 @@ void mfd_emailmug_expose(MFD* mfd, ubyte control)
 
       // Pop the canvas
       gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the 
+      // Now that we've popped the canvas, we can send the
       // updated mfd to screen
       mfd_update_rects(mfd);
 
    }
  out:
    return;
-  
+
 }
 
 bool mfd_emailmug_handler(MFD *, uiEvent *ev)
@@ -903,10 +903,10 @@ void select_email(int num, bool scr)
       current_email = EMAIL_INACTIVE;
       return;
    }
-   
+
    mug_num=atoi((char *)RefGet(MKREF(id,MUGSHOT_IDX)));
    ResUnlock(id);
-   
+
    if (mug_num>=BASE_VMAIL)
       read_email(current_email_base, num);
    if (scr)
@@ -930,7 +930,7 @@ void read_email(Id new_base, int num)
 #endif
 //KLC - use a global preference now   ubyte terseness = player_struct.terseness;
    ubyte terseness = gShockPrefs.goMsgLength;
-   
+
    email_curr_page = 0;
    if (new_base != 0)
       current_email_base = new_base;
@@ -983,10 +983,10 @@ void read_email(Id new_base, int num)
    {
       player_struct.hardwarez_status[HARDWARE_EMAIL] &= ~(WARE_FLASH);
       QUESTBIT_OFF(0x12c);
-      
+
       mug_num=atoi((char *)RefGet(MKREF(current_email_base+num,MUGSHOT_IDX)));
       ResUnlock(current_email_base+num);
-      
+
       if (mug_num>=BASE_VMAIL)  // video email
       {
 #ifdef AUDIOLOGS
@@ -1010,7 +1010,7 @@ void read_email(Id new_base, int num)
          {
             int i;
             ushort mnums[NUM_MFDS];
-            bool grab = TRUE; 
+            bool grab = TRUE;
             parse_email_mugs((char *)RefGet(MKREF(current_email_base+num,MUGSHOT_IDX)),NULL,mnums,TRUE);
             for (i = 1; i < NUM_MFDS; i++)
             {
@@ -1018,7 +1018,7 @@ void read_email(Id new_base, int num)
                {
                   save_mfd_slot(i);
                   mfd_change_slot(i,EMAILMUG_SLOT);
-                  grab = FALSE;     
+                  grab = FALSE;
                }
             }
             if (grab) {
@@ -1042,8 +1042,8 @@ void read_email(Id new_base, int num)
    }
    else
    {
-      if (_current_loop <= FULLSCREEN_LOOP) 
-         chg_set_flg(INVENTORY_UPDATE);   
+      if (_current_loop <= FULLSCREEN_LOOP)
+         chg_set_flg(INVENTORY_UPDATE);
    }
 #endif
 }
@@ -1071,7 +1071,7 @@ void add_email_handler(LGRegion* r)
 
 #define EMAIL_BARRAY_X   0
 #define EMAIL_BARRAY_WD  (MFD_VIEW_WID)
-#define EMAIL_BARRAY_Y (MFD_VIEW_HGT - res_bm_height(REF_IMG_EmailButt0)-2)  
+#define EMAIL_BARRAY_Y (MFD_VIEW_HGT - res_bm_height(REF_IMG_EmailButt0)-2)
 
 
 static ubyte email_pages[] = { 50,7,8};
@@ -1089,13 +1089,13 @@ void mfd_emailware_expose(MFD* mfd, ubyte control)
    {
       int mfd_id = NUM_MFDS;
 
-      // if we aren't showing the email hardware mfd any more, then 
+      // if we aren't showing the email hardware mfd any more, then
       // turn off the MFD
       while(mfd_yield_func(MFD_EMAILWARE_FUNC,&mfd_id))
       {
          if (mfd_id != mfd->id)
             on = TRUE;
-      }   
+      }
    }
    if (((s & WARE_ON) != 0) != on)
    {
@@ -1109,7 +1109,7 @@ void mfd_emailware_expose(MFD* mfd, ubyte control)
    gr_push_canvas(pmfd_canvas);
    ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
-   // Lay down the "background" 
+   // Lay down the "background"
 //KLC - chg for new art   mfd_item_micro_expose(TRUE,VIDTEX_HARD_TRIPLE);
    mfd_item_micro_hires_expose(TRUE,VIDTEX_HARD_TRIPLE);
    if (full)
@@ -1153,7 +1153,7 @@ errtype mfd_emailware_init(MFD_Func* f)
 {
    int cnt = 0;
    LGPoint bsize;
-   LGPoint bdims;                                     
+   LGPoint bdims;
    LGRect r;
    errtype err;
    bsize.x = res_bm_width(REF_IMG_EmailButt0);
@@ -1200,8 +1200,8 @@ void email_turnoff(bool ,bool real_stop)
    }
 }
 
-// every 30 nerd seconds, check to see if we have unread email and flash the email ware 
-// if we do. 
+// every 30 nerd seconds, check to see if we have unread email and flash the email ware
+// if we do.
 
 #define FLASH_TIME_INTERVAL 30
 

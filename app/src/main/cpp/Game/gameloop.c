@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/gameloop.c $
@@ -81,7 +81,7 @@ void draw_pause_string(void)
 	LGRect	r;
 	short w,h,nw,nh;
 	extern void ss_scale_string(char *s, short x, short y);
-	
+
 	uchar old_over = gr2ss_override;
 	gr_set_fcolor(RED_BASE + 4);
 	gr_set_font((grs_font*)ResGet(RES_citadelFont));
@@ -108,9 +108,9 @@ void game_loop(void)
 //extern char saveArray[16];
 //if (memcmp(0, saveArray, 16))
 //	Debugger();
-		
+
 	// Handle paused game state
-	
+
 	if (game_paused)
 	{
 		if (redraw_paused)
@@ -124,9 +124,9 @@ void game_loop(void)
 		if (pal_fx_on)
 			loopLine(GL|0x1E,palette_advance_all_fx(* (long *) 0x16a));	// TickCount()
 	}
-	
+
 	// If we're not paused...
-	
+
 	else
 	{
 		loopLine(GL|0x10,update_state(time_passes));     // move game time
@@ -145,7 +145,7 @@ void game_loop(void)
 /*KLC - no longer needed
 			if (_change_flag&ANIM_UPDATE)
 			{
-				loopLine(GL|0x19, AnimRecur()); 
+				loopLine(GL|0x19, AnimRecur());
 				chg_unset_flg(ANIM_UPDATE);
 			}
 */
@@ -162,11 +162,11 @@ void game_loop(void)
 				loopLine(GL|0x18,mfd_update());
 			}
 			if (_change_flag&DEMOVIEW_UPDATE)
-			{ 
+			{
 //KLC - does nothing!
 //				if (sfx_on || music_on)
 //					loopLine(GL|0x1D,synchronous_update());
-				chg_unset_flg(DEMOVIEW_UPDATE); 
+				chg_unset_flg(DEMOVIEW_UPDATE);
 			}
 		}
 		if (!full_game_3d)
@@ -191,7 +191,7 @@ void game_loop(void)
 		 	pal_frame=0;
 			loopLine(GL|0x1F,palette_advance_all_fx(* (long *) 0x16a));	// TickCount()
 		 }
-		 
+
 		loopLine(GL|0x20, destroy_destroyed_objects());
 		loopLine(GL|0x21, check_cspace_death());
 	}

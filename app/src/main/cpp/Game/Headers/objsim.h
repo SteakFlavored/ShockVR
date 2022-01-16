@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __OBJSIM_H
 #define __OBJSIM_H
@@ -56,13 +56,13 @@ extern int ClassBaseArray[16][16];
 #define get_critter_bitmap(id,triple,posture,frame,view) (lock_bitmap_from_ref(ref_from_critter_data((id),(triple),(posture),(frame),(view))))
 #define release_critter_bitmap(triple,posture,frame,view) (RefUnlock(ref_from_critter_data((triple),(posture),(frame),(view))))
 
-#define get_critter_bitmap_fast(id,triple,posture,frame,view,pref,panch) (lock_bitmap_from_ref_anchor(*(pref) = ref_from_critter_data((id),(triple),(posture),(frame),(view)),(panch)))	
+#define get_critter_bitmap_fast(id,triple,posture,frame,view,pref,panch) (lock_bitmap_from_ref_anchor(*(pref) = ref_from_critter_data((id),(triple),(posture),(frame),(view)),(panch)))
 #define release_critter_bitmap_fast(ref) (RefUnlock((ref)))
 
 // macros for calling those other macros with only an object ID
 #define get_critter_bitmap_obj(id,view) (get_critter_bitmap((id),ID2TRIP((id)),get_crit_posture(ID2SPEC(id)),objs[(id)].info.current_frame,(view)))
 #define release_critter_bitmap_obj(id,view) (release_critter_bitmap(ID2TRIP((id)),get_crit_posture(ID2SPEC(id)),objs[(id)].info.current_frame,(view)))
-#define get_critter_bitmap_obj_fast(id,view,pref,panch) (get_critter_bitmap_fast((id),ID2TRIP((id)),get_crit_posture(ID2SPEC(id)),objs[(id)].info.current_frame,(view),(pref),(panch)))	
+#define get_critter_bitmap_obj_fast(id,view,pref,panch) (get_critter_bitmap_fast((id),ID2TRIP((id)),get_crit_posture(ID2SPEC(id)),objs[(id)].info.current_frame,(view),(pref),(panch)))
 
 #define DOOR_ID_BASE 2400
 #define door_id(id) (DOOR_ID_BASE + CPTRIP(ID2TRIP(id)))

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		LZW.H		Header file for LZW compressor/expander (see lzw.c for info)
 //		Rex E. Bradford (REX)
@@ -23,19 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: lzw.h $
  * Revision 1.4  1994/02/17  11:24:29  rex
  * Changed #ifdef to use double-underscores
- * 
+ *
  * Revision 1.3  1993/08/17  17:55:31  rex
  * Added buffer-management routines
- * 
+ *
  * Revision 1.2  1993/03/22  10:29:30  rex
  * Revamped LZW module to handle sources & destinations
- * 
+ *
  * Revision 1.1  1993/03/04  18:47:54  rex
  * Initial revision
- * 
+ *
  * Revision 1.1  1993/01/12  18:07:18  rex
  * Initial revision
- * 
+ *
 */
 
 

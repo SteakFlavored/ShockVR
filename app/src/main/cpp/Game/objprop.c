@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/cit/src/RCS/objprop.c $
@@ -26,74 +26,74 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Revision 1.23  1994/02/26  19:38:26  tjs
  * Got disgusted with giant case statement in num_types, replaced it
  * with a giant table.  Executable shrinks by 4K.
- * 
+ *
  * Revision 1.22  1994/02/03  17:01:11  minman
  * new ammo\gun regime'
- * 
+ *
  * Revision 1.21  1994/01/14  15:21:47  xemu
  * smallstuff plot
- * 
+ *
  * Revision 1.20  1994/01/09  03:33:16  xemu
  * load frames from art
- * 
+ *
  * Revision 1.19  1993/12/14  15:10:48  xemu
  * better frame warning
- * 
+ *
  * Revision 1.18  1993/12/08  22:01:15  xemu
  * more spew, added objart3
- * 
+ *
  * Revision 1.17  1993/11/22  19:47:31  xemu
  * sanity checker
- * 
+ *
  * Revision 1.16  1993/10/08  00:56:49  xemu
  * The Object Millienia is HERE
- * 
+ *
  * Revision 1.15  1993/10/01  23:53:38  xemu
  * new object regime
- * 
+ *
  * Revision 1.14  1993/09/02  23:02:33  xemu
  * angle!
- * 
+ *
  * Revision 1.13  1993/08/19  20:19:57  jojak
  * revamped object hierarchy
- * 
+ *
  * Revision 1.12  1993/08/17  21:52:51  minman
  * fixed some bugs with assuming subclasses always 16
  * also added get_nth_from triple
- * 
+ *
  * Revision 1.11  1993/08/10  15:52:34  xemu
  * removed trap subclass
- * 
+ *
  * Revision 1.10  1993/08/06  16:03:58  minman
  * changed software subclasse
- * 
+ *
  * Revision 1.9  1993/08/05  19:16:24  mahk
  * Added nth_after_triple
- * 
+ *
  * Revision 1.8  1993/08/05  14:02:27  minman
  * changed to new object properties order
- * 
+ *
  * Revision 1.7  1993/08/04  02:08:23  minman
  * squished the grenade/drug list to 7 types a piece
- * 
+ *
  * Revision 1.6  1993/08/03  23:15:06  minman
  * added transitory animating subclass
- * 
+ *
  * Revision 1.5  1993/08/02  20:39:25  spaz
  * Fixed get_triple_From_class_nth_item()
- * 
+ *
  * Revision 1.4  1993/08/01  23:24:03  spaz
  * get_triple_from_class_nth_item() func
- * 
+ *
  * Revision 1.3  1993/07/31  20:49:29  minman
  * changed class/subclass hierarchy - no more shotguns
- * 
+ *
  * Revision 1.2  1993/07/26  00:49:22  minman
  * added comments
- * 
+ *
  * Revision 1.1  1993/07/25  23:16:00  minman
  * Initial revision
- * 
+ *
  *
  */
 
@@ -188,7 +188,7 @@ int get_triple_from_class_nth_item(uchar obclass, uchar n)
 //   Warning(("Invalid obclass and n given to get_triple_from_class_nth_item"));
 //   Warning(("Class - %d N - %d\n", obclass, n));
    return -1;
-}   
+}
 
 
 // ---------------------------------------------------------------------------
@@ -205,7 +205,7 @@ int nth_after_triple(int base, uchar n)
    total_types = 0;
 
    // Cycle through all 16 members of the specified class
-   for (obclass = TRIP2CL(base); obclass < NUM_CLASSES; obclass++) 
+   for (obclass = TRIP2CL(base); obclass < NUM_CLASSES; obclass++)
       for (i = TRIP2SC(base); i < num_subclasses[obclass]; i++)
       {
 
@@ -258,9 +258,9 @@ int get_nth_from_triple(int triple)
 // ------------------------------------------------------------------
 // sanity_check_obj_props()
 //
-// Performs a basic sanity check on the object properties.  Useful for making 
+// Performs a basic sanity check on the object properties.  Useful for making
 // sure that data hasn't been corrupted, either by bad load-time data or memory
-// trashes.  
+// trashes.
 //
 // Initially, this will probably be pretty bonehead and straightforward, but hopefully
 // it will get more stoked as time goes by and people decide to add stuff to it.

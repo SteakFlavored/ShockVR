@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/inc/RCS/ss_flet.h $
@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 typedef struct {
-   fix norm[3];   // unit normal 
+   fix norm[3];   // unit normal
    fix att;       // attentuation
    fix comp;      // compression
    int flags;     // flag field, BCD, Primary, Which type, so on
@@ -98,7 +98,7 @@ extern uchar             ss_edms_stupid_flag;
 #define SS_BCD_REPUL_SPD  0x800000
 #define SS_BCD_REPUL_NORM 0x000000
 #define SS_BCD_REPUL_FAST 0x800000
-                                 
+
 #define SS_BCD_EOF        (1<<31)
 #define TF_FLG_HPARAM     (1<<31)
 

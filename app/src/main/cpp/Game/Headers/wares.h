@@ -6,20 +6,20 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __WARES_H
 #define __WARES_H
 
-#include "gamesys.h" 
+#include "gamesys.h"
 
 /*
  * $Source: r:/prj/cit/src/inc/RCS/wares.h $
@@ -121,23 +121,23 @@ void get_ware_pointers(int type, ubyte **player_wares, ubyte **player_status,
                        WARE **wares, int *n);
 // Sets several pointers as appropriate to a ware type: the approp. player_struct
 // arrays, the approp. global wares property array, and the number of different
-// wares for that type                     
+// wares for that type
 
 char* get_ware_name(int waretype, int num, char* buf, int bufsz);
-// Fills the buffer with the SHORT name of the ware, specified by 
+// Fills the buffer with the SHORT name of the ware, specified by
 // one of the of the four ware types (hard,combat,def,misc),
-// and "subtype"  
+// and "subtype"
 
 int get_ware_triple(int waretype, int num);
-// converts a (waretype,num) pair into a triple. 
+// converts a (waretype,num) pair into a triple.
 
 void use_ware(int waretype, int num);
-// Uses a ware from the player's inventory, same format 
+// Uses a ware from the player's inventory, same format
 
 int get_player_ware_version(int waretype, int num);
-// get_player_ware_version returns the version number 
-// of a ware in the player's inventory.  zero means 
-// the player doesn't have it. 
+// get_player_ware_version returns the version number
+// of a ware in the player's inventory.  zero means
+// the player doesn't have it.
 
 
 void wares_init();
@@ -150,7 +150,7 @@ void wares_update();
 // Globals
 // -------
 
-// what mode are we using. 
+// what mode are we using.
 extern ubyte motionware_mode;
 #define MOTION_INACTIVE 0
 #define MOTION_SKATES   1

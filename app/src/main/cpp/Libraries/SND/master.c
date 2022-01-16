@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //===================================================================
 // $Source: r:/prj/lib/src/snd/RCS/master.c $
@@ -81,7 +81,7 @@ void snd_shutdown(void)
 		SndDisposeChannel(_snd_smp_prm[i].sndChan, TRUE);
 		DisposePtr((Ptr)_snd_smp_prm[i].sndChan);
 	}
-	
+
 	DisposeRoutineDescriptor(gDigiCallBackProcPtr);
 	gDigiCallBackProcPtr = NULL;
 }
@@ -92,12 +92,12 @@ void snd_shutdown(void)
 pascal void HandleSndCallBack(SndChannelPtr chan, SndCommand *cmd)
 {
 	snd_digi_parms *p = (snd_digi_parms *)cmd->param2;
-	
+
 //	printf("Call-back!   loops:%d, pan:%x, vol:%x, sample:%x\n",
 //			p->loops, p->pan, p->vol, p->sample);
 
 	// See if we need to repeat the sound.
-		
+
 	if (p->loops == -1 || p->loops > 1)
 	{
 		if (p->loops > 1) p->loops--;

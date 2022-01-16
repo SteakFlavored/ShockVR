@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/polyint.h $
@@ -63,8 +63,8 @@ do {                                      \
    _w_max = _vpl[0]->w;                   \
    for (pvp=_vpl+1; pvp<_vpl+_n; ++pvp) { \
       y=fix_cint((*pvp)->y);              \
-      if (y < _y_min) {                   \ 
-         _y_min = y;                      \ 
+      if (y < _y_min) {                   \
+         _y_min = y;                      \
          _w_min = (*pvp)->w;              \
          _p_left = pvp;                   \
       }                                   \

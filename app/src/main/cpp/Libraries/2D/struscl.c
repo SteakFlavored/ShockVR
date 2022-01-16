@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/struscl.c $
@@ -45,7 +45,7 @@ void gen_font_scale_ustring (grs_font *f, char *s, short x0, short y0, short w, 
    fix x, y;                  /* position of current character */
    fix x_scale, y_scale;      /* x and y scale factors */
    fix next_x, next_y, del_y; /* need to use next, del_y since it's const */
-   int i;                     
+   int i;
    uchar c;                    /* current character */
 
    char_buf = (uchar *)f + f->buf;
@@ -62,8 +62,8 @@ void gen_font_scale_ustring (grs_font *f, char *s, short x0, short y0, short w, 
    x = x0<<16; y = y0<<16;
 
    for (i=0, del_y = 0; i < f->h; del_y += y_scale, i++);  /* multiply fix by int, faster ?? */
-   next_y = y + del_y; 
-  
+   next_y = y + del_y;
+
    while ((c = (uchar)(*s++)) != '\0') {
       if (c=='\n' || c==CHAR_SOFTCR) {
          x = x0<<16;
@@ -83,13 +83,13 @@ void gen_font_scale_ustring (grs_font *f, char *s, short x0, short y0, short w, 
          bm.bits = char_buf + (offset>>3);
          bm.align = offset&7;
          gr_scale_ubitmap (&bm, fix_int (x), fix_int (y),  /* does this exist? */
-				fix_int (next_x) - fix_int(x), 
+				fix_int (next_x) - fix_int(x),
 				fix_int (next_y) - fix_int (y));
       }
       else {
          bm.bits = char_buf + offset;
-         gr_scale_ubitmap (&bm, fix_int (x), fix_int (y),  
-				fix_int (next_x) - fix_int(x), 
+         gr_scale_ubitmap (&bm, fix_int (x), fix_int (y),
+				fix_int (next_x) - fix_int(x),
 				fix_int (next_y) - fix_int (y));
 
       }

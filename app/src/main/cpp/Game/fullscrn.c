@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/fullscrn.c $
@@ -55,7 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tools.h"
 #include "wares.h"
 
-#ifdef NOT_YET //KLC stereo 
+#ifdef NOT_YET //KLC stereo
 
 #include <config.h>
 
@@ -231,20 +231,20 @@ void change_svga_screen_mode()
 	extern void amap_pixratio_set(fix ratio);
 	extern bool redraw_paused;
 	extern Boolean DoubleSize;
-	
+
 	uchar cur_pal[768];
 	uchar *s_table;
 	short cur_w, cur_h, cur_m;
 	short mx,my;
 	bool mode_change = FALSE;
 	short temp;
-	
+
 	if (convert_use_mode != mode_id)
 		mode_change = TRUE;
 	if (mode_change)
 	{
 		int retval = -1;
-		
+
 		ui_mouse_get_xy(&mx,&my);
 //		gr_get_pal(0,256,&cur_pal[0]);
 		s_table = gr_get_light_tab();
@@ -296,7 +296,7 @@ void change_svga_screen_mode()
 	 	{
 			FreeDoubleBuffer();
 			svga_render_context = fr_place_view(FR_NEWVIEW, FR_DEFCAM, gMainOffScreen.Address,
-																	FR_DOUBLEB_MASK|FR_WINDOWD_MASK,0,0, 
+																	FR_DOUBLEB_MASK|FR_WINDOWD_MASK,0,0,
 	 																0,0,cur_w,cur_h);
 	 	}
 	 }
@@ -306,17 +306,17 @@ void change_svga_screen_mode()
 	 	{
 			if (!AllocDoubleBuffer(536, 259))
 				DebugStr("\pCan't allocate low-res double buffer!"); 		//¥¥¥Handle memory error!!
-			svga_render_context = fr_place_view(FR_NEWVIEW, FR_DEFCAM, gMainOffScreen.Address, 
-																	FR_DOUBLEB_MASK|FR_WINDOWD_MASK|FR_CURVIEW_STRT, 0, 0, 
-																	SCONV_X(SCREEN_VIEW_X)>>1, SCONV_Y(SCREEN_VIEW_Y)>>1, 
+			svga_render_context = fr_place_view(FR_NEWVIEW, FR_DEFCAM, gMainOffScreen.Address,
+																	FR_DOUBLEB_MASK|FR_WINDOWD_MASK|FR_CURVIEW_STRT, 0, 0,
+																	SCONV_X(SCREEN_VIEW_X)>>1, SCONV_Y(SCREEN_VIEW_Y)>>1,
 																	SCONV_X(SCREEN_VIEW_WIDTH)>>1, (SCONV_Y(SCREEN_VIEW_HEIGHT)+1)>>1);
 		}
 		else
 		{
 			FreeDoubleBuffer();
-			svga_render_context = fr_place_view(FR_NEWVIEW, FR_DEFCAM, gMainOffScreen.Address, 
+			svga_render_context = fr_place_view(FR_NEWVIEW, FR_DEFCAM, gMainOffScreen.Address,
 																	FR_DOUBLEB_MASK|FR_WINDOWD_MASK|FR_CURVIEW_STRT, 0, 0,
-																	SCONV_X(SCREEN_VIEW_X), SCONV_Y(SCREEN_VIEW_Y), 
+																	SCONV_X(SCREEN_VIEW_X), SCONV_Y(SCREEN_VIEW_Y),
 																	SCONV_X(SCREEN_VIEW_WIDTH), SCONV_Y(SCREEN_VIEW_HEIGHT));
 	 	}
 	}
@@ -339,7 +339,7 @@ void change_svga_screen_mode()
 			game_redrop_rad(0);
 		else
 			game_redrop_rad(2+mode_id);
-		
+
 		ss_mouse_convert(&mx,&my,FALSE);
 /*KLC  leave out until stereo view is needed
 		if (mode_id == 5) // hack hack stereo hack
@@ -378,7 +378,7 @@ void change_svga_screen_mode()
 	view360_update_screen_mode();
 	ss_set_hack_mode(0,&temp);
 	olh_svga_deal();
-	
+
 	change_svga_cursors();
 //KLC	gamma_dealfunc(QUESTVAR_GET(GAMMACOR_QVAR));
 	gamma_dealfunc(gShockPrefs.doGamma);
@@ -456,7 +456,7 @@ void fullscreen_exit()
    extern grs_screen *cit_screen;
    uchar *s_table;
 #endif
-   
+
 #ifdef STEREO_SUPPORT
    if (mode_id == 5)
       mode_id = 0;

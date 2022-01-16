@@ -6,64 +6,64 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
-#include "fix.h" 
-#ifndef __2D_H 
-#define __2D_H 
+#include "fix.h"
+#ifndef __2D_H
+#define __2D_H
 typedef struct {
-   uchar id_maj;     
-   uchar id_min;     
-   short memory;     
-   short modes[16];  
+   uchar id_maj;
+   uchar id_min;
+   short memory;
+   short modes[16];
 } grs_sys_info;
 typedef struct {
-   short w;          
-   short h;          
-   uchar b;          
+   short w;
+   short h;
+   uchar b;
 } grs_mode_info;
 typedef ulong grs_rgb;
 typedef struct {
-   uchar *bits;      
-   uchar type;       
-   uchar align;      
-   ushort flags;     
-   short w;          
-   short h;          
-   ushort row;       
-   uchar wlog;       
-   uchar hlog;       
+   uchar *bits;
+   uchar type;
+   uchar align;
+   ushort flags;
+   short w;
+   short h;
+   ushort row;
+   uchar wlog;
+   uchar hlog;
 } grs_bitmap;
 typedef struct _sten {
-   short l;          
-   short r;          
-   struct _sten *n;  
+   short l;
+   short r;
+   struct _sten *n;
 } grs_sten_elem;
 typedef struct {
-   grs_sten_elem *elem;    
-   long flags;             
+   grs_sten_elem *elem;
+   long flags;
 } grs_stencil;
 typedef union {
    struct {
-      grs_stencil *sten;  
-      fix left;            
-      fix top;             
+      grs_stencil *sten;
+      fix left;
+      fix top;
       fix right;
       fix bot;
    } f;
    struct {
-      grs_stencil *sten;  
-      short left;          
+      grs_stencil *sten;
+      short left;
       short pad0;
-      short top;           
+      short top;
       short pad1;
       short right;
       short pad2;
@@ -84,44 +84,44 @@ typedef struct {
 	short off_tab[1];
 } grs_font;
 typedef struct {
-   long fcolor;      
-   long bcolor;      
-   grs_font *font;   
-   long text_attr;   
-   long fill_type;   
-   long fill_parm;   
-   grs_clip clip;    
+   long fcolor;
+   long bcolor;
+   grs_font *font;
+   long text_attr;
+   long fill_type;
+   long fill_parm;
+   grs_clip clip;
 } grs_context;
 typedef struct {
-   grs_bitmap  bm;   
-   grs_context gc;   
-   uchar **ytab;     
+   grs_bitmap  bm;
+   grs_context gc;
+   uchar **ytab;
 } grs_canvas;
 typedef struct {
-   grs_bitmap bm;    
-   grs_canvas *c;    
+   grs_bitmap bm;
+   grs_canvas *c;
    uchar *pal;
    grs_rgb *bpal;
    uchar *ipal;
    uchar *ltab;
    uchar ***transtab;
-   uchar *clut;      
-   short x;          
-   short y;          
+   uchar *clut;
+   short x;
+   short y;
 } grs_screen;
 typedef struct {
-   fix aspect;       
-   short w;          
-   short h;          
-   uchar *vbase;     
+   fix aspect;
+   short w;
+   short h;
+   uchar *vbase;
 } grs_drvcap;
 typedef struct {
-   fix x,y,z;    
+   fix x,y,z;
 } grs_point3d;
 typedef struct {
-   fix x, y;                  
-   fix u, v, w;               
-   fix i;                     
+   fix x, y;
+   fix u, v, w;
+   fix i;
 } grs_vertex;
 typedef struct {
    grs_point3d normal;
@@ -129,8 +129,8 @@ typedef struct {
    grs_point3d v_grad;
 } grs_per_context;
 typedef struct {
-   void (*scanline_func)();   
-   void (*shell_func)();      
+   void (*scanline_func)();
+   void (*shell_func)();
    union {uchar *clut; long fill_parm;};
    fix scan_slope;
    int dp;
@@ -225,11 +225,11 @@ extern grs_bitmap *gr_alloc_bitmap
 #define gr_init_sub_bm gr_init_sub_bitmap
 #define gr_alloc_bm gr_alloc_bitmap
 enum {
-   
+
    GRC_PIXEL,
-#define GRC_LINE GRC_PIXEL 
+#define GRC_LINE GRC_PIXEL
    GRC_WIRE_POLY_LINE,
-   GRC_DEGEN_LINE, 
+   GRC_DEGEN_LINE,
    GRC_BITMAP,
    GRC_STENCIL_BITMAP,
    GRC_CLUT_BITMAP,
@@ -248,8 +248,8 @@ enum {
    GRC_TRANS_LIT_SCALE,
    GRC_CLUT_SCALE,
    GRC_TRANS_CLUT_SCALE,
-   GRC_POLY,      
-   GRC_MORE_POLY, 
+   GRC_POLY,
+   GRC_MORE_POLY,
    GRC_LIN,
    GRC_TRANS_LIN,
    GRC_LIT_LIN,
@@ -302,7 +302,7 @@ enum {
    FILL_SOLID,
    GRD_FILL_TYPES
 };
-typedef void (*grt_function_table[GRD_FILL_TYPES][GRD_FUNCS*REAL_BMT_TYPES])(); 
+typedef void (*grt_function_table[GRD_FILL_TYPES][GRD_FUNCS*REAL_BMT_TYPES])();
 extern grt_function_table gen_function_table;
 extern grt_function_table flat8_function_table;
 extern grt_function_table flat8d_function_table;
@@ -316,9 +316,9 @@ enum {
    GR_VLINE,
    GR_SLINE,
    GR_CLINE,
-   GR_WIRE_POLY_LINE,   
-   GR_WIRE_POLY_SLINE,   
-   GR_WIRE_POLY_CLINE,   
+   GR_WIRE_POLY_LINE,
+   GR_WIRE_POLY_SLINE,
+   GR_WIRE_POLY_CLINE,
    GRD_LINE_TYPES
 };
 typedef
@@ -331,17 +331,17 @@ typedef
    void (*grt_wire_poly_uline) (long, long, grs_vertex *, grs_vertex *);
 typedef
    void (*grt_wire_poly_ucline) (long, long, grs_vertex *, grs_vertex *);
-typedef 
-    grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES]; 
+typedef
+    grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES];
 #define grt_wire_poly_usline grt_wire_poly_ucline;
 extern grt_uline_fill *grd_uline_fill_vector;
 extern grt_uline_fill_table *grd_uline_fill_table;
 extern grt_uline_fill_table *grd_uline_fill_table_list[];
-extern grt_uline_fill gen_uline_fill_table[][GRD_LINE_TYPES];  
-extern grt_uline_fill flat8_uline_fill_table[][GRD_LINE_TYPES];  
-extern grt_uline_fill bank8_uline_fill_table[][GRD_LINE_TYPES];  
-extern grt_uline_fill bank24_uline_fill_table[][GRD_LINE_TYPES];  
-extern grt_uline_fill modex_uline_fill_table[][GRD_LINE_TYPES];  
+extern grt_uline_fill gen_uline_fill_table[][GRD_LINE_TYPES];
+extern grt_uline_fill flat8_uline_fill_table[][GRD_LINE_TYPES];
+extern grt_uline_fill bank8_uline_fill_table[][GRD_LINE_TYPES];
+extern grt_uline_fill bank24_uline_fill_table[][GRD_LINE_TYPES];
+extern grt_uline_fill modex_uline_fill_table[][GRD_LINE_TYPES];
 extern grt_function_table *grd_function_table_list[];
 extern grt_function_table *grd_function_fill_table;
 #define gr_init_st(s,p,f) (s)->elem=(p), (s)->flags=(f)
@@ -358,10 +358,10 @@ extern int gr_close (void);
 #ifdef GR_TEMP_USE_MEMSTACK
 #define gr_alloc_temp temp_malloc
 #define gr_free_temp temp_free
-#else 
+#else
 extern void *gr_alloc_temp (int n);
 extern void gr_free_temp (void *p);
-#endif 
+#endif
 extern grs_context grd_defgc;
 extern void gr_set_canvas (grs_canvas *c);
 extern int gr_push_canvas (grs_canvas *c);
@@ -382,7 +382,7 @@ extern void gr_free_sub_canvas (grs_canvas *c);
 #define CLIP_RIGHT   4
 #define CLIP_BOT     8
 #define CLIP_ALL     16
-extern int gr_clip_fix_code 
+extern int gr_clip_fix_code
    (fix, fix);
 extern int gr_clip_int_line
    (short *x0, short *y0, short *x1, short *y1);
@@ -458,7 +458,7 @@ do {                            \
 do {                                 \
    grd_canvas->gc.fill_type=(type);  \
    gr_set_canvas(grd_canvas);        \
-} while (0)                               
+} while (0)
 #endif
 #define gr_get_fill_type() (grd_canvas->gc.fill_type)
 #define gr_set_fill_parm(parm) \
@@ -554,36 +554,36 @@ enum {
 };
 extern grs_mode_info grd_mode_info[];
 extern int gr_set_mode (int mode, int clear);
-   
+
 #define STF_MULT     1
 extern grs_screen *gr_alloc_screen (short w, short h);
 extern void gr_free_screen (grs_screen *s);
 extern void gr_set_screen (grs_screen *s);
-typedef 
+typedef
    void *grt_line_clip_fill;
-typedef 
+typedef
    int (*grt_line_clip_fill_v) (long, long, grs_vertex *, grs_vertex *);
 typedef
    int (*grt_line_clip_fill_xy) (short, short, short, long, long);
 extern grt_line_clip_fill *grd_line_clip_fill_vector;
-#define grd_uline_fill  ((grt_uline_fill_v)  (grd_uline_fill_vector[GR_LINE])) 
+#define grd_uline_fill  ((grt_uline_fill_v)  (grd_uline_fill_vector[GR_LINE]))
 #define grd_uiline_fill ((grt_uline_fill_v)  (grd_uline_fill_vector[GR_ILINE]))
 #define grd_uhline_fill ((grt_uline_fill_xy) (grd_uline_fill_vector[GR_HLINE]))
 #define grd_uvline_fill ((grt_uline_fill_xy) (grd_uline_fill_vector[GR_VLINE]))
-#define grd_usline_fill ((grt_uline_fill_v) (grd_uline_fill_vector[GR_SLINE])) 
-#define grd_ucline_fill ((grt_uline_fill_v) (grd_uline_fill_vector[GR_CLINE])) 
-#define grd_wire_poly_uline_fill ((grt_wire_poly_uline) (grd_uline_fill_vector[GR_WIRE_POLY_LINE])) 
-#define grd_wire_poly_usline_fill ((grt_wire_poly_usline) (grd_uline_fill_vector[GR_WIRE_POLY_SLINE])) 
-#define grd_wire_poly_ucline_fill ((grt_wire_poly_ucline) (grd_uline_fill_vector[GR_WIRE_POLY_CLINE])) 
-#define grd_line_clip_fill   ((grt_line_clip_fill_v)  (grd_line_clip_fill_vector[GR_LINE])) 
+#define grd_usline_fill ((grt_uline_fill_v) (grd_uline_fill_vector[GR_SLINE]))
+#define grd_ucline_fill ((grt_uline_fill_v) (grd_uline_fill_vector[GR_CLINE]))
+#define grd_wire_poly_uline_fill ((grt_wire_poly_uline) (grd_uline_fill_vector[GR_WIRE_POLY_LINE]))
+#define grd_wire_poly_usline_fill ((grt_wire_poly_usline) (grd_uline_fill_vector[GR_WIRE_POLY_SLINE]))
+#define grd_wire_poly_ucline_fill ((grt_wire_poly_ucline) (grd_uline_fill_vector[GR_WIRE_POLY_CLINE]))
+#define grd_line_clip_fill   ((grt_line_clip_fill_v)  (grd_line_clip_fill_vector[GR_LINE]))
 #define grd_iline_clip_fill  ((grt_line_clip_fill_v)  (grd_line_clip_fill_vector[GR_ILINE]))
 #define grd_hline_clip_fill  ((grt_line_clip_fill_xy) (grd_line_clip_fill_vector[GR_HLINE]))
 #define grd_vline_clip_fill  ((grt_line_clip_fill_xy) (grd_line_clip_fill_vector[GR_VLINE]))
-#define grd_sline_clip_fill  ((grt_line_clip_fill_v) (grd_line_clip_fill_vector[GR_SLINE])) 
-#define grd_cline_clip_fill  ((grt_line_clip_fill_v) (grd_line_clip_fill_vector[GR_CLINE])) 
-#define grd_wire_poly_line_clip_fill ((grt_wire_poly_uline) (grd_line_clip_fill_vector[GR_WIRE_POLY_LINE])) 
-#define grd_wire_poly_sline_clip_fill ((grt_wire_poly_usline) (grd_line_clip_fill_vector[GR_WIRE_POLY_SLINE])) 
-#define grd_wire_poly_cline_clip_fill ((grt_wire_poly_ucline) (grd_line_clip_fill_vector[GR_WIRE_POLY_CLINE])) 
+#define grd_sline_clip_fill  ((grt_line_clip_fill_v) (grd_line_clip_fill_vector[GR_SLINE]))
+#define grd_cline_clip_fill  ((grt_line_clip_fill_v) (grd_line_clip_fill_vector[GR_CLINE]))
+#define grd_wire_poly_line_clip_fill ((grt_wire_poly_uline) (grd_line_clip_fill_vector[GR_WIRE_POLY_LINE]))
+#define grd_wire_poly_sline_clip_fill ((grt_wire_poly_usline) (grd_line_clip_fill_vector[GR_WIRE_POLY_SLINE]))
+#define grd_wire_poly_cline_clip_fill ((grt_wire_poly_ucline) (grd_line_clip_fill_vector[GR_WIRE_POLY_CLINE]))
 #define grd_pixel_fill(c, parm, x, y) gr_fill_upixel(c, x, y)
 #define gr_double_h_ubitmap(bm,x,y) ((int (*)(grs_bitmap *_bm,short _x,short _y)) \
    grd_canvas_table[DOUBLE_H_DEVICE_UBITMAP+2*((bm)->type)])(bm,x,y)
@@ -769,7 +769,7 @@ do {\
    grd_uiline_fill (gr_get_fcolor(), gr_get_fill_parm(), &giu_v0, &giu_v1); \
 } while (0);
 extern int gr_check_poly_y_min(int n,grs_vertex **vpl,long *h_buf);
-   
+
 #define gr_ucpoly \
    ((void (*)(long c, int n,grs_vertex **vpl))grd_canvas_table[FIX_UCPOLY])
 #define gr_cpoly \
@@ -925,7 +925,7 @@ extern struct {
 } grd_pc_point;
 #endif
 extern gr_per_set_tol(ubyte ltol, ubyte wftol);
-   
+
 #define gr_clut_ubitmap(bm,x,y,cl) \
    ((void (*)(grs_bitmap *_bm,short _x,short _y, uchar *_cl)) \
    grd_canvas_table[CLUT_DRAW_DEVICE_UBITMAP+2*((bm)->type)])(bm,x,y,cl)
@@ -1053,10 +1053,10 @@ do { \
    ((void (*)(grs_bitmap *bm)) grd_canvas_table[INTERP2_UBITMAP])
 #define gr_filter2_ubitmap \
    ((void (*)(grs_bitmap *bm)) grd_canvas_table[FILTER2_UBITMAP])
-      
+
 #define gr_scale_ubitmap(bm,x,y,w,h)  \
    ((void (*)(grs_bitmap *_bm,short _x,short _y,short _w,short _h)) \
-   grd_canvas_table[SCALE_DEVICE_UBITMAP+2*((bm)->type)]) (bm,x,y,w,h) 
+   grd_canvas_table[SCALE_DEVICE_UBITMAP+2*((bm)->type)]) (bm,x,y,w,h)
 #define gr_scale_bitmap(bm,x,y,w,h)  \
    ((int (*)(grs_bitmap *_bm,short _x,short _y,short _w,short _h)) \
    grd_canvas_table[SCALE_DEVICE_BITMAP+2*((bm)->type)]) (bm,x,y,w,h)
@@ -1078,8 +1078,8 @@ do { \
    ((void (*)(long c,int n,grs_vertex **vpl))grd_canvas_table[FIX_TLUC8_USPOLY])
 #define gr_tluc8_spoly \
    ((int (*)(long c,int n,grs_vertex **vpl))grd_canvas_table[FIX_TLUC8_SPOLY])
-   
-// MLA  - had to change the gr_string calls because they weren't passing parms correctly   
+
+// MLA  - had to change the gr_string calls because they weren't passing parms correctly
 #define gr_ustring(s, x, y) \
    (((void (*)(grs_font *, char *, short, short)) grd_canvas_table[DRAW_USTRING])) ((grs_font *)gr_get_font(), s, x, y)
 #define gr_string(s, x, y) \
@@ -1092,14 +1092,14 @@ do { \
    (((void (*)(grs_font *, char, short, short)) grd_canvas_table[DRAW_UCHAR])) ((grs_font *)gr_get_font(), s, x, y)
 #define gr_char(s, x, y) \
    (((int (*)(grs_font *, char, short, short)) grd_canvas_table[DRAW_CHAR])) ((grs_font *)gr_get_font(), s, x, y)
-   
-   
+
+
 #define gr_font_ustring \
-   ((void (*)(grs_font *f,char *s,short x,short y))grd_canvas_table[DRAW_USTRING]) 
+   ((void (*)(grs_font *f,char *s,short x,short y))grd_canvas_table[DRAW_USTRING])
 #define gr_font_string \
    ((int (*)(grs_font *f,char *s,short x,short y))grd_canvas_table[DRAW_STRING])
 #define gr_font_scale_ustring \
-   ((void (*)(grs_font *f,char *s,short x,short y, short w, short h))grd_canvas_table[DRAW_SCALE_USTRING]) 
+   ((void (*)(grs_font *f,char *s,short x,short y, short w, short h))grd_canvas_table[DRAW_SCALE_USTRING])
 #define gr_font_scale_string \
    ((int (*)(grs_font *f,char *s,short x,short y, short w, short h))grd_canvas_table[DRAW_SCALE_STRING])
 #define gr_font_uchar \
@@ -1107,16 +1107,16 @@ do { \
 #define gr_font_char \
    ((int (*)(grs_font *f,char c,short x,short y))grd_canvas_table[DRAW_CHAR])
 enum {
-   
-   SET_UPIXEL8,            
+
+   SET_UPIXEL8,
    SET_PIXEL8,
    GET_UPIXEL8,
    GET_PIXEL8,
-   SET_UPIXEL24,           
+   SET_UPIXEL24,
    SET_PIXEL24,
    GET_UPIXEL24,
    GET_PIXEL24,
-   DRAW_CLEAR,             
+   DRAW_CLEAR,
    DRAW_UPOINT,
    DRAW_POINT,
    SET_UPIXEL8_INTERRUPT,
@@ -1127,9 +1127,9 @@ enum {
    DRAW_RECT,
    DRAW_UBOX,
    DRAW_BOX,
-   PUSH_STATE,              
+   PUSH_STATE,
    POP_STATE,
-   FIX_USLINE,             
+   FIX_USLINE,
    FIX_SLINE,
    FIX_UCLINE,
    FIX_CLINE,
@@ -1162,7 +1162,7 @@ enum {
    FLAT8_LIT_FLOOR_MAP,
    FLAT8_CLUT_FLOOR_UMAP,
    FLAT8_CLUT_FLOOR_MAP,
-   DEVICE_ULMAP,           
+   DEVICE_ULMAP,
    DEVICE_LMAP,
    MONO_ULMAP,
    MONO_LMAP,
@@ -1174,7 +1174,7 @@ enum {
    RSD_LMAP,
    TLUC8_ULMAP,
    TLUC8_LMAP,
-   DEVICE_LIT_LIN_UMAP,           
+   DEVICE_LIT_LIN_UMAP,
    DEVICE_LIT_LIN_MAP,
    MONO_LIT_LIN_UMAP,
    MONO_LIT_LIN_MAP,
@@ -1186,7 +1186,7 @@ enum {
    RSD_LIT_LIN_MAP,
    TLUC8_LIT_LIN_UMAP,
    TLUC8_LIT_LIN_MAP,
-   DEVICE_CLUT_LIN_UMAP,           
+   DEVICE_CLUT_LIN_UMAP,
    DEVICE_CLUT_LIN_MAP,
    MONO_CLUT_LIN_UMAP,
    MONO_CLUT_LIN_MAP,
@@ -1199,8 +1199,8 @@ enum {
    TLUC8_CLUT_LIN_UMAP,
    TLUC8_CLUT_LIN_MAP,
    FLAT8_SOLID_LIN_UMAP,
-   FLAT8_SOLID_LIN_MAP,            
-   DEVICE_PER_UMAP,                
+   FLAT8_SOLID_LIN_MAP,
+   DEVICE_PER_UMAP,
    DEVICE_PER_MAP,
    MONO_PER_UMAP,
    MONO_PER_MAP,
@@ -1212,7 +1212,7 @@ enum {
    RSD_PER_MAP,
    TLUC8_PER_UMAP,
    TLUC8_PER_MAP,
-   DEVICE_LIT_PER_UMAP,           
+   DEVICE_LIT_PER_UMAP,
    DEVICE_LIT_PER_MAP,
    MONO_LIT_PER_UMAP,
    MONO_LIT_PER_MAP,
@@ -1224,7 +1224,7 @@ enum {
    RSD_LIT_PER_MAP,
    TLUC8_LIT_PER_UMAP,
    TLUC8_LIT_PER_MAP,
-   DEVICE_CLUT_PER_UMAP,           
+   DEVICE_CLUT_PER_UMAP,
    DEVICE_CLUT_PER_MAP,
    MONO_CLUT_PER_UMAP,
    MONO_CLUT_PER_MAP,
@@ -1236,9 +1236,9 @@ enum {
    RSD_CLUT_PER_MAP,
    TLUC8_CLUT_PER_UMAP,
    TLUC8_CLUT_PER_MAP,
-   FLAT8_SOLID_PER_UMAP,           
+   FLAT8_SOLID_PER_UMAP,
    FLAT8_SOLID_PER_MAP,
-   INT_UCIRCLE,            
+   INT_UCIRCLE,
    INT_CIRCLE,
    FIX_UCIRCLE,
    FIX_CIRCLE,
@@ -1250,7 +1250,7 @@ enum {
    INT_ROD,
    FIX_UROD,
    FIX_ROD,
-   DRAW_DEVICE_UBITMAP,    
+   DRAW_DEVICE_UBITMAP,
    DRAW_DEVICE_BITMAP,
    DRAW_MONO_UBITMAP,
    DRAW_MONO_BITMAP,
@@ -1262,7 +1262,7 @@ enum {
    DRAW_RSD8_BITMAP,
    DRAW_TLUC8_UBITMAP,
    DRAW_TLUC8_BITMAP,
-   CLUT_DRAW_DEVICE_UBITMAP,    
+   CLUT_DRAW_DEVICE_UBITMAP,
    CLUT_DRAW_DEVICE_BITMAP,
    CLUT_DRAW_MONO_UBITMAP,
    CLUT_DRAW_MONO_BITMAP,
@@ -1274,9 +1274,9 @@ enum {
    CLUT_DRAW_RSD8_BITMAP,
    CLUT_DRAW_TLUC8_UBITMAP,
    CLUT_DRAW_TLUC8_BITMAP,
-   SOLID_RSD8_UBITMAP,      
+   SOLID_RSD8_UBITMAP,
    SOLID_RSD8_BITMAP,
-   SCALE_DEVICE_UBITMAP,    
+   SCALE_DEVICE_UBITMAP,
    SCALE_DEVICE_BITMAP,
    SCALE_MONO_UBITMAP,
    SCALE_MONO_BITMAP,
@@ -1288,9 +1288,9 @@ enum {
    SCALE_RSD8_BITMAP,
    SCALE_TLUC8_UBITMAP,
    SCALE_TLUC8_BITMAP,
-   SOLID_SCALE_RSD8_UBITMAP,      
+   SOLID_SCALE_RSD8_UBITMAP,
    SOLID_SCALE_RSD8_BITMAP,
-   CLUT_SCALE_DEVICE_UBITMAP,    
+   CLUT_SCALE_DEVICE_UBITMAP,
    CLUT_SCALE_DEVICE_BITMAP,
    CLUT_SCALE_MONO_UBITMAP,
    CLUT_SCALE_MONO_BITMAP,
@@ -1302,7 +1302,7 @@ enum {
    CLUT_SCALE_RSD8_BITMAP,
    CLUT_SCALE_TLUC8_UBITMAP,
    CLUT_SCALE_TLUC8_BITMAP,
-   MASK_DEVICE_UBITMAP,    
+   MASK_DEVICE_UBITMAP,
    MASK_DEVICE_BITMAP,
    MASK_MONO_UBITMAP,
    MASK_MONO_BITMAP,
@@ -1314,7 +1314,7 @@ enum {
    MASK_RSD8_BITMAP,
    MASK_TLUC8_UBITMAP,
    MASK_TLUC8_BITMAP,
-   GET_DEVICE_UBITMAP,     
+   GET_DEVICE_UBITMAP,
    GET_DEVICE_BITMAP,
    GET_MONO_UBITMAP,
    GET_MONO_BITMAP,
@@ -1326,7 +1326,7 @@ enum {
    GET_RSD8_BITMAP,
    GET_TLUC8_UBITMAP,
    GET_TLUC8_BITMAP,
-   HFLIP_DEVICE_UBITMAP,   
+   HFLIP_DEVICE_UBITMAP,
    HFLIP_DEVICE_BITMAP,
    HFLIP_MONO_UBITMAP,
    HFLIP_MONO_BITMAP,
@@ -1338,7 +1338,7 @@ enum {
    HFLIP_RSD8_BITMAP,
    HFLIP_TLUC8_UBITMAP,
    HFLIP_TLUC8_BITMAP,
-   CLUT_HFLIP_DEVICE_UBITMAP,  
+   CLUT_HFLIP_DEVICE_UBITMAP,
    CLUT_HFLIP_DEVICE_BITMAP,
    CLUT_HFLIP_MONO_UBITMAP,
    CLUT_HFLIP_MONO_BITMAP,
@@ -1422,15 +1422,15 @@ enum {
    SMOOTH_DOUBLE_HV_RSD8_BITMAP,
    SMOOTH_DOUBLE_HV_TLUC8_UBITMAP,
    SMOOTH_DOUBLE_HV_TLUC8_BITMAP,
-   DRAW_USTRING,           
+   DRAW_USTRING,
    DRAW_STRING,
    DRAW_SCALE_USTRING,
    DRAW_SCALE_STRING,
    DRAW_UCHAR,
    DRAW_CHAR,
-   CALC_ROW,               
+   CALC_ROW,
    SUB_BITMAP,
-   START_FRAME,            
+   START_FRAME,
    END_FRAME,
    GRD_CANVAS_FUNCS
 };
@@ -1554,26 +1554,26 @@ typedef struct {
    grs_vertex val;
    grs_vertex d;
 } grs_span_vertex;
-typedef struct _span {  
-  short l, r;    
+typedef struct _span {
+  short l, r;
   struct _span *n;
   union {
     struct {
-      grs_span_vertex *lvert, *rvert;  
+      grs_span_vertex *lvert, *rvert;
     } pgon;
     struct {
-      uchar *pp; 
-      fix scale; 
-      fix start; 
+      uchar *pp;
+      fix scale;
+      fix start;
     } bitmap;
   };
 } grs_span;
 enum {
-   GRUS_SOLID,                         
+   GRUS_SOLID,
    GRS_SOLID,
-   GRUS_OPAQUE8,                       
+   GRUS_OPAQUE8,
    GRS_OPAQUE8,
-   GRUS_TRANS8,                        
+   GRUS_TRANS8,
    GRS_TRANS8,
    GRUS_OPAQUETLUC8,
    GRS_OPAQUETLUC8,

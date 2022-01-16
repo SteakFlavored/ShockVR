@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/genvrect.c $
@@ -27,10 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: genvrect.c $
  * Revision 1.3  1993/10/19  09:57:56  kaboom
  * Replaced #include   new headers.
- * 
+ *
  * Revision 1.2  1993/10/08  01:15:54  kaboom
  * Changed quotes in #include lines to angle brackets for Watcom.
- * 
+ *
  * Revision 1.1  1993/08/19  21:53:06  jaemz
  * Initial revision
  */
@@ -62,7 +62,7 @@ void gen_vox_rect(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_b
    long fdxdz,fdydz;
    long oldcurx;
    long oldcury;
-   
+
    far_ver = (near_ver+2)%4;
 
    /* How to scan given near_ver */

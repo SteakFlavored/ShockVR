@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		AQTM.C		Animfile handler for Quicktime movie files
 //		Rex E. Bradford (REX)
@@ -25,17 +25,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Revision 1.4  1994/10/18  16:00:44  rex
  * Added ability to "write" frame pal for 16-bit movies, so pal changes
  * can cause 16-bit colors to be written correctly
- * 
+ *
  * Revision 1.3  1994/09/30  16:57:53  rex
  * Added routines for movie writing
- * 
+ *
  * Revision 1.2  1994/09/29  10:32:14  rex
  * Revamped with new quiktime.c api
- * 
+ *
  * Revision 1.1  1994/09/27  17:22:51  rex
  * Initial revision
- * 
- * 
+ *
+ *
 */
 
 #include <string.h>

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/clpclin.c $
@@ -40,10 +40,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define fix_make_nof(x)           fix_make(x,0x0000)
 
 /* The amount of copying into and out of vertex's is quite
-   disgusting. 
+   disgusting.
 
    Also, becuase of the vertex interface, we've introduced a new
-   function call that we can't inline because it needs to return a 
+   function call that we can't inline because it needs to return a
    value.
  */
 
@@ -57,9 +57,9 @@ int gri_cline_clip (grs_vertex *v0, grs_vertex *v1)
    fix pixels, pixels_0, pixels_1;
 
    /* transfer out of v0, v1 -- from old gen_clin */
-   x0 = v0->x; y0 = v0->y; 
+   x0 = v0->x; y0 = v0->y;
    r0 = (uchar) (v0->u); g0 = (uchar) (v0->v); b0 = (uchar) (v0->w);
-   x1 = v1->x; y1 = v1->y; 
+   x1 = v1->x; y1 = v1->y;
    r1 = (uchar) (v1->u); g1 = (uchar) (v1->v); b1 = (uchar) (v1->w);
 
 
@@ -72,8 +72,8 @@ int gri_cline_clip (grs_vertex *v0, grs_vertex *v1)
       dg = fix_div(fix_make_nof(g1-g0),pixels);
       db = fix_div(fix_make_nof(b1-b0),pixels);
    }
-   
-   r = gr_clip_fix_line (&x0, &y0, &x1, &y1);   
+
+   r = gr_clip_fix_line (&x0, &y0, &x1, &y1);
    if (r != CLIP_ALL) {
 
       if (((r0 != r1) || (g0 != g1) || (b0 != b1)) &&
@@ -93,11 +93,11 @@ int gri_cline_clip (grs_vertex *v0, grs_vertex *v1)
     }
 
    /* and transfer back to v0, v1 */
-   (v0->x) = x0; (v0->y) = y0; 
+   (v0->x) = x0; (v0->y) = y0;
    (v0->u) = r0; (v0->v) = g0; (v0->w) = b0;
-   (v1->x) = x1; (v1->y) = y1; 
+   (v1->x) = x1; (v1->y) = y1;
    (v1->u) = r1; (v1->v) = g1; (v1->w) = b1;
-   
+
    return r;
  }
 

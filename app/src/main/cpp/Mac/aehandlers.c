@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //====================================================================
 //
@@ -47,7 +47,7 @@ OSErr RequiredCheck(AppleEvent *theAppleEvent )
 	OSErr		anErr;
 	DescType	typeCode;
 	Size			actualSize;
-	
+
 	anErr = AEGetAttributePtr(theAppleEvent, keyMissedKeywordAttr, typeWildCard, &typeCode, NULL, 0, &actualSize);
 	if (anErr == errAEDescNotFound)
 		return(noErr);
@@ -62,11 +62,11 @@ OSErr RequiredCheck(AppleEvent *theAppleEvent )
 pascal OSErr HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *, long  )
 {
 	OSErr		anErr;
-	
+
 	anErr = RequiredCheck(theAppleEvent);
 	return(anErr);
 }
-	
+
 //--------------------------------------------------------------------
 //  Handle the OpenDocument AppleEvent - extract the file specs and open document windows for them.
 //--------------------------------------------------------------------
@@ -81,23 +81,23 @@ pascal OSErr HandleODOC(AppleEvent *theAppleEvent, AppleEvent *, long  )
 	Size				actualSize;
 	FInfo				theFInfo;
 	Boolean			isStationery;
-	
+
 	anErr = AEGetParamDesc(theAppleEvent, keyDirectObject, typeAEList, &docList);
 	if (anErr)return(anErr);
-	
+
 	anErr = RequiredCheck(theAppleEvent);
 	if (anErr)return(anErr);
 
-	anErr = AECountItems(&docList, &itemsInList);	
+	anErr = AECountItems(&docList, &itemsInList);
 	if (anErr)return(anErr);
-	
+
 	// If there is a list of files, just get the first one (can't open more than one game at a time).
 	if (itemsInList > 0)
 	{
 		anErr = AEGetNthPtr(&docList, 1, typeFSS, &theKeyword, &typeCode, (Ptr) &anFSS, sizeof(FSSpec ), &actualSize);
 		if (anErr)
 			return(anErr);
-		
+
 		FSpGetFInfo(&anFSS, &theFInfo);
 		isStationery =((theFInfo.fdFlags & 0x0800) != 0);
 
@@ -107,7 +107,7 @@ pascal OSErr HandleODOC(AppleEvent *theAppleEvent, AppleEvent *, long  )
 			HandleAEOpenGame(&anFSS);
 		}
 	}
-	
+
 	AEDisposeDesc(&docList);
 	return(noErr);
 }
@@ -129,11 +129,11 @@ pascal OSErr HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *, long  )
 pascal OSErr HandleQUIT(AppleEvent *theAppleEvent, AppleEvent *, long  )
 {
 	OSErr	anErr;
-	
+
 	anErr = RequiredCheck(theAppleEvent);
 	if (anErr)
 		return(anErr);
-	
+
 	DoQuit();
 	return(noErr);
 }

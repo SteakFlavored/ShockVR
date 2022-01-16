@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/newai.c $
@@ -76,7 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define DEFAULT_SPEED   fix_make(0xD,0)
 
-// Number of ticks where, if we haven't seen the player in that long, 
+// Number of ticks where, if we haven't seen the player in that long,
 // we forget where he is.
 #define AI_ATTENTION_SPAN CIT_CYCLE * 10
 
@@ -134,7 +134,7 @@ errtype run_cspace_ice()
          dy = PLAYER_BIN_Y - OBJ_LOC_BIN_Y(objs[id].loc);
          dist = dx * dx + dy * dy;
 
-         // Are we close enough to the player to care? 
+         // Are we close enough to the player to care?
          if (dist < AGITATED_ICE_DIST)
          {
             // Lob a slow projectile off at that wacky player.  Boy, we're perfectly statically accurate.
@@ -153,7 +153,7 @@ short compute_base_visibility()
    MapElem *pme;
    short visibility;
 
-	// Update detection variables	
+	// Update detection variables
    if (!cspace_decoy_obj)
    {
 	   if (time_last_seen > player_struct.game_time + AI_ATTENTION_SPAN)
@@ -175,7 +175,7 @@ short compute_base_visibility()
 						   max(1,(
 						   max(0,me_light_flr(pme) - me_templight_flr(pme)) +
 						   max(0,me_light_ceil(pme) - me_templight_ceil(pme))) / 2));
-      visibility += LANTERN_VISIBLE_FACTOR * player_struct.light_value;         
+      visibility += LANTERN_VISIBLE_FACTOR * player_struct.light_value;
 
 	   // More visible if fired gun recently (this may want to be exponentially decaying
       if (player_struct.last_fire)  // make sure we've actually fired a weapon
@@ -210,7 +210,7 @@ errtype run_evil_otto(ObjID id, int dist)
       fix xvec,yvec,fdist;
       int dx,dy;
       ObjLoc newloc = objs[id].loc;
-      // Move the AVAMATAR OF SHODAN (Evil Otto) closer to the player 
+      // Move the AVAMATAR OF SHODAN (Evil Otto) closer to the player
       // first, get a normalized vector
       dx = PLAYER_BIN_X - OBJ_LOC_BIN_X(objs[id].loc);
       dy = PLAYER_BIN_Y - OBJ_LOC_BIN_Y(objs[id].loc);
@@ -245,7 +245,7 @@ bool do_physics_stupidity(ObjID id, int big_dist)
    fix there_yet;
 
 #ifdef DISTANCE_AI_KILL
-   // don't phys-kill anything that is currently pathfinding or in combat mode (it'll leave combat mode 
+   // don't phys-kill anything that is currently pathfinding or in combat mode (it'll leave combat mode
    // after a while anyways)
    if ((objCritters[osid].path_id != -1) ||
        (objCritters[osid].mood == AI_MOOD_HOSTILE) || (objCritters[osid].mood == AI_MOOD_ATTACKING))
@@ -278,13 +278,13 @@ bool do_physics_stupidity(ObjID id, int big_dist)
    {
 //      Spew(DSRC_PHYSICS_Sleeper, ("obj id %x, ph = %d(0x%x) is in range but asleep!\n",id,objs[id].info.ph,objs[id].info.ph));
 //      Spew(DSRC_PHYSICS_Sleeper, ("obj id %x, head = %x (vs %x), spd = %x, urg = %x\n",id,objCritters[osid].des_heading,
-//         objCritters[osid].des_speed, objCritters[osid].urgency));   
+//         objCritters[osid].des_speed, objCritters[osid].urgency));
    }
    return(TRUE);
 }
 
 // If our current pathfind is greater than REPATHFIND_DIST away from reality,
-// punt and repathfind 
+// punt and repathfind
 #define REPATHFIND_DIST 0x4
 errtype ai_spot_player(ObjID id, bool *raycast_success)
 {
@@ -316,7 +316,7 @@ errtype ai_spot_player(ObjID id, bool *raycast_success)
       {
          // if the difference between our current path's destination and the actual
          // location of the player is too great, punt the old one.
-         if (long_fast_pyth_dist((last_known_loc.x>>8) - paths[pcrit->path_id].dest.x, 
+         if (long_fast_pyth_dist((last_known_loc.x>>8) - paths[pcrit->path_id].dest.x,
                (last_known_loc.y>>8) - paths[pcrit->path_id].dest.y) > REPATHFIND_DIST)
          {
             pcrit->path_id = -1;
@@ -475,9 +475,9 @@ errtype follow_pathfinding(ObjID id, ObjSpecID osid)
    }
 
    if ((objCritters[osid].pf_x == -1) ||
-       (paths[path_id].curr_step == -1) || 
+       (paths[path_id].curr_step == -1) ||
        ((OBJ_LOC_BIN_X(objs[id].loc) == objCritters[osid].pf_x) &&
-        (OBJ_LOC_BIN_Y(objs[id].loc) == objCritters[osid].pf_y))) 
+        (OBJ_LOC_BIN_Y(objs[id].loc) == objCritters[osid].pf_y)))
    {
       // We're where we want to be, so lets get the next step!
       objCritters[osid].path_tries = 0;
@@ -516,7 +516,7 @@ errtype follow_pathfinding(ObjID id, ObjSpecID osid)
             csq.x = OBJ_LOC_BIN_X(objs[id].loc);
             csq.y = OBJ_LOC_BIN_Y(objs[id].loc);
             if ((abs(csq.x - sq.x) < 2) && (abs(csq.y - sq.y) < 2))
-               pf_obj_doors(MAP_GET_XY(csq.x, csq.y), MAP_GET_XY(sq.x,sq.y), dir_table[sq.y - csq.y + 1][sq.x - csq.x + 1], &open_me); 
+               pf_obj_doors(MAP_GET_XY(csq.x, csq.y), MAP_GET_XY(sq.x,sq.y), dir_table[sq.y - csq.y + 1][sq.x - csq.x + 1], &open_me);
       //      Warning(("open_me = %x, dt = %d from (%x,%x) to (%x,%x)!\n",open_me,dir_table[sq.y - csq.y + 1][sq.x - csq.x + 1],
       //         csq.x,csq.y,sq.x,sq.y));
             if ((open_me != OBJ_NULL) && (DOOR_CLOSED(open_me)) && !(door_moving(open_me,FALSE)))
@@ -571,7 +571,7 @@ void check_attitude_adjustment(ObjID id, ObjSpecID osid,int big_dist,bool raycas
    // Frankly, if we have no clue where the player is then
    // don't bother trying to find him or anything.... in fact
    // we go back to being NEUTRAL, I think.  Although we will
-   // continue on our current pathfinding in hopes of reacquiring 
+   // continue on our current pathfinding in hopes of reacquiring
    // the player
    if (last_known_loc.x == 255)
    {
@@ -617,17 +617,17 @@ void check_attitude_adjustment(ObjID id, ObjSpecID osid,int big_dist,bool raycas
    {
       fixang angdiff, target_ang;
       // If we're in range of all wpns, stop trying to get closer
-      // but do keep trying to face the player.  Note that normally the 
+      // but do keep trying to face the player.  Note that normally the
       // "face the player" part is dealt with by the pathfinder, hopefully,
       // and so will blast out our des_heading set here.  We have to do the work
       // anyways here in order to figure out wheher or not the critter is facing
       // the player
       set_des_heading(id,osid, fix_from_obj_coord(last_known_loc.x), fix_from_obj_coord(last_known_loc.y),
          &angdiff, &target_ang);
-      if (angdiff < 0x2000) 
+      if (angdiff < 0x2000)
       {
 #ifdef AI_EDMS
-         if (raycast_success || 
+         if (raycast_success ||
             (ray_cast_objects(id, PLAYER_OBJ, VISIBLE_MASS, VISIBLE_SIZE, VISIBLE_SPEED, VISIBLE_RANGE) == PLAYER_OBJ))
          {
             raycast_success = TRUE;
@@ -676,7 +676,7 @@ void load_combat_art(int cp_num)
       }
       last_real_time += *tmd_ticks - old_ticks;
    }
-}   
+}
 
 // copied in ai.c
 #define DEFAULT_URGENCY fix_make(0x30,0)
@@ -697,7 +697,7 @@ errtype run_combat_ai(ObjID id, bool raycast_success)
 //   pcrit->sidestep = fix_make(rand()%200 - 100, 0);
 
    cp_num = CPNUM(id);
-   if (pcrit->mood == AI_MOOD_ATTACKING) 
+   if (pcrit->mood == AI_MOOD_ATTACKING)
    {
       // Don't bother if we're already trying to attack
       if ((get_crit_posture(osid) != ATTACKING_CRITTER_POSTURE) && (get_crit_posture(osid) != ATTACKING2_CRITTER_POSTURE))
@@ -742,7 +742,7 @@ errtype run_combat_ai(ObjID id, bool raycast_success)
 
       delete_path(pcrit->path_id);
       pcrit->path_id = -1;
-      set_des_heading(id,osid,fix_make(OBJ_LOC_BIN_X(objs[PLAYER_OBJ].loc),0x8000), 
+      set_des_heading(id,osid,fix_make(OBJ_LOC_BIN_X(objs[PLAYER_OBJ].loc),0x8000),
          fix_make(OBJ_LOC_BIN_Y(objs[PLAYER_OBJ].loc),0x8000), &diffang, &targang);
 
       // If we're out of range or keep missing, run hell-bent towards the player
@@ -755,7 +755,7 @@ errtype run_combat_ai(ObjID id, bool raycast_success)
       }
       else
       {
-         objCritters[osid].des_speed = DEFAULT_SPEED;    
+         objCritters[osid].des_speed = DEFAULT_SPEED;
          objCritters[osid].urgency = DEFAULT_URGENCY << 1;
       }
    }
@@ -824,7 +824,7 @@ LGPoint ai_highway_func(ObjID, ObjSpecID osid)
    }
    switch(objCritters[osid].x1)
    {
-      case 0: param = objTraps[objs[curr_id].specID].p1; break;   
+      case 0: param = objTraps[objs[curr_id].specID].p1; break;
       case 1: param = objTraps[objs[curr_id].specID].p2; break;
       case 2: param = objTraps[objs[curr_id].specID].p3; break;
    }
@@ -1046,7 +1046,7 @@ errtype ai_run()
       apply_EDMS_controls(osid);
 #endif
 
-      // If it is our turn to get a bigger share of the 
+      // If it is our turn to get a bigger share of the
       // computron pie, then let's crank.
       if (objCritters[osid].wait_frames <= 0)
       {

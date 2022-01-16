@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/ai.c $
@@ -77,7 +77,7 @@ errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc
 
 // Number of frames beyond which, if we haven't seen the player,
 // we stop trying to shoot at 'im.
-#define UNSEEN_FIRE_THRESHOLD 10		 	
+#define UNSEEN_FIRE_THRESHOLD 10
 
 fix there_yet;
 ObjLoc last_known_loc;
@@ -98,7 +98,7 @@ void ai_find_player(ObjID id)
    State st;
    extern void state_to_objloc(State *s, ObjLoc *l);
    extern void get_phys_state(int ph, State *new_state, ObjID id);
-   
+
    if (global_fullmap->cyber)
       last_known_loc = objs[PLAYER_OBJ].loc;
    else
@@ -175,11 +175,11 @@ errtype apply_EDMS_controls(ObjSpecID osid)
 	if (CHECK_OBJ_PH(id))
 	{
 		safe_EDMS_get_state(objs[id].info.ph, &crit_state);
-		
+
 		// Hmm, I wonder whether there is a faster way to do this.
 		if (fix_abs(crit_state.X_dot) + fix_abs(crit_state.Y_dot) + fix_abs(crit_state.Z_dot) > move_tolerance)
 		{
-			if ((get_crit_posture(osid) == STANDING_CRITTER_POSTURE) || 
+			if ((get_crit_posture(osid) == STANDING_CRITTER_POSTURE) ||
 				 (get_crit_posture(osid) == ATTACK_REST_CRITTER_POSTURE))
 			{
 				set_posture_safe(osid, MOVING_CRITTER_POSTURE);
@@ -199,14 +199,14 @@ errtype apply_EDMS_controls(ObjSpecID osid)
 			use_step = 0;
 		}
 		else
-		{   
+		{
 			use_speed = pcrit->des_speed;
 			use_step = pcrit->sidestep;
 		}
 
 		safe_EDMS_ai_control_robot(objs[id].info.ph, pcrit->des_heading,
 													use_speed, pcrit->sidestep, pcrit->urgency, &there_yet, curr_ai_dist);
-	} 
+	}
 #endif
 	return(OK);
 }
@@ -306,7 +306,7 @@ errtype ai_critter_hit(ObjSpecID osid, short damage, bool tranq, bool stun)
 	   // Hey, we'll get our buddies in on the matter too...
 	   // We anger all critters within ANGER_RADIUS who are the same
 	   // loner-ness as ourselves.
-	   // The radius someday might want to be objprop dependant rather 
+	   // The radius someday might want to be objprop dependant rather
 	   // than a constant.
       // Oh, and we also don't have any effect on critters with a mood of ISOLATION
 
@@ -374,7 +374,7 @@ errtype ai_critter_die(ObjSpecID osid)
 
 #define FIRST_CORPSE_TTYPE 11
 
-int treasure_table[NUM_TREASURE_TYPES][NUM_TREASURE_SLOTS][NUM_TREASURE_ENTRIES] = 
+int treasure_table[NUM_TREASURE_TYPES][NUM_TREASURE_SLOTS][NUM_TREASURE_ENTRIES] =
 {
    // No Treasure
    {  { 100, NOTHING_TRIPLE},
@@ -395,7 +395,7 @@ int treasure_table[NUM_TREASURE_TYPES][NUM_TREASURE_SLOTS][NUM_TREASURE_ENTRIES]
    // Drone (2)
    {  { 14, SPAMMO_TRIPLE},
       { 8, TEFAMMO_TRIPLE},
-      { 17, NNAMMO_TRIPLE}, 
+      { 17, NNAMMO_TRIPLE},
       { 6, MEDI_DRUG_TRIPLE},
       { 5, FRAG_G_TRIPLE},
       { 50, NOTHING_TRIPLE},
@@ -575,7 +575,7 @@ errtype do_random_loot(ObjID corpse)
 //   char buf[80];
 
    if (( ((ID2TRIP(corpse) >= MUT_CORPSE1_TRIPLE) && (ID2TRIP(corpse) <= OTH_CORPSE8_TRIPLE)) ||
-         ((ID2TRIP(corpse) >= CORPSE1_TRIPLE) && (ID2TRIP(corpse) <= CORPSE8_TRIPLE)))        
+         ((ID2TRIP(corpse) >= CORPSE1_TRIPLE) && (ID2TRIP(corpse) <= CORPSE8_TRIPLE)))
        && (objs[corpse].info.inst_flags & CLASS_INST_FLAG))
    {
       switch (objs[corpse].obclass)
@@ -686,7 +686,7 @@ errtype ai_autobomb_explode(ObjID id, ObjSpecID osid)
    CritterAttack ca;
    ExplosionData edata;
    extern void critter_light_world(ObjID id);
-   
+
    ca = CritterProps[CPNUM(id)].attacks[0];
 
    edata.radius =  AUTOBOMB_RANGE;
@@ -701,13 +701,13 @@ errtype ai_autobomb_explode(ObjID id, ObjSpecID osid)
    // Do an explosion!
    do_explosion(objs[id].loc, id, FALSE, &edata);
    play_digi_fx_obj(SFX_EXPLOSION_1,1,id);
-   
+
    // Make us dying....
    set_posture(osid, DEATH_CRITTER_POSTURE);
 
    // make us light up the world
    critter_light_world(id);
-   
+
    return(OK);
 }
 
@@ -722,7 +722,7 @@ errtype ai_attack_player(ObjSpecID osid, char a)
 
    if (pacifism_on)
       return(OK);
-   
+
    cp_num = CPNUM(objCritters[osid].id);
 
    // If we are an autobomb, don't attack as usual, instead go boom!
@@ -746,7 +746,7 @@ errtype ai_attack_player(ObjSpecID osid, char a)
                      fix_make(CritterProps[cp_num].attacks[a].att_range, 0));
 #else
 	// If we have NO idea where the player is (all failed detection rolls)
-	// then don't bother firing.						
+	// then don't bother firing.
 	if (last_known_loc.x != 255)
 	{
 		short miss_amt = ((255 - CritterProps[cp_num].attacks[a].accuracy) - rand()%255);
@@ -803,7 +803,7 @@ errtype ai_attack_player(ObjSpecID osid, char a)
    {
       objCritters[osid].mood = AI_MOOD_HOSTILE;
    }
-#endif						
+#endif
    return(OK);
 }
 
@@ -860,7 +860,7 @@ errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc
 
    get_phys_state(objs[PLAYER_OBJ].info.ph, &new_state,PLAYER_OBJ);
 
- 
+
    // Compute distance
    xdiff = fix_from_obj_coord(target_loc.x) - fix_from_obj_coord(src_loc.x);
    ydiff = fix_from_obj_coord(target_loc.y) - fix_from_obj_coord(src_loc.y);

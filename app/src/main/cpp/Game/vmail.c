@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/vmail.c $
@@ -63,28 +63,28 @@ extern LGCursor   vmail_cursor;
 //
 errtype play_vmail(byte vmail_no)
 {
-	extern bool game_paused;   
+	extern bool game_paused;
 	extern bool citadel_check_input(void);
 	extern void email_page_exit(void);
 	extern short old_invent_page;
-	
+
 	// make sure we don't have a current vmail, and we're given a valid vmail num
 	if ((current_vmail != -1) || (vmail_no < 0) || (vmail_no >= NUM_VMAIL))
 		return(ERR_NOEFFECT);
-	
+
 	// spew the appropriate text for vmail - full screen needs a draw!
 	if (full_game_3d)
 		render_run();
-	
+
 	suspend_game_time();
 	time_passes = FALSE;
 	game_paused = TRUE;
-	
+
 	// Play the appropriate V-Mail.
 	{
 		uchar savep[768];
 		FSSpec	fSpec;
-		
+
    		gr_get_pal(0, 256, savep);
 		switch (vmail_no)
 		{
@@ -110,24 +110,24 @@ errtype play_vmail(byte vmail_no)
 		PlayVMail(&fSpec, 120, 90);
    		gr_set_pal(0, 256, savep);
 	}
-	
+
 	uiFlush();
-	
+
 	//¥¥¥ Need to pause here for click if not clicked to stop vmail already.
-	
+
 	email_page_exit();
 	inventory_draw_new_page(old_invent_page);
-	
+
 	resume_game_time();
 	game_paused = FALSE;
-	
+
 	// let the player wait before firing auto fire weapon
 	player_struct.auto_fire_click = player_struct.game_time + 60;
 	time_passes = TRUE;
-	
+
 	chg_set_flg(DEMOVIEW_UPDATE);
-	
-	return(OK);  
+
+	return(OK);
 }
 
 
@@ -266,7 +266,7 @@ errtype play_vmail_intro(bool use_texture_buffer)
       critical_error(CRITERR_MEM|8);
    p = useBuffer+bsize-(w*h);
    vmail_background = (grs_bitmap *) (p - sizeof(grs_bitmap));
-   
+
    gr_init_bm(vmail_background, p, BMT_FLAT8, 0, w,h);
    uiHideMouse(NULL);
 #ifdef SVGA_SUPPORT
@@ -323,11 +323,11 @@ errtype play_vmail(byte vmail_no)
 
    // let's extern
 
-   // the more I look at this procedure - the more I think 
+   // the more I look at this procedure - the more I think
    // art - what were you thinking
    extern uiSlab fullscreen_slab;
    extern uiSlab main_slab;
-   extern bool game_paused;   
+   extern bool game_paused;
    extern bool checking_mouse_button_emulation;
    extern bool citadel_check_input(void);
    extern void email_page_exit(void);
@@ -503,7 +503,7 @@ errtype play_vmail(byte vmail_no)
 #ifdef LOTS_O_SPEW
       mprintf("W");
 #endif
-   }   
+   }
 
 #ifndef CONTINUOUS_VMAIL_TEST
    if (!early_exit && vmail_wait_for_input)
@@ -530,7 +530,7 @@ errtype play_vmail(byte vmail_no)
 #endif
    chg_set_flg(DEMOVIEW_UPDATE);
 
-   return(OK);  
+   return(OK);
 }
 #pragma enable_message(202)
 

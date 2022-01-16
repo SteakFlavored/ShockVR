@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //
 // $Source: r:/prj/lib/src/3d/RCS/instance.asm $
@@ -27,31 +27,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // $Log: instance.asm $
 // Revision 1.8  1994/10/24  01:05:30  jaemz
 // Fixed inverted pitch problem by saving state of ecx
-// 
+//
 // Revision 1.7  1994/10/12  01:09:06  jaemz
 // Inverted wtoo_matrix to make it correct
 // for lighting
-// 
+//
 // Revision 1.6  1994/09/20  13:32:48  jaemz
 // Lighting support
-// 
+//
 // Revision 1.5  1994/08/18  03:46:57  jaemz
 // Changed stereo glob names to have underscore for c
-// 
+//
 // Revision 1.4  1994/07/15  14:13:28  jaemz
 // Added _view_position with an underscore to make it c readable
-// 
+//
 // Revision 1.3  1993/08/10  22:54:12  dc
 // add _3d.inc to includes
-// 
+//
 // Revision 1.2  1993/06/22  18:35:32  kaboom
 // Changed g3_matrix_x_matrix to g3_matrix_x_matrix_ so it's callable
 // from watcom C w/register passing.
-// 
+//
 // Revision 1.1  1993/05/04  17:39:49  matt
 // Initial revision
-// 
-// 
+//
+//
 
 #include "lg.h"
 #include "3d.h"
@@ -85,15 +85,15 @@ long	cstack_depth;
 bool g3_start_object(g3s_vector *p)    //position only (no orientation)
  {
  	if (save_context()) return 0;
- 	
+
 //compute new view position
 	_view_position.gX -= p->gX;
 	_view_position.gY -= p->gY;
 	_view_position.gZ -= p->gZ;
-	
+
 	return -1;	//success
  }
- 
+
 //takes esi=position, ecx=rotation order, angles=eax,ebx,edx
 bool g3_start_object_angles_xyz(g3s_vector *p,fixang tx,fixang ty,fixang tz,int rotation_order)
  {
@@ -104,7 +104,7 @@ bool g3_start_object_angles_xyz(g3s_vector *p,fixang tx,fixang ty,fixang tz,int 
 	temp_angles.tx = tx;
 	temp_angles.ty = ty;
 	temp_angles.tz = tz;
-	
+
 	return (start_obj_common(p,&temp_angles,rotation_order));
  }
 
@@ -115,7 +115,7 @@ bool g3_start_object_angles_v(g3s_vector *p,g3s_angvec *o,int rotation_order)
  	if (save_context()) return 0;
 	return (start_obj_common(p,o,rotation_order));
  }
- 
+
 //takes esi=position, edi=orientation vector, ecx=rotation order
 bool start_obj_common(g3s_vector *p,g3s_angvec *o,int rotation_order)
  {
@@ -125,7 +125,7 @@ bool start_obj_common(g3s_vector *p,g3s_angvec *o,int rotation_order)
 	_view_position.gX -= p->gX;
 	_view_position.gY -= p->gY;
 	_view_position.gZ -= p->gZ;
-	
+
   // copy obj offset to world to obj structure
   // used for lighting, dude
   _wtoo_position = *p;
@@ -164,7 +164,7 @@ bool start_obj_common(g3s_vector *p,g3s_angvec *o,int rotation_order)
 
 
 //rotate around the specified axis. angle = ebx
-//takes esi=position, 
+//takes esi=position,
 bool g3_start_object_angles_y(g3s_vector *p,fixang ty)
  {
  	if (save_context()) return 0;
@@ -176,7 +176,7 @@ bool g3_start_object_angles_y(g3s_vector *p,fixang ty)
 
 	return(instance_y(ty));
  }
- 
+
 //get sin & cos - angles still in ebx
 bool instance_y(fixang ty)
  {
@@ -213,13 +213,13 @@ bool instance_y(fixang ty)
 	vm1 = temp1;
 	vm2 = temp2;
 	vm3 = temp3;
-	
+
 //we're done
 	return -1;	//ok!
  }
 
 //rotate around the specified axis. angle = ebx
-//takes esi=position, 
+//takes esi=position,
 bool g3_start_object_angles_x(g3s_vector *p,fixang tx)
  {
  	if (save_context()) return 0;
@@ -231,7 +231,7 @@ bool g3_start_object_angles_x(g3s_vector *p,fixang tx)
 
 	return(instance_x(tx));
  }
- 
+
 //get sin & cos - angles still in ebx
 bool instance_x(fixang tx)
  {
@@ -269,14 +269,14 @@ bool instance_x(fixang tx)
 	vm4 = temp1;
 	vm5 = temp2;
 	vm6 = temp3;
-	
+
 //we're done
 	return -1;	//ok!
  }
 
 
 //rotate around the specified axis. angle = ebx
-//takes esi=position, 
+//takes esi=position,
 bool g3_start_object_angles_z(g3s_vector *p,fixang tz)
  {
  	if (save_context()) return 0;
@@ -314,7 +314,7 @@ bool instance_z(fixang tz)
 	AsmWideNegate(&result);
 	AsmWideAdd(&result, &result2);
 	_view_position.gY = (result.hi<<16) | (((ulong) result.lo)>>16);
-	
+
 //now modify matrix
 	update_m(temp1,cos_z,vm1,sin_z,vm4);
 	update_m(temp2,cos_z,vm2,sin_z,vm5);
@@ -325,7 +325,7 @@ bool instance_z(fixang tz)
 	vm1 = temp1;
 	vm2 = temp2;
 	vm3 = temp3;
-	
+
 //we're done
 	return -1;  //ok!
  }
@@ -441,17 +441,17 @@ bool g3_start_object_matrix(g3s_vector *p,g3s_matrix *m)
 //returns carry set if cannot save. saves all regs
 bool save_context(void)
  {
- 	if (cstack_depth==MAX_INSTANCE_DEPTH)	
+ 	if (cstack_depth==MAX_INSTANCE_DEPTH)
  		return 1;
- 	
- 	cstack_depth++;	
- 	
+
+ 	cstack_depth++;
+
 //save current context
  	* (g3s_matrix *) cstack_ptr = view_matrix;
  	cstack_ptr += sizeof(g3s_matrix);
  	* (g3s_vector *) cstack_ptr = _view_position;
  	cstack_ptr += sizeof(g3s_vector);
- 	
+
  	return 0;
  }
 
@@ -482,7 +482,7 @@ void g3_scale_object(fix s)
 void g3_end_object(void)
  {
  	if (cstack_depth==0) return;
- 	
+
  	cstack_depth--;
 
  	cstack_ptr -= sizeof(g3s_vector);
@@ -498,7 +498,7 @@ void instance_matrix(g3s_matrix *src, g3s_matrix *dest)
 	g3s_matrix temp_matrix2;
 
  	//do multiply
- 	g3_matrix_x_matrix(&temp_matrix2, src, dest);	
+ 	g3_matrix_x_matrix(&temp_matrix2, src, dest);
 
 	//copy to real dest
 	*dest = temp_matrix2;

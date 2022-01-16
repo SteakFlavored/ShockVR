@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //=================================================================
 //
@@ -41,10 +41,10 @@ ubyte  pGuessTable[256] =
 	3, 3, 3, 3, 3, 3,
 	4, 4, 4, 4, 4, 4, 4, 4,
 	5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 
+	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
 	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
 	8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
-	9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+	9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
 	10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 	11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
 	12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
@@ -53,7 +53,7 @@ ubyte  pGuessTable[256] =
 	15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
 	15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15
 };
-	
+
 //--------------------
 //  Includes
 //--------------------
@@ -69,7 +69,7 @@ asm long long_sqrt(long num);
 fix fix_sqrt(fix num)
 {
 	fix	res = long_sqrt(num);
-	
+
 	// Make the number a fix and return it
 	return (res << 8);
 }
@@ -86,7 +86,7 @@ long quad_sqrt(long hi, long lo)
 //	long		divisor, temp, savediv, rem;
 
 	// Parameter checking
-	
+
 	if (hi == 0)										// If there is no high word
 	{
 		if (lo > 0)										// If lo word is positive, just call long_sqrt()
@@ -96,9 +96,9 @@ long quad_sqrt(long hi, long lo)
 	}
 	if (hi < 0)											// If a negative number, return 0.
 		return(0);
-	
+
 	// If 'hi' is non-zero, call FixMath's WideSquareRoot.
-	
+
 	wide	a;
 	a.hi = hi;
 	a.lo = lo;
@@ -108,7 +108,7 @@ long quad_sqrt(long hi, long lo)
 
 	// Find the highest byte that is non-zero (look only in hiword, since we're assured at this point
 	// that it is non-zero), look up a good first guess for that byte, and shift it the appropriate amount.
-	
+
 	testb = (uchar)(hi >> 24);
 	if (testb != 0)
 	{
@@ -136,13 +136,13 @@ long quad_sqrt(long hi, long lo)
 		trans = pGuessTable[testb];
 		shift = 16;
 	}
-	
+
 	// We now have the good initial guess.  Shift it the appropriate amount.
-	
+
 q_found_byte:
 	divisor = trans;
 	divisor = divisor << shift;
-	
+
 	// Experience has shown that we almost always go through the loop
 	// just about three times.  To avoid compares and jumps, we iterate
 	// three times without even thinking about it, and then start checking
@@ -154,23 +154,23 @@ q_found_byte:
 		divisor += temp;
 		divisor = divisor >> 1;
 	}
-	
+
 	// Starting with the third iteration, we now actually check for a match.
-	
+
 	while (true)
 	{
 		AWide	orig, test;
-		
+
 		temp = AsmWideDivide(hi, lo, divisor);
 		if (temp == divisor)
 			break;
-		
+
 		AsmWideMultiply(temp, divisor, &test);
 		orig.hi = hi;
 		orig.lo = lo;
 		AsmWideSub(&orig, &test);
 		rem = orig.lo;
-		
+
 		savediv = divisor;
 		divisor += temp;
 		divisor = divisor >> 1;
@@ -201,15 +201,15 @@ long long_sqrt(long num)
 	uchar	shift;
 	fix		divisor;
 	short		i;
-	
+
 	if (num == 0)								// A bit of error checking.
 		return (0);
 	if (num < 0)
 		return (0);
-		
+
 	// Find the highest byte that is non-zero, look up a good first guess for
 	// that byte, and shift it the appropriate amount.
-	
+
 	testb = (uchar)(num >> 24);
 	if (testb != 0)
 	{
@@ -239,11 +239,11 @@ long long_sqrt(long num)
 	}
 
 	// We now have the good initial guess.  Shift it the appropriate amount.
-	
+
 found_byte:
 	divisor = trans;
 	divisor = divisor << shift;
-	
+
 	// Experience has shown that we almost always go through the loop
 	// just about three times.  To avoid compares and jumps, we iterate
 	// three times without even thinking about it, and then start checking
@@ -255,15 +255,15 @@ found_byte:
 		divisor += temp;
 		divisor = divisor >> 1;
 	}
-	
+
 	// Starting with the third iteration, we now actually check for a match.
-	
+
 	while (true)
 	{
 		temp = num / divisor;
 		if (temp == divisor)
 			break;
-		
+
 		savediv = divisor;
 		divisor += temp;
 		divisor = divisor >> 1;
@@ -289,12 +289,12 @@ asm long quad_sqrt(long hi, long lo)
  {
  	move.l	4(sp),d1				// check hi
  	bne.s		must_use_quad
-	
+
 	move.l	8(sp),-(sp)
 	jsr		long_sqrt
 	addq.w	#4,sp
 	rts
- 
+
 must_use_quad:
  	move.l		8(sp),d0			// low
  	movem.l		d3-d6,-(sp)		// save regs
@@ -370,7 +370,7 @@ q_newton_loop:
 	dc.l		0x4C430401      //  divu.l	d3,d1:d0
 	add.l		d0,d3
 	roxr.l	#1,d3
-	
+
 // starting with the third iteration, we start actually checking
 q_newton_loop2:
 	move.l	d5, d0
@@ -386,7 +386,7 @@ q_newton_loop2:
 	cmp.l		d2,d3					// cmp	ecx, ebx		       // compare old bx with average
 	beq.s		q_bx_is_close		// je	q_bx_is_close
 	bra.s		q_newton_loop2		// jmp	q_newton_loop2
-	
+
 // now we must find which is closer to x, bx^2 or (bx+1)^2
 // x = bx*(bx+1)+r = bx^2 + bx + r
 //   which is closer to bx^2 than to bx^2 + 2bx + 1
@@ -412,7 +412,7 @@ asm long long_sqrt(long num)
  	move.l		4(sp),d0				// get num
  	movem.l		d3-d5,-(sp)		// save regs
  	move.l		d0,d5				// save num
- 	
+
  	lea			pGuessTable,a0		// get table address
 	move.l		d0,d1				// mov	edx, eax
 	swap			d1						// ror	edx, 16		       // get high 16 bits of arg in dx
@@ -489,7 +489,7 @@ newton_loop2:
 	cmp.w		d2,d1				// cmp	cx, bx		       // compare old bx with average
 	beq.s			bx_is_close		// je	bx_is_close
 	bra.s			newton_loop2
-	
+
 // now we must find which is closer to x, bx^2 or (bx+1)^2
 // x = bx*(bx+1)+r = bx^2 + bx + r
 //   which is closer to bx^2 than to bx^2 + 2bx + 1

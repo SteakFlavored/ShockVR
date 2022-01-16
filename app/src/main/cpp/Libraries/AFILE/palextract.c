@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 
 #include <stdio.h>
@@ -66,7 +66,7 @@ static char *tableNames[] = {
 	long length;
 	MovieChunk *pmc,*pmcBase;
 	char infile[128];
-	
+
 	short	outResNum;
 	short	resID = 128;
 
@@ -75,7 +75,7 @@ static char *tableNames[] = {
 
 	Handle		changesHdl;
 	PalChange	*pcp;
-	
+
 // Prompt for input file
 
 	printf ("File to dump: ");
@@ -94,31 +94,31 @@ static char *tableNames[] = {
 		}
 
 // Open the output resource file for saving the palette resources into.
-	
+
 	{
 		StandardFileReply	reply;
 		OSErr				err;
-	
+
 		StandardPutFile("\pPalette output file:", "\pMovie Palettes", &reply);
 		if (!reply.sfGood)
 			return;
-	
+
 		if (reply.sfReplacing)							// Delete the file if it exists.
 			FSpDelete(&reply.sfFile);
-	
+
 		FSpCreateResFile(&reply.sfFile, 'Shok', 'rsrc', nil);	// Create the resource file.
 		err = ResError();
 		if (err != 0)
 		{
 			printf("Can't create file.\n");
 			return;
-		}	
+		}
 		outResNum = FSpOpenResFile(&reply.sfFile, fsRdWrPerm);	// Open the file for writing.
 		if (outResNum == -1)
 		{
 			printf("Can't open file.\n");
 			return;
-		}	
+		}
 	}
 
 //	Get movie header, check for valid movie file
@@ -144,7 +144,7 @@ static char *tableNames[] = {
 	mh.audioNumChans = SwapShortBytes(mh.audioNumChans);
 	mh.audioSampleSize = SwapShortBytes(mh.audioSampleSize);
 	mh.audioSampleRate = SwapLongBytes(mh.audioSampleRate);
-	
+
 //	Dump movie header
 
 	printf("Movie header:\n");
@@ -170,27 +170,27 @@ static char *tableNames[] = {
 		ReleaseResource(palHdl);
 
 		// Allocate a handle to hold the palette change info.
-		
+
 		changesHdl = NewHandle(16 * sizeof(PalChange));
 		HLock(changesHdl);
 		pcp = (PalChange *)*changesHdl;
-		
+
 		// Go through and dump the chunks.
-		
+
 		pmc = (MovieChunk *)malloc(mh.sizeChunks);
 		fread(pmc, mh.sizeChunks, 1, fpi);
       	pmcBase = pmc;
 		while (TRUE)
 		{
 			uchar	s1, s2;
-			
+
 			// Swap bytes around.
 			s1 = *((uchar *)pmc);
 			s2 = *(((uchar *)pmc)+2);
 			*(((uchar*)pmc)+2) = s1;
 			*((uchar*)pmc) = s2;
  			pmc->offset = SwapLongBytes(pmc->offset);
-			
+
 			// Print info for each chunk type.
 			if (pmc->chunkType != MOVIE_CHUNK_END)
  			{
@@ -206,23 +206,23 @@ static char *tableNames[] = {
 					if (pmc->flags & MOVIE_FPAL_CLEAR)
 						printf(" [CLEAR]");
 					printf("\n");
-					
+
 					if ((pmc->flags & MOVIE_FPAL_EFFECTMASK) == MOVIE_FPAL_SET)
 					{
 						fseek(fpi, pmc->offset, SEEK_SET);		// Read the palette
 						fread(buff, 768, 1, fpi);
-						
+
 						pcp->frameNum = frames;					// Save change info
 						pcp->palID = resID;
 						pcp++;
 
 						printf("Writing palette: %d\n\n", resID);
-						
+
 						Handle	palHdl = NewHandle(768);		// Add to output file
 						HLock(palHdl);
 						BlockMove(buff, *palHdl, 768);
 						HUnlock(palHdl);
-						
+
 						AddResource(palHdl, 'mpal', resID++, "\ppal");
 						WriteResource(palHdl);
 						ReleaseResource(palHdl);
@@ -249,7 +249,7 @@ static char *tableNames[] = {
 	AddResource(changesHdl, 'pchg', 128, "\pchanges");
 	WriteResource(changesHdl);
 	ReleaseResource(changesHdl);
-	
+
 //	Close file
 
 	fclose(fpi);

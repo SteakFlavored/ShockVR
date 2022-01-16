@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //====================================================================================
 //
@@ -84,7 +84,7 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 	Fixed					mr;
 	TimeValue			tv;
 	MovieDrawingCompleteUPP	drawCompProc;
-	
+
 	// Turn off sound if soundFX is off.
 	if (!gShockPrefs.soSoundFX)
 		showSubs = TRUE;
@@ -95,7 +95,7 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 		gChgTime[i] = -1;
 		gCTab[i] = NULL;
 	}
-	
+
 	// Setup for drawing subtitles.
 	gSubRect = gActiveArea;
 	gSubRect.top = gSubRect.bottom - 80;
@@ -107,7 +107,7 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 
 	// Open the movie file and prepare it for playing.
 	err = OpenMovieFile(movieSpec, &movieResFile, fsRdPerm);
-	if (err == noErr) 
+	if (err == noErr)
 	{
 		short 		movieResID = 0;
 		Str255 		movieName;
@@ -115,7 +115,7 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 																			// Load the 'moov' resource.
 		err = NewMovieFromFile(&theMovie, movieResFile, &movieResID,
 						movieName, newMovieActive, &wasChanged);
-		
+
 		subHdl = GetResource('subt', 128);					// Load the subtitles resource.
 		if (subHdl)
 		{
@@ -127,7 +127,7 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 		else
 			showSubs = FALSE;
 		gShowSubs = showSubs;
-		
+
 		qpalHdl = GetResource('qpal', 128);					// Load the palette change times resource
 		if (qpalHdl)													// and copy its information out.
 		{
@@ -141,7 +141,7 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 	{
 		return;
 	}
-	
+
 	// Get a reference to the video track and media, and load all the palettes for the movie.
 	long	tc = GetMovieTrackCount(theMovie);
 	for (long t = 1; t <= tc; t++)
@@ -153,19 +153,19 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 			if (vidMedia)
 			{
 				OSType	medType;
-				
+
 				GetMediaHandlerDescription(vidMedia, &medType, nil, nil);
 				if (medType == VideoMediaType)
 				{
 					ImageDescriptionHandle	idh = (ImageDescriptionHandle)NewHandle(sizeof(ImageDescription));
-					
+
 					long	sdc = GetMediaSampleDescriptionCount(vidMedia);
 					for (long s = 1; s <= sdc; s++)
 					{
 						GetMediaSampleDescription(vidMedia, s, (SampleDescriptionHandle)idh);
 						GetImageDescriptionCTable(idh, &gCTab[s-1]);
 					}
-					
+
 					DisposeHandle((Handle)idh);
 					break;
 				}
@@ -173,13 +173,13 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 		}
 	}
 
-	// Get the movie box and center it on the screen.	
-	GetMovieBox (theMovie, &gMovieBox);		
+	// Get the movie box and center it on the screen.
+	GetMovieBox (theMovie, &gMovieBox);
 	OffsetRect (&gMovieBox, -gMovieBox.left, -gMovieBox.top);
 	OffsetRect(&gMovieBox, (gActiveArea.right - gMovieBox.right) / 2,
 									  (gActiveArea.bottom - gMovieBox.bottom) / 2);
 	SetMovieBox (theMovie, &gMovieBox);
-	
+
 	// Set the movie GWorld to the screen.
 	SetMovieGWorld (theMovie, (CGrafPtr)gMainWindow, nil);
 
@@ -187,20 +187,20 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 	GoToBeginningOfMovie(theMovie);
 	mr = GetMoviePreferredRate(theMovie);
 	PrerollMovie(theMovie, 0, mr);
-	
+
 	HideCursor();
 
 	// When playing cut-scenes, blank the screen first.
 	EraseRect(&gMainWindow->portRect);
-	
+
 	// Set the palette to the first entry.
 	SetEntries(1, 254, &(**(gCTab[0])).ctTable[1]);
 	gPalIndex = 1;
-	
+
 	// Setup the callback routine for subsequent palette changes.
 	drawCompProc = NewMovieDrawingCompleteProc(DrawDoneProc);
 	SetMovieDrawingCompleteProc(theMovie, movieDrawingCallAlways, drawCompProc, 0);
-	
+
 	// Turn off sound if soundFX is off.
 	if (!gShockPrefs.soSoundFX)
 		SetMovieVolume(theMovie, 0);
@@ -208,7 +208,7 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 	// Play the movie until it's done, or a mouse click occurs.
 	StartMovie (theMovie);
 	FlushEvents(keyDownMask | autoKeyMask | mDownMask, 0);
-	while(!IsMovieDone(theMovie)) 
+	while(!IsMovieDone(theMovie))
 	{
 		if (allowHalt)
 		{
@@ -220,11 +220,11 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 				break;
 			}
 		}
-		
+
 		MoviesTask (theMovie, 0);									// Process the movie (quickly now!)
 		tv = GetMovieTime(theMovie, NULL);					// See where we're at.
-		
-		if (showSubs && subHdl)										// If the movie has sub-titles, 
+
+		if (showSubs && subHdl)										// If the movie has sub-titles,
 			DoSubtitle(tv);												// see if it's time to change.
 	}
 	DisposeMovie(theMovie);
@@ -238,7 +238,7 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 		HUnlock(subHdl);
 		DisposeHandle(subHdl);
 	}
-	
+
 	DisposeRoutineDescriptor(drawCompProc);				// Dispose the call-back UPP
 
 	ShowCursor();
@@ -264,12 +264,12 @@ pascal OSErr DrawDoneProc(Movie theMovie, long )
 			EraseRect(&gMovieBox);							// Erase the movie box (and sub-title box).
 			if (gShowSubs)
 				EraseRect(&gSubRect);
-			
+
 //			saveSeed = (*(*gScreenPixMap)->pmTable)->ctSeed;
 			SetEntries(1, 254, &(**(gCTab[gPalIndex])).ctTable[1]);	// Set the palette
 //			(*(*gScreenPixMap)->pmTable)->ctSeed = saveSeed;
 
-//			BlockMove(  &(**(gCTab[gPalIndex])).ctTable[1], 
+//			BlockMove(  &(**(gCTab[gPalIndex])).ctTable[1],
 //							   &(*(*gScreenPixMap)->pmTable)->ctTable[1],
 //							   254 * sizeof(ColorSpec)   );
 
@@ -300,9 +300,9 @@ void DoSubtitle(TimeValue time)
 void DrawSubtitle(char *title)
 {
 	short		tl;
-	
+
 	EraseRect(&gSubRect);									// Blank out before drawing.
-	
+
 	tl = strlen(title);											// Center the text (look for new-lines).
 	TextBox(title, tl, &gSubRect, teCenter);
 }
@@ -333,7 +333,7 @@ void PlayVMail(FSSpec *movieSpec, short orgx, short orgy)
 	Movie				theMovie[2];
 	Fixed					mr;
 	short 				i;
-	
+
 	MaxMem(&dummy);							// Compact heap before loading the movie.
 
 	// Open the movie files and prepare them for playing.
@@ -342,7 +342,7 @@ void PlayVMail(FSSpec *movieSpec, short orgx, short orgy)
 		if (i == 1)
 			BlockMove("\pV-Mail Intro", movieSpec->name, 63);
 		err = OpenMovieFile(movieSpec, &movieResFile, fsRdPerm);
-		if (err == noErr) 
+		if (err == noErr)
 		{
 			short 		movieResID = 0;
 			Str255 		movieName;
@@ -358,18 +358,18 @@ void PlayVMail(FSSpec *movieSpec, short orgx, short orgy)
 		}
 
 		// Figure out where to place the movie on the screen.
-		GetMovieBox (theMovie[i], &movieBox);		
+		GetMovieBox (theMovie[i], &movieBox);
 		OffsetRect (&movieBox, -movieBox.left, -movieBox.top);
 		OffsetRect(&movieBox, orgx, orgy);
 		SetMovieBox (theMovie[i], &movieBox);
-	
+
 		// Set the movie GWorld to the screen.
 		SetMovieGWorld (theMovie[i], (CGrafPtr)gMainWindow, nil);
 
 		// Get ready to play the movie.
 		GoToBeginningOfMovie(theMovie[i]);
 		mr = GetMoviePreferredRate(theMovie[i]);
-		PrerollMovie(theMovie[i], 0, mr);		
+		PrerollMovie(theMovie[i], 0, mr);
 	}
 
 	HideCursor();
@@ -383,15 +383,15 @@ void PlayVMail(FSSpec *movieSpec, short orgx, short orgy)
 		// Turn off sound if soundFX is off.
 		if (!gShockPrefs.soSoundFX)
 			SetMovieVolume(theMovie[i], 0);
-		
+
 		// Play the movie until it's done, or a mouse click occurs.
 		StartMovie (theMovie[i]);
-		while(!IsMovieDone(theMovie[i])) 
+		while(!IsMovieDone(theMovie[i]))
 		{
 			MoviesTask (theMovie[i], 0);									// Process the movie (quickly now!)
 		}
 	}
-	
+
 	for (i=0; i<2; i++)
 		DisposeMovie(theMovie[i]);
 
@@ -409,15 +409,15 @@ void PlayIntroCutScene()
 {
 	FSSpec	fSpec;
 	Rect		r;
-	
+
 	HideMenuBar();
-	
+
 	FSMakeFSSpec(gCDDataVref, gCDDataDirID, "\pIntro", &fSpec);
 	PlayCutScene(&fSpec, FALSE, TRUE);
 	PaintRect(&gMainWindow->portRect);
 
 	SetEntries(0, 255, (**(gMainColorHand)).ctTable);
-	
+
 	ShowMenuBar();
 	SetRect(&r, 0, 0, 640, 480);
 	InvalRect(&r);
@@ -440,7 +440,7 @@ void PlayStartupMovie(FSSpec *movieSpec, short orgx, short orgy)
 
 	// Open the movie files and prepare it for playing.
 	err = OpenMovieFile(movieSpec, &movieResFile, fsRdPerm);
-	if (err == noErr) 
+	if (err == noErr)
 	{
 		short 		movieResID = 0;
 		Str255 		movieName;
@@ -456,7 +456,7 @@ void PlayStartupMovie(FSSpec *movieSpec, short orgx, short orgy)
 	}
 
 	// Figure out where to place the movie on the screen.
-	GetMovieBox (theMovie, &movieBox);		
+	GetMovieBox (theMovie, &movieBox);
 	OffsetRect (&movieBox, -movieBox.left, -movieBox.top);
 	OffsetRect(&movieBox, orgx, orgy);
 	SetMovieBox (theMovie, &movieBox);
@@ -467,7 +467,7 @@ void PlayStartupMovie(FSSpec *movieSpec, short orgx, short orgy)
 	// Get ready to play the movie.
 	GoToBeginningOfMovie(theMovie);
 	mr = GetMoviePreferredRate(theMovie);
-	PrerollMovie(theMovie, 0, mr);		
+	PrerollMovie(theMovie, 0, mr);
 
 	// Erase the movie box.
 	RGBForeColor(&black);
@@ -479,14 +479,14 @@ void PlayStartupMovie(FSSpec *movieSpec, short orgx, short orgy)
 	BlockMove(&(**(ctab)).ctTable[1], &(**(gMainColorHand)).ctTable[1], 254 * sizeof(ColorSpec));
 	ResetCTSeed();
 	ReleaseResource((Handle)ctab);
-	
+
 	// Turn off sound if soundFX is off.
 	if (!gShockPrefs.soSoundFX)
 		SetMovieVolume(theMovie, 0);
 
 	// Play the movie until it's done, or a mouse click occurs.
 	StartMovie (theMovie);
-	while(!IsMovieDone(theMovie)) 
+	while(!IsMovieDone(theMovie))
 	{
 		EventRecord	theEvent;
 		if (OSEventAvail(keyDownMask | autoKeyMask | mDownMask, &theEvent))

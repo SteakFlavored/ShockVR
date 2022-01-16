@@ -6,24 +6,24 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/persetup.c $
  * $Revision: 1.3 $
  * $Author: kevin $
  * $Date: 1994/11/02 19:39:48 $
- * 
+ *
  * setup routines for full perspective mappers.
- * 
+ *
 */
 
 #include "cnvdat.h"
@@ -104,7 +104,7 @@ between pairs.
       fix maxsd, minsd, sd;
       grs_vertex *v1,*v2,*v3;
       short j,k,i0=0,i1=1,i2=2;
- 
+
       maxsd=0;
       for (v1=vplist[i=0]; i<n; v1=vplist[++i]) {
          for (v2=vplist[j=i+1]; j<n; v2=vplist[++j]) {
@@ -134,7 +134,7 @@ between pairs.
    cz=fix_mul_3_3_3((l3d1->x-l3d0->x),(l3d2->y-l3d0->y))
       -fix_mul_3_3_3((l3d2->x-l3d0->x),(l3d1->y-l3d0->y));
    c0=(fix_mul_3_3_3(a,l3d0->x)+fix_mul_3_3_3(b,l3d0->y)+fix_mul_3_3_3(cz,l3d0->z));
-                                        
+
     if (fix_sar(fix_abs(a),7) > fix_sar(fix_abs(b),7-flat8_per_wftol)) {
 //       use wall mapper
        gr_free_temp(l3d);
@@ -150,7 +150,7 @@ between pairs.
 so virtual scan line equations are given by
 a*x_scr+b*y_scr=scale*((c0/z)-cz)
 ******************************************************/
-                                         
+
 /**************************************************************************
 Get wu, wv: vectors s.t. u-u0=wu*(r-r0); v-v0=wv*(r-r0).
 the solutions are determined from two points in the plane (besides r0) and

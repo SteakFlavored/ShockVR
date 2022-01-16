@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // Header file for the Region library
 
@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define UI_LINKED    1
 
 typedef struct _Region
-{                  
+{
 	int     abs_x, abs_y;			// upper left in absolute coords
 	LGRect  *r;						// rectangle covered by this region, in coord frame of parent.
 	int     z;						// z-coordinate to determine stacking
@@ -53,7 +53,7 @@ typedef struct _Region
 	ulong  	status_flags;
 	int    	device_type;
 	void 	*handler;
-	void 	*cursors; 
+	void 	*cursors;
 	void 	*user_data;				// user-provided region information for callback use
 	int    	event_order;
 	struct 	_Region *sub_region;   	// Head of children regions
@@ -75,13 +75,13 @@ typedef bool (*TravCallback)(LGRegion *reg, void *data);
 // the first time you try to create a region, if you haven't done so already.
 errtype region_init();
 
-// Register a region with the UI manager, geometry described by r, and as a 
+// Register a region with the UI manager, geometry described by r, and as a
 // subregion of the parent region.  When the passed
 // events are not filtered out by emask, and callbacks are allowed by
 // cb mask, callback will be called.  cbmask can be used to prevent
 // any of expose, save_under, or event callbacks from happening.
 // Returns a pointer to the newly-defined region.  Depending
-// on the value of the z coordinate, the new region will be 
+// on the value of the z coordinate, the new region will be
 // "above" or "below" other overlapping regions.  Any covered region
 // will be given a saveunder callback if it's mask allows.  Whether or
 // not the parent handles the events before it's children is dependant
@@ -98,13 +98,13 @@ errtype region_create(LGRegion *parent, LGRegion *ret, LGRect *r, int z, int eve
    ulong status, RectCallback expose,
    RectCallback save_under, RectCallback replace, void *user_data);
 
-#define REG_USER_CONTROLLED   EVENT_CB | EXPOSE_CB | SAVEUNDER_CB | REPLACE_CB 
+#define REG_USER_CONTROLLED   EVENT_CB | EXPOSE_CB | SAVEUNDER_CB | REPLACE_CB
 #define REG_NORMAL            EVENT_CB | EXPOSE_CB | SAVEUNDER_CB | REPLACE_CB | AUTOMANAGE_FLAG | DISPLAY_ON_CREATION
 #define REG_AUTOMATIC         AUTOMANAGE_FLAG | EXPOSE_CB | EVENT_CB | DISPLAY_ON_CREATION
 #define REG_TRANSPARENT       EVENT_CB  // Dunno whether this will actually work...
 #define REG_NONEXISTANT       0x0000
 
-// Removes a region from the system, along with all it's children.  
+// Removes a region from the system, along with all it's children.
 // Returns whether or not the operation was successful.  Any newly exposed
 // areas will recieve expose callbacks if their masks allow.
 
@@ -123,7 +123,7 @@ errtype region_resize(LGRegion *reg, int new_x_size, int new_y_size);
 
 errtype region_expose(LGRegion *reg, LGRect *exp_rect);
 
-// Traverse the region stack by calling fn on every Region that is 
+// Traverse the region stack by calling fn on every Region that is
 // intersected by the target rectangle.  The order parameter determines
 // whether traversal is front to back or back to front.  If the callback
 // function ever returns a non-zero value, the traversal stops.  Returns
@@ -153,20 +153,20 @@ int foreign_region_obscured(LGRegion *reg, LGRect *obs_rect);
 // These functions control whether or not the region library thinks the application is
 // in the middle of a sequence which will generate multiple, probably duplicate, expose events.
 // While a sequence is active, it captures all the expose events, and saves them until the
-// sequence has ended, a which point it lets the exposes get through, after filtering out 
+// sequence has ended, a which point it lets the exposes get through, after filtering out
 // all the duplicate exposes.
 errtype region_begin_sequence();
 errtype region_end_sequence(bool replay);
 
 
-// An _invisible_ region is not detected through any kind of traversal, does not 
+// An _invisible_ region is not detected through any kind of traversal, does not
 // receive mouse events and does not change the cursor.
 
 errtype region_set_invisible(LGRegion* reg, bool invis);
 // Sets whether or not a region is invisible
 
 errtype region_get_invisible(LGRegion* reg, bool* invis);
-// determines whether a region is currently invisible. 
+// determines whether a region is currently invisible.
 
 #define UNOBSCURED            0
 #define PARTIALLY_OBSCURED    1

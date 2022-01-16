@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/genrsdtm.c $
  * $Revision: 1.4 $
  * $Author: kevin $
  * $Date: 1994/08/16 13:08:05 $
- * 
+ *
  * Generic routines for texture mapping rsd bitmaps.
  *
  * This file is part of the 2d library.
@@ -29,16 +29,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: genrsdtm.c $
  * Revision 1.4  1994/08/16  13:08:05  kevin
  * Changed to accomodate new function table organization.
- * 
+ *
  * Revision 1.3  1994/07/28  01:29:57  kevin
  * New general purpose chaining procedures for new texture mapping regime.
- * 
+ *
  * Revision 1.2  1993/12/28  16:30:18  kevin
  * changed name of gr_unpack_rsd to gr_rsd8_convert.
- * 
+ *
  * Revision 1.1  1993/12/06  13:16:17  kevin
  * Initial revision
- * 
+ *
  */
 
 #include "bitmap.h"

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: u://RCS/gamerend.c $
@@ -234,12 +234,12 @@ void do_secret_fx(void)
 	      dot_buf[c_val&7]='.';
       }
 
-      if (*tmd_ticks-sfx_time>V_CLOCK)   
+      if (*tmd_ticks-sfx_time>V_CLOCK)
       {
          secret_render_fx++;
 	      if (c_val==REBORN_FRAMES)
          {
-            extern errtype spoof_mouse_event(void); 
+            extern errtype spoof_mouse_event(void);
             extern bool music_on;
             secret_render_fx=0;
 
@@ -313,7 +313,7 @@ void do_secret_fx(void)
                mfd_change_slot(MFD_LEFT, MFD_INFO_SLOT);
                mfd_change_slot(MFD_RIGHT, MFD_INFO_SLOT);
 //KLC-duplicate mail               add_email_datamunge(FAKEWIN_EMAIL_MUNGE, FALSE);
-#ifdef AUDIOLOGS 
+#ifdef AUDIOLOGS
                if (audiolog_setting)
                   audiolog_play(FAKEWIN_EMAIL_MUNGE);
                if (audiolog_setting != 1)
@@ -372,13 +372,13 @@ void gamesys_render_effects(void)
 	int deltax, deltay;
 	short    mx,my;
 	extern bool full_game_3d;
-	
+
 	if ((!global_fullmap->cyber)&&(!secret_render_fx))
 	{
 		ubyte active = player_struct.actives[ACTIVE_WEAPON];
 		extern bool hack_takeover;
 		extern ulong player_death_time;
-		
+
 		// check to make sure we have an active weapon before drawing handart
 		if ((player_struct.weapons[active].type != EMPTY_WEAPON_SLOT) && !hack_takeover && !saveload_static)
 		{
@@ -402,13 +402,13 @@ void gamesys_render_effects(void)
 			{
 				ui_mouse_get_xy(&mx,&my);
 			}
-			
+
 			// Get the weapon art to draw.
 			temp = get_handart(&deltax, &deltay,mx, my);
 			if (temp != NULL)
 			{
 				extern bool ready_to_draw_handart(void);
-				
+
 				if (handart_show != 1)     // are we showing an attack frame?
 				{
 					// If this is a beam weapon, we need to draw the beam during attack.
@@ -420,7 +420,7 @@ void gamesys_render_effects(void)
 						{
 							int i;
 							bool draw_beam=FALSE;
-							
+
 							for (i=0;i<current_num_hudobjs;i++)
 							{
 								struct _hudobj_data *dat = &hudobj_vec[i];
@@ -439,7 +439,7 @@ void gamesys_render_effects(void)
 							if (draw_beam)
 							{
 								short a,b;
-								
+
 								gr_set_fcolor(base_color+5);
 								if (overload_beam)
 								{
@@ -452,7 +452,7 @@ void gamesys_render_effects(void)
 								if (!overload_beam)
 									gr_set_fcolor(base_color+5);
 								DRAW_BEAM_LINE(1,0,20,12);
-								
+
 								if (overload_beam)
 								{
 									gr_set_fcolor(base_color+5);
@@ -470,7 +470,7 @@ void gamesys_render_effects(void)
 			}
 		}
 	}
-   
+
    // Redraw hud displays as appropriate
    // HOW ABOUT A FLAG HERE, NOT HARDCODED LOOP NUMBERS
    if (!secret_render_fx && _current_loop <= FULLSCREEN_LOOP) {
@@ -572,11 +572,11 @@ void draw_full_static(grs_bitmap *stat_dest, int c_base)
 #define VHOLD_SHIFT_AMOUNT 7
 short vhold_shift = 0;
 
-#define FULL_CONVERT_X  
+#define FULL_CONVERT_X
 
 // returns whether to send the bitmap out in the render
 bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y, int flags)
-{ 
+{
    extern hud_do_objs(short xtop, short ytop, short xwid, short ywid, bool rev);
    grs_canvas *dest_canvas = (grs_canvas *)fake_dest_canvas;
    grs_bitmap *dest_bm = (grs_bitmap *)fake_dest_bm;
@@ -595,11 +595,11 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y,
 			case FR_SFX_VHOLD:
 				(*fr_mouse_hide)();
 				gr_set_canvas(dest_canvas);
-				
+
 				// Save off original state
 				orig_bits = dest_bm->bits;
 				orig_h = dest_bm->h;
-				
+
 				// KLC - adjust x and y if in doublesize mode.
 				if (DoubleSize)
 				{
@@ -607,7 +607,7 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y,
 					y *= 2;
 					if (y > 0) y++;		// It's one off in slot view.
 				}
-				
+
 				// Note that all of this contrivance to keep vhold_shift in original
 				// 320x200 coordinates is to avoid the wacky class of bugs of
 				// shifting screen mode in the middle of an EMP grenade
@@ -620,8 +620,8 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y,
 					dest_bm->bits += dest_bm->row * (orig_h - vhs);
 					dest_bm->h = vhs;
 					if (dest_bm->h != 0)
-						gr_bitmap(dest_bm, x, y); 
-					
+						gr_bitmap(dest_bm, x, y);
+
 					// Draw bottom bitmap
 					dest_bm->bits = orig_bits;
 					dest_bm->h = orig_h - vhs;
@@ -662,8 +662,8 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y,
             }
             break;
          case FR_SFX_SHIELD:
-            orig_h=(dest_bm->h>>1)-(dest_bm->h>>5)*abs(shield_raisage); 
-            orig_w=(dest_bm->w>>1)-(dest_bm->w>>5)*abs(shield_raisage); 
+            orig_h=(dest_bm->h>>1)-(dest_bm->h>>5)*abs(shield_raisage);
+            orig_w=(dest_bm->w>>1)-(dest_bm->w>>5)*abs(shield_raisage);
             orig_bits=dest_bm->bits;
             for (loop=1; loop<5; loop++)
 	         {

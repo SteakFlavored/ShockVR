@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		Res.H		Resource Manager header file
 //		Rex E. Bradford (REX)
@@ -23,36 +23,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: res.h $
  * Revision 1.9  1994/06/16  11:56:34  rex
  * Got rid of RDF_NODROP
- * 
+ *
  * Revision 1.8  1994/05/26  13:54:27  rex
  * Added prototype ResInstallPager()
- * 
+ *
  * Revision 1.7  1994/03/09  19:31:48  jak
  * Res\RefExtractInBlocks transfers a variable/length
  * block of data in each pass.  The user/defined function
  * returns the amount that should be passed in NEXT time.
- * 
+ *
  * Revision 1.6  1994/02/17  11:25:02  rex
  * Massive overhaul, moved some private stuff out to res_.h
- * 
+ *
  * Revision 1.5  1993/09/01  16:02:10  rex
  * Added prototype for ResExtractRefTable().
- * 
+ *
  * Revision 1.4  1993/05/13  10:38:44  rex
  * Added prototype for ResUnmake()
- * 
+ *
  * Revision 1.3  1993/05/13  10:30:56  rex
  * Added Extract routines and macros
- * 
+ *
  * Revision 1.2  1993/03/08  10:06:12  rex
  * Changed resource directory entry format (reduced from 12 to 10 bytes)
- * 
+ *
  * Revision 1.1  1993/03/04  18:47:58  rex
  * Initial revision
- * 
+ *
  * Revision 1.6  1993/03/02  18:42:21  rex
  * Major revision, new system
- * 
+ *
 */
 
 #ifndef __RES_H
@@ -159,7 +159,7 @@ void RefExtractInBlocks(RefTable *prt, Ref ref, void *buff, long blockSize,
 
 //	Each resource id gets one of these resource descriptors
 
-typedef struct 
+typedef struct
 {
 	Handle	hdl;			// Mac resource handle.  NULL if not in memory (on disk)
 	short	 	filenum;	// Mac resource file number
@@ -344,7 +344,7 @@ void ResSetComment(int filenum, char *comment);	// set comment
 int ResWrite(Id id);												// write resource to file
 void ResKill(Id id);													// delete resource & remove from file
 //long ResPack(int filenum);									// remove empty entries
-#define ResPack(filenum) 
+#define ResPack(filenum)
 
 //#define ResAutoPackOn(filenum) (resFile[filenum].pedit->flags |= RFF_AUTOPACK)
 //#define ResAutoPackOff(filenum) (resFile[filenum].pedit->flags &= ~RFF_AUTOPACK)

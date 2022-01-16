@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/hand.c $
@@ -45,7 +45,7 @@ typedef struct {
 #define HANDART_NUM (get_nth_from_triple(MAKETRIP(CLASS_GUN,player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]].type,player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]].subtype)))
 
 #define GAMESCR_HANDART_Y  76
-#define FULLSCREEN_HANDART_Y 168 
+#define FULLSCREEN_HANDART_Y 168
 
 #define HANDART_X_BASE  100
 #define HANDART_ID_BASE RES_handArt_0
@@ -56,7 +56,7 @@ typedef struct {
 #define MAX_HAND2HAND_FRAMES  5
 #define NUM_FRAMES            2
 
-#define PR24_COUNT         5       
+#define PR24_COUNT         5
 #define LASER_EPEE_COUNT   5
 
 #define HAND_BOB           3
@@ -81,7 +81,7 @@ handart_frame_info hand2hand_info[NUM_HANDTOHAND_GUN][MAX_HAND2HAND_FRAMES] =
 
 LGPoint pistol_hand_info[NUM_PROJ_GUN][NUM_FRAMES] =
 {
-   {{0, 25},{-4, 19}},       // pistol 
+   {{0, 25},{-4, 19}},       // pistol
    {{0, 25},{-3, 20}},       // dartgun
    {{0, 24},{-2, 18}},       // magnum
    {{0, 23},{-2, 16}},       // assault rifle
@@ -220,7 +220,7 @@ Ref get_handart(int *x_offset, int *y_offset, short mouse_x, short mouse_y)
 
       view_base_y = FULLSCREEN_HANDART_Y;
       screen_height = FULL_VIEW_HEIGHT/3;
-      
+
       if (mouse_x < 10)
          mouse_x = 10;
       else if (mouse_x > (FULL_VIEW_WIDTH-10))

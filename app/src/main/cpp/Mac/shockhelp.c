@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //=====================================================================
 //
@@ -49,9 +49,9 @@ void AddHelpMenu(void)
  {
  	MenuHandle	mh;
 	Str255			str;
-	
+
 	BlockMove("\pSystem Shock HelpÉ",str,32L);
-		
+
 	if (GetHelpMgr())													// If Help Mgr is available, stick Help
 	{																			// menu item in the Help menu
 		if (HMGetHelpMenuHandle(&mh) == noErr)
@@ -65,7 +65,7 @@ void AddHelpMenu(void)
 	}
  }
 
- 
+
 // ------------------------------------------------------------------
 //  Useritem to draw a help pict
 // ------------------------------------------------------------------
@@ -74,16 +74,16 @@ pascal void DrawHelp(WindowPtr dlog, int itemN)
 	Rect		r,r2;
 	short		itype;
 	Handle	hand;
-	
+
 	GetDItem(dlog, itemN, &itype, &hand, &r);
-	
+
 	if (gCurTopic != gPictLoaded)
 	{
 		ReleaseResource((Handle)gHelpPictHdl);
 		gPictLoaded = gCurTopic;
 		gHelpPictHdl = GetPicture(2499+gCurTopic);
 	}
-	
+
 	if (gHelpPictHdl == NULL)
 	{
 		MoveTo(r.left+15, r.top+30);
@@ -93,14 +93,14 @@ pascal void DrawHelp(WindowPtr dlog, int itemN)
 	{
 		r2 = (*gHelpPictHdl)->picFrame;
 		OffsetRect(&r2,-r2.left,-r2.top);
-		
+
 		// align pict to upper left
 		OffsetRect(&r2,r.left,r.top);
-		DrawPicture(gHelpPictHdl,&r2); 
+		DrawPicture(gHelpPictHdl,&r2);
 	}
 }
- 
- 
+
+
 //--------------------------------------------------------------------
 //  Show the help dialog
 //--------------------------------------------------------------------
@@ -116,11 +116,11 @@ void ShowShockHelp(void)
 	Rect					r;
  	int					sel;
 	Point					tempP;
-	
+
 	GetPort(&savePort);
 	dlog = GetNewDialog(6000,0L,(WindowPtr) -1L);
 	SetPort(dlog);
-	
+
 	btnOutlineProcPtr = NewUserItemProc(OKButtonUser);
  	GetDItem(dlog, 4, &itype, &hand, &r);
  	SetDItem(dlog, 4, itype, (Handle)btnOutlineProcPtr, &r);
@@ -128,18 +128,18 @@ void ShowShockHelp(void)
 	gPopupMenuHdl = GetMenu(6000);
 	InsertMenu(gPopupMenuHdl, -1);
 	gPopupSel = gCurTopic;
- 
+
 	popMenuProcPtr = NewUserItemProc(PopupMenuUser);
- 	GetDItem(dlog, 5, &itype, &hand, &r);					
+ 	GetDItem(dlog, 5, &itype, &hand, &r);
  	SetDItem(dlog, 5, itype, (Handle)popMenuProcPtr, &r);
- 	
+
 	picHelpProcPtr = NewUserItemProc(DrawHelp);
- 	GetDItem(dlog, 7, &itype, &hand, &r);					
+ 	GetDItem(dlog, 7, &itype, &hand, &r);
  	SetDItem(dlog, 7, itype, (Handle)picHelpProcPtr, &r);
 
  	gHelpPictHdl = GetPicture(2499+gCurTopic);
  	gPictLoaded = gCurTopic;
- 	
+
  	// Handle the dialog events.
 	do
 	{
@@ -147,11 +147,11 @@ void ShowShockHelp(void)
 		if (itemhit == 5)										// If the popup was selected.
 		{
 			GetDItem(dlog, 5, &itype, &hand, &r);
-			
+
 			tempP.h = r.left+1;
 			tempP.v = r.top+1;
 			LocalToGlobal(&tempP);
-			
+
 			// check the current item
 			CheckItem(gPopupMenuHdl,gCurTopic,true);
 			sel = PopUpMenuSelect(gPopupMenuHdl,tempP.v,tempP.h,gCurTopic);
@@ -161,7 +161,7 @@ void ShowShockHelp(void)
 				gCurTopic = sel;
 				gPopupSel = gCurTopic;
 				InvalRect(&r);
-				
+
 				// update to new pict
 				GetDItem(dlog,7,&itype,&hand,&r);
 				InvalRect(&r);
@@ -172,10 +172,10 @@ void ShowShockHelp(void)
 
 	gPictLoaded = -1;
 	ReleaseResource((Handle)gHelpPictHdl);
-	
+
  	DeleteMenu(6000);
  	ReleaseResource((Handle)gPopupMenuHdl);
-	
+
 	DisposeRoutineDescriptor(picHelpProcPtr);
 	DisposeRoutineDescriptor(popMenuProcPtr);
 	DisposeRoutineDescriptor(btnOutlineProcPtr);
@@ -191,13 +191,13 @@ void ShowShockHelp(void)
 Boolean GetHelpMgr(void)
  {
 	long	result;
-	
-	if (!Gestalt(gestaltHelpMgrAttr, &result)) 
+
+	if (!Gestalt(gestaltHelpMgrAttr, &result))
 	 {
 		if (result & 1L)
 			return (TRUE);
 	 }
-	
+
 	return(FALSE);
  }
 
@@ -211,17 +211,17 @@ void PadMenu(MenuHandle menu)
  	char		str[64];
  	int			oldFont,oldSize;
  	Style		oldStyle;
- 	
+
  	if (!HasSystem7)
- 	 {	
+ 	 {
  	 	oldFont = thePort->txFont;
  	 	oldSize = thePort->txSize;
  	 	oldStyle = thePort->txFace;
- 	 	
+
  	 	TextFont(0);
  	 	TextSize(12);
  	 	TextFace(0);
- 	 	
+
  	 	largest = 1;
  		GetItem(menu, 1, str);
  	 	width = StringWidth(str);
@@ -236,8 +236,8 @@ void PadMenu(MenuHandle menu)
  		 	 	width = temp;
  		 	 	largest = i;
  		 	 }
- 		 } 	
- 		 
+ 		 }
+
  		// add a space to the largest item
  		GetItem(menu, largest, str);
  		pstrcat(str,"\P ");

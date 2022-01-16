@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __HUDOBJ_H
 #define __HUDOBJ_H
@@ -28,13 +28,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: hudobj.h $
  * Revision 1.3  1994/06/29  00:47:25  mahk
  * Added hudobj_rect_capable.
- * 
+ *
  * Revision 1.2  1993/12/18  00:32:33  xemu
  * made flag definition in line with objbit.h
- * 
+ *
  * Revision 1.1  1993/10/13  21:47:24  mahk
  * Initial revision
- * 
+ *
  *
  */
 
@@ -74,18 +74,18 @@ extern ubyte current_num_hudobjs;
                                             hd->id = (oid); hd->xl = (oxl); hd->xh = (oxh); hd->yl = (oyl); hd->yh = (oyh);\
                                           }
 // ---------------
-// GAME SYSTEM API 
-// ---------------                                         
+// GAME SYSTEM API
+// ---------------
 
 
 
 #define HUDOBJ_ALL_SUBCLASSES 0xFF
 void hudobj_set_subclass(ubyte l_class, ubyte subclass, bool val);
-// Sets the value of IS_HUDOBJ for all objects of a particular class & subclass. 
-// if subclass is HUDOBJ_ALL_SUBCLASSES then all subclasses will be set accordingly.  
+// Sets the value of IS_HUDOBJ for all objects of a particular class & subclass.
+// if subclass is HUDOBJ_ALL_SUBCLASSES then all subclasses will be set accordingly.
 
 void hudobj_set_id(short id, bool val);
-// Sets the value of IS_HUDOBJ for the specified object. 
+// Sets the value of IS_HUDOBJ for the specified object.
 
 #define hudobj_rect_capable(triple) (ObjProps[OPTRIP(triple)].render_type == FAUBJ_BITMAP)
 

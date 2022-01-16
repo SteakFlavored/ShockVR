@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __SFXLIST_H
 #define __SFXLIST_H
@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_DOOR_BULKHEAD     67
 #define SFX_DOOR_GRATING      90
 
-// Ambient     
+// Ambient
 #define SFX_BRIDGE_1          -1
 #define SFX_BRIDGE_2          -1
 #define SFX_BRIDGE_3          -1
@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Wacky Objects
 #define SFX_REPULSOR          -1
 #define SFX_FORCE_BRIDGE      72
-#define SFX_TERRAIN_ELEV_LOOP       15  
+#define SFX_TERRAIN_ELEV_LOOP       15
 #define SFX_SPARKING_CABLE          -1  // not done?
 #define SFX_SURGERY_MACHINE         102
 
@@ -57,9 +57,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_GUN_SKORPION      -1
 #define SFX_GUN_MAGPULSE      45
 #define SFX_GUN_RAILGUN       -1
-#define SFX_GUN_PIPE_HIT_MEAT  4 
-#define SFX_GUN_PIPE_HIT_METAL 21 
-#define SFX_GUN_PIPE_MISS      24 
+#define SFX_GUN_PIPE_HIT_MEAT  4
+#define SFX_GUN_PIPE_HIT_METAL 21
+#define SFX_GUN_PIPE_MISS      24
 #define SFX_GUN_LASEREPEE_HIT  -1
 #define SFX_GUN_LASEREPEE_MISS -1
 #define SFX_GUN_PHASER        18
@@ -68,17 +68,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_GUN_STUNGUN       19
 #define SFX_GUN_PLASMA        -1
 
-#define SFX_PLAYER_HURT       64  
+#define SFX_PLAYER_HURT       64
 #define SFX_SHIELD_1          -1
 #define SFX_SHIELD_2          -1
 #define SFX_SHIELD_UP         -1
 #define SFX_SHIELD_DOWN       -1
 #define SFX_METAL_SPANG       -1 // robot hit?   not in
-#define SFX_RADIATION         SFX_STATIC        
+#define SFX_RADIATION         SFX_STATIC
 
-#define SFX_RELOAD_1          22 
+#define SFX_RELOAD_1          22
 #define SFX_RELOAD_2          23
-#define SFX_GRENADE_ARM       7     
+#define SFX_GRENADE_ARM       7
 #define SFX_BATTERY_USE       28
 
 #define SFX_EXPLOSION_1       44
@@ -167,7 +167,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_DOOR_BULKHEAD     67
 #define SFX_DOOR_GRATING      90
 
-// Ambient     
+// Ambient
 #define SFX_BRIDGE_1          -1
 #define SFX_BRIDGE_2          -1
 #define SFX_BRIDGE_3          -1
@@ -179,7 +179,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_GROVE_1           43
 
 // Critters
-#define SFX_DEATH_1           11 // robot 
+#define SFX_DEATH_1           11 // robot
 #define SFX_DEATH_2           49 // bird
 #define SFX_DEATH_3           50 // gort
 #define SFX_DEATH_4           51 // mutant
@@ -188,7 +188,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_DEATH_7           68 // cyb1
 #define SFX_DEATH_8           69 // cyb2
 #define SFX_DEATH_9           88 // 0 grav
-#define SFX_DEATH_10          93 // plant 
+#define SFX_DEATH_10          93 // plant
 #define SFX_DEATH_11          101 // virus mutant
 #define SFX_ATTACK_1          12
 #define SFX_ATTACK_4          46
@@ -197,10 +197,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_ATTACK_7          55
 #define SFX_ATTACK_8          63
 #define SFX_ATTACK_9          16 // cyborg drone
-#define SFX_NOTICE_1          58   
+#define SFX_NOTICE_1          58
 #define SFX_NOTICE_2          59 // replace with new cyborg sound
-#define SFX_NOTICE_3          74   
-#define SFX_NOTICE_4          75   
+#define SFX_NOTICE_3          74
+#define SFX_NOTICE_4          75
 #define SFX_NOTICE_5          100   // virus mutant
 #define SFX_NEAR_1            73
 #define SFX_NEAR_2            56
@@ -210,7 +210,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Wacky Objects
 #define SFX_REPULSOR          -1
 #define SFX_FORCE_BRIDGE      72
-#define SFX_TERRAIN_ELEV_LOOP       15  
+#define SFX_TERRAIN_ELEV_LOOP       15
 #define SFX_SPARKING_CABLE          87  // not done?
 #define SFX_SURGERY_MACHINE         102
 
@@ -224,9 +224,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_GUN_SKORPION      65
 #define SFX_GUN_MAGPULSE      45
 #define SFX_GUN_RAILGUN       29
-#define SFX_GUN_PIPE_HIT_MEAT  4 
-#define SFX_GUN_PIPE_HIT_METAL 21 
-#define SFX_GUN_PIPE_MISS      24 
+#define SFX_GUN_PIPE_HIT_MEAT  4
+#define SFX_GUN_PIPE_HIT_METAL 21
+#define SFX_GUN_PIPE_MISS      24
 #define SFX_GUN_LASEREPEE_HIT  31
 #define SFX_GUN_LASEREPEE_MISS 34
 #define SFX_GUN_PHASER        18
@@ -235,17 +235,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SFX_GUN_STUNGUN       19
 #define SFX_GUN_PLASMA        97
 
-#define SFX_PLAYER_HURT       64  
+#define SFX_PLAYER_HURT       64
 #define SFX_SHIELD_1          32
 #define SFX_SHIELD_2          20
 #define SFX_SHIELD_UP         96
 #define SFX_SHIELD_DOWN       42
 #define SFX_METAL_SPANG       89 // robot hit?   not in
-#define SFX_RADIATION         SFX_STATIC        
+#define SFX_RADIATION         SFX_STATIC
 
-#define SFX_RELOAD_1          22 
+#define SFX_RELOAD_1          22
 #define SFX_RELOAD_2          23
-#define SFX_GRENADE_ARM       7     
+#define SFX_GRENADE_ARM       7
 #define SFX_BATTERY_USE       28
 
 #define SFX_EXPLOSION_1       44

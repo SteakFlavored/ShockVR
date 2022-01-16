@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/fix/RCS/fix.h $
@@ -27,132 +27,132 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: fix.h $
  * Revision 1.41  1994/08/18  18:10:21  jaemz
  * Added sloppy_sqrt
- * 
+ *
  * Revision 1.40  1994/08/11  12:11:14  dfan
  * multiple source directories
- * 
+ *
  * Revision 1.39  1994/03/16  10:29:25  lmfeeney
  * ,
  * added extern fn fix_pow
- * 
+ *
  * Revision 1.38  1994/03/16  10:29:25  dfan
  * fix_safe_pyth_dist etc.
  * also conversions to and from degrees
- * 
+ *
  * Revision 1.37  1994/01/22  19:05:46  dc
  * fast_fix_mul_int
- * 
+ *
  * Revision 1.36  1994/01/22  19:04:22  dc
  * shrd not shr\shl\or for fix_mul
  * neat
- * 
+ *
  * Revision 1.34  1993/11/11  13:50:46  rex
  * Changed fix_from_float() to much simpler macro, added atofix() and atofix24()
- * 
+ *
  * Revision 1.33  1993/11/05  13:56:16  dfan
  * 2pi was wrong.
- * 
+ *
  * Revision 1.32  1993/11/04  11:13:42  dfan
  * long_fast_pyth_dist
- * 
+ *
  * Revision 1.31  1993/09/17  13:03:36  dfan
  * fast_pyth_dist
- * 
+ *
  * Revision 1.30  1993/08/17  15:10:04  kaboom
  * Added fix_cint and fix_fint macros.
- * 
+ *
  * Revision 1.29  1993/07/30  12:42:58  dfan
  * fix_exp
- * 
+ *
  * Revision 1.28  1993/07/07  12:26:58  xemu
  * fixed a numerical error in fixang_to_fixrad
- * 
+ *
  * Revision 1.27  1993/07/02  15:10:01  xemu
  * conversion from fixed-point radians to fixangs
- * 
+ *
  * Revision 1.26  1993/06/27  02:30:47  dc
  * added char return to fix_sprint prototypes, added fix_sprint_hex prototypes
- * 
+ *
  * Revision 1.25  1993/06/07  10:29:36  jak
  * Reversed #pragma and C decls for some functions
  * so that C++ parser will be happy.
- * 
+ *
  * Revision 1.24  1993/06/05  07:38:36  mahk
  * Added abs, sgn, FIXANG_PI
- * 
+ *
  * Revision 1.23  1993/04/19  13:31:42  dfan
  * individual sin & cos functions
- * 
+ *
  * Revision 1.22  1993/04/14  17:13:23  jaemz
  * Added FIX_MIN and FIX_MAX
- * 
+ *
  * Revision 1.21  1993/04/14  16:57:23  jaemz
  * Added floor and ceil
- * 
+ *
  * Revision 1.20  1993/04/07  10:15:06  matt
  * Removed include of math.h, which seemed unneccesary.
- * 
+ *
  * Revision 1.19  1993/03/15  16:55:45  matt
  * Added include of "types.h"
- * 
+ *
  * Revision 1.18  1993/03/03  14:46:59  dfan
  * fix_from_float: short should have been ushort to prevent nasty sign-extend
- * 
+ *
  * Revision 1.17  1993/03/03  11:50:53  dfan
  * float conversion
- * 
+ *
  * Revision 1.16  1993/02/16  10:44:33  matt
  * Added parens around macro args
- * 
- * 
+ *
+ *
  * Revision 1.15  1993/02/15  12:15:29  dfan
  * more fix24 functions
- * 
+ *
  * Revision 1.14  1993/02/15  11:40:22  dfan
  * fix24 support
- * 
+ *
  * Revision 1.13  1993/02/04  16:25:33  matt
  * Added new fix_mul_div() function
- * 
+ *
  * Revision 1.12  1993/01/29  11:10:45  dfan
  * hey, fix_sqrt returns a 32-bit value
- * 
+ *
  * Revision 1.11  1993/01/29  10:42:34  dfan
  * type in fix_sqrt pragma
- * 
+ *
  * Revision 1.10  1993/01/27  16:47:16  dfan
  * sqrt functions
  * by the way, the arctrig functions did work after all
- * 
+ *
  * Revision 1.9  1993/01/22  15:52:36  dfan
  * Asin, acos, and atan2 do work after all
- * 
+ *
  * Revision 1.8  1993/01/22  09:57:19  dfan
  * Added lots of functions, including trig ones
  * Arctrig doesn't work yet
- * 
+ *
  * Revision 1.7  1992/10/14  23:37:46  kaboom
  * Added fix_rint macro to round & take integer part.
- * 
+ *
  * Revision 1.6  1992/10/13  22:34:24  kaboom
  * Added #ifdef __FIX_H clause around body of file.
- * 
+ *
  * Revision 1.5  1992/09/16  19:52:06  kaboom
  * Modified the fix_int macro not to round off before converting fix to int.
  * Added fix_trunc to remove fractional part, fix_frac to return fractional
  * part.
- * 
+ *
  * Revision 1.4  1992/09/16  19:28:26  kaboom
  * Changed fix_mul and fix_div to be inline assembly-language functions
  * instead of called functions.  That makes this the only file in the
  * fixed-point math library and fix.asm is obsolete.
- * 
+ *
  * Revision 1.3  1992/09/15  14:08:22  kaboom
  * Made typedef for fixed point variables.  Added fix_make macro.
- * 
+ *
  * Revision 1.2  1992/08/24  17:27:17  kaboom
  * Added RCS keywords and header at top of file.
- * 
+ *
  * Revision 1.1  1992/08/24  17:27:17  kaboom
  * Initial revision.
  */
@@ -238,7 +238,7 @@ typedef ushort fixang;
 
 // Absolute value and signum
 #define fix_abs(n) (((n) < 0) ? -(n) : (n))
-#define fix_sgn(n) (((n) < 0) ? -FIX_UNIT : (((n) == 0) ? 0 : FIX_UNIT)) 
+#define fix_sgn(n) (((n) < 0) ? -FIX_UNIT : (((n) == 0) ? 0 : FIX_UNIT))
 
 /* converts the floor of n to an integer. */
 #define fix_fint(n) ((n)>>16)

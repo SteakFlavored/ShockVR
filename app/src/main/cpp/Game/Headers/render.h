@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __RENDER_H
 #define __RENDER_H
@@ -102,9 +102,9 @@ extern int  fr_pseudo_spheres;
 
 #define MAX_CAMERAS_VISIBLE   2
 #define NUM_HACK_CAMERAS      8
-// hack cameras are "custom textures" 7c through 7f 
+// hack cameras are "custom textures" 7c through 7f
 // (so, factoring in type, the low byte is fc to ff
-//#define FIRST_CAMERA_TMAP     (short)0x80 - NUM_HACK_CAMERAS 
+//#define FIRST_CAMERA_TMAP     (short)0x80 - NUM_HACK_CAMERAS
 #define FIRST_CAMERA_TMAP     0x78
 
 errtype init_hack_cameras(void);

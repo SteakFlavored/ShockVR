@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __OBJWPN_H
 #define __OBJWPN_H
@@ -40,7 +40,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
 	ubyte    ammo_type;
@@ -55,7 +55,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
 } ObjAmmo;
@@ -68,14 +68,14 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
    ObjID    owner;
    int      bullet_triple;
    int      duration;
 //   char     power;
-   ObjLoc   p1, p2, p3;         
+   ObjLoc   p1, p2, p3;
 } ObjPhysics;
 
 typedef struct {
@@ -86,7 +86,7 @@ typedef struct {
 	};
 	union {
 		ObjSpecID next;
-		ObjSpecID headfree; 
+		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
    ubyte unique_id;
@@ -251,7 +251,7 @@ typedef struct _TimedGrenadeProp {
    ubyte max_time_set;
    ubyte timing_deviation;
 } TimedGrenadeProp;
- 
+
 // Gun
 #define NUM_PISTOL_GUN	      5
 #define NUM_AUTO_GUN	         2
@@ -265,9 +265,9 @@ typedef struct _TimedGrenadeProp {
 #define NUM_NEEDLE_AMMO	      2
 #define NUM_MAGNUM_AMMO	      3
 #define NUM_RIFLE_AMMO	      2
-#define NUM_FLECHETTE_AMMO	   2      
-#define NUM_AUTO_AMMO	      2      
-#define NUM_PROJ_AMMO	      2      
+#define NUM_FLECHETTE_AMMO	   2
+#define NUM_AUTO_AMMO	      2
+#define NUM_PROJ_AMMO	      2
 
 // Physics
 #define NUM_TRACER_PHYSICS    6
@@ -317,16 +317,16 @@ typedef struct _TimedGrenadeProp {
 #define GunProps        ((GunProp *)GunBase)
 #define PistolBase      (GunBase+(sizeof(GunProp)* NUM_GUN))
 #define PistolProps     ((PistolGunProp *)PistolBase)
-#define AutoBase        (PistolBase + (sizeof(PistolGunProp * NUM_PISTOL_GUN)))	
-#define AutoProps       ((AutoGunProp *)AutoBase)			
-#define SpecialBase        (AutoBase + (sizeof(AutoGunProp * NUM_AUTO_GUN)))	
-#define SpecialProps       ((SpecialGunProp *)SpecialBase)			
-#define HandtohandBase        (SpecialBase + (sizeof(SpecialGunProp * NUM_SPECIAL_GUN)))	
-#define HandtohandProps       ((HandtohandGunProp *)HandtohandBase)			
-#define BeamBase        (HandtohandBase + (sizeof(HandtohandGunProp * NUM_HANDTOHAND_GUN)))	
-#define BeamProps       ((BeamGunProp *)BeamBase)			
-#define BeamprojBase        (BeamBase + (sizeof(BeamGunProp * NUM_BEAM_GUN)))	
-#define BeamprojProps       ((BeamprojGunProp *)BeamprojBase)			
+#define AutoBase        (PistolBase + (sizeof(PistolGunProp * NUM_PISTOL_GUN)))
+#define AutoProps       ((AutoGunProp *)AutoBase)
+#define SpecialBase        (AutoBase + (sizeof(AutoGunProp * NUM_AUTO_GUN)))
+#define SpecialProps       ((SpecialGunProp *)SpecialBase)
+#define HandtohandBase        (SpecialBase + (sizeof(SpecialGunProp * NUM_SPECIAL_GUN)))
+#define HandtohandProps       ((HandtohandGunProp *)HandtohandBase)
+#define BeamBase        (HandtohandBase + (sizeof(HandtohandGunProp * NUM_HANDTOHAND_GUN)))
+#define BeamProps       ((BeamGunProp *)BeamBase)
+#define BeamprojBase        (BeamBase + (sizeof(BeamGunProp * NUM_BEAM_GUN)))
+#define BeamprojProps       ((BeamprojGunProp *)BeamprojBase)
 
 #define AmmoBase        (BeamprojBase + sizeof(BeamprojGunProp * NUM_BEAMPROJ_GUN))
 #define AmmoProps       ((AmmoProp *)

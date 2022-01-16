@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #define __HOTKEY_SRC
 #include "hotkey.h"
@@ -203,7 +203,7 @@ static bool shutdown_iter_func(void* elem, void* data)
 #ifdef HOTKEY_HELP
    int i;
    hotkey_link *chain = (hotkey_link*)(ch->keychain.vec);
-   
+
    if (ch == NULL) return FALSE;
    for (i = ch->first; i != CHAIN_END; i = chain[i].next)
    {
@@ -242,7 +242,7 @@ bool hotkey_list(char **item, int sort_type)
    strcpy(*item, "");
    for (i = ch->first; i != CHAIN_END; i = chain[i].next)
    {
-      strcat(*item, 
+      strcat(*item,
       if (chain[i].context & HotkeyContext)
       {
          Spew(DSRC_UI_Hotkey,("Succeeded context test %d\n",chain[i].context));
@@ -250,7 +250,7 @@ bool hotkey_list(char **item, int sort_type)
             return OK;
       }
    }
-   strcpy(*item, 
+   strcpy(*item,
 }
 
 errtype hotkey_list_clear()
@@ -260,5 +260,5 @@ errtype hotkey_list_clear()
 
 #endif
 
-   
+
 

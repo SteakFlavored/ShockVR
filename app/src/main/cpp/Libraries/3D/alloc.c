@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //
 // $Source: r:/prj/lib/src/3d/RCS/alloc.c $
@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // $Date: 1994/09/28 19:01:01 $
 //
 // Point allocation, system init and shutdown
-// 
+//
 
 #include "lg.h"
 #include "3d.h"
@@ -47,7 +47,7 @@ short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
  	char	temp_char;
  	long	allocSize;
 	char 	temp_neg_flags[3]={0,0,0};
- 	
+
 #ifdef stereo_on
 		extn divide_overflow_r3d, proj_div_2
 #endif
@@ -63,7 +63,7 @@ short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
 	 	temp_neg_flags[0] = 1;						//	mov	temp_neg_flags,1
    }
 	axis_x = user_x_axis;						// no_neg_x:	mov	axis_x,ebx
-	
+
 	if (user_y_axis<0)							//  or	ecx,ecx	;check sign		jns	no_neg_y
 	 {
 		user_y_axis = -user_y_axis;		// neg	ecx
@@ -71,7 +71,7 @@ short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
 	 }
 	axis_y = user_y_axis;						// no_neg_y:	mov	axis_y,ecx
 
-	if (user_z_axis<0)							//  or	edx,edx	;check sign  jns	no_neg_z 
+	if (user_z_axis<0)							//  or	edx,edx	;check sign  jns	no_neg_z
 	 {
 		user_z_axis = -user_z_axis;		// neg	edx
 		temp_neg_flags[2] = 1;				// mov	temp_neg_flags+2,1
@@ -85,7 +85,7 @@ short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
 	 	temp_long = user_x_axis;
 	 	user_x_axis = user_y_axis;
 	 	user_y_axis = temp_long;				// 	xchg	ebx,ecx
-	 	
+
 	 	temp_char = temp_neg_flags[0];
 	 	temp_neg_flags[0]=temp_neg_flags[1];
 	 	temp_neg_flags[1] = temp_char;	// mswap	temp_neg_flags,temp_neg_flags+1
@@ -97,7 +97,7 @@ short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
 	 	temp_long = user_x_axis;
 	 	user_x_axis = user_z_axis;
 	 	user_z_axis = temp_long;				// 	xchg	ebx,edx
-	 	
+
 	 	temp_char = temp_neg_flags[0];
 	 	temp_neg_flags[0]=temp_neg_flags[2];
 	 	temp_neg_flags[2] = temp_char;	// mswap	temp_neg_flags,temp_neg_flags+2
@@ -105,24 +105,24 @@ short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
 
 	if (user_y_axis>=user_z_axis)		// cmp	ecx,edx	;check swap y,z			jl	no_swap_xy
 	 {
-	 	axis_swap_flag |= 4;					//	or	axis_swap_flag,1	 	
+	 	axis_swap_flag |= 4;					//	or	axis_swap_flag,1
 	 	temp_char = temp_neg_flags[1];
 	 	temp_neg_flags[1]=temp_neg_flags[2];
 	 	temp_neg_flags[2] = temp_char;	// mswap	temp_neg_flags+1,temp_neg_flags+2
 	 }
-	 
+
 // set neg flags bitmask
 	axis_neg_flag = (temp_neg_flags[2]<<2) | (temp_neg_flags[1]<<1) | temp_neg_flags[0];
-	
+
 	user_y_axis = temp_user_y_axis-1;		// pop	ecx	;get back y axis
 																			// 	dec	ecx	;make y axis 0,1,2
 	up_axis = (user_y_axis<<1) + user_y_axis;
-	
+
 // set axis offset vars. offset is number of elements, not bytes
 	axis_x_ofs = ((axis_x-1)<<1) + (axis_x-1);
 	axis_y_ofs = ((axis_y-1)<<1) + (axis_y-1);
 	axis_z_ofs = ((axis_z-1)<<1) + (axis_z-1);
-	
+
 // get pixel ratio
 	pixel_ratio = grd_cap->aspect;
 
@@ -130,19 +130,19 @@ short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
 
 //	_mark_	<initialize 3d system>
 	allocSize = max_points*sizeof(g3s_point);
-	
+
 #ifdef stereo_on		// ; if stereo mode multiply by 2 at last moment
 	if (_g3d_stereo_base)
 	  allocSize<<=1;
 #endif
- 
+
   point_list = (g3s_point *) NewPtr(allocSize);
   if (!point_list) return(0);
 
 // MLA - all divide overflow/divide by zero errors are handled around the individual divide
 // instructions.
 //
-// Since we can't do divide overflow/zero traps on both the 68k and PPC.  
+// Since we can't do divide overflow/zero traps on both the 68k and PPC.
 
 //install divide overflow callbacks
 /*	mov	eax,EXM_DIVIDE_ERR      ;tell handler to do callbacks
@@ -173,13 +173,13 @@ endif
 
 
 void g3_start_frame(void)
- { 
+ {
  	int				i;
  	g3s_point *pt3;
- 	
+
 //get pixel ratio again in case it's changed
 	pixel_ratio = grd_cap->aspect;
-	
+
 //>>>>>>> 1.15
 //set up window vars
 	window_width = grd_canvas->bm.w;
@@ -189,15 +189,15 @@ void g3_start_frame(void)
 	window_height = grd_canvas->bm.h;
 	_biasy = _scrh = window_height << 15;
 	wh2 = _scrh >> 16;
-	
+
 //mark all points as free
-	if (n_points) 
+	if (n_points)
 	 {
 	 	first_free = point_list;
 	 	pt3 = (g3s_point *) point_list;
 	 	for (i=0; i<n_points-1; i++, pt3++)
 	 	 	pt3->next = (g3s_phandle) (pt3+1);
-	 	
+
 	 	pt3->next = 0L;
 	 }
  }
@@ -211,9 +211,9 @@ void g3_shutdown(void)
 	n_points = 0;
 	first_free = 0;
 
-#ifdef stereo_on		
+#ifdef stereo_on
 	_g3d_stereo_base = 0;
-#endif	
+#endif
  }
 
 //;does extactly what you would think
@@ -221,16 +221,16 @@ int g3_count_free_points(void)
  {
  	int					i;
  	g3s_point 	*free_p = first_free;
- 	
+
  	i=0;
- 	while (free_p) 
+ 	while (free_p)
  	 {
- 	 	i++; 
+ 	 	i++;
  	 	free_p = free_p->next;
  	 }
  	return(i);
- } 
- 
+ }
+
 // check if all points free. returns number of points lost
 int g3_end_frame(void)
  {
@@ -245,16 +245,16 @@ int g3_alloc_list(int n, g3s_phandle *p)
  {
  	int					i;
  	g3s_point 	*cur_ptr;
- 	
+
  	if (!first_free) return(0);
  	cur_ptr = first_free;
- 	
+
  	for (i=0; i<n; i++)
  	 {
  	 	p[i] = cur_ptr;
  	 	cur_ptr = cur_ptr->next;
  	 }
- 	
+
  	first_free = cur_ptr;
  	return(n);
  }
@@ -263,13 +263,13 @@ int g3_alloc_list(int n, g3s_phandle *p)
 g3s_phandle g3_alloc_point(void)
  {
  	g3s_point 	*tempPtr;
- 	
+
  	if (!first_free) return(0L);
  	tempPtr = first_free;
  	first_free = tempPtr->next;
  	return(tempPtr);
  }
- 
+
 // free the point in eax. trashes ebx
 void g3_free_point(g3s_phandle p)      //adds to free list
  {
@@ -284,7 +284,7 @@ void g3_free_list(int n_points, g3s_phandle *p) 	//adds to free list
  	int					i;
  	g3s_phandle *gptr;
  	g3s_point 	*tempPtr;
- 	
+
  	gptr = p;
  	for (i=0; i<n_points; i++)
  	 {
@@ -298,12 +298,12 @@ void g3_free_list(int n_points, g3s_phandle *p) 	//adds to free list
 g3s_phandle g3_dup_point(g3s_phandle p)                //makes copy of a point
  {
  	g3s_point 	*tempPtr,*destPtr;
- 	
+
  	destPtr = first_free;
  	first_free = destPtr->next;
 
  	g3_copy_point(destPtr,p);
- 	
+
  	return(destPtr);
  }
 

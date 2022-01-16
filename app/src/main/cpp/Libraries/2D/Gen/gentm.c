@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/gentm.c $
@@ -82,27 +82,27 @@ void h_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
    /* start with degenerate min and max values. */
 //   poly_find_yw_extrema(y_min,y_max,w_min,w_max,p_left,vpl,n);
 // moved this code from the #define in PolyInt.h because the compiler couldn't handle it
-do {                                      
-   grs_vertex **pvp;                     
-   int y;                                 
-   p_left = vpl;                        
-   y_min = fix_cint(vpl[0]->y);         
-   y_max = fix_cint(vpl[0]->y);         
-   w_min = vpl[0]->w;                   
-   w_max = vpl[0]->w;                   
+do {
+   grs_vertex **pvp;
+   int y;
+   p_left = vpl;
+   y_min = fix_cint(vpl[0]->y);
+   y_max = fix_cint(vpl[0]->y);
+   w_min = vpl[0]->w;
+   w_max = vpl[0]->w;
    for (pvp=vpl+1; pvp<vpl+n; ++pvp) {
-      y=fix_cint((*pvp)->y);              
-      if (y < y_min) {                    
-         y_min = y;                       
-         w_min = (*pvp)->w;              
-         p_left = pvp;                   
-      }                                   
-      if (y > y_max) {                   
-         y_max = y;                     
-         w_max = (*pvp)->w;              
-      }                                   
-   }                                      
-   if (y_min == y_max) return;          
+      y=fix_cint((*pvp)->y);
+      if (y < y_min) {
+         y_min = y;
+         w_min = (*pvp)->w;
+         p_left = pvp;
+      }
+      if (y > y_max) {
+         y_max = y;
+         w_max = (*pvp)->w;
+      }
+   }
+   if (y_min == y_max) return;
 } while(0);
 
    if (ti->flags&TMF_FLOOR) {

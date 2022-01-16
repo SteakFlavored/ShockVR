@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrPipe.c
@@ -26,33 +26,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Citadel Renderer
  *   pipeline controller
- *  
+ *
  * $Log: frpipe.c $
  * Revision 1.8  1994/09/06  03:15:09  dc
  * well, why not try and sort a little better, eh
  * really, though, it just doesnt work
- * 
+ *
  * Revision 1.7  1994/09/05  06:43:47  dc
  * diamond pipe, second wrong pipe, various fixes
- * 
+ *
  * Revision 1.6  1994/08/19  05:03:54  dc
  * diagonals with the correct height... how odd
- * 
+ *
  * Revision 1.5  1994/08/04  23:48:56  dc
  * no seen bits through hack cameras...
- * 
+ *
  * Revision 1.4  1994/04/23  09:06:49  dc
  * seen bit stuff
- * 
+ *
  * Revision 1.3  1994/04/06  07:19:14  dc
  * seen bits, clear dealt bits... soon we will use dealt bits in frobj and life will be good
- * 
+ *
  * Revision 1.2  1994/02/13  05:46:22  dc
  * sort
- * 
+ *
  * Revision 1.1  1994/01/02  17:12:05  dc
  * Initial revision
- * 
+ *
  */
 
 #include <stdlib.h>
@@ -114,13 +114,13 @@ uchar quad_code_to_mask_2[]=
    FMK_NW|FMK_EW,
    FMK_EW|FMK_NW|FMK_SW,
    FMK_EW|FMK_NW,
-   FMK_EW|FMK_SW,   
+   FMK_EW|FMK_SW,
    FMK_SW|FMK_EW|FMK_WW,
    FMK_SW|FMK_EW,
    FMK_SW|FMK_WW,
    FMK_WW|FMK_NW|FMK_SW,
-   FMK_WW|FMK_SW,   
-   FMK_WW|FMK_NW,   
+   FMK_WW|FMK_SW,
+   FMK_WW|FMK_NW,
    FMK_EW|FMK_WW|FMK_SW|FMK_NW
 };
 
@@ -231,7 +231,7 @@ int fr_pipe_end(void)
 }
 
 // claiming i stepped out of line
-// which forced you to leave me 
+// which forced you to leave me
 // as if that idea was mine
 //    oh you stupid thing, speaking of course as your dear departed
 //    oh you stupid thing, it wasnt me that you outsmarted
@@ -348,7 +348,7 @@ int fr_pipe_go_3(void)
 	         loc_code_ptr++; // go to the right fork...
 	         _fdt_mask=(int)*loc_code_ptr;
 	         draw_dir_dir(diag_dirsets[j][0],1,p_dir-1);
-	
+
             // for now just hard restore these three, get cooler later
             _fdt_x=_fr_x_cen+(diag_stupid[j][0]*_fdt_dist);
             _fdt_y=_fr_y_cen+(diag_stupid[j][1]*_fdt_dist);
@@ -383,7 +383,7 @@ int fr_pipe_go_3(void)
             }
 	      }
       }
-      _fdt_dist--;      
+      _fdt_dist--;
    }
 
    if (me_subclip(center)!=SUBCLIP_OUT_OF_CONE)

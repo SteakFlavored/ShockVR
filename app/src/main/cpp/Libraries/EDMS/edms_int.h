@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Header: n:/project/lib/src/edms/RCS/edms_int.h 1.4 1993/05/13 15:46:06 roadkill Exp $
@@ -179,20 +179,20 @@ typedef struct
 		    g_dx,
 		    g_dy,
 		    g_dz,
-		
+
 		    w_x,									//Any walls...
 		    w_y,
 		    w_z;
-	
+
 	fix	terrain_information;			//Squishiness, friction, et cetera...
-	
+
 	long	DATA1,								//For terrain return information...
 			DATA2;
-	
+
 	fix   my_size;                   				//Only needed for "fast" terrain calls
-	
+
 	physics_handle	caller;				//Who's responsible...
-	
+
 } terrain_ff;
 bool FF_terrain( fix X, fix Y, fix Z, bool fast, terrain_ff* TFF );   //From Freefall...
 bool FF_raycast (fix x, fix y, fix z, fix vec[3], fix range, fix where_hit[3], terrain_ff *tff);
@@ -239,7 +239,7 @@ void		field_point_X( int ),
 //#define COLLISION_SIZE 100
 #define DELTA_BY_TWO .5
 
-#define NUM_OBJECT_BITS 32    
+#define NUM_OBJECT_BITS 32
 
 #define		object_bit( n ) (1 << (n & 31))
 

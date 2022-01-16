@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 
 #include <stdio.h>
@@ -59,7 +59,7 @@ static char *tableNames[] = {
 	MovieChunk *pmc,*pmcBase;
 	char infile[128];
 	char buff[128];
-	
+
 	short	outResNum;
 	short	resID = 128;
 
@@ -83,31 +83,31 @@ static char *tableNames[] = {
 		}
 
 // Open the output resource file for saving the palette resources into.
-	
+
 	{
 		StandardFileReply	reply;
 		OSErr				err;
-	
+
 		StandardPutFile("\pPalette output file:", "\pMovie Palettes", &reply);
 		if (!reply.sfGood)
 			return;
-	
+
 		if (reply.sfReplacing)							// Delete the file if it exists.
 			FSpDelete(&reply.sfFile);
-	
+
 		FSpCreateResFile(&reply.sfFile, 'Shok', 'rsrc', nil);	// Create the resource file.
 		err = ResError();
 		if (err != 0)
 		{
 			printf("Can't create file.\n");
 			return;
-		}	
+		}
 		outResNum = FSpOpenResFile(&reply.sfFile, fsRdWrPerm);	// Open the file for writing.
 		if (outResNum == -1)
 		{
 			printf("Can't open file.\n");
 			return;
-		}	
+		}
 	}
 
 //	Get movie header, check for valid movie file
@@ -133,7 +133,7 @@ static char *tableNames[] = {
 	mh.audioNumChans = SwapShortBytes(mh.audioNumChans);
 	mh.audioSampleSize = SwapShortBytes(mh.audioSampleSize);
 	mh.audioSampleRate = SwapLongBytes(mh.audioSampleRate);
-	
+
 //	Dump movie header
 
 	printf("Movie header:\n");
@@ -176,14 +176,14 @@ static char *tableNames[] = {
 		while (TRUE)
 		{
 			uchar	s1, s2;
-			
+
 			// Swap bytes around.
 			s1 = *((uchar *)pmc);
 			s2 = *(((uchar *)pmc)+2);
 			*(((uchar*)pmc)+2) = s1;
 			*((uchar*)pmc) = s2;
  			pmc->offset = SwapLongBytes(pmc->offset);
-			
+
 			// Print info for each chunk type.
 			if (pmc->chunkType != MOVIE_CHUNK_END)
  			{
@@ -198,14 +198,14 @@ static char *tableNames[] = {
   /*
 					MovieTextItem *mti;
 					ulong tag;
-					
+
 					fseek(fpi, pmc->offset, SEEK_SET);
 					fread(buff, sizeof(buff), 1, fpi);
 					mti = (MovieTextItem *)buff;
 					tag = mti->tag;
  					mti->offset = SwapLongBytes(mti->offset);
-					printf("[Text] %c%c%c%c: %s\n", 
-						tag >> 24, (tag >> 16) & 0xFF, (tag >> 8) & 0xFF, tag & 0xFF, 
+					printf("[Text] %c%c%c%c: %s\n",
+						tag >> 24, (tag >> 16) & 0xFF, (tag >> 8) & 0xFF, tag & 0xFF,
 						(char *)mti + mti->offset);
 */
 				}

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrSetup.c
@@ -26,100 +26,100 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Citadel Renderer
  *  setup and modification calls for the view
- *  
+ *
  * $Log: frsetup.c $
  * Revision 1.34  1994/11/25  16:57:55  dc
  * force remake due to 2d.h change
- * 
+ *
  * Revision 1.33  1994/11/22  16:52:37  dc
  * setvmode 23 hack camera taking over stereo views
- * 
+ *
  * Revision 1.32  1994/11/21  09:02:30  dc
  * new olh stuff
- * 
+ *
  * Revision 1.31  1994/11/04  13:08:34  xemu
  * aspect ratio fix for VFX
- * 
+ *
  * Revision 1.30  1994/10/27  04:58:16  xemu
  * stero
- * 
+ *
  * Revision 1.29  1994/09/06  18:40:01  xemu
  * moved fr_closedown
- * 
+ *
  * Revision 1.28  1994/09/06  12:04:55  mahk
  * game closedown for renderer.
- * 
+ *
  * Revision 1.27  1994/09/06  05:03:27  jaemz
  * Added star support
- * 
+ *
  * Revision 1.26  1994/08/28  16:54:35  kevin
  * got rid of old no longer functional mapper switching routines.
  * replaced with new 3d mapper switching routines.
- * 
+ *
  * Revision 1.25  1994/08/27  02:13:45  kevin
  * Min detail level uses clut lighting always.
- * 
+ *
  * Revision 1.24  1994/08/16  07:21:37  dc
  * new terrain function
- * 
+ *
  * Revision 1.23  1994/08/09  20:09:32  tjs
  * Oops.
- * 
+ *
  * Revision 1.22  1994/08/09  02:45:20  tjs
  * End of view radius no longer same as tmap zero.
- * 
+ *
  * Revision 1.21  1994/08/04  23:49:18  dc
  * tweak some parameters in view structure
- * 
+ *
  * Revision 1.20  1994/07/29  18:11:27  roadkill
  * *** empty log message ***
- * 
+ *
  * Revision 1.19  1994/07/20  23:05:41  dc
  * odrop...
- * 
+ *
  * Revision 1.18  1994/07/14  01:59:56  xemu
  * shaking only half as extreme
- * 
+ *
  * Revision 1.17  1994/06/02  23:34:27  kevin
  * Changed min detail level to use 1d walls when applicable.
- * 
+ *
  * Revision 1.16  1994/05/25  21:36:14  xemu
  * default to max detail
- * 
+ *
  * Revision 1.15  1994/05/19  14:51:12  kevin
  * frsetup now initializes terrian rendering function pointers to
  * take advantage of wall and floor special cases when possible.
- * 
+ *
  * Revision 1.14  1994/05/11  21:19:21  xemu
  * got rid of random setting
- * 
+ *
  * Revision 1.13  1994/05/09  06:00:51  dc
  * bits for cnvs in place_view, fix global flags stuff...
- * 
+ *
  * Revision 1.12  1994/04/23  10:19:47  dc
  * ship NO_FAKE_TMAPS fix...
- * 
+ *
  * Revision 1.11  1994/04/23  08:12:13  dc
  * hack for vcolors...
- * 
+ *
  * Revision 1.10  1994/04/14  20:16:45  kevin
  * use zoom hack only with doubling.
- * 
+ *
  * Revision 1.9  1994/04/14  15:01:28  kevin
  * New detail stuff.
- * 
+ *
  * Revision 1.8  1994/03/20  21:14:40  xemu
  * hack cameras
- * 
+ *
  * Revision 1.7  1994/03/13  17:18:56  dc
  * obj_block, /#def for blender...
- * 
+ *
  * Revision 1.6  1994/03/08  03:27:29  dc
  * free the fake tmaps if they exist....
- * 
+ *
  * Revision 1.5  1994/03/03  12:18:11  dc
  * pass in canvas to place view
- * 
+ *
  */
 
 #include <stdlib.h>  // I HATE THIS
@@ -158,8 +158,8 @@ void  (*fr_clip_start)(bool headnorth);
 void  (*fr_rend_start)(void);
 grs_bitmap *(*fr_get_tmap)(void);
 
-// Set by machine type 
-#if (defined(powerc) || defined(__powerc))	
+// Set by machine type
+#if (defined(powerc) || defined(__powerc))
 Boolean DoubleSize = false;
 Boolean SkipLines = false;
 #else
@@ -343,7 +343,7 @@ int fr_free_view(frc *view)
 int fr_mod_cams(frc *fr, void *v_cam, int mod_fac)
 {
 	cams *cam=(cams *)v_cam;
-	
+
 	_fr_top(fr);
 	_fr->viewer_zoom = fix_mul(_fr->viewer_zoom,mod_fac);
 	if (_fr->viewer_zoom==0)
@@ -352,13 +352,13 @@ int fr_mod_cams(frc *fr, void *v_cam, int mod_fac)
 		_fr->viewer_zoom=0x7fffffff;
 	if ((long)cam != -1)
 		if (cam == NULL)
-			_fr->camptr = fr_camera_getdef(); 
-		else 
+			_fr->camptr = fr_camera_getdef();
+		else
 			_fr->camptr = cam;
 	_fr_ret;
 }
-// we put 
-// eachother 
+// we put
+// eachother
 // down
 int fr_context_mod_flag (frc *fr, int pflags_on, int pflags_off)       // change flags
 {
@@ -402,9 +402,9 @@ int fr_mod_size (frc *view, int xc, int yc, int wid, int hgt)    // move us arou
 }
 
 // like styrofoam
-int fr_set_callbacks(frc *view, 
+int fr_set_callbacks(frc *view,
 								int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
-                     				void (*horizon)(void *dstbm, int flg), 
+                     				void (*horizon)(void *dstbm, int flg),
                      				void (*render)(void *dstbm, int flg))
 {  // build local context setup for render
    _fr_top(view);
@@ -416,7 +416,7 @@ int fr_set_callbacks(frc *view,
 
 // like styrofoam
 int fr_set_global_callbacks( int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
-                     							void (*horizon)(void *dstbm, int flg), 
+                     							void (*horizon)(void *dstbm, int flg),
               								void (*render)(void *dstbm, int flg) )
 {  // build local context setup for render
    _fr_glob_draw_call = draw;
@@ -444,7 +444,7 @@ frc *fr_place_view (frc *view, void *v_cam, void *cnvs, int pflags, char axis, i
 //			DisposePtr((Ptr)fr->main_canvas.bm.bits);
 			DisposePtr(fr->realCanvasPtr);
 	}
-*/	
+*/
 	if (pflags&FR_DOUBLEB_MASK)
 	{
 		if (cnvs==NULL)
@@ -453,7 +453,7 @@ DebugStr("\pHey! I though we always supplied a canvas");
 /*
 			uchar *p;
 			int	rowbytes = (wid + 31) & 0xFFFFFFE0;
-			
+
 			// if the number of cache lines is even, then add a cache line width to improve
 			// even/odd line usage for vertical drawing.
 			if (!((rowbytes / 64) & 1))
@@ -476,7 +476,7 @@ DebugStr("\pHey! I though we always supplied a canvas");
 	}
 	else
 		gr_init_sub_canvas(grd_screen_canvas,&fr->main_canvas,xc,yc,wid,hgt);
-	
+
 	gr_init_sub_canvas(grd_screen_canvas,&fr->hack_canvas,xc,yc,wid,hgt);
 	// set everything and its brothers brother, first inherit global callbacks, then set up axis and window and all
 	fr->draw_call=_fr_glob_draw_call; fr->horizon_call=_fr_glob_horizon_call; fr->render_call=_fr_glob_render_call;
@@ -583,7 +583,7 @@ void _fr_change_detail(int det)
    _fr_last_detail=det;
 }
 
-/* sets global fr 
+/* sets global fr
  * masks in the global rendering context
  * deals with any change in detail settings
  */
@@ -748,7 +748,7 @@ int fr_start_view(void)
          _fr->horizon_call(&_fr->draw_canvas.bm, _fr_curflags);
 //KLC      else if (global_fullmap->cyber)
 		gr_clear(_frp.view.clear_color);
-		
+
    // now have everything set up for 3d view
    // if wacky secondary camera mode, set up
 #if _fr_defdbg(ALTCAM)
@@ -800,10 +800,10 @@ int fr_send_view (void)
       gr_set_canvas(i6d_ss->cf_left);
       if (i6d_device == I6D_CTM)
          grd_cap->aspect>>=1;
-      _fr_ret;   
+      _fr_ret;
    }
 #endif
-	
+
 	// If we're rendering just the quick mono bitmap (for clicking on items, on-line help, etc),
 	// then return here.
 	if (_fr_curflags&FR_PICKUPM_MASK)
@@ -811,11 +811,11 @@ int fr_send_view (void)
 		gr_set_canvas(grd_screen_canvas);
 		_fr_ret;
 	}
-	
+
 	// Determine if it's okay to double (it's not okay when rendering the 360 view).
 	ok_to_double = (DoubleSize && !view360_is_rendering);
-	
-	// If double sizing, double-size the rendered bitmap onto the intermediate buffer, 
+
+	// If double sizing, double-size the rendered bitmap onto the intermediate buffer,
 	// before doing any overlays.  Don't do it if rendering the 360 view.
 	if (ok_to_double)
 	{
@@ -825,10 +825,10 @@ int fr_send_view (void)
 		else
 			FastSlotDouble2Canvas(&_fr->draw_canvas.bm, &gDoubleSizeOffCanvas, _fr->xwid, _fr->ywid);
 	}
-	
+
 	// Draw the overlays
 	if (_fr->draw_call)
-		snd_frm = _fr->draw_call(grd_screen_canvas, 
+		snd_frm = _fr->draw_call(grd_screen_canvas,
 												(ok_to_double) ? &gDoubleSizeOffCanvas.bm : &_fr->draw_canvas.bm,
 												_fr->xtop,_fr->ytop,_fr_curflags);
 
@@ -836,7 +836,7 @@ int fr_send_view (void)
 	{
 		(*fr_mouse_hide)();									// This actually draws the mouse into the rendered canvas.
 		gr_set_canvas(grd_screen_canvas);				// Now set us to the screen canvas.
-		
+
 		if (_fr_curflags&FR_DOUBLEB_MASK)		// If we're double-buffered (which we always are)
 		{
 //			if (_fr_curflags&FR_DOHFLIP_MASK)		// Does this ever occur?
@@ -865,5 +865,5 @@ int fr_send_view (void)
    }
    else
 	 	gr_set_canvas(grd_screen_canvas);
-   _fr_ret;   
+   _fr_ret;
 }

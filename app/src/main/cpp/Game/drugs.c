@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/drugs.c $
@@ -62,7 +62,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Constants
 // ---------
 
-#define DRUG_UPDATE_FREQ  1024    // # of ticks in between updates      ~3.5 secs  
+#define DRUG_UPDATE_FREQ  1024    // # of ticks in between updates      ~3.5 secs
 #define DRUG_DECAY        8       // Std chance a drug wears off each
 #define DRUG_DECAY_MAX    16      //   update is DECAY over DECAY_MAX
 #define DRUG_DEFAULT_TIME 8       // relative "duration" of a drug
@@ -116,7 +116,7 @@ int drug2triple(int type)
 // ---------------------------------------------------------------------------
 // triple2drug()      MAHK 7/27
 //
-// Maps triples onto drug types 
+// Maps triples onto drug types
 
 int triple2drug(int triple)
 {
@@ -132,7 +132,7 @@ int triple2drug(int triple)
 char* get_drug_name(int n, char* buf)
 {
    int triple;
-   
+
    triple = drug2triple(n);
    get_object_short_name(triple,buf,50);
 
@@ -161,12 +161,12 @@ void drug_use(int n)
       player_struct.drug_status[n] =  Drugs[n].duration;
 
    if (Drugs[n].use) Drugs[n].use();
-   
+
    mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
    if (_current_loop <= FULLSCREEN_LOOP) \
       chg_set_flg(INVENTORY_UPDATE);
 
-   return;   
+   return;
 }
 
 // ---------------------------------------------------------------------------
@@ -182,7 +182,7 @@ void drug_wear_off(int n)
    if (Drugs[n].wearoff) Drugs[n].wearoff();
 
    mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
-   
+
    return;
 }
 
@@ -196,8 +196,8 @@ void drug_wear_off(int n)
 void drugs_update()
 {
    int i, decay;
-   
-   // Only update drugs once every FREQ game ticks   
+
+   // Only update drugs once every FREQ game ticks
    if ((player_struct.game_time - player_struct.last_drug_update) >= DRUG_UPDATE_FREQ) {
 
       // Reset the last update
@@ -281,7 +281,7 @@ void drug_closedown(bool visible)
 
 
 //---------------------------------------------------------------------------
-// 
+//
 
 // ===========================================================================
 //    ACTUAL DRUG FUNCTIONS
@@ -343,7 +343,7 @@ void drug_lsd_effect()
    int i;
    uchar lsd_palette[768];
    int lsd_first, lsd_last;
- 
+
    // Generate criteria for a random palette shift
    lsd_first = (rand() % 253) + 1;
    lsd_last = (rand() % 253) + 1;
@@ -450,7 +450,7 @@ extern void set_global_lighting(short);
 // drug_sight_use()
 //
 // Initial effects of the sight drug.
-   
+
 
 void drug_sight_use()
 {
@@ -761,7 +761,7 @@ void drug_detox_wearoff()
 
 
 
-DRUG Drugs[NUM_DRUGZ] = {  
+DRUG Drugs[NUM_DRUGZ] = {
    {
        10,
        DRUG_LONGER_DOSE,

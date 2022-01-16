@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __TNGMENU_H
 #define __TNGMENU_H
@@ -28,16 +28,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: tngmenu.h $
  * Revision 1.4  1993/10/11  20:27:38  dc
  * Angle is fun, fun fun fun
- * 
+ *
  * Revision 1.3  1993/07/06  11:39:21  xemu
  * popup_at_mouse
- * 
+ *
  * Revision 1.2  1993/05/19  19:44:08  xemu
  * cleanup
- * 
+ *
  * Revision 1.1  1993/05/18  13:58:10  xemu
  * Initial revision
- * 
+ *
  *
  */
 
@@ -88,19 +88,19 @@ typedef struct {
 #define TNG_MENU_SPACING   2
 
 // Prototypes
-// Initializes the TNG 
+// Initializes the TNG
 
-errtype tng_menu_init(void *ui_data, TNG *ptng, TNGStyle *sty, LGPoint coord, int width, 
+errtype tng_menu_init(void *ui_data, TNG *ptng, TNGStyle *sty, LGPoint coord, int width,
    void (*upfunc)(TNG *ptng), void (*downfunc)(TNG *ptng), void *ui_struct);
 
-// Deallocate all memory used by the TNG 
+// Deallocate all memory used by the TNG
 errtype tng_menu_destroy(TNG *ptng);
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
 errtype tng_menu_2d_draw(TNG *ptng, ushort partmask, LGPoint loc);
 
-// Fill in ppt with the size of the TNG 
+// Fill in ppt with the size of the TNG
 errtype tng_menu_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG

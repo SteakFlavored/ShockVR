@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/gengfl8.c $
@@ -27,19 +27,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: gengfl8.c $
  * Revision 1.6  1994/10/19  17:33:13  kevin
  * Save and restore 2d state in case we are run in an interrupt.
- * 
+ *
  * Revision 1.5  1993/12/15  11:26:45  kaboom
  * Inlined clipping code so can be called from an interrupt.
- * 
+ *
  * Revision 1.4  1993/10/19  09:51:13  kaboom
  * Replaced #include "grd.h" with new headers split from grd.h.
- * 
+ *
  * Revision 1.3  1993/10/02  01:17:23  kaboom
  * Changed include of clip.h to include of clpcon.h and/or clpfcn.h.
- * 
+ *
  * Revision 1.2  1993/04/29  18:40:35  kaboom
  * Changed include of gr.h to smaller more specific grxxx.h.
- * 
+ *
  * Revision 1.1  1993/02/16  15:42:44  kaboom
  * Initial revision
  */
@@ -87,7 +87,7 @@ int gen_get_flat8_bitmap (grs_bitmap *bm, short x, short y)
    uchar *p;
    int extra;
    int code = CLIP_NONE;
-   
+
    /* save stuff that clipping changes. */
    w = bm->w; h = bm->h; p = bm->bits;
 

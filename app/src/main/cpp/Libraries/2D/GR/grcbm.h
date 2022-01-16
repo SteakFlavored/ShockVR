@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/grcbm.h $
@@ -29,19 +29,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: grcbm.h $
  * Revision 1.1  1994/03/15  13:09:57  kevin
  * Initial revision
- * 
+ *
  * Revision 1.5  1993/12/01  21:27:36  baf
  * Added macros for translucent/8 bitmaps.
- * 
+ *
  * Revision 1.4  1993/10/19  10:15:22  kaboom
  * Now includes tabdat.h.
- * 
+ *
  * Revision 1.3  1993/10/08  01:15:59  kaboom
  * Changed quotes in #include liness to angle brackets for Watcom problem.
- * 
+ *
  * Revision 1.2  1993/09/02  20:10:45  kaboom
  * Added macros for flat 24 bitmap routines.
- * 
+ *
  * Revision 1.1  1993/04/29  18:35:50  kaboom
  * Initial revision
  */

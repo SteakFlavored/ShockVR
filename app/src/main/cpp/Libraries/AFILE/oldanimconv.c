@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #include "lg.h"
 #include "rect.h"
@@ -63,25 +63,25 @@ TimeValue	ts[] = {	114, 114, 114, 114, 114,
 // 2626 - Detach
 TimeValue	ts[] = {	100, 100, 100, 100, 100,
 					200,
-					100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 
+					100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
 					100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100
 					  };
 
 // 2627 - Laser Malfunction 1
 TimeValue	ts[] = {	142, 142, 142, 142, 142,
 					284,
-					994, 
+					994,
 					142, 142, 142, 142, 142, 142, 142, 142, 142, 142
 					  };
 
 // 2628 - Laser Malfunction 2
 TimeValue	ts[] = {	142, 142, 142, 142, 142,142, 142, 142, 142, 142,142, 142,
 					284,284,284,
-					568 
+					568
 					  };
 
 // 2629 - Auto-destruct 1
-TimeValue	ts[] = {	114, 114, 114, 114, 114, 
+TimeValue	ts[] = {	114, 114, 114, 114, 114,
 					228, 228, 228,
 					114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114
 					};
@@ -93,17 +93,17 @@ TimeValue	ts[] = {	114, 114, 114, 114, 114 };
 TimeValue	ts[] = {	114, 114, 114 };
 /*
 // 2634 - Intro
-TimeValue	ts[] = {	71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 
-					71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 
+TimeValue	ts[] = {	71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71,
+					71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71,
 					142,
-					71, 71, 71, 
+					71, 71, 71,
 					639 };
 
 // 2635 - Citadel Status
-TimeValue	ts[] = {	114, 114, 114, 114, 114, 
+TimeValue	ts[] = {	114, 114, 114, 114, 114,
 					342,
 					114, 114, 114, 114, 114, 114, 114, 114, 114, 114,
-					114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 
+					114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114,
 					114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114,
 					};
 */
@@ -121,7 +121,7 @@ void main(void)
 	Ref			pRefId;
 	Ptr			p;
 	long			stupid;
-	
+
 	OSErr			err, result;
 	Point			dlgPos = {150,120};
 	SFReply			sfr;
@@ -144,20 +144,20 @@ void main(void)
 	CheckConfig();
 
 	SetupWindows(&gMainWindow);								// setup everything
-	SetupOffscreenBitmaps();			
+	SetupOffscreenBitmaps();
 
 	gr_init();
 	gr_set_mode (GRM_640x480x8, TRUE);
 	screen = gr_alloc_screen (grd_cap->w, grd_cap->h);
 	gr_set_screen (screen);
 	gr_set_unpack_buf((uchar *)NewPtr(640 * 480));
-	
+
 	LoadShockPalette();
 	LoadAnimRes();
-	
+
 	// Setup unpacking bitmap.
 //	gr_init_bm (&unpackBM, (uchar *)malloc(640 * 480), BMT_FLAT8, BMT_TRANS, 640, 480);
-	
+
 	//---------------------
 	// Setup Quicktime stuff.
 	//---------------------
@@ -175,7 +175,7 @@ void main(void)
 	 	ExitMovies();
 		CleanupAndExit();
  	 }
- 	 
+
  	SetRect(&movieRect,0,0,400,200);
 /*
 	imageDescriptionH = (ImageDescriptionHandle)NewHandle(4);
@@ -201,7 +201,7 @@ void main(void)
 	gTrack = NewMovieTrack(gMovie, 400L<<16, 200L<<16, 0);
 	gMedia = NewTrackMedia(gTrack, VideoMediaType, 1000, 0L, 0L);
 	BeginMediaEdits(gMedia);		// We do this since we are adding samples to the media
-	
+
 	//-----------------------------------
 	//  Setup the standard compression component stuff.
 	//-----------------------------------
@@ -218,9 +218,9 @@ void main(void)
 	GetMaxCompressionSize(((CGrafPort *)(gMainWindow))->portPixMap,
 							&movieRect,
 							8, codecHighQuality, 'smc ', anyCodec,
-							&maxCompressedFrameSize);	
+							&maxCompressedFrameSize);
 
-	compressedFrameBitsH = NewHandle(maxCompressedFrameSize);	
+	compressedFrameBitsH = NewHandle(maxCompressedFrameSize);
 	if (compressedFrameBitsH == nil)
 	 {
 		ParamText("\pCan't allocate frame buffer.", "\p", "\p", "\p");
@@ -242,42 +242,42 @@ void main(void)
 		CleanupAndExit();
 	 }
 */
-	
+
 	//---------------------
 	// Convert the movies.
 	//---------------------
 	p = NewPtrClear(320 * 200);
-	
+
 //	for (short r = 2624; r <= 2635; r++)
 //	{
 		gr_clear(0xFF);
 //		Delay(20, &stupid);
-	
+
 		// Load the initial image from the compound resource.
 		short r = 2633;
-		pRefId = MKREF(r, 0);	
+		pRefId = MKREF(r, 0);
 	 	pRefTbl = ResReadRefTable(REFID(pRefId));
-	 	
+
 	 	for (short i = 0; i < pRefTbl->numRefs; i++)
 	 	{
 	 		Handle	compHdl;
 	 		long		compSize;
 	 		short	notSyncFlag;
-	 		
-			pRefId = MKREF(r, i);	
+
+			pRefId = MKREF(r, i);
 			RefExtract(pRefTbl, pRefId, p);
-		
+
 			srcBM = (FrameDesc *)p;
 			srcBM->bm.bits = (uchar *)(srcBM+1);
 			gr_rsd8_convert((grs_bitmap *)srcBM, &unpackBM);
 			unpackBM.flags = BMF_TRANS;
 //		  	gr_bitmap (&unpackBM, 0, 0);
 			gr_scale_ubitmap(&unpackBM, 0,0,400,200);
-		
+
 //			while (!Button());
 //			Delay(10, &stupid);
 
-			// The first time through the loop (after displaying the first image), set the compression 
+			// The first time through the loop (after displaying the first image), set the compression
 			// parameters for the output movie and begin a compression sequence.
 			if (i == 0)
 			{
@@ -297,11 +297,11 @@ void main(void)
 			 	 	ExitMovies();
 					CleanupAndExit();
 			 	}
-				
+
 				// Redraw the first frame on the screen.
 				gr_clear(0xFF);
 				gr_scale_ubitmap(&unpackBM, 0,0,400,200);
-				
+
 				// Begin a compression sequence.
 				result = SCCompressSequenceBegin(ci, ((CGrafPort *)(gMainWindow))->portPixMap,
 												  	&movieRect, &imageDescriptionH);
@@ -316,7 +316,7 @@ void main(void)
 			}
 
 			// Compress this frame.
-			result = SCCompressSequenceFrame(ci, ((CGrafPort *)(gMainWindow))->portPixMap, 
+			result = SCCompressSequenceFrame(ci, ((CGrafPort *)(gMainWindow))->portPixMap,
 								 				&movieRect, &compHdl, &compSize, &notSyncFlag);
 			if (result)
 			 {
@@ -329,8 +329,8 @@ void main(void)
 /*
 			// Add the frame to the QuickTime movie.
 
-			result = CompressSequenceFrame(seq, 
-				((CGrafPort *)(gMainWindow))->portPixMap, 
+			result = CompressSequenceFrame(seq,
+				((CGrafPort *)(gMainWindow))->portPixMap,
 				&movieRect,
 				codecFlagUpdatePreviousComp, *compressedFrameBitsH, &compressedFrameSize, 0L, 0L);
 			if (result)
@@ -340,7 +340,7 @@ void main(void)
 		 	 	ExitMovies();
 				CleanupAndExit();
 			 }
-*/	
+*/
 			result = AddMediaSample(gMedia, compHdl, 0L, compSize,
 									ts[i], (SampleDescriptionHandle)imageDescriptionH,1L,
 									notSyncFlag, 0L);
@@ -353,13 +353,13 @@ void main(void)
 				CleanupAndExit();
 			 }
 		}
-		  
+
 //		ResFreeRefTable(pRefTbl);					// Free the existing refTable
 //	}
-	
+
 //	CDSequenceEnd(seq);
 	SCCompressSequenceEnd(ci);
-	EndMediaEdits( gMedia );				
+	EndMediaEdits( gMedia );
 
 	result = InsertMediaIntoTrack(gTrack,0L,0L,GetMediaDuration(gMedia),1L<<16);
 	if ( result )
@@ -369,7 +369,7 @@ void main(void)
  	 	ExitMovies();
 		CleanupAndExit();
 	 }
-		
+
 	result = AddMovieResource(gMovie, resRefNum, 0L,0L);
 	if ( result )
 	 {
@@ -383,15 +383,15 @@ void main(void)
 
 //	if (imageDescriptionH)
 //		DisposeHandle((Handle)imageDescriptionH);
-		
+
 //	if (compressedFrameBitsH)
 //	{
 //		HUnlock(compressedFrameBitsH);
 //		DisposeHandle(compressedFrameBitsH);
 //	}
 
-	if ( gMovie ) 
-		DisposeMovie(gMovie);	
+	if ( gMovie )
+		DisposeMovie(gMovie);
 
 	CloseComponent(ci);
  	ExitMovies();
@@ -423,7 +423,7 @@ void LoadShockPalette(void)
 		StopAlert(1000, nil);
 		return;
 	}
-	
+
 	{
 		Id 		id = 702;
 		long		rfs;
@@ -439,11 +439,11 @@ void LoadShockPalette(void)
 		StopAlert(1000, nil);
 		return;
 	}
-	
-	
+
+
  	gr_set_pal(0, 256, (uchar *)p);
 	DisposePtr(p);
-	
+
 	ResCloseFile(resNum);
 }
 

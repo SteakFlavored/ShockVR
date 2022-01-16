@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/audiolog.c $
@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/19 20:35:27 $
  */
  //	Mac version by Ken Cobb,  2/9/95
- 
+
 
 #include <stdio.h>
 #include <Movies.h>		// QuickTime header
@@ -98,11 +98,11 @@ errtype audiolog_play(int email_id)
 //		return(ERR_NOEFFECT);
 	if ((!sfx_on) || (!audiolog_setting))
 		return(ERR_NOEFFECT);
-	
+
 	// KLC - Big-time hack to prevent bark #389 from trying to play twice (and thus skipping).
 	if ((email_id == 389) && (alog != NULL) && (curr_alog == email_id))
 		return(ERR_NOEFFECT);
-	
+
 	// KLC - Another big-time hack to prevent the Shodan bark #448 from playing before
 	// bark #389 has finished.
 	if ((email_id == 448) && (alog != NULL) && (curr_alog == 389))
@@ -110,7 +110,7 @@ errtype audiolog_play(int email_id)
 		while (alog != NULL)
 			audiolog_loop_callback();
 	}
-		
+
 	// Stop any currently playing alogs.
 	audiolog_stop();
 
@@ -118,7 +118,7 @@ errtype audiolog_play(int email_id)
 	// this is for the player's log-to-self which has no audiolog
 	if (email_id == 0x44)
 		return(ERR_NOEFFECT);
-	
+
 	begin_wait();
 	MaxMem(&dummy);							// Compact heap before loading the alog.
 
@@ -135,7 +135,7 @@ errtype audiolog_play(int email_id)
 		FSMakeFSSpec(gAlogVref, gAlogDirID, c2pstr(buff), &fSpec);
 	}
 	err = OpenMovieFile(&fSpec, &movieResFile, fsRdPerm);
-	if (err == noErr) 
+	if (err == noErr)
 	{
 		short 		movieResID = 0;
 		Str255 		movieName;
@@ -184,7 +184,7 @@ errtype audiolog_play(int email_id)
 	SetMovieGWorld (alog, nil, nil);
 	GoToBeginningOfMovie(alog);
 	mr = GetMoviePreferredRate(alog);
-	PrerollMovie(alog, 0, mr);		
+	PrerollMovie(alog, 0, mr);
 	StartMovie(alog);
 
 	end_wait();
@@ -208,12 +208,12 @@ void audiolog_stop()
 	if (alog != NULL)
 	{
 //		extern uchar curr_vol_lev;
-	
+
 		// waste it!
 		//MovieKill(palog);
 		StopMovie(alog);
 		DisposeMovie(alog);
-		
+
 		// Restore music volume
 //		if (music_on)
 //			mlimbs_change_master_volume(curr_vol_lev);
@@ -266,7 +266,7 @@ errtype audiolog_loop_callback()
 
 /*
 // subsumed by new timer lib
-#ifdef NOTDEF 
+#ifdef NOTDEF
 fix GetFixTimer()
 {
    return(fix_make(*tmd_ticks / CIT_CYCLE, (*tmd_ticks % CIT_CYCLE) * 65536 / CIT_CYCLE ));

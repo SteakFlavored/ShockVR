@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/rendtool.c $
@@ -112,17 +112,17 @@ void rend_mouse_hide(void)
 	extern Boolean		DoubleSize;
 	extern grs_canvas	gDoubleSizeOffCanvas;
 	extern Boolean		view360_is_rendering;
-		
+
 	MouseLock++;
 	if (MouseLock==1 && CurrentCursor != NULL)
 	{
 		int			cmd = CURSOR_DRAW;
 		LGPoint 		pos = LastCursorPos;
 		grs_canvas	*old_canvas = CursorCanvas;
-		
+
 		pos.x -= _fr->xtop;
 		pos.y -= _fr->ytop;
-		
+
 /*KLC - this is never true, now
 		if (_fr_curflags & FR_DOHFLIP_MASK)
 		{
@@ -132,7 +132,7 @@ void rend_mouse_hide(void)
 */
 		mouselocked = 1;
 		MouseLock++; // keep mouse locked while we blit
-	
+
 		if (DoubleSize && !view360_is_rendering)					// If double-sizing, then draw the cursor in the
 		{																				// temporary doubled canvas.
 			CursorCanvas = &gDoubleSizeOffCanvas;
@@ -296,15 +296,15 @@ bool draw_tmap_p(int ptcnt)
 {
    // JAEMZ JAEMZ JAEMZ JAEMZ
    // notify yourself here, i would guess....
-   if (IsTpropStars()) 
+   if (IsTpropStars())
     {
       if (IsTpStarDraw())
        {
 		 // texture map, don't draw, just eval
 		 star_empty(ptcnt,_fdt_tmppts);
 		 return TRUE;
-       } 
-      else 
+       }
+      else
        {
 		 star_poly(ptcnt,_fdt_tmppts);
 		 return FALSE;

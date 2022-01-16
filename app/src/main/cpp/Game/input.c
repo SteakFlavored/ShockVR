@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/input.c $
@@ -121,7 +121,7 @@ extern frc *svga_render_context;
 
 extern Boolean	DoubleSize;
 
-#define CFG_DCLICK_RATE_VAR "dclick_time" 
+#define CFG_DCLICK_RATE_VAR "dclick_time"
 #define CFG_OOMPHOMETER     "throw_oomph"
 #define CFG_INP6D_GO        "inp6d"
 
@@ -164,7 +164,7 @@ static ushort mouse_constrain_bits = 0;
 typedef struct _3d_mouse_stuff
 {
    bool ldown;
-   bool rdown; 
+   bool rdown;
    int  lastsect;
    LGPoint lastleft;
    LGPoint lastright;
@@ -202,7 +202,7 @@ Ref motion_cursor_ids[] =                   {
 LGCursor motion_cursors[NUM_MOTION_CURSORS];
 grs_bitmap motion_cursor_bitmaps[NUM_MOTION_CURSORS];
 
-static uchar posture_keys[NUM_POSTURES] = { 't', 'g', 'b' } ; 
+static uchar posture_keys[NUM_POSTURES] = { 't', 'g', 'b' } ;
 
 int input_cursor_mode = INPUT_NORMAL_CURSOR;
 int throw_oomph = 5;
@@ -318,7 +318,7 @@ void view3d_constrain_mouse(LGRegion* view, int mouse_bit)
          Warning(("cc->ytop = %d!  view->abs_y = %d!\n",cc->ytop,view->abs_y));
       }
 #else
-      ui_mouse_constrain_xy(view->abs_x,view->abs_y,view->abs_x+RectWidth(view->r)-1,view->abs_y+RectHeight(view->r)-1);       
+      ui_mouse_constrain_xy(view->abs_x,view->abs_y,view->abs_x+RectWidth(view->r)-1,view->abs_y+RectHeight(view->r)-1);
 #endif
    }
 }
@@ -374,7 +374,7 @@ bool citadel_check_input(void)
 
 /*KLC - no headsets in Mac version
 
-   if (inp6d_exists) 
+   if (inp6d_exists)
 #ifdef PLAYTEST
       if (inp6d_motion)
 #endif
@@ -396,7 +396,7 @@ bool citadel_check_input(void)
 	      default:           inp6d_chk(); break;
 		   }
       }
-   if (joystick_count) 
+   if (joystick_count)
       joystick_chk();
 */
 
@@ -421,7 +421,7 @@ void input_chk(void)
 // KLC - not needed on MAC   mouse_set_velocity(0,0);
 
 /* KLC - comment out for now
-   if (inp6d_exists) 
+   if (inp6d_exists)
 #ifdef PLAYTEST
       if (inp6d_motion)
 #endif
@@ -432,7 +432,7 @@ void input_chk(void)
 	      case I6D_SBALL:    sball_chk(); break;
 #endif
 #ifdef CTM_SUPPORT
-         case I6D_ALLPRO:   
+         case I6D_ALLPRO:
          case I6D_CTM:      ctm_chk(); break;
 #endif
 	      case I6D_CYBERMAN: cyberman_chk(); break;
@@ -444,7 +444,7 @@ void input_chk(void)
 		   }
       }
 
-   if (joystick_count) 
+   if (joystick_count)
       joystick_chk();
 */
    process_motion_keys();
@@ -454,7 +454,7 @@ void input_chk(void)
 
 #ifdef NOT_YET //KLC - stuff for VR headsets
 
-#define Y_CEN         0       
+#define Y_CEN         0
 #define MAX_VAL       (1<<15)
 #define TRA_TOL       (MAX_VAL>>8)
 #define ROT_TOL       (MAX_VAL>>5)
@@ -586,58 +586,58 @@ void FilterSpaceballDataOrig( long *tx, long *ty, long *tz, long *rx, long *ry, 
 
    if ( abs( *tx ) > TRA_TOL ) {
 
-      if ( *tx > TRA_TOL ) 
-    *tx = Tra_Scale( *tx - TRA_TOL ); 
-      else 
-    *tx = Tra_Scale( *tx + TRA_TOL ); 
+      if ( *tx > TRA_TOL )
+    *tx = Tra_Scale( *tx - TRA_TOL );
+      else
+    *tx = Tra_Scale( *tx + TRA_TOL );
 
    }
 
-   else 
+   else
       *tx = 0;
 
    if ( abs( *ty ) > TRA_TOL ) {
 
-      if ( *ty > TRA_TOL ) 
-    *ty = Tra_Scale( *ty - TRA_TOL ); 
-      else 
-    *ty = Tra_Scale( *ty + TRA_TOL ); 
+      if ( *ty > TRA_TOL )
+    *ty = Tra_Scale( *ty - TRA_TOL );
+      else
+    *ty = Tra_Scale( *ty + TRA_TOL );
 
    }
 
-   else 
+   else
       *ty = 0;
 
    if ( abs( *tz ) > TRA_TOL ) {
 
-      if ( *tz > TRA_TOL ) 
-    *tz = Tra_Scale( *tz - TRA_TOL ); 
-      else 
+      if ( *tz > TRA_TOL )
+    *tz = Tra_Scale( *tz - TRA_TOL );
+      else
     *tz = Tra_Scale( *tz + TRA_TOL );
 
-   } 
-   else 
+   }
+   else
       *tz = 0;
 
-   if ( *rx > ROT_TOL ) 
-      *rx = Rot_Scale( *rx - ROT_TOL ); 
-   else if ( *rx < -ROT_TOL ) 
-      *rx = Rot_Scale( *rx + ROT_TOL ); 
-   else 
+   if ( *rx > ROT_TOL )
+      *rx = Rot_Scale( *rx - ROT_TOL );
+   else if ( *rx < -ROT_TOL )
+      *rx = Rot_Scale( *rx + ROT_TOL );
+   else
       *rx = 0;
 
-   if ( *ry > ROT_TOL ) 
-      *ry = Rot_Scale( *ry - ROT_TOL ); 
-   else if ( *ry < -ROT_TOL ) 
-      *ry = Rot_Scale( *ry + ROT_TOL ); 
-   else 
+   if ( *ry > ROT_TOL )
+      *ry = Rot_Scale( *ry - ROT_TOL );
+   else if ( *ry < -ROT_TOL )
+      *ry = Rot_Scale( *ry + ROT_TOL );
+   else
       *ry = 0;
 
-   if ( *rz > ROT_TOL ) 
-      *rz = Rot_Scale( *rz - ROT_TOL ); 
-   else if ( *rz < -ROT_TOL ) 
-      *rz = Rot_Scale( *rz + ROT_TOL ); 
-   else 
+   if ( *rz > ROT_TOL )
+      *rz = Rot_Scale( *rz - ROT_TOL );
+   else if ( *rz < -ROT_TOL )
+      *rz = Rot_Scale( *rz + ROT_TOL );
+   else
       *rz = 0;
 
 }
@@ -749,7 +749,7 @@ int FilterPitch( long *pitch )
 
       if ( *pitch > 0 )
          *pitch -= sb_pitch_thresh;
-      else  
+      else
          *pitch += sb_pitch_thresh;
 
 
@@ -857,7 +857,7 @@ void sball_chk(void)
       vals[3] = -32000;
    else
       vals[3] = foo;
- 
+
    vals[4] =  inp6d_in->rx;
    vals[5] = -(float)inp6d_in->rz * 0.9;
 
@@ -865,14 +865,14 @@ void sball_chk(void)
       FilterSpaceballDataMajorAxis( vals );
 
    (*SbFilterFunc)( &vals[0], &vals[1], &vals[2], &vals[4], &vals[3], &vals[5] );
- 
+
 
 #ifdef PLAYTEST
    if (!inp6d_player)
    {
 /*    mprintf("Parsed %d %d %d %d %d %d to %d %d %d %d %d %d\n",
-      inp6d_in->x,  inp6d_in->y,  inp6d_in->z,  inp6d_in->rx,     
-      inp6d_in->ry,     inp6d_in->rz,  vals[0], vals[1], vals[2], 
+      inp6d_in->x,  inp6d_in->y,  inp6d_in->z,  inp6d_in->rx,
+      inp6d_in->ry,     inp6d_in->rz,  vals[0], vals[1], vals[2],
       vals[3], vals[4], vals[5] );
 */
       fr_camera_slewcam( NULL, EYE_X, vals[0] / 5 );
@@ -920,16 +920,16 @@ void sball_chk(void)
 
 
 /*    mprintf("%d Parsed %d %d %d %d %d %d to %d %d %d %d %d %d\n", count,
-      inp6d_in->x,  inp6d_in->y,  inp6d_in->z,  inp6d_in->rx,     
-      inp6d_in->ry,     inp6d_in->rz,  vals[0], vals[1], vals[2], 
+      inp6d_in->x,  inp6d_in->y,  inp6d_in->z,  inp6d_in->rx,
+      inp6d_in->ry,     inp6d_in->rz,  vals[0], vals[1], vals[2],
       vals[3], vals[4], vals[5] );
 */
    ++count;
 
-   
+
    if ( sb_pitch_angles )
       vals[4] = ( vals[4] / sb_pitch_div ) * sb_pitch_div;
-   
+
 
    if ( vals[2] >= 0 ) {
 
@@ -939,7 +939,7 @@ void sball_chk(void)
       }
 
 
-      physics_set_player_controls( INP6D_CONTROL_BANK, vals[0], 
+      physics_set_player_controls( INP6D_CONTROL_BANK, vals[0],
          vals[1], vals[2], vals[3], 0,0 );
 
 
@@ -947,7 +947,7 @@ void sball_chk(void)
 
    else {
 
-      physics_set_player_controls( INP6D_CONTROL_BANK, vals[0], 
+      physics_set_player_controls( INP6D_CONTROL_BANK, vals[0],
          vals[1], 0, vals[3], 0,0 );
 
       if ( abs( vals[2] ) < sb_crouch_thresh ) {
@@ -989,12 +989,12 @@ bool main_kb_callback(uiEvent *h, LGRegion *r, void *udata)
    void *dummy3;
    dummy2 = r;
    dummy3 = udata;
-   
+
 #ifdef INPUT_CHAINING
    kb_flush_bios();
 #endif // INPUT_CHAINING
 
-   if (h->type == UI_EVENT_KBD_COOKED) 
+   if (h->type == UI_EVENT_KBD_COOKED)
       return hotkey_dispatch(h->subtype) == OK;
    return FALSE;
 }
@@ -1004,7 +1004,7 @@ bool posture_hotkey_func(short keycode, ulong context, void* data)
 {
 #ifndef NO_DUMMIES
    ulong dummy; dummy = context + keycode;
-#endif 
+#endif
    return player_set_posture((ubyte)data) == OK;
 }
 
@@ -1052,7 +1052,7 @@ static ushort eye_up_keys[] =
    };
 
 #define NUM_EYE_UP_KEYS (sizeof(eye_up_keys)/sizeof(ushort))
-                                 
+
 static ushort eye_dn_keys[] =
    {
       KEY_DOWN|KB_FLAG_SHIFT,
@@ -1124,7 +1124,7 @@ void reload_motion_cursors(bool cyber)
       // slam the cursor color back to it's childhood colors
       cursor_color_offset = RED_BASE+4;
    }
-   else 
+   else
       for (i = 0; i < NUM_CYBER_CURSORS; i++)
       {
          grs_bitmap* bm = &motion_cursor_bitmaps[i];
@@ -1157,7 +1157,7 @@ void alloc_cursor_bitmaps(void)
       h = res_bm_height(CYB_CURS_ID(i));
 //      ss_point_convert(&w,&h,FALSE);
       cybsz = w * h;
-      
+
       if (REAL_CURS_ID(i) != 0)
       {
          w = res_bm_width(REAL_CURS_ID(i));
@@ -1204,7 +1204,7 @@ bool MacQuitFunc(short , ulong , void*)
 		short					btn;
 		Boolean				savedOK;
 		ModalFilterUPP	stdFilterProcPtr;
-		
+
 		uiHideMouse(NULL);								// Setup the environment for doing Mac stuff.
 		ShowCursor();
 		CopyBits(&gMainWindow->portBits, &gMainOffScreen.bits->portBits, &gActiveArea, &gOffActiveArea, srcCopy, 0L);
@@ -1214,7 +1214,7 @@ bool MacQuitFunc(short , ulong , void*)
  		btn = Alert((global_fullmap->cyber) ? 1010 :1009, stdFilterProcPtr);		// Want to save it first?
 		DisposeRoutineDescriptor(stdFilterProcPtr);
 		HideMenuBar();
- 		
+
 		SetPort(gMainWindow);							// Update area behind the alert
 		BeginUpdate(gMainWindow);
   		CopyBits(&gMainOffScreen.bits->portBits, &gMainWindow->portBits, &gOffActiveArea, &gActiveArea, srcCopy, 0L);
@@ -1245,7 +1245,7 @@ bool MacQuitFunc(short , ulong , void*)
 	 				break;
 			}
 		}
-		
+
 		HideCursor();								// go back to Shock.
 		uiShowMouse(NULL);
 	}
@@ -1258,7 +1258,7 @@ bool MacResFunc(short , ulong , void *)
 {
  	DoubleSize = !DoubleSize;
 	change_svga_screen_mode();
-	
+
 	if (DoubleSize)
 		message_info("Low res.");
 	else
@@ -1269,7 +1269,7 @@ bool MacResFunc(short , ulong , void *)
 	gShockPrefs.doResolution = (DoubleSize) ? 1 : 0;	// KLC - Yeah, got to update this one too
 	gShockPrefs.doUseQD = SkipLines;						// KLC - and this one
 	SavePrefs(kPrefsResID);									// KLC - and save the prefs out to disk.
-	
+
 	return TRUE;
 }
 
@@ -1291,7 +1291,7 @@ bool MacDetailFunc(short , ulong , void *)
 	char	msg[32];
 	char	detailStr[8];
 	fauxrend_context *_frc = (fauxrend_context *) svga_render_context;
-	
+
 	if (_frc->detail == 4)								// Adjust for that global detail nonsense.
 		_frc->detail = _fr_global_detail;
 
@@ -1328,7 +1328,7 @@ bool MacDetailFunc(short , ulong , void *)
 bool temp_FrameCounter_func(short , ulong , void *)
 {
 	gShowFrameCounter = !gShowFrameCounter;
-	
+
 	if (gShowFrameCounter)
 		message_info("Frame counter on.");
 	else
@@ -1349,7 +1349,7 @@ bool MacHelpFunc(short , ulong , void*)
 	ShowCursor();
 
 	ShowShockHelp();
- 		
+
 	SetPort(gMainWindow);							// Update area behind the alert
 	BeginUpdate(gMainWindow);
 	CopyBits(&gMainOffScreen.bits->portBits, &gMainWindow->portBits, &gOffActiveArea, &gActiveArea, srcCopy, 0L);
@@ -1372,7 +1372,7 @@ void init_input(void)
 	int i = 0;
 //KLC	int kbdt, joy_type;
 	int dvec[2];
-	
+
 	// init keyboard
 //KLC	for (i = 0; i < 0x80; i++)
 //KLC	kb_clear_state(i,KBA_REPEAT);
@@ -1400,9 +1400,9 @@ void init_input(void)
    uiAltDoubleClick = TRUE;
    i = 1;
    uiSetMouseMotionPolling(TRUE);
-   
+
    // Load cursors
-   
+
    alloc_cursor_bitmaps();
    reload_motion_cursors(FALSE);
 
@@ -1444,7 +1444,7 @@ void init_input(void)
    hotkey_add(ALT('H'), DEMO_CONTEXT, hud_color_bank_cycle, NULL);
    hotkey_add(CONTROL('m'), DEMO_CONTEXT, toggle_music_func, NULL);
    hotkey_add(CONTROL('M'), DEMO_CONTEXT, toggle_music_func, NULL);
-//   hotkey_add(DOWN(KEY_SPACE),DEMO_CONTEXT,unpause_game_func,(void *)TRUE);   
+//   hotkey_add(DOWN(KEY_SPACE),DEMO_CONTEXT,unpause_game_func,(void *)TRUE);
    hotkey_add(DOWN('p'),DEMO_CONTEXT,pause_game_func,(void *)TRUE);
    hotkey_add(DOWN(KEY_ESC),DEMO_CONTEXT,pause_game_func,(void *)TRUE);
    for (i = 0; i < NUM_POSTURES; i++)
@@ -1475,7 +1475,7 @@ void init_input(void)
    hotkey_add(CONTROL('A'), DEMO_CONTEXT, change_mode_func,  (void *) AUTOMAP_LOOP);
 /*¥¥¥
 #else
-   hotkey_add(DOWN(KEY_SPACE),DEMO_CONTEXT,unpause_game_func,(void *)TRUE);   
+   hotkey_add(DOWN(KEY_SPACE),DEMO_CONTEXT,unpause_game_func,(void *)TRUE);
    hotkey_add(CONTROL('a'), DEMO_CONTEXT, change_mode_func,  (void *) AUTOMAP_LOOP);
    hotkey_add(CONTROL('A'), DEMO_CONTEXT, change_mode_func,  (void *) AUTOMAP_LOOP);
 
@@ -1521,7 +1521,7 @@ void init_input(void)
 //   hotkey_add(DOWN('['),EDIT_CONTEXT,zoom_func,(void *)ZOOM_IN);
 //   hotkey_add(DOWN(']'),EDIT_CONTEXT,zoom_func,(void *)ZOOM_OUT);
 //   hotkey_add(CONTROL('d'),EDIT_CONTEXT,to_demo_mode_func,NULL);
-   
+
 #endif
    hotkey_add(KEY_F11,DEMO_CONTEXT|EDIT_CONTEXT,change_gamma,(void *) 1);
    hotkey_add(KEY_F12,DEMO_CONTEXT|EDIT_CONTEXT,change_gamma,(void *)-1);
@@ -1579,7 +1579,7 @@ void init_input(void)
 	         tracker_initial_pos[1]= inp6d_geth->rx;
 	         tracker_initial_pos[2]=-inp6d_geth->rz;
 	         fullscrn_vitals=fullscrn_icons=FALSE;
-            if (i6_video(I6VID_STARTUP,NULL))               
+            if (i6_video(I6VID_STARTUP,NULL))
                Warning(("Headset video startup failed\n"));
    	      if ((config_get_raw("inp6d_stereo",NULL,0))&&(i6d_device!=I6D_ALLPRO))
             {
@@ -1640,13 +1640,13 @@ void shutdown_input(void)
 // DEFINES
 // -------
 
-#define VIEW_LSIDE      0 
+#define VIEW_LSIDE      0
 #define VIEW_HCENTER    1
 #define VIEW_RSIDE      2
 
 #define VIEW_TOP        0
 #define VIEW_BOTTOM     4
-#define VIEW_VCENTER    8 
+#define VIEW_VCENTER    8
 #define VIEW_WAYTOP     12
 
 #define CYBER_VIEW_TOP     0
@@ -1654,11 +1654,11 @@ void shutdown_input(void)
 #define CYBER_VIEW_BOTTOM  6
 
 
-#define CENTER_WD_N 1 
+#define CENTER_WD_N 1
 #define CENTER_WD_D 8
 #define CYBER_CENTER_WD_D 6
 #define CENTER_HT_N 1
-#define CENTER_HT_D 8    
+#define CENTER_HT_D 8
 #define CYBER_CENTER_HT_D 6
 
 
@@ -1670,7 +1670,7 @@ short object_on_cursor = 0;
 LGCursor object_cursor;
 
 // ------------------------------------------------------------------------------
-// view3d_rightbutton_handler deals with firing/throwing objects in 3d.  
+// view3d_rightbutton_handler deals with firing/throwing objects in 3d.
 
 bool mouse_jump_ui = TRUE;
 bool fire_slam = FALSE;
@@ -1698,7 +1698,7 @@ bool weapon_button_up = TRUE;
 // ---------
 
 // -------------------------------------------------------------------------------------------
-// view3d_mouse_input sets/unsets physics controls based on mouse position in 3d 
+// view3d_mouse_input sets/unsets physics controls based on mouse position in 3d
 
 // return whether any control was applied
 int view3d_mouse_input(LGPoint pos, LGRegion* reg,bool move,int* lastsect)
@@ -1719,7 +1719,7 @@ int view3d_mouse_input(LGPoint pos, LGRegion* reg,bool move,int* lastsect)
       pos.x *= 2;
       pos.y *= 2;
    }
-   
+
    if (!cyber)
    {
       cx = reg->abs_x + RectWidth(reg->r)/2;
@@ -2071,7 +2071,7 @@ void use_object_in_3d(ObjID obj)
 	         showname = FALSE;
 	         break;
 	      }
-	      // yank the object out of the map. 
+	      // yank the object out of the map.
 	      del_loc_state.obj = obj;
 	      del_loc_state.loc = objs[obj].loc;
 	      del_loc_state.loc.x = -1;
@@ -2319,7 +2319,7 @@ void view3d_dclick(LGPoint pos, frc* )
          if ((obj > 0) && (objs[obj].obclass == CLASS_DOOR))
          {
             obj_trans = fr_get_at_raw(use_frc,pos.x,pos.y,FALSE,TRUE);
-            if (obj != obj_trans) 
+            if (obj != obj_trans)
             {
                if (DOOR_REALLY_CLOSED(obj))
                {
@@ -2355,7 +2355,7 @@ void view3d_dclick(LGPoint pos, frc* )
             }
          }
    }
-}               
+}
 
 
 // -------------------------------------------------------------------------------
@@ -2369,7 +2369,7 @@ bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data)
    extern int _fr_glob_flags;
 
    pt = evp;
-   
+
 #ifdef STEREO_SUPPORT
    if (convert_use_mode == 5)
    {
@@ -2429,7 +2429,7 @@ bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data)
    }
    if (ev->action & MOUSE_LUP || !(ev->buttons & (1 << MOUSE_LBUTTON)))
    {
-      data->ldown = FALSE;           
+      data->ldown = FALSE;
       if (full_game_3d && got_focus)
       {
          if (uiReleaseFocus(r,UI_EVENT_MOUSE|UI_EVENT_MOUSE_MOVE) == OK)
@@ -2444,13 +2444,13 @@ bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data)
       ObjID		id;
       frc 			*use_frc;
       short 		rabsx,rabsy;
-      
+
       use_frc = svga_render_context;
       rabsx=r->abs_x;
       rabsy=r->abs_y;
       if (!DoubleSize)
          ss_point_convert(&rabsx,&rabsy,FALSE);
-      
+
       id = fr_get_at(use_frc,evp.x-rabsx,evp.y-rabsy,TRUE);
       if ((short)id > 0)
       {
@@ -2489,11 +2489,11 @@ bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data)
          else
          		uiPopSlabCursor(&main_slab);
          fire_slam = FALSE;
-      } 
+      }
    }
 
 */
-   if ((ev->buttons & (1 << MOUSE_RBUTTON)) == 0 
+   if ((ev->buttons & (1 << MOUSE_RBUTTON)) == 0
       || ((ev->buttons & (1 << MOUSE_RBUTTON)) == 0 && global_fullmap->cyber))
       physics_set_one_control(MOUSE_CONTROL_BANK,CONTROL_ZVEL,0);
 
@@ -2524,7 +2524,7 @@ bool view3d_key_handler(uiCookedKeyEvent* ev, LGRegion* r, void* )
 	bool retval = FALSE;
 //KLC   static bool fire_key_down = FALSE;
 	LGPoint evp;
-	
+
 	if (ev->code == DOWN(FIRE_KEY))									// If fire key was pressed
 	{
 		if (weapon_button_up)												// and we haven't fired already
@@ -2760,7 +2760,7 @@ void inp_use_sidestep_button()
 	      use_but_time=*tmd_ticks;
 }
 
-// teach this that if you have obj on cursor it knows whether to throw or 
+// teach this that if you have obj on cursor it knows whether to throw or
 //  put in your inventory.  do this by storing when you pick up w/joystick
 //  and if mouse moves cancelling but otherwise when joyclicking again with
 //  an obj already on cursor the put it in inventory
@@ -2770,7 +2770,7 @@ void inp_use_sidestep_junk()
    if (use_but_time)
       {
          LGPoint pos;
-         
+
          if (input_cursor_mode == INPUT_OBJECT_CURSOR)
          {
             extern void absorb_object_on_cursor(short keycode, ulong context, void* data);
@@ -2781,7 +2781,7 @@ void inp_use_sidestep_junk()
             pos = MakePoint(_current_view->abs_x + RectWidth(_current_view->r)/2,
                               _current_view->abs_y + RectHeight(_current_view->r)/2);
    #ifdef SVGA_SUPPORT
-            ss_point_convert(&pos.x,&pos.y,FALSE);                          
+            ss_point_convert(&pos.x,&pos.y,FALSE);
    #endif
             mouse_put_xy(pos.x,pos.y);
             view3d_dclick(pos,NULL);
@@ -2900,7 +2900,7 @@ void vfx1_chk(void)
          slam_head(angs);
       }
 
-      // b+xp2, -p+yp, 0+zv, h+xp1, 0, 0 
+      // b+xp2, -p+yp, 0+zv, h+xp1, 0, 0
 	   physics_set_player_controls(INP6D_CONTROL_BANK, xp2, yp, zv, xp1, 0, 0);
    }
    last_but = inp6d_in->but;
@@ -3109,18 +3109,18 @@ void cyberman_chk(void)
          uiSetMouseMotionPolling(FALSE);
 	      uiHideMouse(NULL);
 	      cyb_mouse_around=FALSE;
-      }           
+      }
    }
 
    if (inp6d_in->but&CYBERMAN_FIRE)
    {
       LGPoint pos = MakePoint(_current_view->abs_x + RectWidth(_current_view->r)/2,
                             _current_view->abs_y + RectHeight(_current_view->r)/2 + (RectHeight(_current_view->r)>>5));
-   
+
 #ifdef SVGA_SUPPORT
       ss_point_convert(&(pos.x),&(pos.y),FALSE);
 #endif
-      fire_player_weapon(&pos,_current_view,TRUE);	
+      fire_player_weapon(&pos,_current_view,TRUE);
    }
 
    // fire hack, mouse hack
@@ -3157,7 +3157,7 @@ void cyberman_chk(void)
    {
       if (abs(xp)<12) xp=0;
       if (abs(yp)<12) yp=0;
-//      if ((abs(xp)>80)||(abs(yp)>80)) 
+//      if ((abs(xp)>80)||(abs(yp)>80))
 //         p=b=0;     // how bout that cyberman, eh?
       if (b!=0)
          xp=yp=zv=p=0;
@@ -3166,7 +3166,7 @@ void cyberman_chk(void)
          if (b_vel>0) b_vel+=4; else b_vel=4;
          if (b_vel>CONTROL_MAX_VAL) b_vel=CONTROL_MAX_VAL;
       }
-      else if (b<0) 
+      else if (b<0)
       {
          if (b_vel<0) b_vel-=4; else b_vel=-4;
          if (b_vel<-CONTROL_MAX_VAL) b_vel=-CONTROL_MAX_VAL;
@@ -3179,14 +3179,14 @@ void cyberman_chk(void)
          if (p_vel>0) p_vel+=6; else p_vel=16;
          if (p_vel>CONTROL_MAX_VAL) p_vel=CONTROL_MAX_VAL;
       }
-      else if (p<0) 
+      else if (p<0)
       {
          if (p_vel<0) p_vel-=6; else p_vel=-16;
          if (p_vel<-CONTROL_MAX_VAL) p_vel=-CONTROL_MAX_VAL;
       }
       else p_vel=0;
       p=p_vel;
-      
+
 //      if ((abs(b_vel)>80)||(abs(p_vel)>80))
 //         zv=0; // no posture changes while zipping along in pitch
       if ((b_vel|p_vel)||(abs(xp)>10)||(abs(yp)>10))
@@ -3240,11 +3240,11 @@ void joystick_emulate_mouse(int x, int y,uchar bstate,uchar last_bstate)
    mouse_add_velocity((x)*abs(x)  << (MOUSE_VEL_UNIT_SHF - APPROX_CIT_CYCLE_SHFT-4),
                       -y*abs(y) << (MOUSE_VEL_UNIT_SHF - APPROX_CIT_CYCLE_SHFT-4));
    // if any button states are changed, generate
-   // a low level mouse event.  
+   // a low level mouse event.
    if ((bstate) != (last_bstate))
    {
       // sadly, there is no good api to get at this mouse library
-      // variable, so we will employ gnosis for now.  
+      // variable, so we will employ gnosis for now.
       extern short mouseInstantButts;
       mouse_event me;
 
@@ -3259,7 +3259,7 @@ void joystick_emulate_mouse(int x, int y,uchar bstate,uchar last_bstate)
          me.type |= (bstate&1) ? MOUSE_LDOWN : MOUSE_LUP;
          if (bstate&1)
             me.buttons |= (1 << MOUSE_LBUTTON);
-         else 
+         else
             me.buttons &= ~(1 << MOUSE_LBUTTON);
       }
       if ((bstate&2) != (last_bstate&2))
@@ -3267,7 +3267,7 @@ void joystick_emulate_mouse(int x, int y,uchar bstate,uchar last_bstate)
          me.type |= (bstate&2) ? MOUSE_RDOWN : MOUSE_RUP;
          if (bstate&2)
             me.buttons |= (1 << MOUSE_RBUTTON);
-         else 
+         else
             me.buttons &= ~(1 << MOUSE_RBUTTON);
       }
       me.timestamp = *tmd_ticks;
@@ -3460,7 +3460,7 @@ void push_cursor_object(short obj)
       // use it
       bmp = &svga_cursor_bmp;
    }
-#endif   
+#endif
    hotspot.x = bmp->w/2;
    hotspot.y = bmp->h/2;
    uiMakeBitmapCursor(&object_cursor,bmp,hotspot);
@@ -3471,4 +3471,4 @@ void push_cursor_object(short obj)
    uiPushSlabCursor(&main_slab,&object_cursor);
    uiShowMouse(NULL);
    look_at_object(obj);
-} 
+}

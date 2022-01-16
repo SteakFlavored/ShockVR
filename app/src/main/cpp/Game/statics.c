@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/statics.c $
@@ -25,14 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * static variables and the people who love them
  */
 
-// the idea is you can take just obj mem, tmap and obj, or both 
+// the idea is you can take just obj mem, tmap and obj, or both
 // + either big buffer or the frame buffer or both
 
 // still need to have static.h for people to use this stuff...
 
 // how do we get this aligned right.
 // perhaps do this file in asm for real?
-// if we did it in asm, and had these point, then we could use 
+// if we did it in asm, and had these point, then we could use
 // labels for top and bottom, which would be good...
 // sadly, this alphabetizes, since it is so cool
 

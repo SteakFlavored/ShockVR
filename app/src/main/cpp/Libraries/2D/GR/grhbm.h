@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/grhbm.h $
@@ -29,13 +29,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: grhbm.h $
  * Revision 1.3  1994/11/11  16:48:10  kevin
  * added hflip_in_place primitive.
- * 
+ *
  * Revision 1.2  1993/10/08  01:16:02  kaboom
  * Changed quotes in #include liness to angle brackets for Watcom problem.
- * 
+ *
  * Revision 1.1  1993/06/06  15:13:10  kaboom
  * Initial revision
- * 
+ *
  */
 
 #ifndef __GRHBM_H

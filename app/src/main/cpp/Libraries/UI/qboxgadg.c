@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // Source code for Quickbox Gadgets
 
@@ -45,7 +45,7 @@ int current_z;
 Gadget *current_box;
 LGRect box_dim;
 
-LGPoint QboxDefaultSpacing = {2, 0}; 
+LGPoint QboxDefaultSpacing = {2, 0};
 LGPoint QboxDefaultBorder = {1, 1};
 
 // Prototypes
@@ -128,7 +128,7 @@ Gadget *gad_qbox_start(Gadget *parent, LGPoint coord, int z, TNGStyle *sty, usho
 }
 
 // Add a line to a quickbox.  slot_type describes the type of slot, var is a pointer to the variable to be
-// displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o 
+// displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o
 // combinations of options and types might not be implemented.
 errtype gad_qbox_add(char *label, int slot_type, void *var, ulong slot_options)
 {

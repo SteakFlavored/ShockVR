@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/fl8nft.h $
@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * This file is part of the 2d library.
  */
- 
+
 /* FILL_NORM */
 /* BMT_DEVICE */
    (ptr_type) flat8_set_upixel,    /* pixel primitve */
@@ -253,9 +253,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
    (ptr_type) gri_opaque_wall_umap_init,   /* Wall1d */
    (ptr_type) gri_trans_wall_umap_init,
-   (ptr_type) gri_opaque_lit_wall1d_umap_init, 
+   (ptr_type) gri_opaque_lit_wall1d_umap_init,
    (ptr_type) gri_trans_lit_wall_umap_init,
-   (ptr_type) gri_opaque_clut_wall1d_umap_init, 
+   (ptr_type) gri_opaque_clut_wall1d_umap_init,
    (ptr_type) gri_trans_clut_wall_umap_init,
 
    (ptr_type) gri_opaque_per_umap_hscan_init,   /* Perspective -hscan */

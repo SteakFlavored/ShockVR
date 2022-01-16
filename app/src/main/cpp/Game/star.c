@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/star/RCS/star.c $
@@ -28,16 +28,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Revision 1.2  1994/11/11  19:51:04  buzzard
  * Anti/aliasing stars in high resolutions.
  * Ugly hacked for system shock rather than changing interface.
- * 
+ *
  * Revision 1.1  1994/10/24  23:27:31  jaemz
  * Initial revision
- * 
+ *
  * Revision 1.2  1994/10/21  16:45:47  jaemz
  * *** empty log message ***
- * 
+ *
  * Revision 1.1  1994/09/07  17:41:29  jaemz
  * Initial revision
- * 
+ *
 */
 
 #include <stdlib.h>
@@ -68,7 +68,7 @@ int   std_size = 1;
 // The canvas must be more than <std_alias_size> pixels wide
 // for us to anti-alias the stars (which makes them bigger,
 // hence the size restriction)
-int   std_alias_size = 640;     
+int   std_alias_size = 640;
 // This size is chosen so anti-aliasing starts happening
 // in full screen 640x400 modes.  Won't happen in demo mode
 // if demo mode uses a subcanvas
@@ -211,8 +211,8 @@ void star_sky(void)
 // render a single pixel of an anti-aliased star
 void do_aa_star_pixel(int x, int y, int fx, int fy, int c)
 {
-  int q; 
-  
+  int q;
+
   if (gr_get_pixel(x,y) == 0xff) {
     q = fx * fy * c;
 
@@ -261,7 +261,7 @@ void star_init_alias_table(void)
   b = fix_make(-(std_color_range-1),0);
 
   for (i=0; i < 256; ++i)
-    std_alias_color_table[i] = 
+    std_alias_color_table[i] =
       a + fix_int(fix_mul(b, fix_pow(fix_make(i,0)/255, gamma)));
 }
 
@@ -325,7 +325,7 @@ void star_render(void)
       v.gZ = ((fix)std_vec[i].z)<<1;
 
       s = star_transform_point(&v);
- 
+
       if (s->codes == 0) {
          x = fix_rint(s->sx);
          y = fix_rint(s->sy);
@@ -377,7 +377,7 @@ void star_render(void)
    // reset min z and max rad
    std_min_z     = 0x7fffffff;
    std_max_rad   = 0;
-                        
+
 }
 
 
@@ -435,9 +435,9 @@ void star_rand(uchar col,uchar range)
    }
 }
 
-extern g3s_point 	*first_free;   
-extern g3s_matrix view_matrix;  
-#if (defined(powerc) || defined(__powerc))	
+extern g3s_point 	*first_free;
+extern g3s_matrix view_matrix;
+#if (defined(powerc) || defined(__powerc))
 extern int code_point(g3s_point *pt);
 #else
 extern asm int code_point(g3s_point *pt);
@@ -453,7 +453,7 @@ g3s_phandle star_transform_point(g3s_vector *v)
  	g3s_point 	*point;
 	AWide				result,result2;
 	fix					temp;
-	
+
 	getpnt(point);
 	point->p3_flags = 0;
 
@@ -493,7 +493,7 @@ g3s_phandle star_transform_point(g3s_vector *v)
 	g3_project_point(point);
 	return(point);
  }
- 
 
 
-              
+
+

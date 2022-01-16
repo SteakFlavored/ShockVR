@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //
 // $Source: n:/project/lib/src/3d/RCS/vector.asm $
@@ -27,15 +27,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // $Log: vector.asm $
 // Revision 1.3  1993/08/10  22:54:29  dc
 // add _3d.inc to includes
-// 
+//
 // Revision 1.2  1993/05/11  15:03:18  matt
 // Changed g3_vec_scale() to take seperate dest & src
 // Fixed bug in vector compute
-// 
+//
 // Revision 1.1  1993/05/04  17:39:56  matt
 // Initial revision
-// 
-// 
+//
+//
 
 #include <FixMath.h>
 #include "lg.h"
@@ -57,7 +57,7 @@ void g3_vec_add(g3s_vector *dest,g3s_vector *src1,g3s_vector *src2)
  	dest->gY = src1->gY + src2->gY;
  	dest->gZ = src1->gZ + src2->gZ;
  }
- 
+
 // subtracts two vectors:  edi = esi - ebx. trashes eax
 void g3_vec_sub(g3s_vector *dest,g3s_vector *src1,g3s_vector *src2)
  {
@@ -74,13 +74,13 @@ void g3_vec_scale(g3s_vector *dest,g3s_vector *src,fix s)
  	dest->gY = fix_mul(src->gY,s);
  	dest->gZ = fix_mul(src->gZ,s);
  }
-  
+
 // fix mag(vector *v)
 // takes esi = v. returns mag in eax. trashes all but ebp
 fix g3_vec_mag(g3s_vector *v)
  {
 	AWide		result,result2;
-	
+
 	AsmWideMultiply(v->gX, v->gX, &result);
 	AsmWideMultiply(v->gY, v->gY, &result2);
 	AsmWideAdd(&result, &result2);
@@ -96,7 +96,7 @@ fix g3_vec_mag(g3s_vector *v)
 fix g3_vec_dotprod(g3s_vector *v0,g3s_vector *v1)
  {
 	AWide		result,result2;
-	
+
 	AsmWideMultiply(v0->gX, v1->gX, &result);
 	AsmWideMultiply(v0->gY, v1->gY, &result2);
 	AsmWideAdd(&result, &result2);
@@ -107,7 +107,7 @@ fix g3_vec_dotprod(g3s_vector *v0,g3s_vector *v1)
 
 
 // compute normalized surface normal from three points.
-// takes edi=dest, eax,edx,ebx = points. fills in [edi]. 
+// takes edi=dest, eax,edx,ebx = points. fills in [edi].
 // trashes eax,ebx,ecx,edx,esi
 void g3_compute_normal(g3s_vector *norm,g3s_vector *v0,g3s_vector *v1,g3s_vector *v2)
  {
@@ -120,9 +120,9 @@ void g3_compute_normal(g3s_vector *norm,g3s_vector *v0,g3s_vector *v1,g3s_vector
 void g3_vec_normalize(g3s_vector *v)
  {
  	fix temp;
- 	
+
  	temp = g3_vec_mag(v);
- 	
+
  	v->gX = fix_div(v->gX,temp);
  	v->gY = fix_div(v->gY,temp);
  	v->gZ = fix_div(v->gZ,temp);
@@ -130,7 +130,7 @@ void g3_vec_normalize(g3s_vector *v)
 
 
 // compute surface normal from three points. DOES NOT NORMALIZE!
-// takes edi=dest, eax,edx,ebx = points. fills in [edi]. 
+// takes edi=dest, eax,edx,ebx = points. fills in [edi].
 // trashes eax,ebx,ecx,edx,esi
 // the quick version does not normalize
 void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_vector *v2)
@@ -141,7 +141,7 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_ve
 	g3s_vector	temp_high;
 	long				temp_long;
  	int					shiftcount;
- 	
+
  	g3_vec_sub(&temp_v0,v1,v0);
  	g3_vec_sub(&temp_v1,v2,v1);
 
@@ -152,7 +152,7 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_ve
 	AsmWideAdd(&result, &result2);
  	v->gX = result.lo;
  	temp_high.gX = result.hi;
- 	
+
 // dest->y = v1x * v0z - v1z * v0x;
 	AsmWideMultiply(temp_v1.gX, temp_v0.gZ, &result);
 	AsmWideMultiply(temp_v1.gZ, temp_v0.gX, &result2);
@@ -176,7 +176,7 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_ve
 		AsmWideNegate(&result);
 	Double_64(result.hi,result.lo);
 	temp_long = result.hi;
-	
+
 	result.hi = temp_high.gY;
 	result.lo = v->gY;
 	if (result.hi < 0)
@@ -190,9 +190,9 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_ve
 		AsmWideNegate(&result);
 	Double_64(result.hi,result.lo);
 	temp_long |= result.hi;
-	
+
 	if (!temp_long) return; // everything fits in the low longword. hurrah. see ya.
-	
+
 // see how far to shift to fit in a longword
 	shiftcount = 0;
 	while (((unsigned long) temp_long) >= 0x0100)

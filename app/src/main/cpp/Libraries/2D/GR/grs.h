@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/grs.h $
@@ -29,55 +29,55 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: grs.h $
  * Revision 1.13  1993/12/16  00:30:50  baf
  * Removed include of spntyp.h
- * 
+ *
  * Revision 1.12  1993/12/14  22:36:29  kevin
  * Took out perspective mapper context structure.  Sorry
  *  it should never have been
  * here in the first place.
- * 
+ *
  * Revision 1.11  1993/12/04  12:42:30  kevin
  * Added context structure for perspective mappers.
- * 
+ *
  * Revision 1.10  1993/10/19  10:22:49  kaboom
  * Font member of grs_context is now a grs_font *.
- * 
+ *
  * Revision 1.9  1993/10/15  18:04:45  baf
  * Moved transtab to screen
- * 
+ *
  * Revision 1.8  1993/10/15  12:28:16  baf
  * Added transluceny table to graphics context
- * 
+ *
  * Revision 1.7  1993/10/06  16:08:56  baf
  * Moved grs_span definition to spntyp.h
- * 
+ *
  * Revision 1.6  1993/10/06  13:33:57  kevin
  * Added default color lookup table to screen type.
- * 
+ *
  * Revision 1.5  1993/07/08  23:02:53  kaboom
  * Added wlog and hlog fields to grs_bitmap structure.
- * 
+ *
  * Revision 1.4  1993/06/01  13:51:46  kaboom
  * Added lighting table to screen structure.
- * 
+ *
  * Revision 1.3  1993/04/29  18:37:08  kaboom
  * Added system info structures.  Pared down driver capability structure.
- * 
+ *
  * Revision 1.1  1993/02/04  17:36:18  kaboom
  * Initial revision
- * 
+ *
  ********************************************************************
  * Log entries from old 2d.h
  * Revision 1.20  1993/01/25  11:09:57  matt
  * Removed structure definition for 'vector' (leaving in 'grs_vector'),
  * since vector conflicted with the 3d structure of the same name.
- * 
+ *
  * Revision 1.19  1993/01/22  19:49:02  kaboom
  * Added some structures for texture mapper vertices and palette.
- * 
+ *
  * Revision 1.18  1993/01/15  21:41:52  kaboom
  * Changed grs_stencil to grs_sten_elem and made new grs_stencil that
  * includes a flags word.
- * 
+ *
  * Revision 1.12  1992/12/30  14:59:53  kaboom
  * Changed from using grs_span for stencil elements to new grs_stencil
  * type.
@@ -91,12 +91,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Added type, align and ytab fields to bitmap structure.  Reduced
  * bitmap flags to a short.  Changed clipping region to store fixed-
  * point values, and added different structures to allow their access
- * as fixed-point or integer values without shifting.  
+ * as fixed-point or integer values without shifting.
  *
  * Revision 1.5  1992/10/21  15:58:48  kaboom
  * Changed naming for gr_xxx structures to grs_xxx to avoid some name
  * collisions with functions.
- * 
+ *
  * Revision 1.3  1992/10/09  16:50:55  kaboom
  * Added gr_ylrpp structure for scanline pixel-based drawing.
  */

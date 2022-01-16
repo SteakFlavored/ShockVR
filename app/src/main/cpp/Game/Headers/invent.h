@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __INVENT_H
 #define __INVENT_H
@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // creates and initializes the inventory region
 LGRegion* create_invent_region(LGRegion* parent, LGRegion **pbuttons, LGRegion **pinvent);
 
-// Draw the inventory area.  Keeps information on most recent draw so only does 
+// Draw the inventory area.  Keeps information on most recent draw so only does
 // incremental updates.
 errtype inventory_draw(void);
 
@@ -68,7 +68,7 @@ errtype inventory_clear(void);
 // slots remaining).
 bool inventory_add_object (ObjID new_object,bool select);
 
-// Removes the specified object from the player's inventory.  Does not do any 
+// Removes the specified object from the player's inventory.  Does not do any
 // correlation with the rest of the Universe -- this needs to be handed by
 // the dropping/consuming/destroying code.
 errtype inventory_remove_object(ObjID new_object);

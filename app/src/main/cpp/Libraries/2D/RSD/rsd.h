@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/rsd.h $
@@ -29,10 +29,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Changed algorithm so that rsd_src is never advanced
  * past the end of the bitmap.  (It stays pointed to the
  * end when the end is reached.)
- * 
+ *
  * Revision 1.1  1992/11/12  13:51:29  kaboom
  * Initial revision
- * 
+ *
  */
 
 #define RSD_RUN    0

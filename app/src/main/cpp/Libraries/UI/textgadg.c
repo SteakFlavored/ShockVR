@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // Source code for the Text Gadget
 
@@ -46,7 +46,7 @@ Gadget *gad_text_create(Gadget *parent, LGRect *dim, int z, ulong options, TNGSt
    dsize.y = RectHeight(dim);
    dloc.x = parent->rep->abs_x + dim->ul.x;
    dloc.y = parent->rep->abs_y + dim->ul.y;
-   tng_textgadget_init(NULL, temp_tng, sty, options, dsize, dloc); 
+   tng_textgadget_init(NULL, temp_tng, sty, options, dsize, dloc);
 
    gadget_create_setup(&retgad, parent, CLASS_TEXT, dim, z, name);
    DisposePtr((Ptr)retgad->tng_data);
@@ -65,7 +65,7 @@ Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, 
    Gadget *rgad, *g;
    char new_name[128];
 
-   g = (Gadget *)ui_data;   
+   g = (Gadget *)ui_data;
    newrect.ul = loc;
    newrect.lr.x = newrect.ul.x + size.x;
    newrect.lr.y = newrect.ul.y + size.y;

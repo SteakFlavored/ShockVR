@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __TNG_H
 #define __TNG_H
@@ -28,46 +28,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: tng.h $
  * Revision 1.14  1993/10/11  20:27:35  dc
  * Angle is fun, fun fun fun
- * 
+ *
  * Revision 1.13  1993/06/04  15:33:21  xemu
  * remove gfx.h
- * 
+ *
  * Revision 1.12  1993/06/01  20:27:48  xemu
  * cb_data added to tng stuct
- * 
+ *
  * Revision 1.11  1993/05/12  16:29:43  xemu
  * added tng_cb_draw
- * 
+ *
  * Revision 1.10  1993/05/12  13:01:00  xemu
  * event handling macors
- * 
+ *
  * Revision 1.9  1993/05/10  11:28:52  xemu
  * fixed strange define changes
- * 
+ *
  * Revision 1.8  1993/05/07  18:11:56  mahk
  * Copied resgui.h straight into the file.  So there.
- * 
+ *
  * Revision 1.7  1993/05/04  17:51:47  xemu
  * expose signalling
- * 
+ *
  * Revision 1.6  1993/04/29  19:04:56  xemu
  * removed *2* resource.h includes
- * 
+ *
  * Revision 1.5  1993/04/28  14:40:23  mahk
  * Preparing for second exodus
- * 
+ *
  * Revision 1.4  1993/04/27  17:49:01  xemu
  * resgui strip!
- * 
+ *
  * Revision 1.3  1993/04/27  16:37:05  xemu
  * GFX -> TNG, text support
- * 
+ *
  * Revision 1.2  1993/04/22  15:03:44  xemu
  * mods
- * 
+ *
  * Revision 1.1  1993/04/21  11:30:56  xemu
  * Initial revision
- * 
+ *
  *
  */
 
@@ -77,7 +77,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "2dres.h"
 
 
-// Default resource id's 
+// Default resource id's
 #define RES_guiIcons					400		// (0x190)
 #define REF_IMG_iconArrowUp	0x1900000
 #define REF_IMG_iconArrowUp1	0x1900001
@@ -170,7 +170,7 @@ typedef struct _TNG {
 #define TNG_MOUSE_CUP				0x0040
 #define TNG_ANY_MOUSE_DOWN		TNG_MOUSE_LDOWN | TNG_MOUSE_RDOWN | TNG_MOUSE_CDOWN
 #define TNG_ANY_MOUSE_UP			TNG_MOUSE_LUP | TNG_MOUSE_RUP | TNG_MOUSE_CUP
-#define TNG_ANY_MOUSE_BUTTON	TNG_ANY_MOUSE_UP | TNG_ANY_MOUSE_DOWN 
+#define TNG_ANY_MOUSE_BUTTON	TNG_ANY_MOUSE_UP | TNG_ANY_MOUSE_DOWN
 #define TNG_ANY_MOUSE				TNG_MOUSE_MOTION | TNG_ANY_MOUSE_BUTTON
 
 #define TNG_SIGNAL_CHANGED		0x0001

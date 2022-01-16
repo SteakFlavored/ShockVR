@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/tluctab.h $
@@ -30,19 +30,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: tluctab.h $
  * Revision 1.9  1994/01/31  14:46:54  baf
  * Fixed a typo.
- * 
+ *
  * Revision 1.8  1994/01/17  22:13:22  baf
  * Redid tluc8 spolys (again).
- * 
+ *
  * Revision 1.7  1994/01/14  12:41:13  baf
  * Lit translucency reform.
- * 
+ *
  * Revision 1.6  1993/12/09  17:39:36  baf
  * Added lighting
- * 
+ *
  * Revision 1.5  1993/12/01  21:20:50  baf
  * Added gr_set_tluc8_table.
- * 
+ *
  *
  */
 

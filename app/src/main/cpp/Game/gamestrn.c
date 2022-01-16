@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/gamestrn.c $
@@ -38,13 +38,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------
 
 #define FILENAME_LEN 						14
-#define CONFIG_STRING_RES_FILE		"cfgstrn.res" 
-#define DEFAULT_STRING_RES_FILE	"cybstrng.rsrc" 
+#define CONFIG_STRING_RES_FILE		"cfgstrn.res"
+#define DEFAULT_STRING_RES_FILE	"cybstrng.rsrc"
 #define STRING_RES_VAR					"strings"
 
-// -------          
+// -------
 // GLOBALS
-// -------          
+// -------
 
 int string_res_file; 							// string res filenum
 
@@ -62,7 +62,7 @@ void init_strings(void)
 	// Open the string resource file, Mac style.
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pcybstrng.rsrc", &fSpec);
 	string_res_file = ResOpenFile(&fSpec);
-	
+
 	if (string_res_file < 0)
 		critical_error(CRITERR_RES|0);
 

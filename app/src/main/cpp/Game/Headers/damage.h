@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/inc/RCS/damage.h $
@@ -39,15 +39,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GAS_TYPE                 5
 #define TRANQ_TYPE               6
 #define NEEDLE_TYPE              7
-#define BIO_TYPE                 8 
+#define BIO_TYPE                 8
 
 #define DAMAGE_TYPE2MASK(n) (1 << ((n) - 1))
 
 #define DAMAGE_TYPE_FIELD        0x00FF
 #define PRIMARY_DAMAGE_FIELD     0x0F00
-#define PRIMARY_DAMAGE(X)        (((X) >> 8) & 0xF)          
+#define PRIMARY_DAMAGE(X)        (((X) >> 8) & 0xF)
 #define SUPER_DAMAGE_FIELD       0xF000
-#define SUPER_DAMAGE(X)          (((X) >> 12) & 0xF)          
+#define SUPER_DAMAGE(X)          (((X) >> 12) & 0xF)
 
 #define CYBER_EXPLOSION_TYPE     1
 #define CYBER_PROJECTILE_TYPE    2
@@ -121,18 +121,18 @@ bool simple_damage_object(ObjID target, int damage, ubyte dtype, ubyte flags);
 bool terrain_damage_object(physics_handle ph, fix raw_damage);
 bool special_terrain_hit(ObjID cobjid);
 
-// attack_object()    
+// attack_object()
 //
 // general all purpose attack/damage object
 //   target - the ObjID of the target being attacked
 //   weapon_triple - the triple for the bullet, grenade, or beam gun
-//   flags - see above 
+//   flags - see above
 //   power_level - will be ignored for projectile weapons, but used for grenades and beam guns
 //
 ubyte attack_object(ObjID target, int damage_type,int damage_mod, ubyte offense, ubyte penet, ubyte flags, int power_level, ubyte *effect_row, ubyte *effect, ubyte attack_effect_type, int *damage_inflicted);
 
 // player_attack_object
-// 
+//
 ubyte player_attack_object(ObjID target, int wpn_triple, int power_level, Combat_Pt origin);
 
 // get an estimate of how damaged we are, with above numerical index

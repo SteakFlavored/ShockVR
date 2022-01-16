@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		Subtitles		Extract subtitles from a movie and write them out
 //						to a 'subt' resource.
@@ -95,31 +95,31 @@ static char *tableNames[] = {
 		}
 
 // Create and open the output resource file for saving the 'subt' resource into.
-	
+
 	{
 		StandardFileReply	reply;
 		OSErr				err;
-	
+
 		StandardPutFile("\pText output file:", "\pMovie.Txt", &reply);
 		if (!reply.sfGood)
 			return;
-	
+
 		if (reply.sfReplacing)							// Delete the file if it exists.
 			FSpDelete(&reply.sfFile);
-	
+
 		FSpCreateResFile(&reply.sfFile, 'Shok', 'rsrc', nil);	// Create the resource file.
 		err = ResError();
 		if (err != 0)
 		{
 			printf("Can't create file.\n");
 			return;
-		}	
+		}
 		outResNum = FSpOpenResFile(&reply.sfFile, fsRdWrPerm);	// Open the file for writing.
 		if (outResNum == -1)
 		{
 			printf("Can't open file.\n");
 			return;
-		}	
+		}
 	}
 	subHdl = NewHandle(sizeof(SubtitleEntry) * 200);	// Allocate a big handle.
 	if (!subHdl)
@@ -153,7 +153,7 @@ static char *tableNames[] = {
 	mh.audioNumChans = SwapShortBytes(mh.audioNumChans);
 	mh.audioSampleSize = SwapShortBytes(mh.audioSampleSize);
 	mh.audioSampleRate = SwapLongBytes(mh.audioSampleRate);
-	
+
 //	Dump some movie header info
 
 	printf("Movie header:\n");
@@ -170,16 +170,16 @@ static char *tableNames[] = {
 	while (TRUE)
 	{
 		uchar	s1, s2;
-		
+
 		// Swap bytes around.
 		s1 = *((uchar *)pmc);
 		s2 = *(((uchar *)pmc)+2);
 		*(((uchar*)pmc)+2) = s1;
 		*((uchar*)pmc) = s2;
 		pmc->offset = SwapLongBytes(pmc->offset);
-		
+
 		// Do this for all chunks, until the end.
-		
+
 		if (pmc->chunkType != MOVIE_CHUNK_END)
 		{
    			// If text, then extract it.
@@ -195,7 +195,7 @@ static char *tableNames[] = {
 				mti = (MovieTextItem *)buff;
 				tag = mti->tag;
 				mti->offset = SwapLongBytes(mti->offset);
-				
+
 				// If it's actually text (not a textitem command)
 				if (tag == (ulong)'STD ' ||
 					tag == (ulong)'FRN ' ||
@@ -210,7 +210,7 @@ static char *tableNames[] = {
 					subPtr->startingTime = (fix_int(pmc->time) * 600)
 										 	+ fix_rint(fix_mul(fix_frac(pmc->time),fix_make(600, 0)));
 					BlockMove((char *)mti + mti->offset, subPtr->subtitle, 255);
-					
+
 					// Replace any linefeeds (0x0A) with carriage returns (0x0D)
 					cp = (char *)subPtr->subtitle;
 					while (*cp)
@@ -219,14 +219,14 @@ static char *tableNames[] = {
 							*cp = 0x0D;
 						cp++;
 					}
-				
+
 					fix_sprint (infile, pmc->time);			// Print the time
 					printf("time: %s  ", infile);
-					
+
 					printf("'%c%c%c%c': %s\n", 				// and the text info.
-						tag >> 24, (tag >> 16) & 0xFF, (tag >> 8) & 0xFF, tag & 0xFF, 
+						tag >> 24, (tag >> 16) & 0xFF, (tag >> 8) & 0xFF, tag & 0xFF,
 						(char *)mti + mti->offset);
-					
+
 					subPtr++;
 					numSubs++;
 				}
@@ -249,7 +249,7 @@ static char *tableNames[] = {
 	subPtr->startingTime = -1;
 	subPtr->subtitle[0] = 0;
 	numSubs++;
-	
+
 // Resize subtitles handle, and write it out.
 
 	HUnlock(subHdl);

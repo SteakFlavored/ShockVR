@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/screen.c $
@@ -29,16 +29,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: screen.c $
  * Revision 1.5  1994/10/19  17:57:31  kevin
  * No pal, bpal, and ipal are no longer used in the screen structure.
- * 
+ *
  * Revision 1.4  1993/10/08  01:16:21  kaboom
  * Changed quotes in #include liness to angle brackets for Watcom problem.
- * 
+ *
  * Revision 1.3  1993/05/25  18:53:14  kaboom
  * Fixed bug in gr_free_screen---was erroneously freeing bpal.
- * 
+ *
  * Revision 1.2  1993/04/29  19:08:03  kaboom
  * Cleaned up memory allocation in gr_alloc_screen.
- * 
+ *
  * Revision 1.1  1993/02/04  17:44:20  kaboom
  * Initial revision
  */
@@ -68,7 +68,7 @@ grs_screen *gr_alloc_screen (short w, short h)
         and video ram for the screen itself. */
   if ((p=(uchar *)NewPtr (sizeof (*s)+2*sizeof (*c))) == NULL)	// was gr_malloc
      goto bailout2;
-  if ((b = valloc (w, h)) == (uchar *)-1)      
+  if ((b = valloc (w, h)) == (uchar *)-1)
   	goto bailout1;
 
   /* set up bitmap. */

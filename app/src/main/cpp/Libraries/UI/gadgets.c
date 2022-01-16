@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/ui/RCS/gadgets.c $
@@ -140,7 +140,7 @@ errtype gad_mono_init(Gadget *g, LGPoint extent)
 errtype gad_Mac_init(Gadget *g, LGPoint extent)
 {
 	grs_screen *screen;
-	
+
 	if (!initialize_2d)
 	{
 		gr_init();
@@ -149,7 +149,7 @@ errtype gad_Mac_init(Gadget *g, LGPoint extent)
 		gr_set_screen(screen);
 		initialize_2d = TRUE;
 	}
-	
+
 	g->device_data = (grs_canvas *)NewPtr(sizeof(grs_canvas));
 	gr_init_sub_canvas(dr_scr_canv, (grs_canvas *)g->device_data, 0, 0, extent.x, extent.y);
 	return (OK);
@@ -185,7 +185,7 @@ bool gad_mono_blank_expose(LGRegion *reg, LGRect *r)
 bool gad_Mac_blank_expose(LGRegion *reg, LGRect *r)
 {
 	LGRect nrect;
-	
+
 	region_abs_rect(reg, r, &nrect);
 	SCALE_RECT(&nrect, GD_GADG(reg)->conversion);
 	gr_set_canvas((grs_canvas *)GD_CANV(reg));
@@ -219,7 +219,7 @@ errtype draw_resource_bm(Ref id, int x, int y)
    gr_bitmap(&f->bm, x, y);
    RefUnlock(id);
    return (OK);
-}  
+}
 
 int resource_bm_width(Ref id)
 {
@@ -231,7 +231,7 @@ int resource_bm_width(Ref id)
    // Spew(DSRC_UI_Utilities, ("resource_bm_width = %d\n",n));
    RefUnlock(id);
    return (n);
-}  
+}
 
 int resource_bm_height(Ref id)
 {
@@ -243,7 +243,7 @@ int resource_bm_height(Ref id)
    // Spew(DSRC_UI_Utilities, ("resource_bm_height = %d\n",n));
    RefUnlock(id);
    return (n);
-}  
+}
 
 // Initialize the overall gadget system.  Should be called once, when the first gadget_init is
 // triggered
@@ -266,7 +266,7 @@ Gadget *gadget_init(int display_type, LGPoint extent)
    GadgetData *gd;
    RectCallback fn;
    LGRect r;
-   
+
 //	if ((extent.x <= 0) || (extent.y <= 0))
 //		Spew(DSRC_UI_Bounds, ("Nonpositive extent in gadget_init!\n"));
    if (!gadget_initialization)
@@ -292,7 +292,7 @@ Gadget *gadget_init(int display_type, LGPoint extent)
    // Fill out the user data structure
    gd = (GadgetData *)NewPtr(sizeof(GadgetData));
    gd->g = retgad;
-   gd->name  = (char *)NewPtr(8 * sizeof(char));  
+   gd->name  = (char *)NewPtr(8 * sizeof(char));
 //   lg_sprintf(gd->name, "root%d\0", display_type);
    sprintf(gd->name, "root%d\0", display_type);
 
@@ -534,7 +534,7 @@ bool gadget_tng_Mac_expose(LGRegion *reg, LGRect *r)
 	int 		c1,c2,c3,c4;
 	LGPoint	loc;
 	Gadget	*g;
-	
+
 	g = GD_GADG(reg);
 	partmask = g->draw_parts;
 	if (GD_CANV(reg) != NULL)
@@ -586,7 +586,7 @@ bool gadget_tng_keyboard_handler(uiEvent *e, LGRegion *r, void *state)
    uiCookedKeyEvent *cke;
    void *dummy;
    dummy = state;
-   
+
    if ((e->type != UI_EVENT_KBD_COOKED) || !(e->subtype & KB_FLAG_DOWN))
       return FALSE;
    cke = (uiCookedKeyEvent *)e;
@@ -637,7 +637,7 @@ errtype gadget_create_setup(Gadget **pg, Gadget *parent, GadgetClass cl, LGRect 
    retgad->conversion = parent->conversion;
    retgad->handler_id = -1;
    retgad->destroy_func = NULL;
-  
+
    // Fill in the gadget data info
    gd->name = (char *)NewPtr((strlen(name) + 1) * sizeof(char));
    strcpy(gd->name, name);

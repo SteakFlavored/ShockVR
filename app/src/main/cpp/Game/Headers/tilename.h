@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * tilename.h
@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: tilename.h $
  * Revision 1.1  1994/01/02  17:17:28  dc
  * Initial revision
- * 
+ *
  */
 
 #define TILE_SOLID         0
@@ -76,7 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TILE_3Q_SE2W       40
 #define TILE_3Q_SE2N       41
 #define TILE_VSPLIT        42
-#define TILE_HALVED_EWN    43 
+#define TILE_HALVED_EWN    43
 #define TILE_HALVED_NSE    44
 #define TILE_HALVED_EWS    45
 #define TILE_HALVED_NSW    46
@@ -85,6 +85,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TILE_SLIMWALL_S    49
 #define TILE_SLIMWALL_W    50
 
-#define TILE_TYPES         64 // (TILE_SLOPEUP_W+1) 
+#define TILE_TYPES         64 // (TILE_SLOPEUP_W+1)
 
 

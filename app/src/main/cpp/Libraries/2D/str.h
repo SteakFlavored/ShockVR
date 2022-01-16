@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/2d/RCS/str.h $
@@ -31,16 +31,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * added new height and wrapping routines, added #defines
  * for compatibility with string and char routines taking
  * grs_font * as first arg
- * 
+ *
  * Revision 1.4  1993/06/02  21:29:21  kaboom
  * Moved n argument for gr_string_nwidth from last to second.
- * 
+ *
  * Revision 1.3  1993/06/02  16:33:42  kaboom
  * Added prototypes for various new size & n-char routines.
- * 
+ *
  * Revision 1.2  1993/04/08  18:57:12  kaboom
  * Added prototypes for character functions.
- * 
+ *
  * Revision 1.1  1993/04/08  16:28:06  kaboom
  * Initial revision
  */

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/schedule.c $
@@ -84,11 +84,11 @@ void email_event_handler(Schedule* s, SchedEvent* ev);
 void reset_schedules(void);
 
 
-// comparison function.  
+// comparison function.
 // 8/27/94 THIS FIX FOR WRAPPING BUG MAKES THE COMPARE FUNCTION MUCH LESS GENERAL.
 // I.e. it relies on the fact that timestamps are in terms of TICKS2TSTAMP(player_struct.game_time)
 // in the future, this should be fixed by adding more bits to the timestamp so it doesn't wrap, and
-// then you can have schedule that don't go on gametime. 
+// then you can have schedule that don't go on gametime.
 
 
 #define MAX_USHORT (0xFFFF)
@@ -443,7 +443,7 @@ void email_event_handler(Schedule*, SchedEvent* ev)
 
 
 
-// HERE IS THE ARRAY OF ALL EVENT HANDLERS 
+// HERE IS THE ARRAY OF ALL EVENT HANDLERS
 
 static SchedHandler sched_handlers[] =
 {
@@ -540,7 +540,7 @@ bool schedule_test_hotkey(short keycode, ulong context, void* data)
    SchedEvent e;
 #ifndef NO_DUMMIES
    int dummy; dummy = keycode + context + (int)data;
-#endif 
+#endif
    e.timestamp = player_struct.game_time/CIT_CYCLE + 100;
    e.type = 0;
    schedule_event(&game_seconds_schedule,&e);

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		QUIKTIME.H		QuickTime file access
 //		Rex E. Bradford
@@ -27,16 +27,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: quiktime.h $
  * Revision 1.4  1994/10/04  20:31:57  rex
  * Added depth16 flag and macro to set it
- * 
+ *
  * Revision 1.3  1994/09/30  16:57:34  rex
  * Added stuff for writing quicktime movies
- * 
+ *
  * Revision 1.2  1994/09/29  10:34:57  rex
  * Put globals into a single struct, revamped prototypes, added writing
- * 
+ *
  * Revision 1.1  1994/09/27  17:23:17  rex
  * Initial revision
- * 
+ *
 */
 
 #ifndef __QUIKTIME_H

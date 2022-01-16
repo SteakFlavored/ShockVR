@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/input/RCS/kbcook.h $
@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "kb.h"
 
 /*
-#define KB_CNV_SHIFT   1 
+#define KB_CNV_SHIFT   1
 #define KB_CNV_NOSHIFT 0
 #define KB_CNV_TBLSIZE 0xE0
 
@@ -66,17 +66,17 @@ extern ushort kb_cnv_table[KB_CNV_TBLSIZE][2];
 #define KB_FLAG_2ND     CNV_2ND
 
 #define KB_DOWN_SHF     8
-#define KB_CTRL_SHF     9 
+#define KB_CTRL_SHF     9
 #define KB_ALT_SHF     10
-#define KB_SPECIAL_SHF 11 
+#define KB_SPECIAL_SHF 11
 #define KB_SHIFT_SHF   12
-#define KB_2ND_SHF     13 
+#define KB_2ND_SHF     13
 
 #define KBC_EXTENDED 0x80
 
 errtype kb_cook(kbs_event code, ushort *cooked, bool *results);
-// "cooks" kb event "code."  If cooking generates a cooked code, sets 
-// *results to true and puts the result in *cooked.  Otherwise, *results = false.  
+// "cooks" kb event "code."  If cooking generates a cooked code, sets
+// *results to true and puts the result in *cooked.  Otherwise, *results = false.
 
 #define kb2ascii(x) (((x) & KB_FLAG_SPECIAL) ? 0 : (x) & 0xFF )
 

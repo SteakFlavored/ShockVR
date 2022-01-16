@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/gencnv.c $
  * $Revision: 1.23 $
  * $Author: kevin $
  * $Date: 1994/10/25 15:13:54 $
- * 
+ *
  */
 
 // MLA, NOTE- the general canvas table functions are left as unimplemented ptrs since the
@@ -48,21 +48,21 @@ void (*gen_canvas_table[GRD_CANVAS_FUNCS])() = {
  gr_not_imp, //   (ptr_type) gen_clear,               /* integral, straight primitives */
  gr_not_imp, //   (ptr_type) gen_upoint,
  gr_not_imp, //   (ptr_type) gen_point,
-   gr_null, 		
-   gr_null, 		
-   gr_null, 		
-   gr_null, 		
+   gr_null,
+   gr_null,
+   gr_null,
+   gr_null,
    (ptr_type) gen_urect,
    (ptr_type) gen_rect,
    (ptr_type) gen_ubox,
    (ptr_type) gen_box,
 
    gr_null, 	            /* fixed-point rendering primitives */
-   gr_null,		
-   gr_null, 	
-   gr_null, 	
-   gr_null, 	
-   gr_null, 	
+   gr_null,
+   gr_null,
+   gr_null,
+   gr_null,
+   gr_null,
 gr_not_imp, //   (ptr_type) temp_upoly,
 gr_not_imp, //   (ptr_type) temp_poly,
 gr_not_imp, //   (ptr_type) temp_uspoly,
@@ -95,7 +95,7 @@ gr_not_imp, //   (ptr_type) temp_lit_floor_umap,
    gr_null,
 gr_not_imp, //   (ptr_type) temp_clut_floor_umap,
    gr_null,
-   
+
    gr_null,                   /* linear texture mappers */
    gr_null,
    gr_null,
@@ -179,7 +179,7 @@ gr_not_imp, //   (ptr_type) temp_clut_per_umap,
 
    gr_null,                   /* solid perspective mapper */
    gr_null,
-   
+
 gr_not_imp, //   (ptr_type) gen_int_ucircle,           /* curves, should change to fixed-point */
 gr_not_imp, //   (ptr_type) gen_int_circle,
 gr_not_imp, //   (ptr_type) gen_fix_ucircle,
@@ -192,7 +192,7 @@ gr_not_imp, //   (ptr_type) gen_int_urod,
 gr_not_imp, //   (ptr_type) gen_int_rod,
 gr_not_imp, //   (ptr_type) gen_fix_urod,
 gr_not_imp, //   (ptr_type) gen_fix_rod,
-   
+
    gr_null,                   /* bitmap drawing functions. */
    gr_null,
 gr_not_imp, //   (ptr_type) gen_mono_ubitmap,

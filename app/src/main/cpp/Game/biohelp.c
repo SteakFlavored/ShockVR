@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/biohelp.c $
@@ -66,10 +66,10 @@ errtype biohelp_create_mouse_region(LGRegion* root);
 // ---------------
 
 /* This gets called whenever the MFD needs to redraw or
-   undraw.  
+   undraw.
    The control value is a bitmask with the following bits:
    MFD_EXPOSE: Update the mfd, if MFD_EXPOSE_FULL is not set,
-               update incrementally.  
+               update incrementally.
    MFD_EXPOSE_FULL: Fully redraw the mfd, implies MFD_EXPOSE
 
    if no bits are set, the mfd is being "unexposed;" its display
@@ -97,7 +97,7 @@ errtype biohelp_create_mouse_region(LGRegion* root);
 
 #define LAST_ACTIVE_BITS(mfd) (player_struct.mfd_func_data[MFD_BIOHELP_FUNC][mfd])
 #define LAST_USED_BITS(mfd)   (player_struct.mfd_func_data[MFD_BIOHELP_FUNC][mfd+6])
-#define BIOHELP_PAGE (player_struct.mfd_func_data[MFD_BIOHELP_FUNC][2]) 
+#define BIOHELP_PAGE (player_struct.mfd_func_data[MFD_BIOHELP_FUNC][2])
 #define NUM_TRACKS   (player_struct.mfd_func_data[MFD_BIOHELP_FUNC][3])
 
 void mfd_biohelp_expose(MFD* mfd, ubyte control)
@@ -105,7 +105,7 @@ void mfd_biohelp_expose(MFD* mfd, ubyte control)
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
    {
-      // Do unexpose stuff here.  
+      // Do unexpose stuff here.
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
    {
@@ -135,7 +135,7 @@ void mfd_biohelp_expose(MFD* mfd, ubyte control)
          {
             if (i == NUM_BUTTONS*BIOHELP_PAGE)
                firsttrack = track;
-            LAST_USED_BITS(mfd->id) |= 1 << track; 
+            LAST_USED_BITS(mfd->id) |= 1 << track;
             i++;
          }
          else
@@ -169,29 +169,29 @@ void mfd_biohelp_expose(MFD* mfd, ubyte control)
             y += (BUTTON_HGT - TEXT_HGT)/2;
             get_string(REF_STR_BioHelpBase+track,buf,sizeof(buf));
             mfd_draw_string(buf, x, y, ITEM_COLOR, TRUE);
-         }  
+         }
    break_out:
       LAST_ACTIVE_BITS(mfd->id) = bits;
 
 
       // on a full expose, make sure to draw everything
- 
+
       if (full)
          mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
       // Pop the canvas
       gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the 
+      // Now that we've popped the canvas, we can send the
       // updated mfd to screen
       mfd_update_rects(mfd);
 
    }
-  
+
 }
 
 
 // --------
-// HANDLERS 
+// HANDLERS
 // --------
 
 bool mfd_biohelp_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
@@ -261,7 +261,7 @@ grs_bitmap biohelp_cursor_bmap;
 
 errtype biohelp_load_cursor()
 {
-   errtype err; 
+   errtype err;
    static bool cursor_loaded = FALSE;
    extern errtype simple_load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid);
    if (cursor_loaded)
@@ -273,8 +273,8 @@ errtype biohelp_load_cursor()
 }
 
 errtype biohelp_create_mouse_region(LGRegion* root)
-{ 
-   errtype err; 
+{
+   errtype err;
    int id;
    LGRect r = { { STATUS_X, 0}, {STATUS_X+GAMESCR_BIO_WIDTH,GAMESCR_BIO_HEIGHT}};
    LGRegion* reg = (LGRegion*)NewPtr(sizeof(LGRegion));

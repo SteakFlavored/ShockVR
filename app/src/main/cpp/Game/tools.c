@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/tools.c $
@@ -54,12 +54,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //¥¥¥#include <gifd.h>
 
 
-#ifndef STORE_CLIP 
+#ifndef STORE_CLIP
 #define STORE_CLIP(a,b,c,d) a = gr_get_clip_l(); \
    b = gr_get_clip_t();  c = gr_get_clip_r(); d = gr_get_clip_b()
 #endif // !STORE_CLIP
 
-#ifndef RESTORE_CLIP 
+#ifndef RESTORE_CLIP
 #define RESTORE_CLIP(a,b,c,d) gr_set_cliprect(a,b,c,d)
 #endif // !RESTORE_CLIP
 
@@ -185,7 +185,7 @@ errtype draw_raw_res_bm_extract(Ref id, int x, int y)
 errtype draw_raw_resource_bm(Ref id, int x, int y)
 {
    FrameDesc *f;
-   
+
    f = (FrameDesc *)RefLock(id);
    if (f == NULL)
       critical_error(CRITERR_MEM|9);
@@ -193,7 +193,7 @@ errtype draw_raw_resource_bm(Ref id, int x, int y)
    ss_bitmap(&f->bm, x, y);
    RefUnlock(id);
    return (OK);
-}  
+}
 
 errtype draw_res_bm_core(Ref id, int x, int y, bool scale)
 {
@@ -218,7 +218,7 @@ errtype draw_res_bm_core(Ref id, int x, int y, bool scale)
    if (is_onscreen()) uiShowMouse(&mouse_rect);
    RefUnlock(id);
    return (OK);
-}  
+}
 
 errtype draw_res_bm(Ref id, int x, int y)
 {
@@ -250,12 +250,12 @@ errtype draw_full_res_bm(Ref id, int x, int y, bool fade_in)
 
    f->bm.bits = (uchar *)(f+1);
    ss_scale_bitmap(&f->bm, x, y, 640, 400);		// KLC  ss_bitmap(&f->bm, x, y);
-   RefUnlock(id);	
+   RefUnlock(id);
    ResDrop(REFID(id));
    if (fade_in)
       finish_pal_effect(pal_id);
    return (OK);
-}  
+}
 
 int res_bm_width(Ref id)
 {
@@ -268,7 +268,7 @@ int res_bm_width(Ref id)
    n = f->bm.w;
    RefUnlock(id);
    return (n);
-}  
+}
 
 int res_bm_height(Ref id)
 {
@@ -353,7 +353,7 @@ char *itoa_2_10(char *s, int val)
    return s;
 }
 
-// max 99 hours... 
+// max 99 hours...
 void second_format(int sec_remain, char *s)
 {
    int c_l;
@@ -506,14 +506,14 @@ errtype message_info(char *info_text)
       else
       {
          message_resend = FALSE;
-         if (!full_game_3d  && !view360_message_obscured 
+         if (!full_game_3d  && !view360_message_obscured
             || game_paused)
          {
             gr_set_fcolor(WHITE);
             res_draw_text_shadowed(RES_tinyTechFont,buf,x,y,full_game_3d);
             hud_unset(HUD_MSGLINE);
          }
-         else if (full_game_3d || view360_message_obscured)            
+         else if (full_game_3d || view360_message_obscured)
          {
             if (buf[0] != '\0')
             {
@@ -665,7 +665,7 @@ errtype tight_loop(bool check_input)
 //      synchronous_update();
 
    if (check_input)
-   {   
+   {
       uiPoll();
       kb_flush_bios();
    }
@@ -846,7 +846,7 @@ errtype end_wait()
 
 
 // --------------------------------------------------------------------
-// ZOOM BOXES 
+// ZOOM BOXES
 
 #define NUM_BOXES 8
 #define TICKS_PER_BOX 10
@@ -900,9 +900,9 @@ fixang point_in_view_arc(fix target_x, fix target_y, fix looker_x, fix looker_y,
    y_diff = target_y - looker_y;
    *real_dir = fix_atan2(y_diff, x_diff);
 
-   // Compensate for difference between our coordinate system and fixpoint's   
+   // Compensate for difference between our coordinate system and fixpoint's
 
-   // Hmmm, how do fixangs deal with negatives? 
+   // Hmmm, how do fixangs deal with negatives?
    // Better normalize to absolute difference, just to be sure
    // After all, they do have *real_dir to figure it out themselves
    // if they want to.
@@ -927,7 +927,7 @@ void string_replace_char(char* s, char from, char to)
 void gamma_dealfunc(ushort gamma_qvar)
 {
 	fix gamma;
-	
+
 	if (gamma_qvar > 99)
 		gamma_qvar = 99;
 	gamma_qvar = (ushort)(((int)gamma_qvar*FIX_UNIT)/100);

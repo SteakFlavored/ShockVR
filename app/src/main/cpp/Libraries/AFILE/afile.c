@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		AFILE.C		Read/write anim files
 //		Rex E. Bradford (REX)
@@ -24,31 +24,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: afile.c $
  * Revision 1.9  1994/10/18  16:00:29  rex
  * Removed warning if can't set frame pal
- * 
+ *
  * Revision 1.8  1994/10/04  20:30:41  rex
  * Removed warning if no frame pal
- * 
+ *
  * Revision 1.7  1994/10/03  18:06:33  rex
  * Added warning if w,h of bitmap changes from frame to frame
- * 
+ *
  * Revision 1.6  1994/09/29  10:29:42  rex
  * Added time arg to read/write frame
- * 
+ *
  * Revision 1.5  1994/09/27  17:21:42  rex
  * Added qtmMethods to list of supported file types (Quicktime movies)
- * 
+ *
  * Revision 1.4  1994/09/22  16:42:41  rex
  * Took out warning when read past last frame
- * 
+ *
  * Revision 1.3  1994/09/13  12:22:32  rex
  * Added lots of spew
- * 
+ *
  * Revision 1.2  1994/08/04  11:39:48  rex
  * When reset afile, clear compose buffer
- * 
+ *
  * Revision 1.1  1994/07/22  13:20:00  rex
  * Initial revision
- * 
+ *
 */
 
 #include <string.h>

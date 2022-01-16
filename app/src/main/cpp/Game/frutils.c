@@ -6,31 +6,31 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrUtils.c
- * 
+ *
  *  MLA - 4/14/95
  *
  *  Contiains Mac specific utils for the renderer (fast draw slot view, full screen, etc.)
  *
  */
- 
+
  #include "FrUtils.h"
  #include "Shock.h"
 
 // ------------------
 //  GLOBALS
-// ------------------ 
+// ------------------
 Handle			gDoubleSizeOffHdl = NULL;
 grs_canvas		gDoubleSizeOffCanvas;
 
@@ -42,10 +42,10 @@ int AllocDoubleBuffer(int w, int h)
 	Size		dummy;
 
 	FreeDoubleBuffer();													// If one's there, free it first.
-	
+
 	if (h == 259)															// Major Hack!!!  In slot view, the double
 		h++;																		// buffer needs to be 260 (even number).
-	
+
 	MaxMem(&dummy);													// Compact heap before big alloc.
 
 	gDoubleSizeOffHdl = NewHandle(w * h);						// Allocate new buffer.
@@ -72,31 +72,31 @@ void FreeDoubleBuffer(void)
 }
 
 
- // hard coded to copy from 56,57 to 56+536,57+259 to the screen 
+ // hard coded to copy from 56,57 to 56+536,57+259 to the screen
  #define kFastSlotWide 536
  #define kFastSlotHigh 259
  #define kFastSlotLeft 56
  #define kFastSlotTop 57
- 
+
   #define kFastSlotWide_Half 268
  #define kFastSlotHigh_Half 129
 
- #define LoadStoreTwoDoub(a,b) doub1 = src[a]; doub2 = src[b]; dest[a] = doub1; dest[b] = doub2;	
+ #define LoadStoreTwoDoub(a,b) doub1 = src[a]; doub2 = src[b]; dest[a] = doub1; dest[b] = doub2;
 
 // copy the slot view from offscreen to on
-#if (defined(powerc) || defined(__powerc))	
+#if (defined(powerc) || defined(__powerc))
 void Fast_Slot_Copy(grs_bitmap *bm)
    {
    	double 	*src,*dest,doub1,doub2;
    	int		rows = kFastSlotHigh;
    	int		src_rowb,dest_rowb;
-   	
+
    	src = (double *) bm->bits;
    	src_rowb = bm->row>>3;
-   	
+
    	dest = (double *) (gScreenAddress + (kFastSlotTop*gScreenRowbytes) + kFastSlotLeft);
    	dest_rowb = gScreenRowbytes>>3;
-   	
+
    	while (rows--)
    	  {
 		dest[0] = src[0];
@@ -133,7 +133,7 @@ void Fast_Slot_Copy(grs_bitmap *bm)
 		LoadStoreTwoDoub(61,62);
 		LoadStoreTwoDoub(63,64);
 		LoadStoreTwoDoub(65,66);
-			 
+
    	  	dest += dest_rowb;
    	  	src += src_rowb;
    	  }
@@ -148,7 +148,7 @@ asm void Fast_Slot_Copy(grs_bitmap *bm)
  	sub.w		#kFastSlotWide,d1
  	move.w		#kFastSlotHigh-1,d2	// height
  	move.l		d4,a0
- 	
+
  	move.l		gScreenAddress,a1		// dest
  	move.l		gScreenRowbytes,d3	// screen width
  	move.l		d3,d0
@@ -157,10 +157,10 @@ asm void Fast_Slot_Copy(grs_bitmap *bm)
  	mulu.w		d4,d0
  	add.l			d0,a1
  	add.w			#kFastSlotLeft,a1		// final dest
- 
-@Loop: 	
+
+@Loop:
  	moveq		#1,d4
- 	
+
 @ILoop:
  	move.l		(a0)+,(a1)+
  	move.l		(a0)+,(a1)+
@@ -230,11 +230,11 @@ asm void Fast_Slot_Copy(grs_bitmap *bm)
  	move.l		(a0)+,(a1)+
  	move.l		(a0)+,(a1)+		// 67
  	dbra			d4,@ILoop
- 	
+
  	add.w			d1,a0
  	add.w			d3,a1
  	dbra			d2,@Loop
- 	
+
  	movem.l		(sp)+,d3-d4
  	rts
  }
@@ -243,7 +243,7 @@ asm void Fast_Slot_Copy(grs_bitmap *bm)
 
  // copy the full screen view from offscreen to on
  // hard coded to copy from 0,0 to 640,480 to the screen
- #if (defined(powerc) || defined(__powerc))	
+ #if (defined(powerc) || defined(__powerc))
 void Fast_FullScreen_Copy(grs_bitmap *bm)
    {
    	double 	*src,*dest,doub1,doub2;
@@ -252,10 +252,10 @@ void Fast_FullScreen_Copy(grs_bitmap *bm)
 
    	src = (double *) bm->bits;
    	src_rowb = bm->row>>3;
-   	
+
    	dest = (double *) gScreenAddress;
    	dest_rowb = gScreenRowbytes>>3;
-   	
+
    	while (rows--)
    	  {
 		LoadStoreTwoDoub(79,78);
@@ -298,12 +298,12 @@ void Fast_FullScreen_Copy(grs_bitmap *bm)
 		LoadStoreTwoDoub(5,4);
 		LoadStoreTwoDoub(3,2);
 		LoadStoreTwoDoub(1,0);
-			 
+
    	  	dest += dest_rowb;
    	  	src += src_rowb;
    	  }
    }
-#else   
+#else
 asm void Fast_FullScreen_Copy(grs_bitmap *bm)
  {
  	move.l		4(sp),a0
@@ -313,14 +313,14 @@ asm void Fast_FullScreen_Copy(grs_bitmap *bm)
  	sub.w		#640,d1
  	move.w		#479,d2	// height
  	move.l		d4,a0
- 	
+
  	move.l		gScreenAddress,a1		// dest
  	move.l		gScreenRowbytes,d3	// screen width
  	sub.w		#640,d3
- 
-@Loop: 	
+
+@Loop:
  	moveq		#3,d4
- 	
+
 @ILoop:
  	move.l		(a0)+,(a1)+
  	move.l		(a0)+,(a1)+
@@ -363,11 +363,11 @@ asm void Fast_FullScreen_Copy(grs_bitmap *bm)
  	move.l		(a0)+,(a1)+
  	move.l		(a0)+,(a1)+		// 40
  	dbra			d4,@ILoop
- 	
+
  	add.w			d1,a0
  	add.w			d3,a1
  	dbra			d2,@Loop
- 	
+
  	movem.l		(sp)+,d3-d4
  	rts
  }
@@ -378,13 +378,13 @@ asm void Fast_FullScreen_Copy(grs_bitmap *bm)
 extern Boolean SkipLines;
 
 // copy the slot view from offscreen to on, doubling it
-#if (defined(powerc) || defined(__powerc))	
-extern "C" 
+#if (defined(powerc) || defined(__powerc))
+extern "C"
  {
  	extern void BlitLargeAlign(uchar *draw_buffer, int dstRowBytes, void *dstPtr, long w, long h, long modulus);
  	extern void BlitLargeAlignSkip(uchar *draw_buffer, int dstRowBytes, void *dstPtr, long w, long h, long modulus);
  }
- 
+
 void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
  {
  	if (!SkipLines)
@@ -392,7 +392,7 @@ void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
  	else
  		BlitLargeAlignSkip(bm->bits, gScreenRowbytes, gScreenAddress + (kFastSlotTop*gScreenRowbytes) + kFastSlotLeft,w,h,bm->row);
  }
- 
+
 void FastSlotDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, long w, long h)
 {
 	if (SkipLines)
@@ -414,7 +414,7 @@ asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
  	sub.w		#kFastSlotWide_Half,d1
  	move.w		#kFastSlotHigh_Half-1,d2	// height
  	move.l		d4,a0
- 	
+
  	move.l		gScreenAddress,a1		// dest
  	move.l		gScreenRowbytes,d3	// screen width
  	move.l		d3,a2
@@ -429,10 +429,10 @@ asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
 
  	tst.b			SkipLines
  	bne.s			@SkipLoop
- 	
-@Loop: 	
- 	move.w		#(kFastSlotWide_Half/4)-1,d4			
- 	
+
+@Loop:
+ 	move.w		#(kFastSlotWide_Half/4)-1,d4
+
 @ILoop:
  	move.l		(a0)+,d0			// get 4 pixels
 	move.b		d0,d5
@@ -443,7 +443,7 @@ asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
 	move.b		d0,d6				// double pixel 1
 	swap			d6
 	move.w		d5,d6				// pixel 1 & 2 in d6
-	
+
 	swap			d0
 	move.b		d0,d5
 	ror.w		#8,d5
@@ -458,18 +458,18 @@ asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
  	move.l		d6,(a1)+
  	move.l		d7,(a2)+
  	move.l		d6,(a2)+
- 	 	
+
  	dbra			d4,@ILoop
- 	
+
  	add.w			d1,a0
  	add.w			d3,a1
  	add.w			d3,a2
  	dbra			d2,@Loop
 	bra			@Done
 
-@SkipLoop: 	
- 	move.w		#(kFastSlotWide_Half/4)-1,d4			
- 	
+@SkipLoop:
+ 	move.w		#(kFastSlotWide_Half/4)-1,d4
+
 @SkipILoop:
  	move.l		(a0)+,d0			// get 4 pixels
 	move.b		d0,d5
@@ -480,7 +480,7 @@ asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
 	move.b		d0,d6				// double pixel 1
 	swap			d6
 	move.w		d5,d6				// pixel 1 & 2 in d6
-	
+
 	swap			d0
 	move.b		d0,d5
 	ror.w		#8,d5
@@ -493,14 +493,14 @@ asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
 
  	move.l		d7,(a1)+
  	move.l		d6,(a1)+
- 	 	
+
  	dbra			d4,@SkipILoop
- 	
+
  	add.w			d1,a0
  	add.w			d3,a1
  	dbra			d2,@SkipLoop
 
-@Done: 	
+@Done:
  	movem.l		(sp)+,d3-d7/a2
  	rts
  }
@@ -508,7 +508,7 @@ asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
 
 // copy the full screen view from offscreen to on
 // hard coded to copy from 0,0 to 640,480 to the screen
-#if (defined(powerc) || defined(__powerc))	
+#if (defined(powerc) || defined(__powerc))
 void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
  {
  	if (!SkipLines)
@@ -538,21 +538,21 @@ asm void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
  	sub.w		#320,d1
  	move.w		#240-1,d2	// height
  	move.l		d4,a0
- 	
+
  	move.l		gScreenAddress,a1		// dest
  	move.l		a1,a2
  	move.l		gScreenRowbytes,d3	// screen width
  	add.l			d3,a2
- 	
+
  	add.w			d3,d3
  	sub.w		#640,d3
- 	
+
  	tst.b			SkipLines
  	bne.s			@SkipLoop
- 	
-@Loop: 	
- 	move.w		#(320/4)-1,d4			
- 	
+
+@Loop:
+ 	move.w		#(320/4)-1,d4
+
 @ILoop:
  	move.l		(a0)+,d0			// get 4 pixels
 	move.b		d0,d5
@@ -563,7 +563,7 @@ asm void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
 	move.b		d0,d6				// double pixel 1
 	swap			d6
 	move.w		d5,d6				// pixel 1 & 2 in d6
-	
+
 	swap			d0
 	move.b		d0,d5
 	ror.w		#8,d5
@@ -578,18 +578,18 @@ asm void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
  	move.l		d6,(a1)+
  	move.l		d7,(a2)+
  	move.l		d6,(a2)+
- 	 	
+
  	dbra			d4,@ILoop
- 	
+
  	add.w			d1,a0
  	add.w			d3,a1
  	add.w			d3,a2
  	dbra			d2,@Loop
  	bra			@Done
- 
-@SkipLoop: 	
- 	move.w		#(320/4)-1,d4			
- 	
+
+@SkipLoop:
+ 	move.w		#(320/4)-1,d4
+
 @SkipILoop:
  	move.l		(a0)+,d0			// get 4 pixels
 	move.b		d0,d5
@@ -600,7 +600,7 @@ asm void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
 	move.b		d0,d6				// double pixel 1
 	swap			d6
 	move.w		d5,d6				// pixel 1 & 2 in d6
-	
+
 	swap			d0
 	move.b		d0,d5
 	ror.w		#8,d5
@@ -613,13 +613,13 @@ asm void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
 
  	move.l		d7,(a1)+
  	move.l		d6,(a1)+
- 	 	
+
  	dbra			d4,@SkipILoop
- 	
+
  	add.w			d1,a0
  	add.w			d3,a1
  	dbra			d2,@SkipLoop
- 
+
 @Done:
  	movem.l		(sp)+,d3-d7/a2
  	rts

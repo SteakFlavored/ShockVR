@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrTerr.c
@@ -77,7 +77,7 @@ int _fdt_x, _fdt_y, _fdt_mask;					// implicit parameters to draw tile
 MapElem *_fdt_mptr;                              	// more implicit parameters
 
 // texture mapping function pointers.
-void (*_fr_lit_floor_func)(int, g3s_phandle *, grs_bitmap *);	
+void (*_fr_lit_floor_func)(int, g3s_phandle *, grs_bitmap *);
 void (*_fr_floor_func)(int, g3s_phandle *, grs_bitmap *);
 void (*_fr_lit_wall_func)(int, g3s_phandle *, grs_bitmap *);
 void (*_fr_wall_func)(int, g3s_phandle *, grs_bitmap *);
@@ -182,7 +182,7 @@ void fr_tfunc_grab_fast(int mask);
 
 ///// AAHRRHRHGGHGHG switch to secondary data cache!!!
 
-// probably should have 3 of these, one for cspace, one for unlit, one for lantern, so on, swap in pointers, 
+// probably should have 3 of these, one for cspace, one for unlit, one for lantern, so on, swap in pointers,
 // and for asm have a table of calls to this which we switch if necessary at start of frame
 
 // oh oh oh baby oh baby oh self modify height delta step baby now baby please
@@ -190,7 +190,7 @@ void fr_tfunc_grab_fast(int mask);
 // and to use the 4 respts per map pt idea so we can reuse too
 // 3 tests,
 //   either succeed jump out and reuse
-//   or fail all 3 (no jumps taken) and optimally build new one     
+//   or fail all 3 (no jumps taken) and optimally build new one
 
 // deal with optimality of data structures when rewriting in asm
 
@@ -366,7 +366,7 @@ void _fr_draw_wire_cpoly_4(void)
    g3_draw_cline(_fdt_tmppts[0],_fdt_tmppts[1]);
    g3_draw_cline(_fdt_tmppts[1],_fdt_tmppts[2]);
    g3_draw_cline(_fdt_tmppts[2],_fdt_tmppts[3]);
-   g3_draw_cline(_fdt_tmppts[3],_fdt_tmppts[0]); 
+   g3_draw_cline(_fdt_tmppts[3],_fdt_tmppts[0]);
 }
 
 void _fr_draw_wire_cpoly_3or4(int cnt)
@@ -480,7 +480,7 @@ static void _fr_flat_int_wall(int wall_id)
    // need to have face_code set and be ready with flip and hold and all that jazz
    _fr_figure_pt(_fdt_tmppts[0],wpt->ul);
    _fr_figure_pt(_fdt_tmppts[1],wpt->ur);
-   _fr_figure_pt(_fdt_tmppts[2],wpt->lr);         
+   _fr_figure_pt(_fdt_tmppts[2],wpt->lr);
    _fr_figure_pt(_fdt_tmppts[3],wpt->ll);
    _fr_ndbg(NO_REND,g3_draw_poly((*fr_get_idx)(),4,_fdt_tmppts));
    _fr_sdbg(STATS,_frp.stats.int_wall++);
@@ -555,7 +555,7 @@ static void _fr_cspace_full_int_wall(int wall_id)
 
 // tabs_ext_wall
 
-// this takes a wacky hgt data set 
+// this takes a wacky hgt data set
 // uses _fdt_wallid, _fdt_lcore, _fdt_rcore
 //#pragma disable_message(202)
 static void _fr_null_ext_wall(fix pt_list[4][2]) {}
@@ -563,7 +563,7 @@ static void _fr_null_ext_wall(fix pt_list[4][2]) {}
 
 static void _fr_flat_ext_wall(fix pt_list[4][2])
 {  // note we do this out of order so we can have left left right right, ie. note their indicies
-   g3_replace_add_delta_y(*_fdt_lcore,_fdt_tmppts[0],-pt_list[0][1]); 
+   g3_replace_add_delta_y(*_fdt_lcore,_fdt_tmppts[0],-pt_list[0][1]);
    g3_replace_add_delta_y(*_fdt_lcore,_fdt_tmppts[3],-pt_list[3][1]);
    _fdt_pbase=_fdt_rbase;
    g3_replace_add_delta_y(*_fdt_rcore,_fdt_tmppts[1],-pt_list[1][1]);
@@ -602,7 +602,7 @@ static void _fr_tmap_ext_wall(fix pt_list[4][2])
 
 static void _fr_tmap_lit_ext_wall(fix pt_list[4][2])
 {
-   g3_replace_add_delta_y(*_fdt_lcore,_fdt_tmppts[0],-pt_list[0][1]); ext_wall_uv_l_i(_fdt_tmppts[0],pt_list[0]); _fdt_hgt_val=pt_list[0][1]; _fr_do_light(_fdt_tmppts[0],dlC); 
+   g3_replace_add_delta_y(*_fdt_lcore,_fdt_tmppts[0],-pt_list[0][1]); ext_wall_uv_l_i(_fdt_tmppts[0],pt_list[0]); _fdt_hgt_val=pt_list[0][1]; _fr_do_light(_fdt_tmppts[0],dlC);
    g3_replace_add_delta_y(*_fdt_lcore,_fdt_tmppts[3],-pt_list[3][1]); ext_wall_uv_l_i(_fdt_tmppts[3],pt_list[3]); _fdt_hgt_val=pt_list[3][1]; _fr_do_light(_fdt_tmppts[3],dlF);
    _fdt_pbase=_fdt_rbase;
    g3_replace_add_delta_y(*_fdt_rcore,_fdt_tmppts[1],-pt_list[1][1]); ext_wall_uv_r_i(_fdt_tmppts[1],pt_list[1]); _fdt_hgt_val=pt_list[1][1]; _fr_do_light(_fdt_tmppts[1],dlC);
@@ -707,7 +707,7 @@ static void _fr_tmap_flr(void)
          _fr_figure_pt(*pb,pt_code); pt_code&=FRPTSPTOFF; floor_uv(*pb,pt_code); pb++;
       }
       if (quik_draw_tmap_p(_fdt_ttf->ptsper))
-      {   
+      {
 	      if ((nrm_mask&0xf)==FRFNORM_VFULL)
 		    { _fr_ndbg(NO_REND,_fr_floor_func(_fdt_ttf->ptsper,_fdt_tmppts,(*fr_get_tmap)())); }
 	      else
@@ -800,7 +800,7 @@ static void _fr_flat_ceil(void)
          _fr_figure_pt(*pb--,pt_code);
       }
       _fr_ndbg(NO_REND,g3_draw_poly((*fr_get_idx)(),_fdt_ttf->ptsper,_fdt_tmppts));
-   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));  
+   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));
    _fr_sdbg(STATS,_frp.stats.ceil++);
 }
 
@@ -821,7 +821,7 @@ static void _fr_flat_lit_ceil(void)
       }
       gr_set_fcolor((*fr_get_idx)());
       _fr_ndbg(NO_REND,g3_draw_spoly(_fdt_ttf->ptsper,_fdt_tmppts));
-   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));  
+   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));
    _fr_sdbg(STATS,_frp.stats.ceil++);
 }
 #else
@@ -851,7 +851,7 @@ static void _fr_tmap_ceil(void)
 	      else
 	       { _fr_ndbg(NO_REND,_fr_per_func(_fdt_ttf->ptsper,_fdt_tmppts,(*fr_get_tmap)())); }
       }
-   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));  
+   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));
    _fr_sdbg(STATS,_frp.stats.ceil++);
 }
 
@@ -878,7 +878,7 @@ static void _fr_tmap_lit_ceil(void)
 	      else
 		    { _fr_ndbg(NO_REND,_fr_lit_per_func(_fdt_ttf->ptsper,_fdt_tmppts,(*fr_get_tmap)())); }
       }
-    } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));  
+    } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));
    _fr_sdbg(STATS,_frp.stats.ceil++);
 }
 
@@ -898,7 +898,7 @@ static void _fr_cspace_wire_ceil(void)
          _fr_figure_pt(*pb,pt_code); _fr_pt_cspace(*pb); pb--;
       }
       _fr_ndbg(NO_REND,_fr_draw_wire_cpoly_3or4(_fdt_ttf->ptsper));
-   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));  
+   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));
    _fr_sdbg(STATS,_frp.stats.ceil++);
 }
 
@@ -917,7 +917,7 @@ static void _fr_cspace_full_ceil(void)
          _fr_figure_pt(*pb,pt_code); _fr_pt_cspace(*pb); pb--;
       }
       _fr_ndbg(NO_REND,g3_draw_cpoly(_fdt_ttf->ptsper,_fdt_tmppts));
-   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));  
+   } while ((_fdt_ttf->flags&FRFLRFLG_2ELEM)&&(loopcnt-->0));
    _fr_sdbg(STATS,_frp.stats.ceil++);
 }
 //#pragma enable_message(202)
@@ -1012,17 +1012,17 @@ int _fr_get_anti_gap(fix *face_l, uchar in_fo, uchar *hgts, uchar *mmptr)
       if (hgts[FDT_PT_CEIL]==MAX_HGT)                           // already at top
          facecnt|=ANTI_MASK_PUNTTOP;
       else        // correct x's for this have been set already in _fr_init_slopes in frpipe
-		   *(face_l+5)=*(face_l+7)=_fr_fhgt_list[hgts[FDT_PT_CEIL]];    // set y's  
+		   *(face_l+5)=*(face_l+7)=_fr_fhgt_list[hgts[FDT_PT_CEIL]];    // set y's
       face_l+=8;  // skip to 2nd entry, as we have finshed or punted the first
       if ((in_fo&FO_LR_MSK)!=0x06)   // are we not fully free, tm? (ie. foClr)
-      {  // add the anti of the current here...  
+      {  // add the anti of the current here...
          facecnt++;
 // im sure this is wrong
 		   *(face_l+0)=fo_unpack[in_fo&FO_LR_MSK][T_LEFT];    // flip since this is real order
-		   *(face_l+2)=fo_unpack[in_fo&FO_LR_MSK][T_RIGHT];    
+		   *(face_l+2)=fo_unpack[in_fo&FO_LR_MSK][T_RIGHT];
 		   *(face_l+1)=*(face_l+3)=_fr_fhgt_list[hgts[FDT_PT_CEIL]];  // set y's
 		   *(face_l+4)=fo_unpack[in_fo&FO_LR_MSK][T_RIGHT];     // har har, same flip
-		   *(face_l+6)=fo_unpack[in_fo&FO_LR_MSK][T_LEFT];   
+		   *(face_l+6)=fo_unpack[in_fo&FO_LR_MSK][T_LEFT];
 		   *(face_l+7)=*(face_l+5)=_fr_fhgt_list[hgts[FDT_PT_FLR]];   // set y's
          face_l+=8;        // skip to 3rd, as we have just done middle
       }
@@ -1116,7 +1116,7 @@ int merge_walls(fix *dst_wall,fix *i_wall,int i_cnt,fix *o_wall,int o_cnt)
    while (cur_i<i_cnt)
    {
       while (io_wall_cmp(0,<=,3)&&io_wall_cmp(1,<=,2))   // skip to next outer wall, this one is above our gap
-       { o_wall+=8; if (++cur_o>=o_cnt) return f_cnt; }  
+       { o_wall+=8; if (++cur_o>=o_cnt) return f_cnt; }
       if (io_wall_cmp(3,>=,0)&&io_wall_cmp(2,>=,1))      // if gap bottom above current outer wall, skip to next gap
        { i_wall+=8; f_is_i=FALSE; if (++cur_i>=i_cnt) return f_cnt; else continue; }
       f_cnt++;
@@ -1212,7 +1212,7 @@ static void _fr_parse_wall(int which)
    oth_hgts[FDT_PT_PARM] = me_param(oth_mptr);
    ocnt=_fr_get_anti_gap(&outer_wall[0][0][0], oth_fo, oth_hgts, (uchar *)mmask_facelet[me_bits_mirror(oth_mptr)]);
    if (ocnt!=ANTI_RET_PUNTALL)
-   {   
+   {
 	   useocnt=(ocnt&ANTI_MASK_COUNT);
 	   if ((ocnt&ANTI_MASK_PUNTBOT)==0)
 	   {  // touch up the bottom edge
@@ -1255,12 +1255,12 @@ static void _fr_parse_wall(int which)
 // take the mptr, decode it's clip vectors, and set initial wall masks for the tile
 void parse_clip_tile()
 {
-   
+
 }
 
 // so, ahh, should have wall bits for floor and ceiling, so we can start clipping
 
-#if _fr_defdbg(STATS)                         
+#if _fr_defdbg(STATS)
 #define wall_check(wmask1,wmask2,w_id) \
 	if ((_fdt_mask&wmask1)&&(_fdt_ttw.wallbits&wmask2)) \
       if ((me_clearsolid(_fdt_mptr)&wmask1)!=0) \
@@ -1288,7 +1288,7 @@ void fr_draw_tile(void)
    }
    if (me_subclip(_fdt_mptr)==SUBCLIP_OUT_OF_CONE)
    {
-      return;                                           
+      return;
    }
 
    _fr_ndbg(NO_SUB_CLIP,parse_clip_tile());
@@ -1315,7 +1315,7 @@ void fr_draw_tile(void)
          fr_terr_cspace_pick(last_csp_fr=tmp);
    }
 
-// how about external walls, eh?   
+// how about external walls, eh?
    wall_check(FMK_NW,FRWALLNORTH,0);
    wall_check(FMK_EW,FRWALLEAST ,1);
    wall_check(FMK_SW,FRWALLSOUTH,2);
@@ -1407,7 +1407,7 @@ void fr_terr_cspace_pick(uchar do_wall)
       if (_fr_curflags&FR_PICKUPM_MASK)
          wall_do=to_do=FRT_NULL;
       else
-         wall_do=to_do=FRT_CSPACE;  
+         wall_do=to_do=FRT_CSPACE;
    }
 
    _fr_terr_int_wall = _fr_tabs_int_wall[wall_do];
@@ -1455,7 +1455,7 @@ void fr_terr_frame_start(void)
 
 void fr_terr_frame_end(void)
 {
-   void fr_tfunc_grab_start(void); 
+   void fr_tfunc_grab_start(void);
    fr_tfunc_grab_start();     // set up the physics facelet indirections...
    _fdt_terr=FALSE;
    g3_free_list(FDT_TMPPTCNT,_fdt_tmppts);
@@ -1534,7 +1534,7 @@ static void _fr_tfunc_diag_wall(int wall_id)
       break;
    case 2: // ne - sw, normal to upper nw
       diag_norms[0]=-fix_inv_root2; diag_norms[1]= fix_inv_root2;
-      C=tf_loc_pt[0]+tf_loc_pt[1];      
+      C=tf_loc_pt[0]+tf_loc_pt[1];
       pt[0]=fix_1-(C/2); pt[2]=tf_loc_pt[1]-(C/2);
       break;
    case 3: // nw - se, normal to lower sw
@@ -1574,7 +1574,7 @@ int _fr_tfunc_flr_normal(fix *vec, int *lflg, int fnorm_entry)
    case FRFNORM_SLPE:  vec[0]=slope_norm[_fdt_hgts[FDT_PT_PARM]][0]; vec[1]=0; rv=4; break;
 	}
 	vec[2]=slope_norm[_fdt_hgts[FDT_PT_PARM]][1];
-   *lflg|=SS_BCD_PRIM_MULTI|SS_BCD_TYPE_FLOOR; 
+   *lflg|=SS_BCD_PRIM_MULTI|SS_BCD_TYPE_FLOOR;
    return rv;
 }
 
@@ -1601,7 +1601,7 @@ int _fr_tfunc_ceil_normal(fix *vec, int *lflg, int fnorm_entry)
    case FRFNORM_SLPE:  vec[0]=slope_norm[_fdt_hgts[FDT_PT_PARM]][2]; vec[1]=0; rv=4; break;
 	}
 	vec[2]=-slope_norm[_fdt_hgts[FDT_PT_PARM]][1];
-   *lflg|=SS_BCD_PRIM_MULTI|SS_BCD_TYPE_CEIL; 
+   *lflg|=SS_BCD_PRIM_MULTI|SS_BCD_TYPE_CEIL;
    return rv;
 }
 
@@ -1640,7 +1640,7 @@ void do_floor_element(int nrm_mask)
    case 3: xy[0]=fix_1-tf_loc_pt[1]; _tfunc_rpts[0]=fix_1-tf_loc_pt[0]; sc[1]=-_tfunc_nrm[1]; break; // S up slope
    case 4: xy[0]=fix_1-tf_loc_pt[0]; _tfunc_rpts[0]=tf_loc_pt[1]; sc[1]=-_tfunc_nrm[0]; break;       // W up slope
    }
-   sc[0]=_tfunc_nrm[2]; 
+   sc[0]=_tfunc_nrm[2];
    _tfunc_real_floor[0][1]=_tfunc_real_floor[1][1]=do_fc_trans(xy,sc,&_tfunc_rpts[1]);
    if (nrm_mask<=0xf)
    	tf_solve_aligned_face(_tfunc_rpts,_tfunc_real_floor,_tfunc_flg|TF_FLG_BOX_FULL,_tfunc_nrm);
@@ -1657,7 +1657,7 @@ void do_ceil_element(int nrm_mask)
    switch (code)
    {
    case 0:
-      _tfunc_rpts[0]=tf_loc_pt[0]; _tfunc_rpts[1]=fix_1-tf_loc_pt[1]; _tfunc_rpts[2]=xy[1]; 
+      _tfunc_rpts[0]=tf_loc_pt[0]; _tfunc_rpts[1]=fix_1-tf_loc_pt[1]; _tfunc_rpts[2]=xy[1];
       _tfunc_real_floor[0][1]=_tfunc_real_floor[1][1]=fix_1;
       tf_solve_aligned_face(_tfunc_rpts,_tfunc_real_floor,_tfunc_flg|TF_FLG_BOX_FULL,NULL); return;  // flat ceil
    case 1: xy[0]=fix_1-tf_loc_pt[1]; _tfunc_rpts[0]=tf_loc_pt[0]; sc[1]=-_tfunc_nrm[1]; break;       // N up (slpS) slope
@@ -1665,7 +1665,7 @@ void do_ceil_element(int nrm_mask)
    case 3: xy[0]=tf_loc_pt[1]; _tfunc_rpts[0]=fix_1-tf_loc_pt[0]; sc[1]=_tfunc_nrm[1]; break;        // S up slope
    case 4: xy[0]=tf_loc_pt[0]; _tfunc_rpts[0]=tf_loc_pt[1]; sc[1]=_tfunc_nrm[0]; break;              // W up slope
    }
-   sc[0]=-_tfunc_nrm[2]; 
+   sc[0]=-_tfunc_nrm[2];
    _tfunc_real_floor[0][1]=_tfunc_real_floor[1][1]=do_fc_trans(xy,sc,&_tfunc_rpts[1]);
    if (nrm_mask<=0xf)
 		tf_solve_aligned_face(_tfunc_rpts,_tfunc_real_floor,_tfunc_flg|TF_FLG_BOX_FULL,_tfunc_nrm);
@@ -1691,9 +1691,9 @@ static void _fr_tfunc_flr(void)
       else if (icky)
       {
          do_floor_element(0xf0|(nrm_mask&0xf)); // now make it 3pt...
-         _tfunc_real_floor[1][0]=0; 
+         _tfunc_real_floor[1][0]=0;
          tf_solve_aligned_face(_tfunc_rpts,&_tfunc_real_floor[1],_tfunc_flg|TF_FLG_3PNT_MASK,_tfunc_nrm);
-         _tfunc_real_floor[1][0]=fix_1; 
+         _tfunc_real_floor[1][0]=fix_1;
          do_floor_element(0xf0|(nrm_mask>>4));  // and so on...
    		tf_solve_aligned_face(_tfunc_rpts,&_tfunc_real_floor[1],_tfunc_flg|TF_FLG_3PNT_MASK,_tfunc_nrm);
       }
@@ -1729,9 +1729,9 @@ static void _fr_tfunc_ceil(void)
          do_ceil_element(0xf0|(nrm_mask&0xf));
    		tf_solve_aligned_face(_tfunc_rpts,_tfunc_real_floor,_tfunc_flg|TF_FLG_3PNT_MASK,_tfunc_nrm);
          do_ceil_element(0xf0|(nrm_mask>>4));
-         _tfunc_real_floor[2][0]=0; 
+         _tfunc_real_floor[2][0]=0;
    		tf_solve_aligned_face(_tfunc_rpts,_tfunc_real_floor,_tfunc_flg|TF_FLG_3PNT_MASK,_tfunc_nrm);
-         _tfunc_real_floor[2][0]=fix_1; 
+         _tfunc_real_floor[2][0]=fix_1;
       }
       else
       {
@@ -1747,7 +1747,7 @@ static void _fr_tfunc_obj(void)
    facelet_parse_obj();
 }
 
-void fr_tfunc_grab_start(void) 
+void fr_tfunc_grab_start(void)
 {
    _fr_terr_int_wall = _fr_tfunc_int_wall;
    _fr_terr_ceil     = _fr_tfunc_ceil;

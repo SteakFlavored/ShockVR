@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //===================================================================
 // $Source: r:/prj/lib/src/snd/RCS/dig_init.c $
@@ -47,7 +47,7 @@ int snd_start_digital(void)
 {
 	SndChannelPtr	scPtr;
 	int					i;
-	
+
 	for (i = 0; i < SND_MAX_SAMPLES; i++)
 	{
 		scPtr = CreateSndChannel();
@@ -93,7 +93,7 @@ int snd_set_digital_channels(int chan_cnt)
          if ((_snd_smp_hnd[_snd_smp_cnt]=AIL_allocate_sample_handle(_snd_digi))==NULL)
             return SND_OUT_OF_MEMORY;
          else
-         {   
+         {
             AIL_init_sample(_snd_smp_hnd[_snd_smp_cnt]);
             AIL_set_sample_user_data(_snd_smp_hnd[_snd_smp_cnt],0,_snd_smp_cnt);
          }
@@ -116,7 +116,7 @@ SndChannelPtr CreateSndChannel(void)
 {
 	SndChannelPtr	scPtr;
 	OSErr				err;
-	
+
 	scPtr = SndChannelPtr(NewPtr(sizeof(SndChannel)));
 	if (scPtr)
 	{
@@ -130,6 +130,6 @@ SndChannelPtr CreateSndChannel(void)
 		else
 			scPtr->userInfo = 0;
 	}
-	
+
 	return(scPtr);
 }

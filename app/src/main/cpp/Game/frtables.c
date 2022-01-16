@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * FrTables.c
@@ -26,14 +26,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Citadel Renderer
  *  tables for the tile definitions/quadrant codes
- *  
+ *
  * $Log: frtables.c $
  * Revision 1.2  1994/01/12  22:06:34  dc
  * facelet hacking, new terrain function setup
- * 
+ *
  * Revision 1.1  1994/01/02  17:12:13  dc
  * Initial revision
- * 
+ *
  */
 
 #define __FRTABLES_SRC
@@ -180,7 +180,7 @@ TilesToWalls tile_walls[FRTILEWALLCNT]=
  tTw(wN|wE,1,10), tTw(wS|wW,1,17), tTw(wE|wS,1,5), tTw(wN|wW,1,12),
  tTw(wN|wW,1,6),  tTw(wE|wS,1,15), tTw(wS|wW,1,9), tTw(wN|wE,1,18),
  // vertical split
- tTw(wN|wE|wS|wW,0,0), 
+ tTw(wN|wE|wS|wW,0,0),
  // halves
  tTw(wE|wS|wW,1,21), tTw(wN|wS|wW,1,22), tTw(wN|wE|wW,1,20), tTw(wN|wE|wS,1,23),
  // thin walls
@@ -240,13 +240,13 @@ TilesToFloors tile_floors[FRTILEFLOORCNT]=
 
 //#define _fp1   fix_make(1,0)
 //#define _fpdg  fix_make(0,46340)
-//#define _fphx  fix_make(0,29308)  
+//#define _fphx  fix_make(0,29308)
 //#define _fphy  fix_make(0,58616)
 
 #define ff1   0 // fix_make(1,0)
 #define fhy   1 // fix_make(0,58616)
 #define fdg   2 // fix_make(0,46340)
-#define fhx   3 // fix_make(0,29308)  
+#define fhx   3 // fix_make(0,29308)
 
 #define snp   4
 #define sng   0
@@ -312,10 +312,10 @@ ushort fr_wnorm_list[FRWALLPTSCNT]=
 };
 
 // direction the vector heads, ie the low side
-#define slpN      FRFNORM_SLPN 
-#define slpE      FRFNORM_SLPE 
-#define slpS      FRFNORM_SLPS 
-#define slpW      FRFNORM_SLPW 
+#define slpN      FRFNORM_SLPN
+#define slpE      FRFNORM_SLPE
+#define slpS      FRFNORM_SLPS
+#define slpW      FRFNORM_SLPW
 #define vzero     FRFNORM_VZERO
 #define vfull     FRFNORM_VFULL
 #define sl2N      (0<<4)
@@ -348,10 +348,10 @@ uchar fr_fnorm_list[FRTILEFLOORCNT]=
  // vertical split
  vfull,
  // halves
- vfull, vfull, vfull, vfull, 
+ vfull, vfull, vfull, vfull,
  // thin walls
  vfull, vfull, vfull, vfull
-}; 
+};
 
 //======== Obstruct
 
@@ -360,7 +360,7 @@ uchar fr_fnorm_list[FRTILEFLOORCNT]=
 #define rS    (6)
 #define foNul (0xff)  // secret no freespace, ie. cant get through
 #define foClr (0x06)  // pt0 to 6, ie. fully empty
-#define foLft (0x03) 
+#define foLft (0x03)
 #define foRgt (0x1E)
 
 #define fo(l,r)                      ((l<<FO_L_SHFT)|r)

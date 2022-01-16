@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/olhscan.c $
@@ -117,7 +117,7 @@ ushort olh_scan_objs(void)
    fauxrend_context* fr = (full_game_3d) ? olh_full_context : olh_context;
 #endif
    ubyte save_radius = _frp.view.radius;
-   
+
    // Do a monochrome render
 //   olh_replace_view(SCREEN_CONTEXT->xwid/SCAN_RATIO,SCREEN_CONTEXT->ywid/SCAN_RATIO);
 //   _fr_top(fr);
@@ -139,11 +139,11 @@ ushort olh_scan_objs(void)
    xl = yl = 0;
 
 //#define CRAZY_DEBUGGING_BLIT
-#ifdef CRAZY_DEBUGGING_BLIT 
+#ifdef CRAZY_DEBUGGING_BLIT
    gr_push_canvas(grd_screen_canvas);
    gr_bitmap(&fr->draw_canvas.bm,0,200-fr->draw_canvas.bm.h);
    gr_pop_canvas();
-#endif 
+#endif
 
    olh_object.obj = OBJ_NULL;
    // collect samples
@@ -183,7 +183,7 @@ ushort olh_scan_objs(void)
          }
       }
 
-   // now pick the best one.  
+   // now pick the best one.
    if (objcount > 0)
    {
       int i;
@@ -208,8 +208,8 @@ ushort olh_scan_objs(void)
       }
 #endif
    }
-   else 
+   else
       olh_object.obj = OBJ_NULL;
    return OBJ_NULL;
-   
+
 }

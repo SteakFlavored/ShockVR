@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		QUIKWRIT.C		QuickTime file writing
 //		Rex E. Bradford
@@ -27,24 +27,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: quikwrit.c $
  * Revision 1.6  1994/10/18  16:01:53  rex
  * Got 16-bit depth working
- * 
+ *
  * Revision 1.5  1994/10/04  20:42:01  rex
  * Fixed bugs related to variable-timed frames, put in basic support
  * for 16-bit depth frames, but doesn't work because rgb bitorder unknown
- * 
+ *
  * Revision 1.4  1994/10/03  19:43:38  rex
  * Modified to respect varying frame rate
- * 
+ *
  * Revision 1.3  1994/10/03  18:05:20  rex
  * Modified QuikAddVideoSample() to handle bitmaps where w != row
- * 
+ *
  * Revision 1.2  1994/09/30  17:00:18  rex
  * Made it actually work
- * 
+ *
  * Revision 1.1  1994/09/29  10:36:52  rex
  * Initial revision
- * 
- * 
+ *
+ *
 */
 
 #include <stdio.h>
@@ -232,7 +232,7 @@ void QuikAddVideoSample(QTM *pqtm, FILE *fp, grs_bitmap *pbm, fix time)
 	if (ptrack->numSamps >= ptrack->numSamplesAlloced)
 	{
 		ptrack->numSamplesAlloced += FRAME_ALLOC_INCR;
-		ptrack->pSampleTime = (fix *)realloc(ptrack->pSampleTime, 
+		ptrack->pSampleTime = (fix *)realloc(ptrack->pSampleTime,
 									 ptrack->numSamplesAlloced * sizeof(fix));
 	}
 }
@@ -470,7 +470,7 @@ void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, ulong timeTot)
 
 //	Write STTS chunk
 
-	ptrack->qt_stts = (QTS_STTS *)malloc(sizeof(QTS_STTS) + 
+	ptrack->qt_stts = (QTS_STTS *)malloc(sizeof(QTS_STTS) +
 								  (sizeof(QT_Time2Samp) * ptrack->numSamps));
 	tlenLast = 0;
 	tlast = 0;

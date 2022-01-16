@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		QUIKTIME.C		QuickTime file reading
 //		Rex E. Bradford
@@ -27,22 +27,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: quiktime.c $
  * Revision 1.6  1994/11/21  12:09:36  rex
  * If unknown sample rate, use 4K audio blocks
- * 
+ *
  * Revision 1.5  1994/10/31  17:36:44  rex
  * Made it work for 24-bit Quicktime input
- * 
+ *
  * Revision 1.4  1994/10/03  18:04:12  rex
  * Fixed bug by getting rid of rectangle before bitmap when reading
- * 
+ *
  * Revision 1.3  1994/09/30  16:59:54  rex
  * Fixed bug in Flip2Val() routine
- * 
+ *
  * Revision 1.2  1994/09/29  10:34:28  rex
  * Revamped like made to put globals into a single struct
- * 
+ *
  * Revision 1.1  1994/09/27  17:23:06  rex
  * Initial revision
- * 
+ *
 */
 
 #include <stdio.h>
@@ -227,7 +227,7 @@ static QTS_STSD *pStsd;
 								ushort *psrc;
 								int i,index;
 								uchar *ppall;
-	
+
 								pqtm->track[itrack].palette = Malloc(768);
 								psrc = (ushort *) (((uchar *) pStsd) +
 									sizeof(QTS_STSD_Base) + sizeof(QT_ImageDesc) + 8);
@@ -867,7 +867,7 @@ static uchar *GetVideoFrame(QTM *pqtm, FILE *fpi, long size, ushort *pbmtype,
 	*plength = u_frame_size;
 	return(pqtm->pFrameCurr);
 }
-                   
+
 //	------------------------------------------------------------------
 //		QUIKTIME DECOMPRESSORS
 //	------------------------------------------------------------------
@@ -942,7 +942,7 @@ static void DecompressRle(QTM *pqtm, uchar *pd, uchar *ps, long csize)
 	while (!quit_flag)
 		{
 		command = *(char *)(spoint++);
-		if (command == -1)   
+		if (command == -1)
 			{
 			if (*(spoint++) == 1)
 				{
@@ -984,7 +984,7 @@ static void DecompressRle(QTM *pqtm, uchar *pd, uchar *ps, long csize)
 					*(dpoint++) = *spoint;
 					width_count++;
 					}
-				spoint++;        
+				spoint++;
 				}
 			}
 		}

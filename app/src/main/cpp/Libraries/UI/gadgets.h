@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __GADGETS_H
 #define __GADGETS_H
@@ -83,7 +83,7 @@ typedef struct {
 Gadget *gadget_init(int display_type, LGPoint extent);
 
 // Forces a gadget to display itself across a rectangle.
-// If r is NULL, entire gadget is displayed. 
+// If r is NULL, entire gadget is displayed.
 // Coordinates for r are in g's coordinates.
 errtype gadget_display(Gadget *g, LGRect *r);
 errtype gadget_display_part(Gadget *g, LGRect *r, ushort partmask);
@@ -94,7 +94,7 @@ errtype gadget_destroy(Gadget **pvic);
 // Moves the gadget to a new x, y, z coordinate (relative)
 errtype gadget_move(Gadget *g, LGPoint coord, int z);
 
-// Resizes a gadget 
+// Resizes a gadget
 errtype gadget_resize(Gadget* g, int xsize, int ysize);
 
 // Installs a callback onto a Gadget, triggered by a particular kind of pushbutton input.
@@ -132,7 +132,7 @@ errtype gadget_change_flags(Gadget *g, ulong flags, bool on, bool children);
 #define CALLBACK_TYPE    4
 
 #define DISPLAY_VGA     0
-#define DISPLAY_MONO    1   
+#define DISPLAY_MONO    1
 #define DISPLAY_MODEX   2
 #define DISPLAY_SVGA    3
 #define DISPLAY_MAC 	4

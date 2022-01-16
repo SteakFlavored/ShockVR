@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/objuse.c $
@@ -233,13 +233,13 @@ bool use_door(ObjID id, uchar in_inv, ObjID)
       uchar special;
       int comp;
 
-      if (objDoors[objs[id].specID].access_level > NUM_ACCESS_CODES) 
+      if (objDoors[objs[id].specID].access_level > NUM_ACCESS_CODES)
       {
-         if(objDoors[objs[id].specID].access_level==COMPAR_ESC_ACCESS) 
+         if(objDoors[objs[id].specID].access_level==COMPAR_ESC_ACCESS)
          {
             comp = objTraps[objs[objDoors[objs[id].specID].locked].specID].comparator;
             rv = comparator_check(comp,id,&special);
-            if(!rv) 
+            if(!rv)
             {
                return((comp>>24)&&(special==0));
             }
@@ -297,7 +297,7 @@ access_ok:
        else
        {
           int closetime;
-    
+
           // This string is strangely here rather than above so as to
           // insure that we do no collide with any other messages
           if ((use_card) && (!(in_inv&0x2)))
@@ -310,7 +310,7 @@ access_ok:
             message_info(tempbuf);
             retval = TRUE;
           }
- 
+
           add_obj_to_animlist(id, FALSE, FALSE,FALSE,32,NULL,NULL,0);    // play anim forwards
           play_fx = TRUE;
 
@@ -325,7 +325,7 @@ access_ok:
             new_event.timestamp = TICKS2TSTAMP(player_struct.game_time + (CIT_CYCLE*closetime)/DOOR_TIME_UNIT);
             new_event.type = DOOR_SCHED_EVENT;
             new_event.door_id = id;
-            
+
             // Compute new secret code, poke it into event and door
             new_code = ((objs[id].info.inst_flags >> 6) + 1) & 0x3;
             new_event.secret_code = new_code;
@@ -351,7 +351,7 @@ access_ok:
           case ACCESS_DOOR_TRIPLE:
           case REACTR_DOOR_TRIPLE:
           case BLAST_DOOR_TRIPLE:
-          case STOR_DOOR_TRIPLE: 
+          case STOR_DOOR_TRIPLE:
               sfx_id = SFX_DOOR_METAL; break;
           case EXEC_DOOR_TRIPLE:
           case IRIS_TRIPLE:
@@ -367,12 +367,12 @@ access_ok:
           case GENFORCE_TRIPLE:
           case CYBGENFORCE_TRIPLE:
               sfx_id = SFX_DOOR_GRATING; break;
-          default: 
+          default:
               sfx_id = SFX_DOOR_NORMAL;  break;
        }
        if (sfx_id != -1)
           play_digi_fx_obj(sfx_id, 1,id);
-    }   
+    }
     if (((other=objDoors[objs[id].specID].other_half) != OBJ_NULL) && !(in_inv&0x1)) {
       bool otherdoor=objs[other].obclass==CLASS_DOOR;
       // use other half if we don't have the same closed-ness, in order to
@@ -436,9 +436,9 @@ bool obj_too_smart(ObjID id)
 void container_check(ObjID obj, char* count, ObjID* pidlist)
 {
    if (objs[obj].active && !obj_too_smart(obj)) {
-      if(USE_MODE(obj)==PICKUP_USE_MODE) 
-         pidlist[(*count)++] = obj; 
-//      else 
+      if(USE_MODE(obj)==PICKUP_USE_MODE)
+         pidlist[(*count)++] = obj;
+//      else
 //         Warning(("Non-pickup: trip %#x (%#x) in container!!\n",ID2TRIP(obj),obj));
    }
 }
@@ -459,14 +459,14 @@ void container_stuff(ObjID *pidlist, int numobjs, int* d1, int* d2)
    for (i = numobjs; i < MAX_CONTAINER_CONTENTS; i++)
     pidlist[i] = OBJ_NULL;
    i = 0;
-   *d1 = pidlist[i++]; 
+   *d1 = pidlist[i++];
    *d1 |= pidlist[i++] << 16;
    if (d2 == NULL) return;
-   *d2 = pidlist[i++]; 
+   *d2 = pidlist[i++];
    *d2 |= pidlist[i++] << 16;
 }
 
-// Determines whether or not an object is a "container" and then 
+// Determines whether or not an object is a "container" and then
 // figures out what part of it's instance data is used for holding
 // the objects.
 // If we want to make more objects have these properties later, here is
@@ -584,7 +584,7 @@ errtype gear_power_outage()
       obj = player_struct.inventory[i];
       if ((obj != OBJ_NULL) && (objs[obj].active))
       {
-    // Turn off any active gear 
+    // Turn off any active gear
     switch (ID2TRIP(obj))
     {
        case TRACBEAM_TRIPLE:
@@ -646,7 +646,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
       int mfd;
       extern bool gump_get_useful(void);
       extern void gump_clear(void);
-      
+
       if(id==player_struct.panel_ref && object_on_cursor==NULL) {
          gump_get_useful();
          return TRUE;
@@ -665,7 +665,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
       // gump_pickups cannot work and we do not container_stuff the
       // altered idlist into the wrong container.  Get it?  Good.
       gump_clear();
-  
+
       player_struct.panel_ref = id;
       mfd_change_slot(mfd,MFD_INFO_SLOT);
       retval = TRUE;
@@ -714,7 +714,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
             if (QUESTVAR_GET(MISSION_DIFF_QVAR) > 1)
             {
                ObjLocState del_loc_state;
-               // yank the object out of the map. 
+               // yank the object out of the map.
                del_loc_state.obj = id;
                del_loc_state.loc = objs[id].loc;
                del_loc_state.loc.x = -1;
@@ -755,7 +755,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
             {
                if (me_bits_music(MAP_GET_XY(PLAYER_BIN_X,PLAYER_BIN_Y)) != ELEVATOR_ZONE)
                {
-                 string_message_info(REF_STR_UseTooFar); 
+                 string_message_info(REF_STR_UseTooFar);
                  retval = TRUE;
                }
                else
@@ -775,9 +775,9 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                      int mfd = grab_and_zoom_mfd(MFD_ELEV_FUNC,MFD_INFO_SLOT);
                      // Set our reference...
                      save_mfd_slot(mfd);
-          
+
                      // Call appropriate MFD function so that later, in turn, we get called
-                     // First force the slot...         
+                     // First force the slot...
                      mfd_setup_elevator(pfixt->p4 >> 16, pfixt->p4 & 0xFFFF, player_struct.level, special);
                      player_struct.panel_ref = id;
                      mfd_change_slot(mfd,MFD_INFO_SLOT);
@@ -787,7 +787,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                break;
             }
 
-            case KEYPAD1_TRIPLE:   
+            case KEYPAD1_TRIPLE:
             case KEYPAD2_TRIPLE:
             {
                pfixt = &objFixtures[objs[id].specID];
@@ -806,9 +806,9 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                   int mfd = grab_and_zoom_mfd(MFD_KEYPAD_FUNC,MFD_INFO_SLOT);
                   // Set our reference...
                   save_mfd_slot(mfd);
-          
+
                   // Call appropriate MFD function so that later, in turn, we get called
-                  // First force the slot...         
+                  // First force the slot...
                   objs[id].info.current_frame = 1;
                   gKeypadOverride = TRUE;
                   mfd_setup_keypad(special);
@@ -819,25 +819,25 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                break;
             }
 
-            case ACCPANEL1_TRIPLE:   
-            case ACCPANEL2_TRIPLE:   
-            case ACCPANEL3_TRIPLE:   
-            case ACCPANEL4_TRIPLE:   
-            case ACCPANEL5_TRIPLE:   
-            case ACCPANEL6_TRIPLE:   
+            case ACCPANEL1_TRIPLE:
+            case ACCPANEL2_TRIPLE:
+            case ACCPANEL3_TRIPLE:
+            case ACCPANEL4_TRIPLE:
+            case ACCPANEL5_TRIPLE:
+            case ACCPANEL6_TRIPLE:
             {
                pfixt = &objFixtures[objs[id].specID];
                rv = comparator_check(pfixt->comparator, id, &special);
                if(rv)
                {
                   int accessmfd = NUM_MFDS;
-                  
+
                   if(player_struct.panel_ref!=id) {
                      accessmfd = grab_and_zoom_mfd(mfd_type_accesspanel(id),MFD_INFO_SLOT);
                      save_mfd_slot(accessmfd);
-          
+
                      // Call appropriate MFD function so that later, in turn, we get called
-                     // First force the slot...         
+                     // First force the slot...
                      objs[id].info.current_frame = 1;
                      mfd_setup_accesspanel(special,id);
                      player_struct.panel_ref = id;
@@ -886,7 +886,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                pfixt = &objFixtures[objs[id].specID];
                rv = comparator_check(pfixt->comparator, id, &special);
                if (rv)
-               {               
+               {
                   if (player_struct.game_time >= objFixtures[osid].p4)
                   {
                      // give the player some juice!
@@ -958,13 +958,13 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                         if (ID2TRIP(id) == RETSCANNER_TRIPLE)
                         {
                            int head_count = 0;
-                           if (ID2TRIP(cursor_obj) == HEAD_TRIPLE) 
+                           if (ID2TRIP(cursor_obj) == HEAD_TRIPLE)
                               head_count = objs[cursor_obj].info.current_frame + 1;
                            else if (ID2TRIP(cursor_obj) == HEAD2_TRIPLE)
                               head_count = objs[cursor_obj].info.current_frame + 11 + 1;
-                           if (head_count > 0) 
+                           if (head_count > 0)
                            {
-                              if (((objFixtures[objs[id].specID].comparator & 0xFFFFFF) == head_count - 1) 
+                              if (((objFixtures[objs[id].specID].comparator & 0xFFFFFF) == head_count - 1)
                                  || (QUESTVAR_GET(MISSION_DIFF_QVAR) < 1))
                               {
                                  objs[id].info.current_frame = 1;
@@ -1000,7 +1000,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                   {
                      bool access_okay = FALSE;
                      int try_combo;
-                     if ((objFixtures[osid].access_level == 0) 
+                     if ((objFixtures[osid].access_level == 0)
 #ifdef DOOM_EMULATION_MODE
                         || (QUESTVAR_GET(MISSION_DIFF_QVAR) < 2)
 #endif
@@ -1104,7 +1104,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                   obj_tractor_beam_func(id,(objs[id].info.inst_flags & CLASS_INST_FLAG) == 0);
                   retval = TRUE;
                   break;
-               default:                                                                     
+               default:
    #ifdef SUPPORT_STUFF_OBJUSE
                   if (((ObjProps[OPNUM(id)].flags & CLASS_FLAGS) >> CLASS_FLAGS_SHF) == STUFF_OBJUSE_FLAG)
                         {
@@ -1217,7 +1217,7 @@ ObjID door_in_square(ObjLoc* loc, bool usable)
          if(!usable || USE_MODE(id)==USE_USE_MODE)
             return id;
       }
-      
+
       oref=objRefs[oref].next;
    }
    return(OBJ_NULL);
@@ -1266,7 +1266,7 @@ errtype elevator_janitor_run()
    while (me_bits_music(MAP_GET_XY(x1,y1)) == ELEVATOR_ZONE)
       y1++;
    y1--;
-   
+
    // Collect all the objects
    for (x = x0; x <= x1; x++)
    {
@@ -1399,8 +1399,8 @@ errtype compute_elev_objs(ObjID *objlist)
                      EDMS_kill_object(ph);
                      objs[id].info.ph = -1;
                   }
-                  // This will cruelly strand the container's contents to the 
-                  // eternal limbo of the unreferenced object.  
+                  // This will cruelly strand the container's contents to the
+                  // eternal limbo of the unreferenced object.
                   // Life is a grim place sometimes.
                   if (is_container(id, &pd1, &pd2))
                   {
@@ -1539,12 +1539,12 @@ bool elevator_use(short dest_level, ubyte which_panel)
 
    objs[player_struct.panel_ref].info.current_frame=nuframe;
    check_panel_ref(TRUE);
-   
+
    // Teleport the player to that level, at the same relative distance
    // from the new panel as to the old.
    begin_wait();
    retval = trap_teleport_func(0xF000,0xF000,0xF000, dest_level);  // no change in x, y, or z
-   
+
    if (retval == OK)
    {
       panel_loc = objs[new_panel].loc;
@@ -1563,7 +1563,7 @@ bool elevator_use(short dest_level, ubyte which_panel)
          newloc.z = panel_loc.z - zdiff;
       else if (MAP_ZSHF > old_zsh)
          newloc.z = panel_loc.z - (zdiff << (MAP_ZSHF - old_zsh));
-      else 
+      else
          newloc.z = panel_loc.z - (zdiff >> (old_zsh - MAP_ZSHF));
 
       obj_move_to(PLAYER_OBJ, &newloc, TRUE);
@@ -1589,7 +1589,7 @@ bool elevator_use(short dest_level, ubyte which_panel)
                temploc.z = panel_loc.z - elev_obj_diffs[i].z;
             else if (MAP_ZSHF > old_zsh)
                temploc.z = panel_loc.z - (elev_obj_diffs[i].z << (MAP_ZSHF - old_zsh));
-            else 
+            else
                temploc.z = panel_loc.z - (elev_obj_diffs[i].z >> (old_zsh - MAP_ZSHF));
             obj_move_to(tempid, &temploc, TRUE);
          }
@@ -1606,7 +1606,7 @@ bool elevator_use(short dest_level, ubyte which_panel)
       if(DOOR_REALLY_CLOSED(id) &&
          !door_locked(id) && objDoors[objs[id].specID].other_half==0) {
          object_use(id,FALSE,OBJ_NULL);
-      }            
+      }
    }
    else
       critical_error(CRITERR_FILE);
@@ -1638,13 +1638,13 @@ void unmulti_anim_callback(ObjID id, void *user_data)
    in_anim_callback = TRUE;
    switch(objs[id].obclass)
    {
-      case CLASS_BIGSTUFF:   
-    pp1 = &objBigstuffs[objs[id].specID].data1;  
-    pp2 = &objBigstuffs[objs[id].specID].data2;  
+      case CLASS_BIGSTUFF:
+    pp1 = &objBigstuffs[objs[id].specID].data1;
+    pp2 = &objBigstuffs[objs[id].specID].data2;
     break;
-      case CLASS_SMALLSTUFF:   
-    pp1 = &objSmallstuffs[objs[id].specID].data1;  
-    pp2 = &objSmallstuffs[objs[id].specID].data2;  
+      case CLASS_SMALLSTUFF:
+    pp1 = &objSmallstuffs[objs[id].specID].data1;
+    pp2 = &objSmallstuffs[objs[id].specID].data2;
     break;
    }
    objs[id].info.current_frame = 0;
@@ -1663,13 +1663,13 @@ void multi_anim_callback(ObjID id, void *)
    in_anim_callback = TRUE;
    switch(objs[id].obclass)
    {
-      case CLASS_BIGSTUFF:   
-    pp1 = &objBigstuffs[objs[id].specID].data1;  
-    pp2 = &objBigstuffs[objs[id].specID].data2;  
+      case CLASS_BIGSTUFF:
+    pp1 = &objBigstuffs[objs[id].specID].data1;
+    pp2 = &objBigstuffs[objs[id].specID].data2;
     break;
-      case CLASS_SMALLSTUFF:   
-    pp1 = &objSmallstuffs[objs[id].specID].data1;  
-    pp2 = &objSmallstuffs[objs[id].specID].data2;  
+      case CLASS_SMALLSTUFF:
+    pp1 = &objSmallstuffs[objs[id].specID].data1;
+    pp2 = &objSmallstuffs[objs[id].specID].data2;
     break;
    }
 
@@ -1821,7 +1821,7 @@ errtype obj_cspace_collide(ObjID id, ObjID collider)
    char str_buf[60],temp[20];
    int bigstuff_fake = 0, trip;
    bool select=FALSE;
-   
+
    if (collider != PLAYER_OBJ)
    {
       // generate a fake physics-like collision callback
@@ -1879,7 +1879,7 @@ errtype obj_cspace_collide(ObjID id, ObjID collider)
          {
             ObjLocState del_loc_state;
             int version=0;
-            // yank the object out of the map. 
+            // yank the object out of the map.
             del_loc_state.obj = id;
             del_loc_state.loc = objs[id].loc;
             del_loc_state.loc.x = -1;

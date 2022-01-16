@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // Source Code for the LGRegion library
 
@@ -87,14 +87,14 @@ errtype region_create(LGRegion *parent, LGRegion *ret, LGRect *r, int z, int eve
    ret->real_rect = *r;
    ret->r = &(ret->real_rect);
    ret->z = z;
-   ret->event_order = event_order;                              
+   ret->event_order = event_order;
    ret->status_flags = status;
    ret->expose = expose;
    ret->save_under = save_under;
    ret->replace = replace;
    ret->user_data = user_data;
    ret->parent = parent;
-   
+
    /* Compute initial values for other things */
    ret->handler = NULL;
    ret->cursors = NULL;
@@ -182,7 +182,7 @@ errtype region_destroy(LGRegion *reg, bool draw)
 
    // Shutdown handlers
    uiShutdownRegionHandlers(reg);
-   
+
    // Then, we kill OURSELVES!!!!!!!!!!!!
    if (AUTODESTROY_FLAG & reg->status_flags)
    {
@@ -311,7 +311,7 @@ int region_traverse_point(LGRegion *reg, LGPoint target, TravRectCallback fn, in
 //      Spew(DSRC_UI_Traversal, ("while case, newtarget.ul = (%d,%d)\n",newtarget.ul.x, newtarget.ul.y));
       retval = region_traverse_point(curp, newtarget.ul, fn, order, data);
       curp = trav_get_next(curp, order);
-   }                                                                                                                 
+   }
    if ((order == TOP_TO_BOTTOM) && (iflag) && (!retval))
    {
 //      Spew(DSRC_UI_Traversal, ("TOP_TO_BOTTOM, root case\n"));
@@ -468,12 +468,12 @@ LGRegion *trav_get_next(LGRegion *curp, int order)
    else
    {
       // Spew(DSRC_UI_Traversal, ("next = %s \n",GD_NAME(retval)));
-   } 
+   }
    // Spew(DSRC_UI_Traversal, ("!!\n"));
 */
    return(retval);
 }
-                                                                                                                     
+
 /* INTERNAL FUNCTIONS */
 
 /* Call appropriate callbacks and automanaging functions for
@@ -513,7 +513,7 @@ errtype region_remove(LGRegion *reg, bool draw)
       region_manage_remove(reg);
    }
 #endif // UI_LINKED
-   
+
    if (reg->parent != NULL)
       region_propagate_callback(reg, REPLACE_CB, reg->r);
    region_set_moving(reg,1);
@@ -550,7 +550,7 @@ void region_moverect(LGRegion *reg, int delta_x, int delta_y, int move_rel)
       reg->abs_y += (reg->parent)->abs_y;
    } */
 
-   /* Since our kids are conveniently in OUR frame of reference, 
+   /* Since our kids are conveniently in OUR frame of reference,
       we only need to update their absolute coords */
 
    /* For our kids */
@@ -560,7 +560,7 @@ void region_moverect(LGRegion *reg, int delta_x, int delta_y, int move_rel)
       curp->abs_x += delta_x;
       curp->abs_y += delta_y;
       curp = curp->next_region;
-   } 
+   }
 
    // Spew(DSRC_UI_Region_Manipulation, ("ending region moverect for (%d, %d) - (%d, %d)\n",
    //   RECT_PRINT_ARGS(reg->r)));
@@ -807,7 +807,7 @@ int foreign_region_obscured(LGRegion *reg, LGRect *obs_rect)
    int retval = UNOBSCURED;
    LGRect newr;
    LGRegion *rr;
-     
+
    obsc_region = reg;
    region_found = FALSE;
    region_convert_to_root(reg, &rr, obs_rect, &newr);
@@ -970,4 +970,4 @@ errtype region_get_invisible(LGRegion* reg, bool* invis)
 }
 
 #endif // UI_LINKED
-                                                    
+

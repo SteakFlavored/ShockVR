@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 
 #include "tng.h"
@@ -59,7 +59,7 @@ void TNGDrawBase(TNG *ptng, LGPoint coord, LGPoint size)
 {
 	short width,height;
 	TNGStyle *pstyle;
-	LGRect rect;                        
+	LGRect rect;
    ushort flags;
 	int i;
 
@@ -67,11 +67,11 @@ void TNGDrawBase(TNG *ptng, LGPoint coord, LGPoint size)
 //	Else if tiled background, draw it
 //	Else if background color, draw it
 //	Else if gadget has transparencies, draw dialog underneath
-   
+
 	pstyle = ptng->style;
    flags = ptng->flags;
    width = size.x;
-   height = size.y; 
+   height = size.y;
 	if (flags & TNG_BMAPBACK)
 		TNGDrawBitmapRef(pstyle->bitmapRef, coord);
 	else if (flags & TNG_TILEBACK)
@@ -88,7 +88,7 @@ void TNGDrawBase(TNG *ptng, LGPoint coord, LGPoint size)
 		{
 		if (flags & TNG_BEVEL)
 			{
-	
+
 			gr_cset_fcolor(grd_canvas,
 				pstyle->bordColor[(flags & TNG_BEVELMASK) >> TNG_BEVELSHIFT]);
          gr_hline(coord.x, coord.y, coord.x + width - 1);

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/mlimbs.c $
@@ -55,7 +55,7 @@ volatile uchar   num_XMIDI_sequences = 0;
 volatile uchar   num_master_measures;
 volatile uchar   voices_used = 0;
 volatile uchar   max_voices = 0;
-                 
+
 volatile void  (*mlimbs_AI)(void) = NULL;
 volatile ulong   mlimbs_counter = 0;
 volatile long    mlimbs_error;
@@ -91,7 +91,7 @@ int mlimbs_priority[MLIMBS_MAX_SEQUENCES];
 int mlimbs_init (void)
 {
 	int i;
-   
+
 //¥¥¥   if (!music_card) return -1;
 
 	if (mlimbs_status!=0) return 1;
@@ -137,7 +137,7 @@ int mlimbs_init (void)
 
 //   seq_finish=mlimbs_seq_done_call;
 
-//	Since we cannot stop and start XMIDI sequences from within a MIDI callback, use 
+//	Since we cannot stop and start XMIDI sequences from within a MIDI callback, use
 // a timer, running at 100 hz to start and stop XMIDI sequences. The mlimbs_callback
 // simply sets a flag, letting the timer know when to update sequence status.
 	if ((mlimbs_timer_id = tm_add_process(mlimbs_timer_callback, 0, (TMD_FREQ/MLIMBS_TIMER_FREQUENCY))) == -1)
@@ -240,7 +240,7 @@ int mlimbs_load_theme (char *xname, char *xinfo, int thmid)
 	fread(&num_master_measures, sizeof(uchar), 1, fil);	// Number of measures in the master sequence - i.e. # of measures per loop
 	num_XMIDI_sequences = min (num_XMIDI_sequences,MAX_SEQUENCES);
 	for (i = 0; i < num_XMIDI_sequences; i++)
-	{	
+	{
 		fread (&(xseq_info[i].max_voices), sizeof(uchar), 1, fil);	   // Maximum # of simultaneous voices
 		fread (&(xseq_info[i].avg_voices), sizeof(uchar), 1, fil);     // Normal # of simultaneous voices
 		fread (&(xseq_info[i].channel_map),sizeof(ushort), 1, fil);    // Bitmap of channel usage
@@ -285,7 +285,7 @@ int mlimbs_start_theme (void)
    AIL_set_sequence_loop_count(snd_sequence_ptr_from_id(mlimbs_master_slot),0);
 
 #ifdef CALLBACK_ON
-	// Start the mlimbs timer callback which will now start and stop 
+	// Start the mlimbs timer callback which will now start and stop
 	//	various tracks according to how the current_request structures are set
    tm_activate_process(mlimbs_timer_id);
 #endif
@@ -327,7 +327,7 @@ void _mlimbs_clear_uid(int i)
 // void mlimbs_stop_theme
 //
 //	purpose:
-//		This routine stops all mlimbs XMIDI playback.  After 
+//		This routine stops all mlimbs XMIDI playback.  After
 //		calling this routine, a call to mlimbs_start_theme is
 //		needed to restart playback.  Note that this doesn't
 //		clear the current_request[] array and doesn't reset the
@@ -336,7 +336,7 @@ void _mlimbs_clear_uid(int i)
 //
 //	inputs:
 //
-//	
+//
 /////////////////////////////////////////////////////////////////
 void mlimbs_stop_theme (void)
 {
@@ -366,14 +366,14 @@ void mlimbs_stop_theme (void)
 // void mlimbs_purge_theme
 //
 //	purpose:
-//		This routine, stops all XMIDI sequence playback, unloads 
+//		This routine, stops all XMIDI sequence playback, unloads
 //		the XMIDI sequence from theme, and clears the xseq_info[]
 //		array.  Note that it also reinitializes the current_request[]
 //		and xseq_info[] arrays.
 //
 //	inputs:
 //
-//	
+//
 /////////////////////////////////////////////////////////////////
 void mlimbs_purge_theme (void)
 {
@@ -570,7 +570,7 @@ int mlimbs_unmute_sequence_channel (int usernum, int x)
 // This routine attempts to acquire free channels and voices
 //	from lower priority chunks for a given chunk.
 // For channels used by lower priority chunks, this routine simply
-//	frees them. Call mlimbs_assign_channels to give them to a 
+//	frees them. Call mlimbs_assign_channels to give them to a
 //	chunk.  The minimum number of voices required is the number of
 //	voices the chunk plays on channel 10.  If not enough voices
 //	can be freed, then nothing	is punted, and the chunk is not played.
@@ -671,7 +671,7 @@ int mlimbs_channel_prioritize (int priority, int pieceID,int voices_needed,bool 
 							if ((userID[i].current_channel_map>>j) & (0x0001))
 								num_free_channels++;
 						}
-							
+
 
 				}
 		}
@@ -734,7 +734,7 @@ int mlimbs_channel_prioritize (int priority, int pieceID,int voices_needed,bool 
 							if ((voices_punted >= voices_needed) && (num_free_channels >= channels_needed))
 								break;
 						}
-		
+
 					// If punting channels 11-16 wasn't enough, punt entire
 					//	piece, thus freeing channel 10 voices as well
 					if (j == 10)
@@ -831,11 +831,11 @@ int mlimbs_assign_channels (int usernum,bool crossfade)
 // int mlimbs_play_piece
 //
 //	purpose:
-//		This routine will begin playback of a single 'snippet' in 
+//		This routine will begin playback of a single 'snippet' in
 //		the theme.
 //
 //	inputs:
-//		int pieceID			Index into the xseq_info array.  
+//		int pieceID			Index into the xseq_info array.
 //		int priority		Priority of the request.  If < 0, then
 //								use the default priority (in xseq_info[]).
 //		int loops			Number of times to play the piece
@@ -863,7 +863,7 @@ int mlimbs_play_piece (int pieceID, int priority, int loops, int rel_vol, bool c
 
    // Check for duplicate piece IDs?
    if (cpl_num < 10)
-   {	
+   {
       for (i=0; i < cpl_num; i++)
          if (curr_play_list[i] == pieceID)
          {
@@ -1002,10 +1002,10 @@ void mlimbs_punt_piece (int usernum)
 //	inputs:
 //		int pieceID		- id of the chunk to get the status of
 //	outputs:
-//		>= 0				- the correct crossfade_status 
+//		>= 0				- the correct crossfade_status
 //									0 - not crossfading)
 //									10-16	- next channel to be crossfaded
-//							
+//
 //		< 0				- the chunk is not currently playing.
 //
 ///////////////////////////////////////////////////////////////
@@ -1109,7 +1109,7 @@ void mlimbs_reassign_channels (void)
 				{
 					for (i = 0; i < MLIMBS_MAX_SEQUENCES - 1; i++)
 						{
-							// -1 means that this chunk doens't need more channels 
+							// -1 means that this chunk doens't need more channels
 							if (checked[i] == -1)
 								continue;
 							if (userID[i].pieceID != -1)
@@ -1176,7 +1176,7 @@ void mlimbs_timer_callback (void)
 {
 	int i,j,k,loop,rvol;
 	int usernum;
-	
+
 	if (mlimbs_update_requests == FALSE)
 	{
 		return;
@@ -1434,7 +1434,7 @@ void mlimbs_return_to_synch(void)
 //		made for all currently playing sequences.
 //
 //	inputs:
-//		int vol		
+//		int vol
 //
 ///////////////////////////////////////////////////////
 void mlimbs_change_master_volume (int vol)

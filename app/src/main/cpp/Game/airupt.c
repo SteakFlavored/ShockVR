@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/airupt.c $
@@ -76,7 +76,7 @@ extern char cyber_play;
 
 #define PITCHBEND_CHUNK             15
 
-extern uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE]; 
+extern uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
 extern uchar transition_table[NUM_TRANSITIONS];
 extern uchar layering_table[NUM_LAYERS][MAX_KEYS];
 extern uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
@@ -284,7 +284,7 @@ void grind_music_ai(void)
          {
             if (actual_score == WALKING_SCORE)
                max_rand = 3;
-            else 
+            else
                max_rand = 1;
             for (i=1; i<=max_rand; i++)
                if (track_table[actual_score + i][0] != 255)
@@ -454,7 +454,7 @@ void grind_music_ai(void)
             		//KLC - no layering, force to track 0.
                   make_request(0,layering_table[mlimbs_machine][current_key]);
                }
-	
+
                // Transitions...
                if (transition_count > 0)
                {

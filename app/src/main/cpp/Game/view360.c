@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/view360.c $
@@ -63,7 +63,7 @@ frc* view360_fullscreen_contexts[NUM_360_CONTEXTS];
 bool view360_active_contexts[NUM_360_CONTEXTS]; // which contexts should actually draw
 #define ACTIVE view360_active_contexts
 uchar view360_context_views[NUM_360_CONTEXTS];  // which view is being shown by a given context
-#define VIEW view360_context_views 
+#define VIEW view360_context_views
 
 bool view360_message_obscured = FALSE;
 bool view360_render_on        = FALSE;
@@ -172,7 +172,7 @@ void view360_init(void)
    frc* c;
    uchar *canv;
    short x,y,w,h;
-   
+
    canv=_offscreen_mfd.bm.bits;
    x = MFD_VIEW_LFTX;
    y = MFD_VIEW_Y;
@@ -186,7 +186,7 @@ void view360_init(void)
    view360_contexts[LEFT_CONTEXT]  = fr_place_view(FR_NEWVIEW,FR_DEFCAM,canv,VIEW360_BASEFR|FR_CURVIEW_LEFT,0,0,x,y,w,h);
    c = view360_fullscreen_contexts[LEFT_CONTEXT] = fr_place_view(FR_NEWVIEW,FR_DEFCAM,canv,VIEW360_BASEFR|FR_CURVIEW_LEFT,0,0,x,y,w,h);
    fr_set_callbacks(c,view360_fullscrn_draw_callback,NULL,NULL);
-   
+
    x = MFD_VIEW_RGTX;
    y = MFD_VIEW_Y;
    w = MFD_VIEW_WID;
@@ -200,7 +200,7 @@ void view360_init(void)
    canv=_fullscreen_mfd.bm.bits;
    c = view360_fullscreen_contexts[RIGHT_CONTEXT] = fr_place_view(FR_NEWVIEW,FR_DEFCAM,canv,VIEW360_BASEFR|FR_CURVIEW_RGHT,0,0,x,y,w,h);
    fr_set_callbacks(c,view360_fullscrn_draw_callback,NULL,NULL);
-   
+
    x = GAME_MESSAGE_X;
    y = GAME_MESSAGE_Y;
    w = INV_FULL_WD;
@@ -293,10 +293,10 @@ void view360_render(void)
    {
       dirty_inv_canvas = TRUE;
    }
-   
+
 	// Render the 360 view scenes.
-	
-	view360_is_rendering = TRUE;	
+
+	view360_is_rendering = TRUE;
 	for (i = 0; i < NUM_360_CONTEXTS; i++)
 	if (ACTIVE[i])
 	{
@@ -314,7 +314,7 @@ void view360_render(void)
 	}
 	view360_is_rendering = FALSE;
 	view360_render_on = on;
-   
+
    if (on == !(player_struct.hardwarez_status[HARDWARE_360] & WARE_ON))
       use_ware(WARE_HARD,HARDWARE_360);
 }
@@ -385,7 +385,7 @@ void view360_turnoff(bool visible,bool real_stop)
    }
    view360_render_on = view360_message_obscured   =  FALSE;
 }
-      
+
 bool view360_check()
 {
    extern uchar hack_takeover;

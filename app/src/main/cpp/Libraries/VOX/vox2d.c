@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/vox/RCS/vox2d.c $
@@ -28,22 +28,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: vox2d.c $
  * Revision 1.6  1994/08/16  05:45:28  jaemz
  * Found fix overflow problem and fixed it
- * 
+ *
  * Revision 1.5  1994/08/11  22:52:55  jaemz
  * Made fill mode work and put pix_size in real 3d points.
- * 
+ *
  * Revision 1.4  1994/07/15  21:13:12  jaemz
  * Added self clipping
- * 
+ *
  * Revision 1.3  1994/05/25  23:14:53  jaemz
  * Added more debug checking for out of bounds squares
- * 
+ *
  * Revision 1.2  1994/04/21  12:00:24  jaemz
  * Added bounds checking to the debug version
- * 
+ *
  * Revision 1.1  1994/04/21  10:52:33  jaemz
  * Initial revision
- * 
+ *
  */
 
 #include <stdlib.h>
@@ -62,14 +62,14 @@ extern fix *zdydz;
 extern int vxd_maxd;
 #endif
 
-void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz, 
+void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz,
 			  int near_ver,vxs_vox *vx,int dotw,int doth,bool clip);
 
 // We calculate fdxdu (where uv goes across bitmap)
 // and xy goes across screen
 // x,y seem to be nearest vertex coordinates
 // dz is the amount
-void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz, 
+void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz,
 			  int near_ver,vxs_vox *vx,int dotw,int doth,bool clip)
 {
    int du,dv,initu,endu,initv,endv;
@@ -98,7 +98,7 @@ void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, 
       rect = gr_rect;
    else
       rect = (int (*)(short, short, short, short)) gr_urect;
-   
+
    far_ver = (near_ver+2)%4;
 
    //How to scan given near_ver, and this should be actually computed some day
@@ -111,7 +111,7 @@ void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, 
       initu = 0;
       du = 1;
       endu = col->w;
-   } 
+   }
    if (near_ver < 2) {
       initv = col->h-1;
       dv = -1;

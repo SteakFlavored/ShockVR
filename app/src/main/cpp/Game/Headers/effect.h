@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __EFFECT_H
 #define __EFFECT_H
@@ -74,7 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GREN_TYPE          3
 #define NON_CRITTER_EFFECT       (CRIT_HIT_NUM-1)
 #define SPECIAL_TYPE       CRIT_HIT_NUM
- 
+
 extern ubyte effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES];
 
 // info about the destruction of an object
@@ -107,7 +107,7 @@ extern ubyte effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES];
 #define START_FRAME(x)       ((x) & ~(EFFECT_LIGHT_MAP_MASK | EFFECT_DESTROY_OBJ_FLAG))
 
 // the effect location
-#define EFFECT_LOC(id) (objs[id].info.make_info & 0x03) 
+#define EFFECT_LOC(id) (objs[id].info.make_info & 0x03)
 #define SET_EFFECT_LOC(id,x) (objs[id].info.make_info &= (~0x03 | x))
 #define EFFECT_LEFT 01
 #define EFFECT_RIGHT 02

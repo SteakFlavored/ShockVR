@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __OBJBIT_H
 #define __OBJBIT_H
@@ -29,12 +29,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Includes
 
-// OBJECT PROPERTIES FLAGS 
+// OBJECT PROPERTIES FLAGS
 
 #define     INVENTORY_GENERAL       0x0001
 #define     INVENTORY_GENERAL_SHF   0
 #define     EDMS_PRESERVE           0x0002
-#define     EDMS_PRESERVE_SHF       1   
+#define     EDMS_PRESERVE_SHF       1
 #define     INVENT_USEMODE          0x000C
 #define     INVENT_USEMODE_SHF      2
 #define     OBJECT_USE_NOCURSOR        0x0010
@@ -46,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define     RENDER_BLOCK            0x0020
 #define     RENDER_BLOCK_SHF        5
 
-// LIGHT_TYPE is for how it should be lit. 
+// LIGHT_TYPE is for how it should be lit.
 // 0 -- normal, simple lighting applies
 // 1 -- use complicated lighting
 // 2 -- never apply lighting
@@ -71,7 +71,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define     SPCL_TERR_DMG           0x0800
 #define     SPCL_TERR_DMG_SHT       11
 
-// Class-specific flags go here. 
+// Class-specific flags go here.
 #define     CLASS_FLAGS             0x7000
 #define     CLASS_FLAGS_SHF         12
 
@@ -96,7 +96,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Notes on class specific instance data (flags)
 // Fixtures: used for whether to zoom to mfd on use
 // Critters: CLASS_INST_FLAG used to denote "loner"
-//           CLASS_INST_FLAG2 used to denote that the critter wants to get closer.   
+//           CLASS_INST_FLAG2 used to denote that the critter wants to get closer.
 // Containers: CLASS_INST_FLAG used to indicate that the container is "freshly" dead
 //                and needs to have loot placed on it when searched.
 // Smallstuffs: corpses use their CLASS_INST_FLAG like Containers.
@@ -108,7 +108,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //		to be "used" ala a splitter trap
 #define STUFF_OBJUSE_FLAG	0x1
 
-// Critters:  
+// Critters:
 // CLASS_FLAG 0x1000 used to indicate that creature is incapable of movement.
 // CLASS_FLAG 0x2000 used to indicate that creature is unable to open doors.
 #define CRITTER_NOMOVE_OBJPROP_FLAG   0x1

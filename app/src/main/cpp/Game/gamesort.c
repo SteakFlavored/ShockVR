@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * GameSort.c
@@ -86,7 +86,7 @@ static uchar    partition_cnt;
 static uint     cur_obj_num, draw_last_cnt;
 static uint     osort_zc, osort_yc, osort_xc;			// KLC - changed order for our compiler (it puts them in reverse order)
 
-// set up data space, 
+// set up data space,
 void render_sort_start(void)
 {
    cur_obj_num=0;
@@ -161,7 +161,7 @@ void score_objs(int o_num)
       partition_loc[partition_cnt]=o_num;
       partition_cnt++;
       partition_type|=partition;
-   }   
+   }
    else if (partition<0)
    {
       int tmp=our_score|o_num;

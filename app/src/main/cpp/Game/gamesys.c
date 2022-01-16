@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/gamesys.c $
@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <stdlib.h>                      
+#include <stdlib.h>
 
 #include "ai.h"
 #include "combat.h"  		// for ADD_DESTROYED_OBJECT
@@ -168,7 +168,7 @@ void unshodanizing_callback(ObjID id, void *user_data)
 #define NEAR_NOISE_RADIUS  5
 #define PERIL_RADIUS       4
 
-#define MONSTER_THEME_PATH_LENGTH   12   
+#define MONSTER_THEME_PATH_LENGTH   12
 
 
 void check_nearby_objects()
@@ -255,13 +255,13 @@ void check_nearby_objects()
                                  }
                                  best_dist = dist;
                               }
-                              else 
+                              else
                               {
                                  delete_path(pf_id);
                                  pf_id = -1;
                               }
                            }
-                           if ((dist < PERIL_RADIUS) && 
+                           if ((dist < PERIL_RADIUS) &&
                               (objCritters[osid].mood != AI_MOOD_FRIENDLY) && (objCritters[osid].orders != AI_ORDERS_SLEEP))
                            {
                               mlimbs_peril = DEFAULT_PERIL_MAX;
@@ -317,7 +317,7 @@ void check_nearby_objects()
                               objBigstuffs[objs[id].specID].data2 = FIRST_SHODAN_ANIM;
                               objBigstuffs[objs[id].specID].cosmetic_value = NUM_SHODAN_FRAMES;
                               objs[id].info.current_frame = 0;
-                              // animate me:  cycle, but don't repeat   
+                              // animate me:  cycle, but don't repeat
                               add_obj_to_animlist(id, FALSE, FALSE, FALSE, 0, 3, (void *)0, ANIMCB_REMOVE);
                            }
                         }
@@ -383,7 +383,7 @@ void fatigue_player(void)
    {
       deltat = player_struct.deltat;
       deltaf = run_fatigue_rate*(fatigue_val(c[CONTROL_YVEL]) +
-                     fatigue_val(2*c[CONTROL_ZVEL]) + 
+                     fatigue_val(2*c[CONTROL_ZVEL]) +
    //              fatigue_val(c[CONTROL_XVEL])/64 +
    //              fatigue_val(c[CONTROL_XYROT])/256 +
    //              fatigue_val(c[CONTROL_XZROT])/256 +
@@ -395,7 +395,7 @@ void fatigue_player(void)
          deltaf /= SKATE_MOD;
       player_struct.fatigue += deltaf*deltat/FATIGUE_DENOM + player_struct.fatigue_spend*deltat;
       if (player_struct.fatigue > MAX_FATIGUE) player_struct.fatigue = MAX_FATIGUE;
-      if (player_struct.drug_status[DRUG_STAMINUP] <= 0 && player_struct.fatigue > FATIGUE_WARNING_LEVEL) 
+      if (player_struct.drug_status[DRUG_STAMINUP] <= 0 && player_struct.fatigue > FATIGUE_WARNING_LEVEL)
       {
          if (!fatigue_warning)
          {
@@ -571,9 +571,9 @@ errtype gamesys_run(void)
          {
             for (i=0; i < NUM_SHODAN_REGIONS; i++)
             {
-               shodan_phase_in(shodan_bitmask, shodan_region_full_x[i], shodan_region_full_y[i], 
+               shodan_phase_in(shodan_bitmask, shodan_region_full_x[i], shodan_region_full_y[i],
                   shodan_region_full_width[i], shodan_region_full_height[i],QUESTVAR_GET(CYBER_DIFF_QVAR) + 1,TRUE);
-               shodan_phase_in(shodan_bitmask, 0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT, 
+               shodan_phase_in(shodan_bitmask, 0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT,
                   (3 * QUESTVAR_GET(CYBER_DIFF_QVAR)) + 1,TRUE);
             }
          }
@@ -653,7 +653,7 @@ void check_hazard_regions(MapElem* newElem)
    {
       short exp = (short)me_hazard_rad(newElem)*(short)level_gamedata.hazard.rad;
       exp -= (short)player_struct.hit_points_lost[RADIATION_TYPE-1];
-      if (exp > 0) 
+      if (exp > 0)
       {
          expose_player_real(exp,RADIATION_TYPE,0);
       }
@@ -700,18 +700,18 @@ bool panel_ref_sanity(ObjID obj)
       {
 	      fixang obj_to_p, objh, delt;
 	      fix dy,dx;
-	
+
 	      objh=fixang_from_phys_angle(phys_angle_from_obj(objs[obj].loc.h));
 	      dy=fix_from_obj_coord(objs[PLAYER_OBJ].loc.y)-fix_from_obj_coord(objs[obj].loc.y);
 	      dx=fix_from_obj_coord(objs[PLAYER_OBJ].loc.x)-fix_from_obj_coord(objs[obj].loc.x);
-	
+
 	      // x and y swapped here to transform coordinate system
 	      obj_to_p=fix_atan2(dx,dy);
 	      delt=(objh-FIXANG_PI/2)-obj_to_p;
-	
+
 //	      mprintf("Called with %d, locs %d %d and %d %d, got delt %x from %x and %x\n",
 //	         obj,objs[PLAYER_OBJ].loc.x,objs[PLAYER_OBJ].loc.y,objs[obj].loc.x,objs[obj].loc.y,delt,objh,obj_to_p);
-	
+
 	      // hmmm?
 	      if(delt>FIXANG_PI)
 	         return FALSE;
@@ -720,10 +720,10 @@ bool panel_ref_sanity(ObjID obj)
 }
 
 // -------------------------------------
-// check_panel_ref 
+// check_panel_ref
 //
 // Checks to see if we've walked away from a panel
-// in an mfd, and closes the mfd. 
+// in an mfd, and closes the mfd.
 
 void check_panel_ref(bool puntme)
 {
@@ -760,7 +760,7 @@ void check_panel_ref(bool puntme)
                restore_mfd_slot(mfd_id);
             }
          }
-         player_struct.panel_ref = OBJ_NULL;         
+         player_struct.panel_ref = OBJ_NULL;
       }
    }
    old_x = PLAYER_BIN_X; old_y = PLAYER_BIN_Y;
@@ -768,42 +768,42 @@ void check_panel_ref(bool puntme)
 
 
 // =================================================
-// do_stuff_every_second() 
-// 
+// do_stuff_every_second()
+//
 // deals with game system stuff that gets done every nerd second.
 // (A nerd second is 256 clock ticks.  A nerd minute is 64 nerd seconds)
 
 
-// 1 nerd minute = 64*256/(60*280) = 2*256/(15*35) = 512/525 minutes. 
+// 1 nerd minute = 64*256/(60*280) = 2*256/(15*35) = 512/525 minutes.
 
-// Rates at which exposure levels degrade by type, in units of 
-// percent per nerd minute, compounded every nerd second.  
+// Rates at which exposure levels degrade by type, in units of
+// percent per nerd minute, compounded every nerd second.
 
 uchar exposure_degrade_rates[] =
 {
    100, //   EXPLOSION_TYPE
-   100, //   ENERGY_BEAM_TYPE    
-   100, //   MAGNETIC_TYPE       
-   100, //   RADIATION_TYPE      
+   100, //   ENERGY_BEAM_TYPE
+   100, //   MAGNETIC_TYPE
+   100, //   RADIATION_TYPE
    100, //
-   100, //   ARMOR_PIERCING_TYPE 
-   100, //   NEEDLE_TYPE         
-   100, //   BIO_TYPE            
+   100, //   ARMOR_PIERCING_TYPE
+   100, //   NEEDLE_TYPE
+   100, //   BIO_TYPE
 };
 
 
-// Integrates the function f(t) = num >> denom_shf from t0 to t1, 
-// dealing with roundoff in a graceful way so that 
-// integrating over lots of small intervals roughly equals 
+// Integrates the function f(t) = num >> denom_shf from t0 to t1,
+// dealing with roundoff in a graceful way so that
+// integrating over lots of small intervals roughly equals
 // the large interval.
 #define find_delta(t0,t1,num,denom_shf) ((((t1)*(num)) >> (denom_shf)) - (((t0)*(num)) >> (denom_shf)))
 
 
-// computes the change to var by the specified rate as accrued over the 
-// time from t0 to t1, clamped by [vmin,vmax]. 
+// computes the change to var by the specified rate as accrued over the
+// time from t0 to t1, clamped by [vmin,vmax].
 // returns the new value of var.
 
-// t0 and t1 are times in nerd seconds, rate is in units per minute. 
+// t0 and t1 are times in nerd seconds, rate is in units per minute.
 
 int apply_rate(int var, int rate, int t0, int t1, int vmin, int vmax)
 {
@@ -858,7 +858,7 @@ void do_stuff_every_second()
                   cspace_effect_turnoff[i](TRUE,TRUE);
             }
 
-         if ((time_until_shodan_avatar != 0) && (player_struct.game_time > time_until_shodan_avatar) && 
+         if ((time_until_shodan_avatar != 0) && (player_struct.game_time > time_until_shodan_avatar) &&
                (shodan_avatar_id == OBJ_NULL) && (shodan_bitmask == NULL))
          {
             time_until_shodan_avatar = 0;
@@ -884,7 +884,7 @@ void do_stuff_every_second()
       else
       {
          extern void update_email_ware(void);
-         
+
          if ((QUESTBIT_GET(REACTOR_BOOM_QB)) && (!QUESTBIT_GET(BRIDGE_SEPARATED_QB)) && ((rand() & 0x3F) == 1))
          {
             play_digi_fx(SFX_RUMBLE,2);
@@ -898,7 +898,7 @@ void do_stuff_every_second()
                - player_struct.energy_spend;
             if (num != 0)
             {
-               int finale = apply_rate(player_struct.energy,num,last,next,0, MAX_ENERGY); 
+               int finale = apply_rate(player_struct.energy,num,last,next,0, MAX_ENERGY);
                bio_energy_var -= ENERGY_VAR_RATE*(finale-player_struct.energy);
                player_struct.energy = (ubyte) finale;
                chg_set_flg(VITALS_UPDATE);
@@ -954,7 +954,7 @@ void do_stuff_every_second()
                hud_unset(HUD_BIOPOISON);
          }
          update_email_ware();
-         
+
       }
       if (player_struct.fatigue > 0 && player_struct.controls[CONTROL_YVEL] <= SPRINT_CONTROL_THRESHOLD && !EDMS_pelvis_is_climbing)
       {
@@ -977,10 +977,10 @@ void do_stuff_every_second()
 	if(QUESTVAR_GET(MISSION_DIFF_QVAR)==3)
 	{
 		int remain=MISSION_3_TICKS-player_struct.game_time;
-		
+
 		if((remain/CIT_CYCLE)<=30)
 			secret_render_fx=TIMELIMIT_REND_SFX;
-		
+
 		if(remain<CIT_CYCLE)
 		{
 			secret_render_fx=0;
@@ -1006,8 +1006,8 @@ void do_stuff_every_second()
 
 
 // ---------------------------------------------
-// Expose_player exposes the player to damage of a specified type.  
-// if tsecs is non-zero, it is the amount of time in which the damage will go away.  
+// Expose_player exposes the player to damage of a specified type.
+// if tsecs is non-zero, it is the amount of time in which the damage will go away.
 
 // TSECS IS NO LONGER SUPPORTED, ALL EXPOSURE HAS A BUILT-IN DECAY RATE.
 
@@ -1036,7 +1036,7 @@ void expose_player_real(short damage, ubyte type, ushort )
       ev.type = EXPOSE_SCHED_EVENT;
       xd->damage = -(damage/count); // plus or minus exposure increment
       xd->type = type;
-      xd->tsecs = tsecs;  
+      xd->tsecs = tsecs;
       xd->count = count;
       schedule_event(&game_seconds_schedule,&ev);
    }
@@ -1051,12 +1051,12 @@ void expose_player(byte damage, ubyte type, ushort tsecs)
 
 //-------------------------------------------------------
 // enviro_suit_absorb()
-// 
+//
 // returns damage to player after enviro-suit
 
 extern long long_sqrt(long num);
 
-#define ENVIRO_ABSORB_DENOM 5 
+#define ENVIRO_ABSORB_DENOM 5
 #define ENVIRO_DRAIN_DENOM  1
 #define ENVIRO_DRAIN_RATE   32
 
@@ -1086,11 +1086,11 @@ int enviro_suit_absorb(int damage, int exposure, ubyte dtype)
    // Compute drain for that absorption amount.
    denom = ENVIRO_DRAIN_DENOM+version+1;
    enviro_edrain_rate = exposure*60/(ENVIRO_DRAIN_RATE*denom);
-   drain = (rand()%60+enviro_edrain_rate)/60; 
+   drain = (rand()%60+enviro_edrain_rate)/60;
 
    // drain energy
    energy = drain_energy(drain);
-   // did we have enough? 
+   // did we have enough?
    if (energy < drain)
    {
       // if not, recompute absorption.
@@ -1120,5 +1120,5 @@ int enviro_suit_absorb(int damage, int exposure, ubyte dtype)
    }
    else
       hud_unset(HUD_ENVIROUSE);
-   return (byte)damage; 
+   return (byte)damage;
 }

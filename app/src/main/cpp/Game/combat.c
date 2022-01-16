@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/combat.c $
@@ -82,7 +82,7 @@ physics_handle ray_cast_wrapper(fix X[3], fix D[3], fix speed, fix mass, fix siz
 // simple_ray_caster()
 //
 // NOTE: assumes that the ray to be casted is normalized!
-// 
+//
 
 ObjID simple_ray_caster(Combat_Ray *ray)
 {
@@ -146,7 +146,7 @@ ObjID ray_cast_attack(ObjID src, ObjLoc dest, fix bullet_mass, fix bullet_size, 
    ray.speed = bullet_speed;
    ray.range = bullet_range;
    ray.exclusion = (src == OBJ_NULL) ? -1 : objs[src].info.ph;
-   
+
    return(simple_ray_caster(&ray));
 }
 
@@ -200,7 +200,7 @@ ObjID ray_cast_vector(ObjID exclusion, Combat_Pt *src, Combat_Pt vector, fix bul
    ray.speed = bullet_speed;
    ray.range = bullet_range;
    ray.exclusion = (exclusion == OBJ_NULL) ? -1 : objs[exclusion].info.ph;
- 
+
    target = simple_ray_caster(&ray);
 
    // save the location of the hit
@@ -262,7 +262,7 @@ ObjID ray_cast_objects(ObjID src, ObjID dest, fix bullet_mass, fix bullet_size, 
    ray.speed = bullet_speed;
    ray.range = bullet_range;
    ray.exclusion = (src == OBJ_NULL) ? -1 : objs[src].info.ph;
- 
+
    return(simple_ray_caster(&ray));
 }
 
@@ -305,6 +305,6 @@ void find_fire_vector(LGPoint *pt, Combat_Pt *vector)
    dist = fix_sqrt(fix_mul(vector->x, vector->x) + fix_mul(vector->y, vector->y) + fix_mul(vector->z, vector->z));
    vector->x = fix_div(vector->x, dist);
    vector->y = fix_div(vector->y, dist);
-   vector->z = fix_div(vector->z, dist); 
+   vector->z = fix_div(vector->z, dist);
 }
 

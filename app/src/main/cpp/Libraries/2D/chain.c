@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/chain.c $
@@ -29,31 +29,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: chain.c $
  * Revision 1.8  1994/12/05  21:02:35  kevin
  * Reworked to avoid linking in unused function tables.
- * 
+ *
  * Revision 1.7  1994/12/02  21:51:39  kevin
  * Moved chaining globals accessed in gr_set_canvas to grd.c to avoid linking in unused code.
- * 
+ *
  * Revision 1.6  1993/12/07  11:45:15  baf
  * Renames gr_chain_add_over
- * 
+ *
  * Revision 1.5  1993/12/02  13:44:13  baf
  * Added the ability to unchain and rechain.
- * 
+ *
  * Revision 1.4  1993/11/30  20:47:08  baf
  * Chainged generic mode stuff so it can
  * be done at any time.
- * 
+ *
  * Revision 1.3  1993/11/16  23:06:33  baf
  * Added the ability to chain void functions
  * after the primitive.
- * 
+ *
  * Revision 1.2  1993/11/15  03:26:53  baf
  * Added void chaining (functions that just
  * get executed and pass on)
- * 
+ *
  * Revision 1.1  1993/11/12  09:29:49  baf
  * Initial revision
- * 
+ *
  */
 
 #include "chain.h"
@@ -90,7 +90,7 @@ grs_func_chain *gr_chain_add_over(int n, void (*f)())
    p->next = grd_chain_table[n];
    p->flags = 0;
    grd_chain_table[n] = p;
-   return p; 
+   return p;
 }
 
 grs_func_chain *gr_chain_add_before(int n, void (*f)(void))
@@ -98,7 +98,7 @@ grs_func_chain *gr_chain_add_before(int n, void (*f)(void))
    grs_func_chain *p;
    p = gr_chain_add_over(n, f);
    p->flags |= 1;
-   return p; 
+   return p;
 }
 
 grs_func_chain *gr_chain_add_after(int n, void (*f)(void))
@@ -127,7 +127,7 @@ grs_func_chain *gr_chain_add_after(int n, void (*f)(void))
       while (q->next != NULL) q = q->next;
       q->next = p;
    }
-   return p; 
+   return p;
 }
 
 void gr_unchain(int n)

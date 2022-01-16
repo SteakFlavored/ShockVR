@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/setup.c $
@@ -111,20 +111,20 @@ errtype journey_newgame_func();
 #define KEYBOARD_FOCUS_COLOR  RED_BASE + 3
 #define NORMAL_ENTRY_COLOR    RED_BASE + 7
 #define CURRENT_DIFF_COLOR    RED_BASE + 3
-#define SELECTED_COLOR        RED_BASE 
+#define SELECTED_COLOR        RED_BASE
 #define UNAVAILABLE_COLOR     RED_BASE + 11
 
 #define JOURNEY_OPT_LEFT   79
 #define JOURNEY_OPT_RIGHT  247
 
 #define JOURNEY_OPT1_TOP  66
-#define JOURNEY_OPT1_BOT  88 
+#define JOURNEY_OPT1_BOT  88
 
 #define JOURNEY_OPT2_TOP  97
-#define JOURNEY_OPT2_BOT  119 
+#define JOURNEY_OPT2_BOT  119
 
 #define JOURNEY_OPT3_TOP  129
-#define JOURNEY_OPT3_BOT  160 
+#define JOURNEY_OPT3_BOT  160
 
 #define JOURNEY_OPT4_TOP  160
 #define JOURNEY_OPT4_BOT  182
@@ -154,9 +154,9 @@ errtype journey_newgame_func();
 
 
 #define DIFF_TITLE1_X1    12
-#define DIFF_TITLE1_Y1    70 
+#define DIFF_TITLE1_Y1    70
 #define DIFF_TITLE1_X2    155
-#define DIFF_TITLE1_Y2    93 
+#define DIFF_TITLE1_Y2    93
 #define DIFF_TITLE1_OPT_TOP      94
 #define DIFF_TITLE1_OPT_BOTTOM   118
 #define DIFF_TITLE1_LEFT1        25
@@ -172,9 +172,9 @@ errtype journey_newgame_func();
 #define DIFF_SIZE_Y    DIFF_TITLE1_OPT_BOTTOM - DIFF_TITLE1_OPT_TOP
 
 #define DIFF_TITLE2_X1    169
-#define DIFF_TITLE2_Y1    70 
+#define DIFF_TITLE2_Y1    70
 #define DIFF_TITLE2_X2    311
-#define DIFF_TITLE2_Y2    93 
+#define DIFF_TITLE2_Y2    93
 #define DIFF_TITLE2_OPT_TOP      94
 #define DIFF_TITLE2_OPT_BOTTOM   118
 #define DIFF_TITLE2_LEFT1        181
@@ -187,9 +187,9 @@ errtype journey_newgame_func();
 #define DIFF_TITLE2_RIGHT4       297
 
 #define DIFF_TITLE3_X1    12
-#define DIFF_TITLE3_Y1    123 
+#define DIFF_TITLE3_Y1    123
 #define DIFF_TITLE3_X2    155
-#define DIFF_TITLE3_Y2    146 
+#define DIFF_TITLE3_Y2    146
 #define DIFF_TITLE3_OPT_TOP      147
 #define DIFF_TITLE3_OPT_BOTTOM   171
 #define DIFF_TITLE3_LEFT1        25
@@ -202,9 +202,9 @@ errtype journey_newgame_func();
 #define DIFF_TITLE3_RIGHT4       141
 
 #define DIFF_TITLE4_X1    169
-#define DIFF_TITLE4_Y1    123 
+#define DIFF_TITLE4_Y1    123
 #define DIFF_TITLE4_X2    311
-#define DIFF_TITLE4_Y2    146 
+#define DIFF_TITLE4_Y2    146
 #define DIFF_TITLE4_OPT_TOP      147
 #define DIFF_TITLE4_OPT_BOTTOM   171
 #define DIFF_TITLE4_LEFT1        181
@@ -406,7 +406,7 @@ void flash_username(void)
    while (*tmd_ticks<flash_done);
    gr_set_fcolor(KEYBOARD_FOCUS_COLOR);
    res_draw_string(RES_citadelFont, DIFF_NAME, DIFF_NAME_X, DIFF_NAME_Y);
-   uiShowMouse(&name_rect);   
+   uiShowMouse(&name_rect);
 }
 
 // -------------------------------------------------------------
@@ -669,7 +669,7 @@ errtype draw_sg_slot(int slot_num)
       sz--;
       strcpy(temp, "");
       strncpy(temp,comments[slot_num],sz);
-      temp[sz] = '\0';   
+      temp[sz] = '\0';
       gr_string_size(temp, &x, &y);
    }
    ResUnlock(RES_smallTechFont);
@@ -767,7 +767,7 @@ void go_and_start_the_game_already()
    extern char curr_alog_vol;
 #endif
    extern bool mouseLefty;
-   
+
 /* KLC - no longer needed
 #ifdef GAMEONLY
    if (strlen(start_name)==0)
@@ -881,7 +881,7 @@ bool intro_mouse_handler(uiEvent *ev, Region *r, void *user_data)
             }
             break;
          case SETUP_CREDITS:
-            credits_inp=-1; 
+            credits_inp=-1;
             break;
          case SETUP_CONTINUE:
             if ((mev->pos.x >= SG_SLOT_X) && (mev->pos.x <= SG_SLOT_X + SG_SLOT_WD) &&
@@ -933,8 +933,8 @@ bool intro_key_handler(uiEvent *ev, Region *r, void *user_data)
    uiCookedKeyEvent *kev = (uiCookedKeyEvent *)ev;
    int code = kev->code & ~(KB_FLAG_DOWN | KB_FLAG_2ND);
    char old_diff, old_setup_line = curr_setup_line, n=0;
-   
-   if (kev->code & KB_FLAG_DOWN) 
+
+   if (kev->code & KB_FLAG_DOWN)
    {
       switch (setup_mode)
       {
@@ -977,7 +977,7 @@ bool intro_key_handler(uiEvent *ev, Region *r, void *user_data)
             switch(code)
             {
             case KEY_PAD_UP:   case KEY_PAD_LEFT:
-               n=NUM_SAVE_SLOTS-2; 
+               n=NUM_SAVE_SLOTS-2;
             case KEY_PAD_DOWN: case KEY_PAD_RIGHT:
                n++;
                old_diff=curr_sg;
@@ -1035,7 +1035,7 @@ bool intro_key_handler(uiEvent *ev, Region *r, void *user_data)
                      curr_diff = (curr_diff + n) % NUM_DIFF_CATEGORIES;
                   }
                   difficulty_draw(FALSE);
-                  break;                   
+                  break;
                case KEY_ENTER:
 //                  if (start_name[0] != '\0' && start_selected)
               // note go_and_start the game checks for null string and flashes, so it should get called
@@ -1114,7 +1114,7 @@ errtype load_savegame_names()
                      ResExtract(SAVE_GAME_ID_BASE, comments[i]);
                      valid_save |= (1 << i);
                      break;
-                  default:  
+                  default:
                      sprintf(comments[i], "<< %s >>",get_temp_string(REF_STR_BadVersion));
                      break;
                }
@@ -1183,12 +1183,12 @@ void setup_start()
    {
       if (!save_game_exists && start_first_time)
       {
-         play_intro_anim = TRUE; 
-         setup_mode = SETUP_ANIM; 
+         play_intro_anim = TRUE;
+         setup_mode = SETUP_ANIM;
       }
       else
       {
-         play_intro_anim = FALSE; 
+         play_intro_anim = FALSE;
          setup_mode = SETUP_JOURNEY;
       }
    }
@@ -1288,7 +1288,7 @@ void setup_exit()
    ResCloseFile(intro_num);
 
 #ifdef PALFX_FADES
-   if (pal_fx_on) 
+   if (pal_fx_on)
       palfx_fade_down();
    else {
       gr_set_fcolor(BLACK);

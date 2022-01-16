@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/mfdgump.c $
@@ -50,7 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ============================================================
 
 
-/* This is the MFD for buttons that zoom into the MFD. */ 
+/* This is the MFD for buttons that zoom into the MFD. */
 
 
 // -------
@@ -95,10 +95,10 @@ bool mfd_gump_handler(MFD* m, uiEvent* uie);
 // ---------------
 
 /* This gets called whenever the MFD needs to redraw or
-   undraw.  
+   undraw.
    The control value is a bitmask with the following bits:
    MFD_EXPOSE: Update the mfd, if MFD_EXPOSE_FULL is not set,
-               update incrementally.  
+               update incrementally.
    MFD_EXPOSE_FULL: Fully redraw the mfd, implies MFD_EXPOSE
 
    if no bits are set, the mfd is being "unexposed;" its display
@@ -153,7 +153,7 @@ void mfd_gump_expose(MFD* mfd, ubyte control)
          y = (MFD_VIEW_HGT - y) /2;
          mfd_draw_string(s,x,y,GREEN_YELLOW_BASE,TRUE);
       }
-      else 
+      else
          for (i = 0; i < gump_num_objs; i++)
          {
             short x,y;
@@ -165,24 +165,24 @@ void mfd_gump_expose(MFD* mfd, ubyte control)
                y = FIRST_ITEM_Y + ((r == 0) ? 0 : CONTENTS_HGT) + (CONTENTS_HGT - bm->h)/2;
                ss_bitmap(bm,x,y);
             }
-            // the +1 in the last argument is to get 
+            // the +1 in the last argument is to get
             // mfd_add_rect to union adjacents...
          }
       mfd_add_rect(LEFT_MARGIN,FIRST_ITEM_Y,LEFT_MARGIN+2*CONTENTS_WID,FIRST_ITEM_Y+2*CONTENTS_HGT);
       ResUnlock(MFD_FONT);
       // on a full expose, make sure to draw everything
- 
+
       if (full)
          mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
       // Pop the canvas
       gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the 
+      // Now that we've popped the canvas, we can send the
       // updated mfd to screen
       mfd_update_rects(mfd);
 
    }
-  
+
 }
 
 // ----------------
@@ -215,7 +215,7 @@ bool gump_pickup(byte row)
    // Here's where we update the container object
    is_container(cont,&d1,&d2);
    container_stuff(gump_idlist,gump_num_objs,d1,d2);
-   
+
    if(*d1==0 && (d2==NULL || *d2==0))
       check_panel_ref(TRUE); // punt empty gump
    else
@@ -295,7 +295,7 @@ bool mfd_gump_handler(MFD* m, uiEvent* uie)
 #ifdef RIGHT_BUTTON_GUMP_UI
       if (e->action & MOUSE_RDOWN)
       {
-//KLC         mouse_constrain_xy(m->rect.ul.x,m->rect.ul.y,m->rect.lr.x-1,m->rect.lr.y-1);   
+//KLC         mouse_constrain_xy(m->rect.ul.x,m->rect.ul.y,m->rect.lr.x-1,m->rect.lr.y-1);
          LAST_INPUT_ROW = row;
          return TRUE;
       }

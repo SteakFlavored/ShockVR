@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		AMOV.C		Animfile handler for LG .mov files
 //		Rex E. Bradford (REX)
@@ -24,22 +24,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: amov.c $
  * Revision 1.6  1994/10/18  16:01:15  rex
  * Added processing of PALETTE chunk, so can return frame pals
- * 
+ *
  * Revision 1.5  1994/10/04  10:34:50  rex
  * Fixed so can handle movies > 128 frames
- * 
+ *
  * Revision 1.4  1994/10/03  18:04:33  rex
  * Added ability to read 4x4-compressed movies
- * 
+ *
  * Revision 1.3  1994/09/29  10:31:00  rex
  * Added time arg to read/write frame
- * 
+ *
  * Revision 1.2  1994/09/01  11:06:34  rex
  * Changed flag name
- * 
+ *
  * Revision 1.1  1994/07/22  13:19:51  rex
  * Initial revision
- * 
+ *
 */
 
 #include <string.h>
@@ -160,7 +160,7 @@ int AmovReadHeader(Afile *paf)
 	for (pchunk = pmi->pmc; pchunk->chunkType != MOVIE_CHUNK_END; pchunk++)
 	{
 		uchar	s1, s2;
-		
+
 		// Swap bytes around for the chunk.
 		s1 = *((uchar *)pchunk);
 		s2 = *(((uchar *)pchunk)+2);

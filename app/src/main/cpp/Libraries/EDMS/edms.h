@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Header: r:/prj/lib/src/new_edms/rcs/edms.h 1.2 1994/08/11 18:54:10 dfan Exp $
@@ -214,7 +214,7 @@ fix  EDMS_get_robot_damage( physics_handle ph );
 void EDMS_make_robot_antisocial( physics_handle ph );
 void EDMS_make_robot_social( physics_handle ph );
 
-//	Nota bene:  Here the desired heading is specified is in the range 
+//	Nota bene:  Here the desired heading is specified is in the range
 //		    0 <= desired_heading < 2pi.	Urgency is a number in the range
 //		    0 <= urgency <= 20.  A zero urgency will produce no control input.
 //		    ------------------------------------------------------------------
@@ -227,7 +227,7 @@ void EDMS_ai_control_robot( physics_handle ph,
              fix distance );
 
 
-				 
+
 //	Pelvis:
 //	------
 typedef struct {
@@ -356,7 +356,7 @@ physics_handle	caller;				//Who's responsible...
 typedef struct {						//Filled by user when
 											//Indoor_Terrain is
 fix	cx,cy,cz;						//called...
-fix	fx,fy,fz;						
+fix	fx,fy,fz;
 fix	wx,wy,wz;
 
 } TerrainData;

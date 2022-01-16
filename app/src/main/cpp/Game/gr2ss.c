@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 
 #include "cit2d.h"
@@ -56,7 +56,7 @@ void mouse_unconstrain(void);
 uchar perform_svga_conversion(uchar mask)
 {
 	extern bool full_game_3d;
-	
+
 	if (gr2ss_override & OVERRIDE_FAIL)
 		return(SVGA_CONV_NONE);
 	//¥¥¥ for now -   if ((convert_use_mode == 0) && (!inp6d_stereo_active))
@@ -81,7 +81,7 @@ uchar perform_svga_conversion(uchar mask)
 // Note, x and y already converted here!
 void ss_scale_string(char *s, short x, short y)
 {
-   // needs to scale still! 
+   // needs to scale still!
    // know about different fonts instead?  That would be better...
    grs_font *ttfont = (grs_font *)ResLock(RES_tinyTechFont);
    grs_font *mlfont = (grs_font *)ResLock(RES_mediumLEDFont);
@@ -389,7 +389,7 @@ void ss_thick_int_line(short x1,short y1,short x2,short y2)
 void ss_int_disk(short x1,short y1,short diam)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_int_disk(SCONV_X(x1),SCONV_Y(y1),SCONV_X(diam)>>1); 
+      gr_int_disk(SCONV_X(x1),SCONV_Y(y1),SCONV_X(diam)>>1);
         // Hm, should we convert rad?
         // Yes, but sadly it's hosed in 320x400 mode, where
         // we need to draw an ellipse.  This stuff really

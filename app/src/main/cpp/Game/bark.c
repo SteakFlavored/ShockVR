@@ -6,22 +6,22 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: u://RCS/bark.c $
  * $Revision: 1.33 $
  * $Author: xemu $
  * $Date: 1994/10/27 04:52:50 $
- * 
+ *
  *
  */
 
@@ -48,7 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // ============================================================
-//                   MFD BARK 
+//                   MFD BARK
 // ============================================================
 
 #define BARK_MARGIN 2
@@ -58,7 +58,7 @@ void mfd_bark_expose(MFD* mfd, ubyte control)
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
    {
-      // Do unexpose stuff here.  
+      // Do unexpose stuff here.
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
    {
@@ -108,7 +108,7 @@ void mfd_bark_expose(MFD* mfd, ubyte control)
          short w,h;
          RefTable *prt = (RefTable *)ResLock(REFID(mfd_bark_string));
 //            ResReadRefTable(REFID(mfd_bark_string));
-          
+
          if (RefIndexValid(prt,REFINDEX(mfd_bark_string)))
          {
             gr_set_font((grs_font*)ResLock(MFD_FONT));
@@ -131,12 +131,12 @@ void mfd_bark_expose(MFD* mfd, ubyte control)
 
       // Pop the canvas
       gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the 
+      // Now that we've popped the canvas, we can send the
       // updated mfd to screen
       mfd_update_rects(mfd);
 
    }
-  
+
 }
 
 

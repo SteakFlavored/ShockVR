@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/2d/RCS/genuclin.c $
@@ -39,14 +39,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -- the gen routine only passes the computed color -- arguably it
  should check, but that would be a pain and if the cline function is
  accessed by the fill vector, this function is never called when the
- fill mode is solid 
+ fill mode is solid
 */
 
 #define fix_make_nof(x)           fix_make(x,0x0000)
 #define macro_get_ipal(r,g,b)     (long) ((r>>19) &0x1f) | ((g>>14) & 0x3e0) | ((b>>9) & 0x7c00)
 
 /* the color passed into the line fill is the calculated one, not the
-   param -- see above 
+   param -- see above
  */
 // MLA #pragma off (unreferenced)
 #define macro_plot_rgb(x,y,i)     grd_pixel_fill(grd_ipal[i],parm,x,y)
@@ -65,15 +65,15 @@ void gri_gen_ucline_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
    /* NB: this code mimics the code in fl8clin.c for flat8_ucline's.
       this leads to much more separation among e.g +/- dx and dy is
       ncessary, since increments in the x and y directions can be treated
-      identically, rather than manipulating a canvas pointer.  however, 
-      eventually, i'd like the flat8 and gen to derive from the 
+      identically, rather than manipulating a canvas pointer.  however,
+      eventually, i'd like the flat8 and gen to derive from the
       same code with just different defines for increments, etc.
       */
 
    /* NB: directionality policy -- reversible
-      Lines are drawn in order of increasing x or increasing y, 
+      Lines are drawn in order of increasing x or increasing y,
       for lines that have greater x or y extent, repsectively.
-      This is done for all lines, including horiz., vert., and 
+      This is done for all lines, including horiz., vert., and
       45' lines (increasing x).
       */
 
@@ -92,45 +92,45 @@ void gri_gen_ucline_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
       y1 -= 1;			/* e.g. - epsilon */
    }
    else if (y0 > y1) {
-      y0 -= 1; 
+      y0 -= 1;
    }
-   
+
    dx = fix_trunc (x1) - fix_trunc(x0);	/* x extent in pixels, (macro is flakey) */
    dx = fix_abs (dx);
    dy = fix_trunc (y1) - fix_trunc(y0);	/* y extent in pixels */
    dy = fix_abs (dy);
 
-   if (dx == 0 && dy == 0) 
+   if (dx == 0 && dy == 0)
      return;
 
 
    /* three cases: absolute value dx < = > dy
-      
-      along the longer dimension, the fixpoint x0 (or y0) is treated 
+
+      along the longer dimension, the fixpoint x0 (or y0) is treated
       as an int
-      
+
       the points are swapped if needed and the rgb initial and deltas
       are calculated accordingly
-      
+
       the variable (x0 or y0) for the long dimension is treated as a fix
-      and incremented using ++, the other is kept as fixpoint and 
-      incremented by the fixpoint delta (dx or dy).  Then it's shifted 
+      and incremented using ++, the other is kept as fixpoint and
+      incremented by the fixpoint delta (dx or dy).  Then it's shifted
       to int for pixel drawing.
-      
+
       there are two sub-cases - a horizontal or vertical line,
-      and the dx or dy being added or subtracted.  
-      
+      and the dx or dy being added or subtracted.
+
       the endpoints are walked inclusively in all cases --
-      
+
       45' degree lines are explicitly special cased -- more efficient,
-      since everything is an integer 
+      since everything is an integer
       */
 
    r0 = (uchar) (v0->u); g0 = (uchar) (v0->v); b0 = (uchar) (v0->w);
    r1 = (uchar) (v1->u); g1 = (uchar) (v1->v); b1 = (uchar) (v1->w);
 
    if (dx > dy) {
-      
+
       x0 = fix_int (x0); x1 = fix_int (x1);
 
       if (x0 < x1 ) {
@@ -189,7 +189,7 @@ void gri_gen_ucline_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
 	 dg = fix_div(fix_make_nof(g0-g1),dy);
 	 db = fix_div(fix_make_nof(b0-b1),dy);
       }
-      
+
       if ((fix_int(x0)) == (fix_int(x1))) {
 	 x0 = fix_int (x0);
 	 while (y0 <= y1) {
@@ -198,7 +198,7 @@ void gri_gen_ucline_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
 	    y0++;
 	    r += dr; g += dg; b += db;
 	 }
-      }      
+      }
       else {
 	 dx = fix_div ((x1 - x0), dy);
 	 while (y0 <= y1) {

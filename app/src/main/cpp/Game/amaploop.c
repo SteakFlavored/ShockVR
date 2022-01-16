@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/amaploop.c $
@@ -148,7 +148,7 @@ bool pend_check(void);
 // default units per second
 // in defiance of Rob, I use the number 13.
 #define MAP_SCROLL_SPEED 13
-                                     
+
 #define clear_cur_mapnote() cur_mapnote_base=cur_mapnote_ptr=NULL
 
 // --------------------
@@ -197,10 +197,10 @@ void fsmap_startup(void)
 	}
 	if((n==0) || (oAMap(MFD_FULLSCR_MAP)->flags == 0))
 		oAMap(MFD_FULLSCR_MAP)->flags = f;
-	
+
 	// Get the graphics system setup for fullscreen drawing.
-	full_map_context = fr_place_view(FR_NEWVIEW, FR_DEFCAM, gMainOffScreen.Address, 
-														FR_DOUBLEB_MASK|FR_WINDOWD_MASK, 0, 0, 
+	full_map_context = fr_place_view(FR_NEWVIEW, FR_DEFCAM, gMainOffScreen.Address,
+														FR_DOUBLEB_MASK|FR_WINDOWD_MASK, 0, 0,
 														0, 0, 640, 480);
 	gr_set_canvas(FULLMAP_CANVAS);
 	gr_clear(0xff);
@@ -227,9 +227,9 @@ void fsmap_startup(void)
 	}
 	fsmap_btn_pending=0;
 //KLC - seems to be causing a problem		btn_init(oAMap(MFD_FULLSCR_MAP));
-	
+
 	cur_btn_hgt=(((AMAP_HGT(grd_bm.h))*3)>>5);
-	
+
 	chg_set_flg(LL_CHG_MASK);
 }
 
@@ -309,7 +309,7 @@ char *fsmap_get_lev_str(char* buf, int siz)
 {
    extern char *level_to_floor(int lev_num, char *buf);
    int l;
-   
+
    get_string(REF_STR_Level,buf,siz);
    l=strlen(buf);
    if(l+3 < siz) {
@@ -336,7 +336,7 @@ void fsmap_interface_draw(void)
    chg_unset_flg(AMAP_FULLEXPOSE);
 }
 
-#define MSG_BUF2_SIZE   25 
+#define MSG_BUF2_SIZE   25
 void fsmap_message_redraw(void)
 {
    char buf[FSMAP_MAX_MSG];
@@ -448,7 +448,7 @@ void automap_loop(void)
 //   if (pal_fx_on) {
 //      loopLine(AL|0x41,palette_advance_all_fx(*tmd_ticks));
 //   }
-   audiolog_loop_callback();	
+   audiolog_loop_callback();
    if(cf&(AMAP_FULLEXPOSE|AMAP_MAP_EV|AMAP_BUTTON_EV|AMAP_MESSAGE_EV)) {
       fsmap_draw_screen(cf);
    }
@@ -553,7 +553,7 @@ bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte )
 {
 	extern void mouse_unconstrain(void);
 	int scregion=0;
-	
+
 	if(action&MOUSE_UPS)
 	{
 		mouse_unconstrain();
@@ -570,25 +570,25 @@ bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte )
 		return FALSE;
 
 	ui_mouse_constrain_xy(x,y,x,y);
-	
+
 	y -= AMAP_TOP(grd_bm.h);
-	
+
 	if (y > AMAP_HGT(grd_bm.h))				  							// if click in the message line
 	{
 		scregion=AMAP_MESSAGE_EV;
 		edit_mapnote(amptr);													// start editing.
 	}
-	
+
 	else if (x>AMAP_RGT(grd_bm.w))									// If in the button regionÉ
 	{
 		if (y<GET_BTN_TOP(7)-AMAP_BORDER)   					// If in one of the upper buttons (above pan)
 		{
 			// KLC - changed to treat clicks and keyboard equivalents a little differently
 			// 		  in the Mac version.  Doesn't call the hack_kb_callback anymore.
-			
+
 			int 	btn = y/BTN_HGT_MUL;
    			char	todo = AMAP_TOGGLE;
-			
+
 			if (btn == BTN_ZOOMIN || btn == BTN_ZOOMOUT)
 			{
 				if (zoom_deal(amptr, btn))
@@ -617,9 +617,9 @@ bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte )
 			y -= GET_BTN_TOP(7);
 			y -= 54;
 			y *= 3;
-			
+
 			map_scrolltime=*tmd_ticks;
-			
+
 			if ((abs(abs(x)-abs(y)))<3)
 				return TRUE; // null pan area...
 			if (abs(x)>abs(y))   // ew
@@ -702,7 +702,7 @@ bool zoom_deal(curAMap *amptr, int btn)
 {
    int zfac;
    bool res;
-   // now, set up for real 
+   // now, set up for real
    if (btn==BTN_ZOOMIN) zfac=1; else zfac=-1;
    res=amap_zoom(amptr,FALSE,zfac);
    if (res)
@@ -771,9 +771,9 @@ bool amap_kb_callback(curAMap *amptr, int code)
       if(!(codewas==0)) return TRUE;
    }
 */
-   
+
    // If we're currently editing a message...
-   
+
    if (cur_mapnote_ptr!=NULL)
    {
 //KLC - we'll do keydowns      if ((code&KB_FLAG_DOWN)==KB_FLAG_DOWN) return TRUE;
@@ -823,9 +823,9 @@ bool amap_kb_callback(curAMap *amptr, int code)
          chg_set_flg(AMAP_MAP_EV);
       return TRUE;
    }
-   
+
    // We're not editing.  Keyboard equivalents for buttons.
-   
+
    else
    {
       char btn=-1, todo=AMAP_TOGGLE;
@@ -848,7 +848,7 @@ bool amap_kb_callback(curAMap *amptr, int code)
             last_msg_ok=TRUE;
             chg_set_flg(AMAP_MESSAGE_EV|AMAP_MAP_EV);
             break;
-//KLC      case DO_FULLMSG:           btn=BTN_FULLMSG; break;  
+//KLC      case DO_FULLMSG:           btn=BTN_FULLMSG; break;
 //KLC      case DO_RECENTER:          btn=BTN_RECENTER; todo=AMAP_UNSET; break;
 //KLC      case DO_SCAN:              btn=BTN_SCAN; break;
 //KLC      case DO_CRITTER:           btn=BTN_CRITTER; break;
@@ -873,4 +873,4 @@ bool amap_kb_callback(curAMap *amptr, int code)
 }
 
 
-                                                                
+

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // main test code for 3d library (remove if not building test app)
 
@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 WindowPtr	gMainWindow;
 
 extern void test_3d(void);
- 
+
 void main (void)
  {
 	grs_screen 	*screen;
@@ -44,26 +44,26 @@ void main (void)
 	char				temp[256];
 	Rect				r;
 	Ptr					p;
-												
+
 	InitMac();
-	CheckConfig();	
-	
+	CheckConfig();
+
 	SetupWindows(&gMainWindow);								// setup everything
-	SetupOffscreenBitmaps();			
-					
+	SetupOffscreenBitmaps();
+
 #if __profile__
 	if (!ProfilerInit(collectDetailed, bestTimeBase, 20, 10))
 	{
 #endif
 
 	test_3d();
-	
+
 #if __profile__
 		ProfilerDump("\p3dtest.prof");
 		ProfilerTerm();
 	}
 #endif
- 
+
 	CleanupAndExit();
 }
 

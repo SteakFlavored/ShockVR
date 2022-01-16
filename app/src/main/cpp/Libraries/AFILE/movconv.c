@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	==============================================================
 //		Convert a raw QT movie (from the LG .MOV file) into a nice compressed movie.
@@ -135,7 +135,7 @@ void main(void)
 	Ptr				p;
 	long				stupid;
 	OSErr			err, result;
-	
+
 	FILE 			*fp;
 	uchar 			*dbuff;
 	ulong 			dbuffLen;
@@ -145,12 +145,12 @@ void main(void)
 	short			palResNum, sndResNum;
 	Handle			palChgHdl;
 	PalChange		*pcp;
-	
+
 	Handle			qpalHdl;								// Contains array of palette change times.
 	long				*qpalEntry;							// Pointer to current change.
 	short			numQpalEntries = 0;
 	ulong			qpalCurrTime = 0;
-	
+
 	Point			dlgPos = {120,120};
 	SFReply			sfr;
 	FSSpec			mySpec;
@@ -176,19 +176,19 @@ void main(void)
 	CheckConfig();
 
 	SetupWindows(&gMainWindow);								// setup everything
-	SetupOffscreenBitmaps();			
+	SetupOffscreenBitmaps();
 
 	gr_init();
 	gr_set_mode (GRM_640x480x8, TRUE);
 	screen = gr_alloc_screen (grd_cap->w, grd_cap->h);
 	gr_set_screen (screen);
  	SetRect(&movieRect,0,0,600,300);
-	
+
 	//---------------------
 	//	Setup the input FileSpecs
 	//---------------------
 	SetInputSpecs();
-	
+
 	//---------------------
 	// Setup Quicktime stuff.
 	//---------------------
@@ -198,7 +198,7 @@ void main(void)
 		StopAlert(1000, nil);
 		CleanupAndExit();
 	}
-	
+
 	//----------------------
 	//	Open the input QuickTime movie.
 	//----------------------
@@ -235,11 +235,11 @@ void main(void)
 		CheckError(1, "\pCan't allocate palette change times handle!!");
 	HLock(qpalHdl);
 	qpalEntry = (long *)*qpalHdl;
-	
+
 	*qpalEntry = 0;						// First palette change at 0.
 	qpalEntry++;
 	numQpalEntries++;
-	
+
 	//----------------------
 	//	Setup output file.
 	//----------------------
@@ -249,7 +249,7 @@ void main(void)
 	 	ExitMovies();
 		CleanupAndExit();
  	 }
- 	 
+
 //	imageDescriptionH = (ImageDescription **)NewHandle(sizeof(ImageDescription));
 //	CheckError(MemError(), "\pCan't alloc description for video.");
 
@@ -261,7 +261,7 @@ void main(void)
 	SetMovieColorTable(gMovie, gMainColorHand);
 
 #ifdef ADD_TEXT_TRACK
-	// Add the text track here.	
+	// Add the text track here.
 	MyCreateTextTrack(gMovie);
 #endif
 
@@ -283,9 +283,9 @@ void main(void)
 	GetMaxCompressionSize(((CGrafPort *)(gMainWindow))->portPixMap,
 							&movieRect,
 							8, spatialQ, codec, codecType,
-							&maxCompressedFrameSize);	
+							&maxCompressedFrameSize);
 
-	compressedFrameBitsH = NewHandle(maxCompressedFrameSize);	
+	compressedFrameBitsH = NewHandle(maxCompressedFrameSize);
 	CheckError(MemError(), "\pCan't allocate output frame buffer.");
 
 	result = CompressSequenceBegin(&seq, ((CGrafPort *)(gMainWindow))->portPixMap, 0L,
@@ -295,7 +295,7 @@ void main(void)
 	CheckError(result, "\pCan't begin sequence.");
 	result = SetImageDescriptionCTable(imageDescriptionH, gMainColorHand);
 	CheckError(result, "\pCan't set the sequence's color table.");
-*/	
+*/
 	//-----------------------------------
 	//	Get the Chunk Offset and Sample-to-Time tables.
 	//-----------------------------------
@@ -323,19 +323,19 @@ void main(void)
 				{
 					QTS_STTS	*p = (QTS_STTS *)dbuff;
 					short		i, j, si;
-					
+
 					gSampleTimes = (ulong *)NewPtr(1200 * sizeof(ulong));
 					si = 0;
 					for (i = 0; i < p->numEntries; i++)
 						for (j = 0; j < p->time2samp[i].count; j++)
 							gSampleTimes[si++] = p->time2samp[i].duration;
 				}
-				
+
 				// For the chunk offsets table, read it in to a memory block.
 				if (chunkHdr.ctype == QT_STCO)
 				{
 					QTS_STCO 	*p = (QTS_STCO *)dbuff;
-					
+
 					gNumFrames = p->numEntries;
 					gChunkOffsets = (ulong *)NewPtr(p->numEntries * sizeof(ulong));
 					BlockMove(p->offset, gChunkOffsets, p->numEntries * sizeof(ulong));
@@ -347,7 +347,7 @@ void main(void)
 	}
 
 	HideCursor();
-	
+
 	//----------------------------
 	//	Show the movie, one frame at a time.
 	//----------------------------
@@ -365,17 +365,17 @@ void main(void)
  		Handle		compHdl;
  		long			compSize;
  		short		notSyncFlag;
-		
+
 		frameBuff = NewPtr(600 * 300);
 		CheckError(MemError(), "\pCan't allocate a frame buffer for input movie.");
-		
+
 		SetRect(&r, 0, -17, 300, 0);
 		for (f = 0; f < gNumFrames; f++)
 		{
 			// Read the next frame from the input movie.
 			fseek(fp, gChunkOffsets[f], SEEK_SET);
 			fread(frameBuff, 600 * 300, 1, fp);
-			
+
 			// See if there's an 0xFF anywhere in this screen.
 			subColor = FALSE;
 			pp = (uchar *)frameBuff;
@@ -388,7 +388,7 @@ void main(void)
 				}
 				pp++;
 			}
-			
+
 			// See if the palette needs to change starting at this frame.
 			HLock(palChgHdl);
 			pc = (PalChange *)*palChgHdl;
@@ -407,9 +407,9 @@ void main(void)
 				{
 //					CDSequenceEnd(seq);					// end the current output image sequence,
 					SCCompressSequenceEnd(ci);
-				
+
 					SetPalette(pc->palID);				// set the palette for the screen,
-					
+
 					*qpalEntry = (qpalCurrTime-1) * 20;	// record the time of the palette change
 					qpalEntry++;							// (which is (time * 600)/30, or *20)
 					numQpalEntries++;
@@ -430,7 +430,7 @@ void main(void)
 				pc++;
 			}
 			HUnlock(palChgHdl);
-				
+
 			imgp = frameBuff;
 			scrp = gScreenAddress;
 			for (line = 0; line < 300; line++)
@@ -439,8 +439,8 @@ void main(void)
 				imgp += 600;
 				scrp += gScreenRowbytes;
 			}
-			
-			// The first time through the loop (after displaying the first frame), set the compression 
+
+			// The first time through the loop (after displaying the first frame), set the compression
 			// parameters for the output movie and begin a compression sequence.
 			if (f == 0)
 			{
@@ -453,7 +453,7 @@ void main(void)
 					CleanupAndExit();
 			 	}
 				CheckError(result, "\pError in sequence settings.");
-				
+
 				// Redraw the first frame on the screen.
 				gr_clear(0xFF);
 				imgp = frameBuff;
@@ -464,15 +464,15 @@ void main(void)
 					imgp += 600;
 					scrp += gScreenRowbytes;
 				}
-				
+
 				// Begin a compression sequence.
 				result = SCCompressSequenceBegin(ci, ((CGrafPort *)(gMainWindow))->portPixMap,
 												  	&movieRect, &imageDescriptionH);
 				CheckError(result, "\pCan't start a sequence.");
 			}
-			
+
 			// Display the frame number.
-			
+
 			sprintf(buff, "Frame: %d   Sequence:%d", f, numQpalEntries);
 			RGBForeColor(&black);
 			PaintRect (&r);
@@ -488,14 +488,14 @@ void main(void)
 			// Add the frame to the QuickTime movie.
 /*
 			HLock(compressedFrameBitsH);
-			result = CompressSequenceFrame(seq, 
-				((CGrafPort *)(gMainWindow))->portPixMap, 
+			result = CompressSequenceFrame(seq,
+				((CGrafPort *)(gMainWindow))->portPixMap,
 				&movieRect,
 				kPrevious, *compressedFrameBitsH, &compressedFrameSize, 0L, 0L);
 			CheckError(result, "\pCan't compress a frame.");
 			HUnlock(compressedFrameBitsH);
-*/	
-			result = SCCompressSequenceFrame(ci, ((CGrafPort *)(gMainWindow))->portPixMap, 
+*/
+			result = SCCompressSequenceFrame(ci, ((CGrafPort *)(gMainWindow))->portPixMap,
 								 				&movieRect, &compHdl, &compSize, &notSyncFlag);
 			CheckError(result, "\pCan't compress a frame.");
 
@@ -504,7 +504,7 @@ void main(void)
 				sampTime = 25;		// for Death
 //				sampTime = 250;	// for Endgame
 //				sampTime = 200;	// for Intro
-			result = AddMediaSample(gMedia, compHdl, 0L, compSize, sampTime, 
+			result = AddMediaSample(gMedia, compHdl, 0L, compSize, sampTime,
 									(SampleDescriptionHandle)imageDescriptionH, 1L, notSyncFlag, 0L);
 			CheckError(result, "\pCan't add the frame sample.");
 
@@ -516,42 +516,42 @@ void main(void)
 				RGBForeColor(&black);
 				PaintRect(&movieRect);				// Add a blank frame to the movie.
 /*				HLock(compressedFrameBitsH);
-				result = CompressSequenceFrame(seq, 
-					((CGrafPort *)(gMainWindow))->portPixMap, 
+				result = CompressSequenceFrame(seq,
+					((CGrafPort *)(gMainWindow))->portPixMap,
 					&movieRect,
 					kPrevious, *compressedFrameBitsH, &compressedFrameSize, 0L, 0L);
 				CheckError(result, "\pCan't compress a frame.");
 				HUnlock(compressedFrameBitsH);   */
-				result = SCCompressSequenceFrame(ci, ((CGrafPort *)(gMainWindow))->portPixMap, 
+				result = SCCompressSequenceFrame(ci, ((CGrafPort *)(gMainWindow))->portPixMap,
 									 				&movieRect, &compHdl, &compSize, &notSyncFlag);
 				CheckError(result, "\pCan't compress the blank frame.");
-		
+
 /*				result = AddMediaSample(gMedia, compressedFrameBitsH, 0L, compressedFrameSize,
 										1, (SampleDescriptionHandle)imageDescriptionH,1L,0, 0L);
 				CheckError(result, "\pCan't add the frame sample.");    */
-				result = AddMediaSample(gMedia, compHdl, 0L, compSize, 1, 
+				result = AddMediaSample(gMedia, compHdl, 0L, compSize, 1,
 										(SampleDescriptionHandle)imageDescriptionH, 1L, notSyncFlag, 0L);
 				CheckError(result, "\pCan't add the blank frame sample.");
-				
+
 				qpalCurrTime++;					// Adjust the cumulative time.
-				
+
 				lastInSeq = FALSE;
 			}
 #endif
 		}
 	}
 	ShowCursor();
-	
+
 //	CDSequenceEnd(seq);
 	SCCompressSequenceEnd(ci);
-	EndMediaEdits( gMedia );				
+	EndMediaEdits( gMedia );
 
 	result = InsertMediaIntoTrack(gTrack,0L,0L,GetMediaDuration(gMedia),1L<<16);
 	CheckError(result, "\pCan't insert media into track.");
-	
-	// Add the sound track here.	
+
+	// Add the sound track here.
 	CreateMySoundTrack(gMovie);
-	
+
 	// Finally, we're done with the movie.
 	result = AddMovieResource(gMovie, resRefNum, 0L,0L);
 	CheckError(result, "\pCan't add the movie resource.");
@@ -564,18 +564,18 @@ void main(void)
 	AddResource(qpalHdl, 'qpal', 128, "\ppal chg times");
 	WriteResource(qpalHdl);
 	ReleaseResource(qpalHdl);
-	
+
 	// Close the movie file.
 	CloseMovieFile( resRefNum );
 
 //	if (imageDescriptionH)
 //		DisposeHandle((Handle)imageDescriptionH);
-		
+
 //	if (compressedFrameBitsH)
 //		DisposeHandle(compressedFrameBitsH);
 
-	if ( gMovie ) 
-		DisposeMovie(gMovie);	
+	if ( gMovie )
+		DisposeMovie(gMovie);
 
 	CloseResFile(palResNum);
 	CloseResFile(sndResNum);
@@ -610,7 +610,7 @@ void SetInputSpecs(void)
 	long		temp, parID;
 
  	GetWDInfo(gMainVRef, &vRefNum, &parID, &temp);
- 	
+
 	gInputPal.vRefNum = vRefNum;
 	gInputPal.parID = parID;
 
@@ -624,7 +624,7 @@ void SetInputSpecs(void)
 void SetPalette(short palID)
 {
 	RGBColor	fakecol;
-	
+
 	gPalHdl = GetResource('mpal', palID);
 	if (!gPalHdl)
 	{
@@ -636,12 +636,12 @@ void SetPalette(short palID)
 	gr_clear(0xFF);
 	HLock(gPalHdl);
 	gr_set_pal(0, 256, (uchar *)*gPalHdl);
-	
+
 	fakecol.red = *(*gPalHdl + 765) << 8;
 	fakecol.green = *(*gPalHdl + 766) << 8;
 	fakecol.blue = *(*gPalHdl + 767) << 8;
 	gFakeIndex = Color2Index(&fakecol);
-	
+
 	HUnlock(gPalHdl);
 }
 
@@ -744,12 +744,12 @@ void CreateMySoundTrack(Movie theMovie)
 
 	sndDesc = (SoundDescriptionHandle)NewHandle(4);
 	CheckError (MemError(), "\pNewHandle for SoundDesc" );
-	
+
 	CreateSoundDescription (sndHandle, sndDesc, &sndDataOffset, &numSamples, &sndDataSize );
-	
+
 	theTrack = NewMovieTrack (theMovie, 0, 0, kFullVolume);
 	CheckError (GetMoviesError(), "\pNew Sound Track" );
-	
+
 	theMedia = NewTrackMedia (theTrack, SoundMediaType, FixRound ((**sndDesc).sampleRate), nil, 0);
 	CheckError (GetMoviesError(), "\pNew Media snd." );
 
@@ -759,11 +759,11 @@ void CreateMySoundTrack(Movie theMovie)
 	err = AddMediaSample(theMedia, sndHandle, sndDataOffset, sndDataSize,	1,
 						   (SampleDescriptionHandle) sndDesc, numSamples, 0, nil);
 	CheckError( err, "\pAddMediaSample snd." );
-					
+
 	err = EndMediaEdits (theMedia);
 	CheckError( err, "\pEndMediaEdits snd." );
 
-	err = InsertMediaIntoTrack (theTrack, 0, 0, GetMediaDuration (theMedia), kFix1);	
+	err = InsertMediaIntoTrack (theTrack, 0, 0, GetMediaDuration (theMedia), kFix1);
 	CheckError( err, "\pInsertMediaIntoTrack snd." );
 
 	if (sndDesc != nil) DisposeHandle( (Handle)sndDesc);
@@ -781,53 +781,53 @@ void CreateSoundDescription(Handle sndHandle, SoundDescriptionHandle	sndDesc,
 	long					bytesPerFrame;
 	SignedByte			sndHState;
 	SoundDescriptionPtr	sndDescPtr;
-	
+
 	*sndDataOffset = 0;
 	*numSamples = 0;
 	*sndDataSize = 0;
-	
+
 	SetHandleSize( (Handle)sndDesc, sizeof(SoundDescription) );
 	CheckError(MemError(),"\pSetHandleSize for sndDesc.");
-	
+
 	sndHdrOffset = GetSndHdrOffset (sndHandle);
 	if (sndHdrOffset == 0) CheckError(-1,  "\pGetSndHdrOffset ");
-	
+
 	// we can use pointers since we don't move memory
 	sndHdrPtr = (SoundHeaderPtr)(*sndHandle + sndHdrOffset);
 	sndDescPtr = *sndDesc;
 	sndDescPtr->descSize = sizeof (SoundDescription);			// total size of sound desc structure
-	sndDescPtr->resvd1 = 0;							
+	sndDescPtr->resvd1 = 0;
 	sndDescPtr->resvd2 = 0;
 	sndDescPtr->dataRefIndex = 1;
 	sndDescPtr->compressionID = 0;
 	sndDescPtr->packetSize = 0;
-	sndDescPtr->version = 0;								
+	sndDescPtr->version = 0;
 	sndDescPtr->revlevel = 0;
-	sndDescPtr->vendor = 0;  
-	
-	switch  (sndHdrPtr->encode) 
+	sndDescPtr->vendor = 0;
+
+	switch  (sndHdrPtr->encode)
 	{
 		case stdSH:
 			sndDescPtr->dataFormat = 'raw ';						// uncompressed offset-binary data
-			sndDescPtr->numChannels = 1;						// number of channels of sound 
+			sndDescPtr->numChannels = 1;						// number of channels of sound
 			sndDescPtr->sampleSize = 8;							// number of bits per sample
 			sndDescPtr->sampleRate = sndHdrPtr->sampleRate;	// sample rate
-			*numSamples = sndHdrPtr->length;				
+			*numSamples = sndHdrPtr->length;
 			*sndDataSize = *numSamples;
-			bytesPerFrame = 1;      
+			bytesPerFrame = 1;
 			samplesPerFrame = 1;
 			sampleDataOffset = (Ptr)&sndHdrPtr->sampleArea - (Ptr)sndHdrPtr;
-			break;			
-	
+			break;
+
 		case extSH:
 		{
 			ExtSoundHeaderPtr	extSndHdrP = (ExtSoundHeaderPtr)sndHdrPtr;
-			
+
 			sndDescPtr->dataFormat = 'raw ';							// uncompressed offset-binary data
 			sndDescPtr->numChannels = extSndHdrP->numChannels;	// number of channels of sound
 			sndDescPtr->sampleSize = extSndHdrP->sampleSize;		// number of bits per sample
 			sndDescPtr->sampleRate = extSndHdrP->sampleRate; 		// sample rate
-			numFrames = extSndHdrP->numFrames;				
+			numFrames = extSndHdrP->numFrames;
 			*numSamples = numFrames;
 			bytesPerFrame = extSndHdrP->numChannels * ( extSndHdrP->sampleSize / 8);
 			samplesPerFrame = 1;
@@ -835,30 +835,30 @@ void CreateSoundDescription(Handle sndHandle, SoundDescriptionHandle	sndDesc,
 			sampleDataOffset = (Ptr)(&extSndHdrP->sampleArea) - (Ptr)extSndHdrP;
 		}
 			break;
-					
+
 		default:
 			CheckError(-1, "\pCorrupt sound data or unsupported format." );
 			break;
-			
+
 	}
-	*sndDataOffset = sndHdrOffset + sampleDataOffset;  
+	*sndDataOffset = sndHdrOffset + sampleDataOffset;
 }
 
 //----------------------------------------------------------------
 typedef SndCommand *SndCmdPtr;
 
-typedef struct 
+typedef struct
 {
 	short 			format;
 	short 			numSynths;
 } Snd1Header, *Snd1HdrPtr, **Snd1HdrHndl;
 
-typedef struct 
+typedef struct
 {
 	short 			format;
 	short 			refCount;
 } Snd2Header, *Snd2HdrPtr, **Snd2HdrHndl;
-typedef struct 
+typedef struct
 {
 	short 			synthID;
 	long 			initOption;
@@ -870,31 +870,31 @@ long GetSndHdrOffset (Handle sndHandle)
 	short	howManyCmds;
 	long		sndOffset  = 0;
 	Ptr		sndPtr;
-	
+
 	if (sndHandle == nil) return 0;
 	sndPtr = *sndHandle;
 	if (sndPtr == nil) return 0;
-	
-	if ((*(Snd1HdrPtr)sndPtr).format == firstSoundFormat) 
+
+	if ((*(Snd1HdrPtr)sndPtr).format == firstSoundFormat)
 	{
 		short synths = ((Snd1HdrPtr)sndPtr)->numSynths;
 		sndPtr += sizeof(Snd1Header) + (sizeof(SynthInfo) * synths);
 	}
-	else 
+	else
 	{
 		sndPtr += sizeof(Snd2Header);
 	}
-	
+
 	howManyCmds = *(short *)sndPtr;
-	
+
 	sndPtr += sizeof(howManyCmds);
-	
+
 	// sndPtr is now at the first sound command--cruise all
 	// commands and find the first soundCmd or bufferCmd
-	
-	while (howManyCmds > 0) 
+
+	while (howManyCmds > 0)
 	{
-		switch (((SndCmdPtr)sndPtr)->cmd) 
+		switch (((SndCmdPtr)sndPtr)->cmd)
 		{
 			case (soundCmd + dataOffsetFlag):
 			case (bufferCmd + dataOffsetFlag):
@@ -924,7 +924,7 @@ long GetSndHdrOffset (Handle sndHandle)
 	// French.
 	char					theText1[] = "Ils ont trouv ton corps et lui ont redonn la vie.";
 	char					theText2[] = "En tant que cyborgue, tu serviras bien SHODAN.";
-	
+
 	// Timing - 507 total
 	blank	9
 	text 1	150
@@ -946,7 +946,7 @@ long GetSndHdrOffset (Handle sndHandle)
 	char					theText1[] = "C'est fini.";
 	char					theText2[] = "Ils vous ont offert un bon boulot ennuyeux sur Triop; a ne vous est jamais venu  l'ide de l'accepter.";
 	char					theText3[] = "On a du mal  se dbarasser des mauvaises habitudes.";
-	
+
 	// Timing - 507 total
 	blank	9
 	text 1	180
@@ -977,24 +977,24 @@ void MyCreateTextTrack(Movie theMovie)
 
 	err = BeginMediaEdits (theMedia);
 	CheckError( err, "\pBeginMediaEdits: text." );
-	
-	err = AddTextSample(GetMediaHandler(theMedia), (Ptr)blankText, strlen(blankText), geneva, 14, bold, 
+
+	err = AddTextSample(GetMediaHandler(theMedia), (Ptr)blankText, strlen(blankText), geneva, 14, bold,
 						 &white, &black, teCenter, &textBox, 0, 0, 0, 0, nil, 9, &retTime);
 	CheckError( err, "\pAddTextSample 1." );
-	err = AddTextSample(GetMediaHandler(theMedia), (Ptr)theText1, strlen(theText1), geneva, 14, bold, 
+	err = AddTextSample(GetMediaHandler(theMedia), (Ptr)theText1, strlen(theText1), geneva, 14, bold,
 						 &white, &black, teCenter, &textBox, 0, 0, 0, 0, nil, 150, &retTime);
 	CheckError( err, "\pAddTextSample 2." );
-	err = AddTextSample(GetMediaHandler(theMedia), (Ptr)blankText, strlen(blankText), geneva, 14, bold, 
+	err = AddTextSample(GetMediaHandler(theMedia), (Ptr)blankText, strlen(blankText), geneva, 14, bold,
 						 &white, &black, teCenter, &textBox, 0, 0, 0, 0, nil, 17, &retTime);
 	CheckError( err, "\pAddTextSample 3." );
-	err = AddTextSample(GetMediaHandler(theMedia), (Ptr)theText2, strlen(theText2), geneva, 14, bold, 
+	err = AddTextSample(GetMediaHandler(theMedia), (Ptr)theText2, strlen(theText2), geneva, 14, bold,
 						 &white, &black, teCenter, &textBox, 0, 0, 0, 0, nil, 331, &retTime);
 	CheckError( err, "\pAddTextSample 4." );
-	
+
 	err = EndMediaEdits(theMedia);
 	CheckError( err, "\pEndMediaEdits: text." );
 
-	err = InsertMediaIntoTrack(theTrack, 0, 0, GetMediaDuration(theMedia), kFix1);	
+	err = InsertMediaIntoTrack(theTrack, 0, 0, GetMediaDuration(theMedia), kFix1);
 	CheckError( err, "\pInsertMediaIntoTrack: text." );
 }
 #endif

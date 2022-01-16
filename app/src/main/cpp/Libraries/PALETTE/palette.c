@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/lib/src/palette/RCS/palette.c $
@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 PAL_TABLE_ENTRY *Palette_Effects_Table = NULL;
 short Palette_Effects_Table_Size = 0;
 
-fix   Shadow_Fixed_Cmap[768];    // r,g,b for each entry in colormap 
+fix   Shadow_Fixed_Cmap[768];    // r,g,b for each entry in colormap
 fix   Delta_Cmap[768];           // r,g,b delta shifts for same
 uchar local_smap[768];
 
@@ -87,21 +87,21 @@ byte num_installed_shifts = 0;
  *   only screw up this library's internal bookkeeping.  To
  *   advance an effect, install it and let the master "Advance All"
  *   routine take care of the execution.
- */ 
+ */
 
 void palette_advance_all_fx(long timestamp)
 {
-   static int	ts_remainder = 0;   
+   static int	ts_remainder = 0;
    int         	i, time_diff;
    short		c1, c2, t;
    int         	steps_to_do;
    div_t 		result;
-   
+
    // Figure out how many steps of work need to be done
    //   while updating timestamp info
 
    if (timestamps_per_step <= 0) return; // dont do a div by 0
-   
+
    time_diff = (int) (timestamp - last_timestamp);
    last_timestamp = timestamp;
 
@@ -114,12 +114,12 @@ void palette_advance_all_fx(long timestamp)
       ts_remainder -= timestamps_per_step;
       steps_to_do++;
    }
-   
+
    // Inform all active palette effects in the table how many
    //   steps of work they need to do.
 
    if (steps_to_do == 0) return;
-   
+
   	gr_get_pal(0, 256, local_smap);
 	c1 = 255;
 	c2 = 0;
@@ -154,46 +154,46 @@ void palette_advance_effect(byte id, int steps)
    short s1, sn, sr;
 
    if (Palette_Effects_Table[id].mode == STEADY) steps = 1;
-   
+
    e1 = Palette_Effects_Table[id].entry_1;
    en = Palette_Effects_Table[id].entry_n;
    er = Palette_Effects_Table[id].range;
    t  = Palette_Effects_Table[id].from_pal;  // "Colors" array for cycle
    v  = Palette_Effects_Table[id].to_pal;
-  
+
    // We need to figure out how many color steps to advance,
    //   and how much delay to increment.  So, divide "steps to do"
    //   by delay + 1, which is a complete cycle of effect operation.
    // The quotient will tell us how many colors to increment,
    //   the modulus how many delay elements to add.
-      
+
    dv = div(steps, (int) (Palette_Effects_Table[id].dsteps + 1));
-    
+
    add_to_color = dv.quot;
    add_to_delay = dv.rem;
 
    // Then, if adding to delay puts us through to another color,
    //   update accordingly.
-      
+
    Palette_Effects_Table[id].curr_dstep += add_to_delay;
    if (Palette_Effects_Table[id].curr_dstep >
        Palette_Effects_Table[id].dsteps)
    {
       Palette_Effects_Table[id].curr_dstep -=
          Palette_Effects_Table[id].dsteps;
-   
+
       add_to_color++;
    }
-   
+
    if (Palette_Effects_Table[id].effect != SHIFT) add_to_color %= er;
    else if ((Palette_Effects_Table[id].curr_stage + add_to_color) > 256)
       add_to_color %= 256;
-      
+
    // If we've advanced exactly 0 or 1 times the entire range
    //   of colors, we don't really need to do anything.
 
    if (add_to_color == 0) return;
-   
+
    switch(Palette_Effects_Table[id].effect) {
 
       case SHIFT:
@@ -208,12 +208,12 @@ void palette_advance_effect(byte id, int steps)
             gr_set_pal((int)e1, (int)er, &t[e1*3]);
             Palette_Effects_Table[id].curr_stage = 0;
          }
-         
+
          // If adding the # of steps to do to our current number of
          // steps pushes us up to or past the total number of steps
          // to do, then jump to the final palette and remove the
          // entry.
-         
+
          Palette_Effects_Table[id].curr_stage += add_to_color;
 
          if (Palette_Effects_Table[id].curr_stage >=
@@ -248,7 +248,7 @@ void palette_advance_effect(byte id, int steps)
          }
 
          gr_set_pal(0, 256, local_smap);
-         
+
          break;
 
       case CYCLE:
@@ -265,16 +265,16 @@ void palette_advance_effect(byte id, int steps)
          m  = Palette_Effects_Table[id].entry_n;   // "Curr_color" for cycle
          n  = e1;                                  // "Cmap_Index" for cycle
 
-         // Update colormap and shadow fixed map 
+         // Update colormap and shadow fixed map
 
          if (m < 0) break;            // Rare initial case w/fast frame rate
-         
+
          gr_set_pal((int) n, 1, &t[3*m]);
 
          Shadow_Fixed_Cmap[3*n]   = fix_make(t[3*m],0);
          Shadow_Fixed_Cmap[3*n+1] = fix_make(t[3*m+1],0);
          Shadow_Fixed_Cmap[3*n+2] = fix_make(t[3*m+2],0);
-         
+
          break;
 
       case CBANK:
@@ -303,7 +303,7 @@ void palette_advance_effect(byte id, int steps)
          else if (num_installed_shifts != 1) palette_swap_shadow((int)e1, (int)er, (int)a);
 
          else {
-            
+
             for (i = 0; i < Palette_Effects_Table_Size; i++)
                if (Palette_Effects_Table[i].effect == SHIFT) break;
 
@@ -358,13 +358,13 @@ byte palette_install_effect(PAL_TYPE type, PAL_MODE mode,
    Palette_Effects_Table[i].status	= ACTIVE;
    Palette_Effects_Table[i].effect	= type;
    Palette_Effects_Table[i].mode	= mode;
-   
+
    // ...and then, the type-specific stuff
 
    switch(type) {
-      
+
       case SHIFT:
-                                          
+
          Palette_Effects_Table[i].entry_1		= b1;
          Palette_Effects_Table[i].entry_n		= b2;
          Palette_Effects_Table[i].range			= b2 - b1 + 1;
@@ -374,22 +374,22 @@ byte palette_install_effect(PAL_TYPE type, PAL_MODE mode,
          Palette_Effects_Table[i].stages			= b4;
          Palette_Effects_Table[i].curr_dstep	= 0;
          Palette_Effects_Table[i].curr_stage	= -1;
-         
+
          palette_init_smap(b1, b2, ptr1, ptr2, b4); // reserve smap + deltas
-         
+
          num_installed_shifts++;
-         
+
          break;
 
       case CYCLE:
- 
+
          Palette_Effects_Table[i].entry_1		= b1;
          Palette_Effects_Table[i].range			= b2;
          Palette_Effects_Table[i].from_pal	= ptr1;
          Palette_Effects_Table[i].entry_n		= -1;  // Haven't begun yet
          Palette_Effects_Table[i].dsteps			= b3;
          Palette_Effects_Table[i].curr_dstep	= 0;   // Not currently delayed
-         
+
          break;
 
       case CBANK:
@@ -399,18 +399,18 @@ byte palette_install_effect(PAL_TYPE type, PAL_MODE mode,
          Palette_Effects_Table[i].dsteps			= b3;
          Palette_Effects_Table[i].range			= b2 - b1 + 1;
          Palette_Effects_Table[i].curr_dstep	= 0;   // Not currently delayed
-                       
+
          break;
 
    }
-   
+
    // If this is the only active effect currently installed, lets
    //   reset the timestamp and count from now
 
    num_active_effects++;  // Announce our presence, return handle
 
    return i;
-   
+
 }
 
 errtype palette_remove_effect(byte id)
@@ -420,9 +420,9 @@ errtype palette_remove_effect(byte id)
    Palette_Effects_Table[id].status = EMPTY;
 
    num_active_effects--;
-   
+
    if (Palette_Effects_Table[id].effect == SHIFT) num_installed_shifts--;
-   
+
    return OK;
 }
 
@@ -443,9 +443,9 @@ errtype palette_freeze_effect(byte id)
    if (Palette_Effects_Table[id].status == EMPTY)  return ERR_RANGE;
    if (Palette_Effects_Table[id].status == FROZEN) return ERR_NOEFFECT;
    Palette_Effects_Table[id].status = FROZEN;
-   
+
    num_active_effects--;
-   
+
    return OK;
 }
 
@@ -455,9 +455,9 @@ errtype palette_unfreeze_effect(byte id)
    if (Palette_Effects_Table[id].status != FROZEN) return ERR_NOEFFECT;
 
    Palette_Effects_Table[id].status = ACTIVE;
-   
+
    num_active_effects++;
-   
+
    return OK;
 }
 
@@ -500,23 +500,23 @@ void palette_initialize(short tbl_size)
    int i;
 
    Palette_Effects_Table_Size = tbl_size;
-   
+
    // Malloc the table
 
    Palette_Effects_Table = (PAL_TABLE_ENTRY *)
       NewPtr((int) tbl_size * sizeof(PAL_TABLE_ENTRY));
 //¥¥¥No error check here
-  
+
    // Initialize Table
-   
+
    for (i = 0; i < Palette_Effects_Table_Size; i++)
       Palette_Effects_Table[i].status = EMPTY;
 
    palette_set_rate(1);
-   
+
    return;
 }
-                     
+
 /*
  * Palette_shutdown()
  *
@@ -548,29 +548,29 @@ void palette_init_smap(short first, short last, uchar *from, uchar *to,
 {
    int i, j;
    fix x0, x1, x2, y;
-   
+
    for (i = first; i <= last; i++) {
 
          j = i - first;
-      
+
          Shadow_Fixed_Cmap[3*i]   = fix_make(from[3*j],0);
          Shadow_Fixed_Cmap[3*i+1] = fix_make(from[3*j+1],0);
          Shadow_Fixed_Cmap[3*i+2] = fix_make(from[3*j+2],0);
 
          // Get fixed point difference for r,g,b between src/dest palettes
-         
+
          x0 = fix_make(to[3*j],0)   - Shadow_Fixed_Cmap[3*i];
          x1 = fix_make(to[3*j+1],0) - Shadow_Fixed_Cmap[3*i+1];
          x2 = fix_make(to[3*j+2],0) - Shadow_Fixed_Cmap[3*i+2];
 
          // Now divide the r,g,b diffs by #steps to figure out fixed deltas
-         
+
          y = fix_make(num_steps,0);
-         
+
          Delta_Cmap[3*i]   = fix_div(x0, y);
          Delta_Cmap[3*i+1] = fix_div(x1, y);
          Delta_Cmap[3*i+2] = fix_div(x2, y);
-   }      
+   }
 }
 
 /*
@@ -586,7 +586,7 @@ void palette_swap_shadow(int s, int n, int d)
    fix Shadow_smap[768];
    fix Shadow_dmap[768];
    int i;
-   
+
    // Copy the originals to the shadow maps
 
    for (i = 3*s; i < (s+d)*3; i++) {
@@ -603,7 +603,7 @@ void palette_swap_shadow(int s, int n, int d)
       Shadow_Fixed_Cmap[i] = Shadow_smap[i-((n-d)*3)];
       Delta_Cmap[i] = Shadow_dmap[i-((n-d)*3)];
    }
-   
+
    return;
 }
 #endif

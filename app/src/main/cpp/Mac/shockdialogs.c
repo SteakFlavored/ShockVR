@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //====================================================================================
 //
@@ -74,36 +74,36 @@ void DoGameOptionsDlg(void)
 	Rect					r;
 	short					itype,itemhit;
 	ModalFilterUPP	stdFilterProcPtr;
-	
+
 	localPrefs = gShockPrefs;															// Use a local copy of the prefs while in dlg.
-	
+
 	GetPort(&savePort);																	// Save current port
-	
+
 	dlog = GetNewDialog(kGameOptionsDlg, nil, (WindowPtr)-1L);		// Load the dialog window
 	SetPort(dlog);
-	
+
 	gIgnoreGray = true;																		// Setup the OK button outline
 	btnOutlineProcPtr = NewUserItemProc(OKButtonUser);
 	GetDItem(dlog, kUsrOKOutline, &itype, &hand, &r);
 	SetDItem(dlog, kUsrOKOutline, itype, (Handle)btnOutlineProcPtr, &r);
-	
+
 	GetDItem(dlog, kChkPopupLabels, &itype, &hand, &r);					// Set "Popup Button Labels" checkbox
 	SetCtlValue((ControlHandle)hand, (short)localPrefs.goPopupLabels);
-	
+
 	GetDItem(dlog, kChkOnScreenHelp, &itype, &hand, &r);					// Set "On-Screen Help" checkbox
 	SetCtlValue((ControlHandle)hand, (short)localPrefs.goOnScreenHelp);
-	
+
 	GetDItem(dlog, localPrefs.goMsgLength + kRadNormal, &itype, &hand, &r);	// Set "Message Length" radio buttons
 	SetCtlValue((ControlHandle)hand, (short)true);
 
 	stdFilterProcPtr = NewModalFilterProc(ShockFilterProc);
 
 	ShowWindow(dlog);																	// Show the dialog
-	 	
+
 	do																								// Handle dialog events
 	{
 		ModalDialog(stdFilterProcPtr, &itemhit);
-		
+
 		if (itemhit == kChkPopupLabels)												// For checkboxes, just flip the state
 		{
 			localPrefs.goPopupLabels ^= true;
@@ -120,28 +120,28 @@ void DoGameOptionsDlg(void)
 		{
 			GetDItem(dlog, localPrefs.goMsgLength + kRadNormal, &itype, &hand, &r);	// Turn off previous button
 			SetCtlValue((ControlHandle)hand, (short)false);
-			
+
 			localPrefs.goMsgLength = itemhit - kRadNormal;										// Record new button
-			
+
 			GetDItem(dlog, localPrefs.goMsgLength + kRadNormal, &itype, &hand, &r);	// Turn on new button
 			SetCtlValue((ControlHandle)hand, (short)true);
 		}
 	}
 	while (itemhit != kBtnOK && itemhit != kBtnCancel);						// Until OK or Cancel is clicked
-	
+
 	if (itemhit == kBtnOK)																// If user clicked OK, then
 	{
 		gShockPrefs = localPrefs;														// Save changes in global prefs struct
 		SavePrefs(kPrefsResID);														// and save to prefs file
-		
+
 		popup_cursors = gShockPrefs.goPopupLabels;
 		olh_active = gShockPrefs.goOnScreenHelp;
 //		which_lang = (char)gShockPrefs.goLanguage;
 	}
-	
+
 	DisposeRoutineDescriptor(stdFilterProcPtr);								// Dispose of user item UPPs
 	DisposeRoutineDescriptor(btnOutlineProcPtr);
-		
+
 	SetPort(savePort);																		// Restore port back to main window
 	DisposDialog(dlog);																		// Free this dialog
 }
@@ -161,19 +161,19 @@ void DoSoundOptionsDlg(void)
 	Rect					r;
 	short					itype, itemhit;
 	ModalFilterUPP	stdFilterProcPtr;
-	
+
 	localPrefs = gShockPrefs;															// Use a local copy of the prefs while in dlg.
-	
+
 	GetPort(&savePort);																	// Save current port
-	
+
 	dlog = GetNewDialog(kSoundOptionsDlg, nil, (WindowPtr)-1L);		// Load the dialog window
 	SetPort(dlog);
-	
+
 	gIgnoreGray = true;																		// Setup the OK button outline
 	btnOutlineProcPtr = NewUserItemProc(OKButtonUser);
 	GetDItem(dlog, kUsrOKOutline, &itype, &hand, &r);
 	SetDItem(dlog, kUsrOKOutline, itype, (Handle)btnOutlineProcPtr, &r);
-	
+
 /*	gSliderDimmed = gDimmed = !localPrefs.soBackMusic;
 	BlockMove("\pVolume:", gDimTitle, 8);
 	statDimProcPtr = NewUserItemProc(DimStaticUser);					// Setup the dimmable static "Volume"
@@ -182,7 +182,7 @@ void DoSoundOptionsDlg(void)
 */
 	GetDItem(dlog, kChkBackMusic, &itype, &hand, &r);						// Set "Background Music" checkbox
 	SetCtlValue((ControlHandle)hand, (short)localPrefs.soBackMusic);
-	
+
 /*	gSliderLastPos = localPrefs.soMusicVolume;
 	SetupSlider();
 	sliderProcPtr = NewUserItemProc(DrawSlider);							// Set up the "volume" slider
@@ -191,15 +191,15 @@ void DoSoundOptionsDlg(void)
 */
 	GetDItem(dlog, kChkSoundFX, &itype, &hand, &r);							// Set "Sound FX" checkbox
 	SetCtlValue((ControlHandle)hand, (short)localPrefs.soSoundFX);
-	
+
 	stdFilterProcPtr = NewModalFilterProc(ShockFilterProc);
-	
+
 	ShowWindow(dlog);																	// Show the dialog
-	 	
+
 	do																								// Handle dialog events
 	{
 		ModalDialog(stdFilterProcPtr, &itemhit);
-		
+
 /*		if (itemhit == kSldVolume)														// For the slider, let the slider
 		{																							// tracker handle it.
 			if (!gSliderDimmed)
@@ -215,7 +215,7 @@ void DoSoundOptionsDlg(void)
 			GetDItem(dlog, kStatVolume, &itype, &hand, &r);					// Activate/dim the "volume" static
 			gDimmed = !localPrefs.soBackMusic;
 			InvalRect(&r);
-			
+
 			GetDItem(dlog, kSldVolume, &itype, &hand, &r);					// Activate/dim the "volume" slider
 			gSliderDimmed = !localPrefs.soBackMusic;
 			SetSliderBitmaps();
@@ -230,15 +230,15 @@ void DoSoundOptionsDlg(void)
 		}
 	}
 	while (itemhit != kBtnOK && itemhit != kBtnCancel);						// Until OK or Cancel is clicked
-	
+
 	if (itemhit == kBtnOK)																// If user clicked OK, then
 	{
 		Boolean	musicChanged = (gShockPrefs.soBackMusic != localPrefs.soBackMusic);
-		
+
 		gShockPrefs = localPrefs;														// Save changes in global prefs struct
 
 		sfx_on = gShockPrefs.soSoundFX;
-		
+
 		if (musicChanged)
 		{
 			if (gPlayingGame)									// If I'm currently playing a game...
@@ -267,7 +267,7 @@ void DoSoundOptionsDlg(void)
 				MacTuneShutdown();
 			}
 		}
-		
+
 		SavePrefs(kPrefsResID);														// Save to prefs file
 	}
 
@@ -276,7 +276,7 @@ void DoSoundOptionsDlg(void)
 //	DisposeRoutineDescriptor(sliderProcPtr);
 //	DisposeRoutineDescriptor(statDimProcPtr);
 	DisposeRoutineDescriptor(btnOutlineProcPtr);
-	
+
 	SetPort(savePort);																		// Restore port back to main window
 	DisposDialog(dlog);																		// Free this dialog
 }
@@ -298,24 +298,24 @@ void DoGraphicsOptionsDlg(void)
 	Point					tempP;
 	short					sel;
 	ModalFilterUPP	stdFilterProcPtr;
-	
+
 	localPrefs = gShockPrefs;															// Use a local copy of the prefs while in dlg.
-	
+
 	GetPort(&savePort);																	// Save current port
-	
+
 	dlog = GetNewDialog(kGraphicsOptionsDlg, nil, (WindowPtr)-1L);	// Load the dialog window
 	SetPort(dlog);
-	
+
 	gIgnoreGray = true;																		// Setup the OK button outline
 	btnOutlineProcPtr = NewUserItemProc(OKButtonUser);
 	GetDItem(dlog, kUsrOKOutline, &itype, &hand, &r);
 	SetDItem(dlog, kUsrOKOutline, itype, (Handle)btnOutlineProcPtr, &r);
-	
+
 	GetDItem(dlog, kChkSkipLines, &itype, &hand, &r);						// Set "Skip even lines" checkbox
 	SetCtlValue((ControlHandle)hand, (short)localPrefs.doUseQD);
-	HiliteControl((ControlHandle)hand, 
+	HiliteControl((ControlHandle)hand,
 						(localPrefs.doResolution == 0) ? 255 : 0);
-	
+
 	GetDItem(dlog, localPrefs.doResolution + kRadHighRes, &itype, &hand, &r);	// Set "Resolution" radio buttons
 	SetCtlValue((ControlHandle)hand, (short)true);
 
@@ -325,25 +325,25 @@ void DoGraphicsOptionsDlg(void)
 	popMenuProcPtr = NewUserItemProc(PopupMenuUser);
 	GetDItem(dlog, kPopDetail, &itype, &hand, &r);
 	SetDItem(dlog, kPopDetail, itype, (Handle)popMenuProcPtr, &r);
-	
+
 	gSliderDimmed = FALSE;
 	gSliderLastPos = localPrefs.doGamma;
 	SetupSlider();
 	sliderProcPtr = NewUserItemProc(DrawSlider);							// Set up the "Gamma" slider
 	GetDItem(dlog, kSldGamma, &itype, &hand, &r);
 	SetDItem(dlog, kSldGamma, itype, (Handle)sliderProcPtr, &r);
-		
+
 	stdFilterProcPtr = NewModalFilterProc(ShockFilterProc);
-	
+
 	ShowWindow(dlog);																	// Show the dialog
-	 	
+
 	do																								// Handle dialog events
 	{
 		ModalDialog(stdFilterProcPtr, &itemhit);
-		
+
 		if (itemhit == kSldGamma)														// For the slider, let the slider
 		{																							// tracker handle it.
-			localPrefs.doGamma = DoSliderTracking(dlog, itemhit, 
+			localPrefs.doGamma = DoSliderTracking(dlog, itemhit,
 												(gPlayingGame) ?  (SliderCallbackProcPtr)gamma_dealfunc : NULL);
 		}
 		if (itemhit == kChkSkipLines)													// For checkboxes, just flip the state
@@ -356,12 +356,12 @@ void DoGraphicsOptionsDlg(void)
 		{
 			GetDItem(dlog, localPrefs.doResolution + kRadHighRes, &itype, &hand, &r);	// Turn off previous button
 			SetCtlValue((ControlHandle)hand, (short)false);
-			
+
 			localPrefs.doResolution = itemhit - kRadHighRes;										// Record new button
-			
+
 			GetDItem(dlog, localPrefs.doResolution + kRadHighRes, &itype, &hand, &r);	// Turn on new button
 			SetCtlValue((ControlHandle)hand, (short)true);
-			
+
 			GetDItem(dlog, kChkSkipLines, &itype, &hand, &r);					// Adjust "Skip even lines" checkbox
 			if (localPrefs.doResolution == 0 && localPrefs.doUseQD)				// If switched to Hires and skip was on,
 			{
@@ -374,11 +374,11 @@ void DoGraphicsOptionsDlg(void)
 		else if (itemhit == kPopDetail)												// Show the Detail popup menu
 		{
 			GetDItem(dlog, itemhit, &itype, &hand, &r);
-			
+
 			tempP.h = r.left+1;
 			tempP.v = r.top+1;
 			LocalToGlobal(&tempP);
-			
+
 			sel = gPopupSel;
 			CheckItem(gPopupMenuHdl, gPopupSel, true);										// check the current item
 			sel = PopUpMenuSelect(gPopupMenuHdl, tempP.v, tempP.h, gPopupSel);	// Do the popup thang
@@ -398,14 +398,14 @@ void DoGraphicsOptionsDlg(void)
 		if ((gShockPrefs.doGamma != localPrefs.doGamma) && (gPlayingGame))
 			gamma_dealfunc(gShockPrefs.doGamma);
 	}
-		
+
 	if (itemhit == kBtnOK)																// If user clicked OK, then
 	{
 		Boolean	resChanged = (gShockPrefs.doResolution != localPrefs.doResolution);
 
 		gShockPrefs = localPrefs;														// Save changes in global prefs struct
 		SavePrefs(kPrefsResID);														// and save to prefs file
-		
+
 		if (resChanged)																		// Update the game's globals.
 		{
 			DoubleSize = (gShockPrefs.doResolution == 1);
@@ -455,17 +455,17 @@ Boolean DoNewGameDlg(void)
 	ModalFilterUPP	stdFilterProcPtr;
 	Str255				name;
 	int					 i;
-	
+
 	GetPort(&savePort);																	// Save current port
-	
+
 	dlog = GetNewDialog(kNewGameDlg, nil, (WindowPtr)-1L);			// Load the dialog window
 	SetPort(dlog);
-	
+
 	gIgnoreGray = true;																		// Setup the OK button outline
 	btnOutlineProcPtr = NewUserItemProc(OKButtonUser);
 	GetDItem(dlog, kUsrOKOutline, &itype, &hand, &r);
 	SetDItem(dlog, kUsrOKOutline, itype, (Handle)btnOutlineProcPtr, &r);
-	
+
 	gPopupMenuHdl = GetMenu(8301);												// Get the menu used in popups
 	InsertMenu(gPopupMenuHdl, -1);
 	for (i = 0; i < 4; i++)
@@ -480,27 +480,27 @@ Boolean DoNewGameDlg(void)
 	SetDItem(dlog, kPopPuzzles, itype, (Handle)popMenuProcPtr, &r);
 	GetDItem(dlog, kPopCyberspace, &itype, &hand, &r);
 	SetDItem(dlog, kPopCyberspace, itype, (Handle)popMenuProcPtr, &r);
-		
+
 	grpBoxProcPtr = NewUserItemProc(GroupBoxUser);						// Setup the "Difficulty" group box
 	GetDItem(dlog, kGrpDifficulty, &itype, &hand, &r);
 	SetDItem(dlog, kGrpDifficulty, itype, (Handle)grpBoxProcPtr, &r);
-	
+
 	stdFilterProcPtr = NewModalFilterProc(ShockFilterProc);
 
 	ShowWindow(dlog);																	// Show the dialog
-	 	
+
 	do																								// Handle dialog events
 	{
 		ModalDialog(stdFilterProcPtr, &itemhit);
-		
+
 		if (itemhit >= kPopCombat && itemhit <= kPopCyberspace)
 		{
 			GetDItem(dlog, itemhit, &itype, &hand, &r);
-			
+
 			tempP.h = r.left+1;
 			tempP.v = r.top+5;
 			LocalToGlobal(&tempP);
-			
+
 			cursel = gNewGameSel[itemhit - kPopCombat];
 			CheckItem(gPopupMenuHdl, cursel, true);											// check the current item
 			sel = PopUpMenuSelect(gPopupMenuHdl, tempP.v, tempP.h, cursel);	// Do the popup thang
@@ -512,10 +512,10 @@ Boolean DoNewGameDlg(void)
 			}
 		}
 		else if (itemhit == kBtnOK)
-		{			
+		{
 			GetDItem(dlog, kEdtPlayerName, &itype, &hand, &r);
 	 		GetIText(hand, name);
-	 		
+
 	 		if (name[0] == 0)
 	 		{
 				Alert(1003, nil);
@@ -529,7 +529,7 @@ Boolean DoNewGameDlg(void)
 		}
 	}
 	while (itemhit != kBtnOK && itemhit != kBtnCancel);						// Until OK or Cancel is clicked
-	
+
 	if (itemhit == kBtnOK)																// If user clicked OK, then
 	{
 		for (i = 0; i < 4; i++)																// save the difficulty settings,
@@ -537,7 +537,7 @@ Boolean DoNewGameDlg(void)
 		strcpy(player_struct.name, p2cstr(name));								// and the player name,
 		ret = TRUE;																			// and tell it's ok to go on.
 	}
-		
+
 	DisposeRoutineDescriptor(stdFilterProcPtr);								// Dispose of user item UPPs
 	DisposeRoutineDescriptor(grpBoxProcPtr);
 	DisposeRoutineDescriptor(popMenuProcPtr);
@@ -548,7 +548,7 @@ Boolean DoNewGameDlg(void)
 
 	SetPort(savePort);																		// Restore port back to main window
 	DisposDialog(dlog);																		// Free this dialog
-	
+
 	return (ret);
 }
 
@@ -569,25 +569,25 @@ void DoEndgameDlg(void)
 	int					i, score;
 
 	GetPort(&savePort);																	// Save current port
-	
+
 	dlog = GetNewDialog(kEndGameDlg, nil, (WindowPtr)-1L);				// Load the dialog window
 	SetPort(dlog);
-	
+
 	gIgnoreGray = true;																		// Setup the OK button outline
 	btnOutlineProcPtr = NewUserItemProc(OKButtonUser);
 	GetDItem(dlog, kUsrOKOutline, &itype, &hand, &r);
 	SetDItem(dlog, kUsrOKOutline, itype, (Handle)btnOutlineProcPtr, &r);
-	
+
 	// Figure out the elapsed time
 	second_format(player_struct.game_time / CIT_CYCLE, buf);
 	GetDItem(dlog, kStatTime, &itype, &hand, &r);
 	SetIText(hand, c2pstr(buf));
-	
+
 	// Figure out the kills
 	numtostring(player_struct.num_victories, buf);
 	GetDItem(dlog, kStatKills, &itype, &hand, &r);
 	SetIText(hand, c2pstr(buf));
-	
+
 	// Figure out the regens
 	numtostring(player_struct.num_deaths, buf);
 	GetDItem(dlog, kStatRegens, &itype, &hand, &r);
@@ -619,16 +619,16 @@ void DoEndgameDlg(void)
 	stdFilterProcPtr = NewModalFilterProc(ShockFilterProc);
 
 	ShowWindow(dlog);																	// Show the dialog
-	 	
+
 	do																								// Handle dialog events
 	{
-		ModalDialog(stdFilterProcPtr, &itemhit);	
+		ModalDialog(stdFilterProcPtr, &itemhit);
 	}
 	while (itemhit != kBtnOK);															// Until OK is clicked
-		
+
 	DisposeRoutineDescriptor(stdFilterProcPtr);								// Dispose of user item UPPs
 	DisposeRoutineDescriptor(btnOutlineProcPtr);
-		
+
 	SetPort(savePort);																		// Restore port back to main window
 	DisposDialog(dlog);																		// Free this dialog
 }
@@ -656,14 +656,14 @@ void StartProgressDlg(const Str255& title, int numSteps)
  	GetPort(&gSavePort);												// Save for later
 
      ParamText(title, NULL, NULL, NULL);						// Set the dialog's title
-     
+
      dlog = GetNewDialog(2100,0L,(WindowPtr) -1L);	// Show the progress dialog.
  	SetPort(dlog);
  	DrawDialog(dlog);
- 	
+
  	GetDItem(dlog, 2, &itype, &hand ,&r);						// Draw a border around the progress bar.
  	FrameRect(&r);
- 	
+
 	clr.red = 0x8000;													// Set color to draw progress bar in.
 	clr.green = 0x8000;
 	clr.blue = 0xB000;
@@ -705,7 +705,7 @@ void AdvanceProgress(void)
 void EndProgressDlg(void)
 {
 	RGBColor	black = {0,0,0};
-	
+
 	if (gProgressDlg)
 	{
 		if (gProgress < gNumSteps)											// Make sure we actually finish the progress.
@@ -714,13 +714,13 @@ void EndProgressDlg(void)
 		 	Handle		hand;
 		 	Rect			r;
 		 	long			temp;
-		 	
+
 		 	GetDItem(gProgressDlg, 2, &itype, &hand, &r);			// Get the progress bar's item rect.
-		 	InsetRect(&r, 1, 1);		
+		 	InsetRect(&r, 1, 1);
 			PaintRect(&r);														// Draw the progress bar as complete.
  			Delay(20L, &temp);												// Let user see that we're done.
 		}
-		
+
 		RGBForeColor(&black);
  		DisposDialog(gProgressDlg);
 		gProgressDlg = NULL;
@@ -735,7 +735,7 @@ void EndProgressDlg(void)
 void Pstrcat(StringPtr dest, ConstStr255Param src)
 {
 	long	sLen = min(*src, 255 - *dest);
-	
+
 	BlockMove(src+1, dest + *dest + 1, sLen);
 	*dest += sLen;
 }

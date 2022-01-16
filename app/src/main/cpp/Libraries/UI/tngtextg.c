@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #include "tngtextg.h"
 //#include <_ui.h>
@@ -68,7 +68,7 @@ errtype tng_textgadget_destroy(TNG *ptng)
    return(OK);
 }
 
-// Initializes the TNG 
+// Initializes the TNG
 errtype tng_textgadget_init(void *ui_data, TNG *ptng, TNGStyle *sty, ulong options, LGPoint size, LGPoint abs_loc)
 {
    TNG_textgadget *ptxtng;
@@ -188,7 +188,7 @@ errtype tng_textgadget_2d_draw(TNG *ptng, ushort , LGPoint loc)
    ptxtng = TNG_TG(ptng);
    TNGDrawBase(ptng, loc, ptxtng->size);
    r.ul.x = loc.x + TNG_TG_BORDER_WIDTH;
-   r.ul.y = loc.y + TNG_TG_BORDER_WIDTH; 
+   r.ul.y = loc.y + TNG_TG_BORDER_WIDTH;
    t = TNG_TG_TT(ptng);
    if (t != NULL)
       tt_show_all(t);
@@ -236,7 +236,7 @@ bool tng_textgadget_keycooked(TNG *ptng, ushort key)
    IF_SET_RV(tng_cb_keycooked(ptng, key));
    retval = TRUE;
 */
-   return(retval);   
+   return(retval);
 }
 
 // React appropriately for receiving the specified mouse button event
@@ -261,7 +261,7 @@ bool tng_textgadget_signal(TNG *ptng, ushort signal)
 // -----------------------------
 
 
-// Assumes that lastkey contains the hex code of the 
+// Assumes that lastkey contains the hex code of the
 // appropriate kind of scroll key.
 errtype tng_textgadget_scroll(TNG *ptng)
 {

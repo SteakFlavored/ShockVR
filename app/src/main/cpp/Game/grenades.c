@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/grenades.c $
@@ -82,7 +82,7 @@ static ubyte grenade_counter = 1;
 
 // checks the first two to be equal = which means in_between
 #define IN_BETWEEN_NOT_EQUAL(a,b,c) ((((a) <= (b)) && ((b) < (c))) || \
-                            (((a) >= (b)) && ((b) > (c))))  
+                            (((a) >= (b)) && ((b) > (c))))
 
 #define GRENADE_TIME_UNIT 10 // how many time-setting units in a second
 #define GRENADE_BULLET_MASS fix_make(0,0x0100)
@@ -214,7 +214,7 @@ ObjID explosion_ray_cast_attack(ObjID gren_id, ObjID target, ObjLoc *gren_loc, f
 void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionData *edata)
 {
    int   x = OBJ_LOC_BIN_X(loc);
-   int   y = OBJ_LOC_BIN_Y(loc);                                            
+   int   y = OBJ_LOC_BIN_Y(loc);
    int   cx, cy;
    int   cradius = fix_int(edata->radius);
    fix      deltax, deltay,deltaz;
@@ -323,7 +323,7 @@ void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionDa
                deltay = fix_abs(OBJ_LOC_VAL_TO_FIX(objs[current_id].loc.y - loc.y));
                deltaz = fix_from_obj_height_val(objs[current_id].loc.z) - fix_from_obj_height_val(loc.z);
 
-               // get the distance squared and check with radius squared. (saves us a square 
+               // get the distance squared and check with radius squared. (saves us a square
                // root if object is not within radius).
                dist_squared = fix_mul(deltax, deltax) + fix_mul(deltay, deltay) + fix_mul(deltaz,deltaz);
 
@@ -375,7 +375,7 @@ void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionDa
                      effect_class = (objs[current_id].obclass == CLASS_CRITTER) ? CritterProps[CPNUM(current_id)].hit_effect : NON_CRITTER_EFFECT;
                      effect = effect_matrix[effect_class][GREN_TYPE][0];
 
-                     // okay let's figure out the damage done by the grenade 
+                     // okay let's figure out the damage done by the grenade
                      // let's check if we're dealing with
                      // a. combat difficulty - 0
                      // b. not the player
@@ -397,10 +397,10 @@ void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionDa
                         {
                            ubyte    chaining;
                            int      targ_triple;
-                        
-                           // check if this grenade will be affected by blast 
+
+                           // check if this grenade will be affected by blast
                            targ_triple = MAKETRIP(objs[current_id].obclass, objs[current_id].subclass, objs[current_id].info.type);
-                        
+
                            chaining = GrenadeProps[CPTRIP(targ_triple)].touchiness + (percent_damage/15) +
                                        RndRange(&grenade_rnd, 0, 6) - 3;
 
@@ -565,7 +565,7 @@ void do_object_explosion(ObjID id)
    }
 
    // do some explosion here
-   do_explosion(loc, id, 0, &edata); 
+   do_explosion(loc, id, 0, &edata);
 }
 
 // -------------------------------------------------
@@ -705,7 +705,7 @@ void grenade_contact(ObjID id, int)
       {
          // loook - don't explode me - i ain't still yet
          return;
-      }   
+      }
       ADD_DESTROYED_OBJECT(id);
    }
 }

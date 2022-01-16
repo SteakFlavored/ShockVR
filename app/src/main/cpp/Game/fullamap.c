@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/fullamap.c $
@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mainloop.h"
 #include "amaploop.h"
 #include "lvldata.h"
-                        
+
 extern bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte but);
 extern bool amap_scroll_handler(uiEvent* ev, 	LGRegion* r, void* user_data);
 
@@ -59,7 +59,7 @@ bool amap_kb_callback(curAMap *amptr, int code);
 bool amap_key_handler(uiEvent *ev, LGRegion *r, void *user_data)
 {
    uiCookedKeyEvent *kev = (uiCookedKeyEvent *)ev;
-   
+
    if (amap_kb_callback(oAMap(MFD_FULLSCR_MAP),kev->code))
       return FALSE;
    return(main_kb_callback(ev,r,user_data));

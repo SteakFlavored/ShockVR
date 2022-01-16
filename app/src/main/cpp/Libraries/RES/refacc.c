@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		RefAcc.c		Resource reference access
 //		Rex E. Bradford
@@ -23,16 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $Log: refacc.c $
  * Revision 1.4  1994/08/30  15:18:38  rex
  * Made sure RefGet() returns NULL if ResLoadResource() did
- * 
+ *
  * Revision 1.3  1994/08/30  15:15:22  rex
  * Put in check for NULL return from ResLoadResource
- * 
+ *
  * Revision 1.2  1994/06/16  11:05:17  rex
  * Modified RefGet() to handle LRU list better (keep locked guys out)
- * 
+ *
  * Revision 1.1  1994/02/17  11:23:16  rex
  * Initial revision
- * 
+ *
 */
 
 //#include <string.h>
@@ -60,7 +60,7 @@ void *RefLock(Ref ref)
 	RefIndex index;
 
 	//	Check for valid ref
-	
+
 //	DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return NULL;});
 
 	//	Add to cumulative stats
@@ -94,7 +94,7 @@ void *RefLock(Ref ref)
 //		Warning(("RefLock: reference: $%x bad, index out of range\n", ref));});
 
 	//	Return ptr
-	
+
 	if (!RefIndexValid(prt, index))
 		return (NULL);
 	else
@@ -174,14 +174,14 @@ RefTable *ResReadRefTable(Id id)
 	short			err;
 
 	prd = RESDESC(id);
-	
+
 	SetResLoad(FALSE);													// Get resource handle without
 	resHdl = GetResource(resMacTypes[prd->type], id);		// actually loading res into mem
 	SetResLoad(TRUE);
-	
+
 	ReadPartialResource(resHdl, 0, &numRefs, sizeof(RefIndex));	// Get number of refs
 	tableSize = REFTABLESIZE(numRefs);										// to determine table size
-	
+
 	prt = (RefTable *)NewPtr(tableSize);							// Now allocate a buffer for the
 	if (prt)																		// table and read it in.
 	{
@@ -197,7 +197,7 @@ RefTable *ResReadRefTable(Id id)
 	{
 		DebugStr("\pResReadRefTable: Can't allocate pointer for RefTable\n");
 	}
-	
+
 	return (prt);
 /*
 	//	Check id and file number and make sure compound
@@ -334,11 +334,11 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
 	ResDesc		*prd = RESDESC(REFID(ref));
 	Handle		resHdl;
 	short			err;
-	
+
 	SetResLoad(FALSE);													// Get resource handle without
 	resHdl = GetResource(resMacTypes[prd->type], REFID(ref));
 	SetResLoad(TRUE);														// actually loading res into mem
-	
+
 	if (prd->flags & RDF_LZW)
 	{
 /*
@@ -482,7 +482,7 @@ int RefInject(RefTable *prt, Ref ref, void *buff)
 		}});
 
 //	Add to cumulative stats
-            
+
 	CUMSTATS(REFID(ref),numExtracts);
 
 //	Seek to start of all data in compound resource

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //
 // $Source: r:/prj/lib/src/3d/RCS/globv.asm $
@@ -27,25 +27,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // $Log: globv.asm $
 // Revision 1.5  1994/11/06  19:10:28  jaemz
 // Allow stereo to be externed even in non stereo version to test
-// 
+//
 // Revision 1.4  1994/09/28  19:01:00  jaemz
-// Fixed stereo bug 
-// 
+// Fixed stereo bug
+//
 // Revision 1.3  1994/09/20  13:29:08  jaemz
 // Added globals for lighting
-// 
+//
 // Revision 1.2  1994/08/18  03:46:56  jaemz
 // Changed stereo glob names to have underscore for c
-// 
+//
 // Revision 1.1  1994/08/04  17:47:21  jaemz
 // Initial revision
-// 
-// 
+//
+//
 
 
 #include "lg.h"
 #include "3d.h"
- 
+
 // point allocation vars
 
 g3s_point 	*point_list=0;   //   dd      0       ;ptr to point buffer
@@ -73,7 +73,7 @@ fix 				pixel_ratio;    		//  fix     ?       ;copy from 2d drv_cap
 long				window_width;  		//  dd      ?
 long				window_height; 		//  dd      ?
 
-long				ww2;  							//  dd      ?       ;one-half widht,height 
+long				ww2;  							//  dd      ?       ;one-half widht,height
 long				wh2; 							//  dd      ?       ;..for texture mapper
 
 long				_scrw; 						//  dd      ?       ;need to do double-word mul
@@ -130,14 +130,14 @@ char			axis_neg_flag;   //			db      ?
 // Lighting globals
 char 			_g3d_light_type=0;		// db      0       ; The lighting type, see above
 
-fix				_g3d_amb_light=0;  				// fix    0       ; amount of ambient light 
+fix				_g3d_amb_light=0;  				// fix    0       ; amount of ambient light
 fix				_g3d_diff_light=0x10000; 	// fix    10000h  ; intensity of light source
 fix				_g3d_spec_light=0; 				// fix    0       ; amount of spec light
 fix				_g3d_flash=0;       			// fix    0       ; specular flash point below which none is applied
 // note that specular light is used to provide a "flash" mostly
 // so you can artificially inflate it a bit, or we could try
 // funny functions to make it "flash" only within a certain
-// range.  
+// range.
 
 g3s_vector	_g3d_light_src;			//  g3s_vector      <>      ; light source, either local or vector
 g3s_vector	_g3d_light_trans;		//  g3s_vector   		<>      ; point source in view coords
@@ -149,7 +149,7 @@ fix					_g3d_ldotv;  				//  fix     ?       ; light vector dotted with view vec
 fix					_g3d_sdotl;    			//  fix     ?       ; surface vector dotted with light vector (for diffuse and spec)
 fix					_g3d_sdotv;    			//  fix     ?       ; surface vector dotted with view vector (ostensibly jnorm)
 
-long				_g3d_light_tab=0;		//  dd      0       ; lighting table with 32 or 24 entries.  Should go from black to white, 
+long				_g3d_light_tab=0;		//  dd      0       ; lighting table with 32 or 24 entries.  Should go from black to white,
 
 
 // stereo globals, read em and weep

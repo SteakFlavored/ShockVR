@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //====================================================================================
 //
@@ -60,7 +60,7 @@ void SetDefaultPrefs(void)
 {
 	gShockPrefs.prefVer = 0;
 	gShockPrefs.prefPlayIntro = 1;				// First time through, play the intro
-	
+
 	gShockPrefs.goMsgLength = 0;					// Normal
 	gShockPrefs.goPopupLabels = true;
 	gShockPrefs.goOnScreenHelp = true;
@@ -89,7 +89,7 @@ OSErr LoadPrefs(ResType resID)
 	long						prefParID;
 	short						fRef;
 	HParamBlockRec		info;
-	
+
 	err = GetPrefsDir(&prefVRef, &prefParID);
 	if (err == noErr)
 	{
@@ -122,7 +122,7 @@ OSErr LoadPrefs(ResType resID)
 			prefHdl = GetResource(resID, 128);
 			if (prefHdl)
 			{
-				BlockMove(*prefHdl, &gShockPrefs, sizeof(ShockPrefs));				
+				BlockMove(*prefHdl, &gShockPrefs, sizeof(ShockPrefs));
 				ReleaseResource(prefHdl);
 				SetShockGlobals();
 			}
@@ -142,7 +142,7 @@ OSErr SavePrefs(ResType resID)
 	short			prefVRef;
 	long			prefParID;
 	short			fRef;
-	
+
 	err = GetPrefsDir(&prefVRef, &prefParID);
 	if (err == noErr)
 	{
@@ -156,9 +156,9 @@ OSErr SavePrefs(ResType resID)
 				if (prefHdl)
 					AddResource(prefHdl, resID, 128, "\p");
 			}
-			
+
 			BlockMove(&gShockPrefs, *prefHdl, sizeof(ShockPrefs));		// Set prefs handle from our global.
-			
+
 			ChangedResource(prefHdl);													// Write out the changed resource.
 			WriteResource(prefHdl);
 			ReleaseResource(prefHdl);
@@ -176,10 +176,10 @@ OSErr GetPrefsDir(short *vRef, long *parID)
 {
 	OSErr	err;
 	long		fm;
-	
+
 	err = Gestalt(gestaltFindFolderAttr, &fm);
 	err |= (fm & (1 << gestaltFindFolderPresent)) == 0;
-	
+
 	if (err == noErr)												// If folder mgr present, then find
 	{																		// the 'Preferences' folder
 		err = FindFolder(kOnSystemDisk, kPreferencesFolderType, kCreateFolder, vRef, parID);
@@ -197,7 +197,7 @@ void SetShockGlobals(void)
 	which_lang = 0;													// always English
 
 	sfx_on = gShockPrefs.soSoundFX;
-	
+
 	DoubleSize = (gShockPrefs.doResolution == 1);		// Set this True for low-res.
 	SkipLines = gShockPrefs.doUseQD;
 	_fr_global_detail = gShockPrefs.doDetail;

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/sideicon.c $
@@ -72,7 +72,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ICON_ART_ITEMS        2
 #define ICON_ART_OFF          0
 #define ICON_ART_ON           1
-#define ICON_ART_BACKGROUND   255   
+#define ICON_ART_BACKGROUND   255
 
 #define FLASH_RATE 256
 #define MAX_FLASH_COUNT 12
@@ -121,7 +121,7 @@ grs_bitmap side_icon_background;
 #else
 #define side_icon_bmid(icon,art) (MKREF(RES_SideIconArt, (ICON_ART_ITEMS * icon) + art + 1))
 #define side_icon_backid         (MKREF(RES_SideIconArt,0))
-#endif 
+#endif
 
 #ifdef PROGRAM_SIDEICON
 static char shiftnums[]=")!@#$%^&*(";
@@ -129,24 +129,24 @@ static uchar programmed_sideicon=0;
 #endif
 
 // this is in wares.c
-extern long ware_base_triples[NUM_WARE_TYPES]; 
+extern long ware_base_triples[NUM_WARE_TYPES];
 
 #define IDX_OF_TYPE(type,trip) (OPTRIP(trip) - OPTRIP(ware_base_triples[type]))
 
 static ICON_DATA icon_data[NUM_SIDE_ICONS] =
 {
- 
-  { WARE_HARD, BIOSCAN_HARD_TRIPLE},  
-  { WARE_HARD, FULLSCR_HARD_TRIPLE},  
-  { WARE_HARD, SENS_HARD_TRIPLE},  
-  { WARE_HARD, LANTERN_HARD_TRIPLE},  
+
+  { WARE_HARD, BIOSCAN_HARD_TRIPLE},
+  { WARE_HARD, FULLSCR_HARD_TRIPLE},
+  { WARE_HARD, SENS_HARD_TRIPLE},
+  { WARE_HARD, LANTERN_HARD_TRIPLE},
   { WARE_HARD, SHIELD_HARD_TRIPLE},
- 
-  { WARE_HARD, INFRA_GOG_TRIPLE},  
-  { WARE_HARD, NAV_HARD_TRIPLE},  
-  { WARE_HARD, VIDTEX_HARD_TRIPLE, SFX_EMAIL}, 
-  { WARE_HARD, MOTION_HARD_TRIPLE},  
-  { WARE_HARD, JET_HARD_TRIPLE},  
+
+  { WARE_HARD, INFRA_GOG_TRIPLE},
+  { WARE_HARD, NAV_HARD_TRIPLE},
+  { WARE_HARD, VIDTEX_HARD_TRIPLE, SFX_EMAIL},
+  { WARE_HARD, MOTION_HARD_TRIPLE},
+  { WARE_HARD, JET_HARD_TRIPLE},
 };
 
 grs_bitmap	icon_cursor_bm[2];
@@ -174,23 +174,23 @@ void side_icon_language_change(void)
 void init_all_side_icons()
 {
 	int i;
-	
+
 	// Now, figure out on-screen locations
-	
+
 	for (i = 0; i < (NUM_SIDE_ICONS / 2); i++)             						 // left side first
 	{
 		side_icons[i].r.ul.x = SIDE_ICONS_LEFT_X;
 		side_icons[i].r.ul.y = SIDE_ICONS_TOP_Y + (i * (SIDE_ICONS_HEIGHT + SIDE_ICONS_VSPACE));
-		
+
 		side_icons[i].r.lr.x = side_icons[i].r.ul.x + SIDE_ICONS_WIDTH;
 		side_icons[i].r.lr.y = side_icons[i].r.ul.y + SIDE_ICONS_HEIGHT;
 	}
-	
+
 	for (i = (NUM_SIDE_ICONS / 2); i < NUM_SIDE_ICONS; i++) 		// now right side
 	{
 		side_icons[i].r.ul.x = SIDE_ICONS_RIGHT_X;
 		side_icons[i].r.ul.y = side_icons[i-(NUM_SIDE_ICONS/2)].r.ul.y;
-		
+
 		side_icons[i].r.lr.x = side_icons[i].r.ul.x + SIDE_ICONS_WIDTH;
 		side_icons[i].r.lr.y = side_icons[i].r.ul.y + SIDE_ICONS_HEIGHT;
 	}
@@ -240,7 +240,7 @@ void init_side_icon_hotkeys(void)
 
 
 // ---------------------------------------------------------------------------
-// init_side_icon() 
+// init_side_icon()
 //
 
 
@@ -260,8 +260,8 @@ void screen_init_side_icons(LGRegion* root)
    right_region = (LGRegion *)NewPtr(sizeof(LGRegion));
 
    // Wow, having a LGRegion for each of the side icons is totally uncool
-   // Let's just have two regions, and figure out from there.  
-   
+   // Let's just have two regions, and figure out from there.
+
    r.ul = side_icons[0].r.ul;
    r.lr = side_icons[(NUM_SIDE_ICONS-1)/2].r.lr;
    macro_region_create_with_autodestroy(root, left_region, &r);
@@ -318,7 +318,7 @@ bool side_icon_mouse_callback(uiEvent *e, LGRegion *r, void *udata)
       int ver;
       m = (uiMouseEvent *)e;
 
-  
+
       i = (int) udata + (e->pos.y - SIDE_ICONS_TOP_Y)/(SIDE_ICONS_HEIGHT + SIDE_ICONS_VSPACE);
       type = icon_data[i].waretype;
       num  = IDX_OF_TYPE(type,icon_data[i].waretrip);
@@ -352,7 +352,7 @@ bool side_icon_mouse_callback(uiEvent *e, LGRegion *r, void *udata)
          retval = TRUE;
       }
 */
- 
+
       if (!(m->action & MOUSE_LDOWN)) return retval; // ignore click releases
    //   mprintf("  Side Icon %d: CYBER(%d,%d) [%x] REAL(%d,%d) [%x]\n",
    //      i, side_icons[i].cyber_type, side_icons[i].cyber_num,
@@ -437,7 +437,7 @@ void zoom_to_side_icon(LGPoint from, int icon)
    zoom_rect(&start,&dest);
    side_icon_expose(icon);
 }
-   
+
 
 
 // ---------------------------------------------------------------------------
@@ -488,9 +488,9 @@ void side_icon_expose(ubyte icon_num)
 
    if (type < 0) return;
    get_ware_pointers(type, &player_wares, &player_status, &wares, &n);
-   
+
    // Possible expose cases:
-   // 
+   //
    // 1) We don't have the appropriate ware for that side icon.
    if (player_wares[num] == 0) {
 
@@ -516,7 +516,7 @@ void side_icon_expose(ubyte icon_num)
                if (QUESTBIT_GET(0x12c))
                   play_digi_fx(icon_data[icon_num].flashfx,1);
       }
-      else 
+      else
          side_icon_draw_bm(r, icon_num, ICON_ART_OFF);
       if (fs != side_icons[icon_num].flashstate)
       {
@@ -542,7 +542,7 @@ void side_icon_expose(ubyte icon_num)
       // Expose normal (active) bitmap of current ware version
       side_icon_draw_bm(r, icon_num, ICON_ART_ON);
    }
-  
+
    return;
 }
 
@@ -552,21 +552,21 @@ void side_icon_expose(ubyte icon_num)
 // Load the bitmaps for all side icons and states from the resource system.
 
 errtype side_icon_load_bitmaps()
-{                                
+{
 #ifdef PRELOAD_BITMAPS
    RefTable *side_icon_rft;
    int i, j, index /*, file_handle */;
 
 //  file_handle = ResOpenFile("sideart.res");
-//   if (file_handle < 0) critical_error(CRITERR_RES|6); 
-   
+//   if (file_handle < 0) critical_error(CRITERR_RES|6);
+
    side_icon_rft = ResLock(RES_SideIconArt);
    load_bitmap_from_res(&side_icon_background, RES_SideIconArt, 0, side_icon_rft, FALSE, NULL, NULL);
 
    for (i = 0; i < NUM_SIDE_ICONS; i++) {
 
       for (j = 0; j < ICON_ART_ITEMS; j++) {
- 
+
          index = (ICON_ART_ITEMS * i) + j + 1;
          load_bitmap_from_res(&(side_icon_bms[i][j]), RES_SideIconArt, index, side_icon_rft, FALSE, NULL, NULL);
       }

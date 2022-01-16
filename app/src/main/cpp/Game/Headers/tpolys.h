@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // Since anim is taking top 6 bits of the bitmap_3d, we are
 // left with the bottom 10.
@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TPOLY_TYPE_SCROLL_TEXT  3
 
 // Note: we may need to steal yet another bit for accessing anims
-// 1 bit of scale 
+// 1 bit of scale
 // 2 bits of type -- 0 = "screen" anim   1= custom texture material 2 = screen text  3 = scrolling screen
-// 7 bits of index 
+// 7 bits of index
 #define TPOLY_INDEX_BITS   7
 #define TPOLY_INDEX_MASK   0x007F
 #define TPOLY_TYPE_BITS    2

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //#include <fcntl.h>
 //#include <io.h>
@@ -281,7 +281,7 @@ bool quickbox_uint_text_changed(QuickboxSlot *qbs)
    }
    else
       atoival = 0;
-   *((uint *)(qbs->var)) = atoival; 
+   *((uint *)(qbs->var)) = atoival;
 
    return TRUE;
 }
@@ -392,7 +392,7 @@ bool tng_quickbox_text_changed(void *ui_data, void *user_data)
    return(FALSE);
 }
 
-// Initializes the TNG 
+// Initializes the TNG
 errtype tng_quickbox_init(void *ui_data, TNG *ptng, TNGStyle *sty, ushort options, LGPoint slot_size, LGPoint spacing, LGPoint border,
    Ref left_id, Ref right_id)
 {
@@ -427,7 +427,7 @@ errtype tng_quickbox_init(void *ui_data, TNG *ptng, TNGStyle *sty, ushort option
    return(OK);
 }
 
-// Deallocate all memory used by the TNG 
+// Deallocate all memory used by the TNG
 errtype tng_quickbox_destroy(TNG *ptng)
 {
    GUI_DEALLOC(ptng->ui_data, ptng->type_data);
@@ -510,7 +510,7 @@ errtype tng_draw_qb_int_slot(TNG *ptng, QuickboxSlot *curp, LGRect r)
    }
    else if (curp->vartype == QB_SHORT_SLOT)
    {
-      if (curp->options & QB_HEX)            // the h modifier in sprintf - is for short 
+      if (curp->options & QB_HEX)            // the h modifier in sprintf - is for short
          sprintf(temp, "hex %hx", *argsp);
       else if (curp->options & QB_BINARY)
 //       itoa((int)*argsp, temp, 2);
@@ -560,7 +560,7 @@ errtype tng_draw_qb_int_slot(TNG *ptng, QuickboxSlot *curp, LGRect r)
          else
             base = r.ul.x + _text_width(ptng, curp->label) + TNG_QB(ptng)->spacing.x;
          p1.x = base + (ptng->style->frobsize.x / 2);
-         p1.y = r.ul.y;  
+         p1.y = r.ul.y;
          p2.x = base + ptng->style->frobsize.x;
          p2.y = r.ul.y + (ptng->style->frobsize.y / 2);
          p3.x = p1.x;
@@ -611,7 +611,7 @@ errtype tng_draw_qb_text_slot(TNG *ptng, QuickboxSlot *curp, LGRect r)
 
    char *argp;
    LGRect argrect;     // Where the actual variable should go
-   
+
    // Set some variables, compute some stuff
    argp = (char *)curp->var;
    r.ul.x += TNG_QB(ptng)->border.x;
@@ -703,7 +703,7 @@ errtype tng_draw_qb_bool_slot(TNG *ptng, QuickboxSlot *curp, LGRect r)
          else
             base = r.ul.x + _text_width(ptng, curp->label) + TNG_QB(ptng)->spacing.x;
          p1.x = base + (ptng->style->frobsize.x / 2);
-         p1.y = r.ul.y;  
+         p1.y = r.ul.y;
          p2.x = base + ptng->style->frobsize.x;
          p2.y = r.ul.y + (ptng->style->frobsize.y / 2);
          p3.x = p1.x;
@@ -766,7 +766,7 @@ errtype tng_quickbox_2d_draw(TNG *ptng, ushort , LGPoint loc)
    TNG_quickbox *pqbtng;
    QuickboxSlot *curp;
    LGRect r;
-   
+
    //Spew(DSRC_UI_Quickbox, ("TNG quickbox 2d Draw at (%d, %d) -- partmask = %x\n",loc.x,loc.y,partmask));
    TNG_IF_OBSCURED(ptng)
    {
@@ -934,7 +934,7 @@ bool tng_quickbox_mousebutt(TNG *ptng, uchar type, LGPoint loc)
                   else
                      tng_decrem_slot(ptng, 10);
                }
-               if ((pqbtng->right_id != NULL) &&   
+               if ((pqbtng->right_id != NULL) &&
                   (loc.x > pqbtng->size.x - pqbtng->border.x - resource_bm_width(pqbtng->right_id) - 2 ))
                {
                   if (type == TNG_MOUSE_LDOWN)
@@ -974,7 +974,7 @@ bool tng_quickbox_signal(TNG *ptng, ushort signal)
 }
 
 // Add a line to a quickbox.  slot_type describes the type of slot, var is a pointer to the variable to be
-// displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o 
+// displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o
 // combinations of options and types might not be implemented.
 errtype tng_quickbox_add(char *label, int slot_type, void *var, ulong slot_options)
 {
@@ -986,9 +986,9 @@ errtype tng_quickbox_add(char *label, int slot_type, void *var, ulong slot_optio
 errtype tng_quickbox_add_parm(char *label, int slot_type, void *var, ulong slot_options, void *parm1, void *parm2)
 {
    QuickboxSlot *newslot, *curp;
-   
+
    newslot = (QuickboxSlot *)NewPtr(sizeof(QuickboxSlot));
-   
+
    // Fill out newslot
    num_slots++;
    newslot->options = slot_options;
@@ -1046,11 +1046,11 @@ errtype tng_quickbox_end()
    if (pqbtng->options & QB_ALIGNMENT)
    {
      pqbtng->internal_margin = _label_extent(current_tng);
-     //Spew(DSRC_UI_Quickbox, ("Yay alignment  margin = %d!!\n",pqbtng->internal_margin)); 
+     //Spew(DSRC_UI_Quickbox, ("Yay alignment  margin = %d!!\n",pqbtng->internal_margin));
    }
 //   else
 //   {
-//     Spew(DSRC_UI_Quickbox, ("There is NOOOOO alignment!!\n")); 
+//     Spew(DSRC_UI_Quickbox, ("There is NOOOOO alignment!!\n"));
 //   }
 
    if (pqbtng->options & QB_AUTOSIZE)
@@ -1062,7 +1062,7 @@ errtype tng_quickbox_end()
   // Make children TNGs, if necessary
    curp = QB_SLOTS(current_tng);
    while (curp != NULL)
-   { 
+   {
       if (curp->options & QB_STRINGSET)
       {
          curp->options |= QB_ARROWS;
@@ -1074,12 +1074,12 @@ errtype tng_quickbox_end()
           (curp->vartype == QB_FIX_SLOT) ||
           ( ((curp->vartype == QB_SHORT_SLOT) || (curp->vartype == QB_BYTE_SLOT) || (curp->vartype == QB_INT_SLOT) || (curp->vartype == QB_UINT_SLOT))
             && !(curp->options & QB_RD_ONLY)))
-      { 
+      {
          sdim = (LGRect *)NewPtr(sizeof(LGRect));
          if ((curp->options & QB_SLIDER) ||
             (((curp->vartype == QB_SHORT_SLOT) || (curp->vartype == QB_INT_SLOT) || (curp->vartype == QB_BYTE_SLOT) || (curp->vartype == QB_UINT_SLOT)
                || (curp->vartype == QB_FIX_SLOT))
-               
+
                && !(curp->options & QB_RD_ONLY) && !(curp->options & QB_ARROWS)))
             sdim->ul.x = pqbtng->size.x - pqbtng->aux_size - pqbtng->border.x;
          else if (curp->vartype == QB_PUSHBUTTON_SLOT)
@@ -1100,7 +1100,7 @@ errtype tng_quickbox_end()
          sdim->ul.y = (slotcount * (pqbtng->slot_size.y + pqbtng->spacing.y)) + pqbtng->border.y;
          sdim->lr.y = sdim->ul.y + pqbtng->slot_size.y;
          aux_size.x = RectWidth(sdim) - 1;
-         aux_size.y = RectHeight(sdim) - 1; 
+         aux_size.y = RectHeight(sdim) - 1;
          curp->aux_size = aux_size;
          //Spew(DSRC_UI_Quickbox, ("aux_size = (%d,%d)  sdim = (%d,%d)(%d,%d)\n",aux_size.x, aux_size.y,
          //   RECT_EXPAND_ARGS(sdim)));
@@ -1113,7 +1113,7 @@ errtype tng_quickbox_end()
             TNG_CREATE_SLIDER(current_tng->ui_data, sdim->ul, &(curp->aux_tng), current_tng->style, TNG_SL_HORIZONTAL,
                min, max, *((int *)(curp->var)), 1, aux_size);
 //            TNG_DRAW(curp->aux_tng);
-            tng_install_callback(curp->aux_tng, TNG_EVENT_SIGNAL, TNG_SIGNAL_CHANGED, &tng_quickbox_scroll_changed, curp, &cid);   
+            tng_install_callback(curp->aux_tng, TNG_EVENT_SIGNAL, TNG_SIGNAL_CHANGED, &tng_quickbox_scroll_changed, curp, &cid);
          }
          if (curp->vartype == QB_PUSHBUTTON_SLOT)
          {
@@ -1171,7 +1171,7 @@ int _text_width(TNG *ptng, char *t)
 {
    int retval;
    gr_set_font((grs_font *)ResLock(ptng->style->font));
-   retval = gr_string_width(t);   
+   retval = gr_string_width(t);
    ResUnlock(ptng->style->font);
    return(retval);
 }
@@ -1241,7 +1241,7 @@ errtype tng_quickbox_rename_slot(TNG *qb, int slot_num, char *new_name)
 
 errtype _slot_rectangle(TNG *qb, int slot_num, LGRect *slot_rect)
 {
-   slot_rect->ul = TNG_ABSLOC(qb); 
+   slot_rect->ul = TNG_ABSLOC(qb);
    slot_rect->ul.y += (slot_num * (TNG_QB(qb)->slot_size.y + TNG_QB(qb)->spacing.y)) + 1;
    slot_rect->ul.x += TNG_QB(qb)->border.x;
    slot_rect->lr.x = slot_rect->ul.x + TNG_QB(qb)->size.x - (2 * TNG_QB(qb)->border.x);
@@ -1392,4 +1392,4 @@ int _total_extent(TNG *ptng)
 
 
 
-                                                            
+

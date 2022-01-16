@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: r:/prj/cit/src/RCS/wares.c $
@@ -91,7 +91,7 @@ long ware_base_triples[NUM_WARE_TYPES] =
 };
 
 
-// The existence of this array is a crime.  I should be shot. 
+// The existence of this array is a crime.  I should be shot.
 ubyte waretype2invtype[] =
 {
    MFD_INV_HARDWARE,
@@ -108,8 +108,8 @@ ubyte waretype2invtype[] =
 // EXTERNALS
 // =========
 // -------------------------------------------------------
-// get_ware_triple() converts our stupid representation for 
-// a ware triple into the standard one.  
+// get_ware_triple() converts our stupid representation for
+// a ware triple into the standard one.
 
 int get_ware_triple(int waretype, int num)
 {
@@ -118,10 +118,10 @@ int get_ware_triple(int waretype, int num)
 
 // ---------------------------------------------------------------------------
 // get_ware_name()
-// 
+//
 // Returns the name of a ware to the inventory system.
 
-                                          
+
 char* get_ware_name(int waretype, int num, char* buf, int sz)
 {
    get_object_short_name(nth_after_triple(ware_base_triples[waretype],num), buf, sz);
@@ -158,7 +158,7 @@ int energy_cost(int warenum)
       return 0;
    return energy_cost_vec[warenum][version-1];
 }
-   
+
 
 // ---------------------------------------------------------------------------
 // use_ware()
@@ -200,7 +200,7 @@ void use_ware(int waretype, int num)
 
    if (wares[num].sideicon != SI_NONE)
       side_icon_expose(wares[num].sideicon);
- 
+
    if (!WareActive(player_status[num])) {    // we're turning a ware off
 
       // note that the energy_cost function may use state which is
@@ -272,7 +272,7 @@ void use_ware(int waretype, int num)
       hnd = play_digi_fx(ware_sfx,1);
 	 secret_global_pan=SND_DEF_PAN;
    }
-   if (waretype == WARE_HARD) 
+   if (waretype == WARE_HARD)
    {
       short newe = player_struct.energy_spend;
       if (WareActive(player_status[num]))
@@ -281,14 +281,14 @@ void use_ware(int waretype, int num)
          newe = max(newe-ecost,0);
       set_player_energy_spend((ubyte)newe);
    }
-   if (_current_loop <= FULLSCREEN_LOOP) 
+   if (_current_loop <= FULLSCREEN_LOOP)
       chg_set_flg(INVENTORY_UPDATE);
    mfd_notify_func(NOTIFY_ANY_FUNC,MFD_ITEM_SLOT,FALSE,MFD_ACTIVE,TRUE);
    return;
 }
 
 
-// Hey, we're closing down a game. return to normalcy. 
+// Hey, we're closing down a game. return to normalcy.
 void hardware_closedown(bool visible)
 {
    int i;
@@ -319,7 +319,7 @@ void hardware_power_outage(void)
    for (i = 0; i < NUM_HARDWAREZ; i++)
    {
       if (energy_cost(i) > 0 && WareActive(player_struct.hardwarez_status[i]))
-         use_ware(WARE_HARD,i);          
+         use_ware(WARE_HARD,i);
    }
    if (WareActive(player_struct.hardwarez_status[CPTRIP(JET_HARD_TRIPLE)]))
       use_ware(WARE_HARD,CPTRIP(JET_HARD_TRIPLE));
@@ -330,7 +330,7 @@ void hardware_power_outage(void)
 // get_ware_pointers()
 //
 // Sets a number of pointers to point at the appropriate ware structures
-// for a given type. 
+// for a given type.
 
 void get_ware_pointers(int type, ubyte **player_wares, ubyte **player_status,
                        WARE **wares, int *n)
@@ -358,7 +358,7 @@ void get_ware_pointers(int type, ubyte **player_wares, ubyte **player_status,
          *wares         = Defense_SoftWare;
       }
    else
-      {        
+      {
          *n             = NUM_MISC_SOFTS;
          *player_wares  = player_struct.softs.misc;
          *player_status = player_struct.softs_status.misc;
@@ -371,9 +371,9 @@ void get_ware_pointers(int type, ubyte **player_wares, ubyte **player_status,
 
 // --------------------------------------------------
 //
-// get_player_ware_version returns the version number 
-// of a ware in the player's inventory.  zero means 
-// the player doesn't have it. 
+// get_player_ware_version returns the version number
+// of a ware in the player's inventory.  zero means
+// the player doesn't have it.
 
 int get_player_ware_version(int type, int n)
 {
@@ -622,7 +622,7 @@ lamp_specs[] =
 };
 
 // other oldest lowest value
-//   {  0,15,5,0,-3*FIX_UNIT,18*FIX_UNIT},   
+//   {  0,15,5,0,-3*FIX_UNIT,18*FIX_UNIT},
 // old lowest value (old 0)
 //   {  0,8,4,0,-2*FIX_UNIT,8*FIX_UNIT},
 // is level 3 above ever used?
@@ -653,7 +653,7 @@ void lamp_set_vals_with_offset(byte offset)
       slope_based_mod=fix_div((offset<<(16-OFF_SHF)),-lspec->slope);
 	   _frp.lighting.rad[1] = (uchar)(lspec->rad2+(slope_based_mod>>16));
 //      slope_based_mod=fix_mul((offset<<(16-OFF_SHF)),-lspec->slope);
-      _frp.lighting.yint  += -lspec->slope; 
+      _frp.lighting.yint  += -lspec->slope;
       _frp.lighting.rad[0]++;
    }
    else _frp.lighting.rad[1] = (uchar)lspec->rad2;
@@ -720,14 +720,14 @@ bool lantern_change_setting_hkey(short, ulong, void*)
 
 //--------------------------
 // SHIELD WARE
-//-------------------------- 
+//--------------------------
 void shield_set_absorb(void);
 void shield_toggle(bool visible, bool real);
 bool shield_change_setting_hkey(short keycode, ulong context, void* data);
 
 #define SHIELD_IDX (CPTRIP(SHIELD_HARD_TRIPLE))
 
-ubyte shield_absorb_rates[] = {20, 40, 75, 75}; 
+ubyte shield_absorb_rates[] = {20, 40, 75, 75};
 ubyte shield_thresholds[] = {0, 10, 15, 30};
 
 extern void set_shield_raisage(bool going_up);
@@ -820,7 +820,7 @@ void nav_turnoff(bool visible, bool)
 
 //----------------------
 // MOTION WARE
-//---------------------- 
+//----------------------
 void motionware_update(bool visible,  bool real, bool on);
 void motionware_turnon(bool visible, bool real);
 void motionware_turnoff(bool visible, bool real);
@@ -858,7 +858,7 @@ void motionware_update(bool visible,  bool, bool on)
       }
       EDMS_set_pelvis_parameters(PLAYER_PHYSICS,&elvis);
    }
-   
+
 }
 
 void motionware_turnon(bool visible, bool real)
@@ -882,7 +882,7 @@ static fix   jumpjet_thrust_scales[] = { FIX_UNIT/64, FIX_UNIT/32, FIX_UNIT/16};
 
 bool jumpjets_active = FALSE;
 
-// modifies z control based on jumpject ware. 
+// modifies z control based on jumpject ware.
 void activate_jumpjets(fix* xcntl, fix* ycntl, fix* zcntl)
 {
    int ecost;
@@ -891,7 +891,7 @@ void activate_jumpjets(fix* xcntl, fix* ycntl, fix* zcntl)
    ubyte n = CPTRIP(JET_HARD_TRIPLE);
    ubyte v = player_struct.hardwarez[n];
    ubyte s = player_struct.hardwarez_status[n];
-   
+
    jumpjets_active = FALSE;
    if ((s & WARE_ON) == 0 || player_struct.energy == 0)
       return;
@@ -965,7 +965,7 @@ void turbo_turnon(bool visible, bool real_start)
       player_struct.softs.misc[SOFTWARE_TURBO]--;
       cspace_effect_times[CS_TURBO_EFF] = player_struct.game_time + hammer_time;
    }
-}   
+}
 
 void turbo_turnoff(bool visible, bool)
 {
@@ -988,7 +988,7 @@ void fakeid_turnon(bool visible, bool real_start)
       hud_set(HUD_FAKEID);
       chg_set_flg(INVENTORY_UPDATE);
    }
-}   
+}
 
 void decoy_turnon(bool, bool real_start)
 {
@@ -1010,7 +1010,7 @@ void decoy_turnon(bool, bool real_start)
          chg_set_flg(INVENTORY_UPDATE);
       }
    }
-}   
+}
 
 void decoy_turnoff(bool visible, bool real_stop)
 {
@@ -1036,7 +1036,7 @@ void recall_turnon(bool visible, bool real_start)
       chg_set_flg(INVENTORY_UPDATE);
       play_digi_fx(SFX_RECALL,1);
    }
-}   
+}
 
 
 // =================
@@ -1049,76 +1049,76 @@ extern void email_turnoff(bool visible, bool real_start);
 extern void plotware_turnon(bool visible, bool real_start);
 
 WARE HardWare[NUM_HARDWAREZ] =
-{             
-//"infrared"   
+{
+//"infrared"
    { WARE_FLAGS_NONE, SI_SIXTH, infrared_turnon, NULL, infrared_turnoff, NULL},
 //"target info"
    { WARE_FLAGS_NONE, SI_NONE, targeting_turnon, NULL, targeting_turnoff, NULL},
-//"360 view"   
+//"360 view"
    { WARE_FLAGS_NONE, SI_THIRD, view360_turnon, NULL, view360_turnoff, view360_check },
-//"aim"        
+//"aim"
    { WARE_FLAGS_NONE, SI_NONE, NULL, NULL, NULL,NULL },
-//"HUD"        
+//"HUD"
    { WARE_FLAGS_NONE, SI_NONE, NULL, NULL, NULL, NULL},
-//"bioscan"    
+//"bioscan"
    { WARE_FLAGS_NONE, SI_FIRST, bioware_turnon, bioware_effect, bioware_turnoff , NULL},
-//"nav unit"   
+//"nav unit"
    { WARE_FLAGS_NONE, SI_SEVENTH, nav_turnon, NULL, nav_turnoff , NULL},
-//"shield"     
+//"shield"
    { WARE_FLAGS_NONE, SI_FIFTH, shield_toggle, NULL, shield_toggle , NULL},
 //"data reader"
    { WARE_FLAGS_NONE, SI_EIGHTH, email_turnon, NULL, email_turnoff , NULL},
-//"lantern"    
+//"lantern"
    { WARE_FLAGS_NONE, SI_FOURTH, lamp_turnon, NULL, lamp_turnoff , NULL},
-//"fullscreen"  
+//"fullscreen"
    { WARE_FLAGS_NONE, SI_SECOND, fullscreen_turnon, NULL, fullscreen_turnoff , NULL},
 //"enviro-suit"
    { WARE_FLAGS_NONE, SI_NONE, NULL, NULL, NULL , NULL},
-//"motion"    
+//"motion"
    { WARE_FLAGS_NONE, SI_NINTH, motionware_turnon, NULL, motionware_turnoff , NULL},
-//"skates"     
+//"skates"
    { WARE_FLAGS_NONE, SI_TENTH, NULL, NULL, NULL , NULL},
-//"status"     
+//"status"
    { WARE_FLAGS_NONE, SI_NONE, plotware_turnon, NULL, NULL , NULL},
 };
 
 
-// Except for jumpjets, these costs are in points per 
-// minute of use.   
+// Except for jumpjets, these costs are in points per
+// minute of use.
 
 short energy_cost_vec[NUM_HARDWAREZ][MAX_VERSIONS] =
 {
-//"infrared"   
-   { 50, 50, 50, }, 
+//"infrared"
+   { 50, 50, 50, },
 //"target info"
    { 0, },
-//"360 view"   
+//"360 view"
    { 9, 9, 9 },
-//"aim"        
+//"aim"
    { 0, },
-//"HUD"        
-   { 0, }, 
-//"bioscan"    
+//"HUD"
+   { 0, },
+//"bioscan"
    { 1,},
-//"nav unit"   
-   { 0, }, 
-//"shield"     
-   { 24, 60, 105, 30}, 
+//"nav unit"
+   { 0, },
+//"shield"
+   { 24, 60, 105, 30},
 //"data reader"
    { 0, },
-//"lantern"    
+//"lantern"
 //   { 15, 25, 30, },
    { 10, 25, 30, },
-//"robo comm"  
+//"robo comm"
    { 0, },
 //"enviro-suit"
    { 0, },
-//"motion"    
+//"motion"
    { 0, 40, },
-//"jumpjets"     
+//"jumpjets"
    // these are in points per second of thrust
    { 25, 30, 35 },
-//"status"     
+//"status"
    { 0 },
 };
 

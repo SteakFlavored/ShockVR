@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 #ifndef __PHYSICS_H
 #define __PHYSICS_H
@@ -54,7 +54,7 @@ typedef fix Physvec[6];
 #define EDMS_DIRAC   4
 
 
-// These are the magic edms cyber_space numbers.  
+// These are the magic edms cyber_space numbers.
 #define PELVIS_MODE_NORMAL  0
 #define PELVIS_MODE_SKATES  1
 #define PELVIS_MODE_CYBER   2
@@ -69,10 +69,10 @@ typedef fix Physvec[6];
 #define CONTROL_MAX_VAL 100
 // why is this number 100? what is the point??
 
-// Set the player motion controls, on a scale of  -100 to +100.  
-// An arg of CONTROL_NO_CHANGE leaves the value unchanged. 
+// Set the player motion controls, on a scale of  -100 to +100.
+// An arg of CONTROL_NO_CHANGE leaves the value unchanged.
 // There are CONTROL_BANKS banks of controls, which roughly average
-// together.  
+// together.
 errtype physics_set_player_controls(int bank, byte xvel,byte yvel, byte zvel, byte xyrot, byte yzrot, byte xzrot);
 
 // Set a single control, using the defined control numbers
@@ -100,7 +100,7 @@ errtype physics_init(void);
 // Set the gravity parameter of all objects to new_grav
 errtype apply_gravity_to_objects(fix new_grav);
 
-// Take an object, and moves it to a position and velocity relative to the 
+// Take an object, and moves it to a position and velocity relative to the
 // player.  returns true if it finds an appropriate place to put the object.
 bool player_throw_object(ObjID id,  int x, int y, int lastx, int lasty, fix vel);
 
@@ -112,8 +112,8 @@ bool player_throw_object(ObjID id,  int x, int y, int lastx, int lasty, fix vel)
 errtype player_set_posture(ubyte new_posture);
 
 
-// Lean the player.  Values are in a -100-+100 scale.  
-// Hey kids, this don't exist no more.  set your self an 
+// Lean the player.  Values are in a -100-+100 scale.
+// Hey kids, this don't exist no more.  set your self an
 // XZROT control if you want to lean sideways.
 errtype player_set_lean(byte x, byte y);
 
@@ -128,7 +128,7 @@ void player_set_eye(byte eyecntl);
 // data into the object and do appropriate bookkeeping
 errtype assemble_physics_object(ObjID id, State *pnew_state);
 
-// Instantiators 
+// Instantiators
 void instantiate_robot(int triple, Robot* r);
 void instantiate_pelvis(int triple, Pelvis* r);
 void instantiate_dirac(int triple, Dirac_frame* new_dirac);
