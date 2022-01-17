@@ -123,9 +123,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //        HEADER SECTION
 //    ------------------------------------------------------------
 
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #ifndef __LZW_H
 #include "lzw.h"
@@ -609,35 +611,32 @@ void LzwBuffSrcCtrl(uintptr_t srcLoc, LzwCtrl ctrl)
 
 uint8_t LzwBuffSrcGet()
 {
-    return(*lzwBuffSrcPtr++);
+    return *lzwBuffSrcPtr++;
 }
 
-/*
 //    ---------------------------------------------------------------
 //
 //    LzwFdSrcCtrl() and LzwFdSrcGet() implement a file-descriptor
 //    source (fd = open()) for lzw compression and expansion.
 
 static int32_t lzwFdSrc;
-static int32_t lzwReadBuffIndex;
+static uintptr_t lzwReadBuffIndex;
 
-void LzwFdSrcCtrl(int32_t srcLoc, LzwCtrl ctrl)
+void LzwFdSrcCtrl(uintptr_t srcLoc, LzwCtrl ctrl)
 {
-    if (ctrl == BEGIN)
-        {
+    if (ctrl == BEGIN) {
         lzwFdSrc = (int32_t) srcLoc;
         lzwReadBuffIndex = LZW_FD_READ_BUFF_SIZE;
-        }
+    }
 }
 
 uint8_t LzwFdSrcGet()
 {
-    if (lzwReadBuffIndex == LZW_FD_READ_BUFF_SIZE)
-        {
+    if (lzwReadBuffIndex == LZW_FD_READ_BUFF_SIZE) {
         read(lzwFdSrc, lzwFdReadBuff, LZW_FD_READ_BUFF_SIZE);
         lzwReadBuffIndex = 0;
-        }
-    return(lzwFdReadBuff[lzwReadBuffIndex++]);
+    }
+    return lzwFdReadBuff[lzwReadBuffIndex++];
 }
 
 //    ---------------------------------------------------------------
@@ -647,7 +646,7 @@ uint8_t LzwFdSrcGet()
 
 static FILE *lzwFpSrc;
 
-void LzwFpSrcCtrl(int32_t srcLoc, LzwCtrl ctrl)
+void LzwFpSrcCtrl(uintptr_t srcLoc, LzwCtrl ctrl)
 {
     if (ctrl == BEGIN)
         lzwFpSrc = (FILE *) srcLoc;
@@ -655,9 +654,8 @@ void LzwFpSrcCtrl(int32_t srcLoc, LzwCtrl ctrl)
 
 uint8_t LzwFpSrcGet()
 {
-    return(fgetc(lzwFpSrc));
+    return fgetc(lzwFpSrc);
 }
-*/
 
 //    ---------------------------------------------------------------
 //        STANDARD OUTPUT SOURCES
@@ -679,37 +677,32 @@ void LzwBuffDestPut(uint8_t byte)
     *lzwBuffDestPtr++ = byte;
 }
 
-/*
 //    ---------------------------------------------------------------
 //
 //    LzwFdDestCtrl() and LzwFdDestPut() implement a file-descriptor
 //    destination (fd = open()) for lzw compression and expansion.
 
 static int32_t lzwFdDest;
-static int32_t lzwWriteBuffIndex;
+static uintptr_t lzwWriteBuffIndex;
 
-void LzwFdDestCtrl(int32_t destLoc, LzwCtrl ctrl)
+void LzwFdDestCtrl(uintptr_t destLoc, LzwCtrl ctrl)
 {
-    if (ctrl == BEGIN)
-        {
+    if (ctrl == BEGIN) {
         lzwFdDest = (int32_t) destLoc;
         lzwWriteBuffIndex = 0;
-        }
-    else if (ctrl == END)
-        {
+    } else if (ctrl == END) {
         if (lzwWriteBuffIndex)
             write(lzwFdDest, lzwFdWriteBuff, lzwWriteBuffIndex);
-        }
+    }
 }
 
 void LzwFdDestPut(uint8_t byte)
 {
     lzwFdWriteBuff[lzwWriteBuffIndex++] = byte;
-    if (lzwWriteBuffIndex == LZW_FD_WRITE_BUFF_SIZE)
-        {
+    if (lzwWriteBuffIndex == LZW_FD_WRITE_BUFF_SIZE) {
         write(lzwFdDest, lzwFdWriteBuff, LZW_FD_WRITE_BUFF_SIZE);
         lzwWriteBuffIndex = 0;
-        }
+    }
 }
 
 //    ---------------------------------------------------------------
@@ -719,7 +712,7 @@ void LzwFdDestPut(uint8_t byte)
 
 static FILE *lzwFpDest;
 
-void LzwFpDestCtrl(int32_t destLoc, LzwCtrl ctrl)
+void LzwFpDestCtrl(uintptr_t destLoc, LzwCtrl ctrl)
 {
     if (ctrl == BEGIN)
         lzwFpDest = (FILE *) destLoc;
@@ -729,7 +722,6 @@ void LzwFpDestPut(uint8_t byte)
 {
     fputc(byte, lzwFpDest);
 }
-*/
 
 //    ---------------------------------------------------------------
 //
