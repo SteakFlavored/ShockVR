@@ -160,6 +160,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __FIX_H
 #define __FIX_H
 
+#include <math.h>
+
 #include "lg_types.h"
 
 // Globals
@@ -261,6 +263,7 @@ typedef uint16_t fixang;
 
 // makes a fixed point from an int64_t
 #define fix_from_int64(n) ((fix)(((n) >> 16L) & 0xFFFFFFFFL))
+#define fix_from_int64_hi(n) ((fix)(((n) >> 32L) & 0xFFFFFFFFL))
 #define fix_from_int64_lo(n) ((fix)((n) & 0xFFFFFFFFL))
 
 //========================================
@@ -336,11 +339,11 @@ fixang fix_atan2 (fix y, fix x);
 //========================================
 
 //    Converts string into fixed-point
-fix atofix(int8_t *p);
+fix atofix(char *p);
 
 // Puts a decimal representation of x into str
-int8_t *fix_sprint (int8_t *str, fix x);
-int8_t *fix_sprint_hex (int8_t *str, fix x);
+char *fix_sprint (char *str, fix x);
+char *fix_sprint_hex (char *str, fix x);
 
 /* fixpoint x ^ y */
 extern fix fix_pow (fix x, fix y);
@@ -369,6 +372,8 @@ typedef int32_t fix24;
 #define fix24_frac(n) ((n)&0xff)
 #define fix24_float(n) ((float)(fix24_int(n)) + (float)(fix24_frac(n))/256.0)
 #define fix24_from_float(n) (fix24_make((int16_t)(floor(n)), (uint16_t)((n-floor(n))*256.0)))
+#define fix24_from_int64(n) ((fix24)(((n) >> 8L) & 0xFFFFFFFFL))
+#define fix24_from_int64_lo(n) ((fix24)((n) & 0xFFFFFFFFL))
 
 #define fix24_from_fix16(n) ((n)>>8)
 #define fix16_from_fix24(n) ((n)<<8)
@@ -376,33 +381,8 @@ typedef int32_t fix24;
 #define fix16_to_fix24(n) (fix24_from_fix16(n))
 #define fix24_to_fix16(n) (fix16_from_fix24(n))
 
-// For Mac version: The PowerPC version uses an assembly language routine
-// to do the multiply.
-#if defined(powerc) || defined(__powerc)
-
-extern "C"
-{
-fix24 fix24_mul_asm(fix24 a, fix24 b);
-fix24 fix24_div_asm(fix24 a, fix24 b);
-}
-#define fix24_mul fix24_mul_asm
-#define fix24_div fix24_div_asm
-
-#else
-
-fix24 asm fix24_mul(fix24 a, fix24 b);
-fix24 asm fix24_div (fix24 a, fix24 b);
-
-#endif
-
-/*  Fix this
-fix24 fix24_mul_div (fix24 m0, fix24 m1, fix24 d);
-#pragma aux fix24_mul_div =\
-    "imul     edx"      \
-    "idiv     ebx"      \
-    parm [eax] [edx] [ebx]  \
-    modify [eax edx];
-*/
+fix24 fix24_mul(fix24 a, fix24 b);
+fix24 fix24_div(fix24 a, fix24 b);
 
 fix24 fix24_pyth_dist (fix24 a, fix24 b);
 fix24 fix24_fast_pyth_dist (fix24 a, fix24 b);
@@ -420,8 +400,8 @@ fix24 fix24_fastcos (fixang theta);
 fixang fix24_asin (fix24 x);
 fixang fix24_acos (fix24 x);
 fixang fix24_atan2 (fix24 y, fix24 x);
-fix24 atofix24(int8_t *p);
-int8_t *fix24_sprint (int8_t *str, fix24 x);
-int8_t *fix24_sprint_hex (int8_t *str, fix24 x);
+fix24 atofix24(char *p);
+char *fix24_sprint (char *str, fix24 x);
+char *fix24_sprint_hex (char *str, fix24 x);
 
 #endif /* !__fix24_H */

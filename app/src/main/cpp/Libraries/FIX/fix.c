@@ -90,155 +90,87 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <stdlib.h>
-#include <FixMath.h>
-//#include <stdio.h>
-//#include <lg.h>
 #include "fix.h"
 #include "trigtab.h"
 
 int32_t    gOVResult;
 
-
 //----------------------------------------------------------------------------
 // fix_mul: Multiply two fixed numbers.
 //----------------------------------------------------------------------------
-#if defined(powerc) || defined(__powerc)
-#else
-fix asm fix_mul(fix a, fix b)
+fix fix_mul(fix a, fix b)
 {
-     move.l    4(sp),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(sp),d1:d0
-    move.w    d1,d0
-    swap        d0
-    rts
+    int64_t result = (int64_t)a * (int64_t)b;
+    return fix_from_int64(result);
 }
-#endif
-
 
 //----------------------------------------------------------------------------
 // fast_fix_mul_int: Return the high word of a fixed multiply.
 //----------------------------------------------------------------------------
-#if defined(powerc) || defined(__powerc)
-#else
-fix asm fast_fix_mul_int(fix a, fix b)
+fix fast_fix_mul_int(fix a, fix b)
 {
-     move.l    4(sp),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(sp),d1:d0
-    move.l    d1,d0
-    rts
+    int64_t result = (int64_t)a * (int64_t)b;
+    return fix_from_int64_hi(result);
 }
-#endif
-
 
 //----------------------------------------------------------------------------
 // fix_mul_asm_safe: Multiply two fixed numbers, checking for -1/0 problems
 //----------------------------------------------------------------------------
-#if defined(powerc) || defined(__powerc)
-#else
-fix asm fix_mul_asm_safe(fix a, fix b);
-fix asm fix_mul_asm_safe(fix a, fix b)
+fix fix_mul_asm_safe(fix a, fix b)
 {
-     move.l    4(sp),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(sp),d1:d0
-    move.w    d0,d2
-    move.w    d1,d0
-    swap        d0
-
-    cmp.l        #-1,d0
-    beq.s        @MaybeBad
-    rts
-
-@MaybeBad:
-    cmp.w        #-1,d2
-    beq.s        @OK
-
-    moveq        #0,d0        // zero it
-
-@OK:
-    rts
+    int64_t result = (int64_t)a * (int64_t)b;
+    fix lo = fix_from_int64_lo(result);
+    fix output = fix_from_int64(result);
+    if (output == -1 && lo != -1) {
+        return 0;
+    }
+    return output;
 }
-#endif
 
 //----------------------------------------------------------------------------
 // fix_div: Divide two fixed numbers.
 //----------------------------------------------------------------------------
-#if defined(powerc) || defined(__powerc)
-#else
-fix asm fix_div(fix a, fix b)
+fix fix_div(fix a, fix b)
 {
-    clr.l        gOVResult
-    move.l    8(sp),d2
-    beq.s        @DivZero
-     moveq        #0,d1
-     move.l    4(sp),d0
-     swap        d0
-     move.w    d0,d1
-     ext.l        d1
-     clr.w        d0
-     dc.l        0x4C420C01             // DIVS.L     D2,D1:D0
-     bvs.s        @DivOverflow
-     rts
+    if (b == 0) {
+        // Divide by zero
+        gOVResult = 2;
+        return (fix)((a >= 0) ? 0x7FFFFFFF : 0x80000000);
+    }
 
-@DivOverflow:
-    move.l    #1,gOVResult
-    move.l    #0x7FFFFFFF,d0
-    tst.b        4(sp)
-    bpl.s        @noNeg
-    neg.l        d0
-@noNeg:
-    rts
+    // fix has a 16-bit fractional part
+    int64_t result = ((int64_t)a << 16L) / (int64_t)b;
+    if (result > 0xFFFFFFFFL || result <= -0xFFFFFFFFL) {
+        // Overflow
+        gOVResult = 1;
+        return (fix)((result >= 0) ? 0x7FFFFFFF : 0x80000000);
+    }
 
-@DivZero:
-    move.l    #2,gOVResult
-    move.l    #0x7FFFFFFF,d0
-    tst.b        4(sp)
-    bpl.s        @noNeg2
-    neg.l        d0
-@noNeg2:
-    rts
- }
-#endif
+    return fix_from_int64_lo(result);
+}
 
 //----------------------------------------------------------------------------
 // Multiply two numbers, and divide by a third. Used to be in asm, but
 // now in C.
 //----------------------------------------------------------------------------
-#if defined(powerc) || defined(__powerc)
-#else
-fix asm fix_mul_div (fix m0, fix m1, fix d)
- {
-    clr.l        gOVResult
-     move.l    4(sp),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(sp),d1:d0
+fix fix_mul_div (fix m0, fix m1, fix d)
+{
+    int64_t mulResult = (int64_t)m0 * (int64_t)m1;
+    if (d == 0) {
+        // Divide by zero
+        gOVResult = 2;
+        return (fix)((mulResult >= 0) ? 0x7FFFFFFF : 0x80000000);
+    }
 
-  move.l    12(sp),d2
-    beq.s        @DivZero
-    dc.l        0x4C420C01                        //  DIVS.L  D2,D1:D0
-    bvs.s        @DivOverflow
-    rts
+    int64_t result = mulResult / (int64_t)d;
+    if (result > 0xFFFFFFFFL || result <= -0xFFFFFFFFL) {
+        // Overflow
+        gOVResult = 1;
+        return (fix)((result >= 0) ? 0x7FFFFFFF : 0x80000000);
+    }
 
-@DivOverflow:
-    move.l    #1,gOVResult
-    move.l    #0x7FFFFFFF,d0
-    tst.l        d1
-    bpl.s        @noNeg
-    neg.l        d0
-@noNeg:
-    rts
-
-@DivZero:
-    move.l    #2,gOVResult
-    move.l    #0x7FFFFFFF,d0
-    tst.l        d1                                    // sign of high double long from multiply
-    bpl.s        @noNeg2
-    neg.l        d0
-@noNeg2:
-    rts
- }
-#endif
-
-
-int32_t blah;
+    return fix_from_int64_lo(result);
+}
 
 //----------------------------------------------------------------------------
 // Returns the distance from (0,0) to (a,b)
@@ -246,10 +178,9 @@ int32_t blah;
 fix fix_pyth_dist (fix a, fix b)
 {
     gOVResult = 100;
-    blah    = 200;
 
     // should check for overflow!
-     return fix_sqrt(fix_mul(a, a) + fix_mul(b, b));
+    return fix_sqrt(fix_mul(a, a) + fix_mul(b, b));
 }
 
 
@@ -260,8 +191,10 @@ fix fix_fast_pyth_dist (fix a, fix b)
 {
     if (a < 0) a = -a;
     if (b < 0) b = -b;
-    if (a > b) return (a + b/2);
-            else return (b + a/2);
+    if (a > b)
+        return (a + b/2);
+    else
+        return (b + a/2);
 }
 
 
@@ -297,8 +230,6 @@ fix fix_safe_pyth_dist (fix a, fix b)
     {
         if (a > 0x2fffffff)
         {
-//            Warning (("Overflow in fix_safe_pyth_dist\n"));
-            DebugStr("\pOverflow in fix_safe_pyth_dist");
             return 0;
         }
         for (;;)
@@ -466,13 +397,17 @@ fixang fix_atan2 (fix y, fix x)
     // not 0x8000.  Note that we grab the y = x = 0 case here
     if (y == 0)
     {
-        if (x >= 0) return 0x0000;
-        else return 0x8000;
+        if (x >= 0)
+            return 0x0000;
+        else
+            return 0x8000;
     }
     else if (x == 0)
     {
-        if (y >= 0) return 0x4000;
-        else return 0xc000;
+        if (y >= 0)
+            return 0x4000;
+        else
+            return 0xc000;
     }
 
     if ((hyp = fix_pyth_dist (x, y)) == 0)
@@ -490,8 +425,10 @@ fixang fix_atan2 (fix y, fix x)
         th = fix_asin (s);
         if (x < 0)
         {
-            if (th < 0x4000) th = 0x8000 - th;
-            else th = ~th + 0x8000;            // that is, 0xffff - th + 0x8000
+            if (th < 0x4000)
+                th = 0x8000 - th;
+            else
+                th = ~th + 0x8000;            // that is, 0xffff - th + 0x8000
         }
     }
     else
@@ -522,55 +459,30 @@ fixang fix_atan2 (fix y, fix x)
 //----------------------------------------------------------------------------
 // fix24_div: Divide two fix24 numbers.
 //----------------------------------------------------------------------------
-#if defined(powerc) || defined(__powerc)
-#else
-fix24 asm fix24_div(fix24 a, fix24 b)
- {
-    clr.l        gOVResult
-    tst.l        8(sp)
-    beq.s        @DivZero
+fix24 fix24_div(fix24 a, fix24 b)
+{
+    if (b == 0) {
+        // Divide by zero
+        gOVResult = 2;
+        return (fix24)((a >= 0) ? 0x7FFFFFFF : 0x80000000);
+    }
 
-     moveq        #0,d1
-     move.l    4(sp),d0
-     move.b    4(sp),d1                                // get high byte of A in low byte of d1
-    ext.w        d1
-    ext.l        d1
-    lsl.l        #8,d0                                        // shift rest of A up 8 bits
-    dc.w        0x4C6F,0x0C01,0x0008        //     divs.l    8(sp),d1:d0
-    bvs.s        @DivOverflow
-     rts
+    // fix24 has an 8-bit fractional part
+    int64_t result = ((int64_t)a << 8L) / (int64_t)b;
+    if (result > 0xFFFFFFFFL || result <= -0xFFFFFFFFL) {
+        // Overflow
+        gOVResult = 1;
+        return (fix24)((result >= 0) ? 0x7FFFFFFF : 0x80000000);
+    }
 
-@DivOverflow:
-    move.l    #1,gOVResult
-    move.l    #0x7FFFFFFF,d0
-    tst.b        4(sp)
-    bpl.s        @noNeg
-    neg.l        d0
-@noNeg:
-    rts
+    return fix24_from_int64_lo(result);
+}
 
-@DivZero:
-    move.l    #2,gOVResult
-    move.l    #0x7FFFFFFF,d0
-    tst.b        4(sp)
-    bpl.s        @noNeg2
-    neg.l        d0
-@noNeg2:
-    rts
- }
-
-fix24 asm fix24_mul(fix24 a, fix24 b)
- {
-     move.l    4(sp),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(sp),d1:d0
-    lsr.l        #8,d0                        // shift down 8
-    ror.l        #8,d1                        // get low 8 bits of d1 into high 8 bits
-    andi.l    #0xff000000,d1    // mask everything else off
-    or.l        d1,d0                        // OR result into d0
-    rts
- }
-
-#endif
+fix24 fix24_mul(fix24 a, fix24 b)
+{
+    int64_t result = (int64_t)a * (int64_t)b;
+    return fix24_from_int64(result);
+}
 
 fix fix_pow(fix x,fix y)
 {

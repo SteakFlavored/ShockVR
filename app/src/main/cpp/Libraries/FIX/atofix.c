@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "fix.h"
 
-static void fixgetab(int8_t *p, int16_t fracshift, int16_t *a, int16_t *b, int16_t *sign);
+static void fixgetab(char *p, int16_t fracshift, int16_t *a, int16_t *b, int16_t *sign);
 
 //    ----------------------------------------------------------
 //        CONVERSION ROUTINES
@@ -43,7 +43,7 @@ static void fixgetab(int8_t *p, int16_t fracshift, int16_t *a, int16_t *b, int16
 //
 //    atofix() converts an ascii string into a fixed-point number
 
-fix atofix(int8_t *p)
+fix atofix(char *p)
 {
     int16_t a, b, sign;
 
@@ -70,9 +70,9 @@ fix24 atofix24(int8_t *p)
 //
 //    fixgetab() gets integer and fractional part from ascii buffer
 
-static void fixgetab(int8_t *p, int16_t fracshift, int16_t *a, int16_t *b, int16_t *sign)
+static void fixgetab(char *p, int16_t fracshift, int16_t *a, int16_t *b, int16_t *sign)
 {
-    int16_t divis;
+    int32_t divis;
 
 //    sign is +1 or -1
 
@@ -97,7 +97,7 @@ static void fixgetab(int8_t *p, int16_t fracshift, int16_t *a, int16_t *b, int16
         divis = 10;
         while ((*p >= '0') && (*p <= '9'))
         {
-            *b += ((*p++ - '0') << fracshift) / divis;
+            *b += (int16_t)(((int32_t)(*p++ - '0') << (int32_t)fracshift) / divis);
             divis *= 10;
             if (divis > 655360)
                 break;

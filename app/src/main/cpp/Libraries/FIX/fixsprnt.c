@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Prints out x nicely into str
 // and now returns the string too
 //
-int8_t *fix_sprint (int8_t *str, fix x)
+char *fix_sprint(char *str, fix x)
 {
     uint32_t tmp;
     bool neg = false;
@@ -48,17 +48,19 @@ int8_t *fix_sprint (int8_t *str, fix x)
         neg = true;
     }
 
-    tmp = x & 0xffff;    tmp *= 10000; tmp /= 0xffff;
+    tmp = x & 0xffff;
+    tmp *= 10000;
+    tmp /= 0xffff;
 
     if (!neg)
-        sprintf (str, "%d.%04lu", x >> 16, tmp);
+        sprintf(str, "%d.%04u", x >> 16, tmp);
     else
-        sprintf (str, "-%d.%04lu", x >> 16, tmp);
+        sprintf(str, "-%d.%04u", x >> 16, tmp);
 
     return str;
 }
 
-int8_t *fix24_sprint (int8_t *str, fix24 x)
+char *fix24_sprint(char *str, fix24 x)
 {
     uint32_t tmp;
     bool neg = false;
@@ -69,12 +71,14 @@ int8_t *fix24_sprint (int8_t *str, fix24 x)
         neg = true;
     }
 
-    tmp = x & 0xff; tmp *= 1000; tmp /= 0xff;
+    tmp = x & 0xff;
+    tmp *= 1000;
+    tmp /= 0xff;
 
     if (!neg)
-        sprintf (str, "%ld.%03lu", x >> 8, tmp);
+        sprintf(str, "%ld.%03u", x >> 8, tmp);
     else
-        sprintf (str, "-%ld.%03lu", x >> 8, tmp);
+        sprintf(str, "-%ld.%03u", x >> 8, tmp);
 
     return str;
 }
@@ -82,20 +86,24 @@ int8_t *fix24_sprint (int8_t *str, fix24 x)
 ///////////////////////////////////////////////
 // nicely prints the fix in a hex kinda way
 // it might be better to do %d.%4x but im not sure, so for now we will do this
-int8_t *fix_sprint_hex (int8_t *str, fix x)
+char *fix_sprint_hex(char *str, fix x)
 {
     bool neg = false;
     if (x < 0) { x = -x; neg = true; }
-    if (!neg) sprintf (str, "%x.%04lx", x >> 16, x&0xffff);
-    else          sprintf (str, "-%x.%04lx", x >> 16, x&0xffff);
+    if (!neg)
+        sprintf(str, "%x.%04x", x >> 16, x & 0xffff);
+    else
+        sprintf(str, "-%x.%04x", x >> 16, x & 0xffff);
     return str;
 }
 
-int8_t *fix24_sprint_hex (int8_t *str, fix24 x)
+char *fix24_sprint_hex(char *str, fix24 x)
 {
     bool neg = false;
     if (x < 0) { x = -x; neg = true;    }
-    if (!neg) sprintf (str, "%x.%02lx", x >> 8, x&0xff);
-    else        sprintf (str, "-%x.%02lx", x >> 8, x&0xff);
+    if (!neg)
+        sprintf(str, "%x.%02x", x >> 8, x & 0xff);
+    else
+        sprintf(str, "-%x.%02x", x >> 8, x & 0xff);
     return str;
 }
