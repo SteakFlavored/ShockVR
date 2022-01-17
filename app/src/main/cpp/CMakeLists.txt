@@ -23,7 +23,12 @@ target_include_directories(native_app_glue PUBLIC
 set(CMAKE_SHARED_LINKER_FLAGS
         "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate")
 
+# Split out building game libraries separately
+add_subdirectory(${PROJECT_SOURCE_DIR}/Libraries/)
+
 add_library(shockvr SHARED shockvr.cpp)
+
+target_link_libraries(shockvr FIX_LIB)
 
 # Link in the native app glue
 target_link_libraries(shockvr android native_app_glue)
