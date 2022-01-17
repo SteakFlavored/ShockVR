@@ -78,32 +78,22 @@ void g3_vec_scale(g3s_vector *dest,g3s_vector *src,fix s)
 // fix mag(vector *v)
 // takes esi = v. returns mag in eax. trashes all but ebp
 fix g3_vec_mag(g3s_vector *v)
- {
-    AWide        result,result2;
-
-    AsmWideMultiply(v->gX, v->gX, &result);
-    AsmWideMultiply(v->gY, v->gY, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(v->gZ, v->gZ, &result2);
-    AsmWideAdd(&result, &result2);
-
-    return (quad_sqrt(result.hi, result.lo));
-
-//    return(quad_sqrt(result.hi, result.lo));
- }
+{
+    int64_t magSq = (int64_t)v->gX * (int64_t)v->gX +
+            (int64_t)v->gY * (int64_t)v->gY +
+            (int64_t)v->gZ * (int64_t)v->gZ;
+    float result = sqrt((float)magSq);
+    return fix_from_float(result);
+}
 
 // compute dot product of vectors at [esi] & [edi]
 fix g3_vec_dotprod(g3s_vector *v0,g3s_vector *v1)
- {
-    AWide        result,result2;
-
-    AsmWideMultiply(v0->gX, v1->gX, &result);
-    AsmWideMultiply(v0->gY, v1->gY, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(v0->gZ, v1->gZ, &result2);
-    AsmWideAdd(&result, &result2);
-  return((result.hi<<16) | (((uint32_t) result.lo)>>16));
- }
+{
+    int64_t result = (int64_t)v0->gX * (int64_t)v1->gX +
+            (int64_t)v0->gY * (int64_t)v1->gY +
+            (int64_t)v0->gZ * (int64_t)v1->gZ;
+    return fix_from_int64(result);
+}
 
 
 // compute normalized surface normal from three points.
@@ -134,87 +124,61 @@ void g3_vec_normalize(g3s_vector *v)
 // trashes eax,ebx,ecx,edx,esi
 // the quick version does not normalize
 void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_vector *v2)
- {
-    AWide                result,result2;
+{
+    int64_t       temp, gX, gY, gZ;
     g3s_vector    temp_v0;
     g3s_vector    temp_v1;
-    g3s_vector    temp_high;
-    int32_t                temp_long;
-     int32_t                    shiftcount;
+    int32_t       temp_long;
+    int64_t       shiftcount;
 
-     g3_vec_sub(&temp_v0,v1,v0);
-     g3_vec_sub(&temp_v1,v2,v1);
+    g3_vec_sub(&temp_v0,v1,v0);
+    g3_vec_sub(&temp_v1,v2,v1);
 
 // dest->x = v1z * v0y - v1y * v0z;
-    AsmWideMultiply(temp_v1.gZ, temp_v0.gY, &result);
-    AsmWideMultiply(temp_v1.gY, temp_v0.gZ, &result2);
-    AsmWideNegate(&result2);
-    AsmWideAdd(&result, &result2);
-     v->gX = result.lo;
-     temp_high.gX = result.hi;
+    gX = (int64_t)temp_v1.gZ * (int64_t)temp_v0.gY -
+            (int64_t)temp_v1.gY * (int64_t)temp_v0.gZ;
 
 // dest->y = v1x * v0z - v1z * v0x;
-    AsmWideMultiply(temp_v1.gX, temp_v0.gZ, &result);
-    AsmWideMultiply(temp_v1.gZ, temp_v0.gX, &result2);
-    AsmWideNegate(&result2);
-    AsmWideAdd(&result, &result2);
-     v->gY = result.lo;
-     temp_high.gY = result.hi;
+    gY = (int64_t)temp_v1.gX * (int64_t)temp_v0.gZ -
+            (int64_t)temp_v1.gZ * (int64_t)temp_v0.gX;
 
 // dest->z = v1y * v0x - v1x * v0y;
-    AsmWideMultiply(temp_v1.gY, temp_v0.gX, &result);
-    AsmWideMultiply(temp_v1.gX, temp_v0.gY, &result2);
-    AsmWideNegate(&result2);
-    AsmWideAdd(&result, &result2);
-     v->gZ = result.lo;
-     temp_high.gZ = result.hi;
+    gZ = (int64_t)temp_v1.gY * (int64_t)temp_v0.gX -
+            (int64_t)temp_v1.gX * (int64_t)temp_v0.gY;
 
 // see if fit into a longword
-    result.hi = temp_high.gX;
-    result.lo = v->gX;
-    if (result.hi < 0)
-        AsmWideNegate(&result);
-    Double_64(result.hi,result.lo);
-    temp_long = result.hi;
+    temp = gX;
+    if (temp < 0)
+        temp = -temp;
+    temp_long = (int32_t)(((uint64_t)temp * 2) >> 32UL);
 
-    result.hi = temp_high.gY;
-    result.lo = v->gY;
-    if (result.hi < 0)
-        AsmWideNegate(&result);
-    Double_64(result.hi,result.lo);
-    temp_long |= result.hi;
+    temp = gY;
+    if (temp < 0)
+        temp = -temp;
+    temp_long |= (int32_t)(((uint64_t)temp * 2) >> 32UL);
 
-    result.hi = temp_high.gZ;
-    result.lo = v->gZ;
-    if (result.hi < 0)
-        AsmWideNegate(&result);
-    Double_64(result.hi,result.lo);
-    temp_long |= result.hi;
+    temp = gZ;
+    if (temp < 0)
+        temp = -temp;
+    temp_long |= (int32_t)(((uint64_t)temp * 2) >> 32UL);
 
-    if (!temp_long) return; // everything fits in the low longword. hurrah. see ya.
+    if (!temp_long) {
+        v->gX = fix_from_int64_lo(gX);
+        v->gY = fix_from_int64_lo(gY);
+        v->gZ = fix_from_int64_lo(gZ);
+        return; // everything fits in the low longword. hurrah. see ya.
+    }
 
 // see how far to shift to fit in a longword
     shiftcount = 0;
-    while (((uint32_t) temp_long) >= 0x0100)
-     {
-         shiftcount += 8;
-         temp_long >>= 8;
-     }
+    while (((uint32_t) temp_long) >= 0x0100) {
+        shiftcount += 8;
+        temp_long >>= 8;
+    }
     shiftcount += shift_table[temp_long];
 
 // now get the results
-    result.hi = temp_high.gX;
-    result.lo = v->gX;
-    AsmWideBitShift(&result, shiftcount);
-    v->gX = result.lo;
-
-    result.hi = temp_high.gY;
-    result.lo = v->gY;
-    AsmWideBitShift(&result, shiftcount);
-    v->gY = result.lo;
-
-    result.hi = temp_high.gZ;
-    result.lo = v->gZ;
-    AsmWideBitShift(&result, shiftcount);
-    v->gZ = result.lo;
+    v->gX = fix_from_int64_lo(gX >> shiftcount);
+    v->gY = fix_from_int64_lo(gY >> shiftcount);
+    v->gZ = fix_from_int64_lo(gZ >> shiftcount);
  }

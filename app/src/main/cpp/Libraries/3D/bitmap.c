@@ -82,8 +82,6 @@ extern int32_t h_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info 
 
 fix     _g3d_bitmap_x_scale = 0x010000;
 fix     _g3d_bitmap_y_scale = 0x010000;
-fix     _g3d_bitmap_x_iscale = 0x010000;
-fix     _g3d_bitmap_y_iscale = 0x010000;
 int32_t     _g3d_bitmap_u_anchor = 0;
 int32_t     _g3d_bitmap_v_anchor = 0;
 fix     _g3d_roll_matrix[6];
@@ -116,10 +114,7 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p);
 void g3_set_bitmap_scale (fix u_scale, fix v_scale)
  {
      _g3d_bitmap_x_scale = fix_mul(fix_mul(_matrix_scale.gX,u_scale),_scrw);
-    _g3d_bitmap_x_iscale = AsmWideDivide(1,0,_g3d_bitmap_x_scale);
-
      _g3d_bitmap_y_scale = fix_mul(fix_mul(_matrix_scale.gY,v_scale),_scrh);
-    _g3d_bitmap_y_iscale = AsmWideDivide(1,0,_g3d_bitmap_y_scale);
  }
 
 grs_vertex **g3_full_light_bitmap(grs_bitmap *bm, grs_vertex **p)

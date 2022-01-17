@@ -50,9 +50,6 @@ int32_t                poly_color;
 g3s_phandle        vbuf[MAX_VERTS];
 g3s_phandle        _vbuf2[MAX_VERTS];
 
-// for surface normal check
-g3s_vector        temp_vector;
-
 // used by line clipper
 /*int32_t        temp_points[4];
 int32_t        n_temp_used;*/
@@ -91,19 +88,15 @@ extern void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1
 // takes 3 rotated points: eax,edx,ebx.
 // returns al=true (& s flag set) if facing. trashes all but ebp
 bool g3_check_poly_facing(g3s_phandle p0,g3s_phandle p1,g3s_phandle p2)
- {
-    AWide    result,result2;
+{
+    g3s_vector temp_vector;
+    g3_compute_normal_quick(&temp_vector, (g3s_vector *) p0, (g3s_vector *) p1, (g3s_vector *) p2);
 
-     g3_compute_normal_quick(&temp_vector, (g3s_vector *) p0, (g3s_vector *) p1, (g3s_vector *) p2);
-
-    AsmWideMultiply(p0->gX, temp_vector.gX, &result);
-    AsmWideMultiply(p0->gY, temp_vector.gY, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(p0->gZ, temp_vector.gZ, &result2);
-    AsmWideAdd(&result, &result2);
-
-    return(result.hi<0);
- }
+    int64_t result = (int64_t)p0->gX * (int64_t)temp_vector.gX +
+            (int64_t)p0->gY * (int64_t)temp_vector.gY +
+            (int64_t)p0->gZ * (int64_t)temp_vector.gZ;
+    return result < 0;
+}
 
 // takes same input as draw_poly, but first checks if facing
 int32_t g3_check_and_draw_cpoly(int32_t n_verts,g3s_phandle *p)
@@ -541,14 +534,9 @@ unclipped_sline:
 // takes esi=point on surface, edi=surface normal (can be unnormalized)
 // trashes eax,ebx,ecx,edx. returns al=true & sign set, if facing
 bool g3_check_normal_facing(g3s_vector *v,g3s_vector *normal)
- {
-     AWide        result,result2;
-
-    AsmWideMultiply(v->gX-_view_position.gX, normal->gX, &result);
-    AsmWideMultiply(v->gY-_view_position.gY, normal->gY, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(v->gZ-_view_position.gZ, normal->gZ, &result2);
-    AsmWideAdd(&result, &result2);
-
-    return(result.hi<0);
+{
+    int64_t result = (int64_t)(v->gX - _view_position.gX) * (int64_t)normal->gX +
+            (int64_t)(v->gY - _view_position.gY) * (int64_t)normal->gY +
+            (int64_t)(v->gZ - _view_position.gZ) * (int64_t)normal->gZ;
+    return result < 0;
 }

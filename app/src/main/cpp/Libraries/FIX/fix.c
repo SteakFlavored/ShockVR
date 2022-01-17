@@ -316,15 +316,6 @@ fix fix_safe_pyth_dist (fix a, fix b)
 }
 
 //----------------------------------------------------------------------------
-// We can use the fix function because the difference in scale doesn't matter.
-//----------------------------------------------------------------------------
-int32_t long_safe_pyth_dist (int32_t a, int32_t b)
-{
-    return (fix_safe_pyth_dist (a, b));
-}
-
-
-//----------------------------------------------------------------------------
 // Computes sin and cos of theta
 //----------------------------------------------------------------------------
 void fix_sincos (fixang theta, fix *sin, fix *cos)
@@ -581,7 +572,6 @@ fix24 asm fix24_mul(fix24 a, fix24 b)
 
 #endif
 
-
 fix fix_pow(fix x,fix y)
 {
     int32_t i;
@@ -605,141 +595,3 @@ fix fix_pow(fix x,fix y)
     }
     return ans;
 }
-
-//----------------------------------------------------------------------------
-// AsmWideDivide: Divide a 64 bit long by a 32 bit long, return 32 bit result.
-//----------------------------------------------------------------------------
-#if defined(powerc) || defined(__powerc)
-#else
-
-asm AWide *AsmWideAdd(AWide *target, AWide *source)
- {
-     move.l    4(sp),a0        // target
-     move.l    8(sp),a1        // source
-
-     move.l    (a0),d1            // get high bytes
-     move.l    (a1),d2
-
-     move.l    4(a1),d0        // get low byte
-     add.l        d0,4(a0)        // target.lo += source.lo
-
-     addx.l    d2,d1                // target.hi += source.hi + X
-     move.l    d1,(a0)            // save it
-
-    rts
- }
-
-asm AWide *AsmWideSub(AWide *target, AWide *source)
- {
-     move.l    4(sp),a0        // target
-     move.l    8(sp),a1        // source
-
-     move.l    (a0),d1            // get high bytes
-     move.l    (a1),d2
-
-     move.l    4(a1),d0        // get low byte
-     sub.l        d0,4(a0)        // target.lo -= source.lo
-
-     subx.l    d2,d1                // target.hi -= source.hi + X
-     move.l    d1,(a0)            // save it
-
-    rts
- }
-
-
-asm AWide *AsmWideMultiply(int32_t multiplicand, int32_t multiplier, AWide *target)
- {
-     move.l    4(sp),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(sp),d1:d0
-     move.l    12(sp),a0
-     move.l    d1,(a0)
-     move.l    d0,4(a0)
-     rts
- }
-
-
-asm int32_t AsmWideDivide(int32_t hi, int32_t lo, int32_t divisor)
- {
-    clr.l        gOVResult
-    move.l    12(sp),d2
-    beq.s        @DivZero
-    move.l    4(sp),d1
-    move.l    8(sp),d0
-     dc.l        0x4C420C01             // DIVS.L     D2,D1:D0
-    bvs.s        @DivOverflow
-     rts
-
-@DivOverflow:
-    move.l    #1,gOVResult
-    move.l    #0x7FFFFFFF,d0
-    tst.b        4(sp)
-    bpl.s        @noNeg
-    neg.l        d0
-@noNeg:
-    rts
-
-@DivZero:
-    move.l    #2,gOVResult
-    move.l    #0x7FFFFFFF,d0
-    tst.b        4(sp)
-    bpl.s        @noNeg2
-    neg.l        d0
-@noNeg2:
-    rts
- }
-
-asm AWide *AsmWideNegate(AWide *target)
- {
-     move.l    4(a7),a0
-     move.l    (a0)+,d0
-     move.l    (a0),d1
-     moveq        #0,d2
-
-     not.l        d0            // not high reg
-     not.l        d1            // not low reg
-     addq.l    #1,d1
-     addx.l    d2,d0        // +1
-
-     move.l    d1,(a0)        // save result
-     move.l    d0,-(a0)
-
-@Done:
-     rts
- }
-
-asm AWide *AsmWideBitShift(AWide *src, int32_t shift)
- {
-     move.l    4(a7),a0
-     move.l    8(a7),d2
-     beq.s        @exit
-     bmi.s        @negshift
-
-     move.l    (a0),d1        // get high
-     move.l    4(a0),d0    // get low
-    subq.w    #1,d2            // for dbra
-
-@Loop:
-    asr.l        #1,d1
-  roxr.l    #1,d0                // shift low down with carry
-    dbra        d2,@Loop
-    bra.s        @done
-
-@negshift:
-    neg.l        d2
-    subq.w    #1,d2                // for dbra
-
-@Loop2:
-    lsl.l        #1,d0                // shift low up 1
-    roxl.l    #1,d1                // shift high up with carry
-    dbra        d2,@Loop2
-
-@done:
-    move.l    d1,(a0)
-    move.l    d0,4(a0)
-
-@exit:
-     rts
- }
-
-
-#endif

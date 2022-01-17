@@ -458,36 +458,25 @@ bot_ok:
 // src and dest vectors can be the same
 void g3_vec_rotate(g3s_vector *dest,g3s_vector *src,g3s_matrix *m)
  {
-    AWide    result,result2;
-    int32_t    srcX,srcY,srcZ;     // in locals for PPC speed
-
-    srcX = src->gX;
-    srcY = src->gY;
-    srcZ = src->gZ;
+    int64_t result;
 
 // first column
-    AsmWideMultiply(srcX, m->m1, &result);
-    AsmWideMultiply(srcY, m->m4, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(srcZ, m->m7, &result2);
-    AsmWideAdd(&result, &result2);
-    dest->gX = (result.hi<<16) | (((uint32_t) result.lo)>>16);
+    result = (int64_t)src->gX * (int64_t)m->m1 +
+            (int64_t)src->gY * (int64_t)m->m4 +
+            (int64_t)src->gZ * (int64_t)m->m7;
+    dest->gX = fix_from_int64(result);
 
 // second column
-    AsmWideMultiply(srcX, m->m2, &result);
-    AsmWideMultiply(srcY, m->m5, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(srcZ, m->m8, &result2);
-    AsmWideAdd(&result, &result2);
-    dest->gY = (result.hi<<16) | (((uint32_t) result.lo)>>16);
+    result = (int64_t)src->gX * (int64_t)m->m2 +
+            (int64_t)src->gY * (int64_t)m->m5 +
+            (int64_t)src->gZ * (int64_t)m->m8;
+    dest->gY = fix_from_int64(result);
 
 // third column
-    AsmWideMultiply(srcX, m->m3, &result);
-    AsmWideMultiply(srcY, m->m6, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(srcZ, m->m9, &result2);
-    AsmWideAdd(&result, &result2);
-    dest->gZ = (result.hi<<16) | (((uint32_t) result.lo)>>16);
+    result = (int64_t)src->gX * (int64_t)m->m3 +
+            (int64_t)src->gY * (int64_t)m->m6 +
+            (int64_t)src->gZ * (int64_t)m->m9;
+    dest->gZ = fix_from_int64(result);
  }
 
 // transpose a matrix at esi in place
@@ -519,13 +508,10 @@ void g3_copy_transpose(g3s_matrix *dest,g3s_matrix *src)         //copy and tran
 
 // MLA- oh no I've got LookingGlass disease, I'm making multi-line #defines!
 #define mxm_mul(dst,s1_1,s1_2,s1_3,s2_1,s2_2,s2_3) \
- {AWide    result,result2; \
-    AsmWideMultiply(src1->s1_1, src2->s2_1, &result); \
-    AsmWideMultiply(src1->s1_2, src2->s2_2, &result2);\
-    AsmWideAdd(&result, &result2);\
-    AsmWideMultiply(src1->s1_3, src2->s2_3, &result2);\
-    AsmWideAdd(&result, &result2);\
-    dest->dst = (result.hi<<16) | (((uint32_t) result.lo)>>16);}
+ {int64_t result = (int64_t)src1->s1_1 * (int64_t)src2->s2_1 + \
+            (int64_t)src1->s1_2 * (int64_t)src2->s2_2 + \
+            (int64_t)src1->s1_3 * (int64_t)src2->s2_3; \
+    dest->dst = fix_from_int64(result);}
 
 // matrix by matrix multiply:  ebx = esi * edi
 // does ebx = edi * esi
@@ -551,89 +537,74 @@ void g3_matrix_x_matrix(g3s_matrix *dest,g3s_matrix *src1 ,g3s_matrix *src2 )
     mxm_mul(m9, m7,m8,m9, m3,m6,m9);
 }
 
+static fix do_cross(fix v1, fix v2, fix v3, fix v4)
+{
+    int64_t result = (int64_t)v1 * (int64_t)v2 - (int64_t)v3 * (int64_t)v4;
+    return fix_from_int64(result);
+}
 
-// MLA- oh no I've got LookingGlass disease, I'm making multi-line #defines!
-#define do_cross(v1,v2,v3,v4,res) \
-  {AWide    result,result2; \
-    AsmWideMultiply(v3, v4, &result); \
-    AsmWideMultiply(v1, v2, &result2);\
-    AsmWideNegate(&result); \
-    AsmWideAdd(&result, &result2);\
-    res = (result.hi<<16) | (((uint32_t) result.lo)>>16);}
-
-#define do_cross_nofixup(v1,v2,v3,v4,wide_res) \
-  {AWide    result2; \
-    AsmWideMultiply(v3, v4, &wide_res); \
-    AsmWideMultiply(v1, v2, &result2);\
-    AsmWideNegate(&wide_res); \
-    AsmWideAdd(&wide_res, &result2);}
+static int64_t do_cross_nofixup(fix v1, fix v2, fix v3, fix v4)
+{
+    return (int64_t)v1 * (int64_t)v2 - (int64_t)v3 * (int64_t)v4;
+}
 
 
 #define DEN_MIN  0x00008000    // minimum acceptable value for denomintor
 
 // fills in edi with vector. takes deltas set
 void get_pyr_vector(g3s_vector *corners)
- {
-     fix            den;
-     AWide        wide_den,wide2;
+{
+    fix            den;
+    int64_t        wide_den,wide2;
 
     // try assuming z==1
-    do_cross(d13,d56,d23,d46,den);
-    if (fix_abs(den) >= DEN_MIN)
-     {
-         corners->gZ = f1_0;
+    den = do_cross(d13,d56,d23,d46);
+    if (fix_abs(den) >= DEN_MIN) {
+        corners->gZ = f1_0;
 
-         do_cross_nofixup(d89,d46,d79,d56,wide_den);
-         corners->gX = AsmWideDivide(wide_den.hi,wide_den.lo,den);
+        wide_den = do_cross_nofixup(d89,d46,d79,d56);
+        corners->gX = fix_from_int64_lo(wide_den / (int64_t)den);
 
-         do_cross_nofixup(d79,d23,d13,d89,wide_den);
-         corners->gY = AsmWideDivide(wide_den.hi,wide_den.lo,den);
-     }
-    else
-     {
+        wide_den = do_cross_nofixup(d79,d23,d13,d89);
+        corners->gY = fix_from_int64_lo(wide_den / (int64_t)den);
+    } else {
         // try assuming x==1
-        do_cross(d46,d89,d56,d79,den);
-        if (fix_abs(den) >= DEN_MIN)
-          {
-             corners->gX = f1_0;
+        den = do_cross(d46,d89,d56,d79);
+        if (fix_abs(den) >= DEN_MIN) {
+            corners->gX = f1_0;
 
-             do_cross_nofixup(d23,d79,d13,d89,wide_den);
-             corners->gY = AsmWideDivide(wide_den.hi,wide_den.lo,den);
+            wide_den = do_cross_nofixup(d23,d79,d13,d89);
+            corners->gY = fix_from_int64_lo(wide_den / (int64_t)den);
 
-             do_cross_nofixup(d13,d56,d23,d46,wide_den);
-             corners->gZ = AsmWideDivide(wide_den.hi,wide_den.lo,den);
-          }
-         else
-          {
+            wide_den = do_cross_nofixup(d13,d56,d23,d46);
+            corners->gZ = fix_from_int64_lo(wide_den / (int64_t)den);
+        } else {
             //try assuming y==1
-             do_cross(d13,d89,d23,d79,den);
+            den = do_cross(d13,d89,d23,d79);
 
-             corners->gY = f1_0;
+            corners->gY = f1_0;
 
-             do_cross_nofixup(d56,d79,d46,d89,wide_den);
-             corners->gX = AsmWideDivide(wide_den.hi,wide_den.lo,den);
+            wide_den = do_cross_nofixup(d56,d79,d46,d89);
+            corners->gX = fix_from_int64_lo(wide_den / (int64_t)den);
 
-             do_cross_nofixup(d46,d23,d56,d13,wide_den);
-             corners->gZ = AsmWideDivide(wide_den.hi,wide_den.lo,den);
-          }
-     }
+            wide_den = do_cross_nofixup(d46,d23,d56,d13);
+            corners->gZ = fix_from_int64_lo(wide_den / (int64_t)den);
+        }
+    }
 
 // got_vector
     g3_vec_normalize(corners);
 
 // make sure vector points right way
-    AsmWideMultiply(corners->gX, vm3, &wide_den);
-    AsmWideMultiply(corners->gY, vm6, &wide2);
-    AsmWideAdd(&wide_den, &wide2);
-    AsmWideMultiply(corners->gZ, vm9, &wide2);
-    AsmWideAdd(&wide_den, &wide2);
-    if (wide_den.hi<0)
-     {
-         corners->gX = -corners->gX;
-         corners->gY = -corners->gY;
-         corners->gZ = -corners->gZ;
-     }
- }
+    wide_den = (int64_t)corners->gX * (int64_t)vm3 +
+            (int64_t)corners->gY * (int64_t)vm6 +
+            (int64_t)corners->gZ * (int64_t)vm9;
+    if (wide_den < 0) {
+        corners->gX = -corners->gX;
+        corners->gY = -corners->gY;
+        corners->gZ = -corners->gZ;
+    }
+}
 
 // fills in four vectors which are the corners of the view pyramid
 // takes edi=ptr to array of 4 vectors. trashes all but edp

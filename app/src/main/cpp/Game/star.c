@@ -449,42 +449,39 @@ extern asm int32_t code_point(g3s_point *pt);
 // takes pointer to vector
 // returns point
 g3s_phandle star_transform_point(g3s_vector *v)
- {
-     g3s_point     *point;
-    AWide                result,result2;
-    fix                    temp;
+{
+    g3s_point *point;
+    int64_t result;
+    fix temp;
 
     getpnt(point);
     point->p3_flags = 0;
 
 //third column (z)
-    AsmWideMultiply(v->gX, vm3, &result);
-    AsmWideMultiply(v->gY, vm6, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(v->gZ, vm9, &result2);
-    AsmWideAdd(&result, &result2);
-    temp = (result.hi<<16) | (((uint32_t) result.lo)>>16);
+    result = (int64_t)v->gX * (int64_t)vm3 +
+            (int64_t)v->gY * (int64_t)vm6 +
+            (int64_t)v->gZ * (int64_t)vm9;
+    temp = fix_from_int64(result);
 
-  // check out z, see if behind
-  if (temp<std_min_z) {point->codes = CC_BEHIND; return(point);}
+    // check out z, see if behind
+    if (temp < std_min_z) {
+        point->codes = CC_BEHIND;
+        return(point);
+    }
 
     point->gZ = temp;              //save z
 
 //first column (x)
-    AsmWideMultiply(v->gX, vm1, &result);
-    AsmWideMultiply(v->gY, vm4, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(v->gZ, vm7, &result2);
-    AsmWideAdd(&result, &result2);
-    point->gX = (result.hi<<16) | (((uint32_t) result.lo)>>16);
+    result = (int64_t)v->gX * (int64_t)vm1 +
+            (int64_t)v->gY * (int64_t)vm4 +
+            (int64_t)v->gZ * (int64_t)vm7;
+    point->gX = fix_from_int64(result);
 
 //second column (y)
-    AsmWideMultiply(v->gX, vm2, &result);
-    AsmWideMultiply(v->gY, vm5, &result2);
-    AsmWideAdd(&result, &result2);
-    AsmWideMultiply(v->gZ, vm8, &result2);
-    AsmWideAdd(&result, &result2);
-    point->gY = (result.hi<<16) | (((uint32_t) result.lo)>>16);
+    result = (int64_t)v->gX * (int64_t)vm2 +
+            (int64_t)v->gY * (int64_t)vm5 +
+            (int64_t)v->gZ * (int64_t)vm8;
+    point->gY = fix_from_int64(result);
 
 //call clip codes
     if (code_point(point)) return(point);

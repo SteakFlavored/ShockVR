@@ -72,8 +72,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define fix_mul_div_3_8_8_3 fix_mul_div
 
 // MLA- moved implementations of these into Permap.c, since we can't do inline asm
-#if defined(powerc) || defined(__powerc)
 extern fix fix_div_16_16_3 (fix a, fix b);
+
+#if defined(powerc) || defined(__powerc)
 extern fix fix_mul_3_3_3 (fix a, fix b);
 extern fix fix_mul_3_32_16 (fix a, fix b);
 extern fix fix_mul_3_16_20 (fix a, fix b);
@@ -85,7 +86,6 @@ extern fix fix_mul_16_32_20 (fix a, fix b);
 #define fix_mul_16_32_20 fix_mul_16_32_20_asm
 
 #else
-extern asm fix fix_div_16_16_3 (fix a, fix b);
 extern asm fix fix_mul_3_3_3 (fix a, fix b);
 extern asm fix fix_mul_3_32_16 (fix a, fix b);
 extern asm fix fix_mul_3_16_20 (fix a, fix b);

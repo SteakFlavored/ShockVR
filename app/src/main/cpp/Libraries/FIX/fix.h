@@ -165,17 +165,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Globals
 extern int32_t    gOVResult;
 
-
-//////////////////////////////
-//
-// First some math functions that don't use fixes.
-//
-/*    Change this
-// Returns 0 if x < 0
-uint16_t long_sqrt (int32_t x);
-#pragma aux long_sqrt parm [eax] value [ax] modify [eax ebx ecx edx esi edi]
-*/
-
 //////////////////////////////
 //
 // fix.c
@@ -270,39 +259,21 @@ typedef uint16_t fixang;
 // makes a fixed point from a float.
 #define fix_from_float(n) ((fix)(65536.0*(n)))
 
+// makes a fixed point from an int64_t
+#define fix_from_int64(n) ((fix)(((n) >> 16L) & 0xFFFFFFFFL))
+#define fix_from_int64_lo(n) ((fix)((n) & 0xFFFFFFFFL))
+
 //========================================
 //
 // Multiplication and division.
 //
 //========================================
 
-// For Mac version: The PowerPC version uses two assembly language routines
-// to do the multiply and divide.
-#if defined(powerc) || defined(__powerc)
-
-extern "C"
-{
-fix fix_mul_asm(fix a, fix b);
-fix fast_fix_mul_int_asm(fix a, fix b);
-fix fix_div_asm(fix a, fix b);
-fix fix_mul_div_asm (fix m0, fix m1, fix d);
-}
-#define fix_mul fix_mul_asm
-#define fast_fix_mul fix_mul_asm
-#define fast_fix_mul_int fast_fix_mul_int_asm
-#define fix_div fix_div_asm
-#define fix_mul_div fix_mul_div_asm
-
-#else
-
 fix fix_mul(fix a, fix b);
 fix fix_div(fix a, fix b);
 fix fix_mul_div (fix m0, fix m1, fix d);
 fix fast_fix_mul_int(fix a, fix b);
 #define fast_fix_mul fix_mul
-
-#endif
-
 
 //========================================
 //
@@ -325,18 +296,7 @@ fix fix_safe_pyth_dist (fix a, fix b);
 // Returns 0 if x < 0
 fix fix_sqrt (fix x);
 
-#if defined(powerc) || defined(__powerc)
-int32_t quad_sqrt(int32_t hi, int32_t lo);
-#else
-asm int32_t quad_sqrt(int32_t hi, int32_t lo);
-#endif
-
-
-// Returns 0 if x < 0
-/*  Fix this
-fix fix_sloppy_sqrt (fix x);
-#pragma aux fix_sloppy_sqrt parm [eax] value [eax] modify [eax ebx ecx edx esi edi]
-*/
+#define long_sqrt(x) ((int32_t)sqrt((float)(x)))
 
 //========================================
 //
@@ -463,46 +423,5 @@ fixang fix24_atan2 (fix24 y, fix24 x);
 fix24 atofix24(int8_t *p);
 int8_t *fix24_sprint (int8_t *str, fix24 x);
 int8_t *fix24_sprint_hex (int8_t *str, fix24 x);
-
-
-//============================================
-//
-//  Other multiply/div/add variants used by 2D and 3D.
-//
-//============================================
-struct AWide
-{
-    int32_t            hi;
-    uint32_t    lo;
-};
-typedef struct AWide AWide;
-
-#if defined(powerc) || defined(__powerc)
-extern "C"
-{
-extern fix fix_mul_3_3_3_asm (fix a, fix b);
-extern fix fix_mul_3_32_16_asm (fix a, fix b);
-extern fix fix_mul_3_16_20_asm (fix a, fix b);
-extern fix fix_mul_16_32_20_asm (fix a, fix b);
-extern AWide *AsmWideAdd(AWide *target, AWide *source);
-extern AWide *AsmWideSub(AWide *target, AWide *source);
-extern AWide *AsmWideMultiply(int32_t multiplicand, int32_t multiplier, AWide *target);
-extern int32_t AsmWideDivide(int32_t hi, int32_t lo, int32_t den);
-
-// since these aren't implemented yet in our PPC code yet, we just call the fixMath versions
-// extern AWide *AsmWideNegate(AWide *target);
-// extern AWide *AsmWideBitShift(AWide *src, int32_t shift);
-#define AsmWideNegate(target) (AWide *) WideNegate((wide *) target)
-#define AsmWideBitShift(target,count) (AWide *) WideBitShift((wide *) target,count)
-}
-
-#else
-extern asm AWide *AsmWideAdd(AWide *target, AWide *source);
-extern asm AWide *AsmWideMultiply(int32_t multiplicand, int32_t multiplier, AWide *target);
-extern asm int32_t AsmWideDivide(int32_t hi, int32_t lo, int32_t divisor);
-extern asm AWide *AsmWideNegate(AWide *target);
-extern asm AWide *AsmWideBitShift(AWide *src, int32_t shift);
-#endif
-
 
 #endif /* !__fix24_H */

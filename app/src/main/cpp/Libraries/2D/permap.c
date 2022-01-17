@@ -41,16 +41,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tmaps.h"
 #include "tmaptab.h"
 
+fix fix_div_16_16_3(fix a, fix b)
+{
+    int64_t result = ((int64_t)a << 29L) / (int64_t)b;
+    return fix_from_int64_lo(result);
+}
+
 // PowerPC math routines used by permap stuff
 #if defined(powerc) || defined(__powerc)
-fix fix_div_16_16_3 (fix a, fix b)
- {
-  return(AsmWideDivide((a) >> 3, (a) << 29, b));
- }
-
-// other powerpc routines are in the Fix lib
-
-// 68K math routines used by permap stuff
 #else
 asm fix fix_div_16_16_3 (fix a, fix b)
  {
