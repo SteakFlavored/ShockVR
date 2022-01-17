@@ -28,8 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define UIEV_DATASIZE 8
 
 
-#define UIEVFRONT  LGPoint pos;        /* all ui events have a "screen" position */  \
-                   uint32_t type;         /* An event type, 32 possible.   */
+#define UIEVFRONT  LGPoint pos;          /* all ui events have a "screen" position */  \
+                         uint32_t type;            /* An event type, 32 possible.    */
 
 #define UIEVBACK(sz) int8_t pad[UIEV_DATASIZE-(sz)]
 
@@ -41,22 +41,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct _ui_event
 {
   UIEVFRONT
-  int16_t subtype;                 /* type specific */
-  int8_t data[UIEV_DATASIZE];      /* type specific */
+  int16_t subtype;                      /* type specific */
+  int8_t data[UIEV_DATASIZE];        /* type specific */
 } uiEvent;
 
 
 // Type field values
-#define UI_EVENT_NULL           0x00000000
-#define UI_EVENT_KBD_RAW        0x00000001
-#define UI_EVENT_KBD_COOKED     0x00000002
-#define UI_EVENT_KBD_POLL       0x00000020
-#define UI_EVENT_MOUSE          0x00000004
-#define UI_EVENT_MOUSE_MOVE     0x00000008
-#define UI_EVENT_JOY            0x00000010
-#define UI_EVENT_MIDI           0x10000000  // Hey, gotta be ready for the future.
-#define UI_EVENT_USER_DEFINED   0x80000000
-#define ALL_EVENTS              0xFFFFFFFF
+#define UI_EVENT_NULL              0x00000000
+#define UI_EVENT_KBD_RAW          0x00000001
+#define UI_EVENT_KBD_COOKED      0x00000002
+#define UI_EVENT_KBD_POLL         0x00000020
+#define UI_EVENT_MOUSE             0x00000004
+#define UI_EVENT_MOUSE_MOVE      0x00000008
+#define UI_EVENT_JOY                0x00000010
+#define UI_EVENT_MIDI              0x10000000  // Hey, gotta be ready for the future.
+#define UI_EVENT_USER_DEFINED    0x80000000
+#define ALL_EVENTS                  0xFFFFFFFF
 
 
 // Type-specific versions of event structs
@@ -67,9 +67,9 @@ typedef struct _ui_event
 typedef struct _ui_raw_key_event
 {
   UIEVFRONT
-  int16_t  scancode;    // subtype
-  uint8_t  action;      // KBS_UP or _DOWN
-  uint16_t mods;		  // KLC - modifiers added for Mac version
+  int16_t  scancode;     // subtype
+  uint8_t  action;        // KBS_UP or _DOWN
+  uint16_t mods;          // KLC - modifiers added for Mac version
   UIEVBACK(sizeof(uint8_t) + sizeof(uint16_t));
 } uiRawKeyEvent;
 
@@ -79,7 +79,7 @@ typedef uiRawKeyEvent uiPollKeyEvent;
 typedef struct _ui_cooked_key_event
 {
   UIEVFRONT
-  int16_t code;        /* cooked keycode, chock full o' stuff */
+  int16_t code;          /* cooked keycode, chock full o' stuff */
   UIEVBACK(0);
 } uiCookedKeyEvent;
 
@@ -87,7 +87,7 @@ typedef struct _ui_cooked_key_event
 typedef struct _ui_mouse_event
 {
   UIEVFRONT
-  int16_t action;        /* mouse event type, as per mouse library */
+  int16_t action;          /* mouse event type, as per mouse library */
   uint32_t tstamp;
   uint8_t buttons;
   uint8_t modifiers;
@@ -98,9 +98,9 @@ typedef struct _ui_mouse_event
 typedef struct _ui_joy_event
 {
   UIEVFRONT
-  int16_t action;        /* joystick event subtype, as defined below */
-  uint8_t joynum;        /* joystick number */
-  LGPoint joypos;     /* joystick position */
+  int16_t action;          /* joystick event subtype, as defined below */
+  uint8_t joynum;          /* joystick number */
+  LGPoint joypos;      /* joystick position */
   UIEVBACK(sizeof(uint8_t)+sizeof(LGPoint));
 } uiJoyEvent;
 
@@ -108,14 +108,14 @@ typedef struct _ui_joy_event
 typedef struct _ui_user_defined_event
 {
   UIEVFRONT
-  int16_t action;        /* event subtype, as defined by application */
+  int16_t action;          /* event subtype, as defined by application */
   UIEVBACK(0);
 } uiUserDefinedEvent;
 
 // extended mouse event types (double clicks)
-#define UI_MOUSE_LDOUBLE   (1 << 7)
-#define UI_MOUSE_RDOUBLE   (1 << 8)
-#define UI_MOUSE_CDOUBLE   (1 << 9)
+#define UI_MOUSE_LDOUBLE    (1 << 7)
+#define UI_MOUSE_RDOUBLE    (1 << 8)
+#define UI_MOUSE_CDOUBLE    (1 << 9)
 #define UI_MOUSE_BTN2DOUBLE(i) (128 << (i))
 
 // The "first" events are generated for the first half of a
@@ -127,30 +127,30 @@ typedef struct _ui_user_defined_event
 #define UI_MOUSE_FIRST_CDOWN  (1 << 12)
 #define UI_MOUSE_BTN2FIRST_DOWN(i) (1 << ((i)+10))
 
-#define UI_MOUSE_FIRST_LUP    (1 << 13)
-#define UI_MOUSE_FIRST_RUP    (1 << 14)
-#define UI_MOUSE_FIRST_CUP    (1 << 15)
+#define UI_MOUSE_FIRST_LUP     (1 << 13)
+#define UI_MOUSE_FIRST_RUP     (1 << 14)
+#define UI_MOUSE_FIRST_CUP     (1 << 15)
 #define UI_MOUSE_BTN2FIRST_UP(i) (1 << ((i)+13))
 
 
-#define UI_JOY_MOTION         0
-#define UI_JOY_BUTTON1UP      1
-#define UI_JOY_BUTTON2UP      2
-#define UI_JOY_BUTTON1DOWN    3
-#define UI_JOY_BUTTON2DOWN    4
+#define UI_JOY_MOTION            0
+#define UI_JOY_BUTTON1UP        1
+#define UI_JOY_BUTTON2UP        2
+#define UI_JOY_BUTTON1DOWN     3
+#define UI_JOY_BUTTON2DOWN     4
 
 // ----------------
 //  EVENT HANDLERS
 // ----------------
 
 /* Event handlers are installed by the client to receive callbacks when events
-   happen.  Event handlers are called when the ui toolkit is
-   polled.  Interrupt-driven phenomena such as mouse cursors will, in
-   general, be internal to the ui-toolkit.  An event handler is installed
-   on a region, and will receive events when the mouse is in that region.
-   It is possible to chain event handlers within a region.  In
-   this case, an event is "offered" to each event handler, in order,
-   one at a time until an event handler chooses to accept it.   */
+    happen.  Event handlers are called when the ui toolkit is
+    polled.  Interrupt-driven phenomena such as mouse cursors will, in
+    general, be internal to the ui-toolkit.  An event handler is installed
+    on a region, and will receive events when the mouse is in that region.
+    It is possible to chain event handlers within a region.  In
+    this case, an event is "offered" to each event handler, in order,
+    one at a time until an event handler chooses to accept it.    */
 
 
 typedef bool (*uiHandlerProc)(uiEvent* e, LGRegion* r, void* state);
@@ -271,7 +271,7 @@ void uiShutdown(void);
 
 
 // ----------------
-//     GLOBALS
+//      GLOBALS
 // ----------------
 
 extern uint16_t uiDoubleClickTime;

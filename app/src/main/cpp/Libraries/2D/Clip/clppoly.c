@@ -59,194 +59,194 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int32_t gr_clip_fix_poly (int32_t n, fix *vlist, fix *clist)
 {
-   fix *tlist = (fix *)gr_alloc_temp (128*sizeof (fix));
-   fix x0, y0;
-   fix x1, y1;
-   int32_t i, j;
+    fix *tlist = (fix *)gr_alloc_temp (128*sizeof (fix));
+    fix x0, y0;
+    fix x1, y1;
+    int32_t i, j;
 
-   /* clip left edge from vlist->tlist */
-   x0 = vlist[2*(n-1)];
-   y0 = vlist[2*(n-1)+1];
-   for (i=j=0; i<n; i++) {
-      x1 = vlist[2*i];
-      y1 = vlist[2*i+1];
+    /* clip left edge from vlist->tlist */
+    x0 = vlist[2*(n-1)];
+    y0 = vlist[2*(n-1)+1];
+    for (i=j=0; i<n; i++) {
+        x1 = vlist[2*i];
+        y1 = vlist[2*i+1];
 
-      if (x0 >= grd_fix_clip.left) {
-         /* start point is inside half plane */
-         if (x1 >= grd_fix_clip.left) {
-            /* both points inside half plane.  output end point. */
-            tlist[2*j] = x1;
-            tlist[2*j+1] = y1;
-            j++;
-         } else {
-            /* edge exits half plane.  output intersection. */
-            fix dx = x1-x0;
-            fix dy = y1-y0;
+        if (x0 >= grd_fix_clip.left) {
+            /* start point is inside half plane */
+            if (x1 >= grd_fix_clip.left) {
+                /* both points inside half plane.  output end point. */
+                tlist[2*j] = x1;
+                tlist[2*j+1] = y1;
+                j++;
+            } else {
+                /* edge exits half plane.  output intersection. */
+                fix dx = x1-x0;
+                fix dy = y1-y0;
 
-            tlist[2*j] = grd_fix_clip.left;
-            tlist[2*j+1] = y0 + fix_mul_div (dy,(grd_fix_clip.left-x0),dx);
-            j++;
-         }
-      } else {
-         /* start point is outside half plane. */
-         if (x1 >= grd_fix_clip.left) {
-            /* edge enters half plane.  output intersection and end point. */
-            fix dx = x1-x0;
-            fix dy = y1-y0;
-
-            if (x1 != grd_fix_clip.left) {
-               tlist[2*j] = grd_fix_clip.left;
-               tlist[2*j+1] = y0 + fix_mul_div (dy,(grd_fix_clip.left-x0),dx);
-               j++;
+                tlist[2*j] = grd_fix_clip.left;
+                tlist[2*j+1] = y0 + fix_mul_div (dy,(grd_fix_clip.left-x0),dx);
+                j++;
             }
-            tlist[2*j] = x1;
-            tlist[2*j+1] = y1;
-            j++;
-         } else
-            /* both points outside, eliminate edge. */
-            ;
-      }
-      x0=x1; y0=y1;
-   }
+        } else {
+            /* start point is outside half plane. */
+            if (x1 >= grd_fix_clip.left) {
+                /* edge enters half plane.  output intersection and end point. */
+                fix dx = x1-x0;
+                fix dy = y1-y0;
 
-   /* clip top edge from tlist->clist */
-   x0 = tlist[2*(j-1)];
-   y0 = tlist[2*(j-1)+1];
-   for (n=j, i=j=0; i<n; i++) {
-      x1 = tlist[2*i];
-      y1 = tlist[2*i+1];
+                if (x1 != grd_fix_clip.left) {
+                    tlist[2*j] = grd_fix_clip.left;
+                    tlist[2*j+1] = y0 + fix_mul_div (dy,(grd_fix_clip.left-x0),dx);
+                    j++;
+                }
+                tlist[2*j] = x1;
+                tlist[2*j+1] = y1;
+                j++;
+            } else
+                /* both points outside, eliminate edge. */
+                ;
+        }
+        x0=x1; y0=y1;
+    }
 
-      if (y0 >= grd_fix_clip.top) {
-         /* start point is inside half plane */
-         if (y1 >= grd_fix_clip.top) {
-            /* both points inside half plane.  output end point. */
-            clist[2*j] = x1;
-            clist[2*j+1] = y1;
-            j++;
-         } else {
-            /* edge exits half plane.  output intersection. */
-            fix dx = x1-x0;
-            fix dy = y1-y0;
+    /* clip top edge from tlist->clist */
+    x0 = tlist[2*(j-1)];
+    y0 = tlist[2*(j-1)+1];
+    for (n=j, i=j=0; i<n; i++) {
+        x1 = tlist[2*i];
+        y1 = tlist[2*i+1];
 
-            clist[2*j] = x0 + fix_mul_div (dx,(grd_fix_clip.top-y0),dy);
-            clist[2*j+1] = grd_fix_clip.top;
-            j++;
-         }
-      } else {
-         /* start point is outside half plane. */
-         if (y1 >= grd_fix_clip.top) {
-            /* edge enters half plane.  output intersection and end point. */
-            fix dx = x1-x0;
-            fix dy = y1-y0;
+        if (y0 >= grd_fix_clip.top) {
+            /* start point is inside half plane */
+            if (y1 >= grd_fix_clip.top) {
+                /* both points inside half plane.  output end point. */
+                clist[2*j] = x1;
+                clist[2*j+1] = y1;
+                j++;
+            } else {
+                /* edge exits half plane.  output intersection. */
+                fix dx = x1-x0;
+                fix dy = y1-y0;
 
-            if (y1 != grd_fix_clip.top) {
-               clist[2*j] = x0 + fix_mul_div (dx,(grd_fix_clip.top-y0),dy);
-               clist[2*j+1] = grd_fix_clip.top;
-               j++;
+                clist[2*j] = x0 + fix_mul_div (dx,(grd_fix_clip.top-y0),dy);
+                clist[2*j+1] = grd_fix_clip.top;
+                j++;
             }
-            clist[2*j] = x1;
-            clist[2*j+1] = y1;
-            j++;
-         } else
-            /* both points outside, eliminate edge. */
-            ;
-      }
-      x0=x1; y0=y1;
-   }
+        } else {
+            /* start point is outside half plane. */
+            if (y1 >= grd_fix_clip.top) {
+                /* edge enters half plane.  output intersection and end point. */
+                fix dx = x1-x0;
+                fix dy = y1-y0;
 
-   /* clip right edge from clist->tlist */
-   x0 = clist[2*(j-1)];
-   y0 = clist[2*(j-1)+1];
-   for (n=j, i=j=0; i<n; i++) {
-      x1 = clist[2*i];
-      y1 = clist[2*i+1];
+                if (y1 != grd_fix_clip.top) {
+                    clist[2*j] = x0 + fix_mul_div (dx,(grd_fix_clip.top-y0),dy);
+                    clist[2*j+1] = grd_fix_clip.top;
+                    j++;
+                }
+                clist[2*j] = x1;
+                clist[2*j+1] = y1;
+                j++;
+            } else
+                /* both points outside, eliminate edge. */
+                ;
+        }
+        x0=x1; y0=y1;
+    }
 
-      if (x0 <= grd_fix_clip.right) {
-         /* start point is inside half plane */
-         if (x1 <= grd_fix_clip.right) {
-            /* both points inside half plane.  output end point. */
-            tlist[2*j] = x1;
-            tlist[2*j+1] = y1;
-            j++;
-         } else {
-            /* edge exits half plane.  output intersection. */
-            fix dx = x1-x0;
-            fix dy = y1-y0;
+    /* clip right edge from clist->tlist */
+    x0 = clist[2*(j-1)];
+    y0 = clist[2*(j-1)+1];
+    for (n=j, i=j=0; i<n; i++) {
+        x1 = clist[2*i];
+        y1 = clist[2*i+1];
 
-            tlist[2*j] = grd_fix_clip.right;
-            tlist[2*j+1] = y0 + fix_mul_div (dy,(grd_fix_clip.right-x0),dx);
-            j++;
-         }
-      } else {
-         /* start point is outside half plane. */
-         if (x1 <= grd_fix_clip.right) {
-            /* edge enters half plane.  output intersection and end point. */
-            fix dx = x1-x0;
-            fix dy = y1-y0;
+        if (x0 <= grd_fix_clip.right) {
+            /* start point is inside half plane */
+            if (x1 <= grd_fix_clip.right) {
+                /* both points inside half plane.  output end point. */
+                tlist[2*j] = x1;
+                tlist[2*j+1] = y1;
+                j++;
+            } else {
+                /* edge exits half plane.  output intersection. */
+                fix dx = x1-x0;
+                fix dy = y1-y0;
 
-            if (x1 != grd_fix_clip.right) {
-               tlist[2*j] = grd_fix_clip.right;
-               tlist[2*j+1] = y0 + fix_mul_div (dy,(grd_fix_clip.right-x0),dx);
-               j++;
+                tlist[2*j] = grd_fix_clip.right;
+                tlist[2*j+1] = y0 + fix_mul_div (dy,(grd_fix_clip.right-x0),dx);
+                j++;
             }
-            tlist[2*j] = x1;
-            tlist[2*j+1] = y1;
-            j++;
-         } else
-            /* both points outside, eliminate edge. */
-            ;
-      }
-      x0=x1; y0=y1;
-   }
+        } else {
+            /* start point is outside half plane. */
+            if (x1 <= grd_fix_clip.right) {
+                /* edge enters half plane.  output intersection and end point. */
+                fix dx = x1-x0;
+                fix dy = y1-y0;
 
-   /* clip bottom edge from tlist->clist */
-   x0 = tlist[2*(j-1)];
-   y0 = tlist[2*(j-1)+1];
-   for (n=j, i=j=0; i<n; i++) {
-      x1 = tlist[2*i];
-      y1 = tlist[2*i+1];
+                if (x1 != grd_fix_clip.right) {
+                    tlist[2*j] = grd_fix_clip.right;
+                    tlist[2*j+1] = y0 + fix_mul_div (dy,(grd_fix_clip.right-x0),dx);
+                    j++;
+                }
+                tlist[2*j] = x1;
+                tlist[2*j+1] = y1;
+                j++;
+            } else
+                /* both points outside, eliminate edge. */
+                ;
+        }
+        x0=x1; y0=y1;
+    }
 
-      if (y0 <= grd_fix_clip.bot) {
-         /* start point is inside half plane */
-         if (y1 <= grd_fix_clip.bot) {
-            /* both points inside half plane.  output end point. */
-            clist[2*j] = x1;
-            clist[2*j+1] = y1;
-            j++;
-         } else {
-            /* edge exits half plane.  output intersection. */
-            fix dx = x1-x0;
-            fix dy = y1-y0;
+    /* clip bottom edge from tlist->clist */
+    x0 = tlist[2*(j-1)];
+    y0 = tlist[2*(j-1)+1];
+    for (n=j, i=j=0; i<n; i++) {
+        x1 = tlist[2*i];
+        y1 = tlist[2*i+1];
 
-            clist[2*j] = x0 + fix_mul_div (dx,(grd_fix_clip.bot-y0),dy);
-            clist[2*j+1] = grd_fix_clip.bot;
-            j++;
-         }
-      } else {
-         /* start point is outside half plane. */
-         if (y1 <= grd_fix_clip.bot) {
-            /* edge enters half plane.  output intersection and end point. */
-            fix dx = x1-x0;
-            fix dy = y1-y0;
+        if (y0 <= grd_fix_clip.bot) {
+            /* start point is inside half plane */
+            if (y1 <= grd_fix_clip.bot) {
+                /* both points inside half plane.  output end point. */
+                clist[2*j] = x1;
+                clist[2*j+1] = y1;
+                j++;
+            } else {
+                /* edge exits half plane.  output intersection. */
+                fix dx = x1-x0;
+                fix dy = y1-y0;
 
-            if (y1 != grd_fix_clip.bot) {
-               clist[2*j] = x0 + fix_mul_div (dx,(grd_fix_clip.bot-y0),dy);
-               clist[2*j+1] = grd_fix_clip.bot;
-               j++;
+                clist[2*j] = x0 + fix_mul_div (dx,(grd_fix_clip.bot-y0),dy);
+                clist[2*j+1] = grd_fix_clip.bot;
+                j++;
             }
-            clist[2*j] = x1;
-            clist[2*j+1] = y1;
-            j++;
-         } else
-            /* both points outside, eliminate edge. */
-            ;
-      }
-      x0=x1; y0=y1;
-   }
+        } else {
+            /* start point is outside half plane. */
+            if (y1 <= grd_fix_clip.bot) {
+                /* edge enters half plane.  output intersection and end point. */
+                fix dx = x1-x0;
+                fix dy = y1-y0;
 
-   /* punt temporary vertex list. */
-   gr_free_temp (tlist);
+                if (y1 != grd_fix_clip.bot) {
+                    clist[2*j] = x0 + fix_mul_div (dx,(grd_fix_clip.bot-y0),dy);
+                    clist[2*j+1] = grd_fix_clip.bot;
+                    j++;
+                }
+                clist[2*j] = x1;
+                clist[2*j+1] = y1;
+                j++;
+            } else
+                /* both points outside, eliminate edge. */
+                ;
+        }
+        x0=x1; y0=y1;
+    }
 
-   /* return new number of vertices. */
-   return j;
+    /* punt temporary vertex list. */
+    gr_free_temp (tlist);
+
+    /* return new number of vertices. */
+    return j;
 }

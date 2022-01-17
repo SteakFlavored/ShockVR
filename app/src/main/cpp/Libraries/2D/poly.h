@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __PLYCON
 #define __PLYCON
-#define GRD_POLY_VERTS 128             /* maximum polygon vertices */
+#define GRD_POLY_VERTS 128                 /* maximum polygon vertices */
 #define GRL_OPAQUE 0
 #define GRL_TRANS 1
 #define GRL_LOG2 2

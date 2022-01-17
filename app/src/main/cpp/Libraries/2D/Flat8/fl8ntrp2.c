@@ -46,74 +46,74 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scrdat.h"
 
 /* Assumes bm is flat, assumes canvas is big enough to
-   hold it, as it is, unclipped */
+    hold it, as it is, unclipped */
 void flat8_interp2_ubitmap (grs_bitmap *bm)
 {
-   grs_rgb a,b;
-   int32_t i,j;
-   uint8_t *c;
-   uint8_t *src,*dst;
-   int32_t dd,ds;
+    grs_rgb a,b;
+    int32_t i,j;
+    uint8_t *c;
+    uint8_t *src,*dst;
+    int32_t dd,ds;
 
-   /* Cycle through rows and do horizontal strips */
-   dd = 2*grd_bm.row - grd_bm.w;
-   ds = bm->row - bm->w;
+    /* Cycle through rows and do horizontal strips */
+    dd = 2*grd_bm.row - grd_bm.w;
+    ds = bm->row - bm->w;
 
-   dst = grd_bm.bits;
-   src = bm->bits;
+    dst = grd_bm.bits;
+    src = bm->bits;
 
-   for (j=bm->h;j>0;j--) {
-      for (i=bm->w;i>0;i--) {
+    for (j=bm->h;j>0;j--) {
+        for (i=bm->w;i>0;i--) {
 
-         a = *src;
-         src++;
-         b = *src;
+            a = *src;
+            src++;
+            b = *src;
 
-         *dst = a;
-         dst++;
+            *dst = a;
+            dst++;
 
-         /* load them with the rgb values */
-         a = grd_bpal[a];
-         b = grd_bpal[b];
-         a = (a>>1) + (b>>1);
-         c = grd_ipal;
-         a = a>>5;
-         c += a & 0x1f;
-         a = a>>6;
-         c += a & 0x3e0;
-         a = a>>6;
-         c += a & 0x7c00;
+            /* load them with the rgb values */
+            a = grd_bpal[a];
+            b = grd_bpal[b];
+            a = (a>>1) + (b>>1);
+            c = grd_ipal;
+            a = a>>5;
+            c += a & 0x1f;
+            a = a>>6;
+            c += a & 0x3e0;
+            a = a>>6;
+            c += a & 0x7c00;
 
-         *dst = *c;
-         dst++;
-      }
-      dst += dd;
-      src += ds;
-   }
+            *dst = *c;
+            dst++;
+        }
+        dst += dd;
+        src += ds;
+    }
 
-   /* Cycle through rows and fill in missing strips */
-   src = grd_bm.bits;
-   for(i=(bm->w)*2-1;i>=0;i--) {
-      src = grd_bm.bits + i;
-      for (j=bm->h;j>1;j--) {
-         a = *src;
-         src += 2*grd_bm.row;
-         b = *src;
-         src -= grd_bm.row;
+    /* Cycle through rows and fill in missing strips */
+    src = grd_bm.bits;
+    for(i=(bm->w)*2-1;i>=0;i--) {
+        src = grd_bm.bits + i;
+        for (j=bm->h;j>1;j--) {
+            a = *src;
+            src += 2*grd_bm.row;
+            b = *src;
+            src -= grd_bm.row;
 
-         a = grd_bpal[a];
-         b = grd_bpal[b];
-         a = (a>>1) + (b>>1);
-         c = grd_ipal;
-         a = a>>5;
-         c += a & 0x1f;
-         a = a>>6;
-         c += a & 0x3e0;
-         a = a>>6;
-         c += a & 0x7c00;
-         *src = *c;
-         src += grd_bm.row;
-      }
-      src+=grd_bm.row; *src=0;
-   }
+            a = grd_bpal[a];
+            b = grd_bpal[b];
+            a = (a>>1) + (b>>1);
+            c = grd_ipal;
+            a = a>>5;
+            c += a & 0x1f;
+            a = a>>6;
+            c += a & 0x3e0;
+            a = a>>6;
+            c += a & 0x7c00;
+            *src = *c;
+            src += grd_bm.row;
+        }
+        src+=grd_bm.row; *src=0;
+    }
 }

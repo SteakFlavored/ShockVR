@@ -31,14 +31,14 @@ int32_t fnt_c_clr(int8_t c, int32_t xpos, int32_t ypos);
 int32_t fnt_no_cursor(int32_t x, int32_t y);
 
 // load/system
-int32_t fnt_init(int8_t *def_fname);      // ret handle of def_fname, -1 fail,
-                                    //  0 if def_fname NULL + succesful
+int32_t fnt_init(int8_t *def_fname);        // ret handle of def_fname, -1 fail,
+                                                //  0 if def_fname NULL + succesful
 int32_t fnt_init_from_style(void *style_ptr);
-bool fnt_free(void);                // free the font system
-int32_t fnt_load(int8_t *fnt_fname);      // returns the handle
+bool fnt_free(void);                     // free the font system
+int32_t fnt_load(int8_t *fnt_fname);        // returns the handle
 int32_t fnt_load_from_style(void *style_ptr);
-bool fnt_unload(int32_t fnt_handle);    // these both
-bool fnt_select(int32_t fnt_handle);    //   return success or not
+bool fnt_unload(int32_t fnt_handle);     // these both
+bool fnt_select(int32_t fnt_handle);     //    return success or not
 
 // for texttools...
 #ifdef NOT

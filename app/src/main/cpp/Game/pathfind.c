@@ -64,8 +64,8 @@ uint8_t pf_obj_height(MapElem *pme, uint8_t old_z);
 // Good god, there has got to be a better way to do this! -- Rob
 // Clear out the old set of 2 bits, and or in the new 2 bits
 #define SET_PATH_STEP(pathid,stepnum,newval)  do {PATH_CHAR(pathid,stepnum) = \
-      PATH_CHAR(pathid,stepnum) & ~(0x3 << (LOW_STEP(stepnum) << 1)) | ((newval) << (LOW_STEP(stepnum) << 1)); \
-      }  while (0)
+        PATH_CHAR(pathid,stepnum) & ~(0x3 << (LOW_STEP(stepnum) << 1)) | ((newval) << (LOW_STEP(stepnum) << 1)); \
+        }  while (0)
 #define CLEAR_PATH(pathid) do {memset ((void *)(paths[(pathid)].moves), 0, NUM_PATH_STEPS/4); } while (0)
 
 
@@ -74,39 +74,39 @@ uint8_t pf_obj_height(MapElem *pme, uint8_t old_z);
 // dest_z and start_z are in objLoc height coordinates, since that is the easiest API
 int8_t request_pathfind(LGPoint source, LGPoint dest, uint8_t dest_z, uint8_t start_z, bool priority)
 {
-   int8_t i = 0;
+    int8_t i = 0;
 
-   // Find the first available path number
-   while ((i < MAX_PATHS) && (used_paths & (1 << i)))
-      i++;
+    // Find the first available path number
+    while ((i < MAX_PATHS) && (used_paths & (1 << i)))
+        i++;
 
-   // If no paths free, return -1;
-   if (i == MAX_PATHS)
-   {
-      return(-1);
-   }
-   if (PointsEqual(source,dest))
-   {
-      return(-1);
-   }
+    // If no paths free, return -1;
+    if (i == MAX_PATHS)
+    {
+        return(-1);
+    }
+    if (PointsEqual(source,dest))
+    {
+        return(-1);
+    }
 
-   // Grab the path
-   used_paths |= (1 << i);
+    // Grab the path
+    used_paths |= (1 << i);
 
-   // Init the path struct
-   paths[i].source = source;
-   paths[i].dest = dest;
-   // Path height units and API height units are the same, so don't
-   paths[i].dest_z = dest_z;
-   paths[i].start_z = start_z;
-   paths[i].num_steps = priority ? -2 : -1;
-   paths[i].curr_step = -1;  // to indicate that we haven't been filled yet
+    // Init the path struct
+    paths[i].source = source;
+    paths[i].dest = dest;
+    // Path height units and API height units are the same, so don't
+    paths[i].dest_z = dest_z;
+    paths[i].start_z = start_z;
+    paths[i].num_steps = priority ? -2 : -1;
+    paths[i].curr_step = -1;  // to indicate that we haven't been filled yet
 
-   // clear it
-   CLEAR_PATH(i);
+    // clear it
+    CLEAR_PATH(i);
 
-   // go
-   return(i);
+    // go
+    return(i);
 }
 
 
@@ -118,23 +118,23 @@ int8_t request_pathfind(LGPoint source, LGPoint dest, uint8_t dest_z, uint8_t st
 // Returns direction of that next step
 int8_t compute_next_step(int8_t path_id, LGPoint *pt, int8_t step_num)
 {
-   int8_t movecode = -22;
-   if (step_num == -1)
-      step_num = paths[path_id].curr_step;
-   if (step_num != -1)
-   {
-      movecode = PATH_STEP(path_id,paths[path_id].num_steps - step_num - 1);
-      switch(movecode)
-      {
-         case 0: pt->y++; break; // N
-         case 1: pt->x++; break; // E
-         case 2: pt->y--; break; // S
-         case 3: pt->x--; break; // W
-         default:
-            break;
-      }
-   }
-   return(movecode);
+    int8_t movecode = -22;
+    if (step_num == -1)
+        step_num = paths[path_id].curr_step;
+    if (step_num != -1)
+    {
+        movecode = PATH_STEP(path_id,paths[path_id].num_steps - step_num - 1);
+        switch(movecode)
+        {
+            case 0: pt->y++; break; // N
+            case 1: pt->x++; break; // E
+            case 2: pt->y--; break; // S
+            case 3: pt->x--; break; // W
+            default:
+                break;
+        }
+    }
+    return(movecode);
 }
 
 
@@ -146,20 +146,20 @@ int8_t compute_next_step(int8_t path_id, LGPoint *pt, int8_t step_num)
 // Returns the direction one travels in to get to this next step
 int8_t next_step_on_path(int8_t path_id, LGPoint *next, int8_t *steps_left)
 {
-   int8_t retval;
-   *next = paths[path_id].source;
-   retval = compute_next_step(path_id, next, -1);  // -1 for "use path data"
-   paths[path_id].source = *next;
-   paths[path_id].curr_step++;
-   if (PointsEqual(*next,paths[path_id].dest))
-   {
-      *steps_left = 0;
-   }
-   else
-   {
-      *steps_left = paths[path_id].num_steps - paths[path_id].curr_step;
-   }
-   return(retval);
+    int8_t retval;
+    *next = paths[path_id].source;
+    retval = compute_next_step(path_id, next, -1);  // -1 for "use path data"
+    paths[path_id].source = *next;
+    paths[path_id].curr_step++;
+    if (PointsEqual(*next,paths[path_id].dest))
+    {
+        *steps_left = 0;
+    }
+    else
+    {
+        *steps_left = paths[path_id].num_steps - paths[path_id].curr_step;
+    }
+    return(retval);
 }
 
 
@@ -169,33 +169,33 @@ int8_t next_step_on_path(int8_t path_id, LGPoint *next, int8_t *steps_left)
 // returns true.
 bool check_path_cutting(LGPoint new_sq, int8_t path_id)
 {
-   LGPoint pt;
-   int8_t count;
-   // Hey, first check if we've finished the darn path...
-   if ((path_id == -1) || (paths[path_id].num_steps == 0))
-      return(false);
-   if (PointsEqual(new_sq,paths[path_id].dest))
-   {
-      paths[path_id].num_steps = 0;
-      return(true);
-   }
+    LGPoint pt;
+    int8_t count;
+    // Hey, first check if we've finished the darn path...
+    if ((path_id == -1) || (paths[path_id].num_steps == 0))
+        return(false);
+    if (PointsEqual(new_sq,paths[path_id].dest))
+    {
+        paths[path_id].num_steps = 0;
+        return(true);
+    }
 
-   // Now do the standard lookahead check...
-   pt = paths[path_id].source;
-   for (count = 0; count < LOOKAHEAD_STEPS; count++)
-   {
-      compute_next_step(path_id, &pt, paths[path_id].curr_step + count);
-      if (PointsEqual(pt,new_sq))
-      {
-         // hey look, we cut ahead to a more advanced point in our pathfinding...
-         paths[path_id].source = new_sq;
-         paths[path_id].curr_step += count + 1;
-         return(true);
-      }
-   }
+    // Now do the standard lookahead check...
+    pt = paths[path_id].source;
+    for (count = 0; count < LOOKAHEAD_STEPS; count++)
+    {
+        compute_next_step(path_id, &pt, paths[path_id].curr_step + count);
+        if (PointsEqual(pt,new_sq))
+        {
+            // hey look, we cut ahead to a more advanced point in our pathfinding...
+            paths[path_id].source = new_sq;
+            paths[path_id].curr_step += count + 1;
+            return(true);
+        }
+    }
 
-   // We didn't find anything, how sad.
-   return(false);
+    // We didn't find anything, how sad.
+    return(false);
 }
 
 
@@ -207,39 +207,39 @@ uint32_t last_pathfind_time =0;
 // priority means only check priority requests, but always check
 errtype check_requests(bool priority_only)
 {
-   int8_t i;
-   // Don't bother checking unless it has been at least N ticks,
-   if (priority_only || (player_struct.game_time > last_pathfind_time))
-   {
-      // If it is time to check, go through all the paths, find the
-      // unfilled requests among them, and go satisfy them.
-      for (i=0; i < MAX_PATHS; i++)
-      {
-         if (paths[i].num_steps == -2)
-            find_path(i);
-         if (!priority_only)
-         {
-            if (paths[i].num_steps == -1)
-               find_path(i);
-         }
-      }
+    int8_t i;
+    // Don't bother checking unless it has been at least N ticks,
+    if (priority_only || (player_struct.game_time > last_pathfind_time))
+    {
+        // If it is time to check, go through all the paths, find the
+        // unfilled requests among them, and go satisfy them.
+        for (i=0; i < MAX_PATHS; i++)
+        {
+            if (paths[i].num_steps == -2)
+                find_path(i);
+            if (!priority_only)
+            {
+                if (paths[i].num_steps == -1)
+                    find_path(i);
+            }
+        }
 
-      // Set requirements for next cycle of checking
-      if (!priority_only)
-         last_pathfind_time = player_struct.game_time + PATHFIND_INTERVAL;
-   }
-   return(OK);
+        // Set requirements for next cycle of checking
+        if (!priority_only)
+            last_pathfind_time = player_struct.game_time + PATHFIND_INTERVAL;
+    }
+    return(OK);
 }
 
 
 errtype delete_path(int8_t path_id)
 {
-   // To delete, just mark the path as unused and zero out its data
-   if ((path_id < 0) || (path_id >= MAX_PATHS))
-      return(ERR_NOEFFECT);
-   memset(&paths[path_id],0,sizeof(Path));
-   used_paths &= ~(1 << path_id);
-   return(OK);
+    // To delete, just mark the path as unused and zero out its data
+    if ((path_id < 0) || (path_id >= MAX_PATHS))
+        return(ERR_NOEFFECT);
+    memset(&paths[path_id],0,sizeof(Path));
+    used_paths &= ~(1 << path_id);
+    return(OK);
 }
 
 
@@ -247,8 +247,8 @@ errtype delete_path(int8_t path_id)
 // in the save game
 errtype reset_pathfinding()
 {
-   last_pathfind_time = 0;
-   return(OK);
+    last_pathfind_time = 0;
+    return(OK);
 }
 
 
@@ -256,14 +256,14 @@ errtype reset_pathfinding()
 
 // spt is a "point" which only has 8 bits each for x & y.
 typedef int16_t spt;
-#define SPT_X(s)   ((s) & 0xFF)
-#define SPT_Y(s)   ((s) >> 8)
+#define SPT_X(s)    ((s) & 0xFF)
+#define SPT_Y(s)    ((s) >> 8)
 #define SPT_X_SET(s,newx) ((s) = ((s) & 0xFF00) | (newx))
 #define SPT_Y_SET(s,newy) ((s) = ((s) & 0x00FF) | ((newy) << 8))
-#define PT2SPT(pt)   ((((pt).y & 0xFF) << 8) | ((pt).x & 0xFF))
+#define PT2SPT(pt)    ((((pt).y & 0xFF) << 8) | ((pt).x & 0xFF))
 
 #define FORALLINSPTLIST(pspt, iter, loop) for (iter = pspt[0], i=0; \
-   SPT_X(pspt[i]) != 0; i++, iter = pspt[i])
+    SPT_X(pspt[i]) != 0; i++, iter = pspt[i])
 
 //#define CLEARSPTLIST(pspt, num, loop) do { for (loop=0; loop < num; loop++) { pspt[loop] = 0; } } while (0)
 #define CLEARSPTLIST(pspt, num) memset(pspt,0,sizeof(spt)*num)
@@ -272,11 +272,11 @@ typedef int16_t spt;
 // 5 bits of Z
 // 2 bits of from-directionality
 // 1 bit  of whether or not it's been visited
-#define PFE_Z_MASK   0x1F
+#define PFE_Z_MASK    0x1F
 #define PFE_DIR_MASK 0x60
 #define PFE_USE_MASK 0x80
-#define PFE_DIR_SHIFT   5
-#define PFE_USE_SHIFT   7
+#define PFE_DIR_SHIFT    5
+#define PFE_USE_SHIFT    7
 
 #define PFE_OBJ_ZSHIFT  3
 // PFE_Z just returns the raw stored z value (5 bits)
@@ -308,7 +308,7 @@ typedef int16_t spt;
 // l1 and l2 are two lists of spts, and expand_into_list gets
 // pointed to whichever is the current actual expand_into_list (the
 // other being prepped to be the expand_into_list next time).
-#define EXPAND_LIST_SIZE   64
+#define EXPAND_LIST_SIZE    64
 spt *expand_into_list, *expand_from_list, *exp_l1, *exp_l2;
 int8_t expand_count;
 uint8_t *pathfind_buffer;
@@ -323,68 +323,68 @@ bool expand_fill_list(int8_t path_id);
 // Return value is in map units!
 int16_t tile_height(MapElem *pme, int8_t dir, bool floor)
 {
-   uint8_t retval;
-   if (floor)
-      retval = me_height_flr(pme);
-   else
-      retval = MAP_HEIGHTS - me_height_ceil(pme);
-   switch(me_tiletype(pme))
-   {
-      case TILE_SOLID:
-         return(-1);
-         break;
-      case TILE_SOLID_NW:
-         if ((dir == 2) || (dir ==1))
+    uint8_t retval;
+    if (floor)
+        retval = me_height_flr(pme);
+    else
+        retval = MAP_HEIGHTS - me_height_ceil(pme);
+    switch(me_tiletype(pme))
+    {
+        case TILE_SOLID:
             return(-1);
-         break;
-      case TILE_SOLID_NE:
-         if ((dir == 2) || (dir ==3))
-            return(-1);
-         break;
-      case TILE_SOLID_SE:
-         if ((dir == 0) || (dir ==3))
-            return(-1);
-         break;
-      case TILE_SOLID_SW:
-         if ((dir == 0) || (dir ==1))
-            return(-1);
-         break;
-      // Ask doug how to do the sloping cases right...
-      case TILE_SLOPEUP_N:
-         if (dir == 2)
             break;
-         if (dir == 0)
-            retval += me_param(pme);
-         else
-            retval += me_param(pme) / 2;
-         break;
-      case TILE_SLOPEUP_S:
-         if (dir == 0)
+        case TILE_SOLID_NW:
+            if ((dir == 2) || (dir ==1))
+                return(-1);
             break;
-         if (dir == 2)
-            retval += me_param(pme);
-         else
-            retval += me_param(pme) / 2;
-         break;
-      case TILE_SLOPEUP_E:
-         if (dir == 3)
+        case TILE_SOLID_NE:
+            if ((dir == 2) || (dir ==3))
+                return(-1);
             break;
-         if (dir == 1)
-            retval += me_param(pme);
-         else
-            retval += me_param(pme) / 2;
-         break;
-      case TILE_SLOPEUP_W:
-         if (dir == 1)
+        case TILE_SOLID_SE:
+            if ((dir == 0) || (dir ==3))
+                return(-1);
             break;
-         if (dir == 3)
-            retval += me_param(pme);
-         else
-            retval += me_param(pme) / 2;
-         break;
+        case TILE_SOLID_SW:
+            if ((dir == 0) || (dir ==1))
+                return(-1);
+            break;
+        // Ask doug how to do the sloping cases right...
+        case TILE_SLOPEUP_N:
+            if (dir == 2)
+                break;
+            if (dir == 0)
+                retval += me_param(pme);
+            else
+                retval += me_param(pme) / 2;
+            break;
+        case TILE_SLOPEUP_S:
+            if (dir == 0)
+                break;
+            if (dir == 2)
+                retval += me_param(pme);
+            else
+                retval += me_param(pme) / 2;
+            break;
+        case TILE_SLOPEUP_E:
+            if (dir == 3)
+                break;
+            if (dir == 1)
+                retval += me_param(pme);
+            else
+                retval += me_param(pme) / 2;
+            break;
+        case TILE_SLOPEUP_W:
+            if (dir == 1)
+                break;
+            if (dir == 3)
+                retval += me_param(pme);
+            else
+                retval += me_param(pme) / 2;
+            break;
 
-   }
-   return(retval);
+    }
+    return(retval);
 }
 
 
@@ -392,68 +392,68 @@ int16_t tile_height(MapElem *pme, int8_t dir, bool floor)
 
 bool pf_check_doors(MapElem *pme, int8_t dir, ObjID *open_door)
 {
-   ObjRefID curr;
-   ObjID id, which_obj = OBJ_NULL;
-   curr = me_objref(pme);
-   *open_door = OBJ_NULL;
-   while (curr != OBJ_REF_NULL)
-   {
-      id = objRefs[curr].obj;
-      if (objs[id].obclass == CLASS_DOOR)
-      {
-//         Warning(("contemplating id %x, loc = %x, %x, dir = %d\n",id,objs[id].loc.x,objs[id].loc.y,dir));
-         switch(dir)
-         {
-            case 0: // N
-               if (((objs[id].loc.y & 0xFF) >= 0x80) && !(objs[id].loc.h & 0x40))
-                  which_obj = id;
-               break;
-            case 1: // E
-               if (((objs[id].loc.x & 0xFF) >= 0x80) && (objs[id].loc.h & 0x40))
-                  which_obj = id;
-               break;
-            case 2: // S
-               if (((objs[id].loc.y & 0xFF) <= 0x80) && !(objs[id].loc.h & 0x40))
-                  which_obj = id;
-               break;
-            case 3: // W
-               if (((objs[id].loc.x & 0xFF) <= 0x80) && (objs[id].loc.h & 0x40))
-                  which_obj = id;
-               break;
-         }
-      }
-      curr = objRefs[curr].next;
-   }
-   if (which_obj != OBJ_NULL)
-   {
-      // If there is a door in the way, and it is closed, and
-      // it is either locked or requires access, we can't get through
-      if ((DOOR_CLOSED(which_obj)) && ((ObjProps[OPNUM(which_obj)].flags & TERRAIN_OBJECT)!=0) &&
-          ((QUESTBIT_GET(objDoors[objs[which_obj].specID].locked)) ||
-           (objDoors[objs[which_obj].specID].access_level)))
-      {
-         return(false);
-      }
-      else
-         *open_door = which_obj;
-   }
-   return(true);
+    ObjRefID curr;
+    ObjID id, which_obj = OBJ_NULL;
+    curr = me_objref(pme);
+    *open_door = OBJ_NULL;
+    while (curr != OBJ_REF_NULL)
+    {
+        id = objRefs[curr].obj;
+        if (objs[id].obclass == CLASS_DOOR)
+        {
+//            Warning(("contemplating id %x, loc = %x, %x, dir = %d\n",id,objs[id].loc.x,objs[id].loc.y,dir));
+            switch(dir)
+            {
+                case 0: // N
+                    if (((objs[id].loc.y & 0xFF) >= 0x80) && !(objs[id].loc.h & 0x40))
+                        which_obj = id;
+                    break;
+                case 1: // E
+                    if (((objs[id].loc.x & 0xFF) >= 0x80) && (objs[id].loc.h & 0x40))
+                        which_obj = id;
+                    break;
+                case 2: // S
+                    if (((objs[id].loc.y & 0xFF) <= 0x80) && !(objs[id].loc.h & 0x40))
+                        which_obj = id;
+                    break;
+                case 3: // W
+                    if (((objs[id].loc.x & 0xFF) <= 0x80) && (objs[id].loc.h & 0x40))
+                        which_obj = id;
+                    break;
+            }
+        }
+        curr = objRefs[curr].next;
+    }
+    if (which_obj != OBJ_NULL)
+    {
+        // If there is a door in the way, and it is closed, and
+        // it is either locked or requires access, we can't get through
+        if ((DOOR_CLOSED(which_obj)) && ((ObjProps[OPNUM(which_obj)].flags & TERRAIN_OBJECT)!=0) &&
+             ((QUESTBIT_GET(objDoors[objs[which_obj].specID].locked)) ||
+              (objDoors[objs[which_obj].specID].access_level)))
+        {
+            return(false);
+        }
+        else
+            *open_door = which_obj;
+    }
+    return(true);
 }
 
 // Returns whether or not the two squares can be freely traveled
 // between with respect to door-like objects in the squares.
 bool pf_obj_doors(MapElem *pme1, MapElem *pme2, int8_t dir, ObjID *open_door)
 {
-   bool retval;
-//   Warning(("Top of pf_obj_door!\n"));
-   retval = pf_check_doors(pme1, dir, open_door);
-//   Warning(("A: *open_door = %x\n",*open_door));
-   if (retval && (*open_door == OBJ_NULL))
-   {
-      retval = pf_check_doors(pme2, (dir + 2) % 4, open_door);
-//      Warning(("B: *open_door = %x\n",*open_door));
-   }
-   return(retval);
+    bool retval;
+//    Warning(("Top of pf_obj_door!\n"));
+    retval = pf_check_doors(pme1, dir, open_door);
+//    Warning(("A: *open_door = %x\n",*open_door));
+    if (retval && (*open_door == OBJ_NULL))
+    {
+        retval = pf_check_doors(pme2, (dir + 2) % 4, open_door);
+//        Warning(("B: *open_door = %x\n",*open_door));
+    }
+    return(retval);
 }
 
 
@@ -468,43 +468,43 @@ bool pf_obj_doors(MapElem *pme1, MapElem *pme2, int8_t dir, ObjID *open_door)
 // old_z is almost certainly in PFEZ units, as is the return value
 uint8_t pf_obj_height(MapElem *pme, uint8_t )
 {
-   ObjRefID curr;
-   ObjID id;
-   uint8_t retval = MAPZ_TO_PFEZ(me_height_flr(pme));
+    ObjRefID curr;
+    ObjID id;
+    uint8_t retval = MAPZ_TO_PFEZ(me_height_flr(pme));
 
-   curr = me_objref(pme);
-//   Spew(DSRC_AI_Pathfind, ("pf_o_ht: initial retval = %x\n",retval));
-   while (curr != OBJ_REF_NULL)
-   {
-      id = objRefs[curr].obj;
+    curr = me_objref(pme);
+//    Spew(DSRC_AI_Pathfind, ("pf_o_ht: initial retval = %x\n",retval));
+    while (curr != OBJ_REF_NULL)
+    {
+        id = objRefs[curr].obj;
 #ifdef PATHFIND_REPULSORS
-      if (ID2TRIP(id) == REPULSOR_TRIPLE)
-      {
-         // Check to see if height is sufficient for entry
-         if ((objTraps[objs[id].specID].p2 < old_z) &&
-             (objTraps[objs[id].specID].p3 > old_z))
-         {
-            retval = max(retval,objTraps[objs[id].specID].p3);
-//            Spew(DSRC_AI_Pathfind, ("pf_o_ht: repulsor retval = %x\n",retval));
-         }
-      }
-      else
+        if (ID2TRIP(id) == REPULSOR_TRIPLE)
+        {
+            // Check to see if height is sufficient for entry
+            if ((objTraps[objs[id].specID].p2 < old_z) &&
+                 (objTraps[objs[id].specID].p3 > old_z))
+            {
+                retval = max(retval,objTraps[objs[id].specID].p3);
+//                Spew(DSRC_AI_Pathfind, ("pf_o_ht: repulsor retval = %x\n",retval));
+            }
+        }
+        else
 #endif
-      if (ObjProps[OPNUM(id)].flags & TERRAIN_OBJECT)
-      {
-         switch(ObjProps[OPNUM(id)].render_type)
-         {
-            case FAUBJ_TL_POLY:
-            case FAUBJ_TPOLY:
-            case FAUBJ_SPECIAL:
-               retval = max(retval, OBJZ_TO_PFEZ(objs[id].loc.z));
-//               Spew(DSRC_AI_Pathfind, ("pf_o_ht: obj retval = %x (id = %x)\n",retval,id));
-               break;
-         }
-      }
-      curr = objRefs[curr].next;
-   }
-   return(retval);
+        if (ObjProps[OPNUM(id)].flags & TERRAIN_OBJECT)
+        {
+            switch(ObjProps[OPNUM(id)].render_type)
+            {
+                case FAUBJ_TL_POLY:
+                case FAUBJ_TPOLY:
+                case FAUBJ_SPECIAL:
+                    retval = max(retval, OBJZ_TO_PFEZ(objs[id].loc.z));
+//                    Spew(DSRC_AI_Pathfind, ("pf_o_ht: obj retval = %x (id = %x)\n",retval,id));
+                    break;
+            }
+        }
+        curr = objRefs[curr].next;
+    }
+    return(retval);
 }
 
 
@@ -519,37 +519,37 @@ uint8_t pf_obj_height(MapElem *pme, uint8_t )
 // flr1, new_z, and dest are all in PFE Z units
 bool map_connectivity(spt sq1, spt sq2, int8_t dir, uint8_t flr1, uint8_t *new_z, uint8_t )
 {
-   MapElem *pme1, *pme2;
-   ObjID temp;
-   int16_t flr2,ceil2;
-   bool retval;
+    MapElem *pme1, *pme2;
+    ObjID temp;
+    int16_t flr2,ceil2;
+    bool retval;
 
-   pme1 = MAP_GET_XY(SPT_X(sq1),SPT_Y(sq1));
-   pme2 = MAP_GET_XY(SPT_X(sq2),SPT_Y(sq2));
-   flr2 = MAPZ_TO_PFEZ(tile_height(pme2, (dir+2)%4, true));
-   ceil2 = MAPZ_TO_PFEZ(tile_height(pme2, (dir+2)%4, false));
-   if (flr2 == -1)
-      return(false);
+    pme1 = MAP_GET_XY(SPT_X(sq1),SPT_Y(sq1));
+    pme2 = MAP_GET_XY(SPT_X(sq2),SPT_Y(sq2));
+    flr2 = MAPZ_TO_PFEZ(tile_height(pme2, (dir+2)%4, true));
+    ceil2 = MAPZ_TO_PFEZ(tile_height(pme2, (dir+2)%4, false));
+    if (flr2 == -1)
+        return(false);
 
 #ifdef ALLOW_DESTZ_OVERIDE
-   // Allow final destination overriding, and downshift z
-   if (dest_z)
-      flr2 = dest_z;
+    // Allow final destination overriding, and downshift z
+    if (dest_z)
+        flr2 = dest_z;
 #endif
 
-   if ((ceil2 < flr1 + PF_HEIGHT) || (flr2 > flr1 + PF_CLIMB))
-   {
-      retval = false;
-   }
-   else
-   {
-      retval = true;
-      *new_z = pf_obj_height(pme2,flr1);
-   }
-   if (retval)
-      retval = pf_obj_doors(pme1,pme2,dir,&temp);
+    if ((ceil2 < flr1 + PF_HEIGHT) || (flr2 > flr1 + PF_CLIMB))
+    {
+        retval = false;
+    }
+    else
+    {
+        retval = true;
+        *new_z = pf_obj_height(pme2,flr1);
+    }
+    if (retval)
+        retval = pf_obj_doors(pme1,pme2,dir,&temp);
 
-   return(retval);
+    return(retval);
 }
 
 
@@ -559,46 +559,46 @@ bool map_connectivity(spt sq1, spt sq2, int8_t dir, uint8_t flr1, uint8_t *new_z
 // Returns whether or not we reached the destination.
 bool expand_one_square(spt sq, int8_t path_id)
 {
-   spt newsq, dest = PT2SPT(paths[path_id].dest);
-   int8_t i;
-   uint8_t *ppfe, *ppfe2;
+    spt newsq, dest = PT2SPT(paths[path_id].dest);
+    int8_t i;
+    uint8_t *ppfe, *ppfe2;
 
-   ppfe2 = PFE_GET_XY(SPT_X(sq),SPT_Y(sq));
-//   Spew(DSRC_AI_Pathfind, ("expanding %x\n",sq));
-   for (i=0; i < 4; i++)
-   {
-      newsq = sq;
-      switch(i)
-      {
-         case 0: newsq = SPT_Y_SET(newsq,SPT_Y(newsq)+1); break;  // N
-         case 1: newsq = SPT_X_SET(newsq,SPT_X(newsq)+1); break;  // E
-         case 2: newsq = SPT_Y_SET(newsq,SPT_Y(newsq)-1); break;  // S
-         case 3: newsq = SPT_X_SET(newsq,SPT_X(newsq)-1); break;  // W
-      }
-      ppfe = PFE_GET_XY(SPT_X(newsq),SPT_Y(newsq));
-      if (!PFE_USED(ppfe)) // dont bother if we can already get there
-      {
-         uint8_t new_z, dest_z=0;
-         if (newsq == dest)
-            dest_z = OBJZ_TO_PFEZ(paths[path_id].dest_z);
-         if (map_connectivity(sq,newsq,i,PFE_Z(ppfe2), &new_z, dest_z))
-         {
-            PFE_USED_SET(ppfe,true);
-            // return value from map_conn is already in PFE Z units
-            PFE_Z_SET_RAW(ppfe,new_z);
-            PFE_DIR_SET(ppfe,i);
-            expand_into_list[expand_count++] = newsq;
-  //          Spew(DSRC_AI_Pathfind,("can reach %x\n",newsq));
+    ppfe2 = PFE_GET_XY(SPT_X(sq),SPT_Y(sq));
+//    Spew(DSRC_AI_Pathfind, ("expanding %x\n",sq));
+    for (i=0; i < 4; i++)
+    {
+        newsq = sq;
+        switch(i)
+        {
+            case 0: newsq = SPT_Y_SET(newsq,SPT_Y(newsq)+1); break;  // N
+            case 1: newsq = SPT_X_SET(newsq,SPT_X(newsq)+1); break;  // E
+            case 2: newsq = SPT_Y_SET(newsq,SPT_Y(newsq)-1); break;  // S
+            case 3: newsq = SPT_X_SET(newsq,SPT_X(newsq)-1); break;  // W
+        }
+        ppfe = PFE_GET_XY(SPT_X(newsq),SPT_Y(newsq));
+        if (!PFE_USED(ppfe)) // dont bother if we can already get there
+        {
+            uint8_t new_z, dest_z=0;
             if (newsq == dest)
-               return(true);
-         }
-//         else
-//            Spew(DSRC_AI_Pathfind, ("%x does not connect\n",newsq));
-      }
-//      else
-//         Spew(DSRC_AI_Pathfind, ("%x already used\n",newsq));
-   }
-   return(false);
+                dest_z = OBJZ_TO_PFEZ(paths[path_id].dest_z);
+            if (map_connectivity(sq,newsq,i,PFE_Z(ppfe2), &new_z, dest_z))
+            {
+                PFE_USED_SET(ppfe,true);
+                // return value from map_conn is already in PFE Z units
+                PFE_Z_SET_RAW(ppfe,new_z);
+                PFE_DIR_SET(ppfe,i);
+                expand_into_list[expand_count++] = newsq;
+  //             Spew(DSRC_AI_Pathfind,("can reach %x\n",newsq));
+                if (newsq == dest)
+                    return(true);
+            }
+//            else
+//                Spew(DSRC_AI_Pathfind, ("%x does not connect\n",newsq));
+        }
+//        else
+//            Spew(DSRC_AI_Pathfind, ("%x already used\n",newsq));
+    }
+    return(false);
 }
 
 // Go through the list of last-iteration's reached squares, and
@@ -606,24 +606,24 @@ bool expand_one_square(spt sq, int8_t path_id)
 // Returns whether or not we reached the destination.
 bool expand_fill_list(int8_t path_id)
 {
-   spt s;
-   int8_t i;
-   bool done = false;
-   expand_count = 0;
-   CLEARSPTLIST(expand_into_list,EXPAND_LIST_SIZE);
-   FORALLINSPTLIST(expand_from_list, s, i)
-   {
-      done = expand_one_square(s,path_id);
-      if (done)
-         break;
-   }
-//   Spew(DSRC_AI_Pathfind, ("expand into: "));
-//   FORALLINSPTLIST(expand_into_list, s, i)
-//   {
-//      Spew(DSRC_AI_Pathfind, ("%x ",s));
-//   }
-//   Spew(DSRC_AI_Pathfind, ("\n"));
-   return(done);
+    spt s;
+    int8_t i;
+    bool done = false;
+    expand_count = 0;
+    CLEARSPTLIST(expand_into_list,EXPAND_LIST_SIZE);
+    FORALLINSPTLIST(expand_from_list, s, i)
+    {
+        done = expand_one_square(s,path_id);
+        if (done)
+            break;
+    }
+//    Spew(DSRC_AI_Pathfind, ("expand into: "));
+//    FORALLINSPTLIST(expand_into_list, s, i)
+//    {
+//        Spew(DSRC_AI_Pathfind, ("%x ",s));
+//    }
+//    Spew(DSRC_AI_Pathfind, ("\n"));
+    return(done);
 }
 
 // So, for each map square we keep track of what square we took to get
@@ -650,95 +650,95 @@ bool expand_fill_list(int8_t path_id)
 #define PATHFIND_WITH_BIG_BUFFER
 errtype find_path(int8_t path_id)
 {
-   bool done = false;
-   int8_t i,j,step_count=0;
-   uint8_t *ppfe;
+    bool done = false;
+    int8_t i,j,step_count=0;
+    uint8_t *ppfe;
 
-   // Malloc our expand lists & the buffer
-   exp_l1 = (spt *)big_buffer;
-   exp_l2 = (spt *)(big_buffer + (sizeof(spt) * EXPAND_LIST_SIZE));
-   pathfind_buffer = (uint8_t *)(big_buffer + (sizeof(spt) * 2 * EXPAND_LIST_SIZE));
+    // Malloc our expand lists & the buffer
+    exp_l1 = (spt *)big_buffer;
+    exp_l2 = (spt *)(big_buffer + (sizeof(spt) * EXPAND_LIST_SIZE));
+    pathfind_buffer = (uint8_t *)(big_buffer + (sizeof(spt) * 2 * EXPAND_LIST_SIZE));
 
-   // Clear the lists
-   CLEARSPTLIST(exp_l1,EXPAND_LIST_SIZE);
-   CLEARSPTLIST(exp_l2,EXPAND_LIST_SIZE);
-   memset(pathfind_buffer, 0, MAP_XSIZE * MAP_YSIZE * sizeof(uint8_t));
+    // Clear the lists
+    CLEARSPTLIST(exp_l1,EXPAND_LIST_SIZE);
+    CLEARSPTLIST(exp_l2,EXPAND_LIST_SIZE);
+    memset(pathfind_buffer, 0, MAP_XSIZE * MAP_YSIZE * sizeof(uint8_t));
 #ifdef REALLY_SLOW_PATHFIND_CLEARING
-   for (i=0; i < MAP_XSIZE; i++)
-   {
-      for (j=0; j < MAP_YSIZE; j++)
-      {
-         PFE_USED_SET(PFE_GET_XY(i,j),false);
-      }
-   }
+    for (i=0; i < MAP_XSIZE; i++)
+    {
+        for (j=0; j < MAP_YSIZE; j++)
+        {
+            PFE_USED_SET(PFE_GET_XY(i,j),false);
+        }
+    }
 #endif
 
-   // set up initial pointings
-   expand_into_list = exp_l1;
-   expand_from_list = exp_l2;
+    // set up initial pointings
+    expand_into_list = exp_l1;
+    expand_from_list = exp_l2;
 
-   // Prep the first one to be our source
-   expand_from_list[0] = PT2SPT(paths[path_id].source);
-   ppfe = PFE_GET_XY(paths[path_id].source.x, paths[path_id].source.y);
-   PFE_Z_SET_OBJHT(ppfe, paths[path_id].start_z);
-   PFE_USED_SET(ppfe, true);
+    // Prep the first one to be our source
+    expand_from_list[0] = PT2SPT(paths[path_id].source);
+    ppfe = PFE_GET_XY(paths[path_id].source.x, paths[path_id].source.y);
+    PFE_Z_SET_OBJHT(ppfe, paths[path_id].start_z);
+    PFE_USED_SET(ppfe, true);
 
-   while (!done && step_count < NUM_PATH_STEPS)
-   {
-      // Expand out last iteration's list
-      done = expand_fill_list(path_id);
+    while (!done && step_count < NUM_PATH_STEPS)
+    {
+        // Expand out last iteration's list
+        done = expand_fill_list(path_id);
 
-      // If we haven't found it, swap pointers, etc.
-      if (!done)
-      {
-         if (expand_count == 0)
-         {
-//            Warning(("expand_count = 0!\n"));
-            step_count = NUM_PATH_STEPS;
-         }
-         if (expand_into_list == exp_l1)
-         {
-            expand_into_list = exp_l2;
-            expand_from_list = exp_l1;
-         }
-         else
-         {
-            expand_into_list = exp_l1;
-            expand_from_list = exp_l2;
-         }
-         step_count++;
-      }
-      else
-      // If we HAVE found it, go poke in the right info into the path
-      {
-         LGPoint currpt;
-         i=0;
-         currpt = paths[path_id].dest;
-         while (!PointsEqual(currpt,paths[path_id].source))
-         {
-            j = PFE_DIR(PFE_GET_XY(currpt.x,currpt.y));
-            SET_PATH_STEP(path_id,i,j);
-            i++;
-
-            // Compute one step backwards, according to our direction, j
-            // so that we have a new currpt
-            switch(j)
+        // If we haven't found it, swap pointers, etc.
+        if (!done)
+        {
+            if (expand_count == 0)
             {
-               case 0: currpt.y--; break; // N, so backwards is S
-               case 1: currpt.x--; break; // E, so backwards is W
-               case 2: currpt.y++; break; // S, so backwards is N
-               case 3: currpt.x++; break; // W, so backwards is E
+//                Warning(("expand_count = 0!\n"));
+                step_count = NUM_PATH_STEPS;
             }
-         }
-         paths[path_id].num_steps = i;
-      }
-   }
-   if (step_count >= NUM_PATH_STEPS)
-   {
-      paths[path_id].num_steps = 0;
-//      Warning(("Failed to find path from (%x,%x) to (%x,%x)\n",paths[path_id].source.x,paths[path_id].source.y,
-//         paths[path_id].dest.x, paths[path_id].dest.y));
-   }
+            if (expand_into_list == exp_l1)
+            {
+                expand_into_list = exp_l2;
+                expand_from_list = exp_l1;
+            }
+            else
+            {
+                expand_into_list = exp_l1;
+                expand_from_list = exp_l2;
+            }
+            step_count++;
+        }
+        else
+        // If we HAVE found it, go poke in the right info into the path
+        {
+            LGPoint currpt;
+            i=0;
+            currpt = paths[path_id].dest;
+            while (!PointsEqual(currpt,paths[path_id].source))
+            {
+                j = PFE_DIR(PFE_GET_XY(currpt.x,currpt.y));
+                SET_PATH_STEP(path_id,i,j);
+                i++;
 
-   return(OK);
+                // Compute one step backwards, according to our direction, j
+                // so that we have a new currpt
+                switch(j)
+                {
+                    case 0: currpt.y--; break; // N, so backwards is S
+                    case 1: currpt.x--; break; // E, so backwards is W
+                    case 2: currpt.y++; break; // S, so backwards is N
+                    case 3: currpt.x++; break; // W, so backwards is E
+                }
+            }
+            paths[path_id].num_steps = i;
+        }
+    }
+    if (step_count >= NUM_PATH_STEPS)
+    {
+        paths[path_id].num_steps = 0;
+//        Warning(("Failed to find path from (%x,%x) to (%x,%x)\n",paths[path_id].source.x,paths[path_id].source.y,
+//            paths[path_id].dest.x, paths[path_id].dest.y));
+    }
+
+    return(OK);
 }

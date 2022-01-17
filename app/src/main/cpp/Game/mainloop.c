@@ -83,71 +83,71 @@ void (*exit_modes[])(void)={screen_exit, fullscreen_exit, NULL, NULL,NULL,NULL,N
 void loopmode_switch(int16_t *cmode)
 {
 #ifdef SVGA_SUPPORT
-	extern bool wrapper_screenmode_hack;
+    extern bool wrapper_screenmode_hack;
 #endif
 
-	// Actually switch mode
-	_last_mode = *cmode;
-	(*exit_modes[_last_mode])();
-	*cmode=_new_mode;
-	_static_change = 0;
-	if (*cmode>=0)
-		(*enter_modes[*cmode])();
+    // Actually switch mode
+    _last_mode = *cmode;
+    (*exit_modes[_last_mode])();
+    *cmode=_new_mode;
+    _static_change = 0;
+    if (*cmode>=0)
+        (*enter_modes[*cmode])();
 /*
 #ifdef SVGA_SUPPORT
-	if (wrapper_screenmode_hack)
-	{
-	extern void screenmode_screen_init(void);
-	extern void wrapper_start(void (*init)(void));
-	wrapper_start(screenmode_screen_init);
-	}
+    if (wrapper_screenmode_hack)
+    {
+    extern void screenmode_screen_init(void);
+    extern void wrapper_start(void (*init)(void));
+    wrapper_start(screenmode_screen_init);
+    }
 #endif*/
 }
 
 void loopmode_exit(int16_t loopmode)
 {
-	if (exit_modes[loopmode])
-		(*exit_modes[loopmode])();
+    if (exit_modes[loopmode])
+        (*exit_modes[loopmode])();
 }
 
 /*
 void loopmode_enter(int16_t loopmode)
 {
-   (*enter_modes[loopmode])();
+    (*enter_modes[loopmode])();
 }
 */
 void ShockMain(void)
 {
-	init_all();
+    init_all();
 /*
-	while (_current_loop>=0)
-	{
-		if (!(_change_flag&(ML_CHG_BASE<<1)))
-			loopLine(ML|1,input_chk());        			// go get the UI stuff going
-		(*citadel_loops[_current_loop])();
-		if (globalChanges)										// really, only loopmode_switch (the <<3 case)
-		{  																// will be in the game
-			if (_change_flag&(ML_CHG_BASE<<0)) { loopLine(ML|0x10,loop_debug()); }
-			if (_change_flag&(ML_CHG_BASE<<3)) { loopLine(ML|0x13,loopmode_switch(&_current_loop)); }
-			chg_unset_flg(ML_CHG_BASE<<3);
-		}
+    while (_current_loop>=0)
+    {
+        if (!(_change_flag&(ML_CHG_BASE<<1)))
+            loopLine(ML|1,input_chk());                      // go get the UI stuff going
+        (*citadel_loops[_current_loop])();
+        if (globalChanges)                                        // really, only loopmode_switch (the <<3 case)
+        {                                                                  // will be in the game
+            if (_change_flag&(ML_CHG_BASE<<0)) { loopLine(ML|0x10,loop_debug()); }
+            if (_change_flag&(ML_CHG_BASE<<3)) { loopLine(ML|0x13,loopmode_switch(&_current_loop)); }
+            chg_unset_flg(ML_CHG_BASE<<3);
+        }
 #ifdef ALWAYS_SHOW_FR
-		fr_show_rate(-1);
+        fr_show_rate(-1);
 #endif
-		// OR in the static change flags...
-		chg_set_flg(_static_change);
-	}
+        // OR in the static change flags...
+        chg_set_flg(_static_change);
+    }
 */
-	cit_success=true;
-	// hit them atexit's
+    cit_success=true;
+    // hit them atexit's
 }
 
 errtype static_change_copy()
 {
-   if (always_render)
-      chg_set_sta(_current_3d_flag);
-   else
-      chg_unset_sta(_current_3d_flag);
-   return(OK);
+    if (always_render)
+        chg_set_sta(_current_3d_flag);
+    else
+        chg_unset_sta(_current_3d_flag);
+    return(OK);
 }
 

@@ -53,34 +53,34 @@ int32_t vxd_maxd;
 // returns true for success, false if unable to allocate
 bool vx_init(int32_t max_depth)
 {
-   zdxdz = (fix *)NewPtr(2 * max_depth * sizeof(fix));
-   zdydz = zdxdz + max_depth;
+    zdxdz = (fix *)NewPtr(2 * max_depth * sizeof(fix));
+    zdydz = zdxdz + max_depth;
 
-   #ifdef DBG_ON
-   vxd_maxd = max_depth;
-   #endif
+    #ifdef DBG_ON
+    vxd_maxd = max_depth;
+    #endif
 
-   if (zdxdz == NULL) return false;
-   return true;
+    if (zdxdz == NULL) return false;
+    return true;
 }
 
 void vx_close()
 {
-   DisposePtr((Ptr)zdxdz);
+    DisposePtr((Ptr)zdxdz);
 }
 
 // Der, this could be a macro, and
 // maybe should be
 void vx_init_vox(vxs_vox *v,fix pix_dist,fix pix_size,int32_t depth,grs_bitmap *col,grs_bitmap *ht)
 {
-   v->pix_dist = pix_dist;
-   v->pix_size = pix_size;
+    v->pix_dist = pix_dist;
+    v->pix_size = pix_size;
 
-   v->col = col;
-   v->ht = ht;
+    v->col = col;
+    v->ht = ht;
 
-   v->w = col->w;
-   v->h = col->h;
-   v->d = depth;
+    v->w = col->w;
+    v->h = col->h;
+    v->d = depth;
 }
 

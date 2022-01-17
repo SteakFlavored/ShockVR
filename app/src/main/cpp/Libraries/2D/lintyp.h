@@ -32,42 +32,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 /* The function pointer is actutally a ptr to void, because it contains
-   two different kinds of pointers.  Don't use a union since I want to
-   be able to initialize as automatic.
+    two different kinds of pointers.  Don't use a union since I want to
+    be able to initialize as automatic.
 
-   LINES, ILINES, ULINES and CLINES take a vertex interface (fix pt coord)
+    LINES, ILINES, ULINES and CLINES take a vertex interface (fix pt coord)
 
-   For these, the conversion to vertex is cheap relative to the overall
-   cost and needed for rgb and i values.  (ILINES is converted, it does
-   fix-pt internally.)
+    For these, the conversion to vertex is cheap relative to the overall
+    cost and needed for rgb and i values.  (ILINES is converted, it does
+    fix-pt internally.)
 
-   HLINES and VLINES take an xy interface   (int16_t coord)
+    HLINES and VLINES take an xy interface    (int16_t coord)
 
-   For these, these take short args and are used for speed and
-   for lots of calulations on the arglements (e.g. menues).
-   Unfortunately, they now take 5 params (3 points and 2 parms).
+    For these, these take short args and are used for speed and
+    for lots of calulations on the arglements (e.g. menues).
+    Unfortunately, they now take 5 params (3 points and 2 parms).
 
-   Fill parm last, hpoing compiler notices it's not always used.
+    Fill parm last, hpoing compiler notices it's not always used.
 
 */
 
 typedef
-   void *grt_uline_fill;
+    void *grt_uline_fill;
 
 typedef
-   void (*grt_uline_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_uline_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
 
 typedef
-   void (*grt_uline_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
+    void (*grt_uline_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
 
 typedef
-   void (*grt_wire_poly_uline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_wire_poly_uline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
 
 typedef
-   void (*grt_wire_poly_ucline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_wire_poly_ucline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
 
 typedef
-    grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES];
+     grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES];
 
 #define grt_wire_poly_usline grt_wire_poly_ucline;
 

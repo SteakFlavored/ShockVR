@@ -38,28 +38,28 @@ void *grd_fill_upixel_func();
 /* understands fill type. */
 int32_t gen_fill_pixel (int32_t color, int16_t x, int16_t y)
 {
-   if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
-      return CLIP_ALL;
+    if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
+        return CLIP_ALL;
 
-   gr_fill_upixel(color,x,y);
-   return CLIP_NONE;
+    gr_fill_upixel(color,x,y);
+    return CLIP_NONE;
 }
 
 /* ignores fill type. */
 int32_t gen_set_pixel (int32_t color, int16_t x, int16_t y)
 {
-   if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
-      return CLIP_ALL;
+    if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
+        return CLIP_ALL;
 
-   gr_set_upixel(color,x,y);
-   return CLIP_NONE;
+    gr_set_upixel(color,x,y);
+    return CLIP_NONE;
 }
 
 int32_t gen_set_pixel_interrupt(int32_t color, int16_t x, int16_t y)
 {
-   if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
-      return CLIP_ALL;
+    if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
+        return CLIP_ALL;
 
-   gr_set_upixel_interrupt(color,x,y);
-   return CLIP_NONE;
+    gr_set_upixel_interrupt(color,x,y);
+    return CLIP_NONE;
 }

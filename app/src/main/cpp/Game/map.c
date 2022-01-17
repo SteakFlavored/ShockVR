@@ -42,85 +42,85 @@ errtype _map_init_elem(FullMap *fmap, int32_t i, int32_t j);
 
 errtype _map_init_elem(FullMap *fmap, int32_t i, int32_t j)
 {
-   MapElem *me = FULLMAP_GET_XY(fmap,i,j);
-   // clear tiletype
-   me_tiletype_set(me, 0);
+    MapElem *me = FULLMAP_GET_XY(fmap,i,j);
+    // clear tiletype
+    me_tiletype_set(me, 0);
 
-   // clear tmaps[3]
-   me_tmap_flr_set(me, 0);
-   me_tmap_wall_set(me, 0);
-   me_tmap_ceil_set(me, 0);
+    // clear tmaps[3]
+    me_tmap_flr_set(me, 0);
+    me_tmap_wall_set(me, 0);
+    me_tmap_ceil_set(me, 0);
 
-   // clear flags
-   me_flags_set(me, 0);
+    // clear flags
+    me_flags_set(me, 0);
 
-   // clear heights[2]
-   me_height_flr_set(me, 0);
-   me_height_ceil_set(me, 0);
+    // clear heights[2]
+    me_height_flr_set(me, 0);
+    me_height_ceil_set(me, 0);
 
-   // clear param
-   me_param_set(me, 0);
+    // clear param
+    me_param_set(me, 0);
 
-   // clear objRef
-   me_objref_set(me, 0);
+    // clear objRef
+    me_objref_set(me, 0);
 
-   me_templight_flr_set(me,0);
-   me_templight_ceil_set(me,0);
+    me_templight_flr_set(me,0);
+    me_templight_ceil_set(me,0);
 
-   me_clearsolid_set(me,0);
-   me_subclip_set(me,0xFF); // secret gnosis good
-   me_rotflr_set(me,0);
-   me_rotceil_set(me,0);
-   me_hazard_bio_set(me,0);
-   me_hazard_rad_set(me,0);
-   me_flicker_set(me,0);
+    me_clearsolid_set(me,0);
+    me_subclip_set(me,0xFF); // secret gnosis good
+    me_rotflr_set(me,0);
+    me_rotceil_set(me,0);
+    me_hazard_bio_set(me,0);
+    me_hazard_rad_set(me,0);
+    me_flicker_set(me,0);
 
-   return(OK);
+    return(OK);
 }
 
 FullMap* map_create(int32_t xshf, int32_t yshf,int32_t zshf, bool cyb)
 {
-	int32_t i,j;
-	FullMap* fmap = (FullMap *)NewPtr(sizeof(FullMap));
-	fmap->x_shft = xshf;
-	fmap->y_shft = yshf;
-	fmap->z_shft = zshf;
-	fmap->x_size = 1 << xshf;
-	fmap->y_size = 1 << yshf;
-	fmap->cyber = cyb;
-	fmap->map = (MapElem *)static_map;
-	for (i=0;i<fmap->x_size;i++)
-	{
-		for (j=0;j<fmap->y_size;j++)
-		{
-			_map_init_elem(fmap,i,j);
-		}
-	}
-	fmap->x_scale = fmap->y_scale = fmap->z_scale = 0;
-	for (i = 0; i < NUM_MAP_SCHEDULES; i++)
-		schedule_init(&fmap->sched[i],MAP_SCHEDULE_SIZE,false);
-	return fmap;
+    int32_t i,j;
+    FullMap* fmap = (FullMap *)NewPtr(sizeof(FullMap));
+    fmap->x_shft = xshf;
+    fmap->y_shft = yshf;
+    fmap->z_shft = zshf;
+    fmap->x_size = 1 << xshf;
+    fmap->y_size = 1 << yshf;
+    fmap->cyber = cyb;
+    fmap->map = (MapElem *)static_map;
+    for (i=0;i<fmap->x_size;i++)
+    {
+        for (j=0;j<fmap->y_size;j++)
+        {
+            _map_init_elem(fmap,i,j);
+        }
+    }
+    fmap->x_scale = fmap->y_scale = fmap->z_scale = 0;
+    for (i = 0; i < NUM_MAP_SCHEDULES; i++)
+        schedule_init(&fmap->sched[i],MAP_SCHEDULE_SIZE,false);
+    return fmap;
 }
 
 bool map_set_default(FullMap *fmap)
 {
-   global_fullmap=fmap;
-   global_map=fmap->map;
-   return true;
+    global_fullmap=fmap;
+    global_map=fmap->map;
+    return true;
 }
 
 void map_init(void)
 {
-   FullMap* ourmap = map_create(DEFAULT_XSHF,DEFAULT_YSHF,DEFAULT_ZSHF,false);
-   map_set_default(ourmap);
+    FullMap* ourmap = map_create(DEFAULT_XSHF,DEFAULT_YSHF,DEFAULT_ZSHF,false);
+    map_set_default(ourmap);
 }
 
 void map_free(void)
 {
-	extern errtype schedule_free(Schedule* s);
+    extern errtype schedule_free(Schedule* s);
 
-	for (int32_t i = 0; i < NUM_MAP_SCHEDULES; i++)
-		schedule_free(&global_fullmap->sched[i]);
-	DisposePtr((Ptr)fm_map(global_fullmap));
-	DisposePtr((Ptr)global_fullmap);
+    for (int32_t i = 0; i < NUM_MAP_SCHEDULES; i++)
+        schedule_free(&global_fullmap->sched[i]);
+    DisposePtr((Ptr)fm_map(global_fullmap));
+    DisposePtr((Ptr)global_fullmap);
 }

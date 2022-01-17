@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		RES_.H	Resource System internal header file
-//		Rex E. Bradford
+//        RES_.H    Resource System internal header file
+//        Rex E. Bradford
 /*
 * $Header: n:/project/lib/src/res/rcs/res_.h 1.2 1994/05/26 13:54:52 rex Exp $
 * $Log: res_.h $
@@ -40,23 +40,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#endif
 
 /*
-//	----------------------------------------------------------
-//		FOR RESOURCE SYSTEM INTERNAL USE - DON'T BE BAD!
-//	----------------------------------------------------------
+//    ----------------------------------------------------------
+//        FOR RESOURCE SYSTEM INTERNAL USE - DON'T BE BAD!
+//    ----------------------------------------------------------
 
-//	Checking id's and ref's (resacc.c and refacc.c)
+//    Checking id's and ref's (resacc.c and refacc.c)
 
-bool ResCheckId(Id id);				// returns true if id ok, else false + warns
-bool RefCheckRef(Ref ref);			// returns true if ref ok, else false & warns
+bool ResCheckId(Id id);                // returns true if id ok, else false + warns
+bool RefCheckRef(Ref ref);            // returns true if ref ok, else false & warns
 */
 
-//	Resource loading (resload.c)
+//    Resource loading (resload.c)
 
 void *ResLoadResource(Id id);
 bool ResRetrieve(Id id, void *buffer);
 
 /*
-//	Resource paging (resmem.c)
+//    Resource paging (resmem.c)
 
 void *ResDefaultPager(int32_t size);
 extern void *(*f_pager)(int32_t size);
@@ -64,82 +64,82 @@ extern Id idBeingLoaded;
 #define RES_PAGER(size) (*f_pager)(size)
 */
 
-//	Grow descriptor table (res.c)
+//    Grow descriptor table (res.c)
 
 void ResGrowResDescTable(Id id);
 
 #define ResExtendDesc(id) {if ((id) > resDescMax) ResGrowResDescTable(id);}
 
-#define DEFAULT_RES_GROWDIRENTRIES 128		// must be power of 2
+#define DEFAULT_RES_GROWDIRENTRIES 128        // must be power of 2
 
 /*
-//	Data alignment aids
+//    Data alignment aids
 
 #define RES_OFFSET_ALIGN(offset) (((offset)+3)&0xFFFFFFFCL)
 #define RES_OFFSET_PADBYTES(size) ((4-(size))&3)
 #define RES_OFFSET_REAL2DESC(offset) ((offset)>>2)
 #define RES_OFFSET_DESC2REAL(offset) ((offset)<<2)
 
-#define RES_OFFSET_PENDING 1	// offset of resource not yet written
+#define RES_OFFSET_PENDING 1    // offset of resource not yet written
 
 
-//	LRU chain link management macros
+//    LRU chain link management macros
 
 #define ResRemoveFromLRU(prd) { \
-	gResDesc[(prd)->next].prev = (prd)->prev; \
-	gResDesc[(prd)->prev].next = (prd)->next; }
+    gResDesc[(prd)->next].prev = (prd)->prev; \
+    gResDesc[(prd)->prev].next = (prd)->next; }
 
 #define ResAddToTail(prd) { \
-	(prd)->prev = gResDesc[ID_TAIL].prev; \
-	(prd)->next = ID_TAIL; \
-	gResDesc[(prd)->prev].next = RESDESC_ID(prd); \
-	gResDesc[ID_TAIL].prev = RESDESC_ID(prd); }
+    (prd)->prev = gResDesc[ID_TAIL].prev; \
+    (prd)->next = ID_TAIL; \
+    gResDesc[(prd)->prev].next = RESDESC_ID(prd); \
+    gResDesc[ID_TAIL].prev = RESDESC_ID(prd); }
 
 #define ResMoveToTail(prd) { \
-	if ((prd)->next != ID_TAIL) \
-		{ \
-		ResRemoveFromLRU(prd); \
-		ResAddToTail(prd); \
-		} \
-	}
+    if ((prd)->next != ID_TAIL) \
+        { \
+        ResRemoveFromLRU(prd); \
+        ResAddToTail(prd); \
+        } \
+    }
 
 
-//	Statistics tables
+//    Statistics tables
 
 #ifdef DBG_ON
 
 typedef struct {
-	uint32_t numGets;				// # ResGet()'s or RefGet()'s
-	uint32_t numLocks;			// # ResLock()'s or RefLock()'s
-	uint16_t numExtracts;		// # ResExtract()'s or RefExtract()'s
-	uint16_t numLoads;			// # ResLoad()'s
-	uint16_t numOverwrites;	// # times resource overwritten by one in new file
-	uint16_t numPageouts;		// # times paged out of ram
+    uint32_t numGets;                // # ResGet()'s or RefGet()'s
+    uint32_t numLocks;            // # ResLock()'s or RefLock()'s
+    uint16_t numExtracts;        // # ResExtract()'s or RefExtract()'s
+    uint16_t numLoads;            // # ResLoad()'s
+    uint16_t numOverwrites;    // # times resource overwritten by one in new file
+    uint16_t numPageouts;        // # times paged out of ram
 } ResCumStat;
 
-extern ResCumStat *pCumStatId;						// ptr to cumulative stats by id
+extern ResCumStat *pCumStatId;                        // ptr to cumulative stats by id
 extern ResCumStat cumStatType[NUM_RESTYPENAMES]; // table of cum. stats by type
 
 #define CUMSTATS(id,field) DBG(DSRC_RES_CumStat, { \
-	ResCumStat *prcs;				\
-	if (pCumStatId == NULL)		\
-		ResAllocCumStatTable();	\
-	prcs = pCumStatId + (id);	\
-	prcs->field++;					\
-	prcs = &cumStatType[RESDESC(id)->type]; \
-	prcs->field++;					\
-	})
+    ResCumStat *prcs;                \
+    if (pCumStatId == NULL)        \
+        ResAllocCumStatTable();    \
+    prcs = pCumStatId + (id);    \
+    prcs->field++;                    \
+    prcs = &cumStatType[RESDESC(id)->type]; \
+    prcs->field++;                    \
+    })
 
 typedef struct {
-	uint16_t numPageouts;			// # times ResPageOut() called
-	uint32_t totSizeNeeded;			// total # bytes asked for across calls
-	uint32_t totSizeGotten;			// total # bytes paged out across calls
+    uint16_t numPageouts;            // # times ResPageOut() called
+    uint32_t totSizeNeeded;            // total # bytes asked for across calls
+    uint32_t totSizeGotten;            // total # bytes paged out across calls
 } ResPageStats;
 
-extern ResPageStats resPageStats;	// paging statistics
+extern ResPageStats resPageStats;    // paging statistics
 
-void ResAllocCumStatTable();			// internal stat routine prototypes
-void ResSpewCumStats();					// these are in rescum.c
+void ResAllocCumStatTable();            // internal stat routine prototypes
+void ResSpewCumStats();                    // these are in rescum.c
 
 #else
 

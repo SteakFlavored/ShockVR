@@ -56,12 +56,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #undef RECT_FILL
 #define RECT_FILL(pr,x1,y1,x2,y2) \
-   {   \
-      (pr)->ul.x = (x1); \
-      (pr)->ul.y = (y1); \
-      (pr)->lr.x = (x2); \
-      (pr)->lr.y = (y2); \
-   }
+    {    \
+        (pr)->ul.x = (x1); \
+        (pr)->ul.y = (y1); \
+        (pr)->lr.x = (x2); \
+        (pr)->lr.y = (y2); \
+    }
 
 // ----------
 // GLOBALS
@@ -73,126 +73,126 @@ bool redraw_paused=false;
 // ----------
 void draw_pause_string(void);
 
-int32_t	pal_frame = 0;
+int32_t    pal_frame = 0;
 
 //------------------------------------------------------------------
 void draw_pause_string(void)
 {
-	LGRect	r;
-	int16_t w,h,nw,nh;
-	extern void ss_scale_string(int8_t *s, int16_t x, int16_t y);
+    LGRect    r;
+    int16_t w,h,nw,nh;
+    extern void ss_scale_string(int8_t *s, int16_t x, int16_t y);
 
-	uint8_t old_over = gr2ss_override;
-	gr_set_fcolor(RED_BASE + 4);
-	gr_set_font((grs_font*)ResGet(RES_citadelFont));
-	gr_string_size(get_string(REF_STR_Pause, NULL, 0), &w, &h);
-	nw = SCREEN_VIEW_X + (SCREEN_VIEW_WIDTH - w)/2;
-	nh = SCREEN_VIEW_Y + (SCREEN_VIEW_HEIGHT - h)/2;
-	RECT_FILL(&r,nw,nh,nw+w,nh+h);
-	gr2ss_override = OVERRIDE_ALL;
-	uiHideMouse(&r);
-	ss_string(get_string(REF_STR_Pause, NULL, 0), nw, nh);
-	uiShowMouse(&r);
-	old_over = gr2ss_override;
+    uint8_t old_over = gr2ss_override;
+    gr_set_fcolor(RED_BASE + 4);
+    gr_set_font((grs_font*)ResGet(RES_citadelFont));
+    gr_string_size(get_string(REF_STR_Pause, NULL, 0), &w, &h);
+    nw = SCREEN_VIEW_X + (SCREEN_VIEW_WIDTH - w)/2;
+    nh = SCREEN_VIEW_Y + (SCREEN_VIEW_HEIGHT - h)/2;
+    RECT_FILL(&r,nw,nh,nw+w,nh+h);
+    gr2ss_override = OVERRIDE_ALL;
+    uiHideMouse(&r);
+    ss_string(get_string(REF_STR_Pause, NULL, 0), nw, nh);
+    uiShowMouse(&r);
+    old_over = gr2ss_override;
 }
 
 
 //------------------------------------------------------------------
 void game_loop(void)
 {
-	extern void update_meters(bool);
-	extern errtype check_cspace_death();
-	extern bool game_paused;
-	extern void sound_frame_update(void);
+    extern void update_meters(bool);
+    extern errtype check_cspace_death();
+    extern bool game_paused;
+    extern void sound_frame_update(void);
 // temp
 //extern int8_t saveArray[16];
 //if (memcmp(0, saveArray, 16))
-//	Debugger();
+//    Debugger();
 
-	// Handle paused game state
+    // Handle paused game state
 
-	if (game_paused)
-	{
-		if (redraw_paused)
-		{
-			draw_pause_string();
-			redraw_paused=false;
-		}
-//KLC - does nothing!			loopLine(GL|0x1D,synchronous_update());
-		if (music_on)
-			loopLine(GL|0x1C,mlimbs_do_ai());
-		if (pal_fx_on)
-			loopLine(GL|0x1E,palette_advance_all_fx(* (int32_t *) 0x16a));	// TickCount()
-	}
+    if (game_paused)
+    {
+        if (redraw_paused)
+        {
+            draw_pause_string();
+            redraw_paused=false;
+        }
+//KLC - does nothing!            loopLine(GL|0x1D,synchronous_update());
+        if (music_on)
+            loopLine(GL|0x1C,mlimbs_do_ai());
+        if (pal_fx_on)
+            loopLine(GL|0x1E,palette_advance_all_fx(* (int32_t *) 0x16a));    // TickCount()
+    }
 
-	// If we're not paused...
+    // If we're not paused...
 
-	else
-	{
-		loopLine(GL|0x10,update_state(time_passes));     // move game time
-		if (time_passes)
-		{
-			loopLine(GL|0x12,ai_run());
-			loopLine(GL|0x13,gamesys_run());
-			loopLine(GL|0x14, advance_animations());
-		}
-		loopLine(GL|0x16,wares_update());
-		loopLine(GL|0x1D,message_clear_check());  // This could be done more cleverly with change flags...
-		if (localChanges)
-		{
-			loopLine(GL|0x1A, render_run());
-			loopLine(GL|0x17,if (!full_game_3d) status_vitals_update(false));
+    else
+    {
+        loopLine(GL|0x10,update_state(time_passes));      // move game time
+        if (time_passes)
+        {
+            loopLine(GL|0x12,ai_run());
+            loopLine(GL|0x13,gamesys_run());
+            loopLine(GL|0x14, advance_animations());
+        }
+        loopLine(GL|0x16,wares_update());
+        loopLine(GL|0x1D,message_clear_check());  // This could be done more cleverly with change flags...
+        if (localChanges)
+        {
+            loopLine(GL|0x1A, render_run());
+            loopLine(GL|0x17,if (!full_game_3d) status_vitals_update(false));
 /*KLC - no longer needed
-			if (_change_flag&ANIM_UPDATE)
-			{
-				loopLine(GL|0x19, AnimRecur());
-				chg_unset_flg(ANIM_UPDATE);
-			}
+            if (_change_flag&ANIM_UPDATE)
+            {
+                loopLine(GL|0x19, AnimRecur());
+                chg_unset_flg(ANIM_UPDATE);
+            }
 */
-			if (full_game_3d && ((_change_flag&INVENTORY_UPDATE) || (_change_flag&MFD_UPDATE)))
-				_change_flag|=DEMOVIEW_UPDATE;
-			if (_change_flag&INVENTORY_UPDATE)
-			{
-				chg_unset_flg(INVENTORY_UPDATE);
-				loopLine(GL|0x1B, inventory_draw());
-			}
-			if (_change_flag&MFD_UPDATE)
-			{
-				chg_unset_flg(MFD_UPDATE);
-				loopLine(GL|0x18,mfd_update());
-			}
-			if (_change_flag&DEMOVIEW_UPDATE)
-			{
+            if (full_game_3d && ((_change_flag&INVENTORY_UPDATE) || (_change_flag&MFD_UPDATE)))
+                _change_flag|=DEMOVIEW_UPDATE;
+            if (_change_flag&INVENTORY_UPDATE)
+            {
+                chg_unset_flg(INVENTORY_UPDATE);
+                loopLine(GL|0x1B, inventory_draw());
+            }
+            if (_change_flag&MFD_UPDATE)
+            {
+                chg_unset_flg(MFD_UPDATE);
+                loopLine(GL|0x18,mfd_update());
+            }
+            if (_change_flag&DEMOVIEW_UPDATE)
+            {
 //KLC - does nothing!
-//				if (sfx_on || music_on)
-//					loopLine(GL|0x1D,synchronous_update());
-				chg_unset_flg(DEMOVIEW_UPDATE);
-			}
-		}
-		if (!full_game_3d)
-			loopLine(GL|0x19,update_meters(false));
-		if (!full_game_3d && olh_overlay_on)
-			olh_overlay();
+//                if (sfx_on || music_on)
+//                    loopLine(GL|0x1D,synchronous_update());
+                chg_unset_flg(DEMOVIEW_UPDATE);
+            }
+        }
+        if (!full_game_3d)
+            loopLine(GL|0x19,update_meters(false));
+        if (!full_game_3d && olh_overlay_on)
+            olh_overlay();
 
-      loopLine(GL|0x15,physics_run());
-      {
-         if (!olh_overlay_on && olh_active && !global_fullmap->cyber)
-            olh_scan_objects();
-      }
-//KLC - does nothing!         loopLine(GL|0x1D,synchronous_update());
-      if (sfx_on || music_on)
-      {
-         loopLine(GL|0x1C,mlimbs_do_ai());
-	    loopLine(GL|0x1E,sound_frame_update());
-      }
+        loopLine(GL|0x15,physics_run());
+        {
+            if (!olh_overlay_on && olh_active && !global_fullmap->cyber)
+                olh_scan_objects();
+        }
+//KLC - does nothing!            loopLine(GL|0x1D,synchronous_update());
+        if (sfx_on || music_on)
+        {
+            loopLine(GL|0x1C,mlimbs_do_ai());
+         loopLine(GL|0x1E,sound_frame_update());
+        }
 
-		if (pal_fx_on && (++pal_frame == 2))
-		 {
-		 	pal_frame=0;
-			loopLine(GL|0x1F,palette_advance_all_fx(* (int32_t *) 0x16a));	// TickCount()
-		 }
+        if (pal_fx_on && (++pal_frame == 2))
+         {
+             pal_frame=0;
+            loopLine(GL|0x1F,palette_advance_all_fx(* (int32_t *) 0x16a));    // TickCount()
+         }
 
-		loopLine(GL|0x20, destroy_destroyed_objects());
-		loopLine(GL|0x21, check_cspace_death());
-	}
+        loopLine(GL|0x20, destroy_destroyed_objects());
+        loopLine(GL|0x21, check_cspace_death());
+    }
 }

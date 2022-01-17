@@ -91,113 +91,113 @@ errtype interpret_qvars(void);
 
 errtype copy_file(FSSpec *srcFile, FSSpec *destFile, bool saveGameFile)
 {
-	OSErr	err;
-	FInfo		fi;
-	int16_t		destRefNum, srcRefNum;
-	int32_t 		size, count;
-	errtype	retv=OK;
+    OSErr    err;
+    FInfo        fi;
+    int16_t        destRefNum, srcRefNum;
+    int32_t         size, count;
+    errtype    retv=OK;
 
-	// If the output file is already there, delete it first.
-	err = FSpGetFInfo(destFile, &fi);
-	if (err == noErr)
-		FSpDelete(destFile);
+    // If the output file is already there, delete it first.
+    err = FSpGetFInfo(destFile, &fi);
+    if (err == noErr)
+        FSpDelete(destFile);
 
-	// Create and open the output resource file.
-	FSpCreateResFile(destFile, 'Shok', (saveGameFile) ? 'Sgam' : '????', 0);
-	if (ResError())
-		return (ERR_FOPEN);
+    // Create and open the output resource file.
+    FSpCreateResFile(destFile, 'Shok', (saveGameFile) ? 'Sgam' : '????', 0);
+    if (ResError())
+        return (ERR_FOPEN);
 
-	if (FSpOpenRF(destFile, fsRdWrPerm, &destRefNum) != noErr)
-		return(ERR_FOPEN);
+    if (FSpOpenRF(destFile, fsRdWrPerm, &destRefNum) != noErr)
+        return(ERR_FOPEN);
 
-	// Open the source resource file.
-	if (FSpOpenRF(srcFile, fsRdPerm, &srcRefNum) != noErr)
-	{
-		FSClose(destRefNum);
-		return(ERR_FOPEN);
-	}
-	SetFPos(srcRefNum, fsFromStart, 0);
+    // Open the source resource file.
+    if (FSpOpenRF(srcFile, fsRdPerm, &srcRefNum) != noErr)
+    {
+        FSClose(destRefNum);
+        return(ERR_FOPEN);
+    }
+    SetFPos(srcRefNum, fsFromStart, 0);
 
-	// Copy all the data from src to dest.
-	size = BIG_BUFFER_SIZE / 2;
-	while (size == BIG_BUFFER_SIZE / 2)
-	{
-		size = BIG_BUFFER_SIZE / 2;
-		FSRead(srcRefNum, &size, big_buffer);
-		count = size;
-		FSWrite(destRefNum, &count, big_buffer);
-		if (count != size)
-		{
-			retv = ERR_FWRITE;
-			break;
-		}
-		AdvanceProgress();
-	}
-	FSClose(destRefNum);
-	FSClose(srcRefNum);
-	FlushVol(nil, destFile->vRefNum);
-	return(retv);
+    // Copy all the data from src to dest.
+    size = BIG_BUFFER_SIZE / 2;
+    while (size == BIG_BUFFER_SIZE / 2)
+    {
+        size = BIG_BUFFER_SIZE / 2;
+        FSRead(srcRefNum, &size, big_buffer);
+        count = size;
+        FSWrite(destRefNum, &count, big_buffer);
+        if (count != size)
+        {
+            retv = ERR_FWRITE;
+            break;
+        }
+        AdvanceProgress();
+    }
+    FSClose(destRefNum);
+    FSClose(srcRefNum);
+    FlushVol(nil, destFile->vRefNum);
+    return(retv);
 }
 
 void closedown_game(bool visible)
 {
-   extern void fr_closedown(void);
-   extern void olh_closedown(void);
-   extern void musicai_clear();
-   extern void drug_closedown(bool visible);
-   extern void hardware_closedown(bool visible);
-   extern void clear_digi_fx();
-   extern void reset_schedules(void);
-   extern void hud_shutdown_lines(void);
-   // clear any transient hud settings
-   hud_shutdown_lines();
-   drug_closedown(visible);
-   hardware_closedown(visible);
-   musicai_clear();
-   clear_digi_fx();
-   olh_closedown();
-   fr_closedown();
-   if (visible)
-      reset_schedules();
+    extern void fr_closedown(void);
+    extern void olh_closedown(void);
+    extern void musicai_clear();
+    extern void drug_closedown(bool visible);
+    extern void hardware_closedown(bool visible);
+    extern void clear_digi_fx();
+    extern void reset_schedules(void);
+    extern void hud_shutdown_lines(void);
+    // clear any transient hud settings
+    hud_shutdown_lines();
+    drug_closedown(visible);
+    hardware_closedown(visible);
+    musicai_clear();
+    clear_digi_fx();
+    olh_closedown();
+    fr_closedown();
+    if (visible)
+        reset_schedules();
 }
 
 void startup_game(bool visible)
 {
-   extern void drug_startup(bool visible);
-   extern void hardware_startup(bool visible);
-   drug_startup(visible);
-   hardware_startup(visible);
-   if (visible)
-   {
-      mfd_force_update();
-      side_icon_expose_all();
-      status_vitals_update(true);
-      inventory_page = 0;
-      inv_last_page = INV_BLANK_PAGE;
-   }
+    extern void drug_startup(bool visible);
+    extern void hardware_startup(bool visible);
+    drug_startup(visible);
+    hardware_startup(visible);
+    if (visible)
+    {
+        mfd_force_update();
+        side_icon_expose_all();
+        status_vitals_update(true);
+        inventory_page = 0;
+        inv_last_page = INV_BLANK_PAGE;
+    }
 }
 
 #ifdef NOT_YET
 
 void check_save_game_wackiness(void)
 {
-   // for now, the only thing we have heard of is a bridge in general inventory
-   // so lets make sure geninv has only geninvable stuff
-   int32_t i;
-   ObjID cur_test;
-   for (i=0; i<NUM_GENERAL_SLOTS; i++)
-   {
-	   cur_test=player_struct.inventory[i];
+    // for now, the only thing we have heard of is a bridge in general inventory
+    // so lets make sure geninv has only geninvable stuff
+    int32_t i;
+    ObjID cur_test;
+    for (i=0; i<NUM_GENERAL_SLOTS; i++)
+    {
+        cur_test=player_struct.inventory[i];
 #ifdef USELESS_OBJECT_CHECK
-      if (cur_test!=OBJ_NULL)
-      {
-		   if ((ObjProps[OPNUM(cur_test)].flags & INVENTORY_GENERAL)==0)
-            Warning(("You have obj %d a %d as the %d element of geninv, BADNESS\n",cur_test,OPNUM(cur_test),i));
-//         else
-//            Warning(("You have obj %d a %d as the %d element of geninv ok %x\n",cur_test,OPNUM(cur_test),i,ObjProps[OPNUM(cur_test)].flags));
-      }
+        if (cur_test!=OBJ_NULL)
+        {
+            if ((ObjProps[OPNUM(cur_test)].flags & INVENTORY_GENERAL)==0)
+                Warning(("You have obj %d a %d as the %d element of geninv, BADNESS\n",cur_test,OPNUM(cur_test),i));
+//            else
+//                Warning(("You have obj %d a %d as the %d element of geninv ok %x\n",cur_test,OPNUM(cur_test),i,ObjProps[OPNUM(cur_test)].flags));
+        }
 #endif
-   }
+    }
 }
 
 #endif //NOT_YET
@@ -206,254 +206,254 @@ extern int32_t flush_resource_cache();
 
 errtype save_game(FSSpec *saveSpec)
 {
-	FSSpec		currSpec;
-	int32_t 			filenum;
-	State 			player_state;
-	errtype 		retval;
-	int32_t 			idx = SAVE_GAME_ID_BASE;
+    FSSpec        currSpec;
+    int32_t             filenum;
+    State             player_state;
+    errtype         retval;
+    int32_t             idx = SAVE_GAME_ID_BASE;
 
-   //KLC - this does nothing now.		check_save_game_wackiness();
-   // Why is this done???			closedown_game(false);
+    //KLC - this does nothing now.        check_save_game_wackiness();
+    // Why is this done???            closedown_game(false);
 
-   //KLC  do it the Mac way						i = flush_resource_cache();
-	Size	dummy;
-	MaxMem(&dummy);
+    //KLC  do it the Mac way                        i = flush_resource_cache();
+    Size    dummy;
+    MaxMem(&dummy);
 
-	// Open the current game file to save some more resources into it.
-	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
-	filenum = ResEditFile(&currSpec, false);
-	if (filenum < 0)
-	{
-		DebugStr("\pCouldn't open Current Game\n");
-		return ERR_FOPEN;
-	}
+    // Open the current game file to save some more resources into it.
+    FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
+    filenum = ResEditFile(&currSpec, false);
+    if (filenum < 0)
+    {
+        DebugStr("\pCouldn't open Current Game\n");
+        return ERR_FOPEN;
+    }
 
 /*KLC - no need for this on Mac, where we have sensible, descriptive file names
-	// Save comment
-	ResMake(idx, (void *)comment, strlen(comment)+1, RTYPE_APP, filenum, RDF_LZW);
-	ResWrite(idx);
-	ResUnmake(idx);	*/
-	idx++;
-	AdvanceProgress();
+    // Save comment
+    ResMake(idx, (void *)comment, strlen(comment)+1, RTYPE_APP, filenum, RDF_LZW);
+    ResWrite(idx);
+    ResUnmake(idx);    */
+    idx++;
+    AdvanceProgress();
 
-	// Save player struct (resource #4001)
-	player_struct.version_num = PLAYER_VERSION_NUMBER;
-	player_struct.realspace_loc = objs[player_struct.rep].loc;
-	EDMS_get_state(objs[PLAYER_OBJ].info.ph, &player_state);
-	memcpy(player_struct.edms_state, &player_state, sizeof (fix) * 12);
-// LZW later		ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum, RDF_LZW);
-	ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum, 0);
-	ResWrite(idx);
-	ResUnmake(idx);
-	idx++;
-	AdvanceProgress();
+    // Save player struct (resource #4001)
+    player_struct.version_num = PLAYER_VERSION_NUMBER;
+    player_struct.realspace_loc = objs[player_struct.rep].loc;
+    EDMS_get_state(objs[PLAYER_OBJ].info.ph, &player_state);
+    memcpy(player_struct.edms_state, &player_state, sizeof (fix) * 12);
+// LZW later        ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum, RDF_LZW);
+    ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum, 0);
+    ResWrite(idx);
+    ResUnmake(idx);
+    idx++;
+    AdvanceProgress();
 
-	// Save game schedule (resource #590)
-	idx = SCHEDULE_BASE_ID;
-// LZW later		ResMake(idx, (void *)&game_seconds_schedule, sizeof(Schedule), RTYPE_APP, filenum, RDF_LZW);
-	ResMake(idx, (void *)&game_seconds_schedule, sizeof(Schedule), RTYPE_APP, filenum, 0);
-	ResWrite(idx);
-	ResUnmake(idx);
-	idx++;
-	AdvanceProgress();
+    // Save game schedule (resource #590)
+    idx = SCHEDULE_BASE_ID;
+// LZW later        ResMake(idx, (void *)&game_seconds_schedule, sizeof(Schedule), RTYPE_APP, filenum, RDF_LZW);
+    ResMake(idx, (void *)&game_seconds_schedule, sizeof(Schedule), RTYPE_APP, filenum, 0);
+    ResWrite(idx);
+    ResUnmake(idx);
+    idx++;
+    AdvanceProgress();
 
-	// Save game schedule vec info (resource #591)
-// LZW later		ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent)*GAME_SCHEDULE_SIZE, RTYPE_APP, filenum, RDF_LZW);
-	ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent)*GAME_SCHEDULE_SIZE, RTYPE_APP, filenum, 0);
-	ResWrite(idx);
-	ResUnmake(idx);
-	idx++;
-	AdvanceProgress();
+    // Save game schedule vec info (resource #591)
+// LZW later        ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent)*GAME_SCHEDULE_SIZE, RTYPE_APP, filenum, RDF_LZW);
+    ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent)*GAME_SCHEDULE_SIZE, RTYPE_APP, filenum, 0);
+    ResWrite(idx);
+    ResUnmake(idx);
+    idx++;
+    AdvanceProgress();
 
- 	ResCloseFile(filenum);
-	AdvanceProgress();
+     ResCloseFile(filenum);
+    AdvanceProgress();
 
-	// Save current level
-	retval = write_level_to_disk(ResIdFromLevel(player_struct.level), true);
-	if (retval)
-	{
-		DebugStr("\pReturn value from write_level_to_disk is non-zero!\n");//
-		critical_error(CRITERR_FILE|3);
-	}
+    // Save current level
+    retval = write_level_to_disk(ResIdFromLevel(player_struct.level), true);
+    if (retval)
+    {
+        DebugStr("\pReturn value from write_level_to_disk is non-zero!\n");//
+        critical_error(CRITERR_FILE|3);
+    }
 
-	// Copy current game out to save game slot
-	if (copy_file(&currSpec, saveSpec, true) != OK)
-	{
-		// Put up some alert here.
-		DebugStr("\pNo good copy, dude!\n");
-//		string_message_info(REF_STR_SaveGameFail);
-	}
-//KLC	else
-//KLC		string_message_info(REF_STR_SaveGameSaved);
-	old_ticks = *tmd_ticks;
-	// do we have to do this?		startup_game(false);
-	return(OK);
+    // Copy current game out to save game slot
+    if (copy_file(&currSpec, saveSpec, true) != OK)
+    {
+        // Put up some alert here.
+        DebugStr("\pNo good copy, dude!\n");
+//        string_message_info(REF_STR_SaveGameFail);
+    }
+//KLC    else
+//KLC        string_message_info(REF_STR_SaveGameSaved);
+    old_ticks = *tmd_ticks;
+    // do we have to do this?        startup_game(false);
+    return(OK);
 }
 
 errtype load_game_schedules(void)
 {
-   extern int32_t compare_events(void*, void*);
-   int8_t* oldvec;
-   int32_t idx = SCHEDULE_BASE_ID;
+    extern int32_t compare_events(void*, void*);
+    int8_t* oldvec;
+    int32_t idx = SCHEDULE_BASE_ID;
 
-   oldvec = game_seconds_schedule.queue.vec;
-   ResExtract(idx++, (void *)&game_seconds_schedule);
-   game_seconds_schedule.queue.vec = oldvec;
-   game_seconds_schedule.queue.comp = compare_events;
-   ResExtract(idx++, (void *)oldvec);
-   return OK;
+    oldvec = game_seconds_schedule.queue.vec;
+    ResExtract(idx++, (void *)&game_seconds_schedule);
+    game_seconds_schedule.queue.vec = oldvec;
+    game_seconds_schedule.queue.comp = compare_events;
+    ResExtract(idx++, (void *)oldvec);
+    return OK;
 }
 
 errtype interpret_qvars(void)
 {
-   extern void recompute_music_level(uint16_t var);
-   extern void recompute_digifx_level(uint16_t var);
+    extern void recompute_music_level(uint16_t var);
+    extern void recompute_digifx_level(uint16_t var);
 #ifdef AUDIOLOGS
-   extern void recompute_audiolog_level(uint16_t var);
+    extern void recompute_audiolog_level(uint16_t var);
 #endif
 #ifdef SVGA_SUPPORT
-   extern int16_t mode_id;
+    extern int16_t mode_id;
 #endif
-   extern void digichan_dealfunc(int16_t val);
-   extern void dclick_dealfunc(uint16_t var);
-   extern void joysens_dealfunc(uint16_t var);
-   extern void language_change(uint8_t lang);
-   extern errtype load_da_palette();
-   extern bool fullscrn_vitals;
-   extern bool fullscrn_icons;
-   extern bool map_notes_on;
-   extern uint8_t audiolog_setting;
+    extern void digichan_dealfunc(int16_t val);
+    extern void dclick_dealfunc(uint16_t var);
+    extern void joysens_dealfunc(uint16_t var);
+    extern void language_change(uint8_t lang);
+    extern errtype load_da_palette();
+    extern bool fullscrn_vitals;
+    extern bool fullscrn_icons;
+    extern bool map_notes_on;
+    extern uint8_t audiolog_setting;
 
-//KLC - don't do this here - it's a global now.   load_da_palette();
+//KLC - don't do this here - it's a global now.    load_da_palette();
 /* later
-   gamma_dealfunc(QUESTVAR_GET(GAMMACOR_QVAR));
+    gamma_dealfunc(QUESTVAR_GET(GAMMACOR_QVAR));
 
-   dclick_dealfunc(QUESTVAR_GET(DCLICK_QVAR));
-   joysens_dealfunc(QUESTVAR_GET(JOYSENS_QVAR));
-   recompute_music_level(QUESTVAR_GET(MUSIC_VOLUME_QVAR));
-   recompute_digifx_level(QUESTVAR_GET(SFX_VOLUME_QVAR));
+    dclick_dealfunc(QUESTVAR_GET(DCLICK_QVAR));
+    joysens_dealfunc(QUESTVAR_GET(JOYSENS_QVAR));
+    recompute_music_level(QUESTVAR_GET(MUSIC_VOLUME_QVAR));
+    recompute_digifx_level(QUESTVAR_GET(SFX_VOLUME_QVAR));
 #ifdef AUDIOLOGS
-   recompute_audiolog_level(QUESTVAR_GET(ALOG_VOLUME_QVAR));
-   audiolog_setting = QUESTVAR_GET(ALOG_OPT_QVAR);
+    recompute_audiolog_level(QUESTVAR_GET(ALOG_VOLUME_QVAR));
+    audiolog_setting = QUESTVAR_GET(ALOG_OPT_QVAR);
 #endif
-   fullscrn_vitals = QUESTVAR_GET(FULLSCRN_VITAL_QVAR);
-   fullscrn_icons = QUESTVAR_GET(FULLSCRN_ICON_QVAR);
-   map_notes_on = QUESTVAR_GET(AMAP_NOTES_QVAR);
-   hud_color_bank = QUESTVAR_GET(HUDCOLOR_QVAR);
+    fullscrn_vitals = QUESTVAR_GET(FULLSCRN_VITAL_QVAR);
+    fullscrn_icons = QUESTVAR_GET(FULLSCRN_ICON_QVAR);
+    map_notes_on = QUESTVAR_GET(AMAP_NOTES_QVAR);
+    hud_color_bank = QUESTVAR_GET(HUDCOLOR_QVAR);
 
-   digichan_dealfunc(QUESTVAR_GET(DIGI_CHANNELS_QVAR));
+    digichan_dealfunc(QUESTVAR_GET(DIGI_CHANNELS_QVAR));
 
-   mouse_set_lefty(QUESTVAR_GET(MOUSEHAND_QVAR));
+    mouse_set_lefty(QUESTVAR_GET(MOUSEHAND_QVAR));
 
-   language_change(QUESTVAR_GET(LANGUAGE_QVAR));
+    language_change(QUESTVAR_GET(LANGUAGE_QVAR));
 */
 /*KLC - can't ever change screenmode in Mac version
-   mode_id = QUESTVAR_GET(SCREENMODE_QVAR);
-   if (mode_id != convert_use_mode)
-      chg_set_flg(GL_CHG_LOOP);
+    mode_id = QUESTVAR_GET(SCREENMODE_QVAR);
+    if (mode_id != convert_use_mode)
+        chg_set_flg(GL_CHG_LOOP);
 */
-   return(OK);
+    return(OK);
 }
 
-//char saveArray[16];	//¥temp
+//char saveArray[16];    //¥temp
 
 errtype load_game(FSSpec *loadSpec)
 {
-   int32_t 			filenum;
-   ObjID 		old_plr;
-   bool 		bad_save = false;
-   int8_t 		orig_lvl;
-   FSSpec	currSpec;
-   extern errtype change_detail_level(int8_t new_level);
-   extern void player_set_eye_fixang(int32_t ang);
-   extern uint32_t dynmem_mask;
+    int32_t             filenum;
+    ObjID         old_plr;
+    bool         bad_save = false;
+    int8_t         orig_lvl;
+    FSSpec    currSpec;
+    extern errtype change_detail_level(int8_t new_level);
+    extern void player_set_eye_fixang(int32_t ang);
+    extern uint32_t dynmem_mask;
 
-   closedown_game(true);
-//KLC - don't do this here   stop_music();
+    closedown_game(true);
+//KLC - don't do this here    stop_music();
 
 // KLC - user will not be able to open current game file in Mac version, so skip this check.
-//   rv = DatapathFind(&savegame_dpath, CURRENT_GAME_FNAME, dpath_fn);
-//   if (strcmp(fname, CURRENT_GAME_FNAME))
-   {
-      errtype	retval;
+//    rv = DatapathFind(&savegame_dpath, CURRENT_GAME_FNAME, dpath_fn);
+//    if (strcmp(fname, CURRENT_GAME_FNAME))
+    {
+        errtype    retval;
 
-	 FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
+     FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 
-      // Copy game to load to the current file game.
-      retval = copy_file(loadSpec, &currSpec, false);
-      if (retval != OK)
-      {
-		// bring up an alert here??
-         string_message_info(REF_STR_LoadGameFail);
-         return(retval);
-      }
-   }
+        // Copy game to load to the current file game.
+        retval = copy_file(loadSpec, &currSpec, false);
+        if (retval != OK)
+        {
+        // bring up an alert here??
+            string_message_info(REF_STR_LoadGameFail);
+            return(retval);
+        }
+    }
 
-   // Load in player and current level
-   filenum = ResOpenFile(&currSpec);
-   old_plr = player_struct.rep;
-   orig_lvl = player_struct.level;
-   ResExtract(SAVE_GAME_ID_BASE + 1, (void *)&player_struct);
+    // Load in player and current level
+    filenum = ResOpenFile(&currSpec);
+    old_plr = player_struct.rep;
+    orig_lvl = player_struct.level;
+    ResExtract(SAVE_GAME_ID_BASE + 1, (void *)&player_struct);
 
-   obj_check_time = 0;	// KLC - added because it needs to be reset for Mac version.
+    obj_check_time = 0;    // KLC - added because it needs to be reset for Mac version.
 
-//KLC - this is a global pref now.    change_detail_level(player_struct.detail_level);
-   player_struct.rep = old_plr;
-   player_set_eye_fixang(player_struct.eye_pos);
-   if (!bad_save)
-      obj_move_to(PLAYER_OBJ, &(player_struct.realspace_loc), false);
-   if (load_game_schedules() != OK)
-      bad_save = true;
-   ResCloseFile(filenum);
-   if (orig_lvl == player_struct.level)
-   {
-//      Warning(("HEY, trying to be clever about loading the game! %d vs %d\n",orig_lvl,player_struct.level));
-      dynmem_mask = DYNMEM_PARTIAL;
-   }
-   load_level_from_file(player_struct.level);
-   obj_load_art(false);							//KLC - added here (removed from load_level_data)
-//KLC   string_message_info(REF_STR_LoadGameLoaded);
-   dynmem_mask = DYNMEM_ALL;
-   chg_set_flg(_current_3d_flag);
-   old_ticks = *tmd_ticks;
-   interpret_qvars();
-   startup_game(false);
+//KLC - this is a global pref now.     change_detail_level(player_struct.detail_level);
+    player_struct.rep = old_plr;
+    player_set_eye_fixang(player_struct.eye_pos);
+    if (!bad_save)
+        obj_move_to(PLAYER_OBJ, &(player_struct.realspace_loc), false);
+    if (load_game_schedules() != OK)
+        bad_save = true;
+    ResCloseFile(filenum);
+    if (orig_lvl == player_struct.level)
+    {
+//        Warning(("HEY, trying to be clever about loading the game! %d vs %d\n",orig_lvl,player_struct.level));
+        dynmem_mask = DYNMEM_PARTIAL;
+    }
+    load_level_from_file(player_struct.level);
+    obj_load_art(false);                            //KLC - added here (removed from load_level_data)
+//KLC    string_message_info(REF_STR_LoadGameLoaded);
+    dynmem_mask = DYNMEM_ALL;
+    chg_set_flg(_current_3d_flag);
+    old_ticks = *tmd_ticks;
+    interpret_qvars();
+    startup_game(false);
 
-//KLC - do following instead     recompute_music_level(QUESTVAR_GET(MUSIC_VOLUME_QVAR));
-	if (music_on)
-	{
-		mlimbs_on = true;
-		mlimbs_AI_init();
-		mai_intro();																		//KLC - added here
-		load_score_for_location(PLAYER_BIN_X, PLAYER_BIN_Y);		//KLC - added here
-	}
+//KLC - do following instead      recompute_music_level(QUESTVAR_GET(MUSIC_VOLUME_QVAR));
+    if (music_on)
+    {
+        mlimbs_on = true;
+        mlimbs_AI_init();
+        mai_intro();                                                                        //KLC - added here
+        load_score_for_location(PLAYER_BIN_X, PLAYER_BIN_Y);        //KLC - added here
+    }
 
 //¥¥ temp
 //BlockMove(0, saveArray, 16);
 
-   return(OK);
+    return(OK);
 }
 
 
 errtype load_level_from_file(int32_t level_num)
 {
-	errtype	retval;
-	FSSpec	fSpec;
+    errtype    retval;
+    FSSpec    fSpec;
 
-	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &fSpec);
+    FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &fSpec);
 
-	retval = load_current_map(ResIdFromLevel(level_num), &fSpec);
-	if (retval == OK)
-	{
-		player_struct.level = level_num;
+    retval = load_current_map(ResIdFromLevel(level_num), &fSpec);
+    if (retval == OK)
+    {
+        player_struct.level = level_num;
 
-		compute_shodometer_value(false);
+        compute_shodometer_value(false);
 
-		// if this is the first time the level is loaded, compute the inital shodan security level
-		if (player_struct.initial_shodan_vals[player_struct.level] == -1)
-			player_struct.initial_shodan_vals[player_struct.level] = QUESTVAR_GET(SHODAN_QV);
-	}
-	return(retval);
+        // if this is the first time the level is loaded, compute the inital shodan security level
+        if (player_struct.initial_shodan_vals[player_struct.level] == -1)
+            player_struct.initial_shodan_vals[player_struct.level] = QUESTVAR_GET(SHODAN_QV);
+    }
+    return(retval);
 }
 
 
@@ -461,23 +461,23 @@ errtype load_level_from_file(int32_t level_num)
 
 void check_and_update_initial(void)
 {
-   extern Datapath savegame_dpath;
-   int8_t archive_fname[128];
-   int8_t dpath_fn[50];
-   int8_t* tmp;
-	extern int8_t real_archive_fn[20];
-   if (!DatapathFind(&savegame_dpath, CURRENT_GAME_FNAME, archive_fname))
-   {
-      tmp=getenv("CITHOME");
-      if (tmp) { strcpy(dpath_fn,tmp); strcat(dpath_fn,"\\"); } else dpath_fn[0]='\0';
-      strcat(dpath_fn, "data\\");
-      strcat(dpath_fn, CURRENT_GAME_FNAME);
+    extern Datapath savegame_dpath;
+    int8_t archive_fname[128];
+    int8_t dpath_fn[50];
+    int8_t* tmp;
+    extern int8_t real_archive_fn[20];
+    if (!DatapathFind(&savegame_dpath, CURRENT_GAME_FNAME, archive_fname))
+    {
+        tmp=getenv("CITHOME");
+        if (tmp) { strcpy(dpath_fn,tmp); strcat(dpath_fn,"\\"); } else dpath_fn[0]='\0';
+        strcat(dpath_fn, "data\\");
+        strcat(dpath_fn, CURRENT_GAME_FNAME);
 
-      if (!DatapathFind(&DataDirPath, real_archive_fn, archive_fname))
-         critical_error(CRITERR_RES|0x10);
-      if (copy_file(archive_fname, dpath_fn) != OK)
-         critical_error(CRITERR_FILE|0x7);
-   }
+        if (!DatapathFind(&DataDirPath, real_archive_fn, archive_fname))
+            critical_error(CRITERR_RES|0x10);
+        if (copy_file(archive_fname, dpath_fn) != OK)
+            critical_error(CRITERR_FILE|0x7);
+    }
 
 }
 
@@ -486,114 +486,114 @@ void check_and_update_initial(void)
 
 bool create_initial_game_func(int16_t , uint32_t , void* )
 {
-	FSSpec	archiveSpec, currSpec;
-	OSErr	err;
+    FSSpec    archiveSpec, currSpec;
+    OSErr    err;
 
-	int32_t i;
-	extern int32_t actual_score;
-	int8_t plrdiff[4];
-	int8_t tmpname[sizeof(player_struct.name)];
-	int16_t plr_obj;
-	extern errtype do_level_entry_triggers();
+    int32_t i;
+    extern int32_t actual_score;
+    int8_t plrdiff[4];
+    int8_t tmpname[sizeof(player_struct.name)];
+    int16_t plr_obj;
+    extern errtype do_level_entry_triggers();
 
-	free_dynamic_memory(DYNMEM_ALL);
+    free_dynamic_memory(DYNMEM_ALL);
 
-	// Copy archive into local current game file.
+    // Copy archive into local current game file.
 
-	// First, make sure the archive file is actually there.
-	err = FSMakeFSSpec(gCDDataVref, gCDDataDirID, ARCHIVE_FNAME, &archiveSpec);
-	if (err == fnfErr)
-	{
-		load_dynamic_memory(DYNMEM_ALL);
-		return(true);
-	}
+    // First, make sure the archive file is actually there.
+    err = FSMakeFSSpec(gCDDataVref, gCDDataDirID, ARCHIVE_FNAME, &archiveSpec);
+    if (err == fnfErr)
+    {
+        load_dynamic_memory(DYNMEM_ALL);
+        return(true);
+    }
 
-	// Next, copy the archive file to an untitled game.
-	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
+    // Next, copy the archive file to an untitled game.
+    FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 
-	if (copy_file(&archiveSpec, &currSpec, false) != OK)
-		critical_error(CRITERR_FILE|7);
+    if (copy_file(&archiveSpec, &currSpec, false) != OK)
+        critical_error(CRITERR_FILE|7);
 
 /* KLC - I don't think you actually have to load the player in for a new game, since "init_player"
-                zeroes it out anyway.
+                     zeroes it out anyway.
 
-   // Load in player and current level
-   filenum = ResOpenFile(&fSpec);
-   if (filenum < 0)
-   {
-      string_message_info(REF_STR_GameInitFail);
-      return(true);
-   }
+    // Load in player and current level
+    filenum = ResOpenFile(&fSpec);
+    if (filenum < 0)
+    {
+        string_message_info(REF_STR_GameInitFail);
+        return(true);
+    }
 */
-   plr_obj = PLAYER_OBJ;
-   for (i=0; i<4; i++)
-      plrdiff[i] = player_struct.difficulty[i];
-   memcpy(tmpname,player_struct.name,sizeof(tmpname));
+    plr_obj = PLAYER_OBJ;
+    for (i=0; i<4; i++)
+        plrdiff[i] = player_struct.difficulty[i];
+    memcpy(tmpname,player_struct.name,sizeof(tmpname));
 
-	//KLC - don't need this anymore.  ResExtract(SAVE_GAME_ID_BASE + 1, (void *)&player_struct);
+    //KLC - don't need this anymore.  ResExtract(SAVE_GAME_ID_BASE + 1, (void *)&player_struct);
 
-   init_player(&player_struct);
-   obj_check_time = 0;							// KLC - added here cause it needs to be reset in Mac version
+    init_player(&player_struct);
+    obj_check_time = 0;                            // KLC - added here cause it needs to be reset in Mac version
 
-   player_struct.rep = OBJ_NULL;
+    player_struct.rep = OBJ_NULL;
 
-   load_level_from_file(player_struct.level);
-   obj_load_art(false);							//KLC - added here (removed from load_level_data)
-   amap_reset();
-   player_create_initial();
+    load_level_from_file(player_struct.level);
+    obj_load_art(false);                            //KLC - added here (removed from load_level_data)
+    amap_reset();
+    player_create_initial();
 
-   memcpy(player_struct.name,tmpname,sizeof(player_struct.name));
-   for (i=0; i<4; i++)
-      player_struct.difficulty[i] = plrdiff[i];
+    memcpy(player_struct.name,tmpname,sizeof(player_struct.name));
+    for (i=0; i<4; i++)
+        player_struct.difficulty[i] = plrdiff[i];
 
-   // KLC - not needed any longer ResCloseFile(filenum);
+    // KLC - not needed any longer ResCloseFile(filenum);
 
-   // Reset MFDs to be consistent with starting setup
-   init_newmfd();
+    // Reset MFDs to be consistent with starting setup
+    init_newmfd();
 
-   // No time elapsed, really, honest
-   old_ticks = *tmd_ticks;
+    // No time elapsed, really, honest
+    old_ticks = *tmd_ticks;
 
-   // Setup some start-game stuff
-   // Music
-	current_score = actual_score = last_score = PERIL_SCORE;	// KLC - these aren't actually
-	mlimbs_peril = 1000;														// going to do anything.
+    // Setup some start-game stuff
+    // Music
+    current_score = actual_score = last_score = PERIL_SCORE;    // KLC - these aren't actually
+    mlimbs_peril = 1000;                                                        // going to do anything.
 
-	if (music_on)
-	{
-		mlimbs_on = true;
-		mlimbs_AI_init();
-		mai_intro();																		//KLC - added here
-		load_score_for_location(PLAYER_BIN_X, PLAYER_BIN_Y);		//KLC - added here
-	}
+    if (music_on)
+    {
+        mlimbs_on = true;
+        mlimbs_AI_init();
+        mai_intro();                                                                        //KLC - added here
+        load_score_for_location(PLAYER_BIN_X, PLAYER_BIN_Y);        //KLC - added here
+    }
 
-   load_dynamic_memory(DYNMEM_ALL);
+    load_dynamic_memory(DYNMEM_ALL);
 
-   // Do entry-level triggers for starting level
-   // Hmm, do we actually want to call this any time we restore
-   // a saved game or whatever?  No, probably not....hmmm.....
-   do_level_entry_triggers();
+    // Do entry-level triggers for starting level
+    // Hmm, do we actually want to call this any time we restore
+    // a saved game or whatever?  No, probably not....hmmm.....
+    do_level_entry_triggers();
 
-   // KLC - if not already on, turn on-line help on.
-   if (!olh_active)
-      toggle_olh_func(0, 0, NULL);
+    // KLC - if not already on, turn on-line help on.
+    if (!olh_active)
+        toggle_olh_func(0, 0, NULL);
 
-   // turn on help overlay.
-   olh_overlay_on = true;
+    // turn on help overlay.
+    olh_overlay_on = true;
 
-   // Plot timers
+    // Plot timers
 
-   return(false);
+    return(false);
 }
 
 errtype write_level_to_disk(int32_t idnum, bool flush_mem)
 {
-	FSSpec	currSpec;
+    FSSpec    currSpec;
 
-   // Eventually, this ought to cleverly determine whether or not to pack
-   // the save game resource, but for now we will always do so...
+    // Eventually, this ought to cleverly determine whether or not to pack
+    // the save game resource, but for now we will always do so...
 
-	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
+    FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 
-	return(save_current_map(&currSpec, idnum, flush_mem,true));
+    return(save_current_map(&currSpec, idnum, flush_mem,true));
 }

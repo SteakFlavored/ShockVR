@@ -44,68 +44,68 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* draw an unclipped, horizontally flipped flat 8 bitmap to a
-   canvas. */
+    canvas. */
 void gen_hflip_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   int16_t r;                   /* right x coordinate */
-   int16_t b;                   /* bottom y coordinate */
-   int16_t cur_x;               /* current x */
-   uint8_t *src;                /* pointer into source bitmap */
+    int16_t r;                         /* right x coordinate */
+    int16_t b;                         /* bottom y coordinate */
+    int16_t cur_x;                    /* current x */
+    uint8_t *src;                     /* pointer into source bitmap */
 
-   r = x+bm->w-1;
-   b = y+bm->h-1;
-   src = bm->bits;
-   for ( ; y<=b; y++, src+=bm->row-bm->w)
-      for (cur_x=r; cur_x>=x; cur_x--, src++)
-         gr_set_upixel (*src, cur_x, y);
+    r = x+bm->w-1;
+    b = y+bm->h-1;
+    src = bm->bits;
+    for ( ; y<=b; y++, src+=bm->row-bm->w)
+        for (cur_x=r; cur_x>=x; cur_x--, src++)
+            gr_set_upixel (*src, cur_x, y);
 }
 
 /* draw a clipped, horizontally flipped flat 8bitmap to a canvas. */
 int32_t gen_hflip_flat8_bitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   int16_t w,h;
-   uint8_t *p;
-   int16_t r;
-   int16_t b;
-   int32_t extra;
-   int32_t code = CLIP_NONE;
+    int16_t w,h;
+    uint8_t *p;
+    int16_t r;
+    int16_t b;
+    int32_t extra;
+    int32_t code = CLIP_NONE;
 
-   r = x+bm->w-1;
-   b = y+bm->h-1;
+    r = x+bm->w-1;
+    b = y+bm->h-1;
 
-   /* save stuff that clipping changes. */
-   w = bm->w; h = bm->h; p = bm->bits;
+    /* save stuff that clipping changes. */
+    w = bm->w; h = bm->h; p = bm->bits;
 
-   /* first check for trivial reject. */
-   if (x>=grd_clip.right || r<grd_clip.left ||
-       y>=grd_clip.bot || b<grd_clip.top)
-      return CLIP_ALL;
+    /* first check for trivial reject. */
+    if (x>=grd_clip.right || r<grd_clip.left ||
+         y>=grd_clip.bot || b<grd_clip.top)
+        return CLIP_ALL;
 
-   if (x < grd_clip.left) {            /* off left */
-      bm->w -= grd_clip.left-x;
-      x = grd_clip.left;
-      code |= CLIP_LEFT;
-   }
-   if (r >= grd_clip.right) {          /* off right */
-      extra = r-grd_clip.right+1;
-      bm->w -= extra;
-      bm->bits += extra;
-      code |= CLIP_RIGHT;
-   }
-   if (y < grd_clip.top) {             /* off top */
-      extra = grd_clip.top - y;
-      bm->h -= extra;
-      bm->bits += bm->row*extra;
-      y = grd_clip.top;
-      code |= CLIP_TOP;
-   }
-   if (b >= grd_clip.bot) {      /* off bottom */
-      bm->h -= b-grd_clip.bot+1;
-      code |= CLIP_BOT;
-   }
-   gr_hflip_flat8_ubitmap (bm, x, y);
+    if (x < grd_clip.left) {                /* off left */
+        bm->w -= grd_clip.left-x;
+        x = grd_clip.left;
+        code |= CLIP_LEFT;
+    }
+    if (r >= grd_clip.right) {             /* off right */
+        extra = r-grd_clip.right+1;
+        bm->w -= extra;
+        bm->bits += extra;
+        code |= CLIP_RIGHT;
+    }
+    if (y < grd_clip.top) {                 /* off top */
+        extra = grd_clip.top - y;
+        bm->h -= extra;
+        bm->bits += bm->row*extra;
+        y = grd_clip.top;
+        code |= CLIP_TOP;
+    }
+    if (b >= grd_clip.bot) {        /* off bottom */
+        bm->h -= b-grd_clip.bot+1;
+        code |= CLIP_BOT;
+    }
+    gr_hflip_flat8_ubitmap (bm, x, y);
 
-   /* restore bitmap to normal. */
-   bm->w = w; bm->h = h; bm->bits = p;
-   return code;
+    /* restore bitmap to normal. */
+    bm->w = w; bm->h = h; bm->bits = p;
+    return code;
 }

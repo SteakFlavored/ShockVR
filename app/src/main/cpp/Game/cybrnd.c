@@ -54,35 +54,35 @@ RNDSTREAM_STD(start_rnd);
 
 void rnd_init(void)
 {
-   int32_t  random_seed;
-   int32_t  seed;
+    int32_t  random_seed;
+    int32_t  seed;
 
-   // try to get a completely random value - take the bottom two bytes to be
-   // the random seed
-//   _bios_timeofday(0, &random_seed);
-   random_seed = TickCount();
-   RndSeed(&start_rnd, (random_seed & 0x0000FFFF));
+    // try to get a completely random value - take the bottom two bytes to be
+    // the random seed
+//    _bios_timeofday(0, &random_seed);
+    random_seed = TickCount();
+    RndSeed(&start_rnd, (random_seed & 0x0000FFFF));
 
-   // use config seed - otherwise use a random seed
-   //KLC - For Mac, just hard-code values from the config file.
-//   seed = (config_get_value("damage_seed", CONFIG_INT_TYPE, &data, &count)) ?
-//      data : RndRange(&start_rnd, 0, 0xFFFF);
-   seed = RndRange(&start_rnd, 0, 0xFFFF);
-   RndSeed(&damage_rnd, seed);
+    // use config seed - otherwise use a random seed
+    //KLC - For Mac, just hard-code values from the config file.
+//    seed = (config_get_value("damage_seed", CONFIG_INT_TYPE, &data, &count)) ?
+//        data : RndRange(&start_rnd, 0, 0xFFFF);
+    seed = RndRange(&start_rnd, 0, 0xFFFF);
+    RndSeed(&damage_rnd, seed);
 
-//   seed = (config_get_value("grenade_seed", CONFIG_INT_TYPE, &data, &count)) ?
-//      data : RndRange(&start_rnd, 0, 0xFFFF);
-   seed = RndRange(&start_rnd, 0, 0xFFFF);
-   RndSeed(&grenade_rnd, seed);
+//    seed = (config_get_value("grenade_seed", CONFIG_INT_TYPE, &data, &count)) ?
+//        data : RndRange(&start_rnd, 0, 0xFFFF);
+    seed = RndRange(&start_rnd, 0, 0xFFFF);
+    RndSeed(&grenade_rnd, seed);
 
-//   seed = (config_get_value("obj_make_seed", CONFIG_INT_TYPE, &data, &count)) ?
-//      data : RndRange(&start_rnd, 0, 0xFFFF);
-   seed = RndRange(&start_rnd, 0, 0xFFFF);
-   RndSeed(&obj_make_rnd, seed);
+//    seed = (config_get_value("obj_make_seed", CONFIG_INT_TYPE, &data, &count)) ?
+//        data : RndRange(&start_rnd, 0, 0xFFFF);
+    seed = RndRange(&start_rnd, 0, 0xFFFF);
+    RndSeed(&obj_make_rnd, seed);
 
-//   seed = (config_get_value("effect_seed", CONFIG_INT_TYPE, &data, &count)) ?
-//      data : RndRange(&start_rnd, 0, 0xFFFF);
-   seed = RndRange(&start_rnd, 0, 0xFFFF);
-   RndSeed(&effect_rnd, seed);
+//    seed = (config_get_value("effect_seed", CONFIG_INT_TYPE, &data, &count)) ?
+//        data : RndRange(&start_rnd, 0, 0xFFFF);
+    seed = RndRange(&start_rnd, 0, 0xFFFF);
+    RndSeed(&effect_rnd, seed);
 }
 

@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-// Drugs.c    Drugs Module
+// Drugs.c     Drugs Module
 // Elisha Wiesel (SPAZ)
 //
 // The main C file for drug effects, updates, (un)installs.
@@ -56,41 +56,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_UBYTE 0xFF
 
 #define INTENSITY(x) (player_struct.drug_intensity[x])
-#define STATUS(x)    (player_struct.drug_status[x])
+#define STATUS(x)     (player_struct.drug_status[x])
 
 // ---------
 // Constants
 // ---------
 
-#define DRUG_UPDATE_FREQ  1024    // # of ticks in between updates      ~3.5 secs
-#define DRUG_DECAY        8       // Std chance a drug wears off each
-#define DRUG_DECAY_MAX    16      //   update is DECAY over DECAY_MAX
-#define DRUG_DEFAULT_TIME 8       // relative "duration" of a drug
-                                  // duration unit is 7 * 16/8  =  14 secs
+#define DRUG_UPDATE_FREQ  1024     // # of ticks in between updates        ~3.5 secs
+#define DRUG_DECAY          8         // Std chance a drug wears off each
+#define DRUG_DECAY_MAX     16        //    update is DECAY over DECAY_MAX
+#define DRUG_DEFAULT_TIME 8         // relative "duration" of a drug
+                                             // duration unit is 7 * 16/8  =  14 secs
 // Flags
 
-#define DRUG_LONGER_DOSE  0x01    // If set, taking 2+ of a drug ups duration
+#define DRUG_LONGER_DOSE  0x01     // If set, taking 2+ of a drug ups duration
 
 // ----------
 // Structures
 // ----------
 
 typedef struct {
-   uint8_t duration;                // Preset duration of given drug
-   uint8_t flags;
-   void  (*use)();                // Function slots for take, effect, wear off
-   void  (*effect)();
-   void  (*wearoff)();
-   void  (*startup)(void);
-   void  (*closedown)(bool visible);
-   void  (*after_effect)();
+    uint8_t duration;                     // Preset duration of given drug
+    uint8_t flags;
+    void  (*use)();                     // Function slots for take, effect, wear off
+    void  (*effect)();
+    void  (*wearoff)();
+    void  (*startup)(void);
+    void  (*closedown)(bool visible);
+    void  (*after_effect)();
 } DRUG;
 
 // -------
 // Globals
 // -------
 
-extern DRUG Drugs[NUM_DRUGZ];            // Global array of drugs
+extern DRUG Drugs[NUM_DRUGZ];                // Global array of drugs
 
 // ----------
 // Prototypes
@@ -100,27 +100,27 @@ void drug_detox_effect();
 
 
 // ===========================================================================
-//    INFRASTRUCTURE
+//     INFRASTRUCTURE
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-// drug2triple()      MAHK 7/27
+// drug2triple()        MAHK 7/27
 //
 // Maps drug types (indices in to player_struct.drugs) into objtriples
 
 int32_t drug2triple(int32_t type)
 {
-   return MAKETRIP(CLASS_DRUG, DRUG_SUBCLASS_STATS, type);
+    return MAKETRIP(CLASS_DRUG, DRUG_SUBCLASS_STATS, type);
 }
 
 // ---------------------------------------------------------------------------
-// triple2drug()      MAHK 7/27
+// triple2drug()        MAHK 7/27
 //
 // Maps triples onto drug types
 
 int32_t triple2drug(int32_t triple)
 {
-   return TRIP2TY(triple);
+    return TRIP2TY(triple);
 }
 
 // ---------------------------------------------------------------------------
@@ -131,12 +131,12 @@ int32_t triple2drug(int32_t triple)
 
 int8_t* get_drug_name(int32_t n, int8_t* buf)
 {
-   int32_t triple;
+    int32_t triple;
 
-   triple = drug2triple(n);
-   get_object_short_name(triple,buf,50);
+    triple = drug2triple(n);
+    get_object_short_name(triple,buf,50);
 
-   return buf;
+    return buf;
 }
 
 // ---------------------------------------------------------------------------
@@ -146,27 +146,27 @@ int8_t* get_drug_name(int32_t n, int8_t* buf)
 
 void drug_use(int32_t n)
 {
-   int8_t buf[80];
-   if (player_struct.drugs[n] == 0) return;
+    int8_t buf[80];
+    if (player_struct.drugs[n] == 0) return;
 
-   play_digi_fx(SFX_PATCH_USE,1);
-   get_drug_name(n,buf);
-   get_string(REF_STR_Applied,buf+strlen(buf),sizeof(buf)-strlen(buf));
-   message_info(buf);
-   player_struct.drugs[n]--;
+    play_digi_fx(SFX_PATCH_USE,1);
+    get_drug_name(n,buf);
+    get_string(REF_STR_Applied,buf+strlen(buf),sizeof(buf)-strlen(buf));
+    message_info(buf);
+    player_struct.drugs[n]--;
 
-   if (Drugs[n].flags & DRUG_LONGER_DOSE)
-      player_struct.drug_status[n] = min((int16_t)player_struct.drug_status[n]+Drugs[n].duration,0x7F);
-   else
-      player_struct.drug_status[n] =  Drugs[n].duration;
+    if (Drugs[n].flags & DRUG_LONGER_DOSE)
+        player_struct.drug_status[n] = min((int16_t)player_struct.drug_status[n]+Drugs[n].duration,0x7F);
+    else
+        player_struct.drug_status[n] =  Drugs[n].duration;
 
-   if (Drugs[n].use) Drugs[n].use();
+    if (Drugs[n].use) Drugs[n].use();
 
-   mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
-   if (_current_loop <= FULLSCREEN_LOOP) \
-      chg_set_flg(INVENTORY_UPDATE);
+    mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
+    if (_current_loop <= FULLSCREEN_LOOP) \
+        chg_set_flg(INVENTORY_UPDATE);
 
-   return;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -176,14 +176,14 @@ void drug_use(int32_t n)
 
 void drug_wear_off(int32_t n)
 {
-   player_struct.drug_intensity[n] = 0;
-   player_struct.drug_status[n]    = 0; // in case not called from update loop
+    player_struct.drug_intensity[n] = 0;
+    player_struct.drug_status[n]     = 0; // in case not called from update loop
 
-   if (Drugs[n].wearoff) Drugs[n].wearoff();
+    if (Drugs[n].wearoff) Drugs[n].wearoff();
 
-   mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
+    mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 
-   return;
+    return;
 }
 
 // --------------------------------------------------------------------------
@@ -195,57 +195,57 @@ void drug_wear_off(int32_t n)
 
 void drugs_update()
 {
-   int32_t i, decay;
+    int32_t i, decay;
 
-   // Only update drugs once every FREQ game ticks
-   if ((player_struct.game_time - player_struct.last_drug_update) >= DRUG_UPDATE_FREQ) {
+    // Only update drugs once every FREQ game ticks
+    if ((player_struct.game_time - player_struct.last_drug_update) >= DRUG_UPDATE_FREQ) {
 
-      // Reset the last update
-      player_struct.last_drug_update = player_struct.game_time;
+        // Reset the last update
+        player_struct.last_drug_update = player_struct.game_time;
 
-      // drugs should wear out faster if health=low or fatigue=high
-      // THIS FORMULA SHOULD BE MADE INTELLIGENT.
-      decay = DRUG_DECAY + (player_struct.fatigue>>10) / 16;
+        // drugs should wear out faster if health=low or fatigue=high
+        // THIS FORMULA SHOULD BE MADE INTELLIGENT.
+        decay = DRUG_DECAY + (player_struct.fatigue>>10) / 16;
 
-      // Iterate through drugs array
-      for (i = 0; i < NUM_DRUGZ; i++)
-      {
-         // If effect is active...
-         if (player_struct.drug_status[i] > 0)
-         {
-
-            // Do something, if drug has continual effects
-            if (Drugs[i].effect) Drugs[i].effect();
-
-            // Figure out if the drug wore off a little
-            if ((rand()%DRUG_DECAY_MAX) < decay)
+        // Iterate through drugs array
+        for (i = 0; i < NUM_DRUGZ; i++)
+        {
+            // If effect is active...
+            if (player_struct.drug_status[i] > 0)
             {
 
-               // it did
-               player_struct.drug_status[i]--;
+                // Do something, if drug has continual effects
+                if (Drugs[i].effect) Drugs[i].effect();
 
-               if (player_struct.drug_status[i] == 0) // Totally wore off?
-                  drug_wear_off(i);                   // yes
+                // Figure out if the drug wore off a little
+                if ((rand()%DRUG_DECAY_MAX) < decay)
+                {
+
+                    // it did
+                    player_struct.drug_status[i]--;
+
+                    if (player_struct.drug_status[i] == 0) // Totally wore off?
+                        drug_wear_off(i);                         // yes
+                }
             }
-         }
-         else if (player_struct.drug_status[i] < 0) // after affect
-         {
-
-            // Do something, if drug has continual effects
-
-            // Figure out if the drug wore off a little
-            if ((rand()%DRUG_DECAY_MAX) < decay)
+            else if (player_struct.drug_status[i] < 0) // after affect
             {
 
-               // it did
-               player_struct.drug_status[i]++;
-            }
-            if (Drugs[i].after_effect) Drugs[i].after_effect();
-         }
-      }
-   }
+                // Do something, if drug has continual effects
 
-   return;
+                // Figure out if the drug wore off a little
+                if ((rand()%DRUG_DECAY_MAX) < decay)
+                {
+
+                    // it did
+                    player_struct.drug_status[i]++;
+                }
+                if (Drugs[i].after_effect) Drugs[i].after_effect();
+            }
+        }
+    }
+
+    return;
 }
 
 
@@ -265,18 +265,18 @@ void drugs_init()
 
 void drug_startup(bool)
 {
-   int32_t i;
-   for (i = 0; i < NUM_DRUGZ; i++)
-      if (Drugs[i].startup != NULL)
-         Drugs[i].startup();
+    int32_t i;
+    for (i = 0; i < NUM_DRUGZ; i++)
+        if (Drugs[i].startup != NULL)
+            Drugs[i].startup();
 }
 
 void drug_closedown(bool visible)
 {
-   int32_t i;
-   for (i = 0; i < NUM_DRUGZ; i++)
-      if (Drugs[i].closedown != NULL)
-         Drugs[i].closedown(visible);
+    int32_t i;
+    for (i = 0; i < NUM_DRUGZ; i++)
+        if (Drugs[i].closedown != NULL)
+            Drugs[i].closedown(visible);
 }
 
 
@@ -284,11 +284,11 @@ void drug_closedown(bool visible)
 //
 
 // ===========================================================================
-//    ACTUAL DRUG FUNCTIONS
+//     ACTUAL DRUG FUNCTIONS
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-//                              DUMMY FUNCTIONS
+//                                        DUMMY FUNCTIONS
 // ---------------------------------------------------------------------------
 
 #ifdef USE_DUMMY_FUNCS
@@ -299,7 +299,7 @@ void drug_closedown(bool visible)
 
 void dummy_use_drug()
 {
-   return;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -309,7 +309,7 @@ void dummy_use_drug()
 
 void dummy_effect_drug()
 {
-   return;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -319,13 +319,13 @@ void dummy_effect_drug()
 
 void dummy_wearoff_drug()
 {
-   return;
+    return;
 }
 #endif
 
 
 // --------------------------------------------------------------------------
-//                              LSD
+//                                        LSD
 // --------------------------------------------------------------------------
 void drug_lsd_effect();
 void drug_lsd_startup(void);
@@ -340,33 +340,33 @@ void drug_lsd_closedown(bool visible);
 
 void drug_lsd_effect()
 {
-   int32_t i;
-   uint8_t lsd_palette[768];
-   int32_t lsd_first, lsd_last;
+    int32_t i;
+    uint8_t lsd_palette[768];
+    int32_t lsd_first, lsd_last;
 
-   // Generate criteria for a random palette shift
-   lsd_first = (rand() % 253) + 1;
-   lsd_last = (rand() % 253) + 1;
-   if (lsd_last < lsd_first) { i = lsd_first; lsd_first = lsd_last; lsd_last = i; }
-   for (i = 0; i <= ((lsd_last - lsd_first) * 3); i++)
-      lsd_palette[i] = (uint8_t) (rand() % 256);
+    // Generate criteria for a random palette shift
+    lsd_first = (rand() % 253) + 1;
+    lsd_last = (rand() % 253) + 1;
+    if (lsd_last < lsd_first) { i = lsd_first; lsd_first = lsd_last; lsd_last = i; }
+    for (i = 0; i <= ((lsd_last - lsd_first) * 3); i++)
+        lsd_palette[i] = (uint8_t) (rand() % 256);
 
-   gr_set_pal((int32_t)lsd_first,(int32_t)(lsd_last-lsd_first+1),lsd_palette);
+    gr_set_pal((int32_t)lsd_first,(int32_t)(lsd_last-lsd_first+1),lsd_palette);
 
-   return;
+    return;
 }
 
 void drug_lsd_startup(void)
 {
-   if (STATUS(DRUG_LSD) > 0)
-   {
+    if (STATUS(DRUG_LSD) > 0)
+    {
 #ifdef CRAZE_NODEATH
-      // super-secret craze hack setup
-      if (player_struct.hit_points == 1)
-         player_struct.hit_points = 2;
+        // super-secret craze hack setup
+        if (player_struct.hit_points == 1)
+            player_struct.hit_points = 2;
 #endif // CRAZE_NODEATH
-      drug_lsd_effect();
-   }
+        drug_lsd_effect();
+    }
 }
 
 // --------------------------------------------------------------------------
@@ -376,22 +376,22 @@ void drug_lsd_startup(void)
 
 void drug_lsd_wearoff()
 {
-   // Return from palette shift
-   gr_set_pal(0,256,ppall);
-//KLC   gamma_dealfunc(QUESTVAR_GET(GAMMACOR_QVAR));
-   gamma_dealfunc(gShockPrefs.doGamma);
+    // Return from palette shift
+    gr_set_pal(0,256,ppall);
+//KLC    gamma_dealfunc(QUESTVAR_GET(GAMMACOR_QVAR));
+    gamma_dealfunc(gShockPrefs.doGamma);
 
-   return;
+    return;
 }
 
 void drug_lsd_closedown(bool visible)
 {
-   if (visible && STATUS(DRUG_LSD) > 0)
-      gr_set_pal(0,256,ppall);
+    if (visible && STATUS(DRUG_LSD) > 0)
+        gr_set_pal(0,256,ppall);
 }
 
 // --------------------------------------------------------------------------
-//                              STAMINUP
+//                                        STAMINUP
 // --------------------------------------------------------------------------
 void drug_staminup_use();
 void drug_staminup_effect();
@@ -406,8 +406,8 @@ extern bool fatigue_warning;
 
 void drug_staminup_use()
 {
-   player_struct.fatigue = 0;
-   return;
+    player_struct.fatigue = 0;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -417,8 +417,8 @@ void drug_staminup_use()
 
 void drug_staminup_effect()
 {
-   player_struct.fatigue = 0;
-   return;
+    player_struct.fatigue = 0;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -428,12 +428,12 @@ void drug_staminup_effect()
 
 void drug_staminup_wearoff()
 {
-   player_struct.fatigue = MAX_FATIGUE;
-   return;
+    player_struct.fatigue = MAX_FATIGUE;
+    return;
 }
 
 // --------------------------------------------------------------------------
-//                              SIGHT
+//                                        SIGHT
 // --------------------------------------------------------------------------
 void drug_sight_use();
 void drug_sight_startup();
@@ -454,23 +454,23 @@ extern void set_global_lighting(int16_t);
 
 void drug_sight_use()
 {
-   if (INTENSITY(DRUG_SIGHT) == 0)
-      set_global_lighting(SIGHT_LIGHT_LEVEL);
-   INTENSITY(DRUG_SIGHT) = 1;
-   return;
+    if (INTENSITY(DRUG_SIGHT) == 0)
+        set_global_lighting(SIGHT_LIGHT_LEVEL);
+    INTENSITY(DRUG_SIGHT) = 1;
+    return;
 }
 
 void drug_sight_startup()
 {
-   if (STATUS(DRUG_SIGHT) > 0)
-   {
-      set_global_lighting(SIGHT_LIGHT_LEVEL);
-   }
-   else if (STATUS(DRUG_SIGHT) < 0)
-   {
-      set_global_lighting(-SIGHT_LIGHT_LEVEL);
-   }
-   return;
+    if (STATUS(DRUG_SIGHT) > 0)
+    {
+        set_global_lighting(SIGHT_LIGHT_LEVEL);
+    }
+    else if (STATUS(DRUG_SIGHT) < 0)
+    {
+        set_global_lighting(-SIGHT_LIGHT_LEVEL);
+    }
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -480,7 +480,7 @@ void drug_sight_startup()
 
 void drug_sight_effect()
 {
-   return;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -490,30 +490,30 @@ void drug_sight_effect()
 
 void drug_sight_wearoff()
 {
-   INTENSITY(DRUG_SIGHT) = 0;
-   set_global_lighting(-2*SIGHT_LIGHT_LEVEL);
-   STATUS(DRUG_SIGHT) = - Drugs[DRUG_SIGHT].duration/4;
-   return;
+    INTENSITY(DRUG_SIGHT) = 0;
+    set_global_lighting(-2*SIGHT_LIGHT_LEVEL);
+    STATUS(DRUG_SIGHT) = - Drugs[DRUG_SIGHT].duration/4;
+    return;
 }
 
 void drug_sight_after_effect(void)
 {
-   if (STATUS(DRUG_SIGHT) == 0)
-      set_global_lighting(SIGHT_LIGHT_LEVEL);
+    if (STATUS(DRUG_SIGHT) == 0)
+        set_global_lighting(SIGHT_LIGHT_LEVEL);
 }
 
 void drug_sight_closedown(bool visible)
 {
-   if (!visible) return;
-   if (STATUS(DRUG_SIGHT) > 0)
-      set_global_lighting(-SIGHT_LIGHT_LEVEL);
-   else if (STATUS(DRUG_SIGHT) < 0)
-      set_global_lighting(SIGHT_LIGHT_LEVEL);
-   return;
+    if (!visible) return;
+    if (STATUS(DRUG_SIGHT) > 0)
+        set_global_lighting(-SIGHT_LIGHT_LEVEL);
+    else if (STATUS(DRUG_SIGHT) < 0)
+        set_global_lighting(SIGHT_LIGHT_LEVEL);
+    return;
 }
 
 // --------------------------------------------------------------------------
-//                              MEDIC
+//                                        MEDIC
 // --------------------------------------------------------------------------
 void drug_medic_use();
 void drug_medic_effect();
@@ -533,11 +533,11 @@ uint16_t medic_heal_rates[] = { 5,5,25,25,25,30,50,55,100,110};
 
 void drug_medic_use()
 {
-   INTENSITY(DRUG_MEDIC) = min(INTENSITY(DRUG_MEDIC)+MEDIC_HEAL_STEPS,MAX_UBYTE);
-   player_struct.hit_points_regen += MEDIC_HEAL_RATE;
-   chg_set_flg(VITALS_UPDATE);
+    INTENSITY(DRUG_MEDIC) = min(INTENSITY(DRUG_MEDIC)+MEDIC_HEAL_STEPS,MAX_UBYTE);
+    player_struct.hit_points_regen += MEDIC_HEAL_RATE;
+    chg_set_flg(VITALS_UPDATE);
 
-   return;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -547,26 +547,26 @@ void drug_medic_use()
 
 void drug_medic_effect()
 {
-   uint8_t n = INTENSITY(DRUG_MEDIC);
-   if (n > 0)
-   {
-      int16_t delta;
-      if (n > MEDIC_HEAL_STEPS)
-      {
-         delta = MEDIC_HEAL_RATE;
-         n -= MEDIC_HEAL_STEPS;
-      }
-      else
-      {
-         n--;
-         delta   = medic_heal_rates[n%MEDIC_HEAL_STEPS];
-      }
-      player_struct.hit_points_regen -= delta;
-   }
-   INTENSITY(DRUG_MEDIC) = n;
-   if (n == 0)
-      STATUS(DRUG_MEDIC) = 0;
-   return;
+    uint8_t n = INTENSITY(DRUG_MEDIC);
+    if (n > 0)
+    {
+        int16_t delta;
+        if (n > MEDIC_HEAL_STEPS)
+        {
+            delta = MEDIC_HEAL_RATE;
+            n -= MEDIC_HEAL_STEPS;
+        }
+        else
+        {
+            n--;
+            delta    = medic_heal_rates[n%MEDIC_HEAL_STEPS];
+        }
+        player_struct.hit_points_regen -= delta;
+    }
+    INTENSITY(DRUG_MEDIC) = n;
+    if (n == 0)
+        STATUS(DRUG_MEDIC) = 0;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -576,16 +576,16 @@ void drug_medic_effect()
 
 void drug_medic_wearoff()
 {
-   while (INTENSITY(DRUG_MEDIC) > 0)
-      drug_medic_effect();
+    while (INTENSITY(DRUG_MEDIC) > 0)
+        drug_medic_effect();
 
-   INTENSITY(DRUG_MEDIC) = 0;
-   return;
+    INTENSITY(DRUG_MEDIC) = 0;
+    return;
 }
 
 
 // --------------------------------------------------------------------------
-//                              REFLEX
+//                                        REFLEX
 // --------------------------------------------------------------------------
 void drug_reflex_use();
 void drug_reflex_effect();
@@ -598,9 +598,9 @@ void drug_reflex_wearoff();
 
 void drug_reflex_use()
 {
-   extern int8_t reflex_remainder;
-   reflex_remainder = 0;
-   return;
+    extern int8_t reflex_remainder;
+    reflex_remainder = 0;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -610,7 +610,7 @@ void drug_reflex_use()
 
 void drug_reflex_effect()
 {
-   return;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -620,12 +620,12 @@ void drug_reflex_effect()
 
 void drug_reflex_wearoff()
 {
-   return;
+    return;
 }
 
 
 // --------------------------------------------------------------------------
-//                              GENIUS
+//                                        GENIUS
 // --------------------------------------------------------------------------
 void drug_genius_use();
 void drug_genius_effect();
@@ -639,10 +639,10 @@ void drug_genius_wearoff();
 
 void drug_genius_use()
 {
-   void mfd_gridpanel_set_winmove(bool check);
+    void mfd_gridpanel_set_winmove(bool check);
 
-   mfd_gridpanel_set_winmove(true);
-   return;
+    mfd_gridpanel_set_winmove(true);
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -652,7 +652,7 @@ void drug_genius_use()
 
 void drug_genius_effect()
 {
-   return;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -662,11 +662,11 @@ void drug_genius_effect()
 
 void drug_genius_wearoff()
 {
-   return;
+    return;
 }
 
 // --------------------------------------------------------------------------
-//                              DETOX
+//                                        DETOX
 // --------------------------------------------------------------------------
 void drug_detox_use();
 void wear_off_drug(int32_t i);
@@ -674,12 +674,12 @@ void drug_detox_wearoff();
 
 uint8_t detox_drug_order[] =
 {
-   DRUG_LSD,
-   DRUG_SIGHT,
-   DRUG_GENIUS,
-   DRUG_STAMINUP,
-   DRUG_REFLEX,
-   DRUG_MEDIC,
+    DRUG_LSD,
+    DRUG_SIGHT,
+    DRUG_GENIUS,
+    DRUG_STAMINUP,
+    DRUG_REFLEX,
+    DRUG_MEDIC,
 };
 
 #define NUM_DETOX_DRUGS (sizeof(detox_drug_order)/sizeof(detox_drug_order[0]))
@@ -691,10 +691,10 @@ uint8_t detox_drug_order[] =
 
 void drug_detox_use()
 {
-   INTENSITY(DRUG_DETOX)+=2;
-   if (INTENSITY(DRUG_DETOX) == 2)
-      drug_detox_effect();
-   return;
+    INTENSITY(DRUG_DETOX)+=2;
+    if (INTENSITY(DRUG_DETOX) == 2)
+        drug_detox_effect();
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -704,44 +704,44 @@ void drug_detox_use()
 
 void wear_off_drug(int32_t i)
 {
-   int32_t laststat = STATUS(i);
-   STATUS(i) = 0;
-   if (laststat > 0 && Drugs[i].wearoff != NULL)
-      Drugs[i].wearoff();
-   else if (laststat < 0 && Drugs[i].after_effect != NULL)
-      Drugs[i].after_effect();
+    int32_t laststat = STATUS(i);
+    STATUS(i) = 0;
+    if (laststat > 0 && Drugs[i].wearoff != NULL)
+        Drugs[i].wearoff();
+    else if (laststat < 0 && Drugs[i].after_effect != NULL)
+        Drugs[i].after_effect();
 }
 
 void drug_detox_effect()
 {
-   int32_t i,stack;
-   for (stack = 0; stack < INTENSITY(DRUG_DETOX); stack+=2)
-   {
-      for (i = 0; i < NUM_DETOX_DRUGS; i++)
-      {
-         int32_t d = detox_drug_order[i];
-         if (STATUS(d) < 0)
-         {
-            wear_off_drug(d);
-            goto found;
-         }
-      }
-      for (i = 0; i < NUM_DETOX_DRUGS; i++)
-      {
-         int32_t d = detox_drug_order[i];
-         if (STATUS(d) > 0)
+    int32_t i,stack;
+    for (stack = 0; stack < INTENSITY(DRUG_DETOX); stack+=2)
+    {
+        for (i = 0; i < NUM_DETOX_DRUGS; i++)
+        {
+            int32_t d = detox_drug_order[i];
+            if (STATUS(d) < 0)
             {
-               wear_off_drug(d);
-               goto found;
+                wear_off_drug(d);
+                goto found;
             }
-      }
+        }
+        for (i = 0; i < NUM_DETOX_DRUGS; i++)
+        {
+            int32_t d = detox_drug_order[i];
+            if (STATUS(d) > 0)
+                {
+                    wear_off_drug(d);
+                    goto found;
+                }
+        }
   found:
-   ;
-   }
-   for (i = 0; i < NUM_DAMAGE_TYPES; i++)
-   {
-      player_struct.hit_points_lost[i] /= INTENSITY(DRUG_DETOX)+1;
-   }
+    ;
+    }
+    for (i = 0; i < NUM_DAMAGE_TYPES; i++)
+    {
+        player_struct.hit_points_lost[i] /= INTENSITY(DRUG_DETOX)+1;
+    }
 }
 
 
@@ -753,8 +753,8 @@ void drug_detox_effect()
 
 void drug_detox_wearoff()
 {
-   INTENSITY(DRUG_DETOX) = 0;
-   return;
+    INTENSITY(DRUG_DETOX) = 0;
+    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -762,62 +762,62 @@ void drug_detox_wearoff()
 
 
 DRUG Drugs[NUM_DRUGZ] = {
-   {
-       10,
-       DRUG_LONGER_DOSE,
-       &drug_staminup_use,
-       &drug_staminup_effect,
-       &drug_staminup_wearoff},
+    {
+         10,
+         DRUG_LONGER_DOSE,
+         &drug_staminup_use,
+         &drug_staminup_effect,
+         &drug_staminup_wearoff},
 
-   {
-       20,
-       DRUG_LONGER_DOSE,
-       &drug_sight_use,
-       &drug_sight_effect,
-       &drug_sight_wearoff,
-       &drug_sight_startup,
-       &drug_sight_closedown,
-       &drug_sight_after_effect,
-      } ,
-
-
-   {
-       DRUG_DEFAULT_TIME/2,
-       DRUG_LONGER_DOSE,
-       NULL,
-       &drug_lsd_effect,
-       &drug_lsd_wearoff,
-       &drug_lsd_startup,
-       &drug_lsd_closedown
-      },
-   {
-       10,
-       NULL,
-       &drug_medic_use,
-       &drug_medic_effect,
-       &drug_medic_wearoff},
-
-   {
-       DRUG_DEFAULT_TIME,
-       DRUG_LONGER_DOSE,
-       &drug_reflex_use,
-       &drug_reflex_effect,
-       &drug_reflex_wearoff
-   },
+    {
+         20,
+         DRUG_LONGER_DOSE,
+         &drug_sight_use,
+         &drug_sight_effect,
+         &drug_sight_wearoff,
+         &drug_sight_startup,
+         &drug_sight_closedown,
+         &drug_sight_after_effect,
+        } ,
 
 
-   {
-       DRUG_DEFAULT_TIME/2,
-       NULL,
-       &drug_genius_use,
-       &drug_genius_effect,
-       &drug_genius_wearoff},
+    {
+         DRUG_DEFAULT_TIME/2,
+         DRUG_LONGER_DOSE,
+         NULL,
+         &drug_lsd_effect,
+         &drug_lsd_wearoff,
+         &drug_lsd_startup,
+         &drug_lsd_closedown
+        },
+    {
+         10,
+         NULL,
+         &drug_medic_use,
+         &drug_medic_effect,
+         &drug_medic_wearoff},
 
-   {
-       DRUG_DEFAULT_TIME,
-       NULL,
-       &drug_detox_use,
-       &drug_detox_effect,
-       &drug_detox_wearoff,
-      },
+    {
+         DRUG_DEFAULT_TIME,
+         DRUG_LONGER_DOSE,
+         &drug_reflex_use,
+         &drug_reflex_effect,
+         &drug_reflex_wearoff
+    },
+
+
+    {
+         DRUG_DEFAULT_TIME/2,
+         NULL,
+         &drug_genius_use,
+         &drug_genius_effect,
+         &drug_genius_wearoff},
+
+    {
+         DRUG_DEFAULT_TIME,
+         NULL,
+         &drug_detox_use,
+         &drug_detox_effect,
+         &drug_detox_wearoff,
+        },
 };

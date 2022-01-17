@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //====================================================================
 //
-//		System Shock - Macintosh.
+//        System Shock - Macintosh.
 //
-//		High-Level AppleEvent handlers.
+//        High-Level AppleEvent handlers.
 //
 //====================================================================
 
@@ -33,10 +33,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------
 void DoAEInstallation(void )
 {
-	AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, NewAEEventHandlerProc(HandleODOC), 0, false);
-	AEInstallEventHandler(kCoreEventClass, kAEQuitApplication, NewAEEventHandlerProc(HandleQUIT), 0, false);
-	AEInstallEventHandler(kCoreEventClass, kAEPrintDocuments, NewAEEventHandlerProc(HandlePDOC), 0, false);
-	AEInstallEventHandler(kCoreEventClass, kAEOpenApplication, NewAEEventHandlerProc(HandleOAPP), 0, false);
+    AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, NewAEEventHandlerProc(HandleODOC), 0, false);
+    AEInstallEventHandler(kCoreEventClass, kAEQuitApplication, NewAEEventHandlerProc(HandleQUIT), 0, false);
+    AEInstallEventHandler(kCoreEventClass, kAEPrintDocuments, NewAEEventHandlerProc(HandlePDOC), 0, false);
+    AEInstallEventHandler(kCoreEventClass, kAEOpenApplication, NewAEEventHandlerProc(HandleOAPP), 0, false);
 }
 
 //--------------------------------------------------------------------
@@ -44,16 +44,16 @@ void DoAEInstallation(void )
 //--------------------------------------------------------------------
 OSErr RequiredCheck(AppleEvent *theAppleEvent )
 {
-	OSErr		anErr;
-	DescType	typeCode;
-	Size			actualSize;
+    OSErr        anErr;
+    DescType    typeCode;
+    Size            actualSize;
 
-	anErr = AEGetAttributePtr(theAppleEvent, keyMissedKeywordAttr, typeWildCard, &typeCode, NULL, 0, &actualSize);
-	if (anErr == errAEDescNotFound)
-		return(noErr);
-	if (anErr == noErr)
-		return(errAEEventNotHandled);
-	return(anErr);
+    anErr = AEGetAttributePtr(theAppleEvent, keyMissedKeywordAttr, typeWildCard, &typeCode, NULL, 0, &actualSize);
+    if (anErr == errAEDescNotFound)
+        return(noErr);
+    if (anErr == noErr)
+        return(errAEEventNotHandled);
+    return(anErr);
 }
 
 //--------------------------------------------------------------------
@@ -61,10 +61,10 @@ OSErr RequiredCheck(AppleEvent *theAppleEvent )
 //--------------------------------------------------------------------
 pascal OSErr HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 {
-	OSErr		anErr;
+    OSErr        anErr;
 
-	anErr = RequiredCheck(theAppleEvent);
-	return(anErr);
+    anErr = RequiredCheck(theAppleEvent);
+    return(anErr);
 }
 
 //--------------------------------------------------------------------
@@ -72,44 +72,44 @@ pascal OSErr HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 //--------------------------------------------------------------------
 pascal OSErr HandleODOC(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 {
-	OSErr			anErr;
-	AEDescList		docList;
-	FSSpec			anFSS;
-	int32_t				itemsInList;
-	AEKeyword		theKeyword;
-	DescType		typeCode;
-	Size				actualSize;
-	FInfo				theFInfo;
-	bool			isStationery;
+    OSErr            anErr;
+    AEDescList        docList;
+    FSSpec            anFSS;
+    int32_t                itemsInList;
+    AEKeyword        theKeyword;
+    DescType        typeCode;
+    Size                actualSize;
+    FInfo                theFInfo;
+    bool            isStationery;
 
-	anErr = AEGetParamDesc(theAppleEvent, keyDirectObject, typeAEList, &docList);
-	if (anErr)return(anErr);
+    anErr = AEGetParamDesc(theAppleEvent, keyDirectObject, typeAEList, &docList);
+    if (anErr)return(anErr);
 
-	anErr = RequiredCheck(theAppleEvent);
-	if (anErr)return(anErr);
+    anErr = RequiredCheck(theAppleEvent);
+    if (anErr)return(anErr);
 
-	anErr = AECountItems(&docList, &itemsInList);
-	if (anErr)return(anErr);
+    anErr = AECountItems(&docList, &itemsInList);
+    if (anErr)return(anErr);
 
-	// If there is a list of files, just get the first one (can't open more than one game at a time).
-	if (itemsInList > 0)
-	{
-		anErr = AEGetNthPtr(&docList, 1, typeFSS, &theKeyword, &typeCode, (Ptr) &anFSS, sizeof(FSSpec ), &actualSize);
-		if (anErr)
-			return(anErr);
+    // If there is a list of files, just get the first one (can't open more than one game at a time).
+    if (itemsInList > 0)
+    {
+        anErr = AEGetNthPtr(&docList, 1, typeFSS, &theKeyword, &typeCode, (Ptr) &anFSS, sizeof(FSSpec ), &actualSize);
+        if (anErr)
+            return(anErr);
 
-		FSpGetFInfo(&anFSS, &theFInfo);
-		isStationery =((theFInfo.fdFlags & 0x0800) != 0);
+        FSpGetFInfo(&anFSS, &theFInfo);
+        isStationery =((theFInfo.fdFlags & 0x0800) != 0);
 
-		// If this is actually a game file, then set flags to assume an "Open" has occurred.
-		if (theFInfo.fdType == 'Sgam')
-		{
-			HandleAEOpenGame(&anFSS);
-		}
-	}
+        // If this is actually a game file, then set flags to assume an "Open" has occurred.
+        if (theFInfo.fdType == 'Sgam')
+        {
+            HandleAEOpenGame(&anFSS);
+        }
+    }
 
-	AEDisposeDesc(&docList);
-	return(noErr);
+    AEDisposeDesc(&docList);
+    return(noErr);
 }
 
 //--------------------------------------------------------------------
@@ -117,10 +117,10 @@ pascal OSErr HandleODOC(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 //--------------------------------------------------------------------
 pascal OSErr HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 {
-	OSErr	anErr;
+    OSErr    anErr;
 
-	anErr = RequiredCheck(theAppleEvent);
-	return(anErr);
+    anErr = RequiredCheck(theAppleEvent);
+    return(anErr);
 }
 
 //--------------------------------------------------------------------
@@ -128,12 +128,12 @@ pascal OSErr HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 //--------------------------------------------------------------------
 pascal OSErr HandleQUIT(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 {
-	OSErr	anErr;
+    OSErr    anErr;
 
-	anErr = RequiredCheck(theAppleEvent);
-	if (anErr)
-		return(anErr);
+    anErr = RequiredCheck(theAppleEvent);
+    if (anErr)
+        return(anErr);
 
-	DoQuit();
-	return(noErr);
+    DoQuit();
+    return(noErr);
 }

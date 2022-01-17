@@ -90,16 +90,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "schedtyp.h"
 
 // Defines
-#define NUM_LEVELZ            22
-#define NUM_HARDWAREZ         NUM_HARDWARE         // Steal from Objwarez.h
-#define NUM_COMBAT_SOFTS      NUM_OFFENSE_SOFTWARE
-#define NUM_DEFENSE_SOFTS     NUM_DEFENSE_SOFTWARE
-#define NUM_MISC_SOFTS        (NUM_ONESHOT_SOFTWARE + NUM_MISC_SOFTWARE)
-#define NUM_GRENADEZ          7
-#define NUM_DRUGZ             7
-#define NUM_WEAPONZ           16
+#define NUM_LEVELZ                22
+#define NUM_HARDWAREZ            NUM_HARDWARE            // Steal from Objwarez.h
+#define NUM_COMBAT_SOFTS        NUM_OFFENSE_SOFTWARE
+#define NUM_DEFENSE_SOFTS      NUM_DEFENSE_SOFTWARE
+#define NUM_MISC_SOFTS          (NUM_ONESHOT_SOFTWARE + NUM_MISC_SOFTWARE)
+#define NUM_GRENADEZ             7
+#define NUM_DRUGZ                 7
+#define NUM_WEAPONZ              16
 
-#define NUM_AMMO_TYPES        NUM_AMMO             // Steal from Objwpn.h
+#define NUM_AMMO_TYPES          NUM_AMMO                 // Steal from Objwpn.h
 
 // just so you don't screw up.
 #define NUM_GRENADES NUM_GRENADEZ
@@ -109,20 +109,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define SPRINT_CONTROL_THRESHOLD 70 // threshold between sprint and jog
 
-#define MAX_ENERGY   255
+#define MAX_ENERGY    255
 #define MAX_ACCURACY 100
 
-#define LEVEL_GRAV_NORMAL     0
-#define LEVEL_GRAV_LOW        1
-#define LEVEL_GRAV_ZERO       2
+#define LEVEL_GRAV_NORMAL      0
+#define LEVEL_GRAV_LOW          1
+#define LEVEL_GRAV_ZERO         2
 
-#define LEVEL_MIST_NONE       0
-#define LEVEL_MIST_LIGHT      1
-#define LEVEL_MIST_HEAVY      2
+#define LEVEL_MIST_NONE         0
+#define LEVEL_MIST_LIGHT        1
+#define LEVEL_MIST_HEAVY        2
 
-#define LEVEL_BIOHAZARD_NONE     0
+#define LEVEL_BIOHAZARD_NONE      0
 #define LEVEL_BIOHAZARD_PARTIAL  1
-#define LEVEL_BIOHAZARD_SEVERE   2
+#define LEVEL_BIOHAZARD_SEVERE    2
 
 #define GAME_SCHEDULE_SIZE 64
 

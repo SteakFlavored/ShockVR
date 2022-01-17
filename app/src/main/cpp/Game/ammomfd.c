@@ -80,7 +80,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // ============================================================
-//                   THE AMMO MFD
+//                         THE AMMO MFD
 // ============================================================
 
 
@@ -97,7 +97,7 @@ uint8_t ammo_line_colors[] = { GREEN_BASE+6, GREEN_BASE+2, GREEN_YELLOW_BASE+1 }
 #define AMMO_TITLE_COLOR (RED_BASE+5)
 
 #define PLAYER_HASNT 0
-#define PLAYER_HAS   1
+#define PLAYER_HAS    1
 #define PLAYER_HAS_SELECTED 2
 
 // ----------
@@ -114,128 +114,128 @@ bool mfd_ammo_handler(MFD* m, uiEvent* ev);
 //
 uint8_t player_has_weapon(int32_t trip)
 {
-   int32_t num;
-   bool retval=PLAYER_HASNT;
-   weapon_slot* wp=player_struct.weapons;
+    int32_t num;
+    bool retval=PLAYER_HASNT;
+    weapon_slot* wp=player_struct.weapons;
 
-   for(num=0;num<NUM_WEAPON_SLOTS && wp[num].type!=EMPTY_WEAPON_SLOT; num++) {
-      if(MAKETRIP(CLASS_GUN,wp[num].type,wp[num].subtype)==trip) {
-         if(player_struct.actives[ACTIVE_WEAPON]==num)
-            retval=PLAYER_HAS_SELECTED;
-         else if(retval!=PLAYER_HAS_SELECTED)
-            retval=PLAYER_HAS;
-      }
-   }
-   return(retval);
+    for(num=0;num<NUM_WEAPON_SLOTS && wp[num].type!=EMPTY_WEAPON_SLOT; num++) {
+        if(MAKETRIP(CLASS_GUN,wp[num].type,wp[num].subtype)==trip) {
+            if(player_struct.actives[ACTIVE_WEAPON]==num)
+                retval=PLAYER_HAS_SELECTED;
+            else if(retval!=PLAYER_HAS_SELECTED)
+                retval=PLAYER_HAS;
+        }
+    }
+    return(retval);
 }
 
-#define HARDWIRED_HEIGHT_CONSTANT   5
+#define HARDWIRED_HEIGHT_CONSTANT    5
 void mfd_ammo_expose(uint8_t control)
 {
-   bool full = control & MFD_EXPOSE_FULL;
-   if (control & MFD_EXPOSE) // Time to draw stuff
-   {
-      gr_set_font((grs_font*)ResGet(MFD_FONT));
+    bool full = control & MFD_EXPOSE_FULL;
+    if (control & MFD_EXPOSE) // Time to draw stuff
+    {
+        gr_set_font((grs_font*)ResGet(MFD_FONT));
 
-      // Clear the canvas by drawing the background bitmap
-      if (!full_game_3d)
-//KLC - chg for new art         ss_bitmap(&mfd_background, 0, 0);
-         gr_bitmap(&mfd_background, 0, 0);
+        // Clear the canvas by drawing the background bitmap
+        if (!full_game_3d)
+//KLC - chg for new art            ss_bitmap(&mfd_background, 0, 0);
+            gr_bitmap(&mfd_background, 0, 0);
 
-      {
-         int32_t num, guntrip, typemask, type, subc, ammonum, count;
-         int16_t w,h,ypos=0,y_list;
-         uint8_t col,has;
-         bool gotammo;
-         int8_t ammoline[30], weapline[30], minibuf[3]=" /", *title;
+        {
+            int32_t num, guntrip, typemask, type, subc, ammonum, count;
+            int16_t w,h,ypos=0,y_list;
+            uint8_t col,has;
+            bool gotammo;
+            int8_t ammoline[30], weapline[30], minibuf[3]=" /", *title;
 
-         if(full) {
-            title=get_temp_string(REF_STR_AmmoMFDWeaps);
-            mfd_draw_string(title,AMMO_LIST_X,AMMO_LIST_Y+ypos,AMMO_TITLE_COLOR,true);
-            title=get_temp_string(REF_STR_AmmoMFDClips);
-            gr_string_size(title,&w,&h);
-            mfd_draw_string(title,AMMO_COUNT_X-w,AMMO_LIST_Y+ypos,AMMO_TITLE_COLOR,true);
-         }
-         else {
-            gr_string_size(minibuf,&w,&h);
-         }
-         ypos+=HARDWIRED_HEIGHT_CONSTANT;
-         y_list = ypos+HARDWIRED_HEIGHT_CONSTANT;
-
-         // iterate through gun types
-         for (num=0;num<NUM_GUN;num++) {
-            guntrip=get_triple_from_class_nth_item(CLASS_GUN,num);
-            typemask=GunProps[CPTRIP(guntrip)].useable_ammo_type;
-            subc=AMMOTYPE_SUBCLASS(typemask);
-            typemask=AMMOTYPE_TYPE(typemask); // type type type
-
-            if(typemask!=0) {
-               gotammo=false;
-               ammoline[0]='\0';
-               for(type=0;typemask!=0;typemask=typemask>>1,type++) {
-                  if(typemask & 0x1) { // that's 1 HEX, mind you
-                     ammonum = get_nth_from_triple(MAKETRIP(CLASS_AMMO,subc,type));
-                     count=player_struct.cartridges[ammonum];
-                     gotammo = gotammo || count;
-                     numtostring(count,ammoline+strlen(ammoline));
-                     minibuf[0]=AMMO_TYPE_LETTER(ammonum);
-                     strcat(ammoline,minibuf[0]==' '?minibuf+1:minibuf);
-                  }
-               }
-
-               has=player_has_weapon(guntrip);
-               if(has||gotammo) {
-                  get_object_short_name(guntrip,weapline,sizeof(weapline));
-                  col=ammo_line_colors[has];
-                  mfd_draw_string(weapline,AMMO_LIST_X,AMMO_LIST_Y+ypos,col,true);
-
-                  // get rid of trailing slash
-                  ammoline[strlen(ammoline)-1]='\0';
-                  // shamefully, replace '1' with 'I' to save space onscreen
-                  string_replace_char(ammoline,'1','I');
-                  gr_string_size(ammoline,&w,&h);
-                  mfd_draw_string(ammoline,AMMO_COUNT_X-w,AMMO_LIST_Y+ypos,col,true);
-                  // glue together ammo rects so as not to
-                  // run out of mfd rects, goddamnit.
-                  mfd_add_rect(AMMO_COUNT_X-1,y_list,AMMO_COUNT_X,AMMO_LIST_Y+ypos);
-                  ypos+=HARDWIRED_HEIGHT_CONSTANT;
-               }
-
+            if(full) {
+                title=get_temp_string(REF_STR_AmmoMFDWeaps);
+                mfd_draw_string(title,AMMO_LIST_X,AMMO_LIST_Y+ypos,AMMO_TITLE_COLOR,true);
+                title=get_temp_string(REF_STR_AmmoMFDClips);
+                gr_string_size(title,&w,&h);
+                mfd_draw_string(title,AMMO_COUNT_X-w,AMMO_LIST_Y+ypos,AMMO_TITLE_COLOR,true);
             }
-         }
-      }
+            else {
+                gr_string_size(minibuf,&w,&h);
+            }
+            ypos+=HARDWIRED_HEIGHT_CONSTANT;
+            y_list = ypos+HARDWIRED_HEIGHT_CONSTANT;
 
-      // on a full expose, make sure to draw everything
+            // iterate through gun types
+            for (num=0;num<NUM_GUN;num++) {
+                guntrip=get_triple_from_class_nth_item(CLASS_GUN,num);
+                typemask=GunProps[CPTRIP(guntrip)].useable_ammo_type;
+                subc=AMMOTYPE_SUBCLASS(typemask);
+                typemask=AMMOTYPE_TYPE(typemask); // type type type
 
-      if (full)
-         mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+                if(typemask!=0) {
+                    gotammo=false;
+                    ammoline[0]='\0';
+                    for(type=0;typemask!=0;typemask=typemask>>1,type++) {
+                        if(typemask & 0x1) { // that's 1 HEX, mind you
+                            ammonum = get_nth_from_triple(MAKETRIP(CLASS_AMMO,subc,type));
+                            count=player_struct.cartridges[ammonum];
+                            gotammo = gotammo || count;
+                            numtostring(count,ammoline+strlen(ammoline));
+                            minibuf[0]=AMMO_TYPE_LETTER(ammonum);
+                            strcat(ammoline,minibuf[0]==' '?minibuf+1:minibuf);
+                        }
+                    }
 
-   }
+                    has=player_has_weapon(guntrip);
+                    if(has||gotammo) {
+                        get_object_short_name(guntrip,weapline,sizeof(weapline));
+                        col=ammo_line_colors[has];
+                        mfd_draw_string(weapline,AMMO_LIST_X,AMMO_LIST_Y+ypos,col,true);
+
+                        // get rid of trailing slash
+                        ammoline[strlen(ammoline)-1]='\0';
+                        // shamefully, replace '1' with 'I' to save space onscreen
+                        string_replace_char(ammoline,'1','I');
+                        gr_string_size(ammoline,&w,&h);
+                        mfd_draw_string(ammoline,AMMO_COUNT_X-w,AMMO_LIST_Y+ypos,col,true);
+                        // glue together ammo rects so as not to
+                        // run out of mfd rects, goddamnit.
+                        mfd_add_rect(AMMO_COUNT_X-1,y_list,AMMO_COUNT_X,AMMO_LIST_Y+ypos);
+                        ypos+=HARDWIRED_HEIGHT_CONSTANT;
+                    }
+
+                }
+            }
+        }
+
+        // on a full expose, make sure to draw everything
+
+        if (full)
+            mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+
+    }
 
 }
 
 bool mfd_ammo_handler(MFD* m, uiEvent* ev)
 {
-   LGPoint32_t pos;
-   int16_t w,h,line;
-   int32_t guntrip;
-   uint8_t has;
+    LGPoint32_t pos;
+    int16_t w,h,line;
+    int32_t guntrip;
+    uint8_t has;
 
-   if(ev->type != UI_EVENT_MOUSE || !(ev->subtype & MOUSE_LDOWN)) return false;
+    if(ev->type != UI_EVENT_MOUSE || !(ev->subtype & MOUSE_LDOWN)) return false;
 
-   pos = MakePoint(ev->pos.x - m->rect.ul.x, ev->pos.y - m->rect.ul.y);
-   gr_font_char_size((grs_font*)ResGet(MFD_FONT),'X',&w,&h);
+    pos = MakePoint(ev->pos.x - m->rect.ul.x, ev->pos.y - m->rect.ul.y);
+    gr_font_char_size((grs_font*)ResGet(MFD_FONT),'X',&w,&h);
 
-   line=(pos.y-AMMO_LIST_Y)/h;
-   if(line<=0) return false;
-   guntrip=get_triple_from_class_nth_item(CLASS_GUN,line-1);
-   if(guntrip<0) return false;
-   has=player_has_weapon(guntrip);
-   if(has==PLAYER_HAS_SELECTED) {
-      mfd_change_slot(m->id,MFD_WEAPON_SLOT);
-      return true;
-   }
-   return false;
+    line=(pos.y-AMMO_LIST_Y)/h;
+    if(line<=0) return false;
+    guntrip=get_triple_from_class_nth_item(CLASS_GUN,line-1);
+    if(guntrip<0) return false;
+    has=player_has_weapon(guntrip);
+    if(has==PLAYER_HAS_SELECTED) {
+        mfd_change_slot(m->id,MFD_WEAPON_SLOT);
+        return true;
+    }
+    return false;
 }
 
 

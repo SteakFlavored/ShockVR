@@ -38,42 +38,42 @@ void sound_frame_update(void);
 /* KLC - not used in Mac version.
 void cdecl simple_xmi_stop(snd_midi_parms *seq)
 {
-//   if (seq->snd_ref==0xc1c1)
-	   Free(seq->data);
-   mono_ch(60,'A'+tmp);
-   tlc(tmp=(tmp+1)&0xf);
-   mono_ch(61,'a'+simple_xmi_sound_on);
-   simple_xmi_sound_on--;
+//    if (seq->snd_ref==0xc1c1)
+        Free(seq->data);
+    mono_ch(60,'A'+tmp);
+    tlc(tmp=(tmp+1)&0xf);
+    mono_ch(61,'a'+simple_xmi_sound_on);
+    simple_xmi_sound_on--;
 }
 */
 
 void digifx_EOS_callback(snd_digi_parms *sdp)
 {
-   if (sdp->snd_ref>0x10)
-	   if (rulock_ptr<MAX_UNLOCK-1)
-		   rulock_list[rulock_ptr++]=sdp->snd_ref;
+    if (sdp->snd_ref>0x10)
+        if (rulock_ptr<MAX_UNLOCK-1)
+            rulock_list[rulock_ptr++]=sdp->snd_ref;
 }
 
 
 void sound_frame_update(void)
 {
-	int32_t			i;
-	SCStatus	stat;
-	snd_digi_parms *sdp;
-	extern bool set_sample_pan_gain(snd_digi_parms *sdp);
+    int32_t            i;
+    SCStatus    stat;
+    snd_digi_parms *sdp;
+    extern bool set_sample_pan_gain(snd_digi_parms *sdp);
 
-	while (rulock_ptr>0)
-		ResUnlock(rulock_list[--rulock_ptr]);
+    while (rulock_ptr>0)
+        ResUnlock(rulock_list[--rulock_ptr]);
 
-	for (i=0; i < _snd_smp_cnt; i++)
-	{
-		SndChannelStatus(_snd_smp_prm[i].sndChan, sizeof(SCStatus), &stat);
-		if (stat.scChannelBusy || stat.scChannelPaused)
-		{
-			sdp = snd_sample_parms(i);
-			if (set_sample_pan_gain(sdp))
-				snd_end_sample(i);
-		}
-	}
+    for (i=0; i < _snd_smp_cnt; i++)
+    {
+        SndChannelStatus(_snd_smp_prm[i].sndChan, sizeof(SCStatus), &stat);
+        if (stat.scChannelBusy || stat.scChannelPaused)
+        {
+            sdp = snd_sample_parms(i);
+            if (set_sample_pan_gain(sdp))
+                snd_end_sample(i);
+        }
+    }
 }
 

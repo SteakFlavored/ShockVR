@@ -66,7 +66,7 @@ void (**grd_device_table)();
 void (**grd_pixel_table)();
 
 /* pointer to start of current bitmap driver's function table for clipped
-   primitives. */
+    primitives. */
 void (**grd_canvas_table)();
 
 /* currently active graphics mode. -1 means unrecognized mode */

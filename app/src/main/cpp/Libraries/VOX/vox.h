@@ -23,12 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Voxel structure
 typedef struct {
-   fix pix_dist;     // space between pixels in 3d units
-   fix pix_size;     // size of pixels in 3d units
-   int32_t w,h,d;     // size of voxel in source pixels
-   // any pointer set to Null is not rendered
-   grs_bitmap *col;  // Pointers to color maps
-   grs_bitmap *ht;   // Pointers to height maps
+    fix pix_dist;      // space between pixels in 3d units
+    fix pix_size;      // size of pixels in 3d units
+    int32_t w,h,d;      // size of voxel in source pixels
+    // any pointer set to Null is not rendered
+    grs_bitmap *col;  // Pointers to color maps
+    grs_bitmap *ht;    // Pointers to height maps
 } vxs_vox;
 
 

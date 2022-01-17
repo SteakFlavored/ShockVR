@@ -41,13 +41,13 @@ int32_t slorkatron_memory_check();
 // If LZW stuff ever gets lots more efficient, may need to raise this up some.
 #define BIG_BUFFER_SIZE (LZW_BUFF_SIZE+3)
 
-#define MINIMUM_GAME_THRESHOLD       540000   // this will be tweaked as appropriate...
-#define BIG_CACHE_THRESHOLD         MINIMUM_GAME_THRESHOLD + 1900000
+#define MINIMUM_GAME_THRESHOLD         540000    // this will be tweaked as appropriate...
+#define BIG_CACHE_THRESHOLD            MINIMUM_GAME_THRESHOLD + 1900000
 
-#define EXTRA_TMAP_THRESHOLD        BIG_CACHE_THRESHOLD
+#define EXTRA_TMAP_THRESHOLD          BIG_CACHE_THRESHOLD
 
-#define BLEND_THRESHOLD             EXTRA_TMAP_THRESHOLD + 64000
-#define BIG_HACKCAM_THRESHOLD       BLEND_THRESHOLD + 32000
+#define BLEND_THRESHOLD                 EXTRA_TMAP_THRESHOLD + 64000
+#define BIG_HACKCAM_THRESHOLD         BLEND_THRESHOLD + 32000
 
 #define PRELOAD_ANIMATION_THRESHOLD EXTRA_TMAP_THRESHOLD  // for simplicity, can be set different if we are psyched
 

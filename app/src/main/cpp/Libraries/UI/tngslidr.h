@@ -62,28 +62,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Typedefs
 typedef struct {
-   TNG *tng_data;
-   LGPoint size;
-   int32_t alignment;
-   int32_t min, max;
-   int32_t value, increm;
-   bool dragging;
-   Ref left_id, right_id, up_id, down_id;
-   Ref slider_id;
+    TNG *tng_data;
+    LGPoint size;
+    int32_t alignment;
+    int32_t min, max;
+    int32_t value, increm;
+    bool dragging;
+    Ref left_id, right_id, up_id, down_id;
+    Ref slider_id;
 } TNG_slider;
 
 #define TNG_SL_HORIZONTAL  0
-#define TNG_SL_VERTICAL    1
+#define TNG_SL_VERTICAL     1
 
 #define TNG_SL_INCREMENTER 0x0001
 #define TNG_SL_DECREMENTER 0x0002
-#define TNG_SL_SLIDER      0x0004
-#define TNG_SL_ALLPARTS    TNG_ALLPARTS
+#define TNG_SL_SLIDER        0x0004
+#define TNG_SL_ALLPARTS     TNG_ALLPARTS
 
-#define TNG_SL_LEFT_KEY        0x1c
-#define TNG_SL_RIGHT_KEY       0x1d
-#define TNG_SL_UP_KEY          0x1e
-#define TNG_SL_DOWN_KEY        0x1f
+#define TNG_SL_LEFT_KEY          0x1c
+#define TNG_SL_RIGHT_KEY         0x1d
+#define TNG_SL_UP_KEY             0x1e
+#define TNG_SL_DOWN_KEY          0x1f
 
 // Prototypes
 
@@ -92,7 +92,7 @@ errtype tng_slider_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t alignme
 
 // Initializes the TNG slider
 errtype tng_slider_full_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max, int32_t value, int32_t increm, LGPoint size,
-   Ref left_id, Ref right_id, Ref up_id, Ref down_id, Ref slider_id);
+    Ref left_id, Ref right_id, Ref up_id, Ref down_id, Ref slider_id);
 
 // Deallocate all memory used by the TNG slider
 errtype tng_slider_destroy(TNG *ptng);

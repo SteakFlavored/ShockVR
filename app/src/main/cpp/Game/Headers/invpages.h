@@ -31,22 +31,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // INVENTORY PAGE NUMBERS
 // ----------------------
 
-#define INV_BLANK_PAGE              -1
+#define INV_BLANK_PAGE                  -1
 
-#define INV_MAIN_PAGE               0
-#define INV_HARDWARE_PAGE           1
-#define INV_GENERAL_PAGE            2
-#define INV_SOFTWARE_PAGE           5
-#define INV_LOG_MAIN_PAGE           7
-#define INV_DATA_PAGE               8
-#define INV_AMMO_PAGE               9
-#define INV_EMAIL0_PAGE             50
-#define INV_EMAIL1_PAGE             51
-#define INV_EMAIL2_PAGE             52
-#define INV_LOG0_PAGE               20
+#define INV_MAIN_PAGE                    0
+#define INV_HARDWARE_PAGE              1
+#define INV_GENERAL_PAGE                2
+#define INV_SOFTWARE_PAGE              5
+#define INV_LOG_MAIN_PAGE              7
+#define INV_DATA_PAGE                    8
+#define INV_AMMO_PAGE                    9
+#define INV_EMAIL0_PAGE                 50
+#define INV_EMAIL1_PAGE                 51
+#define INV_EMAIL2_PAGE                 52
+#define INV_LOG0_PAGE                    20
 
-#define INV_3DVIEW_PAGE             -5
-#define INV_EMAILTEXT_PAGE          -10
+#define INV_3DVIEW_PAGE                 -5
+#define INV_EMAILTEXT_PAGE             -10
 
 
 #endif // __INVPAGES_H

@@ -175,9 +175,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Defines for stuff strewn all about the world
 // #define stereo_on 1
 
-#define f1_0	fix_make(1,0)
-#define f0_5	fix_make(0,0x8000)
-#define f0_25	fix_make(0,0x4000)
+#define f1_0    fix_make(1,0)
+#define f0_5    fix_make(0,0x8000)
+#define f0_25    fix_make(0,0x4000)
 
 
 // gets the next available pnt in reg.
@@ -200,22 +200,22 @@ typedef int16_t sfix;
 //these are for rotation order when generating a matrix from angles
 //bit 2 means y before z if 0, 1 means x before z if 0, 0 means x before y if 0
 
-#define ORDER_XYZ  0    //000
-#define ORDER_YXZ  1    //001
-#define ORDER_YZX  3    //011
-#define ORDER_XZY  4    //100
-#define ORDER_ZXY  6    //110
-#define ORDER_ZYX  7    //111
+#define ORDER_XYZ  0     //000
+#define ORDER_YXZ  1     //001
+#define ORDER_YZX  3     //011
+#define ORDER_XZY  4     //100
+#define ORDER_ZXY  6     //110
+#define ORDER_ZYX  7     //111
 
 //To specify user's coordinate system: use one of these for each user_x_axis,
 //user_y_axis,& user_z_axis in g3_init to tell the 3d what your x,y,& z mean.
 
 #define AXIS_RIGHT  1
-#define AXIS_UP     2
-#define AXIS_IN     3
+#define AXIS_UP      2
+#define AXIS_IN      3
 #define AXIS_LEFT  -AXIS_RIGHT
 #define AXIS_DOWN  -AXIS_UP
-#define AXIS_OUT   -AXIS_IN
+#define AXIS_OUT    -AXIS_IN
 
 //vectors, points, matrices
 
@@ -224,12 +224,12 @@ typedef int16_t sfix;
 // references of g3s_vector.x to g3s_vector.xyz[0] (or .gX, .gY, etc. from the #defines)
 typedef struct g3s_vector {
 #if 0 // MLA #ifdef __cplusplus
-	fix x,y,z;
+    fix x,y,z;
 #else
-	union {
-		struct {fix x,y,z;};
-		fix xyz[3];
-	};
+    union {
+        struct {fix x,y,z;};
+        fix xyz[3];
+    };
 #endif
 } g3s_vector;
 
@@ -241,70 +241,70 @@ typedef struct g3s_vector {
 typedef struct g3s_angvec {fixang tx,ty,tz;} g3s_angvec;
 
 // This transformation matrix is row based, ie
-//|m1 m2 m3|   |x|   |x'|
+//|m1 m2 m3|    |x|    |x'|
 //|m4 m5 m6| * |y| = |y'|
-//|m7 m8 m9|   |z|   |z'|
+//|m7 m8 m9|    |z|    |z'|
 //
 // but of course the incoming y coordinates
 // are inverted, have a nice day
 typedef struct g3s_matrix {
-	fix m1,m2,m3,m4,m5,m6,m7,m8,m9;
+    fix m1,m2,m3,m4,m5,m6,m7,m8,m9;
 } g3s_matrix;
 
-//typedef int16_t g3s_phandle;    //used to refer to points, equal to pntnum * 4
+//typedef int16_t g3s_phandle;     //used to refer to points, equal to pntnum * 4
 typedef struct g3s_point *g3s_phandle;
 
 typedef struct g3s_point {
 #if 0 // #ifdef __cplusplus
-	fix x,y,z;
+    fix x,y,z;
 #else
-	union {                                         //rotated 3d coords, use as vector or elements
-		g3s_vector vec;
-		struct {fix x,y,z;};
-		fix xyz[3];
-    g3s_phandle next; //next in free list, when point is unused
-	};
+    union {                                                      //rotated 3d coords, use as vector or elements
+        g3s_vector vec;
+        struct {fix x,y,z;};
+        fix xyz[3];
+     g3s_phandle next; //next in free list, when point is unused
+    };
 #endif
 
-	fix sx,sy;                                      //screen coords
-	int8_t codes;                                     //clip codes
-	uint8_t p3_flags;                 //misc flags
+    fix sx,sy;                                                  //screen coords
+    int8_t codes;                                                 //clip codes
+    uint8_t p3_flags;                      //misc flags
 #if 0 // #ifdef __cplusplus
-	sfix u,v;
+    sfix u,v;
 #else
-	union {
-		struct {sfix u,v;} uv;     //for texturing, etc.
-		grs_rgb rgb;                    //for RGB-space gouraud shading
-	};
+    union {
+        struct {sfix u,v;} uv;      //for texturing, etc.
+        grs_rgb rgb;                          //for RGB-space gouraud shading
+    };
 #endif
-	sfix i;                                         //gouraud shading & lighting
+    sfix i;                                                      //gouraud shading & lighting
 } g3s_point;
 
 
 //clip codes
 #define CC_OFF_LEFT  1
 #define CC_OFF_RIGHT 2
-#define CC_OFF_BOT   4
-#define CC_OFF_TOP   8
-#define CC_BEHIND    128
-#define CC_CLIP_OVERFLOW     16
+#define CC_OFF_BOT    4
+#define CC_OFF_TOP    8
+#define CC_BEHIND     128
+#define CC_CLIP_OVERFLOW      16
 
 //flags for the point structure
-#define PF_U                    1               //is u value used?
-#define PF_V                    2               //is v value used?
-#define PF_I                    4               //is i value used?
-#define PF_PROJECTED    8               //has this point been projected?
-#define PF_RGB                  16              //are the RBG values used?
-#define PF_CLIPPNT      32              //this point created by clipper
-#define PF_LIT       64    //has this point been lit by the lighter?
+#define PF_U                          1                    //is u value used?
+#define PF_V                          2                    //is v value used?
+#define PF_I                          4                    //is i value used?
+#define PF_PROJECTED     8                    //has this point been projected?
+#define PF_RGB                        16                  //are the RBG values used?
+#define PF_CLIPPNT        32                  //this point created by clipper
+#define PF_LIT         64     //has this point been lit by the lighter?
 
 
 // lighting codes
-#define LT_NONE    0
-#define LT_SOLID   1
-#define LT_DIFF    2
-#define LT_SPEC    4
-#define LT_GOUR    128
+#define LT_NONE     0
+#define LT_SOLID    1
+#define LT_DIFF     2
+#define LT_SPEC     4
+#define LT_GOUR     128
 
 #define LT_NEAR_LIGHT 16  // true if light is near and has to be evaluated
 #define LT_NEAR_VIEW  8  // true if viewing point is near, and has to be reevaled
@@ -316,10 +316,10 @@ typedef struct g3s_point {
 extern fix scrw,scrh;
 extern fix biasx,biasy;
 
-extern uint8_t   g3d_light_type;
-extern fix     g3d_amb_light,g3d_diff_light,g3d_spec_light;
-extern fix     g3d_ldotv,g3d_sdotl,g3d_sdotv,g3d_flash;
-extern uint8_t   *g3d_light_tab;
+extern uint8_t    g3d_light_type;
+extern fix      g3d_amb_light,g3d_diff_light,g3d_spec_light;
+extern fix      g3d_ldotv,g3d_sdotl,g3d_sdotv,g3d_flash;
+extern uint8_t    *g3d_light_tab;
 extern g3s_vector g3d_light_src,g3d_light_trans;
 extern g3s_vector g3d_light_src,g3d_light_trans;
 extern g3s_vector g3d_view_vec,g3d_light_vec;
@@ -328,11 +328,11 @@ extern g3s_vector g3d_view_vec,g3d_light_vec;
 typedef struct g3s_codes {int8_t or,and;} g3s_codes;
 
 /*
- *      We're going to want a bunch of general-purpose 3d vector math
- *      routines. These are:
+ *        We're going to want a bunch of general-purpose 3d vector math
+ *        routines. These are:
  *
- *      Question:  some of these take a destination, and some change the
- *              vector passed to them. Should we adopt a consistent interface?
+ *        Question:  some of these take a destination, and some change the
+ *                  vector passed to them. Should we adopt a consistent interface?
  *
  * There's sure to be more of these
  *
@@ -349,10 +349,10 @@ void  g3_compute_normal(g3s_vector *norm,g3s_vector *v0,g3s_vector *v1,g3s_vecto
 fix g3_vec_dotprod(g3s_vector *v0,g3s_vector *v1);
 
 void  g3_vec_rotate(g3s_vector *dest,g3s_vector *src,g3s_matrix *m);
-	//src and dest can be the same
+    //src and dest can be the same
 
-void g3_transpose(g3s_matrix *m);       //transpose in place
-void g3_copy_transpose(g3s_matrix *dest,g3s_matrix *src);       //copy and transpose
+void g3_transpose(g3s_matrix *m);         //transpose in place
+void g3_copy_transpose(g3s_matrix *dest,g3s_matrix *src);         //copy and transpose
 void g3_matrix_x_matrix(g3s_matrix *dest,g3s_matrix *src1,g3s_matrix *src2);
 
 int32_t g3_clip_line(g3s_point *src[],g3s_point *dest[]);
@@ -361,58 +361,58 @@ int32_t g3_clip_polygon(int32_t n,g3s_point *src[],g3s_point *dest[]);
 // MLA #pragma aux g3_clip_polygon parm [ecx] [esi] [edi] modify [eax ebx ecx edx esi edi];
 
 /*
- *      Graphics-specific 3d routines
+ *        Graphics-specific 3d routines
  *
  */
 
 // stereo functions
 int16_t g3_init_stereo(int16_t max_points,int32_t user_x_axis,int32_t user_y_axis,int32_t user_z_axis);
-   // sets up system for stereo by allocating twice as many
-   // points, setting g3d_stereo_base to the amount of memory
-   // the points take up
+    // sets up system for stereo by allocating twice as many
+    // points, setting g3d_stereo_base to the amount of memory
+    // the points take up
 
 void g3_start_stereo_frame(grs_canvas *rt);
-   // mark all points as being unused, sets g3d_stereo to true
-   // sets g3d_rt_canv to rt so you know where to render to
+    // mark all points as being unused, sets g3d_stereo to true
+    // sets g3d_rt_canv to rt so you know where to render to
 
 void g3_set_eyesep(fix sep);
-   // sets g3d_eyesep_raw to sep
+    // sets g3d_eyesep_raw to sep
 
 // System inialization, etc.
 
 int16_t g3_init(int16_t max_points,int32_t user_x_axis,int32_t user_y_axis,int32_t user_z_axis);
-	//the three axis vars describe your coordintate system.  Use the constants
-	//      X_AXIS,Y_AXIS,Z_AXIS, or negative of these, to describe what your
-	// coordinates mean. For each of width_,height_, and depth_axis, specify
-	//      which of your axes goes in that dimension. Depth is into the screen,
-	//      height is up, and width is to the right
-	//returns number actually allocated
+    //the three axis vars describe your coordintate system.  Use the constants
+    //        X_AXIS,Y_AXIS,Z_AXIS, or negative of these, to describe what your
+    // coordinates mean. For each of width_,height_, and depth_axis, specify
+    //        which of your axes goes in that dimension. Depth is into the screen,
+    //        height is up, and width is to the right
+    //returns number actually allocated
 
 
-void g3_shutdown(void);                         //frees allocated points, and whatever else
+void g3_shutdown(void);                                 //frees allocated points, and whatever else
 int32_t g3_count_free_points(void);
 
 // Point definition and manipulation
 
 g3s_phandle g3_alloc_point(void);
-	//returns a free point
+    //returns a free point
 
 int32_t g3_alloc_list(int32_t n, g3s_phandle *p);
-   // allocates n points into p, returns 0 for none, or n for ok
+    // allocates n points into p, returns 0 for none, or n for ok
 
 g3s_phandle g3_rotate_point(g3s_vector *v);
-	//translate, rotate, and code point in 3-space. returns point handle
+    //translate, rotate, and code point in 3-space. returns point handle
 
 g3s_phandle g3_rotate_norm(g3s_vector *v);
-	//rotate normal in 3-space. returns point handle.
+    //rotate normal in 3-space. returns point handle.
 
 //g3s_phandle g3_rotate_grad(g3s_vector *v);
 // MLA - defined as same routine in POINT.C
 #define g3_rotate_grad g3_rotate_norm
-	//rotate gradient in 3-space. returns point handle.
+    //rotate gradient in 3-space. returns point handle.
 
 g3s_phandle g3_rotate_light_norm(g3s_vector *v);
-   //rotate light norm from obj space into viewer space
+    //rotate light norm from obj space into viewer space
 
 #if (defined(powerc) || defined(__powerc))
 int32_t g3_project_point(g3s_phandle p);
@@ -420,15 +420,15 @@ int32_t g3_project_point(g3s_phandle p);
 asm int32_t g3_project_point(g3s_phandle p);
 #endif
 
-	//project already-rotated point. returns true if z>0
+    //project already-rotated point. returns true if z>0
 
 g3s_phandle g3_transform_point(g3s_vector *v);
-	//translate, rotate, code, and project point (rotate_point + project_point);
-	//returns point handle
+    //translate, rotate, code, and project point (rotate_point + project_point);
+    //returns point handle
 
 
 void g3_rotate_delta_v(g3s_vector *dest,g3s_vector *src);
-	//rotates a delta - takes vector input, fills in vector
+    //rotates a delta - takes vector input, fills in vector
 
 void g3_rotate_delta_x(g3s_vector *dest,fix dx);
 void g3_rotate_delta_y(g3s_vector *dest,fix dy);
@@ -437,7 +437,7 @@ void g3_rotate_delta_xz(g3s_vector *dest,fix dx,fix dz);
 void g3_rotate_delta_yz(g3s_vector *dest,fix dy,fix dz);
 void g3_rotate_delta_xy(g3s_vector *dest,fix dx,fix dy);
 void g3_rotate_delta_xyz(g3s_vector *dest,fix dx,fix dy,fix dz);
-	//rotate a deltas - take just the spefified values
+    //rotate a deltas - take just the spefified values
 
 void g3_add_delta_v(g3s_phandle p,g3s_vector *delta);
 void g3_add_delta_x(g3s_phandle p,fix dx);
@@ -447,7 +447,7 @@ void g3_add_delta_xy(g3s_phandle p,fix dx,fix dy);
 void g3_add_delta_xz(g3s_phandle p,fix dx,fix dz);
 void g3_add_delta_yz(g3s_phandle p,fix dy,fix dz);
 void g3_add_delta_xyz(g3s_phandle p,fix dx,fix dy,fix dz);
-	//adds a delta to a point
+    //adds a delta to a point
 
 g3s_phandle g3_copy_add_delta_v(g3s_phandle src,g3s_vector *delta);
 g3s_phandle g3_copy_add_delta_x(g3s_phandle src,fix dx);
@@ -457,14 +457,14 @@ g3s_phandle g3_copy_add_delta_xy(g3s_phandle src,fix dx,fix dy);
 g3s_phandle g3_copy_add_delta_xz(g3s_phandle src,fix dx,fix dz);
 g3s_phandle g3_copy_add_delta_yz(g3s_phandle src,fix dy,fix dz);
 g3s_phandle g3_copy_add_delta_xyz(g3s_phandle src,fix dx,fix dy,fix dz);
-	//adds a delta to a point, and stores in a new point
+    //adds a delta to a point, and stores in a new point
 
 g3s_phandle g3_replace_add_delta_x(g3s_phandle src, g3s_phandle dst, fix dx);
 g3s_phandle g3_replace_add_delta_y(g3s_phandle src, g3s_phandle dst, fix dy);
 g3s_phandle g3_replace_add_delta_z(g3s_phandle src, g3s_phandle dst, fix dz);
-   //adds a delta to src and stores to preallocated point dst
+    //adds a delta to src and stores to preallocated point dst
 
-g3s_phandle g3_dup_point(g3s_phandle p);                //makes copy of a point
+g3s_phandle g3_dup_point(g3s_phandle p);                     //makes copy of a point
 
 void g3_copy_point(g3s_phandle dest,g3s_phandle src);
 
@@ -474,17 +474,17 @@ g3s_codes g3_transform_list(int16_t n,g3s_phandle *dest_list,g3s_vector *v);
 g3s_codes g3_project_list(int16_t n,g3s_phandle *point_list);
 
 
-void g3_free_point(g3s_phandle p);      //adds to free list
+void g3_free_point(g3s_phandle p);        //adds to free list
 void g3_free_list(int32_t n_points,g3s_phandle *p); //adds to free list
 
 
 // Frame setup commands
 
-void g3_start_frame(void);          //mark all points as unused
+void g3_start_frame(void);             //mark all points as unused
 void g3_set_view_matrix(g3s_vector *pos,g3s_matrix *m,fix zoom);
-void g3_set_view_angles(g3s_vector *pos,g3s_angvec *angles,int32_t rotation_order,fix zoom);        //takes ptr to angles
+void g3_set_view_angles(g3s_vector *pos,g3s_angvec *angles,int32_t rotation_order,fix zoom);          //takes ptr to angles
 
-int32_t g3_end_frame(void);             //returns number of points lost. thus, 0==no error
+int32_t g3_end_frame(void);                 //returns number of points lost. thus, 0==no error
 
 // Lighting commands
 void g3_light_diff(g3s_phandle norm,g3s_phandle pos); // takes normal vector transformed, dots with the light vec, puts light val in norm
@@ -565,35 +565,35 @@ void g3_draw_horizon(int32_t sky_color,int32_t ground_color);
 // Misc commands
 
 g3s_codes g3_check_codes(int32_t n_verts,g3s_phandle *p);
-	//returns codes_and & codes_or of points
+    //returns codes_and & codes_or of points
 
 bool g3_check_normal_facing(g3s_vector *v,g3s_vector *normal);
-	//takes surface normal and unrotated point on poly. normal need not
-	//be normalized
+    //takes surface normal and unrotated point on poly. normal need not
+    //be normalized
 
 bool g3_check_poly_facing(g3s_phandle p0,g3s_phandle p1,g3s_phandle p2);
-	//takes 3 rotated points on poly
+    //takes 3 rotated points on poly
 
 void g3_get_FOV(fixang *x,fixang *y);
-	//fills in field of view across width and height of screen
+    //fills in field of view across width and height of screen
 
 fix g3_get_zoom(int8_t axis,fixang angle,int32_t window_width,int32_t window_height);
-	//returns zoom factor to achieve the desired view angle. axis is 'y' or 'x'
+    //returns zoom factor to achieve the desired view angle. axis is 'y' or 'x'
 
 void g3_get_view_pyramid(g3s_vector *corners);
-	//fills in 4 vectors, which unit vectors from the eye that describe the
-	//view pyramid.  first vector is upper right, then clockwise
+    //fills in 4 vectors, which unit vectors from the eye that describe the
+    //view pyramid.  first vector is upper right, then clockwise
 
 void g3_get_slew_step(fix step_size,g3s_vector *x_step,g3s_vector *y_step,g3s_vector *z_step);
-	//fills in three vectors, each of length step_size, in the specified
-	//direction in the viewer's frame of reference.  any (or all) of the
-	//vector pointers can be NULL to skip that axis.
+    //fills in three vectors, each of length step_size, in the specified
+    //direction in the viewer's frame of reference.  any (or all) of the
+    //vector pointers can be NULL to skip that axis.
 
 // Instancing. These all return true if everything ok
 
-bool g3_start_object(g3s_vector *p);    //position only (no orientation).
+bool g3_start_object(g3s_vector *p);     //position only (no orientation).
 
-bool g3_start_object_matrix(g3s_vector *p,g3s_matrix *m);       //position and orientation. these can nest
+bool g3_start_object_matrix(g3s_vector *p,g3s_matrix *m);         //position and orientation. these can nest
 
 bool g3_start_object_angles_v(g3s_vector *p,g3s_angvec *o,int32_t rotation_order);  //position and orientation vector. these can nest
 bool g3_start_object_angles_xyz(g3s_vector *p,fixang tx,fixang ty,fixang tz,int32_t rotation_order);
@@ -631,11 +631,11 @@ int32_t g3_draw_poly(int32_t c,int32_t n_verts,g3s_phandle *p);
 // MLA #pragma aux g3_draw_poly "*" parm [eax] [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
 int32_t g3_draw_tluc_poly(int32_t c,int32_t n_verts,g3s_phandle *p);
 // MLA #pragma aux g3_draw_tluc_poly "*" parm [eax] [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-int32_t g3_draw_spoly(int32_t n_verts,g3s_phandle *p);             //smooth poly
+int32_t g3_draw_spoly(int32_t n_verts,g3s_phandle *p);                 //smooth poly
 // MLA #pragma aux g3_draw_spoly "*" parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-int32_t g3_draw_tluc_spoly(int32_t n_verts,g3s_phandle *p);   //smooth poly
+int32_t g3_draw_tluc_spoly(int32_t n_verts,g3s_phandle *p);    //smooth poly
 // MLA #pragma aux g3_draw_tluc_spoly "*" parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-int32_t g3_draw_cpoly(int32_t n_verts,g3s_phandle *p);        //RBG-space smooth poly
+int32_t g3_draw_cpoly(int32_t n_verts,g3s_phandle *p);          //RBG-space smooth poly
 // MLA #pragma aux g3_draw_cpoly "*" parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
 
 int32_t g3_check_and_draw_poly(int32_t c,int32_t n_verts,g3s_phandle *p);
@@ -651,8 +651,8 @@ int32_t g3_check_and_draw_cpoly(int32_t n_verts,g3s_phandle *p);
 
 //versions of the poly routines which take the args on the stack
 int32_t g3_draw_poly_st(int32_t n_verts,...);
-int32_t g3_draw_cpoly_st(int32_t n_verts,...);          //RBG-space smooth poly
-int32_t g3_draw_spoly_st(int32_t n_verts,...);          //smooth poly
+int32_t g3_draw_cpoly_st(int32_t n_verts,...);             //RBG-space smooth poly
+int32_t g3_draw_spoly_st(int32_t n_verts,...);             //smooth poly
 int32_t g3_check_and_draw_poly_st(int32_t n_verts,...);
 int32_t g3_check_and_draw_cpoly_st(int32_t n_verts,...);
 int32_t g3_check_and_draw_spoly_st(int32_t n_verts,...);
@@ -684,15 +684,15 @@ int32_t g3_light_lmap(int32_t n,g3s_phandle *vp,grs_bitmap *bm);
 
 #define g3_draw_tmap_quad(vp,bm) g3_draw_tmap_quad_tile(vp,bm,1,1)
 #define g3_check_and_draw_tmap_quad(vp,bm) g3_check_and_draw_tmap_quad_tile(vp,bm,1,1)
-	//these take four points, which match the four points of the texture map
-	//corners.  The points are clockwise, and the first point is the upper left.
+    //these take four points, which match the four points of the texture map
+    //corners.  The points are clockwise, and the first point is the upper left.
 
 int32_t g3_draw_tmap_quad_tile(g3s_phandle *vp,grs_bitmap *bm,int32_t width_count,int32_t height_count);
 // MLA #pragma aux g3_draw_tmap_quad_tile "*" parm [esi] [edi] [eax] [ebx] value [eax] modify [eax ebx ecx edx esi edi];
 int32_t g3_check_and_draw_tmap_quad_tile(g3s_phandle *vp,grs_bitmap *bm,int32_t width_count,int32_t height_count);
 // MLA #pragma aux g3_check_and_draw_tmap_quad_tile "*" parm [esi] [edi] [eax] [ebx] value [eax] modify [eax ebx ecx edx esi edi];
-	//these are like draw_tmap_quad(), but tile the specified number of times
-	//across and down.
+    //these are like draw_tmap_quad(), but tile the specified number of times
+    //across and down.
 int32_t g3_light_tmap_quad_tile(g3s_phandle *vp,grs_bitmap *bm,int32_t width_count,int32_t height_count);
 // MLA #pragma aux g3_light_tmap_quad_tile "*" parm [esi] [edi] [eax] [ebx] value [eax] modify [eax ebx ecx edx esi edi];
 int32_t g3_check_and_light_tmap_quad_tile(g3s_phandle *vp,grs_bitmap *bm,int32_t width_count,int32_t height_count);
@@ -709,12 +709,12 @@ int32_t g3_check_and_light_lmap_quad_tile(g3s_phandle *vp,grs_bitmap *bm,int32_t
 
 int32_t g3_draw_tmap_tile(g3s_phandle upperleft,g3s_vector *u_vec,g3s_vector *v_vec,int32_t nverts,g3s_phandle *vp,grs_bitmap *bm);
 // MLA #pragma aux g3_draw_tmap_tile "*" parm [eax] [ebx] [ecx] [edx] [esi] [edi] value [eax] modify [eax ebx ecx edx esi edi];
-	//this will tile a texture map over an arbitrary polygon. upperleft is the
-	//point in 3-space the matches the upper left corner of the texture map.
-	//u_vec and v_vec are the u and v basis vectors respectively.
-	//upperleft need not be in the polygon.  If upperleft is 0, the warp matrix
-	//from the last texture map that drew (i.e. was at least partly on screen)
-	//will be used.
+    //this will tile a texture map over an arbitrary polygon. upperleft is the
+    //point in 3-space the matches the upper left corner of the texture map.
+    //u_vec and v_vec are the u and v basis vectors respectively.
+    //upperleft need not be in the polygon.  If upperleft is 0, the warp matrix
+    //from the last texture map that drew (i.e. was at least partly on screen)
+    //will be used.
 int32_t g3_light_tmap_tile(g3s_phandle upperleft,g3s_vector *u_vec,g3s_vector *v_vec,int32_t nverts,g3s_phandle *vp,grs_bitmap *bm);
 // MLA #pragma aux g3_light_tmap_tile "*" parm [eax] [ebx] [ecx] [edx] [esi] [edi] value [eax] modify [eax ebx ecx edx esi edi];
 int32_t g3_draw_lmap_tile(g3s_phandle upperleft,g3s_vector *u_vec,g3s_vector *v_vec,int32_t nverts,g3s_phandle *vp,grs_bitmap *bm);
@@ -866,52 +866,52 @@ extern void g3_reset_tmaps(void);
 // and all routines need to be C callable
 /*
 #pragma aux g3_draw_poly_st = \
-	"mov ecx,[esp]"                 \
-	"lea esi,4[esp]"                        \
-	"call	g3_draw_poly"     \
-	"pop ecx"                               \
-	"lea esp,[esp+ecx*4]"   \
-	parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
+    "mov ecx,[esp]"                      \
+    "lea esi,4[esp]"                                \
+    "call    g3_draw_poly"      \
+    "pop ecx"                                         \
+    "lea esp,[esp+ecx*4]"    \
+    parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
 
 #pragma aux g3_draw_spoly_st = \
-	"mov ecx,[esp]"                 \
-	"lea esi,4[esp]"                        \
-	"call	g3_draw_spoly"    \
-	"pop ecx"                               \
-	"lea esp,[esp+ecx*4]"   \
-	parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
+    "mov ecx,[esp]"                      \
+    "lea esi,4[esp]"                                \
+    "call    g3_draw_spoly"     \
+    "pop ecx"                                         \
+    "lea esp,[esp+ecx*4]"    \
+    parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
 
 #pragma aux g3_draw_cpoly_st = \
-	"mov ecx,[esp]"                 \
-	"lea esi,4[esp]"                        \
-	"call	g3_draw_cpoly"    \
-	"pop ecx"                               \
-	"lea esp,[esp+ecx*4]"   \
-	parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
+    "mov ecx,[esp]"                      \
+    "lea esi,4[esp]"                                \
+    "call    g3_draw_cpoly"     \
+    "pop ecx"                                         \
+    "lea esp,[esp+ecx*4]"    \
+    parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
 
 #pragma aux g3_check_and_draw_poly_st = \
-	"mov ecx,[esp]"                 \
-	"lea esi,4[esp]"                        \
-	"call	g3_check_and_draw_poly"   \
-	"pop ecx"                               \
-	"lea esp,[esp+ecx*4]"   \
-	parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
+    "mov ecx,[esp]"                      \
+    "lea esi,4[esp]"                                \
+    "call    g3_check_and_draw_poly"    \
+    "pop ecx"                                         \
+    "lea esp,[esp+ecx*4]"    \
+    parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
 
 #pragma aux g3_check_and_draw_cpoly_st = \
-	"mov ecx,[esp]"                 \
-	"lea esi,4[esp]"                        \
-	"call	g3_check_and_draw_cpoly"  \
-	"pop ecx"                               \
-	"lea esp,[esp+ecx*4]"   \
-	parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
+    "mov ecx,[esp]"                      \
+    "lea esi,4[esp]"                                \
+    "call    g3_check_and_draw_cpoly"  \
+    "pop ecx"                                         \
+    "lea esp,[esp+ecx*4]"    \
+    parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
 
 #pragma aux g3_check_and_draw_spoly_st = \
-	"mov ecx,[esp]"                 \
-	"lea esi,4[esp]"                        \
-	"call	g3_check_and_draw_spoly"  \
-	"pop ecx"                               \
-	"lea esp,[esp+ecx*4]"   \
-	parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
+    "mov ecx,[esp]"                      \
+    "lea esi,4[esp]"                                \
+    "call    g3_check_and_draw_spoly"  \
+    "pop ecx"                                         \
+    "lea esp,[esp+ecx*4]"    \
+    parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
 */
 
 #endif /* __3D_H */

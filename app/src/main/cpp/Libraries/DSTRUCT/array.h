@@ -63,12 +63,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _array
 {
-   int32_t elemsize;  // How big is each array element
-   int32_t vecsize;   // How many elements in the vector
-   int32_t fullness;  // How many elements are used.
-   int32_t freehead;  // index to head of the free list.
-   int32_t *freevec;  // free list
-   int8_t *vec;     // the actual vector;
+    int32_t elemsize;  // How big is each array element
+    int32_t vecsize;    // How many elements in the vector
+    int32_t fullness;  // How many elements are used.
+    int32_t freehead;  // index to head of the free list.
+    int32_t *freevec;  // free list
+    int8_t *vec;      // the actual vector;
 } Array;
 
 

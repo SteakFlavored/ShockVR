@@ -55,21 +55,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 /* allocate enoguh video memory for a screen of the specified size.  then set
-   up the screen structure describing this screen and the 2 system canvases
-   for drawing on it.  return a pointer to the new screen structure. */
+    up the screen structure describing this screen and the 2 system canvases
+    for drawing on it.  return a pointer to the new screen structure. */
 grs_screen *gr_alloc_screen (int16_t w, int16_t h)
  {
-	grs_screen *s=0L;
+    grs_screen *s=0L;
   grs_canvas *c;
   uint8_t *p;
   uint8_t *b;
 
   /* get memory for screen structure itself and 2 system canvases,
-        and video ram for the screen itself. */
-  if ((p=(uint8_t *)NewPtr (sizeof (*s)+2*sizeof (*c))) == NULL)	// was gr_malloc
-     goto bailout2;
+          and video ram for the screen itself. */
+  if ((p=(uint8_t *)NewPtr (sizeof (*s)+2*sizeof (*c))) == NULL)    // was gr_malloc
+      goto bailout2;
   if ((b = valloc (w, h)) == (uint8_t *)-1)
-  	goto bailout1;
+      goto bailout1;
 
   /* set up bitmap. */
   s = (grs_screen *)p;
@@ -87,7 +87,7 @@ grs_screen *gr_alloc_screen (int16_t w, int16_t h)
   return s;
 
 bailout1:
-  DisposePtr ((Ptr) s);	// was gr_free
+  DisposePtr ((Ptr) s);    // was gr_free
 bailout2:
   return NULL;
 }
@@ -95,11 +95,11 @@ bailout2:
 /* free memory for screen and its related data structures. */
 void gr_free_screen (grs_screen *s)
 {
-	vfree (s->bm.bits);
-	if (s->c->ytab)
-  	DisposePtr ((Ptr) s->c->ytab);	// was gr_free
+    vfree (s->bm.bits);
+    if (s->c->ytab)
+      DisposePtr ((Ptr) s->c->ytab);    // was gr_free
   if ((s->c+1)->ytab)
-  	DisposePtr ((Ptr) (s->c+1)->ytab);	// was gr_free
-  DisposePtr ((Ptr) s->c);	// was gr_free
-  DisposePtr ((Ptr) s);	// was gr_free
+      DisposePtr ((Ptr) (s->c+1)->ytab);    // was gr_free
+  DisposePtr ((Ptr) s->c);    // was gr_free
+  DisposePtr ((Ptr) s);    // was gr_free
 }

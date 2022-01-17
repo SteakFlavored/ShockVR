@@ -56,23 +56,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tabdat.h"
 
 #define gr_set_upixel \
-   ((void (*)(int32_t color, int16_t x, int16_t y))grd_pixel_table[SET_UPIXEL8])
+    ((void (*)(int32_t color, int16_t x, int16_t y))grd_pixel_table[SET_UPIXEL8])
 #define gr_set_pixel \
-   ((int32_t (*)(int32_t color, int16_t x, int16_t y))grd_pixel_table[SET_PIXEL8])
+    ((int32_t (*)(int32_t color, int16_t x, int16_t y))grd_pixel_table[SET_PIXEL8])
 
 #define gr_set_upixel_interrupt \
-   ((void (*)(int32_t color, int16_t x, int16_t y))grd_pixel_table[SET_UPIXEL8_INTERRUPT])
+    ((void (*)(int32_t color, int16_t x, int16_t y))grd_pixel_table[SET_UPIXEL8_INTERRUPT])
 #define gr_set_pixel_interrupt \
-   ((int32_t (*)(int32_t color, int16_t x, int16_t y))grd_pixel_table[SET_PIXEL8_INTERRUPT])
+    ((int32_t (*)(int32_t color, int16_t x, int16_t y))grd_pixel_table[SET_PIXEL8_INTERRUPT])
 
 extern int32_t gen_fill_pixel(int32_t color, int16_t x, int16_t y);
 
 #define gr_fill_upixel \
-   ((void (*)(int32_t color, int16_t x, int16_t y))grd_function_table[GRC_PIXEL])
+    ((void (*)(int32_t color, int16_t x, int16_t y))grd_function_table[GRC_PIXEL])
 #define gr_fill_pixel gen_fill_pixel
 
 #define gr_get_upixel \
-   ((int32_t (*)(int16_t x, int16_t y))grd_pixel_table[GET_UPIXEL8])
+    ((int32_t (*)(int16_t x, int16_t y))grd_pixel_table[GET_UPIXEL8])
 #define gr_get_pixel \
-   ((int32_t (*)(int16_t x, int16_t y))grd_pixel_table[GET_PIXEL8])
+    ((int32_t (*)(int16_t x, int16_t y))grd_pixel_table[GET_PIXEL8])
 #endif /* !__GRPIX_H */

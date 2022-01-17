@@ -53,8 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Includes
 
 // Defines
-#define MAIN_PANEL       0
-#define SAVELOAD_PANEL   1
+#define MAIN_PANEL         0
+#define SAVELOAD_PANEL    1
 
 // questbit for terse text.
 #define TERSENESS_QBIT 0x180
@@ -67,7 +67,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // as an argument.
 bool wrapper_options_func(int16_t keycode, uint32_t context, void* data);
 
-#define NUM_SAVE_SLOTS    8
+#define NUM_SAVE_SLOTS     8
 #define SAVE_COMMENT_LEN 32
 
 // Globals

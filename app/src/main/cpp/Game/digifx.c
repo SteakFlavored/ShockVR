@@ -56,16 +56,16 @@ int32_t digi_timer_id;
 void start_asynch_digi_fx()
 {
 #ifdef ASYNCH_DIGI
-   if (sfx_on)
-      tm_activate_process(digi_timer_id);
+    if (sfx_on)
+        tm_activate_process(digi_timer_id);
 #endif
 }
 
 void stop_asynch_digi_fx()
 {
 #ifdef ASYNCH_DIGI
-   if (sfx_on)
-      tm_deactivate_process(digi_timer_id);
+    if (sfx_on)
+        tm_deactivate_process(digi_timer_id);
 #endif
 }
 
@@ -74,21 +74,21 @@ void stop_asynch_digi_fx()
 errtype stop_digi_fx()
 {
 #ifdef AUDIOLOGS
-   if (audiolog_setting)
-      audiolog_stop();
+    if (audiolog_setting)
+        audiolog_stop();
 #endif
-   if (sfx_on)
-   {
-      extern void sound_frame_update(void);
-      snd_kill_all_samples();
-      sound_frame_update();
-   }
-   return(ERR_NOEFFECT);
+    if (sfx_on)
+    {
+        extern void sound_frame_update(void);
+        snd_kill_all_samples();
+        sound_frame_update();
+    }
+    return(ERR_NOEFFECT);
 }
 
 void clear_digi_fx()
 {
-   stop_digi_fx();
+    stop_digi_fx();
 }
 
 
@@ -97,36 +97,36 @@ void clear_digi_fx()
 errtype digifx_init()
 {
 /* KLC - almost none of this is needed now
-   int32_t fp;
-   int8_t fname[80];
-   extern Datapath DataDirPath;
-   extern void asynch_digi_fx(void);
+    int32_t fp;
+    int8_t fname[80];
+    extern Datapath DataDirPath;
+    extern void asynch_digi_fx(void);
 
-   DatapathFind(&DataDirPath, "digiparm.bin", fname);
-   if ((fp = open(fname,O_RDONLY|O_BINARY)) == NULL)
-      return (ERR_FOPEN);
+    DatapathFind(&DataDirPath, "digiparm.bin", fname);
+    if ((fp = open(fname,O_RDONLY|O_BINARY)) == NULL)
+        return (ERR_FOPEN);
 
-   read(fp, volumes, NUM_DIGI_FX);
-   read(fp, flags, NUM_DIGI_FX);
-   read(fp, priorities, NUM_DIGI_FX);
+    read(fp, volumes, NUM_DIGI_FX);
+    read(fp, flags, NUM_DIGI_FX);
+    read(fp, priorities, NUM_DIGI_FX);
 
-   close(fp);
+    close(fp);
 */
-   clear_digi_fx();
+    clear_digi_fx();
 
-   snd_finish = digifx_EOS_callback;
+    snd_finish = digifx_EOS_callback;
 
 /* KLC - not needed now.
 #ifdef ASYNCH_DIGI
-   digi_timer_id = tm_add_process(asynch_digi_fx, 0, CIT_FREQ << 2);
+    digi_timer_id = tm_add_process(asynch_digi_fx, 0, CIT_FREQ << 2);
 #endif
 */
-   return(OK);
+    return(OK);
 }
 
 
 #define DIGIFX_TIMEOUT_TICKS  (CIT_CYCLE * 3) >> 1
-#define DIGIFX_DUPE_TICKS     CIT_CYCLE >> 2
+#define DIGIFX_DUPE_TICKS      CIT_CYCLE >> 2
 
 // Returns a 0-255 factor of how loud the sound should be.
 #define VOL_FULL  0xFF
@@ -146,100 +146,100 @@ bool set_sample_pan_gain(snd_digi_parms *sdp);
 
 int32_t compute_sfx_vol(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
-   fix dx,dy,dist;
-   int32_t retval;
+    fix dx,dy,dist;
+    int32_t retval;
 
-   dx = fix_from_obj_coord(x1) - fix_from_obj_coord(x2);
-   dy = fix_from_obj_coord(y1) - fix_from_obj_coord(y2);
-   dist = fix_fast_pyth_dist(dx,dy);
+    dx = fix_from_obj_coord(x1) - fix_from_obj_coord(x2);
+    dy = fix_from_obj_coord(y1) - fix_from_obj_coord(y2);
+    dist = fix_fast_pyth_dist(dx,dy);
 
-   if (dist > MAX_DIGIFX_DIST)
-      retval = 0;
-   else if (dist < MIN_DIGIFX_DIST)
-      retval = VOL_FULL;
-   else
-      // What, no fix_mul_div_int?
-      retval = fix_int(fix_mul_div(FIX_VOL_FULL, MAX_DIGIFX_DIST - dist, MAX_DIGIFX_DIST - MIN_DIGIFX_DIST));
-   return(retval);
+    if (dist > MAX_DIGIFX_DIST)
+        retval = 0;
+    else if (dist < MIN_DIGIFX_DIST)
+        retval = VOL_FULL;
+    else
+        // What, no fix_mul_div_int?
+        retval = fix_int(fix_mul_div(FIX_VOL_FULL, MAX_DIGIFX_DIST - dist, MAX_DIGIFX_DIST - MIN_DIGIFX_DIST));
+    return(retval);
 }
 
 // i should just fix this....
 int32_t compute_sfx_pan(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, fixang our_ang)
 {
-   fixang sfx_ang;
-   fix dx,dy;
-   int32_t retval;
+    fixang sfx_ang;
+    fix dx,dy;
+    int32_t retval;
 
-   dx = fix_from_obj_coord(x1) - fix_from_obj_coord(x2);
-   dy = fix_from_obj_coord(y1) - fix_from_obj_coord(y2);
+    dx = fix_from_obj_coord(x1) - fix_from_obj_coord(x2);
+    dy = fix_from_obj_coord(y1) - fix_from_obj_coord(y2);
 
-   // Do some trig, and move the angle into our relative frame
-   // wait, our_ang is 0-65536 from North, clockwise  // so, ah, what is going on????
-   our_ang=0x4000-our_ang;
-   sfx_ang = fix_atan2(dy,dx) - our_ang;
-   // Now we have an angle, sfx_ang, which supposedly represents the angle of the source relative to our facing...
-   retval = fix_int(fix_mul(fix_fastsin(sfx_ang), fix_make(-63,0))) + 64;   // was cos,i made it sin, flipped to be left-right
-   return(retval);
+    // Do some trig, and move the angle into our relative frame
+    // wait, our_ang is 0-65536 from North, clockwise  // so, ah, what is going on????
+    our_ang=0x4000-our_ang;
+    sfx_ang = fix_atan2(dy,dx) - our_ang;
+    // Now we have an angle, sfx_ang, which supposedly represents the angle of the source relative to our facing...
+    retval = fix_int(fix_mul(fix_fastsin(sfx_ang), fix_make(-63,0))) + 64;    // was cos,i made it sin, flipped to be left-right
+    return(retval);
 }
 
 // Returns whether or not in the humble opinion of the
 // sound system, the sample should be politely obliterated out of existence
 bool set_sample_pan_gain(snd_digi_parms *sdp)
 {
-   uint8_t temp_vol,vol;
-   uint32_t raw_data = (uint)sdp->data;
-   extern uint8_t curr_sfx_vol;
+    uint8_t temp_vol,vol;
+    uint32_t raw_data = (uint)sdp->data;
+    extern uint8_t curr_sfx_vol;
 
-   if (raw_data & 0x80000000)
-   {
-      int16_t x,y,i;
-      extern height_semaphor h_sems[NUM_HEIGHT_SEMAPHORS];
-      height_semaphor h;
+    if (raw_data & 0x80000000)
+    {
+        int16_t x,y,i;
+        extern height_semaphor h_sems[NUM_HEIGHT_SEMAPHORS];
+        height_semaphor h;
 
-      x = (raw_data & 0x7FFF0000) >> 16;
-      y = (raw_data & 0xFFFF);
-      // Check whether we should stop playing...totally hacked for terrain elevators
-      for (i=0; i < NUM_HEIGHT_SEMAPHORS; i++)
-      {
-         h = h_sems[i];
-         if ((h.x == (x >> 8)) && (h.y == (y >> 8)) && (h.inuse == 1))
-         {
-            h.inuse--;
-            return(true);
-         }
-      }
-      temp_vol = compute_sfx_vol(x, y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
-      sdp->pan = compute_sfx_pan(x, y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y,
-         objs[PLAYER_OBJ].loc.h << 8);
-   }
-   else if (raw_data != 0)
-   {
-      ObjID id;
-      id = (ObjID) raw_data;
-      temp_vol = compute_sfx_vol(objs[id].loc.x, objs[id].loc.y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
-      sdp->pan = compute_sfx_pan(objs[id].loc.x, objs[id].loc.y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y,
-         objs[PLAYER_OBJ].loc.h << 8);
-   }
-   else if (sdp->snd_ref==0)
-   {  // audiolog
-// following is temp      sdp->vol=curr_alog_vol;
-      sdp->vol = 100;
-      snd_sample_reload_parms(sdp);
-      return(false);
-   }
-   else
-   {
-//      sdp->pan=SND_DEF_PAN;
-      temp_vol = VOL_FULL;
-   }
-   vol = volumes[sdp->snd_ref - SFX_BASE];
-   if (vol == -1)
-      vol = 127;
-//   vol = vol  * curr_sfx_vol / 100;
-   sdp->vol = vol * temp_vol / VOL_FULL;
-   sdp->vol = 127;  // for now
-   snd_sample_reload_parms(sdp);
-   return(false);
+        x = (raw_data & 0x7FFF0000) >> 16;
+        y = (raw_data & 0xFFFF);
+        // Check whether we should stop playing...totally hacked for terrain elevators
+        for (i=0; i < NUM_HEIGHT_SEMAPHORS; i++)
+        {
+            h = h_sems[i];
+            if ((h.x == (x >> 8)) && (h.y == (y >> 8)) && (h.inuse == 1))
+            {
+                h.inuse--;
+                return(true);
+            }
+        }
+        temp_vol = compute_sfx_vol(x, y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
+        sdp->pan = compute_sfx_pan(x, y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y,
+            objs[PLAYER_OBJ].loc.h << 8);
+    }
+    else if (raw_data != 0)
+    {
+        ObjID id;
+        id = (ObjID) raw_data;
+        temp_vol = compute_sfx_vol(objs[id].loc.x, objs[id].loc.y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
+        sdp->pan = compute_sfx_pan(objs[id].loc.x, objs[id].loc.y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y,
+            objs[PLAYER_OBJ].loc.h << 8);
+    }
+    else if (sdp->snd_ref==0)
+    {  // audiolog
+// following is temp        sdp->vol=curr_alog_vol;
+        sdp->vol = 100;
+        snd_sample_reload_parms(sdp);
+        return(false);
+    }
+    else
+    {
+//        sdp->pan=SND_DEF_PAN;
+        temp_vol = VOL_FULL;
+    }
+    vol = volumes[sdp->snd_ref - SFX_BASE];
+    if (vol == -1)
+        vol = 127;
+//    vol = vol  * curr_sfx_vol / 100;
+    sdp->vol = vol * temp_vol / VOL_FULL;
+    sdp->vol = 127;  // for now
+    snd_sample_reload_parms(sdp);
+    return(false);
 }
 
 #ifdef NOT_YET //
@@ -247,43 +247,43 @@ bool set_sample_pan_gain(snd_digi_parms *sdp)
 #pragma disable_message(202)
 int32_t digifx_volume_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta, int32_t basevol)
 {
-   int32_t retval;
-   // Note that "x" is really the object ID of the thing we care about
-   // unless phi is set, in which case phi and theta are a literal location to use
-   if (x != OBJ_NULL)
-      retval = compute_sfx_vol(objs[x].loc.x, objs[x].loc.y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
-   else if (phi != 0)
-      retval = compute_sfx_vol(phi,theta,objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
-   else
-      retval = VOL_FULL;
+    int32_t retval;
+    // Note that "x" is really the object ID of the thing we care about
+    // unless phi is set, in which case phi and theta are a literal location to use
+    if (x != OBJ_NULL)
+        retval = compute_sfx_vol(objs[x].loc.x, objs[x].loc.y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
+    else if (phi != 0)
+        retval = compute_sfx_vol(phi,theta,objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
+    else
+        retval = VOL_FULL;
 
-   // Now normalize vs basevol
-   retval = basevol * retval / VOL_FULL;
-   return(retval);
+    // Now normalize vs basevol
+    retval = basevol * retval / VOL_FULL;
+    return(retval);
 }
 
 int32_t digifx_pan_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta)
 {
-   int32_t retval;
-   // Note that "x" is really the object ID of the thing we care about
-   // unless phi is set, in which case phi and theta are a literal location to use
-   if (x != OBJ_NULL)
-      retval = compute_sfx_pan(objs[x].loc.x,objs[x].loc.y,objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y, objs[PLAYER_OBJ].loc.h << 8);
-   else if (phi != 0)
-      retval = compute_sfx_pan(phi,theta,objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y, objs[PLAYER_OBJ].loc.h << 8);
-   else
-      retval = 128; // is this right??
-   retval = (retval + 64) >> 1;
-   Spew(DSRC_AUDIO_Testing, ("Modified PAN value=%d\n",retval));
-   return(retval);
+    int32_t retval;
+    // Note that "x" is really the object ID of the thing we care about
+    // unless phi is set, in which case phi and theta are a literal location to use
+    if (x != OBJ_NULL)
+        retval = compute_sfx_pan(objs[x].loc.x,objs[x].loc.y,objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y, objs[PLAYER_OBJ].loc.h << 8);
+    else if (phi != 0)
+        retval = compute_sfx_pan(phi,theta,objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y, objs[PLAYER_OBJ].loc.h << 8);
+    else
+        retval = 128; // is this right??
+    retval = (retval + 64) >> 1;
+    Spew(DSRC_AUDIO_Testing, ("Modified PAN value=%d\n",retval));
+    return(retval);
 }
 #pragma enable_message(202)
 
 #endif  // NOT_YET
 
 uint8_t sfx_volume_levels[] = {0, 0x9, 0xF};
-#define ALWAYS_QUEUE_TOLERANCE   2
-#define NO_GAIN_THRESHOLD     0x6A
+#define ALWAYS_QUEUE_TOLERANCE    2
+#define NO_GAIN_THRESHOLD      0x6A
 #define HARSH_GAIN_THRESHOLD  0xBA
 
 snd_digi_parms s_dprm;
@@ -291,102 +291,102 @@ int8_t secret_global_pan=SND_DEF_PAN;
 
 int32_t play_digi_fx_master(int32_t sfx_code, int32_t num_loops, ObjID id, uint16_t x, uint16_t y)
 {
-   Id vocRes;
-   int32_t retval, real_code = sfx_code, len;
-   uint8_t *addr;
-   extern bool sfx_on;
-   extern uint8_t curr_sfx_vol;
+    Id vocRes;
+    int32_t retval, real_code = sfx_code, len;
+    uint8_t *addr;
+    extern bool sfx_on;
+    extern uint8_t curr_sfx_vol;
 
-   if (!sfx_on)
-      return -2;
-   if ((sfx_code == -1) || (sfx_code == 255))
-      return -1;     // why do we call this with things we dont use?
+    if (!sfx_on)
+        return -2;
+    if ((sfx_code == -1) || (sfx_code == 255))
+        return -1;      // why do we call this with things we dont use?
 
 #ifdef AUDIOLOGS
-   if (sfx_code > 255)
-      sfx_code = 0;
-   if (audiolog_playing(-1))        // what is this, really?
-      if (sfx_code != real_code)
-         audiolog_stop();
-   if (sfx_code == real_code)
+    if (sfx_code > 255)
+        sfx_code = 0;
+    if (audiolog_playing(-1))          // what is this, really?
+        if (sfx_code != real_code)
+            audiolog_stop();
+    if (sfx_code == real_code)
 #endif
-   {
-      // If the sound effect is too far away, don't even bother us
-      if (id != OBJ_NULL)
-      {
-         if (compute_sfx_vol(objs[id].loc.x, objs[id].loc.y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y)==0)
-            return -1;
-      }
-      else if (x != 0)
-         if (compute_sfx_vol(x, y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y) == 0)
-            return -1;
-   }
+    {
+        // If the sound effect is too far away, don't even bother us
+        if (id != OBJ_NULL)
+        {
+            if (compute_sfx_vol(objs[id].loc.x, objs[id].loc.y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y)==0)
+                return -1;
+        }
+        else if (x != 0)
+            if (compute_sfx_vol(x, y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y) == 0)
+                return -1;
+    }
 
-   vocRes = SFX_BASE + real_code;
+    vocRes = SFX_BASE + real_code;
 
-   // s_dprm is the static data set for the parameters
-   s_dprm.loops=num_loops;
-   s_dprm.pri=priorities[sfx_code];
-   s_dprm.pan  = secret_global_pan;
+    // s_dprm is the static data set for the parameters
+    s_dprm.loops=num_loops;
+    s_dprm.pri=priorities[sfx_code];
+    s_dprm.pan  = secret_global_pan;
 #ifdef AUDIOLOGS
-   if (sfx_code != real_code)
-   {
-      s_dprm.data = NULL;
-      s_dprm.vol  = volumes[sfx_code]; //* curr_sfx_vol / 100;
-   }
-   else
+    if (sfx_code != real_code)
+    {
+        s_dprm.data = NULL;
+        s_dprm.vol  = volumes[sfx_code]; //* curr_sfx_vol / 100;
+    }
+    else
 #endif
-   {
-      if (id != OBJ_NULL)
-         s_dprm.data=(void *)id;
-      else if (x != 0)
-         s_dprm.data = (void *)(0x80000000 | (x << 16) | y);
-      else
-         s_dprm.data = NULL;
-      s_dprm.snd_ref = vocRes; // okay, I'm cheating a little here
-      set_sample_pan_gain(&s_dprm);
-   }
+    {
+        if (id != OBJ_NULL)
+            s_dprm.data=(void *)id;
+        else if (x != 0)
+            s_dprm.data = (void *)(0x80000000 | (x << 16) | y);
+        else
+            s_dprm.data = NULL;
+        s_dprm.snd_ref = vocRes; // okay, I'm cheating a little here
+        set_sample_pan_gain(&s_dprm);
+    }
 
-   // have to hash x,y no id to a secret ID code, eh?
-   s_dprm.flags=0;
-   len=ResSize(vocRes);
-   addr=(uint8_t *)ResLock(vocRes);
-   if (addr!=NULL)
-	   retval=snd_sample_play(vocRes,len,addr,&s_dprm);
-   else
-      critical_error(CRITERR_MEM|9);
-   if (retval == SND_PERROR)
-	{
-      ResUnlock(vocRes);
-      return -3;
-   }
-   return retval;          // which sample id
+    // have to hash x,y no id to a secret ID code, eh?
+    s_dprm.flags=0;
+    len=ResSize(vocRes);
+    addr=(uint8_t *)ResLock(vocRes);
+    if (addr!=NULL)
+        retval=snd_sample_play(vocRes,len,addr,&s_dprm);
+    else
+        critical_error(CRITERR_MEM|9);
+    if (retval == SND_PERROR)
+    {
+        ResUnlock(vocRes);
+        return -3;
+    }
+    return retval;             // which sample id
 }
 
 // scan through the whole list
 bool digi_fx_playing(int32_t fx_id, int32_t *handle_ptr)
 {
-	int32_t 			i;
-	SCStatus	stat;
-	snd_digi_parms *sdp;
+    int32_t             i;
+    SCStatus    stat;
+    snd_digi_parms *sdp;
 
-	if (fx_id == -1)
-		return(false);
+    if (fx_id == -1)
+        return(false);
 
-	// should scan all current sfx's for snd_ref=fx_id+SFX_BASE
-	for (i=0; i < _snd_smp_cnt; i++)
-	{
-		SndChannelStatus(_snd_smp_prm[i].sndChan, sizeof(SCStatus), &stat);
-		if (stat.scChannelBusy || stat.scChannelPaused)
-		{
-			sdp = snd_sample_parms(i);
-			if (sdp->snd_ref == fx_id + SFX_BASE)
-			{
-				if (handle_ptr != NULL)
-					*handle_ptr = i;
-				return(true);
-			}
-		}
-	}
-	return false;
+    // should scan all current sfx's for snd_ref=fx_id+SFX_BASE
+    for (i=0; i < _snd_smp_cnt; i++)
+    {
+        SndChannelStatus(_snd_smp_prm[i].sndChan, sizeof(SCStatus), &stat);
+        if (stat.scChannelBusy || stat.scChannelPaused)
+        {
+            sdp = snd_sample_parms(i);
+            if (sdp->snd_ref == fx_id + SFX_BASE)
+            {
+                if (handle_ptr != NULL)
+                    *handle_ptr = i;
+                return(true);
+            }
+        }
+    }
+    return false;
 }

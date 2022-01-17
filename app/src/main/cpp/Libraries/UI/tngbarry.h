@@ -71,47 +71,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Typedefs
 typedef struct {
-   int32_t type;
-   void *disp_data;
+    int32_t type;
+    void *disp_data;
 } TNGButtonArrayElement;
 
 typedef struct _butdrawcallback
 {
-   void (*func)(LGRect* r, LGPoint butcoord, void* data);
-   void* data;
+    void (*func)(LGRect* r, LGPoint butcoord, void* data);
+    void* data;
 } ButtonDrawCallback;
 
 
 typedef struct {
-   TNG *tng_data;
-   LGPoint bsize, msize, wsize, scroll_size;
-   LGPoint size, offset, lsel;
-   uint8_t spacing;
-   int32_t num_selectable;
-   int16_t lastkey;
-   uint16_t options;
-   TNGButtonArrayElement *matrix;
-   bool *selected;
-   TNG *hscroll_tng, *vscroll_tng;
+    TNG *tng_data;
+    LGPoint bsize, msize, wsize, scroll_size;
+    LGPoint size, offset, lsel;
+    uint8_t spacing;
+    int32_t num_selectable;
+    int16_t lastkey;
+    uint16_t options;
+    TNGButtonArrayElement *matrix;
+    bool *selected;
+    TNG *hscroll_tng, *vscroll_tng;
 } TNG_buttonarray;
 
-#define TNG_BA_MATRIX   0x0001
+#define TNG_BA_MATRIX    0x0001
 #define TNG_BA_HSCROLL  0x0002
 #define TNG_BA_VSCROLL  0x0004
 
-#define TNG_BA_SELECT_SIZE    1
-#define TNG_BA_BORDER_WIDTH   1
-#define TNG_BA_SCROLL_X       7
-#define TNG_BA_SCROLL_Y       7
+#define TNG_BA_SELECT_SIZE     1
+#define TNG_BA_BORDER_WIDTH    1
+#define TNG_BA_SCROLL_X         7
+#define TNG_BA_SCROLL_Y         7
 
 
-#define TNG_BA_NO_OPTIONS          0x00
-#define TNG_BA_OUTLINE_MODE        0x01
-#define TNG_BA_CHECKBOX_MODE       0x02
-#define TNG_BA_TIGHTPACK           0x04
-#define TNG_BA_LOOSEPACK           0x08
+#define TNG_BA_NO_OPTIONS             0x00
+#define TNG_BA_OUTLINE_MODE          0x01
+#define TNG_BA_CHECKBOX_MODE         0x02
+#define TNG_BA_TIGHTPACK              0x04
+#define TNG_BA_LOOSEPACK              0x08
 
-#define TNG_BA_CHECKBOX_SIZE       4
+#define TNG_BA_CHECKBOX_SIZE         4
 // Prototypes
 
 // Initializes the TNG

@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * added grs_font * as first argument, #define for compatibility in str.h
  *
  * Revision 1.5  1993/10/19  09:57:55  kaboom
- * Replaced #include   new headers.
+ * Replaced #include    new headers.
  *
  * Revision 1.4  1993/10/08  01:15:51  kaboom
  * Changed quotes in #include lines to angle brackets for Watcom.
@@ -58,43 +58,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 /* draw a string s in the specified font at (x0,y0).  does not perform
-   any clipping. */
+    any clipping. */
 
 void gen_font_ustring (grs_font *f, int8_t *s, int16_t x0, int16_t y0)
 {
-   grs_bitmap bm;             /* character bitmap */
-   int16_t *offset_tab;         /* table of character offsets */
-   uint8_t *char_buf;           /* font pixel data */
-   int16_t offset;              /* offset of current character */
-   int16_t x, y;                /* position of current character */
-   uint8_t c;                    /* current character */
+    grs_bitmap bm;                 /* character bitmap */
+    int16_t *offset_tab;            /* table of character offsets */
+    uint8_t *char_buf;              /* font pixel data */
+    int16_t offset;                  /* offset of current character */
+    int16_t x, y;                     /* position of current character */
+    uint8_t c;                          /* current character */
 
-   char_buf = (uint8_t *)f + f->buf;
-   offset_tab = f->off_tab;
-   gr_init_bm (&bm, NULL, (f->id==0xcccc)? BMT_FLAT8: BMT_MONO,
-               BMF_TRANS, 0, f->h);
-   bm.row = f->w;
+    char_buf = (uint8_t *)f + f->buf;
+    offset_tab = f->off_tab;
+    gr_init_bm (&bm, NULL, (f->id==0xcccc)? BMT_FLAT8: BMT_MONO,
+                    BMF_TRANS, 0, f->h);
+    bm.row = f->w;
 
-   x = x0; y = y0;
-   while ((c=(uint8_t) (*s++)) != '\0') {
-      if (c=='\n' || c==CHAR_SOFTCR) {
-         x = x0;
-         y += f->h;
-         continue;
-      }
-      if (c>f->max || c<f->min || c==CHAR_SOFTSP)
-         continue;
-      offset = offset_tab[c-f->min];
-      bm.w = offset_tab[c-f->min+1]-offset;
-      if (bm.type == BMT_MONO) {
-         bm.bits = char_buf + (offset>>3);
-         bm.align = offset&7;
-         gr_mono_ubitmap (&bm, x, y);
-      }
-      else {
-         bm.bits = char_buf + offset;
-         gr_flat8_ubitmap (&bm, x, y);
-      }
-      x += bm.w;
-   }
+    x = x0; y = y0;
+    while ((c=(uint8_t) (*s++)) != '\0') {
+        if (c=='\n' || c==CHAR_SOFTCR) {
+            x = x0;
+            y += f->h;
+            continue;
+        }
+        if (c>f->max || c<f->min || c==CHAR_SOFTSP)
+            continue;
+        offset = offset_tab[c-f->min];
+        bm.w = offset_tab[c-f->min+1]-offset;
+        if (bm.type == BMT_MONO) {
+            bm.bits = char_buf + (offset>>3);
+            bm.align = offset&7;
+            gr_mono_ubitmap (&bm, x, y);
+        }
+        else {
+            bm.bits = char_buf + offset;
+            gr_flat8_ubitmap (&bm, x, y);
+        }
+        x += bm.w;
+    }
 }

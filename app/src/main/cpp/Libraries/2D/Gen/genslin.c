@@ -62,45 +62,45 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* Draw a gouraud-shaded line, specified by indices into the palette.
-   be warned, weird precision bugs abound (check out test programs
-   in /project/lib/src/2d/test).
+    be warned, weird precision bugs abound (check out test programs
+    in /project/lib/src/2d/test).
 
-   5/94: Precision errors have been (entirely?) eliminated.  See
-   correctness argument in note.txt.
+    5/94: Precision errors have been (entirely?) eliminated.  See
+    correctness argument in note.txt.
 
 */
 
 /* This routine draws clipped goroud-shaded lines as specified by
-   intensities.  returns a clip value */
+    intensities.  returns a clip value */
 
 int32_t gen_fix_sline (fix x0, fix y0, fix i0, fix x1, fix y1, fix i1)
 {
-   int32_t r;
-   grs_vertex v0, v1;
+    int32_t r;
+    grs_vertex v0, v1;
 
-   v0.x = x0; v0.y = y0; v0.i = i0;
-   v1.x = x1; v1.y = y1; v1.i = i1;
+    v0.x = x0; v0.y = y0; v0.i = i0;
+    v1.x = x1; v1.y = y1; v1.i = i1;
 
-   r = grd_sline_clip_fill (gr_get_fcolor(), gr_get_fill_parm(), &v0, &v1);
+    r = grd_sline_clip_fill (gr_get_fcolor(), gr_get_fill_parm(), &v0, &v1);
 
-   return r;
+    return r;
 }
 
 
 int32_t gri_sline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   int32_t r;
-   grs_vertex u0, u1;
+    int32_t r;
+    grs_vertex u0, u1;
 
-   /* save inputs (don't really need whole struct) */
+    /* save inputs (don't really need whole struct) */
 
-   u0 = *v0;
-   u1 = *v1;
+    u0 = *v0;
+    u1 = *v1;
 
-   r = gri_sline_clip (&u0, &u1);
+    r = gri_sline_clip (&u0, &u1);
 
-   if (r != CLIP_ALL)
-     grd_usline_fill (c, parm, &u0, &u1);
+    if (r != CLIP_ALL)
+      grd_usline_fill (c, parm, &u0, &u1);
 
-   return r;
+    return r;
 }

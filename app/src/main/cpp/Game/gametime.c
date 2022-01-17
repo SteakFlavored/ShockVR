@@ -47,34 +47,34 @@ void update_level_gametime(void);
 
 errtype update_state(bool time_running)
 {
-   bool update = true;
-   if (time_running)
-   {
-      uint32_t deltat;
-      if (player_struct.drug_status[DRUG_REFLEX] > 0 && !global_fullmap->cyber)
-      {
-         // So we effectively downshift deltat by 2 to divide by 4
-         // we keep the remainder around so that we don't screw up the universe badly
-         deltat = *tmd_ticks + reflex_remainder - last_real_time;
-         reflex_remainder = deltat & 0x3;
-         deltat = deltat >> 2;
-      }
-      else
-         deltat = *tmd_ticks - last_real_time;
-      if (deltat > MAX_DELTAT) deltat = MAX_DELTAT;
-      if (deltat < MIN_DELTAT)
-      {
-         deltat = 0;
-         update = false;
-      }
-      // update game time.
-      player_struct.deltat =  deltat;
-      player_struct.game_time += deltat;
-   }
-   if (update)
-      last_real_time = *tmd_ticks;
-   run_schedules();
-   return(OK);
+    bool update = true;
+    if (time_running)
+    {
+        uint32_t deltat;
+        if (player_struct.drug_status[DRUG_REFLEX] > 0 && !global_fullmap->cyber)
+        {
+            // So we effectively downshift deltat by 2 to divide by 4
+            // we keep the remainder around so that we don't screw up the universe badly
+            deltat = *tmd_ticks + reflex_remainder - last_real_time;
+            reflex_remainder = deltat & 0x3;
+            deltat = deltat >> 2;
+        }
+        else
+            deltat = *tmd_ticks - last_real_time;
+        if (deltat > MAX_DELTAT) deltat = MAX_DELTAT;
+        if (deltat < MIN_DELTAT)
+        {
+            deltat = 0;
+            update = false;
+        }
+        // update game time.
+        player_struct.deltat =  deltat;
+        player_struct.game_time += deltat;
+    }
+    if (update)
+        last_real_time = *tmd_ticks;
+    run_schedules();
+    return(OK);
 }
 
 
@@ -82,15 +82,15 @@ errtype update_state(bool time_running)
 
 void suspend_game_time(void)
 {
-//   if (time_at_suspend == 0)
-//      time_at_suspend = *tmd_ticks;
+//    if (time_at_suspend == 0)
+//        time_at_suspend = *tmd_ticks;
 }
 
 void resume_game_time(void)
 {
-//   last_real_time += *tmd_ticks - time_at_suspend;
-   last_real_time = *tmd_ticks;
-//   time_at_suspend = 0;
+//    last_real_time += *tmd_ticks - time_at_suspend;
+    last_real_time = *tmd_ticks;
+//    time_at_suspend = 0;
 }
 
 
@@ -98,20 +98,20 @@ void resume_game_time(void)
 
 void update_level_gametime(void)
 {
-   uint32_t oldtime = level_gamedata.exit_time;
-   uint32_t deltat = player_struct.game_time - oldtime;
-   run_schedules();
-   // run ai's
-//KLC   ai_time_passes(&deltat);
-//KLC   ai_freeze_tag();
-   // run physics
-   if (global_fullmap->cyber)
-   {
-      EDMS_control_Dirac_frame(PLAYER_PHYSICS,0,0,0,0);
-   }
-   else
-   {
-      EDMS_control_pelvis(PLAYER_PHYSICS,0,0,0,0,0,0);
-   }
-   EDMS_soliton_vector(min(MAX_PHYSICS_RUNTIME,deltat/CIT_CYCLE));
+    uint32_t oldtime = level_gamedata.exit_time;
+    uint32_t deltat = player_struct.game_time - oldtime;
+    run_schedules();
+    // run ai's
+//KLC    ai_time_passes(&deltat);
+//KLC    ai_freeze_tag();
+    // run physics
+    if (global_fullmap->cyber)
+    {
+        EDMS_control_Dirac_frame(PLAYER_PHYSICS,0,0,0,0);
+    }
+    else
+    {
+        EDMS_control_pelvis(PLAYER_PHYSICS,0,0,0,0,0,0);
+    }
+    EDMS_soliton_vector(min(MAX_PHYSICS_RUNTIME,deltat/CIT_CYCLE));
 }

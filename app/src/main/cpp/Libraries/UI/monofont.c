@@ -48,11 +48,11 @@ int32_t mono_cursor(int32_t x, int32_t y)
 #ifdef nOAF
 TTFontInfo *build_mono_TTFI(TextToolFontInfo *mono_font)
 {
-   if (mono_font==NULL) mono_font=(TextToolFontInfo *)Malloc(sizeof(TextToolFontInfo));
-   mono_font->s_draw=mono_s_draw; mono_font->s_wid=mono_s_wid;
-   mono_font->c_draw=mono_c_draw; mono_font->c_wid=mono_c_wid;
-   mono_font->c_clr=mono_c_clr; mono_font->s_clr=mono_s_clr; mono_font->l_clr=mono_l_clr;
-   mono_font->height=1; mono_font->base_w=1; mono_font->type=TTFI_FIXED;
-   return mono_font;
+    if (mono_font==NULL) mono_font=(TextToolFontInfo *)Malloc(sizeof(TextToolFontInfo));
+    mono_font->s_draw=mono_s_draw; mono_font->s_wid=mono_s_wid;
+    mono_font->c_draw=mono_c_draw; mono_font->c_wid=mono_c_wid;
+    mono_font->c_clr=mono_c_clr; mono_font->s_clr=mono_s_clr; mono_font->l_clr=mono_l_clr;
+    mono_font->height=1; mono_font->base_w=1; mono_font->type=TTFI_FIXED;
+    return mono_font;
 }
 #endif

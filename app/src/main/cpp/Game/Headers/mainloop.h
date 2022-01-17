@@ -22,15 +22,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gameloop.h"
 #include "frtypesx.h"
 
-#define QUIT_LOOP    -1
-#define GAME_LOOP     0
+#define QUIT_LOOP     -1
+#define GAME_LOOP      0
 #define FULLSCREEN_LOOP 1
-#define EDIT_LOOP     2
-#define CYBER_LOOP    3
-#define SETUP_LOOP    4
-#define MWORK_LOOP    5
+#define EDIT_LOOP      2
+#define CYBER_LOOP     3
+#define SETUP_LOOP     4
+#define MWORK_LOOP     5
 #define CUTSCENE_LOOP 6
-#define SVGA_LOOP     7
+#define SVGA_LOOP      7
 #define AUTOMAP_LOOP  8
 
 #define ML 0x1000
@@ -42,10 +42,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FL 0x2100
 #define AL 0x2200
 
-#define ML_CHG_MASK 0xF000             /* mask for main loop bits in change_flag */
-#define ML_CHG_BASE 0x1000             /* mask for single main loop bit of change_flag */
-#define LL_CHG_MASK 0x0FFF             /* mask for local loop bits of change_flag */
-#define LL_CHG_BASE 0x0001             /* mask for single local loop bit out of change_flag */
+#define ML_CHG_MASK 0xF000                 /* mask for main loop bits in change_flag */
+#define ML_CHG_BASE 0x1000                 /* mask for single main loop bit of change_flag */
+#define LL_CHG_MASK 0x0FFF                 /* mask for local loop bits of change_flag */
+#define LL_CHG_BASE 0x0001                 /* mask for single local loop bit out of change_flag */
 
 #define chg_set_flg(x) (_change_flag|=x)
 #define chg_get_flg(x) (_change_flag&x)
@@ -55,10 +55,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define chg_get_sta(x) (_static_change&x)
 #define chg_unset_sta(x) (_static_change &= ~(x))
 
-#define GL_CHG_1       (ML_CHG_BASE<<0)
-#define GL_CHG_2       (ML_CHG_BASE<<1)
-#define GL_CHG_3       (ML_CHG_BASE<<2)
-#define GL_CHG_LOOP    (ML_CHG_BASE<<3)
+#define GL_CHG_1         (ML_CHG_BASE<<0)
+#define GL_CHG_2         (ML_CHG_BASE<<1)
+#define GL_CHG_3         (ML_CHG_BASE<<2)
+#define GL_CHG_LOOP     (ML_CHG_BASE<<3)
 
 void mainloop(int32_t argc, int8_t *argv[]);
 void loopmode_switch(int16_t *cmode);
@@ -67,13 +67,13 @@ void loopmode_exit(int16_t loopmode);
 
 #ifdef __MAINLOOP_SRC
 frc *_current_fr_context;
-int16_t _current_loop  = SETUP_LOOP;          /* which loop we currently are */
+int16_t _current_loop  = SETUP_LOOP;             /* which loop we currently are */
 int16_t _current_3d_flag = DEMOVIEW_UPDATE;
 LGRegion *_current_view = NULL;
-uint32_t  _change_flag   = 0;          /* change flags for loop */
-uint32_t  _static_change = 0;          /* current static changes */
-int16_t _new_mode      = 0;          /* mode to change to, if any */
-int16_t _last_mode     = 0;          /* last mode, if you want to change back to it */
+uint32_t  _change_flag    = 0;             /* change flags for loop */
+uint32_t  _static_change = 0;             /* current static changes */
+int16_t _new_mode        = 0;             /* mode to change to, if any */
+int16_t _last_mode      = 0;             /* last mode, if you want to change back to it */
 bool time_passes = true;
 bool saves_allowed = false;
 bool physics_running = true;
@@ -84,18 +84,18 @@ bool player_immortal = false;
 bool always_render = false;
 bool pal_fx_on = true;
 
-#else     // NOT _MAINLOOP_SRC
+#else      // NOT _MAINLOOP_SRC
 
-extern int16_t _current_loop;   	  /* which loop we currently are */
+extern int16_t _current_loop;          /* which loop we currently are */
 extern int16_t _current_3d_flag;
 extern frc *_current_fr_context;
 #ifdef GADGET
 extern Gadget *_current_root;
 #endif
-extern uint32_t  _change_flag;         /* change flags for loop */
-extern uint32_t  _static_change;       /* current static changes */
-extern int16_t _new_mode;            /* mode to change to, if any */
-extern int16_t _last_mode;           /* last mode we were in, to switch back to */
+extern uint32_t  _change_flag;            /* change flags for loop */
+extern uint32_t  _static_change;         /* current static changes */
+extern int16_t _new_mode;                /* mode to change to, if any */
+extern int16_t _last_mode;              /* last mode we were in, to switch back to */
 extern bool player_invulnerable;
 extern bool player_immortal;
 extern bool physics_running;
@@ -110,7 +110,7 @@ extern LGRegion *_current_view;
 
 #define loopLine(num,code_line) code_line
 
-#define localChanges   (_change_flag&LL_CHG_MASK)
+#define localChanges    (_change_flag&LL_CHG_MASK)
 #define globalChanges  (_change_flag&ML_CHG_MASK)
 
 #endif

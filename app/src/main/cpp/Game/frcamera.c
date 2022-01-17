@@ -27,12 +27,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Citadel Renderer
  *  camera position/modification/creation system
  *
- * bool    fr_camera_create (cams *camtype, int32_t *arg1, int32_t *arg2)
- * int32_t     fr_camera_update (cams *cam, int32_t *arg1, int32_t *arg2)
- * void    fr_camera_slewone(cams *cam, int32_t which, int32_t how)
- * fix    *fr_camera_getpos (cams *cam)
- * void    fr_camera_setdef (cams *cam)
- * void    fr_camera_slewcam(cams *cam, int32_t which, int32_t how)
+ * bool     fr_camera_create (cams *camtype, int32_t *arg1, int32_t *arg2)
+ * int32_t      fr_camera_update (cams *cam, int32_t *arg1, int32_t *arg2)
+ * void     fr_camera_slewone(cams *cam, int32_t which, int32_t how)
+ * fix     *fr_camera_getpos (cams *cam)
+ * void     fr_camera_setdef (cams *cam)
+ * void     fr_camera_slewcam(cams *cam, int32_t which, int32_t how)
  *
  * $Log: frcamera.c $
  * Revision 1.15  1994/07/15  13:58:34  dc
@@ -84,152 +84,152 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define __FRCAMERA_SRC
 #include <string.h>
-#include <stdlib.h>        // for abs, of course
+#include <stdlib.h>          // for abs, of course
 
 #include "frcamera.h"
-#include "froslew.h"       // has objects
+#include "froslew.h"         // has objects
 #include "fauxrint.h"
 #include "map.h"
 
-fix    fr_camera_last[CAM_COOR_CNT]={0,0,0,0,0,0};
-fix    cam_slew_scale[CAM_COOR_CNT]={fix_make(4,0),fix_make(4,0),fix_make(4,0),128,128,128};
+fix     fr_camera_last[CAM_COOR_CNT]={0,0,0,0,0,0};
+fix     cam_slew_scale[CAM_COOR_CNT]={fix_make(4,0),fix_make(4,0),fix_make(4,0),128,128,128};
 cams  *_def_cam=NULL;
 
 #define _cam_top(cam) cams *_cam=(cam==NULL)?_def_cam:cam; if (_cam==NULL) return
 
-void    fr_camera_setdef (cams *cam)
+void     fr_camera_setdef (cams *cam)
  { _def_cam=cam; }
 
-cams   *fr_camera_getdef (void)
+cams    *fr_camera_getdef (void)
  { return _def_cam; }
 
-bool    fr_camera_create (cams *cam, int32_t camtype, void *arg1, void *arg2)
+bool     fr_camera_create (cams *cam, int32_t camtype, void *arg1, void *arg2)
 {
-   _cam_top(cam) false;
-   _cam->type=camtype;
-   if (camtype&CAMBIT_OBJ)
-      _cam->obj_id=(uint16_t)arg1;
-   else
-      memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
-   memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
-   return true;
+    _cam_top(cam) false;
+    _cam->type=camtype;
+    if (camtype&CAMBIT_OBJ)
+        _cam->obj_id=(uint16_t)arg1;
+    else
+        memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
+    memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
+    return true;
 }
 
-uint8_t   fr_camera_modtype(cams *cam, uint8_t type_on, uint8_t type_off)
+uint8_t    fr_camera_modtype(cams *cam, uint8_t type_on, uint8_t type_off)
 {
-   uint8_t ret;
-   _cam_top(cam) 0;
-   ret=_cam->type;
-   _cam->type&=~type_off;
-   _cam->type|=type_on;
-   return ret;
+    uint8_t ret;
+    _cam_top(cam) 0;
+    ret=_cam->type;
+    _cam->type&=~type_off;
+    _cam->type|=type_on;
+    return ret;
 }
 
 // i'll give you fish, i'll give you candy, i'll give you, everything I have in my hand
-int32_t     fr_camera_update (cams *cam, void *arg1, int32_t whicharg, void *arg2)
+int32_t      fr_camera_update (cams *cam, void *arg1, int32_t whicharg, void *arg2)
 {
-   _cam_top(cam) false;
-   if (arg1!=NULL)
-	   if (_cam->type&CAMBIT_OBJ) _cam->obj_id=(uint16_t)arg1; else memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
-   if (whicharg==CAM_UPDATE_ALL)
-	   memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
-   else if (whicharg<CAM_ARGS_CNT)
-      _cam->args[whicharg]=(fix)arg2;
-   return true;
+    _cam_top(cam) false;
+    if (arg1!=NULL)
+        if (_cam->type&CAMBIT_OBJ) _cam->obj_id=(uint16_t)arg1; else memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
+    if (whicharg==CAM_UPDATE_ALL)
+        memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
+    else if (whicharg<CAM_ARGS_CNT)
+        _cam->args[whicharg]=(fix)arg2;
+    return true;
 }
 
-void    fr_camera_setone(cams *cam, int32_t which, int32_t newone)
+void     fr_camera_setone(cams *cam, int32_t which, int32_t newone)
 {
-   _cam_top(cam);
-   if (_cam->type&CAMBIT_OBJ)
-      fr_objslew_setone(which,newone);
-   else
-	   _cam->coor[which]=newone;
+    _cam_top(cam);
+    if (_cam->type&CAMBIT_OBJ)
+        fr_objslew_setone(which,newone);
+    else
+        _cam->coor[which]=newone;
 }
 
-void    fr_camera_slewone(cams *cam, int32_t which, int32_t how)
+void     fr_camera_slewone(cams *cam, int32_t which, int32_t how)
 {
-   uint8_t cv[3]={0,2,1};
-   _cam_top(cam);
-   if (which>=3)                       /* angles */
-   {
-      if (which==EYE_RESET)
-         _cam->coor[4]=_cam->coor[5]=0;
-      else
-	      _cam->coor[which]+=how*cam_slew_scale[which];
-   }
-   else                                /* actual move */
-   {
-      g3s_vector v[3];
-      fix tot, _cammul;
+    uint8_t cv[3]={0,2,1};
+    _cam_top(cam);
+    if (which>=3)                              /* angles */
+    {
+        if (which==EYE_RESET)
+            _cam->coor[4]=_cam->coor[5]=0;
+        else
+            _cam->coor[which]+=how*cam_slew_scale[which];
+    }
+    else                                          /* actual move */
+    {
+        g3s_vector v[3];
+        fix tot, _cammul;
 
 // this just doesnt work, really
 
-      tot=how*cam_slew_scale[which];
-      g3_get_slew_step(tot,v+0,v+1,v+2);
-//      if (which==2) how*=-1;
-      if (_cam->type&CAMFLT_FLAT)
-      {
-         _cammul=fix_sqrt(fix_mul(tot,tot)-(fix_mul(v[cv[which]].gY,v[cv[which]].gY)));
-         _cammul=fix_div(abs(tot),_cammul);
-//       Warning(("mul %x from %x and %x\n",_cammul,tot,v[cv[which]]));
-      }
-      else
-	    { _cam->coor[2]-=fix_int((v[cv[which]].gY))<<8; _cammul=fix_make(1,0); }
-      _cam->coor[0]+=fix_mul(_cammul,((v[cv[which]].gX)>>8));
-      _cam->coor[1]+=fix_mul(_cammul,((v[cv[which]].gZ)>>8));
-   }
+        tot=how*cam_slew_scale[which];
+        g3_get_slew_step(tot,v+0,v+1,v+2);
+//        if (which==2) how*=-1;
+        if (_cam->type&CAMFLT_FLAT)
+        {
+            _cammul=fix_sqrt(fix_mul(tot,tot)-(fix_mul(v[cv[which]].gY,v[cv[which]].gY)));
+            _cammul=fix_div(abs(tot),_cammul);
+//         Warning(("mul %x from %x and %x\n",_cammul,tot,v[cv[which]]));
+        }
+        else
+         { _cam->coor[2]-=fix_int((v[cv[which]].gY))<<8; _cammul=fix_make(1,0); }
+        _cam->coor[0]+=fix_mul(_cammul,((v[cv[which]].gX)>>8));
+        _cam->coor[1]+=fix_mul(_cammul,((v[cv[which]].gZ)>>8));
+    }
 }
 
 // also in init.c
-#define MAGIC_SELFRUN_OBJID      0xC3
+#define MAGIC_SELFRUN_OBJID        0xC3
 
-void    fr_camera_getobjloc (int32_t oid, fix *store)
+void     fr_camera_getobjloc (int32_t oid, fix *store)
 {
-   Obj *cobj=&objs[oid];
-   if (cobj->info.ph!=-1)
-   {
+    Obj *cobj=&objs[oid];
+    if (cobj->info.ph!=-1)
+    {
 #ifndef __RENDTEST__
-      extern bool get_phys_info(int32_t ph, fix *targ_array, int32_t cnt);
+        extern bool get_phys_info(int32_t ph, fix *targ_array, int32_t cnt);
 #endif
-     get_phys_info(cobj->info.ph,store,6);
-   }
-   else
-   {
-      store[0]=cobj->loc.x<<8;                        store[1]=cobj->loc.y<<8;
-	   store[2]=cobj->loc.z<<(8+SLOPE_SHIFT_D);        store[3]=(cobj->loc.h<<8);
-      store[4]=(cobj->loc.p<<8);                      store[5]=(cobj->loc.b<<8);
-   }
+      get_phys_info(cobj->info.ph,store,6);
+    }
+    else
+    {
+        store[0]=cobj->loc.x<<8;                                store[1]=cobj->loc.y<<8;
+        store[2]=cobj->loc.z<<(8+SLOPE_SHIFT_D);          store[3]=(cobj->loc.h<<8);
+        store[4]=(cobj->loc.p<<8);                             store[5]=(cobj->loc.b<<8);
+    }
 
 }
 
-fix    *fr_camera_getpos (cams *cam)
+fix     *fr_camera_getpos (cams *cam)
 {
-   _cam_top(cam) NULL;
-   if (_cam->type&CAMBIT_OBJ)   /* set fix x,y,z etc from the object positions */
-      fr_camera_getobjloc(_cam->obj_id,_cam->coor);
+    _cam_top(cam) NULL;
+    if (_cam->type&CAMBIT_OBJ)    /* set fix x,y,z etc from the object positions */
+        fr_camera_getobjloc(_cam->obj_id,_cam->coor);
 
-   memcpy(fr_camera_last,_cam->coor,sizeof(fix)*CAM_COOR_CNT);
-   if (_cam->type&CAMBIT_MOD)
-	   fr_camera_last[3]=(fr_camera_last[3]+eye_mods[0])&0xffff;
-   if ((_cam->type&(CAMBIT_OFF|CAMBIT_ANG))!=0)
-   {
-	   fr_camera_last[3]+=(0x10000)-((1<<(14-CAMANG_S))*(_cam->type&CAMBIT_ANG));
-   }  // for now 360 view will stay body flat....
-   else if (_cam->type&CAMBIT_MOD)
-   {
-//	   fr_camera_last[3]=(fr_camera_last[3]+eye_mods[0])&0xffff;
-      fr_camera_last[4]=(fr_camera_last[4]+eye_mods[1])&0xffff;
-	   fr_camera_last[5]=(fr_camera_last[5]+eye_mods[2])&0xffff;
-   }
-   return &fr_camera_last[0];
+    memcpy(fr_camera_last,_cam->coor,sizeof(fix)*CAM_COOR_CNT);
+    if (_cam->type&CAMBIT_MOD)
+        fr_camera_last[3]=(fr_camera_last[3]+eye_mods[0])&0xffff;
+    if ((_cam->type&(CAMBIT_OFF|CAMBIT_ANG))!=0)
+    {
+        fr_camera_last[3]+=(0x10000)-((1<<(14-CAMANG_S))*(_cam->type&CAMBIT_ANG));
+    }  // for now 360 view will stay body flat....
+    else if (_cam->type&CAMBIT_MOD)
+    {
+//        fr_camera_last[3]=(fr_camera_last[3]+eye_mods[0])&0xffff;
+        fr_camera_last[4]=(fr_camera_last[4]+eye_mods[1])&0xffff;
+        fr_camera_last[5]=(fr_camera_last[5]+eye_mods[2])&0xffff;
+    }
+    return &fr_camera_last[0];
 }
 
-void    fr_camera_slewcam(cams *cam, int32_t which, int32_t how)
+void     fr_camera_slewcam(cams *cam, int32_t which, int32_t how)
 {
-   _cam_top(cam);
-   if (_cam->type&CAMBIT_OBJ)
-      fr_objslew_moveone(NULL,_cam->obj_id,which,how,true);
-   else
-      fr_camera_slewone(_cam,which,how);
+    _cam_top(cam);
+    if (_cam->type&CAMBIT_OBJ)
+        fr_objslew_moveone(NULL,_cam->obj_id,which,how,true);
+    else
+        fr_camera_slewone(_cam,which,how);
 }

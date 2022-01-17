@@ -67,12 +67,12 @@ extern int32_t grd_mode;
 #define dr_scr_canv grd_screen_canvas
 #define dr_vis_canv grd_visible_canvas
 
-#define dr_bm       grd_bm
-#define dr_gc       grd_gc
-#define dr_ytab     grd_ytab
+#define dr_bm         grd_bm
+#define dr_gc         grd_gc
+#define dr_ytab      grd_ytab
 #define dr_int_clip grd_int_clip
 #define dr_fix_clip grd_fix_clip
-#define dr_clip     grd_clip
+#define dr_clip      grd_clip
 #define driver_func grd_driver_func
 
 #endif /* !__GRD_H */

@@ -63,70 +63,70 @@ void double_re_heapify(PQueue *q, int32_t head);
 // ---------
 void swapelems(PQueue* q,int32_t i, int32_t j)
 {
-   memcpy(swap_buffer,NTH(q,i),q->elemsize);
-   memcpy(NTH(q,i),NTH(q,j),q->elemsize);
-   memcpy(NTH(q,j),swap_buffer,q->elemsize);
+    memcpy(swap_buffer,NTH(q,i),q->elemsize);
+    memcpy(NTH(q,i),NTH(q,j),q->elemsize);
+    memcpy(NTH(q,j),swap_buffer,q->elemsize);
 }
 
 void re_heapify(PQueue *q)
 {
-   uint32_t head = 0;
-   while (head < q->fullness)
-   {
-      uint32_t lchild = LCHILD(head);
-      uint32_t rchild = RCHILD(head);
-      uint32_t minchild = NULL_CHILD;
-      if (rchild >= q->fullness)
-         minchild = lchild;
-      if (lchild >= q->fullness)
-         minchild = rchild;
-      if (minchild == NULL_CHILD)
-         if (LESS(q,lchild,rchild))
-         {
+    uint32_t head = 0;
+    while (head < q->fullness)
+    {
+        uint32_t lchild = LCHILD(head);
+        uint32_t rchild = RCHILD(head);
+        uint32_t minchild = NULL_CHILD;
+        if (rchild >= q->fullness)
             minchild = lchild;
-         }
-         else
-         {
+        if (lchild >= q->fullness)
             minchild = rchild;
-         }
-      if (minchild < q->fullness && LESS(q,minchild,head))
-      {
-         swapelems(q,head,minchild);
-         head = minchild;
-      }
-      else break;
-   }
+        if (minchild == NULL_CHILD)
+            if (LESS(q,lchild,rchild))
+            {
+                minchild = lchild;
+            }
+            else
+            {
+                minchild = rchild;
+            }
+        if (minchild < q->fullness && LESS(q,minchild,head))
+        {
+            swapelems(q,head,minchild);
+            head = minchild;
+        }
+        else break;
+    }
 }
 
 
 void double_re_heapify(PQueue *q, int32_t head)
 {
-   uint32_t lchild = LCHILD(head);
-   uint32_t rchild = RCHILD(head);
-   uint32_t minchild = NULL_CHILD;
-   uint32_t maxchild = NULL_CHILD;
-   if (rchild >= q->fullness)
-      minchild = lchild;
-   if (lchild >= q->fullness)
-      minchild = rchild;
-   if (minchild == NULL_CHILD)
-      if (LESS(q,lchild,rchild))
-      {
-         minchild = lchild;
-         maxchild = rchild;
-      }
-      else
-      {
-         minchild = rchild;
-         maxchild = lchild;
-      }
-   if (minchild < q->fullness && LESS(q,minchild,head))
-   {
-      swapelems(q,head,minchild);
-      double_re_heapify(q,minchild);
-      if (maxchild < q->fullness)
-         double_re_heapify(q,maxchild);
-   }
+    uint32_t lchild = LCHILD(head);
+    uint32_t rchild = RCHILD(head);
+    uint32_t minchild = NULL_CHILD;
+    uint32_t maxchild = NULL_CHILD;
+    if (rchild >= q->fullness)
+        minchild = lchild;
+    if (lchild >= q->fullness)
+        minchild = rchild;
+    if (minchild == NULL_CHILD)
+        if (LESS(q,lchild,rchild))
+        {
+            minchild = lchild;
+            maxchild = rchild;
+        }
+        else
+        {
+            minchild = rchild;
+            maxchild = lchild;
+        }
+    if (minchild < q->fullness && LESS(q,minchild,head))
+    {
+        swapelems(q,head,minchild);
+        double_re_heapify(q,minchild);
+        if (maxchild < q->fullness)
+            double_re_heapify(q,maxchild);
+    }
 }
 
 // ---------
@@ -135,105 +135,105 @@ void double_re_heapify(PQueue *q, int32_t head)
 
 errtype pqueue_init(PQueue* q, int32_t size, int32_t elemsize, QueueCompare comp, bool grow)
 {
-   if (size < 1) return ERR_RANGE;
-   q->vec = NewPtr(elemsize*size);
-   if (q->vec == NULL) return ERR_NOMEM;
-   if (elemsize > swap_bufsize)
-   {
-      if (swap_buffer == NULL)
-      	swap_buffer = NewPtr(elemsize);
-      else
-      {
-      	DisposePtr(swap_buffer);
-      	swap_buffer = NewPtr(elemsize);
-      }
-      swap_bufsize = elemsize;
-      if (MemError()) return ERR_NOMEM;
-   }
-   q->size = size;
-   q->fullness = 0;
-   q->elemsize = elemsize;
-   q->comp = comp;
-   q->grow = grow;
-   return OK;
+    if (size < 1) return ERR_RANGE;
+    q->vec = NewPtr(elemsize*size);
+    if (q->vec == NULL) return ERR_NOMEM;
+    if (elemsize > swap_bufsize)
+    {
+        if (swap_buffer == NULL)
+            swap_buffer = NewPtr(elemsize);
+        else
+        {
+            DisposePtr(swap_buffer);
+            swap_buffer = NewPtr(elemsize);
+        }
+        swap_bufsize = elemsize;
+        if (MemError()) return ERR_NOMEM;
+    }
+    q->size = size;
+    q->fullness = 0;
+    q->elemsize = elemsize;
+    q->comp = comp;
+    q->grow = grow;
+    return OK;
 }
 
 errtype pqueue_insert(PQueue* q, void* elem)
 {
-   int32_t n;
-   if (!q->grow && q->fullness >= q->size)
-      return ERR_DOVERFLOW;
-   while (q->fullness >= q->size)
-   {
-      Ptr newp = NewPtr(q->elemsize * q->size*2);
-      if (MemError())
-      	return ERR_NOMEM;
-      BlockMoveData(q->vec, newp, q->size * q->elemsize);
-      DisposePtr(q->vec);
-      q->vec = newp;
-      q->size*=2;
-   }
-   n = q->fullness++;
-   memcpy(NTH(q,n),elem,q->elemsize);
-   while(n > 0)
-   {
-      if (LESS(q,PARENT(n),n))
-         break;
-      swapelems(q,n,PARENT(n));
-      n = PARENT(n);
-   }
-   return OK;
+    int32_t n;
+    if (!q->grow && q->fullness >= q->size)
+        return ERR_DOVERFLOW;
+    while (q->fullness >= q->size)
+    {
+        Ptr newp = NewPtr(q->elemsize * q->size*2);
+        if (MemError())
+            return ERR_NOMEM;
+        BlockMoveData(q->vec, newp, q->size * q->elemsize);
+        DisposePtr(q->vec);
+        q->vec = newp;
+        q->size*=2;
+    }
+    n = q->fullness++;
+    memcpy(NTH(q,n),elem,q->elemsize);
+    while(n > 0)
+    {
+        if (LESS(q,PARENT(n),n))
+            break;
+        swapelems(q,n,PARENT(n));
+        n = PARENT(n);
+    }
+    return OK;
 }
 
 errtype pqueue_extract(PQueue* q, void* elem)
 {
-   if (q->fullness == 0) return ERR_DUNDERFLOW;
-   memcpy(elem,NTH(q,0),q->elemsize);
-   memcpy(NTH(q,0),NTH(q,q->fullness-1),q->elemsize);
-   q->fullness--;
-   re_heapify(q);
-   return OK;
+    if (q->fullness == 0) return ERR_DUNDERFLOW;
+    memcpy(elem,NTH(q,0),q->elemsize);
+    memcpy(NTH(q,0),NTH(q,q->fullness-1),q->elemsize);
+    q->fullness--;
+    re_heapify(q);
+    return OK;
 }
 
 errtype pqueue_least(PQueue* q, void* elem)
 {
-   if (q->fullness == 0) return ERR_DUNDERFLOW;
-   memcpy(elem,NTH(q,0),q->elemsize);
-   return OK;
+    if (q->fullness == 0) return ERR_DUNDERFLOW;
+    memcpy(elem,NTH(q,0),q->elemsize);
+    return OK;
 }
 /*
 errtype pqueue_write(PQueue* q, int32_t fd, void (*writefunc)(int32_t fd, void* elem))
 {
-   int32_t i;
-   write(fd,(int8_t*)q,sizeof(PQueue));
-   for(i = 0; i < q->fullness; i++)
-   {
-      if (writefunc != NULL)
-         writefunc(fd,NTH(q,i));
-      else write(fd,(int8_t*)NTH(q,i),q->elemsize);
-   }
-   return OK;
+    int32_t i;
+    write(fd,(int8_t*)q,sizeof(PQueue));
+    for(i = 0; i < q->fullness; i++)
+    {
+        if (writefunc != NULL)
+            writefunc(fd,NTH(q,i));
+        else write(fd,(int8_t*)NTH(q,i),q->elemsize);
+    }
+    return OK;
 }
 
 errtype pqueue_read(PQueue* q, int32_t fd, void (*readfunc)(int32_t fd, void* elem))
 {
-   int32_t i;
-   read(fd,(int8_t*)q,sizeof(PQueue));
-   if (q->grow) q->size = q->fullness;
-   q->vec = NewPtr(q->size*q->elemsize);
-   if (q->vec == NULL) return ERR_NOMEM;
-   for(i = 0; i < q->fullness; i++)
-   {
-      if (readfunc != NULL)
-         readfunc(fd,NTH(q,i));
-      else read(fd,(int8_t*)NTH(q,i),q->elemsize);
-   }
-   return OK;
+    int32_t i;
+    read(fd,(int8_t*)q,sizeof(PQueue));
+    if (q->grow) q->size = q->fullness;
+    q->vec = NewPtr(q->size*q->elemsize);
+    if (q->vec == NULL) return ERR_NOMEM;
+    for(i = 0; i < q->fullness; i++)
+    {
+        if (readfunc != NULL)
+            readfunc(fd,NTH(q,i));
+        else read(fd,(int8_t*)NTH(q,i),q->elemsize);
+    }
+    return OK;
 }
 */
 errtype pqueue_destroy(PQueue* q)
 {
-   DisposePtr(q->vec);
-   q->fullness = 0;
-   return OK;
+    DisposePtr(q->vec);
+    q->fullness = 0;
+    return OK;
 }

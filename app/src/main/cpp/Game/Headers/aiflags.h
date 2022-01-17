@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#define AI_FLAG_CHASING    0x0001
-#define AI_FLAG_NOLOOT     0x0002
-#define AI_FLAG_CONFUSED   0x0004
-#define AI_FLAG_TRANQ      0x0010
+#define AI_FLAG_CHASING     0x0001
+#define AI_FLAG_NOLOOT      0x0002
+#define AI_FLAG_CONFUSED    0x0004
+#define AI_FLAG_TRANQ        0x0010
 
 #define ai_critter_sleeping(osid) ((objCritters[(osid)].orders == AI_ORDERS_SLEEP) ||  (objCritters[(osid)].flags & AI_FLAG_TRANQ))

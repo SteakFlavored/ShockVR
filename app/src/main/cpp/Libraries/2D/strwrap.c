@@ -25,15 +25,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* wrapping and unwrapping routines moved into the 2d library, other
-   routines already present in 2d
+    routines already present in 2d
 */
 
-//		Font.C	Font-handling routines
-//		Rex E. Bradford (REX)
+//        Font.C    Font-handling routines
+//        Rex E. Bradford (REX)
 //
-//		This module provides routines for accessing fonts
-//		and for calculating the area needed to display
-//		text in a font, including automatic wrapping.
+//        This module provides routines for accessing fonts
+//        and for calculating the area needed to display
+//        text in a font, including automatic wrapping.
 
 
 /* log from /project/ff/code/gfx/font.c
@@ -62,8 +62,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "chr.h"
 #include "ctxmac.h"
 
-static int16_t *pCharPixOff;		// ptr to int8_t offset table, with pfont->minch
-					// already subtracted out!
+static int16_t *pCharPixOff;        // ptr to int8_t offset table, with pfont->minch
+                    // already subtracted out!
 
 #define CHARALIGN(pfont,c) (pCharPixOff[(uint8_t)c] & 7)
 #define CHARPTR(pfont,c) (&pfont->bits[pCharPixOff[(uint8_t)c] >> 3])
@@ -71,125 +71,125 @@ static int16_t *pCharPixOff;		// ptr to int8_t offset table, with pfont->minch
 
 #define FONT_SETFONT(pfont) (pCharPixOff = &(pfont)->off_tab[0] - (pfont)->min)
 
-//	----------------------------------------------------
+//    ----------------------------------------------------
 //
-//	FontWrapText() inserts wrapping codes into text.
-//	It inserts soft carriage returns into the text, and
-//	returns the number of lines needed for display.
+//    FontWrapText() inserts wrapping codes into text.
+//    It inserts soft carriage returns into the text, and
+//    returns the number of lines needed for display.
 //
-//		pfont = ptr to font
-//		ps    = ptr to string (soft cr's and soft spaces inserted into it)
-//		width = width of area to wrap into, in pixels
+//        pfont = ptr to font
+//        ps     = ptr to string (soft cr's and soft spaces inserted into it)
+//        width = width of area to wrap into, in pixels
 //
-//	Returns: # lines string wraps into
+//    Returns: # lines string wraps into
 
 /* renamed to gr_font_string_wrap in library */
 
 int32_t gr_font_string_wrap (grs_font *pfont, int8_t *ps, int16_t width)
 {
-	uint8_t *p;
-	int8_t *pmark;
-	int16_t numLines;
-	int16_t currWidth;
+    uint8_t *p;
+    int8_t *pmark;
+    int16_t numLines;
+    int16_t currWidth;
 
-//	Set up to do wrapping
+//    Set up to do wrapping
 
-	FONT_SETFONT(pfont);
-	numLines = 0;					// ps = base of current line
+    FONT_SETFONT(pfont);
+    numLines = 0;                    // ps = base of current line
 
-//	Do wrapping for each line till hit end
+//    Do wrapping for each line till hit end
 
-	while (*ps)
-		{
-		pmark = NULL;				// no SOFTCR insert point yet
-		currWidth = 0;				// and zero width so far
-		p = (uint8_t *) ps;
+    while (*ps)
+        {
+        pmark = NULL;                // no SOFTCR insert point yet
+        currWidth = 0;                // and zero width so far
+        p = (uint8_t *) ps;
 
-//	Loop thru each word
+//    Loop thru each word
 
-		while (*p)
-			{
+        while (*p)
+            {
 
-//	Skip through to next CR or space or '\0', keeping track of width
+//    Skip through to next CR or space or '\0', keeping track of width
 
-			while ((*p != 0) && (*p != '\n') && (*p != ' '))
-				{
-				currWidth += CHARWIDTH(pfont, *p);
-				p++;
-				}
+            while ((*p != 0) && (*p != '\n') && (*p != ' '))
+                {
+                currWidth += CHARWIDTH(pfont, *p);
+                p++;
+                }
 
-//	If bypassed width, break out of word loop
+//    If bypassed width, break out of word loop
 
-			if (currWidth > width)
-				{
-				if ((pmark == NULL) && (*p != 0) && (*p != '\n'))
-					pmark = (int8_t *) p;
-				break;
-				}
+            if (currWidth > width)
+                {
+                if ((pmark == NULL) && (*p != 0) && (*p != '\n'))
+                    pmark = (int8_t *) p;
+                break;
+                }
 
-//	Else set new mark point (unless eol or eos, then bust out)
+//    Else set new mark point (unless eol or eos, then bust out)
 
-			else
-				{
-				if ((*p == 0) || (*p == '\n'))	// hit end of line, wipe marker
-					{
-					pmark = NULL;
-					break;
-					}
-				pmark = (int8_t *) p;									// else advance marker
-				currWidth += CHARWIDTH(pfont, ' ');	// and account for space
-				p++;
-				}
-			}
+            else
+                {
+                if ((*p == 0) || (*p == '\n'))    // hit end of line, wipe marker
+                    {
+                    pmark = NULL;
+                    break;
+                    }
+                pmark = (int8_t *) p;                                    // else advance marker
+                currWidth += CHARWIDTH(pfont, ' ');    // and account for space
+                p++;
+                }
+            }
 
-//	Now insert soft cr if marked one
+//    Now insert soft cr if marked one
 
-		if (pmark)
-			{
-			*pmark = CHAR_SOFTCR;
-			ps = pmark + 1;
-			if (*ps == ' ')			// if wrapped and following space,
-				*ps++ = CHAR_SOFTSP;	// turn into (ignored) soft space
-			}
+        if (pmark)
+            {
+            *pmark = CHAR_SOFTCR;
+            ps = pmark + 1;
+            if (*ps == ' ')            // if wrapped and following space,
+                *ps++ = CHAR_SOFTSP;    // turn into (ignored) soft space
+            }
 
-//	Otherwise, bump past cr
-		else
-			{
-			if (*p)
-				++p;
-			ps = (int8_t *) p;
-			}
+//    Otherwise, bump past cr
+        else
+            {
+            if (*p)
+                ++p;
+            ps = (int8_t *) p;
+            }
 
-//	Bump line counter in any case
+//    Bump line counter in any case
 
-		++numLines;
-		}
+        ++numLines;
+        }
 
-//	When hit end of string, return # lines encountered
+//    When hit end of string, return # lines encountered
 
-	return(numLines);
+    return(numLines);
 }
 
-//	--------------------------------------------------------
+//    --------------------------------------------------------
 //
-//	FontUnwrapText() turns soft carriage returns back into
-//	spaces.  Usually this is done prior to re-wrapping
-//	text with a new width.
+//    FontUnwrapText() turns soft carriage returns back into
+//    spaces.  Usually this is done prior to re-wrapping
+//    text with a new width.
 //
-//		s = ptr to string (soft cr's and spaces turned back to spaces)
+//        s = ptr to string (soft cr's and spaces turned back to spaces)
 
 /* renamed to gr_font_string_unwrap in 2d library */
 
 void gr_font_string_unwrap (int8_t *s)
 {
-	int32_t c;
+    int32_t c;
 
-	while ((c = *s) != 0)
-		{
-		if ((c == CHAR_SOFTCR) || (c == CHAR_SOFTSP))
-			*s = ' ';
-		s++;
-		}
+    while ((c = *s) != 0)
+        {
+        if ((c == CHAR_SOFTCR) || (c == CHAR_SOFTSP))
+            *s = ' ';
+        s++;
+        }
 }
 
 

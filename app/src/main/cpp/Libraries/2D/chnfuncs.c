@@ -51,12 +51,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // globals
-grs_func_chain 	*gr_current_chain;
-int16_t						funcnum;
-Ptr							firstfunc;
+grs_func_chain     *gr_current_chain;
+int16_t                        funcnum;
+Ptr                            firstfunc;
 
-Ptr							chain_stack[256];
-Ptr							chain_stack_ptr;
+Ptr                            chain_stack[256];
+Ptr                            chain_stack_ptr;
 
-void 						(**chn_primitives[GRD_CANVAS_FUNCS])();
-int32_t 						gr_current_primitive = GRD_CANVAS_FUNCS;
+void                         (**chn_primitives[GRD_CANVAS_FUNCS])();
+int32_t                         gr_current_primitive = GRD_CANVAS_FUNCS;

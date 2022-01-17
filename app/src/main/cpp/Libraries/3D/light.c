@@ -50,7 +50,7 @@ g3s_vector  zero_vec ={0,0,0};
 // takes eax, trashes esi,edi
 void g3_set_light_src(g3s_vector *l)
  {
- 	_g3d_light_src = *l;
+     _g3d_light_src = *l;
  }
 
 // This should be called after a frames' angles and stuff have been
@@ -59,19 +59,19 @@ void g3_set_light_src(g3s_vector *l)
 // Means you should be not near
 void g3_eval_vec_light(void)
  {
-	// needs to be rotated through view matrix
- 	g3_vec_rotate(&_g3d_light_vec,&_g3d_light_src,&_wtoo_matrix);
- 	scale_light_vec();
+    // needs to be rotated through view matrix
+     g3_vec_rotate(&_g3d_light_vec,&_g3d_light_src,&_wtoo_matrix);
+     scale_light_vec();
  }
 
-	// should be normalized already
-	// multiply by _g3d_diff_light
-	// to set light intensity
+    // should be normalized already
+    // multiply by _g3d_diff_light
+    // to set light intensity
 void scale_light_vec(void)
  {
- 	_g3d_light_vec.gX = fix_mul(_g3d_light_vec.gX, _g3d_diff_light);
- 	_g3d_light_vec.gY = fix_mul(_g3d_light_vec.gY, _g3d_diff_light);
- 	_g3d_light_vec.gZ = fix_mul(_g3d_light_vec.gZ, _g3d_diff_light);
+     _g3d_light_vec.gX = fix_mul(_g3d_light_vec.gX, _g3d_diff_light);
+     _g3d_light_vec.gY = fix_mul(_g3d_light_vec.gY, _g3d_diff_light);
+     _g3d_light_vec.gZ = fix_mul(_g3d_light_vec.gZ, _g3d_diff_light);
  }
 
 
@@ -83,10 +83,10 @@ void scale_light_vec(void)
 // could be lit more cheaply
 void g3_trans_loc_light(void)
  {
- 	g3s_phandle	 p;
+     g3s_phandle     p;
 
- 	p = g3_rotate_point(&_g3d_light_src);
- 	_g3d_light_trans = * (g3s_vector *) p;
+     p = g3_rotate_point(&_g3d_light_src);
+     _g3d_light_trans = * (g3s_vector *) p;
  }
 
 // evaluates light point relative to another point, src is in world coords
@@ -94,26 +94,26 @@ void g3_trans_loc_light(void)
 // void g3_eval_loc_light(eax)//
 void g3_eval_loc_light(g3s_phandle pos)
  {
- 	fix			temp;
+     fix            temp;
 
   // transform light src point to eye coords
 
   // take difference with pos, and unscale them
-	temp = -(pos->gX - _g3d_light_trans.gX);
-	_g3d_light_vec.gX = fix_div(temp,_matrix_scale.gX);
+    temp = -(pos->gX - _g3d_light_trans.gX);
+    _g3d_light_vec.gX = fix_div(temp,_matrix_scale.gX);
 
-	temp = -(pos->gY - _g3d_light_trans.gY);
-	_g3d_light_vec.gY = fix_div(temp,_matrix_scale.gY);
+    temp = -(pos->gY - _g3d_light_trans.gY);
+    _g3d_light_vec.gY = fix_div(temp,_matrix_scale.gY);
 
-	temp = -(pos->gZ - _g3d_light_trans.gZ);
-	_g3d_light_vec.gZ = fix_div(temp,_matrix_scale.gZ);
+    temp = -(pos->gZ - _g3d_light_trans.gZ);
+    _g3d_light_vec.gZ = fix_div(temp,_matrix_scale.gZ);
 
   // normalize vector
-	g3_vec_normalize(&_g3d_light_vec);
+    g3_vec_normalize(&_g3d_light_vec);
 
   // multiply by diff and divide by scale
   // so dot product just works
-	scale_light_vec();
+    scale_light_vec();
  }
 
 
@@ -123,26 +123,26 @@ void g3_eval_loc_light(g3s_phandle pos)
 // eax points to the point in 3d space
 void g3_eval_view(g3s_phandle pos)
  {
- 	fix temp;
+     fix temp;
 
- 	_g3d_view_vec.gX = pos->gX - _view_position.gX;
- 	_g3d_view_vec.gY = pos->gY - _view_position.gY;
- 	_g3d_view_vec.gZ = pos->gZ - _view_position.gZ;
+     _g3d_view_vec.gX = pos->gX - _view_position.gX;
+     _g3d_view_vec.gY = pos->gY - _view_position.gY;
+     _g3d_view_vec.gZ = pos->gZ - _view_position.gZ;
 
   // normalize
- 	g3_vec_normalize(&_g3d_view_vec);
+     g3_vec_normalize(&_g3d_view_vec);
 
-	// multiply by spec and negate vector
+    // multiply by spec and negate vector
   // since it currently points at the
   // point instead of the viewer
   // you might think, why not do this
   // afterwards, and you're right.  But only
   // only if this view vec only gets used once
 
-	temp = -_g3d_spec_light;
-	_g3d_view_vec.gX = fix_mul(_g3d_view_vec.gX,temp);
-	_g3d_view_vec.gY = fix_mul(_g3d_view_vec.gY,temp);
-	_g3d_view_vec.gZ = fix_mul(_g3d_view_vec.gZ,temp);
+    temp = -_g3d_spec_light;
+    _g3d_view_vec.gX = fix_mul(_g3d_view_vec.gX,temp);
+    _g3d_view_vec.gY = fix_mul(_g3d_view_vec.gY,temp);
+    _g3d_view_vec.gZ = fix_mul(_g3d_view_vec.gZ,temp);
  }
 
 // takes the dot product of view and light, for specular light
@@ -172,54 +172,54 @@ void g3_eval_ldotv(void)
 // this should do eval vec as well, basically everything
 void g3_eval_light_obj_cen(void)
  {
- 	DebugStr("\pCall Mark if you see this");
+     DebugStr("\pCall Mark if you see this");
 
- 	// MLA - this routine is buggy as far as I can tell, it doesn't work at all
- 	// edi is never set or just happens to be set right, or it always falls
- 	// through the first test (non_local)
+     // MLA - this routine is buggy as far as I can tell, it doesn't work at all
+     // edi is never set or just happens to be set right, or it always falls
+     // through the first test (non_local)
 
-    /*    ; is local?
-        test    _g3d_light_type,LT_LOC_LIGHT or LT_SPEC
-        jz     non_local
+     /*     ; is local?
+          test     _g3d_light_type,LT_LOC_LIGHT or LT_SPEC
+          jz      non_local
 
-        ; find center of object, duh, center is at 0,0,0
-        ;lea     esi,zero_vec
-        ;call    g3_rotate_point; this would be point in viewer space
-        ; returns point in edi
-        ;mov     tmp1,edi
+          ; find center of object, duh, center is at 0,0,0
+          ;lea      esi,zero_vec
+          ;call     g3_rotate_point; this would be point in viewer space
+          ; returns point in edi
+          ;mov      tmp1,edi
 
-        ; evaluate local light
-        test    _g3d_light_type,LT_LOC_LIGHT
-        jz      no_loc
-        mov     eax,edi
-        call    g3_eval_loc_light
-        jmp     test_spec
-        no_loc:
-        call    g3_eval_vec_light
+          ; evaluate local light
+          test     _g3d_light_type,LT_LOC_LIGHT
+          jz        no_loc
+          mov      eax,edi
+          call     g3_eval_loc_light
+          jmp      test_spec
+          no_loc:
+          call     g3_eval_vec_light
 
-        ; is spec set?
-        test_spec:
-        test    _g3d_light_type,LT_SPEC
-        jz     spec_done
+          ; is spec set?
+          test_spec:
+          test     _g3d_light_type,LT_SPEC
+          jz      spec_done
 
-        ; evaluate view
-        ; view vector relative to zero is in _view_position
-        ; already
-        ;mov     eax,tmp1
-        lea     eax,zero_vec    ;in reality should write a diff routine
-        call    g3_eval_view
+          ; evaluate view
+          ; view vector relative to zero is in _view_position
+          ; already
+          ;mov      eax,tmp1
+          lea      eax,zero_vec     ;in reality should write a diff routine
+          call     g3_eval_view
 
-        call    g3_eval_ldotv
+          call     g3_eval_ldotv
 
-        spec_done:
-        ;mov     edi,tmp1
-        ;freepnt edi
-        ret
+          spec_done:
+          ;mov      edi,tmp1
+          ;freepnt edi
+          ret
 
-        non_local:
-        ; assumes you've transformed
-        ; it already
-        jmp    g3_eval_vec_light*/
+          non_local:
+          ; assumes you've transformed
+          ; it already
+          jmp     g3_eval_vec_light*/
  }
 
 
@@ -230,12 +230,12 @@ void g3_eval_view_ahead(void)
  {
   // this is in view coords, need in
   // object coords, this won't work
- 	_g3d_view_vec.gX = 0;
- 	_g3d_view_vec.gY = 0;
- 	_g3d_view_vec.gZ = -0x01000;
+     _g3d_view_vec.gX = 0;
+     _g3d_view_vec.gY = 0;
+     _g3d_view_vec.gZ = -0x01000;
 
   // now eval ldotv, hm.
- 	_g3d_ldotv = -_g3d_light_vec.gZ;
+     _g3d_ldotv = -_g3d_light_vec.gZ;
  }
 
 // check to see if local stuff has to get set and
@@ -243,23 +243,23 @@ void g3_eval_view_ahead(void)
 // takes args in tmp1,tmp2
 void check_for_near(void)
  {
- 	if ((_g3d_light_type & (LT_NEAR_VIEW | LT_NEAR_LIGHT) == 0))
- 	 	return;
+     if ((_g3d_light_type & (LT_NEAR_VIEW | LT_NEAR_LIGHT) == 0))
+          return;
 
   // if light near, evaluate
- 	if ((_g3d_light_type & LT_NEAR_LIGHT)!=0)
- 	 	g3_eval_loc_light(tmp2);
+     if ((_g3d_light_type & LT_NEAR_LIGHT)!=0)
+          g3_eval_loc_light(tmp2);
 
   //if view near, eval
- 	if ((_g3d_light_type & LT_NEAR_VIEW)!=0)
- 	 	g3_eval_view(tmp2);
+     if ((_g3d_light_type & LT_NEAR_VIEW)!=0)
+          g3_eval_view(tmp2);
 
   //evaluate ldotv if either was local
   // MLA - this is stupid, the code that tests for whether or not to call
-	// g3_eval_ldotv makes no sense, it does a JZ on an undetermined condition code
-	// setup.  So I just call it all the time. Look in Light.ASM in the PC 3D code for
-	// the original stuff.
-	g3_eval_ldotv();
+    // g3_eval_ldotv makes no sense, it does a JZ on an undetermined condition code
+    // setup.  So I just call it all the time. Look in Light.ASM in the PC 3D code for
+    // the original stuff.
+    g3_eval_ldotv();
  }
 
 
@@ -274,16 +274,16 @@ void g3_light_diff(g3s_phandle norm, g3s_phandle pos)
   // maybe we could make this self modifying based
   // on a light type setter, if this is slow
 
- 	// MLA - whatever, I made it normal C code
+     // MLA - whatever, I made it normal C code
 
-	tmp1 = norm;
-	tmp2 = pos;
-	check_for_near();
+    tmp1 = norm;
+    tmp2 = pos;
+    check_for_near();
 
-	if ((_g3d_light_type & LT_GOUR) == 0)
-		light_diff_raw(tmp1,norm);
-	else
-		light_diff_raw(tmp1,pos);
+    if ((_g3d_light_type & LT_GOUR) == 0)
+        light_diff_raw(tmp1,norm);
+    else
+        light_diff_raw(tmp1,pos);
  }
 
 // raw version
@@ -292,17 +292,17 @@ void g3_light_diff(g3s_phandle norm, g3s_phandle pos)
 //ret eax
 fix light_diff_raw(g3s_phandle src, g3s_phandle dest)
 {
-	fix		temp;
+    fix        temp;
 
-	temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *) src);
+    temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *) src);
 
   //set lighting value in norm
   //test eax for negativity, zero if negative
-	if (temp<0) temp = 0;
-	temp += _g3d_amb_light;	//add ambient light
-	temp >>= 4;		//convert to sfix, consider row 16 normal
-	dest->i = temp;
-	return(temp);
+    if (temp<0) temp = 0;
+    temp += _g3d_amb_light;    //add ambient light
+    temp >>= 4;        //convert to sfix, consider row 16 normal
+    dest->i = temp;
+    return(temp);
  }
 
 
@@ -316,18 +316,18 @@ void g3_light_spec(g3s_phandle norm,g3s_phandle pos)
   // maybe we could make this self modifying based
   // on a light type setter, if this is slow
 
- 	// MLA - whatever, I made it normal C code
+     // MLA - whatever, I made it normal C code
 
   // save norm and pos off so we don't push and
   // pop them forever
-	tmp1 = norm;
-	tmp2 = pos;
-	check_for_near();
+    tmp1 = norm;
+    tmp2 = pos;
+    check_for_near();
 
-	if ((_g3d_light_type & LT_GOUR) == 0)
-		light_spec_raw(tmp1,norm);
-	else
-		light_spec_raw(tmp1,pos);
+    if ((_g3d_light_type & LT_GOUR) == 0)
+        light_spec_raw(tmp1,norm);
+    else
+        light_spec_raw(tmp1,pos);
  }
 
 
@@ -336,28 +336,28 @@ void g3_light_spec(g3s_phandle norm,g3s_phandle pos)
 //take (s.l)
 fix light_spec_raw(g3s_phandle src, g3s_phandle dest)
  {
- 	fix		temp;
+     fix        temp;
 
- 	temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *) src);
-	if (temp<0)
-	 {
-	 	dest->i = _g3d_amb_light>>4;
-	 	return(dest->i);
-	 }
+     temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *) src);
+    if (temp<0)
+     {
+         dest->i = _g3d_amb_light>>4;
+         return(dest->i);
+     }
 
-	_g3d_sdotl = temp;
+    _g3d_sdotl = temp;
 
   //take (s.v), note that this is jnorm, if its been done
   //we can eliminate this step intelligently somehow
   _g3d_sdotv = temp = g3_vec_dotprod(&_g3d_view_vec, (g3s_vector *) tmp1);
-	temp <<= 1;	 // multiply (s.v) by 2
-	temp = fix_mul(temp,_g3d_sdotl);	// mult by (s.l)
-	temp -= _g3d_ldotv;			 // subtract ldotv, done!
+    temp <<= 1;     // multiply (s.v) by 2
+    temp = fix_mul(temp,_g3d_sdotl);    // mult by (s.l)
+    temp -= _g3d_ldotv;             // subtract ldotv, done!
 
   //test eax for flash point zero if under
   //or better test eax for spec threshhold
   if (temp < _g3d_flash)
-  	temp = 0;
+      temp = 0;
 
   // add ambient light
   temp += _g3d_amb_light;
@@ -365,10 +365,10 @@ fix light_spec_raw(g3s_phandle src, g3s_phandle dest)
   // check to see if its greater than the max row
   // and truncate if it is
   if (temp >= (LT_TABSIZE << 12));
-  	temp = (LT_TABSIZE << 12) - 1;	// if its over the max, set it to just under max
+      temp = (LT_TABSIZE << 12) - 1;    // if its over the max, set it to just under max
 
-	dest->i = temp>>4;	 //convert to sfix, consider row 16 normal
-	return(temp);
+    dest->i = temp>>4;     //convert to sfix, consider row 16 normal
+    return(temp);
  }
 
 
@@ -377,56 +377,56 @@ fix light_spec_raw(g3s_phandle src, g3s_phandle dest)
 //[eax,edx]
 void g3_light_dands(g3s_phandle norm,g3s_phandle pos)
  {
-	// MLA - same stuff as before, changed to C....
-	tmp1 = norm;
-	tmp2 = pos;
-	check_for_near();
+    // MLA - same stuff as before, changed to C....
+    tmp1 = norm;
+    tmp2 = pos;
+    check_for_near();
 
-	if ((_g3d_light_type & LT_GOUR) == 0)
-		light_dands_raw(tmp1,norm);
-	else
-		light_dands_raw(tmp1,pos);
+    if ((_g3d_light_type & LT_GOUR) == 0)
+        light_dands_raw(tmp1,norm);
+    else
+        light_dands_raw(tmp1,pos);
  }
 
 // raw version of dands without local checking
 fix light_dands_raw(g3s_phandle src, g3s_phandle dest)
  {
- 	fix		temp;
+     fix        temp;
 
   //pure specular lighting is equal to
   //2(s.l)(s.v) - (l.v)
   //take (s.l) if neg, you know you're done, surface HAS to face the light
 
- 	temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *) src);
+     temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *) src);
   if (temp<0)
-   {
-   	dest->i = _g3d_amb_light>>4;
-   	return(dest->i);
-   }
+    {
+        dest->i = _g3d_amb_light>>4;
+        return(dest->i);
+    }
   _g3d_sdotl = temp;
 
   //take (s.v), note that this is jnorm, if its been done
   //we can eliminate this step intelligently somehow
-	_g3d_sdotv = temp = g3_vec_dotprod(&_g3d_view_vec, (g3s_vector *) tmp1);
-	temp = fix_mul(temp,_g3d_sdotl);      // mult by (s.l)
-	temp<<=1;	// multiply (s.v)(s.l) by 2
-	temp -= _g3d_ldotv;	// subtract ldotv, done!
+    _g3d_sdotv = temp = g3_vec_dotprod(&_g3d_view_vec, (g3s_vector *) tmp1);
+    temp = fix_mul(temp,_g3d_sdotl);        // mult by (s.l)
+    temp<<=1;    // multiply (s.v)(s.l) by 2
+    temp -= _g3d_ldotv;    // subtract ldotv, done!
 
   //test eax for flash point zero if under
   //or better test eax for spec threshhold
   if (temp < _g3d_flash)
-  	temp = 0;
+      temp = 0;
 
-	// add diffuse component & ambient light
-	temp += _g3d_sdotl + _g3d_amb_light;
+    // add diffuse component & ambient light
+    temp += _g3d_sdotl + _g3d_amb_light;
 
   // check to see if its greater than the max row
   // and truncate if it is
   if (temp >= (LT_TABSIZE << 12))
-  	temp = (LT_TABSIZE << 12) - 1;	// if its over the max, set it to just under max
+      temp = (LT_TABSIZE << 12) - 1;    // if its over the max, set it to just under max
 
-	dest->i = temp>>4;	 //convert to sfix, consider row 16 normal
-	return(temp);
+    dest->i = temp>>4;     //convert to sfix, consider row 16 normal
+    return(temp);
  }
 
 // farms out a point based on flags
@@ -434,26 +434,26 @@ fix light_dands_raw(g3s_phandle src, g3s_phandle dest)
 //[eax,edx]
 fix g3_light(g3s_phandle norm,g3s_phandle pos)
  {
- 	g3s_phandle	temp;
+     g3s_phandle    temp;
 
-	if ((_g3d_light_type & LT_GOUR) == 0)
-		temp = norm;
-	else
-		temp = pos;
+    if ((_g3d_light_type & LT_GOUR) == 0)
+        temp = norm;
+    else
+        temp = pos;
 
-	tmp1 = norm;
-	tmp2 = pos;
+    tmp1 = norm;
+    tmp2 = pos;
 
-	if ((_g3d_light_type & (LT_NEAR_VIEW | LT_NEAR_LIGHT)) != 0)
-		check_for_near();
+    if ((_g3d_light_type & (LT_NEAR_VIEW | LT_NEAR_LIGHT)) != 0)
+        check_for_near();
 
   // determine which routine to jump to based on flags
   switch (_g3d_light_type)
-   {
-   	case LT_DIFF: return(light_diff_raw(tmp1, temp));
-   	case LT_SPEC: return(light_spec_raw(tmp1, temp));
-   	default: return(light_dands_raw(tmp1, temp));
-   }
+    {
+        case LT_DIFF: return(light_diff_raw(tmp1, temp));
+        case LT_SPEC: return(light_spec_raw(tmp1, temp));
+        default: return(light_dands_raw(tmp1, temp));
+    }
  }
 
 // farms out a point based on flags
@@ -465,33 +465,33 @@ fix g3_light(g3s_phandle norm,g3s_phandle pos)
 //not world space
 void g3_light_obj(g3s_phandle norm, g3s_phandle pos)
  {
-	g3s_point 	*norm_point;
-	g3s_point 	*pos_point;
-	fix					shade;
+    g3s_point     *norm_point;
+    g3s_point     *pos_point;
+    fix                    shade;
 
-	tmp1 = norm;
-	tmp2 = pos;
-	getpnt(norm_point);
+    tmp1 = norm;
+    tmp2 = pos;
+    getpnt(norm_point);
 
- 	norm_point->gX = norm->gX<<1;
- 	norm_point->gY = norm->gY<<1;
- 	norm_point->gZ = norm->gZ<<1;
+     norm_point->gX = norm->gX<<1;
+     norm_point->gY = norm->gY<<1;
+     norm_point->gZ = norm->gZ<<1;
 
   // Copy position over to its own point
-	getpnt(pos_point);
-	* (g3s_vector *) pos_point = * (g3s_vector *) pos;
+    getpnt(pos_point);
+    * (g3s_vector *) pos_point = * (g3s_vector *) pos;
 
-	shade = g3_light(norm_point, pos_point);
+    shade = g3_light(norm_point, pos_point);
 
   //set the lighting when non gouraud
   //set fill type to address of shading table
-	shade &= 0xffffff00;
-	shade += _g3d_light_tab;
+    shade &= 0xffffff00;
+    shade += _g3d_light_tab;
 
-	gr_set_fill_parm(shade);
+    gr_set_fill_parm(shade);
 
-	freepnt(norm_point);
-	freepnt(pos_point);
+    freepnt(norm_point);
+    freepnt(pos_point);
  }
 
 

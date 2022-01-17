@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * str.h
  *
  * Revision 1.4  1993/10/19  09:57:52  kaboom
- * Replaced #include   new headers.
+ * Replaced #include    new headers.
  *
  * Revision 1.3  1993/10/02  01:17:16  kaboom
  * Changed include of clip.h to include of clpcon.h and/or clpfcn.h.
@@ -58,28 +58,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int32_t gen_font_char (grs_font *f, int8_t c, int16_t x, int16_t y)
 {
-   grs_bitmap bm;             /* character bitmap */
-   int16_t *off_tab;            /* character offset table */
-   uint8_t *data_buf;           /* pixel data buffer */
-   int16_t offset;              /* current character offset */
+    grs_bitmap bm;                 /* character bitmap */
+    int16_t *off_tab;                /* character offset table */
+    uint8_t *data_buf;              /* pixel data buffer */
+    int16_t offset;                  /* current character offset */
 
-   /* range check char, get font table pointers, offset. */
-   if ((uint8_t)c > f->max || (uint8_t)c < f->min)
-      return CLIP_ALL;
-   data_buf = (uint8_t *)f + f->buf;
-   off_tab = f->off_tab;
-   offset = off_tab[(uint8_t)c - f->min];
-   gr_init_bm (&bm, NULL, (f->id==0xcccc)? BMT_FLAT8: BMT_MONO,
-               BMF_TRANS, off_tab[(uint8_t)c - f->min+1]-offset, f->h);
-   bm.row = f->w;
-   /* draw the character with clipping. */
-   if (bm.type == BMT_MONO) {
-      bm.bits = data_buf + (offset>>3);
-      bm.align = offset&7;
-      return gr_mono_bitmap (&bm, x, y);
-   }
-   else {
-      bm.bits = data_buf + offset;
-      return gr_flat8_bitmap (&bm, x, y);
-   }
+    /* range check char, get font table pointers, offset. */
+    if ((uint8_t)c > f->max || (uint8_t)c < f->min)
+        return CLIP_ALL;
+    data_buf = (uint8_t *)f + f->buf;
+    off_tab = f->off_tab;
+    offset = off_tab[(uint8_t)c - f->min];
+    gr_init_bm (&bm, NULL, (f->id==0xcccc)? BMT_FLAT8: BMT_MONO,
+                    BMF_TRANS, off_tab[(uint8_t)c - f->min+1]-offset, f->h);
+    bm.row = f->w;
+    /* draw the character with clipping. */
+    if (bm.type == BMT_MONO) {
+        bm.bits = data_buf + (offset>>3);
+        bm.align = offset&7;
+        return gr_mono_bitmap (&bm, x, y);
+    }
+    else {
+        bm.bits = data_buf + offset;
+        return gr_flat8_bitmap (&bm, x, y);
+    }
 }

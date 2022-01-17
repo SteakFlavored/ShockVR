@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "linfcn.h"
 
 /* in addition to the tables that are in the list, there are device
-   specific tables
+    specific tables
  */
 
 grt_uline_fill *grd_uline_fill_vector;
@@ -37,59 +37,59 @@ grt_uline_fill_table *grd_uline_fill_table;
 grt_uline_fill flat8_uline_fill_table [GRD_FILL_TYPES][GRD_LINE_TYPES] =
 {
   { gri_flat8_uline_ns,
-		gri_all_uiline_fill,
-		gri_flat8_uhline_ns,
-		gri_flat8_uvline_ns,
-		gri_flat8_usline_norm,
-		gri_flat8_ucline_norm,
-		gri_flat8_wire_poly_uline,
-    gr_null,
-		gri_flat8_wire_poly_ucline_norm
-   },
-
-  {	gri_flat8_uline_clut,
-		gri_all_uiline_fill,
-		gri_flat8_uhline_clut,
-		gri_flat8_uvline_clut,
-		gri_flat8_usline_clut,
-		gri_flat8_ucline_norm,
-		gri_flat8_wire_poly_uline,
-    gr_null,
-		gri_flat8_wire_poly_ucline_clut
-   },
-
-  {	gri_flat8_uline_xor,
-		gri_all_uiline_fill,
-		gri_flat8_uhline_xor,
-		gri_flat8_uvline_xor,
-		gri_flat8_usline_xor,
-		gri_flat8_ucline_norm,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
-
-  {	gri_flat8_uline_blend,
-		gri_all_uiline_fill,
-		gri_flat8_uhline_blend,
-		gri_flat8_uvline_blend,
-		gri_flat8_usline_blend,
-		gri_flat8_ucline_norm,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
-
-  {	gri_flat8_uline_ns,
-		gri_all_uiline_fill,
-		gri_flat8_uhline_ns,
-		gri_flat8_uvline_ns,
-		gri_flat8_uline_ns,
-		gri_flat8_uline_ns,
-		gri_flat8_wire_poly_uline,
-    gr_null,
-		gri_flat8_wire_poly_uline
+        gri_all_uiline_fill,
+        gri_flat8_uhline_ns,
+        gri_flat8_uvline_ns,
+        gri_flat8_usline_norm,
+        gri_flat8_ucline_norm,
+        gri_flat8_wire_poly_uline,
+     gr_null,
+        gri_flat8_wire_poly_ucline_norm
     },
+
+  {    gri_flat8_uline_clut,
+        gri_all_uiline_fill,
+        gri_flat8_uhline_clut,
+        gri_flat8_uvline_clut,
+        gri_flat8_usline_clut,
+        gri_flat8_ucline_norm,
+        gri_flat8_wire_poly_uline,
+     gr_null,
+        gri_flat8_wire_poly_ucline_clut
+    },
+
+  {    gri_flat8_uline_xor,
+        gri_all_uiline_fill,
+        gri_flat8_uhline_xor,
+        gri_flat8_uvline_xor,
+        gri_flat8_usline_xor,
+        gri_flat8_ucline_norm,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
+
+  {    gri_flat8_uline_blend,
+        gri_all_uiline_fill,
+        gri_flat8_uhline_blend,
+        gri_flat8_uvline_blend,
+        gri_flat8_usline_blend,
+        gri_flat8_ucline_norm,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
+
+  {    gri_flat8_uline_ns,
+        gri_all_uiline_fill,
+        gri_flat8_uhline_ns,
+        gri_flat8_uvline_ns,
+        gri_flat8_uline_ns,
+        gri_flat8_uline_ns,
+        gri_flat8_wire_poly_uline,
+     gr_null,
+        gri_flat8_wire_poly_uline
+     },
 };
 
 
@@ -98,59 +98,59 @@ grt_uline_fill flat8_uline_fill_table [GRD_FILL_TYPES][GRD_LINE_TYPES] =
 grt_uline_fill gen_uline_fill_table [GRD_FILL_TYPES][GRD_LINE_TYPES] =
 {
   { gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+     },
+
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
     },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
-
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_uline_fill,
-		gri_gen_uline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_uline_fill,
+        gri_gen_uline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 };
 
 
@@ -158,178 +158,178 @@ grt_uline_fill gen_uline_fill_table [GRD_FILL_TYPES][GRD_LINE_TYPES] =
 
 grt_uline_fill modex_uline_fill_table [GRD_FILL_TYPES][GRD_LINE_TYPES] =
 {
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-  	 (void *) gr_null, //MLA		gri_modex_uhline_ns,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-		 gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+       (void *) gr_null, //MLA        gri_modex_uhline_ns,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+         gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-		gr_null,
-		gri_gen_wire_poly_ucline
-	},
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+        gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
- 		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+         gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-  	 (void *) gr_null, //MLA		gri_modex_uhline_ns,
-		gri_gen_uvline_fill,
-		gri_gen_uline_fill,
-		gri_gen_uline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+       (void *) gr_null, //MLA        gri_modex_uhline_ns,
+        gri_gen_uvline_fill,
+        gri_gen_uline_fill,
+        gri_gen_uline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 };
 
 
 grt_uline_fill bank8_uline_fill_table [GRD_FILL_TYPES][GRD_LINE_TYPES] =
 {
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-  	 (void *) gr_null, //MLA		gri_bank8_uhline_ns,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+       (void *) gr_null, //MLA        gri_bank8_uhline_ns,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_bank8_uhline_ns,
-		gri_gen_uvline_fill,
-	 	gri_gen_uline_fill,
-		gri_gen_uline_fill,
-    gri_gen_wire_poly_uline,
-		gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_bank8_uhline_ns,
+        gri_gen_uvline_fill,
+         gri_gen_uline_fill,
+        gri_gen_uline_fill,
+     gri_gen_wire_poly_uline,
+        gr_null,
+        gri_gen_wire_poly_ucline
+    },
 };
 
 
 grt_uline_fill bank24_uline_fill_table [GRD_FILL_TYPES][GRD_LINE_TYPES] =
 {
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
- 		gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+         gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_usline_fill,
-		gri_gen_ucline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_usline_fill,
+        gri_gen_ucline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 
-  {	gri_gen_uline_fill,
-		gri_all_uiline_fill,
-		gri_gen_uhline_fill,
-		gri_gen_uvline_fill,
-		gri_gen_uline_fill,
-		gri_gen_uline_fill,
-		gri_gen_wire_poly_uline,
-    gr_null,
-		gri_gen_wire_poly_ucline
-   },
+  {    gri_gen_uline_fill,
+        gri_all_uiline_fill,
+        gri_gen_uhline_fill,
+        gri_gen_uvline_fill,
+        gri_gen_uline_fill,
+        gri_gen_uline_fill,
+        gri_gen_wire_poly_uline,
+     gr_null,
+        gri_gen_wire_poly_ucline
+    },
 };
 
 grt_uline_fill_table *grd_uline_fill_table_list[] = {

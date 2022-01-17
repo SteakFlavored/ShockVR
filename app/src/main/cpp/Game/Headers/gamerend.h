@@ -46,21 +46,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Includes
 
-#define SNOW_COLOR_SET     0
-#define BLOOD_COLOR_SET    1
-#define SHIELD_COLOR_SET   2
+#define SNOW_COLOR_SET      0
+#define BLOOD_COLOR_SET     1
+#define SHIELD_COLOR_SET    2
 
-#define TYPE_REND_SFX      0x0F00
-#define VAL_REND_SFX       0x00FF
+#define TYPE_REND_SFX        0x0F00
+#define VAL_REND_SFX         0x00FF
 
-#define DYING_REND_SFX     0x0100
-#define REBORN_REND_SFX    0x0200
-#define FAKEWIN_REND_SFX   0x0300
+#define DYING_REND_SFX      0x0100
+#define REBORN_REND_SFX     0x0200
+#define FAKEWIN_REND_SFX    0x0300
 #define TIMELIMIT_REND_SFX 0x0400
 
-#define DMG_SHIELD         0
-#define DMG_BLOOD          1
-#define DMG_RAD            2
+#define DMG_SHIELD            0
+#define DMG_BLOOD             1
+#define DMG_RAD                2
 
 // Prototypes
 errtype gamerend_init(void);

@@ -63,7 +63,7 @@ errtype inventory_draw_new_page(int32_t pgnum);
 // clears the inventory region
 errtype inventory_clear(void);
 
-// Add the appropriate kind of object to the player's inventory.   Returns whether
+// Add the appropriate kind of object to the player's inventory.    Returns whether
 // or not the action succeded (typical failure reason being not enough inventory
 // slots remaining).
 bool inventory_add_object (ObjID new_object,bool select);

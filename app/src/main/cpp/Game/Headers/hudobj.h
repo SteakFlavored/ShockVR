@@ -52,8 +52,8 @@ extern uint16_t hudobj_classes[];
 
 extern struct _hudobj_data
 {
-   int16_t id;
-   int16_t xl,yl,xh,yh;
+    int16_t id;
+    int16_t xl,yl,xh,yh;
 }  hudobj_vec[NUM_HUDOBJS];
 
 extern uint8_t current_num_hudobjs;
@@ -66,13 +66,13 @@ extern uint8_t current_num_hudobjs;
 // given an objid, determin whether this is an object the renderer
 // should store in the u
 #define IS_HUDOBJ(id) ((objs[id].info.inst_flags & HUDOBJ_INST_FLAG) \
-                     || ((1 << objs[id].subclass) & hudobj_classes[objs[id].obclass]))
+                            || ((1 << objs[id].subclass) & hudobj_classes[objs[id].obclass]))
 
 #define SET_HUDOBJ_RECT(oid,oxl,oyl,oxh,oyh)  if (current_num_hudobjs < NUM_HUDOBJS) \
-                                          { \
-                                            struct _hudobj_data *hd = &hudobj_vec[current_num_hudobjs++];\
-                                            hd->id = (oid); hd->xl = (oxl); hd->xh = (oxh); hd->yl = (oyl); hd->yh = (oyh);\
-                                          }
+                                                        { \
+                                                          struct _hudobj_data *hd = &hudobj_vec[current_num_hudobjs++];\
+                                                          hd->id = (oid); hd->xl = (oxl); hd->xh = (oxh); hd->yl = (oyl); hd->yh = (oyh);\
+                                                        }
 // ---------------
 // GAME SYSTEM API
 // ---------------

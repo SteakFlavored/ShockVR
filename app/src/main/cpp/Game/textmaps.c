@@ -81,88 +81,88 @@ extern void FlipLong(int32_t *lng);
 #define ACTUAL_SMALL_ANIMS 101
 bool set_animations(int16_t start,int16_t frames, uint8_t *anim_used)
 {
-   int32_t loop;
-   // Note that NUM_ACTUAL_SMALL_ANIMS contains the actual number of valid
-   // animations, BUT anything in the gap between them will get caught by the
-   // ResInUse call in load_small_texturemaps
-   if ((start<0)||(start+frames>MAX_SMALL_TMAPS))
-   {
-//      mprintf("PAIN SUFFERING SET ANIM DEATH %d %d\n",start,frames);
-      return false;
-   }
-   for (loop = start; loop < start + frames; loop++)
-      SET_ANIM_USED(loop);
-   return true;
+    int32_t loop;
+    // Note that NUM_ACTUAL_SMALL_ANIMS contains the actual number of valid
+    // animations, BUT anything in the gap between them will get caught by the
+    // ResInUse call in load_small_texturemaps
+    if ((start<0)||(start+frames>MAX_SMALL_TMAPS))
+    {
+//        mprintf("PAIN SUFFERING SET ANIM DEATH %d %d\n",start,frames);
+        return false;
+    }
+    for (loop = start; loop < start + frames; loop++)
+        SET_ANIM_USED(loop);
+    return true;
 }
 
 errtype load_small_texturemaps(void)
 {
-   Id id = TEXTURE_SMALL_ID;
-   int8_t i = 0;
-   extern bool obj_is_display(int32_t triple);
-   int32_t d;
-   int8_t rv=0;
-   ObjSpecID osid;
-   uint8_t anim_used[MAX_SMALL_TMAPS/8];
+    Id id = TEXTURE_SMALL_ID;
+    int8_t i = 0;
+    extern bool obj_is_display(int32_t triple);
+    int32_t d;
+    int8_t rv=0;
+    ObjSpecID osid;
+    uint8_t anim_used[MAX_SMALL_TMAPS/8];
 
-   memset(anim_used, 0, MAX_SMALL_TMAPS/8);
+    memset(anim_used, 0, MAX_SMALL_TMAPS/8);
 
-   // Figure out which animations are in use
-   osid = objBigstuffs[0].id;
-   while (osid != OBJ_SPEC_NULL)
-   {
-      if (obj_is_display(ID2TRIP(objSmallstuffs[osid].id)))
-      {
-         d = objBigstuffs[osid].data2;
-         if ((d & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
-            rv=set_animations(d & TPOLY_INDEX_MASK, objBigstuffs[osid].cosmetic_value, anim_used);
-         if (((d >> 16) & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
-            rv|=set_animations((d >> 16) & TPOLY_INDEX_MASK, objBigstuffs[osid].cosmetic_value, anim_used);
-//         if (!rv) mprintf("Big badness for o %x, osid %x, data2 %d\n",objBigstuffs[osid].id,osid,d);
-      }
-      osid = objBigstuffs[osid].next;
-   }
-   AdvanceProgress();
+    // Figure out which animations are in use
+    osid = objBigstuffs[0].id;
+    while (osid != OBJ_SPEC_NULL)
+    {
+        if (obj_is_display(ID2TRIP(objSmallstuffs[osid].id)))
+        {
+            d = objBigstuffs[osid].data2;
+            if ((d & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
+                rv=set_animations(d & TPOLY_INDEX_MASK, objBigstuffs[osid].cosmetic_value, anim_used);
+            if (((d >> 16) & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
+                rv|=set_animations((d >> 16) & TPOLY_INDEX_MASK, objBigstuffs[osid].cosmetic_value, anim_used);
+//            if (!rv) mprintf("Big badness for o %x, osid %x, data2 %d\n",objBigstuffs[osid].id,osid,d);
+        }
+        osid = objBigstuffs[osid].next;
+    }
+    AdvanceProgress();
 
-   osid = objSmallstuffs[0].id;
-   while (osid != OBJ_SPEC_NULL)
-   {
-      if (obj_is_display(ID2TRIP(objSmallstuffs[osid].id)))
-      {
-         d = objSmallstuffs[osid].data2;
-         if ((d & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
-            rv = (int8_t) set_animations(d & TPOLY_INDEX_MASK, objSmallstuffs[osid].cosmetic_value, anim_used);
-         if (((d >> 16) & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
-            rv |= (int8_t) set_animations((d >> 16) & TPOLY_INDEX_MASK, objSmallstuffs[osid].cosmetic_value, anim_used);
-//         if (!rv) mprintf("Small badness for o %x, osid %x, data2 %d\n",objSmallstuffs[osid].id,osid,d);
-      }
-      osid = objSmallstuffs[osid].next;
-   }
-   AdvanceProgress();
+    osid = objSmallstuffs[0].id;
+    while (osid != OBJ_SPEC_NULL)
+    {
+        if (obj_is_display(ID2TRIP(objSmallstuffs[osid].id)))
+        {
+            d = objSmallstuffs[osid].data2;
+            if ((d & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
+                rv = (int8_t) set_animations(d & TPOLY_INDEX_MASK, objSmallstuffs[osid].cosmetic_value, anim_used);
+            if (((d >> 16) & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
+                rv |= (int8_t) set_animations((d >> 16) & TPOLY_INDEX_MASK, objSmallstuffs[osid].cosmetic_value, anim_used);
+//            if (!rv) mprintf("Small badness for o %x, osid %x, data2 %d\n",objSmallstuffs[osid].id,osid,d);
+        }
+        osid = objSmallstuffs[osid].next;
+    }
+    AdvanceProgress();
 
-   while(ResInUse(id+i))
-   {
-     if (CHECK_ANIM_USED(i))
-      {
-         ResLock(id+i);
-         ResUnlock(id+i);
-      }
-      i++;
-   }
-   AdvanceProgress();
-   return(OK);
+    while(ResInUse(id+i))
+    {
+      if (CHECK_ANIM_USED(i))
+        {
+            ResLock(id+i);
+            ResUnlock(id+i);
+        }
+        i++;
+    }
+    AdvanceProgress();
+    return(OK);
 }
 
 // should really do dynamic creation of grs_bitmap *'s for the textures
 // but for now, we'll be lame
 
-extern uint8_t       tmap_static_mem[];
-extern uint8_t      *tmap_dynamic_mem=NULL;
+extern uint8_t         tmap_static_mem[];
+extern uint8_t        *tmap_dynamic_mem=NULL;
 
 #define get_tmap_128x128(i) ((uint8_t *)&tmap_dynamic_mem[i*(128*128)])
-#define get_tmap_64x64(i)   ((uint8_t *)&tmap_static_mem[i*SIZE_STATIC_TMAP])
-#define get_tmap_32x32(i)   ((uint8_t *)&tmap_static_mem[(i*SIZE_STATIC_TMAP)+(64*64)])
-#define get_tmap_16x16(i)   ((uint8_t *)&tmap_static_mem[(i*SIZE_STATIC_TMAP)+(64*64)+(32*32)])
+#define get_tmap_64x64(i)    ((uint8_t *)&tmap_static_mem[i*SIZE_STATIC_TMAP])
+#define get_tmap_32x32(i)    ((uint8_t *)&tmap_static_mem[(i*SIZE_STATIC_TMAP)+(64*64)])
+#define get_tmap_16x16(i)    ((uint8_t *)&tmap_static_mem[(i*SIZE_STATIC_TMAP)+(64*64)+(32*32)])
 
 // have we built the tables, do we have the extra memory, so on
 static bool tmaps_setup=false;
@@ -171,319 +171,319 @@ static bool tmaps_setup=false;
 static grs_bitmap tmap_bitmaps[NUM_TEXTURE_SIZES];
 void setup_tmap_bitmaps(void)
 {
-   int32_t i;
-   for (i=0; i<4; i++)
-	   gr_init_bm(&tmap_bitmaps[i], NULL, BMT_FLAT8, 0, tmap_sizes[i], tmap_sizes[i]);
+    int32_t i;
+    for (i=0; i<4; i++)
+        gr_init_bm(&tmap_bitmaps[i], NULL, BMT_FLAT8, 0, tmap_sizes[i], tmap_sizes[i]);
 }
 
 grs_bitmap *get_texture_map(int32_t idx, int32_t sz)
 {
-   uint16_t sz_add[NUM_TEXTURE_SIZES-1]={0,64*64,(64*64)+(32*32)};
-   uint8_t *bt;
-//   mprintf("Getting tmap %d, sz %d\n",idx,sz);
+    uint16_t sz_add[NUM_TEXTURE_SIZES-1]={0,64*64,(64*64)+(32*32)};
+    uint8_t *bt;
+//    mprintf("Getting tmap %d, sz %d\n",idx,sz);
 #ifdef DEMO
-   if (sz == 2)
-      sz = 1;
+    if (sz == 2)
+        sz = 1;
 #endif
-   if (sz==0)
-      if (all_textures)
-         bt=get_tmap_128x128(idx);
-      else
-         sz=1;
-   if (sz!=0)
-   {
-         bt=get_tmap_64x64(idx)+sz_add[sz-1];
-   }
-   tmap_bitmaps[sz].bits=bt;
-   return &tmap_bitmaps[sz];
+    if (sz==0)
+        if (all_textures)
+            bt=get_tmap_128x128(idx);
+        else
+            sz=1;
+    if (sz!=0)
+    {
+            bt=get_tmap_64x64(idx)+sz_add[sz-1];
+    }
+    tmap_bitmaps[sz].bits=bt;
+    return &tmap_bitmaps[sz];
 }
 
 
 void load_textures(void)
 {
-   grs_bitmap *cur_bm;
-   int32_t i, n, c;
-   errtype retval = OK;
-   int32_t atext_tmp=1;
+    grs_bitmap *cur_bm;
+    int32_t i, n, c;
+    errtype retval = OK;
+    int32_t atext_tmp=1;
 
-   {
-      if (start_mem < EXTRA_TMAP_THRESHOLD)
-         atext_tmp = 0;
-      else
-      {
-         //Spew(DSRC_SYSTEM_Memory, ("Sufficient Memory detected for Loading 128s!\n"));
-         atext_tmp = 1;
-      }
-   }
+    {
+        if (start_mem < EXTRA_TMAP_THRESHOLD)
+            atext_tmp = 0;
+        else
+        {
+            //Spew(DSRC_SYSTEM_Memory, ("Sufficient Memory detected for Loading 128s!\n"));
+            atext_tmp = 1;
+        }
+    }
 
-   //Spew(DSRC_GFX_Texturemaps, ("all_textures = %d\n",all_textures));
-   all_textures=atext_tmp;
-   //Spew(DSRC_GFX_Texturemaps, ("GAME_TEXTURES = %d\n",GAME_TEXTURES));
+    //Spew(DSRC_GFX_Texturemaps, ("all_textures = %d\n",all_textures));
+    all_textures=atext_tmp;
+    //Spew(DSRC_GFX_Texturemaps, ("GAME_TEXTURES = %d\n",GAME_TEXTURES));
 
-   if (!tmaps_setup)
-   {
-      if (all_textures) // get our butts some memory
-         tmap_dynamic_mem = tmap_big_buffer;
+    if (!tmaps_setup)
+    {
+        if (all_textures) // get our butts some memory
+            tmap_dynamic_mem = tmap_big_buffer;
 
-      setup_tmap_bitmaps();
-      tmaps_setup=true;
-   }
+        setup_tmap_bitmaps();
+        tmaps_setup=true;
+    }
 
-   for (c=0; c< NUM_LOADED_TEXTURES; c++)
-   {
-      i = loved_textures[c];
-      if (!ResInUse(TEXTURE_64_ID + i))
-      {
-         //Warning(("Hey, invalid texture in palette! slot %d = %d\n",c,i));
-         i = 0;
-      }  // Set local properties
-      for (n = SMALLEST_SIZE_INDEX; n<NUM_TEXTURE_SIZES; n++)
-      {
-         if ((n != TEXTURE_128_INDEX) || all_textures)
-         {
+    for (c=0; c< NUM_LOADED_TEXTURES; c++)
+    {
+        i = loved_textures[c];
+        if (!ResInUse(TEXTURE_64_ID + i))
+        {
+            //Warning(("Hey, invalid texture in palette! slot %d = %d\n",c,i));
+            i = 0;
+        }  // Set local properties
+        for (n = SMALLEST_SIZE_INDEX; n<NUM_TEXTURE_SIZES; n++)
+        {
+            if ((n != TEXTURE_128_INDEX) || all_textures)
+            {
 #ifdef DEMO
-            if (n == TEXTURE_32_INDEX)
-               break;
+                if (n == TEXTURE_32_INDEX)
+                    break;
 #endif
-            cur_bm=get_texture_map(c,n);
+                cur_bm=get_texture_map(c,n);
 
-            // This is a BLATANT hack to get around the 1 Meg limit in the resource system
-            if ((n == TEXTURE_128_INDEX) || (n == TEXTURE_64_INDEX))
-            {
-               if (ResInUse(tmap_ids[n] + i))
-               {
-                  retval = load_res_bitmap(cur_bm, MKREF(tmap_ids[n] + i,0), false);
-                  cur_bm->flags = 0;
-               }
-               else
-               {
-                  //Warning(("Hey, ResInUse failed in tmap_load and i'm so blue (%d,%d,%x)\n",n,i,tmap_ids[n]+i));
-                  // should abort !!!
-               }
+                // This is a BLATANT hack to get around the 1 Meg limit in the resource system
+                if ((n == TEXTURE_128_INDEX) || (n == TEXTURE_64_INDEX))
+                {
+                    if (ResInUse(tmap_ids[n] + i))
+                    {
+                        retval = load_res_bitmap(cur_bm, MKREF(tmap_ids[n] + i,0), false);
+                        cur_bm->flags = 0;
+                    }
+                    else
+                    {
+                        //Warning(("Hey, ResInUse failed in tmap_load and i'm so blue (%d,%d,%x)\n",n,i,tmap_ids[n]+i));
+                        // should abort !!!
+                    }
+                }
+                else
+                {
+                    retval = load_res_bitmap(cur_bm, MKREF(tmap_ids[n],i), false);
+                    cur_bm->flags = 0;
+                }
+                if ((cur_bm->w != tmap_sizes[n]) || (cur_bm->h != tmap_sizes[n]))
+                {
+                    //Warning(("Incorrect size in tmap %d! (%d)(%d x %d) vs (%d x %d)\n",i,c,cur_bm->w,
+                    //    cur_bm->h, tmap_sizes[n], tmap_sizes[n]));
+                    // should abort !!!
+//                    DBG(DSRC_GFX_Texturemaps, {
+//                                        gr_set_fcolor(0);
+//                                        gr_rect(0,0,320,200);
+//                                        gr_bitmap(cur_bm, 0, 0);
+//                    });
+                }
             }
-            else
-            {
-               retval = load_res_bitmap(cur_bm, MKREF(tmap_ids[n],i), false);
-               cur_bm->flags = 0;
-            }
-            if ((cur_bm->w != tmap_sizes[n]) || (cur_bm->h != tmap_sizes[n]))
-            {
-               //Warning(("Incorrect size in tmap %d! (%d)(%d x %d) vs (%d x %d)\n",i,c,cur_bm->w,
-               //   cur_bm->h, tmap_sizes[n], tmap_sizes[n]));
-               // should abort !!!
-//               DBG(DSRC_GFX_Texturemaps, {
-//                              gr_set_fcolor(0);
-//                              gr_rect(0,0,320,200);
-//                              gr_bitmap(cur_bm, 0, 0);
-//               });
-            }
-         }
-	  	 AdvanceProgress();
-      }
-   }
-   // Load in texture properties for all textures
-   load_master_texture_properties();
-   AdvanceProgress();
+           AdvanceProgress();
+        }
+    }
+    // Load in texture properties for all textures
+    load_master_texture_properties();
+    AdvanceProgress();
 
-   // Copy the appropriate things into textprops
-   for (i=0; i < NUM_LOADED_TEXTURES; i ++)
-      textprops[i] = texture_properties[loved_textures[i]];
-   AdvanceProgress();
+    // Copy the appropriate things into textprops
+    for (i=0; i < NUM_LOADED_TEXTURES; i ++)
+        textprops[i] = texture_properties[loved_textures[i]];
+    AdvanceProgress();
 
-   // Get rid of the big set
-   unload_master_texture_properties();
-   textures_loaded = true;
-   game_fr_reparam(all_textures,-1,-1);
-   AdvanceProgress();
+    // Get rid of the big set
+    unload_master_texture_properties();
+    textures_loaded = true;
+    game_fr_reparam(all_textures,-1,-1);
+    AdvanceProgress();
 }
 
 void free_textures(void)
 {
 #ifndef SVGA_CUTSCENES
-   if (all_textures&&(tmap_dynamic_mem==NULL))
-      DisposePtr((Ptr)tmap_dynamic_mem);
+    if (all_textures&&(tmap_dynamic_mem==NULL))
+        DisposePtr((Ptr)tmap_dynamic_mem);
 #endif
-   tmaps_setup=false;
+    tmaps_setup=false;
 }
 
 errtype bitmap_array_unload(int32_t *num_bitmaps, grs_bitmap *arr[])
 {
-   int32_t i;
+    int32_t i;
 
-   if (*num_bitmaps == 0)
-      return(ERR_NOEFFECT);
+    if (*num_bitmaps == 0)
+        return(ERR_NOEFFECT);
 
-   //Spew(DSRC_SYSTEM_Memory, ("Freeing %d bitmaps...\n",*num_bitmaps));
-   for (i=0; i<*num_bitmaps; i++)
-   {
-//      Spew(DSRC_SYSTEM_Memory, ("%d ",i));
-      DisposePtr((Ptr)arr[i]->bits);
-      DisposePtr((Ptr)arr[i]);
-   }
-   *num_bitmaps = 0;
-   return(OK);
+    //Spew(DSRC_SYSTEM_Memory, ("Freeing %d bitmaps...\n",*num_bitmaps));
+    for (i=0; i<*num_bitmaps; i++)
+    {
+//        Spew(DSRC_SYSTEM_Memory, ("%d ",i));
+        DisposePtr((Ptr)arr[i]->bits);
+        DisposePtr((Ptr)arr[i]);
+    }
+    *num_bitmaps = 0;
+    return(OK);
 }
 
 bool empty_bitmap(grs_bitmap *bmp)
 {
-   uint8_t *cur=&bmp->bits[0], *targ=cur+(bmp->w*bmp->h);
-   while (cur<targ)
-      if (*cur++!=0)
-         return false;
-   return true;
+    uint8_t *cur=&bmp->bits[0], *targ=cur+(bmp->w*bmp->h);
+    while (cur<targ)
+        if (*cur++!=0)
+            return false;
+    return true;
 }
 
 errtype Init_Lighting(void)
 {
-   Handle	res;
-   int32_t		i;
+    Handle    res;
+    int32_t        i;
 
-   // Read in the standard shading table
-   res = GetResource('shad',1000);
-   if (!res) return(ERR_FOPEN);
-   BlockMove(*res, shading_table,(256 * 16));
-   ReleaseResource(res);
-
-// MLA- changed this to use resources
-/*   int8_t shad_path[255];
-   int32_t num_shad,fd,i;
-
-   // Read in the standard shading table
-   if (!DatapathFind(&DataDirPath,SHADING_TABLE_FNAME,shad_path))
-   {
-      //Warning(("Could not find lighting table(%s)!!\n",SHADING_TABLE_FNAME));
-      return(ERR_FOPEN);
-   }
-   fd = open(shad_path, O_RDONLY|O_BINARY);
-   if (fd < 0)
-   {
-      //Warning(("Could not load lighting table(%s)!!\n",shad_path));
-      return(ERR_FREAD);
-   }
-   num_shad = read(fd,shading_table,(256 * 16));
-   if (num_shad < (256 * 16))
-   {
-      //Warning(("Read only %d values from shading_table\n"));
-   }
-   close(fd);*/
-
-   for (i=0; i<256*16; i+=256)
-   {
-      shading_table[i]=0;  			// i love our shading table
-      shading_table[i+255]=0xFF;  	// KLC - so do I
-   }
-
-   // Now choose this one as our normal shading table
-   gr_set_light_tab(shading_table);
-
-   // now read bw shading table
-   res = GetResource('shad',1001);
-   if (!res) return(ERR_FOPEN);
-   BlockMove(*res, bw_shading_table,(256 * 16));
-   ReleaseResource(res);
+    // Read in the standard shading table
+    res = GetResource('shad',1000);
+    if (!res) return(ERR_FOPEN);
+    BlockMove(*res, shading_table,(256 * 16));
+    ReleaseResource(res);
 
 // MLA- changed this to use resources
-/*   if (!DatapathFind(&DataDirPath,SHADING_TABLE_BW_FNAME,shad_path))
-   {
-      //Warning(("Could not find lighting table(%s)!!\n",SHADING_TABLE_BW_FNAME));
-      return(ERR_FOPEN);
-   }
-   fd = open(shad_path, O_RDONLY|O_BINARY);
-   if (fd < 0)
-   {
-      //Warning(("Could not load lighting table(%s)!!\n",shad_path));
-      return(ERR_FREAD);
-   }
-   // how about loading these into an array, not separate symbols?
+/*    int8_t shad_path[255];
+    int32_t num_shad,fd,i;
 
-   num_shad = read(fd,bw_shading_table,(256 * 16));
-   if (num_shad < (256 * 16))
-   {
-      //Warning(("Read only %d values from bw_shading_table\n"));
-   }
-   close(fd);
-   */
+    // Read in the standard shading table
+    if (!DatapathFind(&DataDirPath,SHADING_TABLE_FNAME,shad_path))
+    {
+        //Warning(("Could not find lighting table(%s)!!\n",SHADING_TABLE_FNAME));
+        return(ERR_FOPEN);
+    }
+    fd = open(shad_path, O_RDONLY|O_BINARY);
+    if (fd < 0)
+    {
+        //Warning(("Could not load lighting table(%s)!!\n",shad_path));
+        return(ERR_FREAD);
+    }
+    num_shad = read(fd,shading_table,(256 * 16));
+    if (num_shad < (256 * 16))
+    {
+        //Warning(("Read only %d values from shading_table\n"));
+    }
+    close(fd);*/
 
-   for (i=0; i<256*16; i+=256)
-      bw_shading_table[i]=0;  // i love our shading table
+    for (i=0; i<256*16; i+=256)
+    {
+        shading_table[i]=0;              // i love our shading table
+        shading_table[i+255]=0xFF;      // KLC - so do I
+    }
 
-   fr_set_cluts(shading_table,bw_shading_table,bw_shading_table,bw_shading_table);
+    // Now choose this one as our normal shading table
+    gr_set_light_tab(shading_table);
 
-   return(OK);
+    // now read bw shading table
+    res = GetResource('shad',1001);
+    if (!res) return(ERR_FOPEN);
+    BlockMove(*res, bw_shading_table,(256 * 16));
+    ReleaseResource(res);
+
+// MLA- changed this to use resources
+/*    if (!DatapathFind(&DataDirPath,SHADING_TABLE_BW_FNAME,shad_path))
+    {
+        //Warning(("Could not find lighting table(%s)!!\n",SHADING_TABLE_BW_FNAME));
+        return(ERR_FOPEN);
+    }
+    fd = open(shad_path, O_RDONLY|O_BINARY);
+    if (fd < 0)
+    {
+        //Warning(("Could not load lighting table(%s)!!\n",shad_path));
+        return(ERR_FREAD);
+    }
+    // how about loading these into an array, not separate symbols?
+
+    num_shad = read(fd,bw_shading_table,(256 * 16));
+    if (num_shad < (256 * 16))
+    {
+        //Warning(("Read only %d values from bw_shading_table\n"));
+    }
+    close(fd);
+    */
+
+    for (i=0; i<256*16; i+=256)
+        bw_shading_table[i]=0;  // i love our shading table
+
+    fr_set_cluts(shading_table,bw_shading_table,bw_shading_table,bw_shading_table);
+
+    return(OK);
 }
 
 errtype load_master_texture_properties(void)
 {
-   int32_t version,i;
-   Handle res;
+    int32_t version,i;
+    Handle res;
 
-   texture_properties = (TextureProp *)NewPtr(GAME_TEXTURES * sizeof(TextureProp));
+    texture_properties = (TextureProp *)NewPtr(GAME_TEXTURES * sizeof(TextureProp));
 
-   // Load Properties from disk
-   clear_texture_properties();
+    // Load Properties from disk
+    clear_texture_properties();
 
-   res = GetResource('tprp',1000);
-   if (res)
-    {
-     FlipLong((int32_t *) (*res));
-     version =  * (int32_t *) (*res);
-     if (version == TEXTPROP_VERSION_NUMBER)
-      {
-       // copy out the structs, fixing the 11->12 byte size difference
-       for (i=0; i<363; i++)
-         texture_properties[i] = * (TextureProp *) (*res+4+(i*11));
-
-       // fix shorts in texture_properties
-       for (i=0; i<GAME_TEXTURES; i++)
+    res = GetResource('tprp',1000);
+    if (res)
+     {
+      FlipLong((int32_t *) (*res));
+      version =  * (int32_t *) (*res);
+      if (version == TEXTPROP_VERSION_NUMBER)
         {
-         FlipShort(&texture_properties[i].resilience);
-         FlipShort(&texture_properties[i].distance_mod);
-        }
-      }
-	 ReleaseResource(res);
-    }
-// MLA- changed this to use resources
-/*   if (DatapathFind(&DataDirPath, levname, path))
-   {
-      fd = open(path, O_RDONLY|O_BINARY);
-      if (fd != -1)
-      {
-         sz += READ(fd, version);
-         if (version == TEXTPROP_VERSION_NUMBER)
-         {
-            sz += read(fd, texture_properties, GAME_TEXTURES * 10);
-         }
-//         else
-//            Warning(("Bad Texture Properties version number (%d).  Current = %d.\n",version,TEXTPROP_VERSION_NUMBER));
-         close(fd);
-      }
-    }*/
+         // copy out the structs, fixing the 11->12 byte size difference
+         for (i=0; i<363; i++)
+            texture_properties[i] = * (TextureProp *) (*res+4+(i*11));
 
-   return(OK);
+         // fix shorts in texture_properties
+         for (i=0; i<GAME_TEXTURES; i++)
+          {
+            FlipShort(&texture_properties[i].resilience);
+            FlipShort(&texture_properties[i].distance_mod);
+          }
+        }
+     ReleaseResource(res);
+     }
+// MLA- changed this to use resources
+/*    if (DatapathFind(&DataDirPath, levname, path))
+    {
+        fd = open(path, O_RDONLY|O_BINARY);
+        if (fd != -1)
+        {
+            sz += READ(fd, version);
+            if (version == TEXTPROP_VERSION_NUMBER)
+            {
+                sz += read(fd, texture_properties, GAME_TEXTURES * 10);
+            }
+//            else
+//                Warning(("Bad Texture Properties version number (%d).  Current = %d.\n",version,TEXTPROP_VERSION_NUMBER));
+            close(fd);
+        }
+     }*/
+
+    return(OK);
 }
 
 errtype unload_master_texture_properties(void)
 {
-   DisposePtr((Ptr)texture_properties);
-   texture_properties = NULL;
-   return(OK);
+    DisposePtr((Ptr)texture_properties);
+    texture_properties = NULL;
+    return(OK);
 }
 
 errtype clear_texture_properties(void)
 {
-   int32_t i;
+    int32_t i;
 
-   // clear it all
-   memset(texture_properties, 0, sizeof (TextureProp) * GAME_TEXTURES);
+    // clear it all
+    memset(texture_properties, 0, sizeof (TextureProp) * GAME_TEXTURES);
 
-   // set the stuff that needs values besides zero
-   for (i=0; i<GAME_TEXTURES; i++)
-   {
-      texture_properties[i].family_texture = i;
-      texture_properties[i].target_texture = i;
-      texture_properties[i].resilience = 10;
-   }
-   return(OK);
+    // set the stuff that needs values besides zero
+    for (i=0; i<GAME_TEXTURES; i++)
+    {
+        texture_properties[i].family_texture = i;
+        texture_properties[i].target_texture = i;
+        texture_properties[i].resilience = 10;
+    }
+    return(OK);
 }
 
 //#define TEXTURE_CRUNCH_HACK
@@ -592,34 +592,34 @@ int16_t tmap_crunch[GAME_TEXTURES];
 
 errtype texture_crunch_init(void)
 {
-   int32_t i,c;
-   for (i=0; i < GAME_TEXTURES; i++)
-      tmap_convert[i] = i;
-   for (i=0; i < NUM_CONVERT; i++)
-      tmap_convert[convert_list[i][0]] = convert_list[i][1];
-   c = 0;
-   for (i=0; i < GAME_TEXTURES; i++)
-   {
-      if (tmap_convert[i] == i)
-         tmap_crunch[i] = c++;
-      else
-         tmap_crunch[i] = -1;
-   }
-   return(OK);
+    int32_t i,c;
+    for (i=0; i < GAME_TEXTURES; i++)
+        tmap_convert[i] = i;
+    for (i=0; i < NUM_CONVERT; i++)
+        tmap_convert[convert_list[i][0]] = convert_list[i][1];
+    c = 0;
+    for (i=0; i < GAME_TEXTURES; i++)
+    {
+        if (tmap_convert[i] == i)
+            tmap_crunch[i] = c++;
+        else
+            tmap_crunch[i] = -1;
+    }
+    return(OK);
 }
 
 errtype texture_crunch_go(void)
 {
-   int32_t i;
+    int32_t i;
 
-   for (i=0; i < NUM_LOADED_TEXTURES; i++)
-   {
-      //Warning(("%d=%d->%d->%d\n",i,loved_textures[i],tmap_convert[loved_textures[i]],tmap_crunch[tmap_convert[loved_textures[i]]]));
-      loved_textures[i] = tmap_crunch[tmap_convert[loved_textures[i]]];
-   }
-   load_textures();
+    for (i=0; i < NUM_LOADED_TEXTURES; i++)
+    {
+        //Warning(("%d=%d->%d->%d\n",i,loved_textures[i],tmap_convert[loved_textures[i]],tmap_crunch[tmap_convert[loved_textures[i]]]));
+        loved_textures[i] = tmap_crunch[tmap_convert[loved_textures[i]]];
+    }
+    load_textures();
 
-   return(OK);
+    return(OK);
 }
 #endif
 
@@ -631,54 +631,54 @@ errtype texture_crunch_go(void)
 bool salvation_list[GAME_TEXTURES];
 bool texture_annihilate_func(int16_t keycode, uint32_t context, void* data)
 {
-   int32_t fn;
-   int32_t i,c;
-   extern int32_t texture_fnum;
+    int32_t fn;
+    int32_t i,c;
+    extern int32_t texture_fnum;
 
-   mprintf("texture_fnum = %d\n",texture_fnum);
-   if (texture_fnum == 0)
-   {
-      //Warning(("HEY, TEXTURE_FNUM is %d!\n",texture_fnum));
-      return(true);
-   }
+    mprintf("texture_fnum = %d\n",texture_fnum);
+    if (texture_fnum == 0)
+    {
+        //Warning(("HEY, TEXTURE_FNUM is %d!\n",texture_fnum));
+        return(true);
+    }
 
-   ResCloseFile(texture_fnum);
+    ResCloseFile(texture_fnum);
 
-   fn = ResEditFile("texture.res", false);
+    fn = ResEditFile("texture.res", false);
 
-   for (i=0; i < GAME_TEXTURES; i++)
-      salvation_list[i] = false;
+    for (i=0; i < GAME_TEXTURES; i++)
+        salvation_list[i] = false;
 
-   // Determine which textures are fine and happy
-   for (i=0; i < NUM_DEMO_TEXTURES; i++)
-   {
-      salvation_list[loved_textures[i]] = true;
-   }
+    // Determine which textures are fine and happy
+    for (i=0; i < NUM_DEMO_TEXTURES; i++)
+    {
+        salvation_list[loved_textures[i]] = true;
+    }
 
-   // Annhiliate all that do not conform... except for 16x16s which are in
-   // always since it's annoying to remove them!
-   for (i=0; i < GAME_TEXTURES; i++)
-   {
-      if (!salvation_list[i])
-      {
-         mprintf("destroying number %d, id = %x and %x\n",i,TEXTURE_64_ID + i, TEXTURE_128_ID + i);
-         if (!ResInUse(TEXTURE_64_ID + i))
-            break;
-         else
-         {
-            ResKill(TEXTURE_64_ID + i);
-            ResKill(TEXTURE_128_ID + i);
-         }
-      }
-   }
+    // Annhiliate all that do not conform... except for 16x16s which are in
+    // always since it's annoying to remove them!
+    for (i=0; i < GAME_TEXTURES; i++)
+    {
+        if (!salvation_list[i])
+        {
+            mprintf("destroying number %d, id = %x and %x\n",i,TEXTURE_64_ID + i, TEXTURE_128_ID + i);
+            if (!ResInUse(TEXTURE_64_ID + i))
+                break;
+            else
+            {
+                ResKill(TEXTURE_64_ID + i);
+                ResKill(TEXTURE_128_ID + i);
+            }
+        }
+    }
 
-   ResPack(fn);
+    ResPack(fn);
 
-   ResCloseFile(fn);
+    ResCloseFile(fn);
 
-   texture_fnum = ResOpenFile("texture.res");
+    texture_fnum = ResOpenFile("texture.res");
 
-   return(true);
+    return(true);
 }
 #pragma enable_message(202)
 #endif

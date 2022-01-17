@@ -34,18 +34,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define _chkNull(ptr)
 #define _chkNullcast(pt,cast)
-#define _fr_top(vr)           if ((vr)==NULL) _fr=_sr; else _fr=(fauxrend_context *)(vr)
+#define _fr_top(vr)              if ((vr)==NULL) _fr=_sr; else _fr=(fauxrend_context *)(vr)
 #define _fr_top_cast(vr,cast) _fr_top(vr)
-#define _fr_ret               return FR_OK
-#define _fr_ret_val(v)        return v
+#define _fr_ret                    return FR_OK
+#define _fr_ret_val(v)          return v
 #define _fr_dbg(exp)
 #define _fr_dbgchk(flg,exp)
 #define _fr_sdbg(flg,exp)
-#define _fr_ndbg(flg,exp)     exp
-#define _fr_defdbg(flg)       0
-#define static                static
+#define _fr_ndbg(flg,exp)      exp
+#define _fr_defdbg(flg)         0
+#define static                     static
 #define _fr_dbgflg_add(flg)
 #define _fr_dbgflg_tog(flg)
-#define _fr_dbgflg_chk(flg)   (0)
+#define _fr_dbgflg_chk(flg)    (0)
 
 #endif // __FRSHIPM_H

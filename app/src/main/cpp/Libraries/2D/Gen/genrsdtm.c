@@ -52,24 +52,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void rsd8_tm_init(grs_tmap_loop_info *ti)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(&(ti->bm),&tbm)==GR_UNPACK_RSD8_OK) {
-         ti->bm.bits=tbm.bits;
-         ti->n+=(tbm.type-BMT_RSD8)*GRD_FUNCS;
-         ((void (*)(grs_tmap_loop_info *))(grd_tmap_init_table[ti->n]))(ti);
-      }
-   }
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(&(ti->bm),&tbm)==GR_UNPACK_RSD8_OK) {
+            ti->bm.bits=tbm.bits;
+            ti->n+=(tbm.type-BMT_RSD8)*GRD_FUNCS;
+            ((void (*)(grs_tmap_loop_info *))(grd_tmap_init_table[ti->n]))(ti);
+        }
+    }
 }
 
 void rsd8_pm_init(grs_bitmap *bm, grs_per_setup *ps)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK) {
-         bm->bits=tbm.bits;
-         ps->dp+=(tbm.type-BMT_RSD8)*GRD_FUNCS;
-         ((void (*)(grs_bitmap *, grs_per_setup *))(grd_tmap_init_table[ps->dp]))(bm,ps);
-      }
-   }
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK) {
+            bm->bits=tbm.bits;
+            ps->dp+=(tbm.type-BMT_RSD8)*GRD_FUNCS;
+            ((void (*)(grs_bitmap *, grs_per_setup *))(grd_tmap_init_table[ps->dp]))(bm,ps);
+        }
+    }
 }

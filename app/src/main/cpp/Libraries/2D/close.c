@@ -53,13 +53,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "close.h"
 
 /* shut down 2d system.  call device-dependent shutdown routine and
-   restore video state. */
+    restore video state. */
 int32_t gr_close(void)
 {
-   if (grd_active == 0)
-      return 0;
-   gr_pop_video_state (true);
-   gr_close_device (&grd_info);
-   grd_active = 0;
-   return 0;
+    if (grd_active == 0)
+        return 0;
+    gr_pop_video_state (true);
+    gr_close_device (&grd_info);
+    grd_active = 0;
+    return 0;
 }

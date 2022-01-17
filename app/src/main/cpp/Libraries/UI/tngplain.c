@@ -22,61 +22,61 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma require_prototypes off
 bool tng_plain_keycooked(TNG *ptng, uint16_t key)
 {
-   bool retval = false;
-   IF_SET_RV(tng_cb_keycooked(ptng, key));
-   return(retval);
+    bool retval = false;
+    IF_SET_RV(tng_cb_keycooked(ptng, key));
+    return(retval);
 }
 
 bool tng_plain_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
-   tng_cb_mousebutt(ptng,type,loc);
-   return(true);
+    tng_cb_mousebutt(ptng,type,loc);
+    return(true);
 }
 
 bool tng_plain_signal(TNG *ptng, uint16_t signal)
 {
-   tng_cb_signal(ptng,signal);
-   return(true);
+    tng_cb_signal(ptng,signal);
+    return(true);
 }
 #pragma require_prototypes on
 
 // Initializes the TNG
 errtype tng_plain_init(void *ui_data, TNG *ptng, LGPoint size)
 {
-   TNG_plain *ppbtng;
+    TNG_plain *ppbtng;
 
-   ppbtng = (TNG_plain *)GUI_MALLOC(ptng->ui_data, sizeof(TNG_plain));
+    ppbtng = (TNG_plain *)GUI_MALLOC(ptng->ui_data, sizeof(TNG_plain));
 
-   TNGInit(ptng,NULL,ui_data);
-   ptng->type_data = ppbtng;
-   ptng->keycooked = &tng_plain_keycooked;
-   ptng->mousebutt = &tng_plain_mousebutt;
-   ptng->signal = &tng_plain_signal;
+    TNGInit(ptng,NULL,ui_data);
+    ptng->type_data = ppbtng;
+    ptng->keycooked = &tng_plain_keycooked;
+    ptng->mousebutt = &tng_plain_mousebutt;
+    ptng->signal = &tng_plain_signal;
 
-   ppbtng->tng_data = ptng;
-   ppbtng->size = size;
-   return(OK);
+    ppbtng->tng_data = ptng;
+    ppbtng->size = size;
+    return(OK);
 }
 
 // Deallocate all memory used by the TNG
 errtype tng_plain_destroy(TNG *ptng)
 {
-   GUI_DEALLOC(ptng->ui_data, ptng->type_data);
-   return(OK);
+    GUI_DEALLOC(ptng->ui_data, ptng->type_data);
+    return(OK);
 }
 
 // Fill in ppt with the size...
 errtype tng_plain_size(TNG *ptng, LGPoint *ppt)
 {
-   *ppt = TNG_PL(ptng)->size;
-   return(OK);
+    *ppt = TNG_PL(ptng)->size;
+    return(OK);
 }
 
 // Returns the current "value" of the TNG
 int32_t tng_plain_getvalue(TNG *ptng)
 {
-   void *dummy;   dummy = ptng;
-   return(0);
+    void *dummy;    dummy = ptng;
+    return(0);
 }
 
 

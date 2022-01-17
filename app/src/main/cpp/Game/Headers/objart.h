@@ -16,11 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
 #ifndef __OBJART_H
 #define __OBJART_H
 
-#define RES_bmObjectIcons 0x546		// (1350)
+#define RES_bmObjectIcons 0x546        // (1350)
 
 #endif

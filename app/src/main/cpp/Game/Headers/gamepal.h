@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
 #ifndef __GAMEPAL_H
 #define __GAMEPAL_H
 
-#define RES_gamePalette 0x2bc		// (700)
-#define RES_gamePalette2 0x2bd		// (701)
-#define RES_gamePalette3 0x2be		// (702)
+#define RES_gamePalette 0x2bc        // (700)
+#define RES_gamePalette2 0x2bd        // (701)
+#define RES_gamePalette3 0x2be        // (702)
 
 #endif

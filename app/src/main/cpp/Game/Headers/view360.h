@@ -17,23 +17,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 // render contexts for MFD and invent panels.
-#define NUM_360_CONTEXTS   3
+#define NUM_360_CONTEXTS    3
 
 // ------------------------------------
 // WHOOP WHOOP HACK HACK HACK ALERT
 // left & right contexts IDs must be the same as MFD ids.
 
-#define LEFT_CONTEXT       0
-#define RIGHT_CONTEXT      1
-#define MID_CONTEXT        2
+#define LEFT_CONTEXT         0
+#define RIGHT_CONTEXT        1
+#define MID_CONTEXT          2
 
 // Hey, let's expose the rep of the fullscreen visible bits.
 // (see fullscrn.h)
 #define VISIBLE_BIT(c) (1 << (c))
 
-#define MODE_360           0  // All 3 views
-#define MODE_270           1  // Just side views
-#define MODE_REAR          2  // Just rear view in mfd
+#define MODE_360              0  // All 3 views
+#define MODE_270              1  // Just side views
+#define MODE_REAR             2  // Just rear view in mfd
 
 #define REAR_FOV 110
 

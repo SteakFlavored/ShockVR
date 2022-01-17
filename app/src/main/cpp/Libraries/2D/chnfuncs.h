@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __CHNFUNCS
 
 /* The following is for the flags field in the
-   grs_func_chain struct. */
+    grs_func_chain struct. */
 #define CHNF_VOID 1
 #define CHNF_AFTER 3
 

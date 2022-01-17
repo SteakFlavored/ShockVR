@@ -56,45 +56,45 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* clipped vertical line with integral coordinates.  returns clip
-   code. */
+    code. */
 
 int32_t gen_vline (int16_t x0, int16_t y0, int16_t y1)
 {
-   int32_t r;
+    int32_t r;
 
-   r = grd_vline_clip_fill (x0, y0, y1, gr_get_fcolor(), gr_get_fill_parm());
+    r = grd_vline_clip_fill (x0, y0, y1, gr_get_fcolor(), gr_get_fill_parm());
 
-   return r;
+    return r;
 
 }
 
 int32_t gri_vline_clip_fill (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-   int16_t t;
-   int32_t r = CLIP_NONE;
+    int16_t t;
+    int32_t r = CLIP_NONE;
 
-   /* the clip code needs to be buried in here so that this can
-      be called from an interrupt handle !
-    */
+    /* the clip code needs to be buried in here so that this can
+        be called from an interrupt handle !
+     */
 
-   if (y0 > y1) {
-      t = y0; y0 = y1; y1 = t;
-   }
+    if (y0 > y1) {
+        t = y0; y0 = y1; y1 = t;
+    }
 
-   if (x0<grd_clip.left || x0>=grd_clip.right ||
-       y1<grd_clip.top || y0>=grd_clip.bot)
-     return CLIP_ALL;
+    if (x0<grd_clip.left || x0>=grd_clip.right ||
+         y1<grd_clip.top || y0>=grd_clip.bot)
+      return CLIP_ALL;
 
-   if (y0 < grd_clip.top) {
-      r |= CLIP_TOP;
-      y0 = grd_clip.top;
-   }
-   if (y1 >= grd_clip.bot) {
-      r |= CLIP_BOT;
-      y1 = grd_clip.bot-1;
-   }
+    if (y0 < grd_clip.top) {
+        r |= CLIP_TOP;
+        y0 = grd_clip.top;
+    }
+    if (y1 >= grd_clip.bot) {
+        r |= CLIP_BOT;
+        y1 = grd_clip.bot-1;
+    }
 
-   grd_uvline_fill (x0, y0, y1, c, parm);
+    grd_uvline_fill (x0, y0, y1, c, parm);
 
-   return r;
+    return r;
 }

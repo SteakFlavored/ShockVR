@@ -52,7 +52,7 @@ extern int16_t ss_curr_mode_height(void);
 extern void ss_set_hack_mode(int16_t new_m, int16_t *tval);
 
 #define MAX_CONVERT_TYPES  4
-#define MAX_USE_MODES      8
+#define MAX_USE_MODES        8
 
 extern fix convert_x[MAX_CONVERT_TYPES][MAX_USE_MODES];
 extern fix convert_y[MAX_CONVERT_TYPES][MAX_USE_MODES];
@@ -65,28 +65,28 @@ extern int8_t convert_use_mode;
 extern int16_t MODE_SCONV_X(int16_t cval, int16_t m);
 extern int16_t MODE_SCONV_Y(int16_t cval, int16_t m);
 
-#define SCONV_X(x)   fast_fix_mul_int(fix_make((x),0), convert_x[convert_type][convert_use_mode])
-#define SCONV_Y(y)   fast_fix_mul_int(fix_make((y),0), convert_y[convert_type][convert_use_mode])
-#define RSCONV_X(x)   fix_int(0x8000 + fast_fix_mul(fix_make((x),0), convert_x[convert_type][convert_use_mode]))
-#define RSCONV_Y(y)   fix_int(0x8000 + fast_fix_mul(fix_make((y),0), convert_y[convert_type][convert_use_mode]))
+#define SCONV_X(x)    fast_fix_mul_int(fix_make((x),0), convert_x[convert_type][convert_use_mode])
+#define SCONV_Y(y)    fast_fix_mul_int(fix_make((y),0), convert_y[convert_type][convert_use_mode])
+#define RSCONV_X(x)    fix_int(0x8000 + fast_fix_mul(fix_make((x),0), convert_x[convert_type][convert_use_mode]))
+#define RSCONV_Y(y)    fix_int(0x8000 + fast_fix_mul(fix_make((y),0), convert_y[convert_type][convert_use_mode]))
 
-#define INV_SCONV_X(x)   fast_fix_mul_int(fix_make((x),0), inv_convert_x[convert_type][convert_use_mode])
-#define INV_SCONV_Y(y)   fast_fix_mul_int(fix_make((y),0), inv_convert_y[convert_type][convert_use_mode])
+#define INV_SCONV_X(x)    fast_fix_mul_int(fix_make((x),0), inv_convert_x[convert_type][convert_use_mode])
+#define INV_SCONV_Y(y)    fast_fix_mul_int(fix_make((y),0), inv_convert_y[convert_type][convert_use_mode])
 
-#define FIXCONV_X(x)   fast_fix_mul((x), convert_x[convert_type][convert_use_mode])
-#define FIXCONV_Y(y)   fast_fix_mul((y), convert_y[convert_type][convert_use_mode])
-#define INV_FIXCONV_X(x)   fast_fix_mul((x), inv_convert_x[convert_type][convert_use_mode])
-#define INV_FIXCONV_Y(y)   fast_fix_mul((y), inv_convert_y[convert_type][convert_use_mode])
+#define FIXCONV_X(x)    fast_fix_mul((x), convert_x[convert_type][convert_use_mode])
+#define FIXCONV_Y(y)    fast_fix_mul((y), convert_y[convert_type][convert_use_mode])
+#define INV_FIXCONV_X(x)    fast_fix_mul((x), inv_convert_x[convert_type][convert_use_mode])
+#define INV_FIXCONV_Y(y)    fast_fix_mul((y), inv_convert_y[convert_type][convert_use_mode])
 
 extern uint8_t gr2ss_override;
 
-#define OVERRIDE_NONE   0x00
+#define OVERRIDE_NONE    0x00
 #define OVERRIDE_SCALE  0x01
-#define OVERRIDE_FONT   0x02
-#define OVERRIDE_CLIP   0x04
+#define OVERRIDE_FONT    0x02
+#define OVERRIDE_CLIP    0x04
 #define OVERRIDE_GET_BM 0x10
-#define OVERRIDE_ALL    0x7F
-#define OVERRIDE_FAIL   0x80
+#define OVERRIDE_ALL     0x7F
+#define OVERRIDE_FAIL    0x80
 
 
 #else
@@ -119,15 +119,15 @@ extern uint8_t gr2ss_override;
 extern void ss_mouse_convert(int16_t *px, int16_t *py, bool down);
 extern void ss_mouse_convert_round(int16_t *px, int16_t *py, bool down);
 
-#define SCONV_X(x)   x
-#define SCONV_Y(y)   y
-#define INV_SCONV_X(x)   x
-#define INV_SCONV_Y(y)   y
+#define SCONV_X(x)    x
+#define SCONV_Y(y)    y
+#define INV_SCONV_X(x)    x
+#define INV_SCONV_Y(y)    y
 
-#define FIXCONV_X(x)   x
-#define FIXCONV_Y(y)   y
-#define INV_FIXCONV_X(x)   x
-#define INV_FIXCONV_Y(y)   y
+#define FIXCONV_X(x)    x
+#define FIXCONV_Y(y)    y
+#define INV_FIXCONV_X(x)    x
+#define INV_FIXCONV_Y(y)    y
 
 #define MODE_SCONV_X(x,m)  x
 #define MODE_SCONV_Y(y,m)  y

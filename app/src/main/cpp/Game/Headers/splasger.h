@@ -16,12 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
 #ifndef __SPLASGER_H
 #define __SPLASGER_H
 
-#define RES_splash 0x73a		// (1850)
+#define RES_splash 0x73a        // (1850)
 #define REF_IMG_bmOriginSplash 0x73a0000
 #define REF_IMG_bmLGSplash 0x73a0001
 #define REF_IMG_bmSystemShockTitle 0x73a0002

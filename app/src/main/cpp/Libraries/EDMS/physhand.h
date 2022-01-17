@@ -20,13 +20,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Header: n:/project/lib/src/edms/RCS/physhand.h 1.1 1994/02/28 17:07:42 roadkill Exp $
  */
 
-//	These are the physics handle routine stuff things!!
-// 	===================================================
+//    These are the physics handle routine stuff things!!
+//     ===================================================
 
 #ifndef __PHYSHAND_H
 #define __PHYSHAND_H
 
-typedef int32_t	physics_handle;
+typedef int32_t    physics_handle;
 
 #endif /* __PHYSHAND_H */
 

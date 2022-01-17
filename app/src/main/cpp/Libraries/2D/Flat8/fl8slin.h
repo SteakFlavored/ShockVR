@@ -44,210 +44,210 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* Draw a goroud-shaded line, specified by indices into the palette.
-   be warned, weird precision bugs abound (check out test programs
-   in /project/lib/src/2d/test).
+    be warned, weird precision bugs abound (check out test programs
+    in /project/lib/src/2d/test).
 
-   These have been mostly corrected.  See also note.txt for correctness
-   arguement of new algorithm
+    These have been mostly corrected.  See also note.txt for correctness
+    arguement of new algorithm
 */
 
 /* NB: directionality policy -- reversible
-   Lines are drawn in order of increasing x or increasing y,
-   for lines that have greater x or y extent, repsectively.
-   This is done for all lines, including horiz., vert., and
-   45' lines (increasing x).
+    Lines are drawn in order of increasing x or increasing y,
+    for lines that have greater x or y extent, repsectively.
+    This is done for all lines, including horiz., vert., and
+    45' lines (increasing x).
 */
 
  /* NB: endpoint policy -- inclusive The left and top endpoints are
-    'trunc'-ed.  The right and bottom endpoints exclude the ceiling,
-    or equivlalently, include the pixel containing the line.  This is
-    calculated by subtracting epsilon (i.e. 1/65536) from its
-    fixed-point representation, then trunc'ing.
+     'trunc'-ed.  The right and bottom endpoints exclude the ceiling,
+     or equivlalently, include the pixel containing the line.  This is
+     calculated by subtracting epsilon (i.e. 1/65536) from its
+     fixed-point representation, then trunc'ing.
 
-    This makes sense if you note that open interval right
-         < ceil (x)
-    is the same as
-         <= trunc (x - e)
+     This makes sense if you note that open interval right
+            < ceil (x)
+     is the same as
+            <= trunc (x - e)
 */
 
 
-   fix x0, y0, x1, y1;
-   fix dx, dy;			/* deltas in x and y */
-   fix t;			/* temporary fix */
+    fix x0, y0, x1, y1;
+    fix dx, dy;            /* deltas in x and y */
+    fix t;            /* temporary fix */
 
-   fix i0, i1;
-   fix di;			/* delta intensity */
+    fix i0, i1;
+    fix di;            /* delta intensity */
 
-   uint8_t *p;			/* pointer into the canvas */
-
-
-   x0 = v0->x; y0 = v0->y;
-   x1 = v1->x; y1 = v1->y;
-
-   i0 = (fix) v0->i; i1 = (fix) v1->i;
-
-   /* set endpoints
-      note that this cannot go negative or change octant, since the ==
-      case is excluded */
-
-   if (x0 < x1) {
-      x1  -= 1;			/* e.g. - epsilon */
-   }
-   else if (x0 > x1) {
-      x0 -= 1;
-   }
-
-   if (y0 < y1) {
-      y1 -= 1;
-   }
-   else if (y0 > y1) {
-      y0 -= 1;
-   }
+    uint8_t *p;            /* pointer into the canvas */
 
 
-   dx = fix_trunc (x1) - fix_trunc(x0);	/* x extent in pixels, (macro is flakey) */
-   dx = fix_abs (dx);
-   dy = fix_trunc (y1) - fix_trunc(y0);	/* y extent in pixels */
-   dy = fix_abs (dy);
+    x0 = v0->x; y0 = v0->y;
+    x1 = v1->x; y1 = v1->y;
 
-   if (dx == 0 && dy == 0)
-     return;
+    i0 = (fix) v0->i; i1 = (fix) v1->i;
+
+    /* set endpoints
+        note that this cannot go negative or change octant, since the ==
+        case is excluded */
+
+    if (x0 < x1) {
+        x1  -= 1;            /* e.g. - epsilon */
+    }
+    else if (x0 > x1) {
+        x0 -= 1;
+    }
+
+    if (y0 < y1) {
+        y1 -= 1;
+    }
+    else if (y0 > y1) {
+        y0 -= 1;
+    }
 
 
-   /* three cases: absolute value dx < = > dy
+    dx = fix_trunc (x1) - fix_trunc(x0);    /* x extent in pixels, (macro is flakey) */
+    dx = fix_abs (dx);
+    dy = fix_trunc (y1) - fix_trunc(y0);    /* y extent in pixels */
+    dy = fix_abs (dy);
 
-      along the longer dimension, the fixpoint x0 (or y0) is treated
-      as an int
+    if (dx == 0 && dy == 0)
+      return;
 
-      the points are swapped if needed and the rgb initial and deltas
-      are calculated accordingly
 
-      there are two or three sub-cases - a horizontal or vertical line,
-      and the dx or dy being added or subtracted.  dx and dy
-      are kept as absolute values and +/- is managed in the
-      two separate inner loops if it's a dy, since you also have to
-      manage the canvas pointer
+    /* three cases: absolute value dx < = > dy
 
-      if y is being changed by 'dy' and x is being incremented, do a
-      FunkyBitCheck (TM) to see whether the integer part of y has changed
-      and if it has, resetting the the canvas pointer to the next row
+        along the longer dimension, the fixpoint x0 (or y0) is treated
+        as an int
 
-      if x is being changed by 'dx' and y is being incremented, just
-      add or subtract row to increment y in the canvas
+        the points are swapped if needed and the rgb initial and deltas
+        are calculated accordingly
 
-      the endpoints are walked inclusively in all cases, see above
+        there are two or three sub-cases - a horizontal or vertical line,
+        and the dx or dy being added or subtracted.  dx and dy
+        are kept as absolute values and +/- is managed in the
+        two separate inner loops if it's a dy, since you also have to
+        manage the canvas pointer
 
-      45' degree lines are explicitly special cased -- because it
-      all runs as integers, but it's probably not frequent enough
-      to justify the check
+        if y is being changed by 'dy' and x is being incremented, do a
+        FunkyBitCheck (TM) to see whether the integer part of y has changed
+        and if it has, resetting the the canvas pointer to the next row
 
-      */
+        if x is being changed by 'dx' and y is being incremented, just
+        add or subtract row to increment y in the canvas
 
-   if (dx > dy) {
+        the endpoints are walked inclusively in all cases, see above
 
-      x0 = fix_int (x0); x1 = fix_int (x1);
+        45' degree lines are explicitly special cased -- because it
+        all runs as integers, but it's probably not frequent enough
+        to justify the check
 
-      if (x0 > x1) {
-	 t = x0; x0 = x1; x1 = t;
-	 t = y0; y0 = y1; y1 = t;
-	 t = i0; i0 = i1; i1 = t;
-      }
+        */
 
-      p = grd_bm.bits + grd_bm.row * (fix_int (y0));
-      di = fix_div ((i1-i0), dx);
+    if (dx > dy) {
 
-      if ((fix_int(y0)) == (fix_int(y1))) {
-	 while (x0 <= x1) {
-	    macro_plot_i (x0, p, fix_fint (i0));
-	    x0++;
-	    i0 += di;
-	 }
-      }
-      else if (y0 < y1) {
-	 dy = fix_div ((y1 - y0), dx);
-	 while (x0 <= x1) {
-	    macro_plot_i (x0, p, fix_fint(i0));
-	    x0 ++;
-	    y0 += dy;
-	    p += (grd_bm.row & (-(fix_frac (y0) < dy)));
-	    i0 += di;
-	 }
-      }
-      else {
-	 dy = fix_div ((y0 - y1), dx);
-	 while (x0 <= x1) {
-	    macro_plot_i (x0, p, fix_fint(i0));
-	    x0 ++;
-	    p -= (grd_bm.row & (-(fix_frac (y0) < dy)));
-	    y0 -= dy;
-	    i0 += di;
-	 }
-      }
-   }
-   else if (dy > dx) {
+        x0 = fix_int (x0); x1 = fix_int (x1);
 
-      y0 = fix_int (y0); y1 = fix_int (y1);
+        if (x0 > x1) {
+     t = x0; x0 = x1; x1 = t;
+     t = y0; y0 = y1; y1 = t;
+     t = i0; i0 = i1; i1 = t;
+        }
 
-      if (y0 > y1) {
-	 t = x0; x0 = x1; x1 = t;
-	 t = y0; y0 = y1; y1 = t;
-	 t = i0; i0 = i1; i1 = t;
-      }
+        p = grd_bm.bits + grd_bm.row * (fix_int (y0));
+        di = fix_div ((i1-i0), dx);
 
-      p = grd_bm.bits + grd_bm.row * y0;
-      di = fix_div((i1-i0), dy);
+        if ((fix_int(y0)) == (fix_int(y1))) {
+     while (x0 <= x1) {
+         macro_plot_i (x0, p, fix_fint (i0));
+         x0++;
+         i0 += di;
+     }
+        }
+        else if (y0 < y1) {
+     dy = fix_div ((y1 - y0), dx);
+     while (x0 <= x1) {
+         macro_plot_i (x0, p, fix_fint(i0));
+         x0 ++;
+         y0 += dy;
+         p += (grd_bm.row & (-(fix_frac (y0) < dy)));
+         i0 += di;
+     }
+        }
+        else {
+     dy = fix_div ((y0 - y1), dx);
+     while (x0 <= x1) {
+         macro_plot_i (x0, p, fix_fint(i0));
+         x0 ++;
+         p -= (grd_bm.row & (-(fix_frac (y0) < dy)));
+         y0 -= dy;
+         i0 += di;
+     }
+        }
+    }
+    else if (dy > dx) {
 
-      if ((fix_int(x0)) == (fix_int(x1))) {
-	 x0 = fix_int (x0);
-	 while (y0 <= y1) {
-	    macro_plot_i(x0, p, fix_fint(i0));
-	    y0++;
-	    p += grd_bm.row;
-	    i0 += di;
-	 }
-      }
-      else {
-	 dx = fix_div ((x1 - x0), dy);
-	 while (y0 <= y1) {
-	    macro_plot_i(fix_fint(x0), p, fix_fint (i0));
-	    x0 += dx;
-	    y0++;
-	    p += grd_bm.row;
-	    i0 += di;
-	 }
-      }
-   }
-   else {			/* dy == dx, walk the x axis, all integers */
+        y0 = fix_int (y0); y1 = fix_int (y1);
 
-      x0 = fix_int (x0); x1 = fix_int (x1);
-      y0 = fix_int (y0); y1 = fix_int (y1);
+        if (y0 > y1) {
+     t = x0; x0 = x1; x1 = t;
+     t = y0; y0 = y1; y1 = t;
+     t = i0; i0 = i1; i1 = t;
+        }
 
-      if (x0 > x1 ) {
-	 t = x0; x0 = x1; x1 = t;
-	 t = y0; y0 = y1; y1 = t;
-	 t = i0; i0 = i1; i1 = t;
-      }
+        p = grd_bm.bits + grd_bm.row * y0;
+        di = fix_div((i1-i0), dy);
 
-      p = grd_bm.bits + grd_bm.row * y0; /* set canvas ptr */
-      di = fix_div((i1-i0),dx);
+        if ((fix_int(x0)) == (fix_int(x1))) {
+     x0 = fix_int (x0);
+     while (y0 <= y1) {
+         macro_plot_i(x0, p, fix_fint(i0));
+         y0++;
+         p += grd_bm.row;
+         i0 += di;
+     }
+        }
+        else {
+     dx = fix_div ((x1 - x0), dy);
+     while (y0 <= y1) {
+         macro_plot_i(fix_fint(x0), p, fix_fint (i0));
+         x0 += dx;
+         y0++;
+         p += grd_bm.row;
+         i0 += di;
+     }
+        }
+    }
+    else {            /* dy == dx, walk the x axis, all integers */
 
-      if (y0 < y1) {
-	 while (y0 <= y1) {
-	    macro_plot_i(x0, p, fix_fint(i0));
-	    x0++;
-	    y0++;
-	    p += grd_bm.row;
-	    i0+= di;
-	 }
-      }
-      else {
-	 while (y0 >= y1) {
-	    macro_plot_i(x0,p, fix_fint (i0));
-	    x0++;
-	    y0--;
-	    p -= grd_bm.row;
-	    i0 += di;
-	 }
-      }
-   }
+        x0 = fix_int (x0); x1 = fix_int (x1);
+        y0 = fix_int (y0); y1 = fix_int (y1);
+
+        if (x0 > x1 ) {
+     t = x0; x0 = x1; x1 = t;
+     t = y0; y0 = y1; y1 = t;
+     t = i0; i0 = i1; i1 = t;
+        }
+
+        p = grd_bm.bits + grd_bm.row * y0; /* set canvas ptr */
+        di = fix_div((i1-i0),dx);
+
+        if (y0 < y1) {
+     while (y0 <= y1) {
+         macro_plot_i(x0, p, fix_fint(i0));
+         x0++;
+         y0++;
+         p += grd_bm.row;
+         i0+= di;
+     }
+        }
+        else {
+     while (y0 >= y1) {
+         macro_plot_i(x0,p, fix_fint (i0));
+         x0++;
+         y0--;
+         p -= grd_bm.row;
+         i0 += di;
+     }
+        }
+    }
 

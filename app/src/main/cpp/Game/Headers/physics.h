@@ -47,21 +47,21 @@ typedef fix Physvec[6];
 #define WGRAD_ADD(a,b,c) { terrain_info.wx += (a); terrain_info.wy += (b); terrain_info.wz += (c); }
 
 #define NUM_EDMS_MODELS 5
-#define EDMS_NONE    0
-#define EDMS_ROBOT   1
+#define EDMS_NONE     0
+#define EDMS_ROBOT    1
 #define EDMS_PELVIS  2
-#define EDMS_JELLO   3
-#define EDMS_DIRAC   4
+#define EDMS_JELLO    3
+#define EDMS_DIRAC    4
 
 
 // These are the magic edms cyber_space numbers.
 #define PELVIS_MODE_NORMAL  0
 #define PELVIS_MODE_SKATES  1
-#define PELVIS_MODE_CYBER   2
+#define PELVIS_MODE_CYBER    2
 
-#define STANDARD_MASS   fix_make(1,0)
-#define STANDARD_SIZE   (standard_robot.size)
-#define STANDARD_GRAVITY   fix_make(4,0)
+#define STANDARD_MASS    fix_make(1,0)
+#define STANDARD_SIZE    (standard_robot.size)
+#define STANDARD_GRAVITY    fix_make(4,0)
 
 // Prototypes
 
@@ -77,12 +77,12 @@ errtype physics_set_player_controls(int32_t bank, int8_t xvel,int8_t yvel, int8_
 
 // Set a single control, using the defined control numbers
 
-#define CONTROL_XVEL    0 // x translation
-#define CONTROL_YVEL    1 // y translation
-#define CONTROL_ZVEL    2 // z translation
-#define CONTROL_XYROT   3 // xy rotation
-#define CONTROL_YZROT   4 // yz rotation
-#define CONTROL_XZROT   5 // xz rotation
+#define CONTROL_XVEL     0 // x translation
+#define CONTROL_YVEL     1 // y translation
+#define CONTROL_ZVEL     2 // z translation
+#define CONTROL_XYROT    3 // xy rotation
+#define CONTROL_YZROT    4 // yz rotation
+#define CONTROL_XZROT    5 // xz rotation
 
 #define MOUSE_CONTROL_BANK 0
 #define KEYBD_CONTROL_BANK 1
@@ -105,10 +105,10 @@ errtype apply_gravity_to_objects(fix new_grav);
 bool player_throw_object(ObjID id,  int32_t x, int32_t y, int32_t lastx, int32_t lasty, fix vel);
 
 // Cause the player to assume one of three postures
-#define POSTURE_STAND    0
-#define POSTURE_STOOP    1
-#define POSTURE_PRONE    2
-#define NUM_POSTURES     3
+#define POSTURE_STAND     0
+#define POSTURE_STOOP     1
+#define POSTURE_PRONE     2
+#define NUM_POSTURES      3
 errtype player_set_posture(uint8_t new_posture);
 
 

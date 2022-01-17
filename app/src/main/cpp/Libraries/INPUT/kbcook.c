@@ -41,121 +41,121 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 errtype kb_cook(kbs_event ev, uint16_t *cooked, bool *results)
 {
-	// On the Mac, since modifiers by themselves don't produce an event,
-	// you always have a "cooked" result.
+    // On the Mac, since modifiers by themselves don't produce an event,
+    // you always have a "cooked" result.
 
-	*results = true;
-	*cooked = ev.ascii;
+    *results = true;
+    *cooked = ev.ascii;
 
-	*cooked |= (int16_t)ev.state << KB_DOWN_SHF; // Add in the key-down state.
+    *cooked |= (int16_t)ev.state << KB_DOWN_SHF; // Add in the key-down state.
 
-	if (ev.modifiers & 0x01)		// If command-key was down,
-		*cooked |= KB_FLAG_CTRL;	// simulate a control key
+    if (ev.modifiers & 0x01)        // If command-key was down,
+        *cooked |= KB_FLAG_CTRL;    // simulate a control key
 
-	if (ev.modifiers & 0x02)		// If shift-key was down
-		*cooked |= KB_FLAG_SHIFT;
+    if (ev.modifiers & 0x02)        // If shift-key was down
+        *cooked |= KB_FLAG_SHIFT;
 
-	if (ev.modifiers & 0x08)		// If option-key was down,
-	{								// simulate an alt key.
-		Handle	kHdl;
-		int32_t	tk;
-		UInt32	state = 0;
+    if (ev.modifiers & 0x08)        // If option-key was down,
+    {                                // simulate an alt key.
+        Handle    kHdl;
+        int32_t    tk;
+        UInt32    state = 0;
 
-		// Unfortunately, option-key changes the character that was
-		// pressed.  So we need to find out what the unmodified
-		// character is.
-		kHdl = GetIndResource('KCHR', 1);
-		HLock(kHdl);
-		tk = KeyTranslate(*kHdl, ev.code, &state);
-		HUnlock(kHdl);
+        // Unfortunately, option-key changes the character that was
+        // pressed.  So we need to find out what the unmodified
+        // character is.
+        kHdl = GetIndResource('KCHR', 1);
+        HLock(kHdl);
+        tk = KeyTranslate(*kHdl, ev.code, &state);
+        HUnlock(kHdl);
 
-		// We've got the character, so or it into the "cooked" short.
-		*cooked &= 0xFF00;
-		*cooked |= (uint16_t)(tk & 0x00FF) | KB_FLAG_ALT;
-	}
+        // We've got the character, so or it into the "cooked" short.
+        *cooked &= 0xFF00;
+        *cooked |= (uint16_t)(tk & 0x00FF) | KB_FLAG_ALT;
+    }
 
-	return OK;
+    return OK;
 /*
-   uint16_t flags = KB_CNV(ev.code,0);
-   bool shifted = 1 & ((kbd_modifier_state >> KBM_SHIFT_SHF)
-      | (kbd_modifier_state >> (KBM_SHIFT_SHF+1)));
-   bool capslock = 1 & (flags >> CNV_CAPS_SHF)
-                     & (kbd_modifier_state >> KBM_CAPS_SHF);
-   uint16_t cnv = KB_CNV(ev.code,shifted ^ capslock);
-   int32_t old_mods = kbd_modifier_state;
+    uint16_t flags = KB_CNV(ev.code,0);
+    bool shifted = 1 & ((kbd_modifier_state >> KBM_SHIFT_SHF)
+        | (kbd_modifier_state >> (KBM_SHIFT_SHF+1)));
+    bool capslock = 1 & (flags >> CNV_CAPS_SHF)
+                            & (kbd_modifier_state >> KBM_CAPS_SHF);
+    uint16_t cnv = KB_CNV(ev.code,shifted ^ capslock);
+    int32_t old_mods = kbd_modifier_state;
 
-   *cooked = cnv & (CNV_SPECIAL|CNV_2ND|0xFF)  ;
-   *results = false;
+    *cooked = cnv & (CNV_SPECIAL|CNV_2ND|0xFF)  ;
+    *results = false;
 
-   // if an up event, use negative logic.  Wacky
-   if (ev.state == KBS_UP) kbd_modifier_state = ~kbd_modifier_state;
-   switch(ev.code)  // check for modifiers
-   {
-   case 0x7a: return 0; break;
-   case KBC_LSHIFT:
-      kbd_modifier_state |= KBM_LSHIFT;
-      break;
-   case KBC_RSHIFT:
-      kbd_modifier_state |= KBM_RSHIFT;
-      break;
-   case KBC_LCTRL:
-      kbd_modifier_state |= KBM_LCTRL;
-      break;
-   case KBC_RCTRL:
-      kbd_modifier_state |= KBM_RCTRL;
-      break;
-   case KBC_CAPS:
-      if (ev.state == KBS_DOWN)
-         kbd_modifier_state ^= KBM_CAPS;
-      break;
-   case KBC_NUM:
-      if (ev.state == KBS_DOWN)
-        kbd_modifier_state ^= KBM_NUM;
-      break;
-   case KBC_SCROLL:
-      if (ev.state == KBS_DOWN)
-         kbd_modifier_state ^= KBM_SCROLL;
-      break;
-   case KBC_LALT:
-      kbd_modifier_state |= KBM_LALT;
-      break;
-   case KBC_RALT:
-      kbd_modifier_state |= KBM_RALT;
-      break;
-   default:
-      *results = true;  // Not a modifier key, we must translate.
-      break;
-   }
-   if (ev.state == KBS_UP) kbd_modifier_state = ~kbd_modifier_state;
-   if ((kbd_modifier_state&KBM_LED_MASK) != (old_mods&KBM_LED_MASK))
-      kb_set_leds(kbd_modifier_state&KBM_LED_MASK);
-   if (!*results) return OK;
+    // if an up event, use negative logic.  Wacky
+    if (ev.state == KBS_UP) kbd_modifier_state = ~kbd_modifier_state;
+    switch(ev.code)  // check for modifiers
+    {
+    case 0x7a: return 0; break;
+    case KBC_LSHIFT:
+        kbd_modifier_state |= KBM_LSHIFT;
+        break;
+    case KBC_RSHIFT:
+        kbd_modifier_state |= KBM_RSHIFT;
+        break;
+    case KBC_LCTRL:
+        kbd_modifier_state |= KBM_LCTRL;
+        break;
+    case KBC_RCTRL:
+        kbd_modifier_state |= KBM_RCTRL;
+        break;
+    case KBC_CAPS:
+        if (ev.state == KBS_DOWN)
+            kbd_modifier_state ^= KBM_CAPS;
+        break;
+    case KBC_NUM:
+        if (ev.state == KBS_DOWN)
+          kbd_modifier_state ^= KBM_NUM;
+        break;
+    case KBC_SCROLL:
+        if (ev.state == KBS_DOWN)
+            kbd_modifier_state ^= KBM_SCROLL;
+        break;
+    case KBC_LALT:
+        kbd_modifier_state |= KBM_LALT;
+        break;
+    case KBC_RALT:
+        kbd_modifier_state |= KBM_RALT;
+        break;
+    default:
+        *results = true;  // Not a modifier key, we must translate.
+        break;
+    }
+    if (ev.state == KBS_UP) kbd_modifier_state = ~kbd_modifier_state;
+    if ((kbd_modifier_state&KBM_LED_MASK) != (old_mods&KBM_LED_MASK))
+        kb_set_leds(kbd_modifier_state&KBM_LED_MASK);
+    if (!*results) return OK;
 
-   if ((cnv & CNV_NUM) && !(kbd_modifier_state & KBM_NUM))
-      *cooked = ev.code|KB_FLAG_SPECIAL;
+    if ((cnv & CNV_NUM) && !(kbd_modifier_state & KBM_NUM))
+        *cooked = ev.code|KB_FLAG_SPECIAL;
 
-   *cooked |= (int16_t)ev.state << KB_DOWN_SHF;
+    *cooked |= (int16_t)ev.state << KB_DOWN_SHF;
 
-   *cooked |= (((kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF))
-      | (kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF-1)))
-         & KB_FLAG_CTRL) & cnv;
+    *cooked |= (((kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF))
+        | (kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF-1)))
+            & KB_FLAG_CTRL) & cnv;
 
-   *cooked |= (((kbd_modifier_state << (KB_ALT_SHF - KBM_ALT_SHF))
-      | (kbd_modifier_state << (KB_ALT_SHF - KBM_ALT_SHF-1)))
-         & KB_FLAG_ALT) & cnv;
+    *cooked |= (((kbd_modifier_state << (KB_ALT_SHF - KBM_ALT_SHF))
+        | (kbd_modifier_state << (KB_ALT_SHF - KBM_ALT_SHF-1)))
+            & KB_FLAG_ALT) & cnv;
 
-   // if KB_FLAG_SPECIAL is set, then let set the shifted
-   // flag according to shifted
-   *cooked |= (shifted << KB_SHIFT_SHF) & cnv;
-   return OK;
+    // if KB_FLAG_SPECIAL is set, then let set the shifted
+    // flag according to shifted
+    *cooked |= (shifted << KB_SHIFT_SHF) & cnv;
+    return OK;
 */
 }
 
 bool kb_get_cooked(uint16_t *key)
 {
-   bool res = false;
-   kbs_event ev = kb_next();
-   if (ev.code == KBC_NONE) return res;
-   kb_cook(ev,key,&res);
-   return res;
+    bool res = false;
+    kbs_event ev = kb_next();
+    if (ev.code == KBC_NONE) return res;
+    kb_cook(ev,key,&res);
+    return res;
 }

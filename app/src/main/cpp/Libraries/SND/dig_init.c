@@ -30,8 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------
 // Globals
 //--------------------------
-snd_digi_parms	_snd_smp_prm[SND_MAX_SAMPLES];
-int32_t					_snd_smp_cnt;
+snd_digi_parms    _snd_smp_prm[SND_MAX_SAMPLES];
+int32_t                    _snd_smp_cnt;
 SndCallBackUPP  gDigiCallBackProcPtr;
 
 //--------------------------
@@ -45,91 +45,91 @@ SndChannelPtr CreateSndChannel(void);
 //---------------------------------------------------------
 int32_t snd_start_digital(void)
 {
-	SndChannelPtr	scPtr;
-	int32_t					i;
+    SndChannelPtr    scPtr;
+    int32_t                    i;
 
-	for (i = 0; i < SND_MAX_SAMPLES; i++)
-	{
-		scPtr = CreateSndChannel();
-		if (scPtr)
-			_snd_smp_prm[i].sndChan = scPtr;
-		else
-			break;
-	};
+    for (i = 0; i < SND_MAX_SAMPLES; i++)
+    {
+        scPtr = CreateSndChannel();
+        if (scPtr)
+            _snd_smp_prm[i].sndChan = scPtr;
+        else
+            break;
+    };
 
-	_snd_smp_cnt = i;
-	return (SND_OK);
+    _snd_smp_cnt = i;
+    return (SND_OK);
 }
 
 // Not needed for Mac version.
 /*
 int32_t snd_set_digital_channels(int32_t chan_cnt)
 {
-   _digi_top;
-   if (chan_cnt>SND_MAX_SAMPLES)
-      return SND_NOT_SUPPORTED;
-   if (_snd_smp_cnt>chan_cnt)
-   {  // have to lower allocation
-      int32_t i;
-      for (i=_snd_smp_cnt-1; (i>=chan_cnt); i--)
-         switch (AIL_sample_status(_snd_smp_hnd[i]))
-         {
-         default:
-            snd_end_sample(i);
-            AIL_release_sample_handle(_snd_smp_hnd[i]);
-            break;
-         case SMP_FREE:
+    _digi_top;
+    if (chan_cnt>SND_MAX_SAMPLES)
+        return SND_NOT_SUPPORTED;
+    if (_snd_smp_cnt>chan_cnt)
+    {  // have to lower allocation
+        int32_t i;
+        for (i=_snd_smp_cnt-1; (i>=chan_cnt); i--)
+            switch (AIL_sample_status(_snd_smp_hnd[i]))
+            {
+            default:
+                snd_end_sample(i);
+                AIL_release_sample_handle(_snd_smp_hnd[i]);
+                break;
+            case SMP_FREE:
 #ifdef SND_ANAL_DEBUG
-            Warning(("Hey, why do we have a handle for a FREE sample\n"));
+                Warning(("Hey, why do we have a handle for a FREE sample\n"));
 #endif
-            break;
-         case SMP_DONE:
-            AIL_release_sample_handle(_snd_smp_hnd[i]);
-            break;
-         }
-   }
-   else if (_snd_smp_cnt<chan_cnt)
-      for (;_snd_smp_cnt<chan_cnt; _snd_smp_cnt++)
-         if ((_snd_smp_hnd[_snd_smp_cnt]=AIL_allocate_sample_handle(_snd_digi))==NULL)
-            return SND_OUT_OF_MEMORY;
-         else
-         {
-            AIL_init_sample(_snd_smp_hnd[_snd_smp_cnt]);
-            AIL_set_sample_user_data(_snd_smp_hnd[_snd_smp_cnt],0,_snd_smp_cnt);
-         }
-   _digi_ret;
+                break;
+            case SMP_DONE:
+                AIL_release_sample_handle(_snd_smp_hnd[i]);
+                break;
+            }
+    }
+    else if (_snd_smp_cnt<chan_cnt)
+        for (;_snd_smp_cnt<chan_cnt; _snd_smp_cnt++)
+            if ((_snd_smp_hnd[_snd_smp_cnt]=AIL_allocate_sample_handle(_snd_digi))==NULL)
+                return SND_OUT_OF_MEMORY;
+            else
+            {
+                AIL_init_sample(_snd_smp_hnd[_snd_smp_cnt]);
+                AIL_set_sample_user_data(_snd_smp_hnd[_snd_smp_cnt],0,_snd_smp_cnt);
+            }
+    _digi_ret;
 }
 */
 
 int32_t snd_stop_digital(void)
 {
-   snd_kill_all_samples();
-//   AIL_uninstall_DIG_driver(snd_digi);
-//   snd_digi=NULL;
-   return SND_OK;
+    snd_kill_all_samples();
+//    AIL_uninstall_DIG_driver(snd_digi);
+//    snd_digi=NULL;
+    return SND_OK;
 }
 
 //---------------------------------------------------------
-// CreateSndChannel -	Mac function to create a sound channel and return its ptr.
+// CreateSndChannel -    Mac function to create a sound channel and return its ptr.
 //---------------------------------------------------------
 SndChannelPtr CreateSndChannel(void)
 {
-	SndChannelPtr	scPtr;
-	OSErr				err;
+    SndChannelPtr    scPtr;
+    OSErr                err;
 
-	scPtr = SndChannelPtr(NewPtr(sizeof(SndChannel)));
-	if (scPtr)
-	{
-		scPtr->qLength = 16;
-		err = SndNewChannel(&scPtr, sampledSynth, initStereo, gDigiCallBackProcPtr);
-		if (err != noErr)
-		{
-			DisposePtr(Ptr(scPtr));
-			scPtr = NULL;
-		}
-		else
-			scPtr->userInfo = 0;
-	}
+    scPtr = SndChannelPtr(NewPtr(sizeof(SndChannel)));
+    if (scPtr)
+    {
+        scPtr->qLength = 16;
+        err = SndNewChannel(&scPtr, sampledSynth, initStereo, gDigiCallBackProcPtr);
+        if (err != noErr)
+        {
+            DisposePtr(Ptr(scPtr));
+            scPtr = NULL;
+        }
+        else
+            scPtr->userInfo = 0;
+    }
 
-	return(scPtr);
+    return(scPtr);
 }

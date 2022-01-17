@@ -55,21 +55,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* draw an unclipped, filled rectangle with edges as given.  do this
-   by making repeated calls to the installed unclipped hline drawer. */
+    by making repeated calls to the installed unclipped hline drawer. */
 void gen_urect (int16_t left, int16_t top, int16_t right, int16_t bot)
 {
-   while (top < bot)
-      gr_uhline (left, top++, right-1);
+    while (top < bot)
+        gr_uhline (left, top++, right-1);
 }
 
 /* draw a clipped, filled rectangle.  clip, then chain to the installed
-   unclipped rectangle drawer.  returns clip code. */
+    unclipped rectangle drawer.  returns clip code. */
 int32_t gen_rect (int16_t left, int16_t top, int16_t right, int16_t bot)
 {
-   int32_t r;
+    int32_t r;
 
-   r = gr_clip_rect (&left, &top, &right, &bot);
-   if (r != CLIP_ALL)
-      gr_urect (left, top, right, bot);
-   return r;
+    r = gr_clip_rect (&left, &top, &right, &bot);
+    if (r != CLIP_ALL)
+        gr_urect (left, top, right, bot);
+    return r;
 }

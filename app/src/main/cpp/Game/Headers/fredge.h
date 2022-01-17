@@ -24,22 +24,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // noway, no how, no nothing, null space
-#define MEDGE_NO_TILE            0x0000
+#define MEDGE_NO_TILE                0x0000
 
 // a full wall, end of the line, no further can you go
-#define MEDGE_NO_EGRESS          0x0001
-#define MEDGE_FULL_WALL          0x0001
+#define MEDGE_NO_EGRESS             0x0001
+#define MEDGE_FULL_WALL             0x0001
 
 // no floor height difference
-#define MEDGE_FLAT_CASE          0x0002
+#define MEDGE_FLAT_CASE             0x0002
 
 // various partial things
-#define MEDGE_SMALL_STEP         0x0004
-#define MEDGE_LARGE_STEP         0x0008
-#define MEDGE_CLIFF_THING        0x0010
+#define MEDGE_SMALL_STEP            0x0004
+#define MEDGE_LARGE_STEP            0x0008
+#define MEDGE_CLIFF_THING          0x0010
 
 // secret bug cases for playtest
-#define MEDGE_BOWTIE_CASE        0x1000
+#define MEDGE_BOWTIE_CASE          0x1000
 #define MEDGE_INTERNAL_CROSSING  0x2000
 
 int32_t get_edge_code(void *mp, int32_t edge);

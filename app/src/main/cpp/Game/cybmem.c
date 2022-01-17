@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <memstat.h>
 #include <ckpoint.h>
 #include <keydefs.h>
-#include <musicai.h>       // for stop_digi_fx()
+#include <musicai.h>         // for stop_digi_fx()
 */
 int32_t loadcount = 0;
 
@@ -59,142 +59,142 @@ int32_t hand_fnum, digi_fnum, critter_fnum, critter_fnum2,texture_fnum;
 
 int32_t flush_resource_cache(void)
 {
-   Id curr_id = ID_MIN;
-   int32_t count = 0;
-   while (curr_id < resDescMax)
-   {
-      if (ResInUse(curr_id) && ResPtr(curr_id) && !ResLocked(curr_id))
-      {
-         ResDrop(curr_id);
-         count++;
-      }
-      curr_id++;
-   }
-   return(count);
+    Id curr_id = ID_MIN;
+    int32_t count = 0;
+    while (curr_id < resDescMax)
+    {
+        if (ResInUse(curr_id) && ResPtr(curr_id) && !ResLocked(curr_id))
+        {
+            ResDrop(curr_id);
+            count++;
+        }
+        curr_id++;
+    }
+    return(count);
 }
 
 errtype free_dynamic_memory(int32_t mask)
 {
-   // Release textures
-   if (loadcount & DYNMEM_TEXTURES & mask)
-   {
-      free_textures();
-      ResCloseFile(texture_fnum);
-   }
+    // Release textures
+    if (loadcount & DYNMEM_TEXTURES & mask)
+    {
+        free_textures();
+        ResCloseFile(texture_fnum);
+    }
 
-   if (loadcount & mask & DYNMEM_SIDEICONS)
-   {
-      side_icon_free_bitmaps();
-   }
+    if (loadcount & mask & DYNMEM_SIDEICONS)
+    {
+        side_icon_free_bitmaps();
+    }
 
-   if (loadcount & mask & DYNMEM_FHANDLE_1)
-   {
- 	 ResCloseFile(hand_fnum);
-   }
+    if (loadcount & mask & DYNMEM_FHANDLE_1)
+    {
+      ResCloseFile(hand_fnum);
+    }
 
-   // digifx used to be fhandle 2
-   if (loadcount & mask & DYNMEM_FHANDLE_3)
-   {
-      ResCloseFile(critter_fnum);
-   }
+    // digifx used to be fhandle 2
+    if (loadcount & mask & DYNMEM_FHANDLE_3)
+    {
+        ResCloseFile(critter_fnum);
+    }
 
-   if (loadcount & mask & DYNMEM_FHANDLE_4)
-   {
-      ResCloseFile(critter_fnum2);
-   }
+    if (loadcount & mask & DYNMEM_FHANDLE_4)
+    {
+        ResCloseFile(critter_fnum2);
+    }
 
-   loadcount &= ~mask;
-   return(OK);
+    loadcount &= ~mask;
+    return(OK);
 }
 
 errtype load_dynamic_memory(int32_t mask)
 {
-   FSSpec	fSpec;
-   extern int16_t _new_mode;
+    FSSpec    fSpec;
+    extern int16_t _new_mode;
 
   FSMakeFSSpec(gDataVref, gDataDirID, "\ptexture.rsrc", &fSpec);
-   if (_new_mode != -1)
-   {
-      if ((~loadcount) & mask & DYNMEM_TEXTURES)
-      {
-         texture_fnum = ResOpenFile(&fSpec);
-         load_textures();
+    if (_new_mode != -1)
+    {
+        if ((~loadcount) & mask & DYNMEM_TEXTURES)
+        {
+            texture_fnum = ResOpenFile(&fSpec);
+            load_textures();
 
-         if (texture_fnum < 0)
-            critical_error(CRITERR_RES|7);
-      }
-      if ((~loadcount) & mask & DYNMEM_SIDEICONS)
-      {
-         side_icon_load_bitmaps();
-      }
-	 AdvanceProgress();
+            if (texture_fnum < 0)
+                critical_error(CRITERR_RES|7);
+        }
+        if ((~loadcount) & mask & DYNMEM_SIDEICONS)
+        {
+            side_icon_load_bitmaps();
+        }
+     AdvanceProgress();
 
-      if ((~loadcount) & mask & DYNMEM_FHANDLE_1)
-      {
-  		FSMakeFSSpec(gDataVref, gDataDirID, "\phandart.rsrc", &fSpec);
-		hand_fnum = ResOpenFile(&fSpec);
-		if (hand_fnum < 0)
-			critical_error(CRITERR_RES|3);
-      }
-	 AdvanceProgress();
+        if ((~loadcount) & mask & DYNMEM_FHANDLE_1)
+        {
+          FSMakeFSSpec(gDataVref, gDataDirID, "\phandart.rsrc", &fSpec);
+        hand_fnum = ResOpenFile(&fSpec);
+        if (hand_fnum < 0)
+            critical_error(CRITERR_RES|3);
+        }
+     AdvanceProgress();
 
-      // digifx used to be FHANDLE_2
-      if ((~loadcount) & mask & DYNMEM_FHANDLE_3)
-      {
-  		FSMakeFSSpec(gDataVref, gDataDirID, "\pobjart2.rsrc", &fSpec);
-		critter_fnum = ResOpenFile(&fSpec);
-		if (critter_fnum < 0)
-			critical_error(CRITERR_RES|8);
-      }
-	 AdvanceProgress();
+        // digifx used to be FHANDLE_2
+        if ((~loadcount) & mask & DYNMEM_FHANDLE_3)
+        {
+          FSMakeFSSpec(gDataVref, gDataDirID, "\pobjart2.rsrc", &fSpec);
+        critter_fnum = ResOpenFile(&fSpec);
+        if (critter_fnum < 0)
+            critical_error(CRITERR_RES|8);
+        }
+     AdvanceProgress();
 
-      if ((~loadcount) & mask & DYNMEM_FHANDLE_4)
-      {
-  		FSMakeFSSpec(gDataVref, gDataDirID, "\pobjart3.rsrc", &fSpec);
-		critter_fnum2 = ResOpenFile(&fSpec);
-		if (critter_fnum2 < 0)
-			critical_error(CRITERR_RES|8);
-      }
-	 AdvanceProgress();
+        if ((~loadcount) & mask & DYNMEM_FHANDLE_4)
+        {
+          FSMakeFSSpec(gDataVref, gDataDirID, "\pobjart3.rsrc", &fSpec);
+        critter_fnum2 = ResOpenFile(&fSpec);
+        if (critter_fnum2 < 0)
+            critical_error(CRITERR_RES|8);
+        }
+     AdvanceProgress();
 
-      loadcount |= mask;
-   }
-   return(OK);
+        loadcount |= mask;
+    }
+    return(OK);
 }
 
-#define LARGEST_GUESS 				8000000
-#define DECREMENT_INTERVAL 	10000
-#define MAX_PTRS           			25
-#define MINIMUM_SLORK_SIZE 	100000
+#define LARGEST_GUESS                 8000000
+#define DECREMENT_INTERVAL     10000
+#define MAX_PTRS                          25
+#define MINIMUM_SLORK_SIZE     100000
 
 int32_t slorkatron_memory_check()
 {
-   int32_t retval,size;
-   int32_t ptr_count,i;
-   uint8_t *mem_ptrs[MAX_PTRS];
+    int32_t retval,size;
+    int32_t ptr_count,i;
+    uint8_t *mem_ptrs[MAX_PTRS];
 
-   for (ptr_count = 0; ptr_count < MAX_PTRS; ptr_count++)
-      mem_ptrs[ptr_count] = NULL;
+    for (ptr_count = 0; ptr_count < MAX_PTRS; ptr_count++)
+        mem_ptrs[ptr_count] = NULL;
 
-   ptr_count = 0;
+    ptr_count = 0;
 
-   size = LARGEST_GUESS + DECREMENT_INTERVAL;
-   retval = 0;
+    size = LARGEST_GUESS + DECREMENT_INTERVAL;
+    retval = 0;
 
-   while ((size > MINIMUM_SLORK_SIZE) && (ptr_count < MAX_PTRS))
-   {
-      mem_ptrs[ptr_count] = (uint8_t *)NewPtr(size);		//  mem_ptrs[ptr_count] = Malloc(size);
-      if (mem_ptrs[ptr_count] == NULL)
-         size -= DECREMENT_INTERVAL;
-      else
-      {
-         retval += size;
-         ptr_count++;
-      }
-   }
-   for (i=ptr_count - 1; i >= 0; i--)
-      if (mem_ptrs[i] != NULL)
-         DisposePtr((Ptr)mem_ptrs[i]);		//  Free(mem_ptrs[i]);
+    while ((size > MINIMUM_SLORK_SIZE) && (ptr_count < MAX_PTRS))
+    {
+        mem_ptrs[ptr_count] = (uint8_t *)NewPtr(size);        //  mem_ptrs[ptr_count] = Malloc(size);
+        if (mem_ptrs[ptr_count] == NULL)
+            size -= DECREMENT_INTERVAL;
+        else
+        {
+            retval += size;
+            ptr_count++;
+        }
+    }
+    for (i=ptr_count - 1; i >= 0; i--)
+        if (mem_ptrs[i] != NULL)
+            DisposePtr((Ptr)mem_ptrs[i]);        //  Free(mem_ptrs[i]);
 
-   return(retval);
+    return(retval);
 }

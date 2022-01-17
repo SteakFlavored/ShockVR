@@ -43,34 +43,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void flat8_tluc8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-	uint8_t *src;
-	uint8_t *dst;
-	int32_t 	w = bm->w;
-	int32_t 	h = bm->h;
-	int32_t 	i;
-	int32_t	grow = grd_bm.row;
-	int32_t  brow = bm->row;
+    uint8_t *src;
+    uint8_t *dst;
+    int32_t     w = bm->w;
+    int32_t     h = bm->h;
+    int32_t     i;
+    int32_t    grow = grd_bm.row;
+    int32_t  brow = bm->row;
 
-	src = bm->bits;
-	dst = grd_bm.bits + grow*y + x;
+    src = bm->bits;
+    dst = grd_bm.bits + grow*y + x;
 
-	if (bm->flags & BMF_TRANS)
-	  while (h--) {
-	     for (i=0; i<w; i++)
-	        if (src[i]!=0) {
-	           if (tluc8tab[src[i]] == NULL) dst[i]=src[i];
-	           else dst[i] = tluc8tab [src[i]] [dst[i]];
-	        }
-	     src += brow;
-	     dst += grow;
-	  }
-	else
-	  while (h--) {
-	     for (i=0; i<w; i++) {
-	        if (tluc8tab[src[i]] == NULL) dst[i]=src[i];
-	        else dst[i] = tluc8tab [src[i]] [dst[i]];
-	     }
-	     src += brow;
-	     dst += grow;
-	  }
+    if (bm->flags & BMF_TRANS)
+      while (h--) {
+          for (i=0; i<w; i++)
+              if (src[i]!=0) {
+                  if (tluc8tab[src[i]] == NULL) dst[i]=src[i];
+                  else dst[i] = tluc8tab [src[i]] [dst[i]];
+              }
+          src += brow;
+          dst += grow;
+      }
+    else
+      while (h--) {
+          for (i=0; i<w; i++) {
+              if (tluc8tab[src[i]] == NULL) dst[i]=src[i];
+              else dst[i] = tluc8tab [src[i]] [dst[i]];
+          }
+          src += brow;
+          dst += grow;
+      }
 }

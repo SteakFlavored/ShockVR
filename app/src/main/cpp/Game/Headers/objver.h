@@ -33,14 +33,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // v21 - v22 :  switch to pad-less objRefs
 // v22 - v23 :  go from 12 byte to 10 byte objrefs
 // v23 - v24 :  a massive sociopolitical upheaval where the empowered majority
-//                of the Bigstuffs makes a daring coup, boldly seizing the resources
-//                once held by its smaller brethren.  Most noticeably, the power of the Traps
-//                and the Containers are severely cut back by clever political infighting.
+//                     of the Bigstuffs makes a daring coup, boldly seizing the resources
+//                     once held by its smaller brethren.  Most noticeably, the power of the Traps
+//                     and the Containers are severely cut back by clever political infighting.
 // v24 - v25 : after the fallout of the big v23/24 conflict, the Bigstuffs further consolidate their
-//                power, going to 176 instead of a mere 160.
+//                     power, going to 176 instead of a mere 160.
 // v25 - v26 : smaller objinfo structs, to save some memory
 // v26 - v27 : the incredible shrinking objinfo continues, this time as physhandles lose 3
-//             bytes without dieting or exercise.
+//                 bytes without dieting or exercise.
 #define OBJECT_VERSION_NUMBER  ((int32_t)27)
 
 // v39 - v40 : eliminated bitmap_2d
@@ -49,8 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // v42 - v43 : hey - critters throw grenades
 // v43 - v44 : slow projectiles have a light flag now
 // v44  - v45: critters with slow projectile attacks have y offsets
-#define OBJPROP_FILENAME   "objprop.dat"
-#define OBJPROP_VERSION_NUMBER   45
+#define OBJPROP_FILENAME    "objprop.dat"
+#define OBJPROP_VERSION_NUMBER    45
 
 // 7  - 8  : Added automap strings
 // 8  - 9  : automap strings, for real this time, honest

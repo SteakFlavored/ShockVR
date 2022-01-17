@@ -89,18 +89,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* compatibility -- rah ! */
 
 /* - Lines have been eliminated from the canvas table.
-   - The preferred interface now takes color and fill parameters and
-   either a grs_vertex structure or short points.
+    - The preferred interface now takes color and fill parameters and
+    either a grs_vertex structure or short points.
 
-   Unclipped line routines have been inlined to convert parameters and
-   call the new function via the uline_fill table.
+    Unclipped line routines have been inlined to convert parameters and
+    call the new function via the uline_fill table.
 
-   Clipped line routines return a value and so cannot be macro inlined
-   this way.  The canvas lookup macro is now a function which is
-   extern'ed by it's old 'gen' name.
+    Clipped line routines return a value and so cannot be macro inlined
+    this way.  The canvas lookup macro is now a function which is
+    extern'ed by it's old 'gen' name.
 
-   Again: the preferred interface is through the new parameter'ed functions
-   in the uline_fill and line_clip_fill tables.
+    Again: the preferred interface is through the new parameter'ed functions
+    in the uline_fill and line_clip_fill tables.
 
 */
 
@@ -125,13 +125,13 @@ extern int32_t gen_fix_cline (fix x0, fix y0, grs_rgb c0, fix x1, fix y1, grs_rg
 
 #define gr_fix_ucline(x0,y0,c0,x1,y1,c1) \
 do { \
-   grs_vertex gfuc_v0, gfuc_v1; \
+    grs_vertex gfuc_v0, gfuc_v1; \
 \
-   gfuc_v0.x = (x0); gfuc_v0.y = (y0); \
-   gfuc_v1.x = (x1); gfuc_v1.y = (y1); \
+    gfuc_v0.x = (x0); gfuc_v0.y = (y0); \
+    gfuc_v1.x = (x1); gfuc_v1.y = (y1); \
 \
-   gr_split_rgb ((c0), (uint8_t*) &(gfuc_v0.u), (uint8_t*)&(gfuc_v0.v), (uint8_t*)&(gfuc_v0.w)); \
-   gr_split_rgb ((c1), (uint8_t*)&(gfuc_v1.u), (uint8_t*)&(gfuc_v1.v), (uint8_t*)&(gfuc_v1.w)); \
+    gr_split_rgb ((c0), (uint8_t*) &(gfuc_v0.u), (uint8_t*)&(gfuc_v0.v), (uint8_t*)&(gfuc_v0.w)); \
+    gr_split_rgb ((c1), (uint8_t*)&(gfuc_v1.u), (uint8_t*)&(gfuc_v1.v), (uint8_t*)&(gfuc_v1.w)); \
 \
   grd_ucline_fill (gr_get_fcolor(), gr_get_fill_parm(), &gfuc_v0, &gfuc_v1); \
 } while(0)
@@ -144,10 +144,10 @@ extern int32_t gen_fix_sline (fix x0, fix y0, fix i0, fix x1, fix y1, fix i1);
 
 #define gr_fix_usline(x0,y0,i0,x1,y1,i1) \
 do { \
-   grs_vertex gfuc_v0, gfuc_v1; \
+    grs_vertex gfuc_v0, gfuc_v1; \
 \
-   gfuc_v0.x = (x0); gfuc_v0.y = (y0); gfuc_v0.i = (i0);\
-   gfuc_v1.x = (x1); gfuc_v1.y = (y1); gfuc_v1.i = (i1);\
+    gfuc_v0.x = (x0); gfuc_v0.y = (y0); gfuc_v0.i = (i0);\
+    gfuc_v1.x = (x1); gfuc_v1.y = (y1); gfuc_v1.i = (i1);\
 \
   grd_usline_fill (gr_get_fcolor(), gr_get_fill_parm(), &gfuc_v0, &gfuc_v1); \
 } while(0)
@@ -155,60 +155,60 @@ do { \
 /* vertex lines */
 
 #define gr_uline(c,v0,v1) \
-   grd_uline_fill(c,gr_get_fill_parm(),v0,v1)
+    grd_uline_fill(c,gr_get_fill_parm(),v0,v1)
 #define gr_usline(v0,v1) \
-   grd_usline_fill(gr_get_fcolor(), gr_get_fill_parm(),v0,v1)
+    grd_usline_fill(gr_get_fcolor(), gr_get_fill_parm(),v0,v1)
 #define gr_ucline(v0,v1) \
-   grd_ucline_fill(gr_get_fcolor(), gr_get_fill_parm(),v0,v1)
+    grd_ucline_fill(gr_get_fcolor(), gr_get_fill_parm(),v0,v1)
 
 /* wire poly lines */
 
 #define gr_wire_poly_uline(c,v0,v1) \
-   grd_wire_poly_uline_fill(c, gr_get_fill_parm(),v0,v1)
+    grd_wire_poly_uline_fill(c, gr_get_fill_parm(),v0,v1)
 #define gr_wire_poly_usline(v0,v1) \
-   grd_wire_poly_usline_fill(gr_get_fcolor(), gr_get_fill_parm(), v0, v1)
+    grd_wire_poly_usline_fill(gr_get_fcolor(), gr_get_fill_parm(), v0, v1)
 #define gr_wire_poly_ucline(v0,v1) \
-   grd_wire_poly_ucline_fill(gr_get_fcolor(), gr_get_fill_parm(), v0, v1)
+    grd_wire_poly_ucline_fill(gr_get_fcolor(), gr_get_fill_parm(), v0, v1)
 
 #define gr_wire_poly_line(c,v0,v1) \
-   grd_wire_poly_line_clip_fill(c, gr_get_fill_parm(),v0,v1)
+    grd_wire_poly_line_clip_fill(c, gr_get_fill_parm(),v0,v1)
 #define gr_wire_poly_sline(v0,v1) \
-   grd_wire_poly_sline_clip_fill(gr_get_fcolor(), gr_get_fill_parm(), v0, v1)
+    grd_wire_poly_sline_clip_fill(gr_get_fcolor(), gr_get_fill_parm(), v0, v1)
 #define gr_wire_poly_cline(v0,v1) \
-   grd_wire_poly_cline_clip_fill(gr_get_fcolor(), gr_get_fill_parm(), v0, v1)
+    grd_wire_poly_cline_clip_fill(gr_get_fcolor(), gr_get_fill_parm(), v0, v1)
 
 /* these continue to do traditional lookup's */
 
 #define gr_vox_rect \
-   ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht,int32_t dotw,int32_t doth)) \
-   grd_canvas_table[VOX_RECT])
+    ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht,int32_t dotw,int32_t doth)) \
+    grd_canvas_table[VOX_RECT])
 #define gr_vox_poly \
-   ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht)) \
-   grd_canvas_table[VOX_POLY])
+    ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht)) \
+    grd_canvas_table[VOX_POLY])
 #define gr_vox_cpoly \
-   ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht)) \
-   grd_canvas_table[VOX_CPOLY])
+    ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht)) \
+    grd_canvas_table[VOX_CPOLY])
 #define gr_interp2_ubitmap \
-   ((void (*)(grs_bitmap *bm)) grd_canvas_table[INTERP2_UBITMAP])
+    ((void (*)(grs_bitmap *bm)) grd_canvas_table[INTERP2_UBITMAP])
 #define gr_filter2_ubitmap \
-   ((void (*)(grs_bitmap *bm)) grd_canvas_table[FILTER2_UBITMAP])
+    ((void (*)(grs_bitmap *bm)) grd_canvas_table[FILTER2_UBITMAP])
 
-      /* These are horrific: something should be done. */
+        /* These are horrific: something should be done. */
 #define gr_scale_ubitmap(bm,x,y,w,h)  \
-   ((void (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h)) \
-   grd_canvas_table[SCALE_DEVICE_UBITMAP+2*((bm)->type)]) (bm,x,y,w,h)
+    ((void (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h)) \
+    grd_canvas_table[SCALE_DEVICE_UBITMAP+2*((bm)->type)]) (bm,x,y,w,h)
 #define gr_scale_bitmap(bm,x,y,w,h)  \
-   ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h)) \
-   grd_canvas_table[SCALE_DEVICE_BITMAP+2*((bm)->type)]) (bm,x,y,w,h)
+    ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h)) \
+    grd_canvas_table[SCALE_DEVICE_BITMAP+2*((bm)->type)]) (bm,x,y,w,h)
 
 #define gr_clut_scale_ubitmap(bm,x,y,w,h,cl) \
-   ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h,uint8_t *_cl)) \
-   grd_canvas_table[CLUT_SCALE_DEVICE_UBITMAP+2*((bm)->type)]) \
-   (bm,x,y,w,h,cl)
+    ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h,uint8_t *_cl)) \
+    grd_canvas_table[CLUT_SCALE_DEVICE_UBITMAP+2*((bm)->type)]) \
+    (bm,x,y,w,h,cl)
 #define gr_clut_scale_bitmap(bm,x,y,w,h,cl) \
-   ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h,uint8_t *_cl)) \
-   grd_canvas_table[CLUT_SCALE_DEVICE_BITMAP+2*((bm)->type)]) \
-   (bm,x,y,w,h,cl)
-#define gr_roll_ubitmap          grd_canvas_table[ROLL_UBITMAP])
-#define gr_roll_bitmap           ((int32_t (*)())grd_canvas_table[ROLL_BITMAP])
+    ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h,uint8_t *_cl)) \
+    grd_canvas_table[CLUT_SCALE_DEVICE_BITMAP+2*((bm)->type)]) \
+    (bm,x,y,w,h,cl)
+#define gr_roll_ubitmap             grd_canvas_table[ROLL_UBITMAP])
+#define gr_roll_bitmap              ((int32_t (*)())grd_canvas_table[ROLL_BITMAP])
 #endif /* !__GRREND_H */

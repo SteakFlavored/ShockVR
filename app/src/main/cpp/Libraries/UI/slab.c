@@ -56,8 +56,8 @@ uiSlab* uiCurrentSlab = NULL;
 
 errtype ui_init_slabs(void)
 {
-   uiCurrentSlab = NULL;
-   return OK;
+    uiCurrentSlab = NULL;
+    return OK;
 }
 
 
@@ -67,36 +67,36 @@ errtype ui_init_slabs(void)
 
 errtype uiMakeSlab(uiSlab* slab, LGRegion* cursor_reg, LGCursor* default_cursor)
 {
-   errtype err;
-   extern errtype ui_init_focus_chain(uiSlab* slab);
-   extern errtype ui_init_cursor_stack(uiSlab* slab, LGCursor* default_cursor);
+    errtype err;
+    extern errtype ui_init_focus_chain(uiSlab* slab);
+    extern errtype ui_init_cursor_stack(uiSlab* slab, LGCursor* default_cursor);
 
-   slab->creg = cursor_reg;
-   err = ui_init_focus_chain(slab);
-   if (err != OK) return err;
-   err = ui_init_cursor_stack(slab,default_cursor);
-   if (err != OK) return err;
-   return OK;
+    slab->creg = cursor_reg;
+    err = ui_init_focus_chain(slab);
+    if (err != OK) return err;
+    err = ui_init_cursor_stack(slab,default_cursor);
+    if (err != OK) return err;
+    return OK;
 }
 
 errtype uiDestroySlab(uiSlab* slab)
 {
-   slab->creg = NULL;
-   uiDestroyCursorStack(&slab->cstack);
-   array_destroy(&slab->fchain.chain);
-   return OK;
+    slab->creg = NULL;
+    uiDestroyCursorStack(&slab->cstack);
+    array_destroy(&slab->fchain.chain);
+    return OK;
 }
 
 errtype uiSetCurrentSlab(uiSlab* slab)
 {
-   uiCurrentSlab = slab;
-   return OK;
+    uiCurrentSlab = slab;
+    return OK;
 }
 
 errtype uiGetCurrentSlab(uiSlab** slab)
 {
-   *slab = uiCurrentSlab;
-   return OK;
+    *slab = uiCurrentSlab;
+    return OK;
 }
 
 

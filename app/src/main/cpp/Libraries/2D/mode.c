@@ -43,41 +43,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bitmap.h"
 
 grs_mode_info grd_mode_info[GRD_MODES] = {
-   {  320,  200,  8 },
-   {  320,  200,  8 },
-   {  320,  400,  8 },
-   {  320,  240,  8 },
-   {  320,  480,  8 },
-   {  640,  400,  8 },
-   {  640,  480,  8 },
-   {  800,  600,  8 },
-   { 1024,  768,  8 },
-   { 1280, 1024,  8 },
-   {  320,  200, 24 },
-   {  640,  480, 24 },
-   {  800,  600, 24 },
-   { 1024,  768, 24 },
-   { 1280, 1024, 24 }
+    {  320,  200,  8 },
+    {  320,  200,  8 },
+    {  320,  400,  8 },
+    {  320,  240,  8 },
+    {  320,  480,  8 },
+    {  640,  400,  8 },
+    {  640,  480,  8 },
+    {  800,  600,  8 },
+    { 1024,  768,  8 },
+    { 1280, 1024,  8 },
+    {  320,  200, 24 },
+    {  640,  480, 24 },
+    {  800,  600, 24 },
+    { 1024,  768, 24 },
+    { 1280, 1024, 24 }
 };
 
 // code from SMODE.ASM
 int32_t gr_set_mode (int32_t mode, int32_t clear)
  {
-	gr_set_screen_mode(mode, clear);		// try to set graphics mode.
-	gr_init_device(&grd_info);					// try to initialize device if pointer isn't NULL
+    gr_set_screen_mode(mode, clear);        // try to set graphics mode.
+    gr_init_device(&grd_info);                    // try to initialize device if pointer isn't NULL
 
-	// copy width & height values from info table to capability list
-	grd_mode = mode;
-	grd_mode_cap.w = grd_mode_info[mode].w;
-	grd_mode_cap.h = grd_mode_info[mode].h;
+    // copy width & height values from info table to capability list
+    grd_mode = mode;
+    grd_mode_cap.w = grd_mode_info[mode].w;
+    grd_mode_cap.h = grd_mode_info[mode].h;
 
-	// store aspect into capability struct.
-	grd_mode_cap.aspect = 0x010000; // fixed 1:1 aspect ratio on Mac
+    // store aspect into capability struct.
+    grd_mode_cap.aspect = 0x010000; // fixed 1:1 aspect ratio on Mac
 
-	grd_canvas_table = grd_canvas_table_list[BMT_DEVICE];
-	grd_pixel_table = grd_canvas_table_list[BMT_DEVICE];
+    grd_canvas_table = grd_canvas_table_list[BMT_DEVICE];
+    grd_pixel_table = grd_canvas_table_list[BMT_DEVICE];
 
-	return(0);
+    return(0);
  }
 
 

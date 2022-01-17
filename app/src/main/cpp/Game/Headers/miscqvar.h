@@ -19,19 +19,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Miscellaneous code-references quest variables
 
 #define MUSIC_VOLUME_QVAR  0x29
-#define GAMMACOR_QVAR      0x2a
-#define SFX_VOLUME_QVAR    0x2b
-#define MOUSEHAND_QVAR     0x2c
-#define DCLICK_QVAR        0x2f
-#define LANGUAGE_QVAR      0x30
-#define ALOG_VOLUME_QVAR   0x31
-#define SCREENMODE_QVAR    0x32
-#define JOYSENS_QVAR       0x33
+#define GAMMACOR_QVAR        0x2a
+#define SFX_VOLUME_QVAR     0x2b
+#define MOUSEHAND_QVAR      0x2c
+#define DCLICK_QVAR          0x2f
+#define LANGUAGE_QVAR        0x30
+#define ALOG_VOLUME_QVAR    0x31
+#define SCREENMODE_QVAR     0x32
+#define JOYSENS_QVAR         0x33
 #define FULLSCRN_ICON_QVAR 0x34
-#define ALOG_OPT_QVAR      0x35
+#define ALOG_OPT_QVAR        0x35
 #define FULLSCRN_VITAL_QVAR 0x36
-#define AMAP_NOTES_QVAR    0x37
-#define HUDCOLOR_QVAR      0x39
+#define AMAP_NOTES_QVAR     0x37
+#define HUDCOLOR_QVAR        0x39
 #define DIGI_CHANNELS_QVAR 0x3A
 
 #define QVAR_TO_VOLUME(x) (long_sqrt(100*(x)))

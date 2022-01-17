@@ -30,9 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern int32_t *kbd_global;
 
 enum {
-   KBI_QUEUE_HEAD,
-   KBI_LAST_CODES,
-   KBI_OLD_REAL_HANDLER,
-   KBI_STATUS_FLAGS
+    KBI_QUEUE_HEAD,
+    KBI_LAST_CODES,
+    KBI_OLD_REAL_HANDLER,
+    KBI_STATUS_FLAGS
 };
 

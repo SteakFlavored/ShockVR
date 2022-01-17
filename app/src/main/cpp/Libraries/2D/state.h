@@ -43,10 +43,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef STATE_H
 #define STATE_H
 
-#define GRD_STATE_GRAPHICS_OURS  0        // in house graphics mode
-#define GRD_STATE_GRAPHICS_VGA   1        // VGA or VESA graphics moed
-#define GRD_STATE_BIOS_TEXT      2        // VGA text mode
-#define GRD_STATE_VESA_TEXT      3        // VESA text mode
+#define GRD_STATE_GRAPHICS_OURS  0          // in house graphics mode
+#define GRD_STATE_GRAPHICS_VGA    1          // VGA or VESA graphics moed
+#define GRD_STATE_BIOS_TEXT        2          // VGA text mode
+#define GRD_STATE_VESA_TEXT        3          // VESA text mode
 
 #define GRD_STATE_DEF 0
 #define GRD_STATE_PAL 1

@@ -34,30 +34,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* draw an unclipped, unfilled rectangle.  does 2 hlines & 2 vlines. */
 void gen_ubox(int16_t left, int16_t top, int16_t right, int16_t bot)
 {
-   if (left<=(right-2))
-      gr_uhline(left, top, right-2);
-   if (top<=(bot-2))
-      gr_uvline(right-1, top, bot-2);
-   if ((left+1)<=(right-1))
-      gr_uhline(left+1, bot-1, right-1);
-   if ((top+1)<=(bot-1))
-      gr_uvline(left, top+1, bot-1);
+    if (left<=(right-2))
+        gr_uhline(left, top, right-2);
+    if (top<=(bot-2))
+        gr_uvline(right-1, top, bot-2);
+    if ((left+1)<=(right-1))
+        gr_uhline(left+1, bot-1, right-1);
+    if ((top+1)<=(bot-1))
+        gr_uvline(left, top+1, bot-1);
 }
 
 /* draw a clipped, unfilled rectangle.  does 2 clipped hlines and 2 clipped
-   vlines.  returns clip code. */
+    vlines.  returns clip code. */
 int32_t gen_box(int16_t left, int16_t top, int16_t right, int16_t bot)
 {
-   int32_t code = CLIP_NONE;
+    int32_t code = CLIP_NONE;
 
-   if (left<=(right-2))
-      code |= gr_hline(left, top, right-2);
-   if (top<=(bot-2))
-      code |= gr_vline(right-1, top, bot-2);
-   if ((left+1)<=(right-1))
-      code |= gr_hline(left+1, bot-1, right-1);
-   if ((top+1)<=(bot-1))
-      code |= gr_vline(left, top+1, bot-1);
+    if (left<=(right-2))
+        code |= gr_hline(left, top, right-2);
+    if (top<=(bot-2))
+        code |= gr_vline(right-1, top, bot-2);
+    if ((left+1)<=(right-1))
+        code |= gr_hline(left+1, bot-1, right-1);
+    if ((top+1)<=(bot-1))
+        code |= gr_vline(left, top+1, bot-1);
 
-   return code;
+    return code;
 }

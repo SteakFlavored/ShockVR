@@ -20,21 +20,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ======================================================================================
 
 
-//	Struct...
-//	---------
+//    Struct...
+//    ---------
 typedef struct {
 
-fix	mass,
-	hardness,
-	roughness,
-	gravity;
+fix    mass,
+    hardness,
+    roughness,
+    gravity;
 
-fix	corners[10][4];
+fix    corners[10][4];
 
 } Dirac_frame;
 
 physics_handle EDMS_make_Dirac_frame( Dirac_frame *d, State *s );
-void           EDMS_get_Dirac_frame_viewpoint( physics_handle ph, State *s );
-void           EDMS_set_Dirac_frame_parameters( physics_handle ph, Dirac_frame *d );
-void           EDMS_get_Dirac_frame_parameters( physics_handle ph, Dirac_frame *d );
-void           EDMS_control_Dirac_frame( physics_handle ph, fix forward, fix pitch, fix yaw, fix roll );
+void              EDMS_get_Dirac_frame_viewpoint( physics_handle ph, State *s );
+void              EDMS_set_Dirac_frame_parameters( physics_handle ph, Dirac_frame *d );
+void              EDMS_get_Dirac_frame_parameters( physics_handle ph, Dirac_frame *d );
+void              EDMS_control_Dirac_frame( physics_handle ph, fix forward, fix pitch, fix yaw, fix roll );

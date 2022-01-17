@@ -32,19 +32,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // structures
 typedef struct {
-   grs_canvas draw_canvas, main_canvas, hack_canvas;
-   bool       double_buffer;
-   int32_t        xtop, ytop;
-   int32_t        xwid, ywid;              /* ywid is, of course, height */
-   fix        viewer_zoom;
-   int32_t        fov;
-   int8_t       axis;
-   int32_t        flags, detail, last_detail;
-   int32_t      (*draw_call)(void *dest_canvas, void *dest_bm, int32_t x, int32_t y, int32_t flags);
-   void     (*horizon_call)(void *dest_bm, int32_t flags);
-   void     (*render_call)(void *dest_bm, int32_t flags);
-   cams      *camptr, *xtracam;
-   Ptr		  realCanvasPtr;
+    grs_canvas draw_canvas, main_canvas, hack_canvas;
+    bool         double_buffer;
+    int32_t          xtop, ytop;
+    int32_t          xwid, ywid;                  /* ywid is, of course, height */
+    fix          viewer_zoom;
+    int32_t          fov;
+    int8_t         axis;
+    int32_t          flags, detail, last_detail;
+    int32_t        (*draw_call)(void *dest_canvas, void *dest_bm, int32_t x, int32_t y, int32_t flags);
+    void      (*horizon_call)(void *dest_bm, int32_t flags);
+    void      (*render_call)(void *dest_bm, int32_t flags);
+    cams        *camptr, *xtracam;
+    Ptr          realCanvasPtr;
 } fauxrend_context;
 
 #endif // __FRTYPES_H

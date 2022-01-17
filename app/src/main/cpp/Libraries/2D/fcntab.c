@@ -32,12 +32,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void (**grd_function_table)();
 grt_function_table *grd_function_fill_table;
 grt_function_table *grd_function_table_list[] = {
-   NULL,                 /* device driver-initialized by gr_set_mode */
-   NULL,                 /* monochrome-not supported */
-   (grt_function_table *) flat8_function_table, /* flat 8 canvas */
-   NULL,                 /* flat 24-not supported */
-   NULL,                 /* doubling, RSD8 canvas-not supported */
-   NULL,                 /* translucent 8-not supported */
-   NULL,                 /* span-obsolete */
-   NULL                  /* generic-initialized by gr_force_generic */
+    NULL,                      /* device driver-initialized by gr_set_mode */
+    NULL,                      /* monochrome-not supported */
+    (grt_function_table *) flat8_function_table, /* flat 8 canvas */
+    NULL,                      /* flat 24-not supported */
+    NULL,                      /* doubling, RSD8 canvas-not supported */
+    NULL,                      /* translucent 8-not supported */
+    NULL,                      /* span-obsolete */
+    NULL                        /* generic-initialized by gr_force_generic */
 };

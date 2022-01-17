@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
 KLC - stereo
-#include "LG_menus.h"	// can't be just "menus" since thats a mac include
+#include "LG_menus.h"    // can't be just "menus" since thats a mac include
 #include "config.h"
 #include "inp6d.h"
 #include "i6dvideo.h"
@@ -100,203 +100,203 @@ errtype load_misc_cursors(void);
 
 void generic_reg_init(bool create_it, LGRegion *reg, LGRect *rct, uiSlab *slb, void *key_h, void *maus_h)
 {
-   int32_t callid;
-   if (rct==NULL)
-     rct=&fscrn_rect;
-   if (create_it)
-	   region_create(NULL, reg, rct, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
-   if (key_h!=NULL)
-	   uiInstallRegionHandler(reg,UI_EVENT_KBD_COOKED, (uiHandlerProc) key_h, NULL, &callid);
-   if (maus_h!=NULL)
-	   uiInstallRegionHandler(reg,UI_EVENT_MOUSE, (uiHandlerProc) maus_h, NULL, &callid);
-   if (slb!=NULL)
-   {
-	   uiMakeSlab(slb, reg, &globcursor);
-	   uiGrabSlabFocus(slb,reg, ALL_EVENTS);
-   }
+    int32_t callid;
+    if (rct==NULL)
+      rct=&fscrn_rect;
+    if (create_it)
+        region_create(NULL, reg, rct, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
+    if (key_h!=NULL)
+        uiInstallRegionHandler(reg,UI_EVENT_KBD_COOKED, (uiHandlerProc) key_h, NULL, &callid);
+    if (maus_h!=NULL)
+        uiInstallRegionHandler(reg,UI_EVENT_MOUSE, (uiHandlerProc) maus_h, NULL, &callid);
+    if (slb!=NULL)
+    {
+        uiMakeSlab(slb, reg, &globcursor);
+        uiGrabSlabFocus(slb,reg, ALL_EVENTS);
+    }
 }
 
 // Initialize the main game screen and draw it's initial state
 LGRect mainview_rect;
 errtype screen_init(void)
 {
-   extern void init_posture_meters(LGRegion*,bool);
-   extern errtype wrapper_create_mouse_region(LGRegion*);
-   extern LGRegion *fullview_region;
-   int32_t callid;
-   extern void (*ui_mouse_convert)(int16_t *px, int16_t *py,bool down);
-   extern void (*ui_mouse_convert_round)(int16_t *px, int16_t *py,bool down);
+    extern void init_posture_meters(LGRegion*,bool);
+    extern errtype wrapper_create_mouse_region(LGRegion*);
+    extern LGRegion *fullview_region;
+    int32_t callid;
+    extern void (*ui_mouse_convert)(int16_t *px, int16_t *py,bool down);
+    extern void (*ui_mouse_convert_round)(int16_t *px, int16_t *py,bool down);
 
-   // God this is stupid, maybe I'll get it right next project
-   status_rect = &real_status_rect;
+    // God this is stupid, maybe I'll get it right next project
+    status_rect = &real_status_rect;
 
-   // Create all the appropriate regions for to make input happen
-   // Root LGRegion
-   generic_reg_init(true ,root_region,NULL,NULL,NULL,NULL);
+    // Create all the appropriate regions for to make input happen
+    // Root LGRegion
+    generic_reg_init(true ,root_region,NULL,NULL,NULL,NULL);
 
-   // Main view LGRegion
-   mainview_rect.ul.x = SCREEN_VIEW_X;   mainview_rect.ul.y = SCREEN_VIEW_Y;
-   mainview_rect.lr.x = mainview_rect.ul.x + SCREEN_VIEW_WIDTH;
-   mainview_rect.lr.y = mainview_rect.ul.y + SCREEN_VIEW_HEIGHT;
-   mainview_region = &mv_region_data;
-   region_create(root_region, mainview_region, &mainview_rect, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
+    // Main view LGRegion
+    mainview_rect.ul.x = SCREEN_VIEW_X;    mainview_rect.ul.y = SCREEN_VIEW_Y;
+    mainview_rect.lr.x = mainview_rect.ul.x + SCREEN_VIEW_WIDTH;
+    mainview_rect.lr.y = mainview_rect.ul.y + SCREEN_VIEW_HEIGHT;
+    mainview_region = &mv_region_data;
+    region_create(root_region, mainview_region, &mainview_rect, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
 
-   // Initialize da mousie
-   _screen_init_mouse(root_region, &main_slab, true);	// KLC - moved here
+    // Initialize da mousie
+    _screen_init_mouse(root_region, &main_slab, true);    // KLC - moved here
 
-   install_motion_mouse_handler(mainview_region, NULL);
+    install_motion_mouse_handler(mainview_region, NULL);
 
 #ifdef SVGA_SUPPORT
-   gr2ss_register_init(0,320,200);
-   gr2ss_register_mode(0,320,400);
-   gr2ss_register_mode(0,640,400);
-   gr2ss_register_mode(0,640,480);
-//   gr2ss_register_mode(0,1024,768);
+    gr2ss_register_init(0,320,200);
+    gr2ss_register_mode(0,320,400);
+    gr2ss_register_mode(0,640,400);
+    gr2ss_register_mode(0,640,480);
+//    gr2ss_register_mode(0,1024,768);
 #ifdef STEREO_SUPPORT
-   if (i6d_device == I6D_VFX1)
-   {
-     Warning(("size = %d, %d!\n",i6d_ss->scr_w,i6d_ss->scr_h));
-     gr2ss_register_mode(0,320,240);
-     gr2ss_register_mode(0,640,240);     // VFX Hack Mode
-	 }
-   else
-   {
-      gr2ss_register_mode(0,320,100); // note secret stereo mode
-      gr2ss_register_mode(0,640,350);     // CTM Hack Mode
-   }
+    if (i6d_device == I6D_VFX1)
+    {
+      Warning(("size = %d, %d!\n",i6d_ss->scr_w,i6d_ss->scr_h));
+      gr2ss_register_mode(0,320,240);
+      gr2ss_register_mode(0,640,240);      // VFX Hack Mode
+     }
+    else
+    {
+        gr2ss_register_mode(0,320,100); // note secret stereo mode
+        gr2ss_register_mode(0,640,350);      // CTM Hack Mode
+    }
 #endif
 #endif
 
-   // Install mouse converter...
-   ui_mouse_convert = ss_mouse_convert;
-   ui_mouse_convert_round = ss_mouse_convert_round;
+    // Install mouse converter...
+    ui_mouse_convert = ss_mouse_convert;
+    ui_mouse_convert_round = ss_mouse_convert_round;
 
-   // Inventory LGRegion
-   create_invent_region(root_region, &pagebutton_region_game, &inventory_region_game);
-   screen_init_mfd(false);        // sets up regions + mouse callbacks
-   screen_init_side_icons(root_region);
+    // Inventory LGRegion
+    create_invent_region(root_region, &pagebutton_region_game, &inventory_region_game);
+    screen_init_mfd(false);          // sets up regions + mouse callbacks
+    screen_init_side_icons(root_region);
 
 
-   // Message-line LGRegion
-   mess_rect.ul.x = GAME_MESSAGE_X;
-   mess_rect.ul.y = GAME_MESSAGE_Y;
-   mess_rect.lr.x = mess_rect.ul.x + INVENTORY_PANEL_WIDTH;
-   mess_rect.lr.y = mess_rect.ul.y + 10;
-   msg_region = &msg_region_data;
-   region_create(root_region, msg_region, &mess_rect, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
+    // Message-line LGRegion
+    mess_rect.ul.x = GAME_MESSAGE_X;
+    mess_rect.ul.y = GAME_MESSAGE_Y;
+    mess_rect.lr.x = mess_rect.ul.x + INVENTORY_PANEL_WIDTH;
+    mess_rect.lr.y = mess_rect.ul.y + 10;
+    msg_region = &msg_region_data;
+    region_create(root_region, msg_region, &mess_rect, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
 
-   // Status LGRegion
-   status_rect->ul.x = STATUS_X; status_rect->ul.y = STATUS_Y;
-   status_rect->lr.x = status_rect->ul.x + STATUS_WIDTH;
-   status_rect->lr.y = status_rect->ul.y + STATUS_HEIGHT;
-   status_region = &status_region_data;
-   region_create(root_region, status_region, status_rect, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
+    // Status LGRegion
+    status_rect->ul.x = STATUS_X; status_rect->ul.y = STATUS_Y;
+    status_rect->lr.x = status_rect->ul.x + STATUS_WIDTH;
+    status_rect->lr.y = status_rect->ul.y + STATUS_HEIGHT;
+    status_region = &status_region_data;
+    region_create(root_region, status_region, status_rect, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
 
-   status_bio_init();
+    status_bio_init();
 
-   // lean-o-meter
-   init_posture_meters(root_region,false);
+    // lean-o-meter
+    init_posture_meters(root_region,false);
 
 /* KLC
-   // option LGCursor LGRegion
-   wrapper_create_mouse_region(root_region);
+    // option LGCursor LGRegion
+    wrapper_create_mouse_region(root_region);
  */
-   // Install basic input handlers
-   uiInstallRegionHandler(root_region,UI_EVENT_KBD_COOKED, &main_kb_callback, NULL, &callid);
+    // Install basic input handlers
+    uiInstallRegionHandler(root_region,UI_EVENT_KBD_COOKED, &main_kb_callback, NULL, &callid);
 
-   install_motion_keyboard_handler(root_region);
+    install_motion_keyboard_handler(root_region);
 
-   // we already do this in generic_reg_init
-   // Grab all input!
-   uiGrabSlabFocus(&main_slab, root_region, ALL_EVENTS);
+    // we already do this in generic_reg_init
+    // Grab all input!
+    uiGrabSlabFocus(&main_slab, root_region, ALL_EVENTS);
 
-   return(OK);
+    return(OK);
 }
 
 extern void game_redrop_rad(int32_t rad_mod);
 
 void screen_start()
 {
-   extern errtype load_da_palette();
-   extern LGRegion *pagebutton_region, *inventory_region;
+    extern errtype load_da_palette();
+    extern LGRegion *pagebutton_region, *inventory_region;
 #ifdef SVGA_SUPPORT
-   extern void change_svga_screen_mode();
+    extern void change_svga_screen_mode();
 #endif
 
 /*  Not yet
-   // Check the config system to see if time should automatically be running
-   if (config_get_raw(CFG_TIME_VAR, NULL, 0)) time_passes = true;
+    // Check the config system to see if time should automatically be running
+    if (config_get_raw(CFG_TIME_VAR, NULL, 0)) time_passes = true;
 */
 
-	HotkeyContext = DEMO_CONTEXT;
-	uiSetCurrentSlab(&main_slab);
-	inventory_region = inventory_region_game;
-	pagebutton_region = pagebutton_region_game;
+    HotkeyContext = DEMO_CONTEXT;
+    uiSetCurrentSlab(&main_slab);
+    inventory_region = inventory_region_game;
+    pagebutton_region = pagebutton_region_game;
 
-	// A rather strange function for a Mac program, but we'll keep it.
-	change_svga_screen_mode();
+    // A rather strange function for a Mac program, but we'll keep it.
+    change_svga_screen_mode();
 
-   gr_clear(0xFF);
-   status_bio_set(GAMESCR_BIO);
-   screen_draw();
-//KLC   uiShowMouse(NULL);
-   chg_set_flg(DEMOVIEW_UPDATE);
-   chg_set_flg(MFD_UPDATE);
-   chg_set_flg(VITALS_UPDATE);
-   status_bio_start();
-   status_vitals_update(true);
-// KLC - not needed anymore   mouse_unconstrain();
+    gr_clear(0xFF);
+    status_bio_set(GAMESCR_BIO);
+    screen_draw();
+//KLC    uiShowMouse(NULL);
+    chg_set_flg(DEMOVIEW_UPDATE);
+    chg_set_flg(MFD_UPDATE);
+    chg_set_flg(VITALS_UPDATE);
+    status_bio_start();
+    status_vitals_update(true);
+// KLC - not needed anymore    mouse_unconstrain();
 #ifdef PALFX_FADES
-// later   if (pal_fx_on) palfx_fade_up(false);
+// later    if (pal_fx_on) palfx_fade_up(false);
 #endif
-   return;
+    return;
 }
 
 void screen_exit()
 {
-   extern wrapper_panel_close();
+    extern wrapper_panel_close();
 #ifdef SVGA_SUPPORT
-   uint8_t cur_pal[768];
-   extern grs_screen *cit_screen;
-   uint8_t *s_table;
+    uint8_t cur_pal[768];
+    extern grs_screen *cit_screen;
+    uint8_t *s_table;
 #endif
 
-   status_bio_end();
-   uiHideMouse(NULL);
+    status_bio_end();
+    uiHideMouse(NULL);
 
 #ifdef SVGA_SUPPORT
-   if ((_new_mode != GAME_LOOP) && (_new_mode != FULLSCREEN_LOOP))
-   {
-      extern void change_svga_cursors();
-      extern void status_bio_update_screenmode();
+    if ((_new_mode != GAME_LOOP) && (_new_mode != FULLSCREEN_LOOP))
+    {
+        extern void change_svga_cursors();
+        extern void status_bio_update_screenmode();
 
-      s_table = gr_get_light_tab();
-      gr_get_pal(0,256,&cur_pal[0]);
-      gr_set_screen(cit_screen);
-      convert_use_mode = 0;
-//KLC      change_svga_cursors();
-//KLC      status_bio_update_screenmode();
-   }
+        s_table = gr_get_light_tab();
+        gr_get_pal(0,256,&cur_pal[0]);
+        gr_set_screen(cit_screen);
+        convert_use_mode = 0;
+//KLC        change_svga_cursors();
+//KLC        status_bio_update_screenmode();
+    }
 #endif
-   if (_new_mode == -1)
-      return;
+    if (_new_mode == -1)
+        return;
 
 /* KLC
 #ifdef PALFX_FADES
-   if (pal_fx_on)
-      palfx_fade_down();
-   else {
-      gr_set_fcolor(BLACK);
-      gr_rect(0,0,320,200);
-   }
+    if (pal_fx_on)
+        palfx_fade_down();
+    else {
+        gr_set_fcolor(BLACK);
+        gr_rect(0,0,320,200);
+    }
 #endif
 
 #ifdef SVGA_SUPPORT
-   if ((_new_mode != GAME_LOOP) && (_new_mode != FULLSCREEN_LOOP))
-   {
-      gr_set_pal(0,256,&cur_pal[0]);
-      gr_set_light_tab(s_table);
-   }
+    if ((_new_mode != GAME_LOOP) && (_new_mode != FULLSCREEN_LOOP))
+    {
+        gr_set_pal(0,256,&cur_pal[0]);
+        gr_set_light_tab(s_table);
+    }
 #endif
 */
 }
@@ -308,46 +308,46 @@ void screen_exit()
 
 errtype screen_draw(void)
 {
-   extern void update_meters(bool);
-   // Just go through and draw all the component parts....
-   // In theory, they should all be clever enough to redraw
-   // efficiently.  Alternatively, this should only be called
-   // very few times, and in general just the changing parts
-   // get a signal to draw themselves.
-   uiHideMouse(NULL);
-   _screen_background();
+    extern void update_meters(bool);
+    // Just go through and draw all the component parts....
+    // In theory, they should all be clever enough to redraw
+    // efficiently.  Alternatively, this should only be called
+    // very few times, and in general just the changing parts
+    // get a signal to draw themselves.
+    uiHideMouse(NULL);
+    _screen_background();
 
-   screen_init_mfd_draw();
-   side_icon_expose_all();
+    screen_init_mfd_draw();
+    side_icon_expose_all();
 
-   inventory_clear();
-   inventory_draw();
-   status_bio_draw();
-   status_vitals_init();
-   status_vitals_update(true);
-   update_meters(true);
-   uiShowMouse(NULL);
+    inventory_clear();
+    inventory_draw();
+    status_bio_draw();
+    status_vitals_init();
+    status_vitals_update(true);
+    update_meters(true);
+    uiShowMouse(NULL);
 
-   return(OK);
+    return(OK);
 }
 
 errtype _screen_background(void)
 {
-//KLC - chg for new art   Ref back_id = REF_IMG_bmGamescreenBackground;
-//KLC - chg for new art   draw_raw_res_bm_extract(back_id, 0, 0);
-	draw_hires_resource_bm(REF_IMG_bmGamescreenBackground, 0, 0);
-	return(OK);
+//KLC - chg for new art    Ref back_id = REF_IMG_bmGamescreenBackground;
+//KLC - chg for new art    draw_raw_res_bm_extract(back_id, 0, 0);
+    draw_hires_resource_bm(REF_IMG_bmGamescreenBackground, 0, 0);
+    return(OK);
 }
 
 // Stop doing graphics things
 errtype screen_shutdown(void)
 {
-   region_destroy(status_region, false);
-   region_destroy(msg_region, false);
-   region_destroy(mainview_region, false);
+    region_destroy(status_region, false);
+    region_destroy(msg_region, false);
+    region_destroy(mainview_region, false);
 
-//   Free(status_rect); umm, see, now we point at it, so dont free it
-   return(OK);
+//    Free(status_rect); umm, see, now we point at it, so dont free it
+    return(OK);
 }
 
 static grs_bitmap _targbm;
@@ -359,46 +359,46 @@ extern LGCursor slider_cursor;
 
 errtype load_misc_cursors(void)
 {
-   static bool misc_cursors_loaded = false;
+    static bool misc_cursors_loaded = false;
 
-   if (misc_cursors_loaded)
-   {
-      if (_targbm.bits != NULL)  DisposPtr((Ptr) _targbm.bits);
-      if (_waitbm.bits != NULL)  DisposPtr((Ptr) _waitbm.bits);
-      if (_firebm.bits != NULL)  DisposPtr((Ptr) _firebm.bits);
-//      if (_vmailbm.bits != NULL)  DisposPtr((Ptr) _vmailbm.bits);
-      if (slider_cursor_bmap.bits != NULL)  DisposPtr((Ptr) slider_cursor_bmap.bits);
-   }
-   load_hires_bitmap_cursor(&globcursor,   &_targbm,  REF_IMG_bmTargetCursor, true);
-   load_hires_bitmap_cursor(&wait_cursor,  &_waitbm,  REF_IMG_bmWaitCursor, true);
-   load_hires_bitmap_cursor(&fire_cursor,  &_firebm,  REF_IMG_bmFireCursor, true);
-//   load_hires_bitmap_cursor(&vmail_cursor, &_vmailbm, REF_IMG_bmVmailCursor, true);
-   load_hires_bitmap_cursor(&slider_cursor, &slider_cursor_bmap, REF_IMG_bmMfdPhaserCursor, true);
-   misc_cursors_loaded = true;
-   return(OK);
+    if (misc_cursors_loaded)
+    {
+        if (_targbm.bits != NULL)  DisposPtr((Ptr) _targbm.bits);
+        if (_waitbm.bits != NULL)  DisposPtr((Ptr) _waitbm.bits);
+        if (_firebm.bits != NULL)  DisposPtr((Ptr) _firebm.bits);
+//        if (_vmailbm.bits != NULL)  DisposPtr((Ptr) _vmailbm.bits);
+        if (slider_cursor_bmap.bits != NULL)  DisposPtr((Ptr) slider_cursor_bmap.bits);
+    }
+    load_hires_bitmap_cursor(&globcursor,    &_targbm,  REF_IMG_bmTargetCursor, true);
+    load_hires_bitmap_cursor(&wait_cursor,  &_waitbm,  REF_IMG_bmWaitCursor, true);
+    load_hires_bitmap_cursor(&fire_cursor,  &_firebm,  REF_IMG_bmFireCursor, true);
+//    load_hires_bitmap_cursor(&vmail_cursor, &_vmailbm, REF_IMG_bmVmailCursor, true);
+    load_hires_bitmap_cursor(&slider_cursor, &slider_cursor_bmap, REF_IMG_bmMfdPhaserCursor, true);
+    misc_cursors_loaded = true;
+    return(OK);
 }
 
 errtype _screen_init_mouse(LGRegion* r, uiSlab* slab, bool do_init)
 {
-   extern errtype ui_init_cursors(void);
+    extern errtype ui_init_cursors(void);
 
-   ui_init_cursors();			// KLC - do this here, take out of uiInit.
-   load_misc_cursors();
+    ui_init_cursors();            // KLC - do this here, take out of uiInit.
+    load_misc_cursors();
 
-   // Entirely arbitrarily, screen does the uiInit.
-   // only one of the slab creators needs to do this.
-   uiMakeSlab(slab,r,&globcursor);
-   if (do_init)
-      uiInit(slab);
+    // Entirely arbitrarily, screen does the uiInit.
+    // only one of the slab creators needs to do this.
+    uiMakeSlab(slab,r,&globcursor);
+    if (do_init)
+        uiInit(slab);
 #ifdef INPUT_CHAINING
 /* Êdo we ever need this?
-   if (config_get_raw(CHAINING_VAR,NULL,0))
-      kb_set_flags(kb_get_flags()|KBF_CHAIN);*/
+    if (config_get_raw(CHAINING_VAR,NULL,0))
+        kb_set_flags(kb_get_flags()|KBF_CHAIN);*/
 #endif // INPUT_CHAINING
 
-   uiHideMouse(NULL);
-// KLC - no longer needed   if (mouse_put_xy(100,100) == ERR_NODEV)
-//                            critical_error(CRITERR_CFG|0);
-   return(OK);
+    uiHideMouse(NULL);
+// KLC - no longer needed    if (mouse_put_xy(100,100) == ERR_NODEV)
+//                                     critical_error(CRITERR_CFG|0);
+    return(OK);
 }
 

@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //====================================================================================
 //
-//		System Shock - ©1994-1995 Looking Glass Technologies, Inc.
+//        System Shock - ©1994-1995 Looking Glass Technologies, Inc.
 //
-//		DialogHelpers.h	-	Utility routines and user items for dialog boxes.
+//        DialogHelpers.h    -    Utility routines and user items for dialog boxes.
 //
 //====================================================================================
 
@@ -28,33 +28,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Constants
 //--------------------
-#define kBtnOK				1
-#define kBtnCancel			2
-#define	kUsrOKOutline	3
+#define kBtnOK                1
+#define kBtnCancel            2
+#define    kUsrOKOutline    3
 
-#define kSliderWidth		112
-#define kSliderHeight		12
-#define kSliderEnd			6
-#define	kSliderBackPict			8990
-#define	kThumbIcon				8991
-#define	kSliderBackPictDim	8992
-#define	kThumbIconDim			8993
+#define kSliderWidth        112
+#define kSliderHeight        12
+#define kSliderEnd            6
+#define    kSliderBackPict            8990
+#define    kThumbIcon                8991
+#define    kSliderBackPictDim    8992
+#define    kThumbIconDim            8993
 
 typedef pascal void (*SliderCallbackProcPtr)(int16_t value);
 
 //--------------------
 //  Globals
 //--------------------
-extern bool		gGrayOK;
-extern bool		gIgnoreGray;
-extern Str255		gDimTitle;
-extern bool		gDimmed;
-extern MenuHandle	gPopupMenuHdl;
-extern int16_t			gPopupSel;
-extern int16_t			gSliderLastPos;
-extern bool		gSliderDimmed;
+extern bool        gGrayOK;
+extern bool        gIgnoreGray;
+extern Str255        gDimTitle;
+extern bool        gDimmed;
+extern MenuHandle    gPopupMenuHdl;
+extern int16_t            gPopupSel;
+extern int16_t            gSliderLastPos;
+extern bool        gSliderDimmed;
 
-extern int16_t			gNewGameSel[4];
+extern int16_t            gNewGameSel[4];
 
 //--------------------
 //  Prototypes

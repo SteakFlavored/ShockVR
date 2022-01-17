@@ -42,69 +42,69 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* bozo flat8 bitmap drawer. */
 void gen_flat8_clut_ubitmap (grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
-   uint8_t *src  = bm->bits;
-   int16_t right = x+bm->w;
-   int16_t bot   = y+bm->h;
-   int16_t cur_x;
+    uint8_t *src  = bm->bits;
+    int16_t right = x+bm->w;
+    int16_t bot    = y+bm->h;
+    int16_t cur_x;
 
-   if (cl==NULL) cl=grd_screen->clut;
-   if (bm->flags & BMF_TRANS) {
-      for ( ; y<bot; y++, src+=bm->row-bm->w) {
-         for (cur_x=x ; cur_x<right; cur_x++, src++)
-            if (*src)
-               gr_set_upixel (cl[*src], cur_x, y);
-      }
-   }
-   else {
-      for ( ; y<bot; y++, src+=bm->row-bm->w) {
-         for (cur_x=x ; cur_x<right; cur_x++, src++)
-            gr_set_upixel (cl[*src], cur_x, y);
-      }
-   }
+    if (cl==NULL) cl=grd_screen->clut;
+    if (bm->flags & BMF_TRANS) {
+        for ( ; y<bot; y++, src+=bm->row-bm->w) {
+            for (cur_x=x ; cur_x<right; cur_x++, src++)
+                if (*src)
+                    gr_set_upixel (cl[*src], cur_x, y);
+        }
+    }
+    else {
+        for ( ; y<bot; y++, src+=bm->row-bm->w) {
+            for (cur_x=x ; cur_x<right; cur_x++, src++)
+                gr_set_upixel (cl[*src], cur_x, y);
+        }
+    }
 }
 
 /* clip flat8 bitmap against cliprect and jump to unclipped drawer. */
 int32_t gen_flat8_clut_bitmap (grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
-   int16_t w,h;
-   uint8_t *p;
-   int32_t extra;
-   int32_t code = CLIP_NONE;
+    int16_t w,h;
+    uint8_t *p;
+    int32_t extra;
+    int32_t code = CLIP_NONE;
 
-   /* save stuff that clipping changes. */
-   w = bm->w; h = bm->h; p = bm->bits;
+    /* save stuff that clipping changes. */
+    w = bm->w; h = bm->h; p = bm->bits;
 
-   /* check for trivial reject. */
-   if (x+bm->w<grd_clip.left || x>=grd_clip.right ||
-       y+bm->h<grd_clip.top  || y>=grd_clip.bot)
-      return CLIP_ALL;
+    /* check for trivial reject. */
+    if (x+bm->w<grd_clip.left || x>=grd_clip.right ||
+         y+bm->h<grd_clip.top  || y>=grd_clip.bot)
+        return CLIP_ALL;
 
-   /* clip & draw that sucker. */
-   if (x < grd_clip.left) {            /* off left edge */
-      extra = grd_clip.left - x;
-      bm->w -= extra;
-      bm->bits += extra;
-      x = grd_clip.left;
-      code |= CLIP_LEFT;
-   }
-   if (x+bm->w > grd_clip.right) {     /* off right edge */
-      bm->w -= x+bm->w-grd_clip.right;
-      code |= CLIP_RIGHT;
-   }
-   if (y < grd_clip.top) {             /* off top */
-      extra = grd_clip.top - y;
-      bm->h -= extra;
-      bm->bits += bm->row*extra;
-      y = grd_clip.top;
-      code |= CLIP_TOP;
-   }
-   if (y+bm->h > grd_clip.bot) {      /* off bottom */
-      bm->h -= y+bm->h-grd_clip.bot;
-      code |= CLIP_BOT;
-   }
-   gr_flat8_clut_ubitmap (bm, x, y, cl);
+    /* clip & draw that sucker. */
+    if (x < grd_clip.left) {                /* off left edge */
+        extra = grd_clip.left - x;
+        bm->w -= extra;
+        bm->bits += extra;
+        x = grd_clip.left;
+        code |= CLIP_LEFT;
+    }
+    if (x+bm->w > grd_clip.right) {      /* off right edge */
+        bm->w -= x+bm->w-grd_clip.right;
+        code |= CLIP_RIGHT;
+    }
+    if (y < grd_clip.top) {                 /* off top */
+        extra = grd_clip.top - y;
+        bm->h -= extra;
+        bm->bits += bm->row*extra;
+        y = grd_clip.top;
+        code |= CLIP_TOP;
+    }
+    if (y+bm->h > grd_clip.bot) {        /* off bottom */
+        bm->h -= y+bm->h-grd_clip.bot;
+        code |= CLIP_BOT;
+    }
+    gr_flat8_clut_ubitmap (bm, x, y, cl);
 
-   /* restore bitmap to normal. */
-   bm->w = w; bm->h = h; bm->bits = p;
-   return code;
+    /* restore bitmap to normal. */
+    bm->w = w; bm->h = h; bm->bits = p;
+    return code;
 }

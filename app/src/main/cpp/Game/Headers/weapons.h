@@ -28,33 +28,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
-#include "objwpn.h"    // for GUN_SUBCLASS_BEAM
+#include "objwpn.h"     // for GUN_SUBCLASS_BEAM
 #include "player.h"
 
 // Defines
 
-#define MAX_HEAT             100
-#define OVERHEAT_THRESHOLD    80
-#define MINIMUM_OVERLOAD      30
-#define WARM_THRESHOLD        45
+#define MAX_HEAT                 100
+#define OVERHEAT_THRESHOLD     80
+#define MINIMUM_OVERLOAD        30
+#define WARM_THRESHOLD          45
 
-#define MIN_ENERGY_USE        10
+#define MIN_ENERGY_USE          10
 
-#define OVERLOAD_VALUE(X)     (X & 0x80)
-#define OVERLOAD_SET(X)       (X |= 0x80)
-#define OVERLOAD_RESET(X)     (X &= ~0x80)
-#define BEAM_SETTING_VAL(X)   (X & 0x7F)
-#define BEAM_SETTING(X, Y)    (OVERLOAD_VALUE(X) | (BEAM_SETTING_VAL(Y)))
+#define OVERLOAD_VALUE(X)      (X & 0x80)
+#define OVERLOAD_SET(X)         (X |= 0x80)
+#define OVERLOAD_RESET(X)      (X &= ~0x80)
+#define BEAM_SETTING_VAL(X)    (X & 0x7F)
+#define BEAM_SETTING(X, Y)     (OVERLOAD_VALUE(X) | (BEAM_SETTING_VAL(Y)))
 
 // moved WEAPON_COOL_OFF_TIME to weapons.c for easier tweaking
-#define MAX_WEAPON_TYPE       6
-#define MAX_WEAPON_SUBTYPE    5
+#define MAX_WEAPON_TYPE         6
+#define MAX_WEAPON_SUBTYPE     5
 
 // slow projectile flags
-#define PROJ_LIGHT_FLAG             0x01
-#define PROJ_PRESERVE_WALL          0x02
-#define PROJ_PRESERVE_HIT           0x04
-#define PROJ_PRESERVE_PROJ_HIT      0x08
+#define PROJ_LIGHT_FLAG                 0x01
+#define PROJ_PRESERVE_WALL             0x02
+#define PROJ_PRESERVE_HIT              0x04
+#define PROJ_PRESERVE_PROJ_HIT        0x08
 
 // extern int8_t ammo_type_letters[];
 #define AMMO_TYPE_LETTER(l) (get_temp_string(REF_STR_AmmoTypeLetters)[l])
@@ -63,8 +63,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define AMMO_SUBCLASSES num_subclasses[CLASS_AMMO]
 
-#define AMMOTYPE_SUBCLASS(X)   ((X) >= (AMMO_SUBCLASSES << 4) ? AMMO_SUBCLASSES-1 : (X) >> 4)
-#define AMMOTYPE_TYPE(X)       ((X) & 0xF)
+#define AMMOTYPE_SUBCLASS(X)    ((X) >= (AMMO_SUBCLASSES << 4) ? AMMO_SUBCLASSES-1 : (X) >> 4)
+#define AMMOTYPE_TYPE(X)         ((X) & 0xF)
 
 #define set_shield_rate(X) (player_struct.shield_absorb_rate = (X))
 #define get_shield_rate(X) (player_struct.shield_absorb_rate)

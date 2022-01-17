@@ -19,8 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __INIT_H
 #define __INIT_H
 
-#define MAX_MODELS      80
-#define MAX_MATERIALS   64
+#define MAX_MODELS        80
+#define MAX_MATERIALS    64
 
 #ifndef __INIT_SRC
 extern int8_t num_materials;

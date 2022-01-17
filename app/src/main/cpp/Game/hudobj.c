@@ -37,14 +37,14 @@ uint8_t current_num_hudobjs = 0;
 
 void hudobj_set_subclass(uint8_t obclass, uint8_t subclass, bool val)
 {
-   uint16_t mask = (subclass == HUDOBJ_ALL_SUBCLASSES) ? 0xFFFF : (1 << subclass);
-   if (val) hudobj_classes[obclass] |= mask;
-   else hudobj_classes[obclass] &= ~mask;
+    uint16_t mask = (subclass == HUDOBJ_ALL_SUBCLASSES) ? 0xFFFF : (1 << subclass);
+    if (val) hudobj_classes[obclass] |= mask;
+    else hudobj_classes[obclass] &= ~mask;
 }
 
 void hudobj_set_id(int16_t id, bool val)
 {
-   if (id == OBJ_NULL) return;
-   if (val) objs[id].info.inst_flags |=  HUDOBJ_INST_FLAG;
-   else     objs[id].info.inst_flags &= ~HUDOBJ_INST_FLAG;
+    if (id == OBJ_NULL) return;
+    if (val) objs[id].info.inst_flags |=  HUDOBJ_INST_FLAG;
+    else      objs[id].info.inst_flags &= ~HUDOBJ_INST_FLAG;
 }

@@ -34,15 +34,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Game Object Includes
 
 typedef enum {
-   CLASS_ROOT,
-   CLASS_PUSHBUTTON,
-   CLASS_SLIDER,
-   CLASS_BUTTONARRAY,
-   CLASS_TEXT,
-   CLASS_QUICKBOX,
-   CLASS_PLAIN,
-   CLASS_MENU,
-   NUM_GAD_CLASSES
+    CLASS_ROOT,
+    CLASS_PUSHBUTTON,
+    CLASS_SLIDER,
+    CLASS_BUTTONARRAY,
+    CLASS_TEXT,
+    CLASS_QUICKBOX,
+    CLASS_PLAIN,
+    CLASS_MENU,
+    NUM_GAD_CLASSES
 } GadgetClass;
 
 // Your basic gadget.  Most of the real work info is in whatever
@@ -51,15 +51,15 @@ typedef enum {
 typedef struct _TNG TNG;
 
 typedef struct _Gadget{
-   LGRegion *rep;
-   struct _Gadget *parent;
-   GadgetClass gclass;
-   TNG *tng_data;
-   void *device_data;
-   LGPoint conversion;
-   int32_t handler_id;
-   int32_t draw_parts;
-   int32_t (*destroy_func)(struct _Gadget *g, void *user_data);
+    LGRegion *rep;
+    struct _Gadget *parent;
+    GadgetClass gclass;
+    TNG *tng_data;
+    void *device_data;
+    LGPoint conversion;
+    int32_t handler_id;
+    int32_t draw_parts;
+    int32_t (*destroy_func)(struct _Gadget *g, void *user_data);
 } Gadget;
 
 #include "tng.h"
@@ -67,13 +67,13 @@ typedef struct _Gadget{
 // A GadgetData is installed as the userdata for a region to get
 // a pointer back to the gadget, as well as other useful info
 typedef struct {
-   int8_t *name;
-   Gadget *g;
+    int8_t *name;
+    Gadget *g;
 } GadgetData;
 
 typedef struct {
-   LGPoint delta;
-   Gadget *g;
+    LGPoint delta;
+    Gadget *g;
 } MoveStruct;
 
 // Prototypes
@@ -124,21 +124,21 @@ errtype gadget_create_setup(Gadget **pg, Gadget *parent, GadgetClass cl, LGRect 
 errtype gadget_change_flags(Gadget *g, uint32_t flags, bool on, bool children);
 
 // Defines
-#define NULL_TYPE       -1
-#define RESOURCE_TYPE    0
-#define TEXT_TYPE        1
+#define NULL_TYPE         -1
+#define RESOURCE_TYPE     0
+#define TEXT_TYPE          1
 #define TRANSPARENT_TYPE 2
-#define COLORED_TYPE     3
-#define CALLBACK_TYPE    4
+#define COLORED_TYPE      3
+#define CALLBACK_TYPE     4
 
-#define DISPLAY_VGA     0
-#define DISPLAY_MONO    1
-#define DISPLAY_MODEX   2
-#define DISPLAY_SVGA    3
-#define DISPLAY_MAC 	4
+#define DISPLAY_VGA      0
+#define DISPLAY_MONO     1
+#define DISPLAY_MODEX    2
+#define DISPLAY_SVGA     3
+#define DISPLAY_MAC     4
 
-#define BASELINE_X      640
-#define BASELINE_Y      480
+#define BASELINE_X        640
+#define BASELINE_Y        480
 
 // These macros all take in a region and derive from it information about gadgets
 #define GD_CANV(x) ((GadgetData *)((x)->user_data))->g->device_data
@@ -146,7 +146,7 @@ errtype gadget_change_flags(Gadget *g, uint32_t flags, bool on, bool children);
 #define GD_GADG(x) ((GadgetData *)((x)->user_data))->g
 
 #define STORE_CLIP(a,b,c,d) a = gr_get_clip_l(); \
-   b = gr_get_clip_t();  c = gr_get_clip_r(); d = gr_get_clip_b()
+    b = gr_get_clip_t();  c = gr_get_clip_r(); d = gr_get_clip_b()
 
 #define RESTORE_CLIP(a,b,c,d) gr_set_cliprect(a,b,c,d)
 

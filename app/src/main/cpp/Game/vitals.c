@@ -51,7 +51,7 @@ void draw_status_bar(uint16_t x0, uint16_t x1, uint16_t cutoff, uint16_t y);
 
 // ===========================================================================
 // ======================= * UPPER RIGHT HAND CORNER STUFF * =================
-// ======================= *        STARTS HERE            * =================
+// ======================= *          STARTS HERE                * =================
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
@@ -66,29 +66,29 @@ grs_bitmap status_arrows[NUM_STATUS_ARROWS];
 
 void status_vitals_init()
 {
-   // Draw the background map
-//   draw_res_bm(STATUS_RES_VITALSID, STATUS_VITALS_X, STATUS_VITALS_Y);
+    // Draw the background map
+//    draw_res_bm(STATUS_RES_VITALSID, STATUS_VITALS_X, STATUS_VITALS_Y);
 
-   // Draw the innards
-//KLC - chg for new art   draw_res_bm(STATUS_RES_HEALTH_ID, STATUS_VITALS_X_BASE, STATUS_VITALS_Y_TOP);
-//KLC - chg for new art   draw_res_bm(STATUS_RES_ENERGY_ID, STATUS_VITALS_X_BASE, STATUS_VITALS_Y_BOTTOM);
-   draw_hires_resource_bm(STATUS_RES_HEALTH_ID, 372, 3);
-   draw_hires_resource_bm(STATUS_RES_ENERGY_ID, 372, 27);
-   return;
+    // Draw the innards
+//KLC - chg for new art    draw_res_bm(STATUS_RES_HEALTH_ID, STATUS_VITALS_X_BASE, STATUS_VITALS_Y_TOP);
+//KLC - chg for new art    draw_res_bm(STATUS_RES_ENERGY_ID, STATUS_VITALS_X_BASE, STATUS_VITALS_Y_BOTTOM);
+    draw_hires_resource_bm(STATUS_RES_HEALTH_ID, 372, 3);
+    draw_hires_resource_bm(STATUS_RES_ENERGY_ID, 372, 27);
+    return;
 }
 
 void status_vitals_start()
 {
-   // load in our bitmaps!
-   for (int32_t i=0; i < NUM_STATUS_ARROWS; i++)
-      simple_load_res_bitmap(&status_arrows[i],REF_IMG_bmStatusAngle1 + i);
+    // load in our bitmaps!
+    for (int32_t i=0; i < NUM_STATUS_ARROWS; i++)
+        simple_load_res_bitmap(&status_arrows[i],REF_IMG_bmStatusAngle1 + i);
 }
 
 void status_vitals_end()
 {
-   int32_t i;
-   for (i=0;i<NUM_STATUS_ARROWS;i++)
-      DisposePtr((Ptr)status_arrows[i].bits);
+    int32_t i;
+    for (i=0;i<NUM_STATUS_ARROWS;i++)
+        DisposePtr((Ptr)status_arrows[i].bits);
 }
 #define VITALS_MAX 23
 
@@ -104,78 +104,78 @@ void status_vitals_end()
 
 errtype status_vitals_update(bool Full_Redraw)
 {
-   static int16_t last_health_x = 0;
-   static int16_t last_energy_x = 0;
-   grs_bitmap *icon_bmp;
-   extern bool full_game_3d;
-   Ref ref;
+    static int16_t last_health_x = 0;
+    static int16_t last_energy_x = 0;
+    grs_bitmap *icon_bmp;
+    extern bool full_game_3d;
+    Ref ref;
 
-   int16_t health_value,energy_value,health_x,energy_x;
-   uint16_t minx,maxx;
-//   static int32_t last_time=0L;
-//   int32_t delta;
+    int16_t health_value,energy_value,health_x,energy_x;
+    uint16_t minx,maxx;
+//    static int32_t last_time=0L;
+//    int32_t delta;
 
-   if (global_fullmap->cyber)
-      health_value = player_struct.cspace_hp;
-   else
-      health_value = player_struct.hit_points;
+    if (global_fullmap->cyber)
+        health_value = player_struct.cspace_hp;
+    else
+        health_value = player_struct.hit_points;
 
-   if (health_value < 0) health_value = 0;
+    if (health_value < 0) health_value = 0;
 
-   energy_value = player_struct.energy;
+    energy_value = player_struct.energy;
 
-   // So the scale is 0-VITALS_MAX, which is # of angles to draw
-   health_x = max(0,((health_value) * VITALS_MAX + PLAYER_MAX_HP - 1) / PLAYER_MAX_HP);
-   energy_x = max(0,(energy_value * VITALS_MAX + MAX_ENERGY - 1) / MAX_ENERGY);
-//   mprintf("health_x = %d, energy_x = %d\n",health_x,energy_x);
+    // So the scale is 0-VITALS_MAX, which is # of angles to draw
+    health_x = max(0,((health_value) * VITALS_MAX + PLAYER_MAX_HP - 1) / PLAYER_MAX_HP);
+    energy_x = max(0,(energy_value * VITALS_MAX + MAX_ENERGY - 1) / MAX_ENERGY);
+//    mprintf("health_x = %d, energy_x = %d\n",health_x,energy_x);
 
-   if (Full_Redraw) {
-      if (health_x != 0)
-         last_health_x = 0;
-      if (energy_x != 0)
-         last_energy_x = 0;
-   }
+    if (Full_Redraw) {
+        if (health_x != 0)
+            last_health_x = 0;
+        if (energy_x != 0)
+            last_energy_x = 0;
+    }
 
-   if (health_x != last_health_x)
-   {
-      minx = min(health_x,last_health_x);
-      if (Full_Redraw)
-         maxx = VITALS_MAX;
-      else
-         maxx = max(health_x,last_health_x);
-
-      draw_status_bar(minx, maxx, health_x, STATUS_VITALS_Y_TOP);
-      ref = ((global_fullmap->cyber) ? REF_IMG_bmCyberIcon1 : REF_IMG_bmHealthIcon1) + (health_x / 8);
-      icon_bmp = lock_bitmap_from_ref(ref);
-//KLC - chg for new art      ss_bitmap(icon_bmp, STATUS_ICON_X, STATUS_VITALS_Y_TOP);
-      gr_bitmap(icon_bmp, SCONV_X(STATUS_ICON_X), SCONV_Y(STATUS_VITALS_Y_TOP));
-      RefUnlock(ref);
-
-      last_health_x     = health_x;
-   }
-
-   if (!(full_game_3d && global_fullmap->cyber))
-   {
-      if (energy_x != last_energy_x) {
-
-         minx = min(energy_x,last_energy_x);
-         if (Full_Redraw)
+    if (health_x != last_health_x)
+    {
+        minx = min(health_x,last_health_x);
+        if (Full_Redraw)
             maxx = VITALS_MAX;
-         else
-            maxx = max(energy_x,last_energy_x);
+        else
+            maxx = max(health_x,last_health_x);
 
-         draw_status_bar(minx, maxx, energy_x, STATUS_VITALS_Y_BOTTOM+1);
-         ref = REF_IMG_bmEnergyIcon1 + (energy_x / 8);
-         icon_bmp = lock_bitmap_from_ref(ref);
-//KLC - chg for new art         ss_bitmap(icon_bmp, STATUS_ICON_X, STATUS_VITALS_Y_BOTTOM);
-         gr_bitmap(icon_bmp, SCONV_X(STATUS_ICON_X), SCONV_Y(STATUS_VITALS_Y_BOTTOM));
-         RefUnlock(ref);
+        draw_status_bar(minx, maxx, health_x, STATUS_VITALS_Y_TOP);
+        ref = ((global_fullmap->cyber) ? REF_IMG_bmCyberIcon1 : REF_IMG_bmHealthIcon1) + (health_x / 8);
+        icon_bmp = lock_bitmap_from_ref(ref);
+//KLC - chg for new art        ss_bitmap(icon_bmp, STATUS_ICON_X, STATUS_VITALS_Y_TOP);
+        gr_bitmap(icon_bmp, SCONV_X(STATUS_ICON_X), SCONV_Y(STATUS_VITALS_Y_TOP));
+        RefUnlock(ref);
 
-         last_energy_x     = energy_x;
-      }
-   }
+        last_health_x      = health_x;
+    }
 
-   return(OK);
+    if (!(full_game_3d && global_fullmap->cyber))
+    {
+        if (energy_x != last_energy_x) {
+
+            minx = min(energy_x,last_energy_x);
+            if (Full_Redraw)
+                maxx = VITALS_MAX;
+            else
+                maxx = max(energy_x,last_energy_x);
+
+            draw_status_bar(minx, maxx, energy_x, STATUS_VITALS_Y_BOTTOM+1);
+            ref = REF_IMG_bmEnergyIcon1 + (energy_x / 8);
+            icon_bmp = lock_bitmap_from_ref(ref);
+//KLC - chg for new art            ss_bitmap(icon_bmp, STATUS_ICON_X, STATUS_VITALS_Y_BOTTOM);
+            gr_bitmap(icon_bmp, SCONV_X(STATUS_ICON_X), SCONV_Y(STATUS_VITALS_Y_BOTTOM));
+            RefUnlock(ref);
+
+            last_energy_x      = energy_x;
+        }
+    }
+
+    return(OK);
 }
 
 // ---------------------------------------------------------------------------
@@ -187,23 +187,23 @@ errtype status_vitals_update(bool Full_Redraw)
 // NOTE:  x_coord in in angle units, not pixels!  y is still in pixels
 errtype draw_status_arrow(int32_t x_coord, int32_t y)
 {
-   int32_t index;
-   if (x_coord < 0)
-   {
-      index = 3;
-      x_coord = ~x_coord;
-   }
-   else if (x_coord <= 7)
-      index = 0;
-   else if (x_coord <= 15)
-      index = 1;
-   else
-      index = 2;
-//KLC - chg for new art   ss_bitmap(&status_arrows[index], STATUS_VITALS_X_BASE + (x_coord * STATUS_ANGLE_SIZE), y);
-   gr_bitmap(&status_arrows[index],
-   					SCONV_X(STATUS_VITALS_X_BASE + (x_coord * STATUS_ANGLE_SIZE)),
-   					SCONV_Y(y));
-   return(OK);
+    int32_t index;
+    if (x_coord < 0)
+    {
+        index = 3;
+        x_coord = ~x_coord;
+    }
+    else if (x_coord <= 7)
+        index = 0;
+    else if (x_coord <= 15)
+        index = 1;
+    else
+        index = 2;
+//KLC - chg for new art    ss_bitmap(&status_arrows[index], STATUS_VITALS_X_BASE + (x_coord * STATUS_ANGLE_SIZE), y);
+    gr_bitmap(&status_arrows[index],
+                        SCONV_X(STATUS_VITALS_X_BASE + (x_coord * STATUS_ANGLE_SIZE)),
+                        SCONV_Y(y));
+    return(OK);
 }
 
 // ---------------------------------------------------------------------------
@@ -214,24 +214,24 @@ errtype draw_status_arrow(int32_t x_coord, int32_t y)
 
 void draw_status_bar(uint16_t x0, uint16_t x1, uint16_t cutoff, uint16_t y)
 {
-   int32_t i;
-   LGRect r;
+    int32_t i;
+    LGRect r;
 
-   r.ul = MakePoint(STATUS_VITALS_X_BASE + (x0 * STATUS_ANGLE_SIZE),y);
-   r.lr = MakePoint(STATUS_VITALS_X_BASE + (x1 * STATUS_ANGLE_SIZE),y + status_arrows[0].h);
+    r.ul = MakePoint(STATUS_VITALS_X_BASE + (x0 * STATUS_ANGLE_SIZE),y);
+    r.lr = MakePoint(STATUS_VITALS_X_BASE + (x1 * STATUS_ANGLE_SIZE),y + status_arrows[0].h);
 
-   uiHideMouse(&r);
-//   mprintf ("draw_bar x0=%d x1=%d cutoff = %d\n",x0,x1,cutoff);
-   // Do the drawing
-   for (i=x0; i < cutoff; i++)
-      draw_status_arrow(i,y);
+    uiHideMouse(&r);
+//    mprintf ("draw_bar x0=%d x1=%d cutoff = %d\n",x0,x1,cutoff);
+    // Do the drawing
+    for (i=x0; i < cutoff; i++)
+        draw_status_arrow(i,y);
 
-   // Do the erasing
-   if (!full_game_3d)
-      for (i=cutoff; i < x1; i++)
-         draw_status_arrow(~i,y);
-   uiShowMouse(&r);
+    // Do the erasing
+    if (!full_game_3d)
+        for (i=cutoff; i < x1; i++)
+            draw_status_arrow(~i,y);
+    uiShowMouse(&r);
 
-   return;
+    return;
 }
 

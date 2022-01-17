@@ -18,6 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // misc macros
 
-#define max(x, y)	(((x) < (y)) ? (y) : (x))
-#define min(x, y)	(((x) < (y)) ? (x) : (y))
+#define max(x, y)    (((x) < (y)) ? (y) : (x))
+#define min(x, y)    (((x) < (y)) ? (x) : (y))
 

@@ -57,14 +57,14 @@ typedef int32_t (*Hashfunc)(void* data);
 
 typedef struct _hashtable
 {
-   int32_t size;
-   int32_t sizelog2;
-   int32_t elemsize;
-   int32_t fullness;
-   Equfunc efunc;
-   Hashfunc hfunc;
-   int8_t *statvec;
-   int8_t *vec;
+    int32_t size;
+    int32_t sizelog2;
+    int32_t elemsize;
+    int32_t fullness;
+    Equfunc efunc;
+    Hashfunc hfunc;
+    int8_t *statvec;
+    int8_t *vec;
 } Hashtable;
 
 

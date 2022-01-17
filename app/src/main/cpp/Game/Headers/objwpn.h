@@ -33,102 +33,102 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Instance Data
 typedef struct {
-//   COMMON_OBJSPEC_FIELDS;
-   union {
-		ObjID id;
-		ObjSpecID headused;
-	};
-	union {
-		ObjSpecID next;
-		ObjSpecID headfree;
-	};
-	ObjSpecID prev;
-	uint8_t    ammo_type;
-	uint8_t    ammo_count;
+//    COMMON_OBJSPEC_FIELDS;
+    union {
+        ObjID id;
+        ObjSpecID headused;
+    };
+    union {
+        ObjSpecID next;
+        ObjSpecID headfree;
+    };
+    ObjSpecID prev;
+    uint8_t     ammo_type;
+    uint8_t     ammo_count;
 } ObjGun;
 
 typedef struct {
-//   COMMON_OBJSPEC_FIELDS;
-   union {
-		ObjID id;
-		ObjSpecID headused;
-	};
-	union {
-		ObjSpecID next;
-		ObjSpecID headfree;
-	};
-	ObjSpecID prev;
+//    COMMON_OBJSPEC_FIELDS;
+    union {
+        ObjID id;
+        ObjSpecID headused;
+    };
+    union {
+        ObjSpecID next;
+        ObjSpecID headfree;
+    };
+    ObjSpecID prev;
 } ObjAmmo;
 
 typedef struct {
-//   COMMON_OBJSPEC_FIELDS;
-   union {
-		ObjID id;
-		ObjSpecID headused;
-	};
-	union {
-		ObjSpecID next;
-		ObjSpecID headfree;
-	};
-	ObjSpecID prev;
-   ObjID    owner;
-   int32_t      bullet_triple;
-   int32_t      duration;
-//   int8_t     power;
-   ObjLoc   p1, p2, p3;
+//    COMMON_OBJSPEC_FIELDS;
+    union {
+        ObjID id;
+        ObjSpecID headused;
+    };
+    union {
+        ObjSpecID next;
+        ObjSpecID headfree;
+    };
+    ObjSpecID prev;
+    ObjID     owner;
+    int32_t        bullet_triple;
+    int32_t        duration;
+//    int8_t      power;
+    ObjLoc    p1, p2, p3;
 } ObjPhysics;
 
 typedef struct {
-//   COMMON_OBJSPEC_FIELDS;
-   union {
-		ObjID id;
-		ObjSpecID headused;
-	};
-	union {
-		ObjSpecID next;
-		ObjSpecID headfree;
-	};
-	ObjSpecID prev;
-   uint8_t unique_id;
-   uint8_t walls_hit;
-   int16_t flags;
-   int16_t timestamp;
+//    COMMON_OBJSPEC_FIELDS;
+    union {
+        ObjID id;
+        ObjSpecID headused;
+    };
+    union {
+        ObjSpecID next;
+        ObjSpecID headfree;
+    };
+    ObjSpecID prev;
+    uint8_t unique_id;
+    uint8_t walls_hit;
+    int16_t flags;
+    int16_t timestamp;
 } ObjGrenade;
 
 // Class typedefs
 
 #define COMBAT_DATA_FIELDS \
-   int16_t damage_modifier;  \
-   uint8_t offense_value;    \
-   int32_t   damage_type;      \
-   uint8_t penetration
+    int16_t damage_modifier;  \
+    uint8_t offense_value;     \
+    int32_t    damage_type;        \
+    uint8_t penetration
 
 typedef struct _GunProp {
-   uint8_t fire_rate;
-   uint8_t useable_ammo_type;
+    uint8_t fire_rate;
+    uint8_t useable_ammo_type;
 } GunProp;
 
 typedef struct _AmmoProp {
-   COMBAT_DATA_FIELDS;
-   uint8_t cartridge_size;
-   uint8_t bullet_mass;
-   int16_t bullet_speed;
-   uint8_t range;
-   uint8_t recoil_force;
+    COMBAT_DATA_FIELDS;
+    uint8_t cartridge_size;
+    uint8_t bullet_mass;
+    int16_t bullet_speed;
+    uint8_t range;
+    uint8_t recoil_force;
 } AmmoProp;
 
 typedef struct _PhysicsProp {
-   uint8_t flags;
+    uint8_t flags;
 } PhysicsProp;
 
 typedef struct _GrenadeProp {
-   COMBAT_DATA_FIELDS;
-   uint8_t touchiness;
-   uint8_t radius;
-   uint8_t radius_change;
-   uint8_t damage_change;
-   uint8_t attack_mass;
-   int16_t flags;            // Does it spew shrapnel? Can timer be set? Can it stick to wall?
+    COMBAT_DATA_FIELDS;
+    uint8_t touchiness;
+    uint8_t radius;
+    uint8_t radius_change;
+    uint8_t damage_change;
+    uint8_t attack_mass;
+    int16_t flags;                // Does it spew shrapnel? Can timer be set? Can it stick to wall?
 } GrenadeProp;
 
 // Subclass typedefs
@@ -137,154 +137,154 @@ typedef struct _GrenadeProp {
 
 typedef struct _PistolGunProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } PistolGunProp;
 
 typedef struct _AutoGunProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } AutoGunProp;
 
 typedef struct _SpecialGunProp {
-   COMBAT_DATA_FIELDS;
-   uint8_t speed;
-   int32_t   proj_triple;
-   uint8_t attack_mass;
-   int16_t attack_speed;
+    COMBAT_DATA_FIELDS;
+    uint8_t speed;
+    int32_t    proj_triple;
+    uint8_t attack_mass;
+    int16_t attack_speed;
 } SpecialGunProp;
 
 typedef struct _HandtohandGunProp {
-   COMBAT_DATA_FIELDS;
-   uint8_t energy_use;
-   uint8_t attack_mass;
-   uint8_t attack_range;
-   int16_t attack_speed;
+    COMBAT_DATA_FIELDS;
+    uint8_t energy_use;
+    uint8_t attack_mass;
+    uint8_t attack_range;
+    int16_t attack_speed;
 } HandtohandGunProp;
 
 typedef struct _BeamGunProp {
-   COMBAT_DATA_FIELDS;
-   uint8_t max_charge;
-   uint8_t attack_mass;
-   uint8_t attack_range;
-   int16_t attack_speed;
+    COMBAT_DATA_FIELDS;
+    uint8_t max_charge;
+    uint8_t attack_mass;
+    uint8_t attack_range;
+    int16_t attack_speed;
 } BeamGunProp;
 
 typedef struct _BeamprojGunProp {
-   COMBAT_DATA_FIELDS;
-   uint8_t max_charge;
-   uint8_t attack_mass;
-   int16_t attack_speed;
-   uint8_t speed;
-   int32_t   proj_triple;
-   uint8_t flags;
+    COMBAT_DATA_FIELDS;
+    uint8_t max_charge;
+    uint8_t attack_mass;
+    int16_t attack_speed;
+    uint8_t speed;
+    int32_t    proj_triple;
+    uint8_t flags;
 } BeamprojGunProp;
 
 typedef struct _PistolAmmoProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } PistolAmmoProp;
 
 typedef struct _NeedleAmmoProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } NeedleAmmoProp;
 
 typedef struct _MagnumAmmoProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } MagnumAmmoProp;
 
 typedef struct _RifleAmmoProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } RifleAmmoProp;
 
 typedef struct _FlechetteAmmoProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } FlechetteAmmoProp;
 
 typedef struct _AutoAmmoProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } AutoAmmoProp;
 
 typedef struct _ProjAmmoProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } ProjAmmoProp;
 
 typedef struct _TracerPhysicsProp {
-   int16_t xcoords[4];
-   int16_t ycoords[4];
-   uint8_t zcoords[4];
+    int16_t xcoords[4];
+    int16_t ycoords[4];
+    uint8_t zcoords[4];
 } TracerPhysicsProp;
 
-#define NUM_SLOW_VCOLORS   6
+#define NUM_SLOW_VCOLORS    6
 typedef struct _SlowPhysicsProp {
-   uint8_t vcolors[NUM_SLOW_VCOLORS];
+    uint8_t vcolors[NUM_SLOW_VCOLORS];
 } SlowPhysicsProp;
 
 typedef struct _CameraPhysicsProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } CameraPhysicsProp;
 
 typedef struct _DirectGrenadeProp {
 #ifdef EMPTY_STRUCTS
-   uint8_t dummy;
+    uint8_t dummy;
 #endif
 } DirectGrenadeProp;
 
 typedef struct _TimedGrenadeProp {
-   uint8_t min_time_set;
-   uint8_t max_time_set;
-   uint8_t timing_deviation;
+    uint8_t min_time_set;
+    uint8_t max_time_set;
+    uint8_t timing_deviation;
 } TimedGrenadeProp;
 
 // Gun
-#define NUM_PISTOL_GUN	      5
-#define NUM_AUTO_GUN	         2
-#define NUM_SPECIAL_GUN	      2
-#define NUM_HANDTOHAND_GUN    2
-#define NUM_BEAM_GUN	         3
-#define NUM_BEAMPROJ_GUN	   2
+#define NUM_PISTOL_GUN            5
+#define NUM_AUTO_GUN                2
+#define NUM_SPECIAL_GUN            2
+#define NUM_HANDTOHAND_GUN     2
+#define NUM_BEAM_GUN                3
+#define NUM_BEAMPROJ_GUN        2
 
 // Ammo
-#define NUM_PISTOL_AMMO	      2
-#define NUM_NEEDLE_AMMO	      2
-#define NUM_MAGNUM_AMMO	      3
-#define NUM_RIFLE_AMMO	      2
-#define NUM_FLECHETTE_AMMO	   2
-#define NUM_AUTO_AMMO	      2
-#define NUM_PROJ_AMMO	      2
+#define NUM_PISTOL_AMMO            2
+#define NUM_NEEDLE_AMMO            2
+#define NUM_MAGNUM_AMMO            3
+#define NUM_RIFLE_AMMO            2
+#define NUM_FLECHETTE_AMMO        2
+#define NUM_AUTO_AMMO            2
+#define NUM_PROJ_AMMO            2
 
 // Physics
-#define NUM_TRACER_PHYSICS    6
-#define NUM_SLOW_PHYSICS      16
-#define NUM_CAMERA_PHYSICS    2
+#define NUM_TRACER_PHYSICS     6
+#define NUM_SLOW_PHYSICS        16
+#define NUM_CAMERA_PHYSICS     2
 
 // Grenade
-#define NUM_DIRECT_GRENADE    5
-#define NUM_TIMED_GRENADE     3
+#define NUM_DIRECT_GRENADE     5
+#define NUM_TIMED_GRENADE      3
 
-#define NUM_GUN	(NUM_PISTOL_GUN + NUM_AUTO_GUN + NUM_SPECIAL_GUN + NUM_HANDTOHAND_GUN + NUM_BEAM_GUN + NUM_BEAMPROJ_GUN)
+#define NUM_GUN    (NUM_PISTOL_GUN + NUM_AUTO_GUN + NUM_SPECIAL_GUN + NUM_HANDTOHAND_GUN + NUM_BEAM_GUN + NUM_BEAMPROJ_GUN)
 
-#define NUM_AMMO	(NUM_PISTOL_AMMO + NUM_NEEDLE_AMMO + NUM_MAGNUM_AMMO + NUM_RIFLE_AMMO + NUM_FLECHETTE_AMMO + NUM_AUTO_AMMO + NUM_PROJ_AMMO)
+#define NUM_AMMO    (NUM_PISTOL_AMMO + NUM_NEEDLE_AMMO + NUM_MAGNUM_AMMO + NUM_RIFLE_AMMO + NUM_FLECHETTE_AMMO + NUM_AUTO_AMMO + NUM_PROJ_AMMO)
 
 #define NUM_PHYSICS (NUM_TRACER_PHYSICS + NUM_SLOW_PHYSICS + NUM_CAMERA_PHYSICS)
 
-#define NUM_GRENADE	(NUM_DIRECT_GRENADE + NUM_TIMED_GRENADE)
+#define NUM_GRENADE    (NUM_DIRECT_GRENADE + NUM_TIMED_GRENADE)
 
 // Gun
 #define GUN_SUBCLASS_PISTOL 0
@@ -295,13 +295,13 @@ typedef struct _TimedGrenadeProp {
 #define GUN_SUBCLASS_BEAMPROJ 5
 
 // Ammo
-#define AMMO_SUBCLASS_PISTOL	   0
-#define AMMO_SUBCLASS_NEEDLE	   1
-#define AMMO_SUBCLASS_MAGNUM     2
-#define AMMO_SUBCLASS_RIFLE	   3
-#define AMMO_SUBCLASS_FLECHETTE	4
-#define AMMO_SUBCLASS_AUTO	      5
-#define AMMO_SUBCLASS_PROJ       6
+#define AMMO_SUBCLASS_PISTOL        0
+#define AMMO_SUBCLASS_NEEDLE        1
+#define AMMO_SUBCLASS_MAGNUM      2
+#define AMMO_SUBCLASS_RIFLE        3
+#define AMMO_SUBCLASS_FLECHETTE    4
+#define AMMO_SUBCLASS_AUTO            5
+#define AMMO_SUBCLASS_PROJ         6
 
 // Physics
 #define PHYSICS_SUBCLASS_TRACER 0
@@ -313,73 +313,73 @@ typedef struct _TimedGrenadeProp {
 #define GRENADE_SUBCLASS_TIMED 1
 
 #ifdef STRANGE_EFFICIOMATRON_WAY
-#define GunBase         (&PropsArray)
-#define GunProps        ((GunProp *)GunBase)
-#define PistolBase      (GunBase+(sizeof(GunProp)* NUM_GUN))
-#define PistolProps     ((PistolGunProp *)PistolBase)
-#define AutoBase        (PistolBase + (sizeof(PistolGunProp * NUM_PISTOL_GUN)))
-#define AutoProps       ((AutoGunProp *)AutoBase)
-#define SpecialBase        (AutoBase + (sizeof(AutoGunProp * NUM_AUTO_GUN)))
-#define SpecialProps       ((SpecialGunProp *)SpecialBase)
-#define HandtohandBase        (SpecialBase + (sizeof(SpecialGunProp * NUM_SPECIAL_GUN)))
-#define HandtohandProps       ((HandtohandGunProp *)HandtohandBase)
-#define BeamBase        (HandtohandBase + (sizeof(HandtohandGunProp * NUM_HANDTOHAND_GUN)))
-#define BeamProps       ((BeamGunProp *)BeamBase)
-#define BeamprojBase        (BeamBase + (sizeof(BeamGunProp * NUM_BEAM_GUN)))
-#define BeamprojProps       ((BeamprojGunProp *)BeamprojBase)
+#define GunBase            (&PropsArray)
+#define GunProps          ((GunProp *)GunBase)
+#define PistolBase        (GunBase+(sizeof(GunProp)* NUM_GUN))
+#define PistolProps      ((PistolGunProp *)PistolBase)
+#define AutoBase          (PistolBase + (sizeof(PistolGunProp * NUM_PISTOL_GUN)))
+#define AutoProps         ((AutoGunProp *)AutoBase)
+#define SpecialBase          (AutoBase + (sizeof(AutoGunProp * NUM_AUTO_GUN)))
+#define SpecialProps         ((SpecialGunProp *)SpecialBase)
+#define HandtohandBase          (SpecialBase + (sizeof(SpecialGunProp * NUM_SPECIAL_GUN)))
+#define HandtohandProps         ((HandtohandGunProp *)HandtohandBase)
+#define BeamBase          (HandtohandBase + (sizeof(HandtohandGunProp * NUM_HANDTOHAND_GUN)))
+#define BeamProps         ((BeamGunProp *)BeamBase)
+#define BeamprojBase          (BeamBase + (sizeof(BeamGunProp * NUM_BEAM_GUN)))
+#define BeamprojProps         ((BeamprojGunProp *)BeamprojBase)
 
-#define AmmoBase        (BeamprojBase + sizeof(BeamprojGunProp * NUM_BEAMPROJ_GUN))
-#define AmmoProps       ((AmmoProp *)
+#define AmmoBase          (BeamprojBase + sizeof(BeamprojGunProp * NUM_BEAMPROJ_GUN))
+#define AmmoProps         ((AmmoProp *)
 #endif
 
 #ifdef __OBJSIM_SRC
-GunProp	GunProps[NUM_GUN];
-PistolGunProp	PistolGunProps[NUM_PISTOL_GUN];
-AutoGunProp	AutoGunProps[NUM_AUTO_GUN];
-SpecialGunProp	SpecialGunProps[NUM_SPECIAL_GUN];
-HandtohandGunProp	HandtohandGunProps[NUM_HANDTOHAND_GUN];
-BeamGunProp	BeamGunProps[NUM_BEAM_GUN];
-BeamprojGunProp	BeamprojGunProps[NUM_BEAMPROJ_GUN];
+GunProp    GunProps[NUM_GUN];
+PistolGunProp    PistolGunProps[NUM_PISTOL_GUN];
+AutoGunProp    AutoGunProps[NUM_AUTO_GUN];
+SpecialGunProp    SpecialGunProps[NUM_SPECIAL_GUN];
+HandtohandGunProp    HandtohandGunProps[NUM_HANDTOHAND_GUN];
+BeamGunProp    BeamGunProps[NUM_BEAM_GUN];
+BeamprojGunProp    BeamprojGunProps[NUM_BEAMPROJ_GUN];
 
-AmmoProp	AmmoProps[NUM_AMMO];
-PistolAmmoProp	PistolAmmoProps[NUM_PISTOL_AMMO];
-NeedleAmmoProp	NeedleAmmoProps[NUM_NEEDLE_AMMO];
-MagnumAmmoProp	MagnumAmmoProps[NUM_MAGNUM_AMMO];
-RifleAmmoProp	RifleAmmoProps[NUM_RIFLE_AMMO];
-FlechetteAmmoProp	FlechetteAmmoProps[NUM_FLECHETTE_AMMO];
-AutoAmmoProp	AutoAmmoProps[NUM_AUTO_AMMO];
-ProjAmmoProp	ProjAmmoProps[NUM_PROJ_AMMO];
+AmmoProp    AmmoProps[NUM_AMMO];
+PistolAmmoProp    PistolAmmoProps[NUM_PISTOL_AMMO];
+NeedleAmmoProp    NeedleAmmoProps[NUM_NEEDLE_AMMO];
+MagnumAmmoProp    MagnumAmmoProps[NUM_MAGNUM_AMMO];
+RifleAmmoProp    RifleAmmoProps[NUM_RIFLE_AMMO];
+FlechetteAmmoProp    FlechetteAmmoProps[NUM_FLECHETTE_AMMO];
+AutoAmmoProp    AutoAmmoProps[NUM_AUTO_AMMO];
+ProjAmmoProp    ProjAmmoProps[NUM_PROJ_AMMO];
 
-PhysicsProp	PhysicsProps[NUM_PHYSICS];
+PhysicsProp    PhysicsProps[NUM_PHYSICS];
 TracerPhysicsProp TracerPhysicsProps[NUM_TRACER_PHYSICS];
 SlowPhysicsProp SlowPhysicsProps[NUM_SLOW_PHYSICS];
 CameraPhysicsProp CameraPhysicsProps[NUM_CAMERA_PHYSICS];
-GrenadeProp	GrenadeProps[NUM_GRENADE];
-DirectGrenadeProp	DirectGrenadeProps[NUM_DIRECT_GRENADE];
-TimedGrenadeProp	TimedGrenadeProps[NUM_TIMED_GRENADE];
+GrenadeProp    GrenadeProps[NUM_GRENADE];
+DirectGrenadeProp    DirectGrenadeProps[NUM_DIRECT_GRENADE];
+TimedGrenadeProp    TimedGrenadeProps[NUM_TIMED_GRENADE];
 #else
-extern GunProp	GunProps[NUM_GUN];
-extern PistolGunProp	PistolGunProps[NUM_PISTOL_GUN];
-extern AutoGunProp	AutoGunProps[NUM_AUTO_GUN];
-extern SpecialGunProp	SpecialGunProps[NUM_SPECIAL_GUN];
-extern HandtohandGunProp	HandtohandGunProps[NUM_HANDTOHAND_GUN];
-extern BeamGunProp	BeamGunProps[NUM_BEAM_GUN];
-extern BeamprojGunProp	BeamprojGunProps[NUM_BEAMPROJ_GUN];
-extern AmmoProp	AmmoProps[NUM_AMMO];
-extern PistolAmmoProp	PistolAmmoProps[NUM_PISTOL_AMMO];
-extern NeedleAmmoProp	NeedleAmmoProps[NUM_NEEDLE_AMMO];
-extern MagnumAmmoProp	MagnumAmmoProps[NUM_MAGNUM_AMMO];
-extern RifleAmmoProp	RifleAmmoProps[NUM_RIFLE_AMMO];
-extern FlechetteAmmoProp	FlechetteAmmoProps[NUM_FLECHETTE_AMMO];
-extern AutoAmmoProp	AutoAmmoProps[NUM_AUTO_AMMO];
-extern ProjAmmoProp	ProjAmmoProps[NUM_PROJ_AMMO];
-extern PhysicsProp	PhysicsProps[NUM_PHYSICS];
+extern GunProp    GunProps[NUM_GUN];
+extern PistolGunProp    PistolGunProps[NUM_PISTOL_GUN];
+extern AutoGunProp    AutoGunProps[NUM_AUTO_GUN];
+extern SpecialGunProp    SpecialGunProps[NUM_SPECIAL_GUN];
+extern HandtohandGunProp    HandtohandGunProps[NUM_HANDTOHAND_GUN];
+extern BeamGunProp    BeamGunProps[NUM_BEAM_GUN];
+extern BeamprojGunProp    BeamprojGunProps[NUM_BEAMPROJ_GUN];
+extern AmmoProp    AmmoProps[NUM_AMMO];
+extern PistolAmmoProp    PistolAmmoProps[NUM_PISTOL_AMMO];
+extern NeedleAmmoProp    NeedleAmmoProps[NUM_NEEDLE_AMMO];
+extern MagnumAmmoProp    MagnumAmmoProps[NUM_MAGNUM_AMMO];
+extern RifleAmmoProp    RifleAmmoProps[NUM_RIFLE_AMMO];
+extern FlechetteAmmoProp    FlechetteAmmoProps[NUM_FLECHETTE_AMMO];
+extern AutoAmmoProp    AutoAmmoProps[NUM_AUTO_AMMO];
+extern ProjAmmoProp    ProjAmmoProps[NUM_PROJ_AMMO];
+extern PhysicsProp    PhysicsProps[NUM_PHYSICS];
 extern TracerPhysicsProp TracerPhysicsProps[NUM_TRACER_PHYSICS];
 extern SlowPhysicsProp SlowPhysicsProps[NUM_SLOW_PHYSICS];
 extern CameraPhysicsProp CameraPhysicsProps[NUM_CAMERA_PHYSICS];
-extern GrenadeProp	GrenadeProps[NUM_GRENADE];
-extern DirectGrenadeProp	DirectGrenadeProps[NUM_DIRECT_GRENADE];
-extern TimedGrenadeProp	TimedGrenadeProps[NUM_TIMED_GRENADE];
+extern GrenadeProp    GrenadeProps[NUM_GRENADE];
+extern DirectGrenadeProp    DirectGrenadeProps[NUM_DIRECT_GRENADE];
+extern TimedGrenadeProp    TimedGrenadeProps[NUM_TIMED_GRENADE];
 #endif
 
 #ifdef __OBJSIM_SRC

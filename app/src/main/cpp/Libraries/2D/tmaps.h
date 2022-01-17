@@ -43,9 +43,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __TMAPS_H
 
 typedef struct {
-   int16_t tmap_type;
-   int16_t flags;
-   uint8_t *clut;
+    int16_t tmap_type;
+    int16_t flags;
+    uint8_t *clut;
 } grs_tmap_info;
 
 #define TMF_PER 1

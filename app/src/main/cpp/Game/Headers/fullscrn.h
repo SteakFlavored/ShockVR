@@ -46,16 +46,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 
-#define FULL_VIEW_X   0
-#define FULL_VIEW_Y   0
+#define FULL_VIEW_X    0
+#define FULL_VIEW_Y    0
 #define FULL_VIEW_HEIGHT 200
 #define FULL_VIEW_WIDTH  320
 
 // Note, these have been kludged to parallel the
 // view360 context numbers.
-#define FULL_R_MFD_MASK    0x01
-#define FULL_L_MFD_MASK    0x02
-#define FULL_INVENT_MASK   0x04
+#define FULL_R_MFD_MASK     0x01
+#define FULL_L_MFD_MASK     0x02
+#define FULL_INVENT_MASK    0x04
 #define FULL_MFD_MASK(id) (((id)==0)?FULL_L_MFD_MASK:FULL_R_MFD_MASK)
 
 // Typedefs

@@ -48,7 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef STORE_CLIP
 #define STORE_CLIP(a,b,c,d) a = gr_get_clip_l(); \
-   b = gr_get_clip_t();  c = gr_get_clip_r(); d = gr_get_clip_b()
+    b = gr_get_clip_t();  c = gr_get_clip_r(); d = gr_get_clip_b()
 #endif // !STORE_CLIP
 
 #ifndef RESTORE_CLIP
@@ -90,19 +90,19 @@ extern bool full_game_3d;
 extern void physics_set_relax(int32_t axis, bool relax);
 
 static uint8_t discrete_eye_height[DISCRETE_EYE_POSITIONS] =
-      {   3,
-          10,
-          18,
-      };
+        {    3,
+             10,
+             18,
+        };
 uint8_t hires_eye_height[DISCRETE_EYE_POSITIONS] =
-      {   8,
-          26,
-          45,
-      };
+        {    8,
+             26,
+             45,
+        };
 LGPoint shield_offsets[9] =
-	{
-		{4,3}, {4,3}, {2,3}, {4,2}, {4,2}, {2,2}, {8,1}, {4,2}, {0,1}
-	};
+    {
+        {4,3}, {4,3}, {2,3}, {4,2}, {4,2}, {2,2}, {8,1}, {4,2}, {0,1}
+    };
 
 void EDMS_lean_o_meter(physics_handle ph, fix& lean, fix& crouch);
 
@@ -163,55 +163,55 @@ void zoom_to_lean_meter(void);
 
 void set_base_lean_bmap(bool shield)
 {
-	int32_t		v;
-	uint16_t	baseRes;
+    int32_t        v;
+    uint16_t    baseRes;
 
-	// Set the lean bitmaps resource.
+    // Set the lean bitmaps resource.
 
-	v = player_struct.hardwarez[CPTRIP(ENV_HARD_TRIPLE)];		// v will be 0-2.
-	if (v > MAX_LEAN_BASE) v = MAX_LEAN_BASE;
-	baseRes = RES_leanMeterBase + v;
+    v = player_struct.hardwarez[CPTRIP(ENV_HARD_TRIPLE)];        // v will be 0-2.
+    if (v > MAX_LEAN_BASE) v = MAX_LEAN_BASE;
+    baseRes = RES_leanMeterBase + v;
 
-	if (baseRes != lean_bmap_res)						// If the base lean bitmap has changed:
-	{
-		if (lean_bmap_res != 0)								// free the old bitmap
-		{
-			ResUnlock(lean_bmap_res);
-			ResDrop(lean_bmap_res);
-		}
-		ResLockHi(baseRes);									// Load hi and lock the new bitmap series.
-		lean_bmap_res = baseRes;							// this is our base bitmap now
-	}
+    if (baseRes != lean_bmap_res)                        // If the base lean bitmap has changed:
+    {
+        if (lean_bmap_res != 0)                                // free the old bitmap
+        {
+            ResUnlock(lean_bmap_res);
+            ResDrop(lean_bmap_res);
+        }
+        ResLockHi(baseRes);                                    // Load hi and lock the new bitmap series.
+        lean_bmap_res = baseRes;                            // this is our base bitmap now
+    }
 
-	// Set the shield bitmaps resource.
+    // Set the shield bitmaps resource.
 
-	if (shield)
-	{
-		v = SHIELD_SETTING(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]);
-		if(player_struct.hardwarez[CPTRIP(SHIELD_HARD_TRIPLE)]==SHIELD_VERSIONS)
-			v = SHIELD_VERSIONS-1;
-		baseRes = RES_leanShield1 + v;
+    if (shield)
+    {
+        v = SHIELD_SETTING(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]);
+        if(player_struct.hardwarez[CPTRIP(SHIELD_HARD_TRIPLE)]==SHIELD_VERSIONS)
+            v = SHIELD_VERSIONS-1;
+        baseRes = RES_leanShield1 + v;
 
-		if (baseRes != shield_bmap_res)					// If the base shield bitmap has changed:
-		{
-			if (shield_bmap_res != 0)						// free the old bitmap
-			{
-				ResUnlock(shield_bmap_res);
-				ResDrop(shield_bmap_res);
-			}
-			ResLockHi(baseRes);								// Load hi and lock the new bitmap series.
-			shield_bmap_res = baseRes;					// this is our base shield bitmap now
-		}
-	}
-	else																// If shields are now off:
-	{
-		if (shield_bmap_res != 0)							// If shields were previously on,
-		{																// free up the shield bitmaps.
-			ResUnlock(shield_bmap_res);
-			ResDrop(shield_bmap_res);
-			shield_bmap_res = 0;
-		}
-	}
+        if (baseRes != shield_bmap_res)                    // If the base shield bitmap has changed:
+        {
+            if (shield_bmap_res != 0)                        // free the old bitmap
+            {
+                ResUnlock(shield_bmap_res);
+                ResDrop(shield_bmap_res);
+            }
+            ResLockHi(baseRes);                                // Load hi and lock the new bitmap series.
+            shield_bmap_res = baseRes;                    // this is our base shield bitmap now
+        }
+    }
+    else                                                                // If shields are now off:
+    {
+        if (shield_bmap_res != 0)                            // If shields were previously on,
+        {                                                                // free up the shield bitmaps.
+            ResUnlock(shield_bmap_res);
+            ResDrop(shield_bmap_res);
+            shield_bmap_res = 0;
+        }
+    }
 }
 
 #define LEAN_CONST (fix_2pi/10)
@@ -231,28 +231,28 @@ void set_base_lean_bmap(bool shield)
 #ifdef BIASED_CAPACITOR
 fix compute_filter_weight(uint32_t deltat)
 {
-   int32_t rate = POSTURE_FILTER_RATE;
-   fix bias = FIX_UNIT*CONTROL_MAX_VAL/(CONTROL_MAX_VAL + 3*abs(player_struct.controls[CONTROL_YVEL]));
-   fix weight = fix_make(deltat,0)*rate >> APPROX_CIT_CYCLE_SHFT;
-   Spew(DSRC_USER_I_Lean,("posture filter weight = %q, bias = %q\n",weight,bias));
-   weight = fix_mul(weight,bias);
-   return weight;
+    int32_t rate = POSTURE_FILTER_RATE;
+    fix bias = FIX_UNIT*CONTROL_MAX_VAL/(CONTROL_MAX_VAL + 3*abs(player_struct.controls[CONTROL_YVEL]));
+    fix weight = fix_make(deltat,0)*rate >> APPROX_CIT_CYCLE_SHFT;
+    Spew(DSRC_USER_I_Lean,("posture filter weight = %q, bias = %q\n",weight,bias));
+    weight = fix_mul(weight,bias);
+    return weight;
 }
 #else
 fix compute_filter_weight(uint32_t deltat)
 {
-   int32_t rate = POSTURE_FILTER_RATE;
-   fix weight = fix_make(deltat,0)*rate >> APPROX_CIT_CYCLE_SHFT;
+    int32_t rate = POSTURE_FILTER_RATE;
+    fix weight = fix_make(deltat,0)*rate >> APPROX_CIT_CYCLE_SHFT;
 
-   return weight;
+    return weight;
 }
 #endif
 
 
 fix apply_weighted_filter(fix input, fix state, uint32_t deltat)
 {
-   fix weight = compute_filter_weight(deltat);
-   return fix_div(fix_mul(weight,input) + state,weight + FIX_UNIT);
+    fix weight = compute_filter_weight(deltat);
+    return fix_div(fix_mul(weight,input) + state,weight + FIX_UNIT);
 }
 
 
@@ -267,186 +267,186 @@ fix apply_weighted_filter(fix input, fix state, uint32_t deltat)
 
 void slam_posture_meter_state(void)
 {
-   STORE_STATE(INTENDED_HGT);
-   player_struct.posture_slam_state = player_struct.game_time + SLAM_DURATION;
+    STORE_STATE(INTENDED_HGT);
+    player_struct.posture_slam_state = player_struct.game_time + SLAM_DURATION;
 }
 
 fix velocity_crouch_filter(fix crouch)
 {
-   uint8_t posture = player_struct.posture+1;
-   fix hgt = INTENDED_HGT;
-   fix vel = posture*FIX_UNIT*(abs(player_struct.controls[CONTROL_YVEL]
-                       +abs(player_struct.controls[CONTROL_ZVEL] )))/(2*CONTROL_MAX_VAL);
-   return fix_div(fix_mul(hgt,vel)+crouch,vel+FIX_UNIT);
+    uint8_t posture = player_struct.posture+1;
+    fix hgt = INTENDED_HGT;
+    fix vel = posture*FIX_UNIT*(abs(player_struct.controls[CONTROL_YVEL]
+                              +abs(player_struct.controls[CONTROL_ZVEL] )))/(2*CONTROL_MAX_VAL);
+    return fix_div(fix_mul(hgt,vel)+crouch,vel+FIX_UNIT);
 }
 
 
 void lean_icon(LGPoint* pos, grs_bitmap** icon, int32_t* inum)
 {
-	int32_t		posture ,leanx;
-	uint8_t	*bp;
+    int32_t        posture ,leanx;
+    uint8_t    *bp;
 
-	// Determine the posture and lean amount for the player currently.
-	if (!global_fullmap->cyber)
-	{
-		fix ln,crouch;
-		fix state = GET_STATE;
+    // Determine the posture and lean amount for the player currently.
+    if (!global_fullmap->cyber)
+    {
+        fix ln,crouch;
+        fix state = GET_STATE;
 
-		EDMS_lean_o_meter(PLAYER_PHYSICS, ln, crouch);
+        EDMS_lean_o_meter(PLAYER_PHYSICS, ln, crouch);
 
-		crouch = velocity_crouch_filter(crouch);
-		if (player_struct.game_time > player_struct.posture_slam_state)
-		state = apply_weighted_filter(crouch,state,player_struct.deltat);
-		STORE_STATE(state);
-		posture = CROUCH_TO_POSTURE(state);
-		leanx = LEAN_TO_LEANX(ln);
-	}
-	else
-	{
-		posture = POSTURE_STAND;
-		leanx = 0;
-	}
+        crouch = velocity_crouch_filter(crouch);
+        if (player_struct.game_time > player_struct.posture_slam_state)
+        state = apply_weighted_filter(crouch,state,player_struct.deltat);
+        STORE_STATE(state);
+        posture = CROUCH_TO_POSTURE(state);
+        leanx = LEAN_TO_LEANX(ln);
+    }
+    else
+    {
+        posture = POSTURE_STAND;
+        leanx = 0;
+    }
 
-	// Calculate the bitmap resource index based on posture and lean.
-	*inum = posture*BMAPS_PER_POSTURE + ((100 - leanx)*BMAPS_PER_POSTURE/201);
+    // Calculate the bitmap resource index based on posture and lean.
+    *inum = posture*BMAPS_PER_POSTURE + ((100 - leanx)*BMAPS_PER_POSTURE/201);
 
-	// Get a pointer to the corresponding lean bitmap.
-	bp = (uint8_t *)ResPtr(lean_bmap_res);
-	if (bp)
-	{
-		RefTable	*prt = (RefTable *)bp;
-		FrameDesc	*f = (FrameDesc *)(((uint8_t *)prt) + (prt->offset[*inum]));
-		f->bm.bits = (uint8_t *)(f + 1);
-		*icon = &(f->bm);
-	}
-	else
-		DebugStr("\pNo lean resource bitmap!");
+    // Get a pointer to the corresponding lean bitmap.
+    bp = (uint8_t *)ResPtr(lean_bmap_res);
+    if (bp)
+    {
+        RefTable    *prt = (RefTable *)bp;
+        FrameDesc    *f = (FrameDesc *)(((uint8_t *)prt) + (prt->offset[*inum]));
+        f->bm.bits = (uint8_t *)(f + 1);
+        *icon = &(f->bm);
+    }
+    else
+        DebugStr("\pNo lean resource bitmap!");
 
-	// Determine where to draw the bitmap.
-	pos->y = 53 - (*icon)->h;
-	pos->x = (46 - (*icon)->w+1) * abs(leanx)/200;
-	if (leanx < 0) pos->x = - pos->x;
-	pos->x += SCONV_X(LEANOMETER_X()) + (46+1)/2 - ((*icon)->w+1)/2;
-	pos->y += SCONV_Y(LEANOMETER_Y());
+    // Determine where to draw the bitmap.
+    pos->y = 53 - (*icon)->h;
+    pos->x = (46 - (*icon)->w+1) * abs(leanx)/200;
+    if (leanx < 0) pos->x = - pos->x;
+    pos->x += SCONV_X(LEANOMETER_X()) + (46+1)/2 - ((*icon)->w+1)/2;
+    pos->y += SCONV_Y(LEANOMETER_Y());
 }
 
 static void undraw_meter_area(LGRect* r)
 {
-	int16_t a,b,c,d;
-	int8_t	saveMode;
-	int32_t	x,y;
+    int16_t a,b,c,d;
+    int8_t    saveMode;
+    int32_t    x,y;
 
-	STORE_CLIP(a,b,c,d);
-	safe_set_cliprect(r->ul.x,r->ul.y,r->lr.x,r->lr.y);
-	x = SCONV_X(EYEMETER_X());
-	y = SCONV_Y(EYEMETER_Y());
+    STORE_CLIP(a,b,c,d);
+    safe_set_cliprect(r->ul.x,r->ul.y,r->lr.x,r->lr.y);
+    x = SCONV_X(EYEMETER_X());
+    y = SCONV_Y(EYEMETER_Y());
 
-	saveMode = convert_use_mode;
-	convert_use_mode = 0;
-	if (is_onscreen()) uiHideMouse(r);
-	gr_bitmap(meter_bkgnd(), x, y);
-	if (is_onscreen()) uiShowMouse(r);
-	convert_use_mode = saveMode;
+    saveMode = convert_use_mode;
+    convert_use_mode = 0;
+    if (is_onscreen()) uiHideMouse(r);
+    gr_bitmap(meter_bkgnd(), x, y);
+    if (is_onscreen()) uiShowMouse(r);
+    convert_use_mode = saveMode;
 
-	RESTORE_CLIP(a,b,c,d);
+    RESTORE_CLIP(a,b,c,d);
 }
 
 void player_reset_eye(void)
 {
-   player_struct.eye_pos = eye_mods[1] = 0;
+    player_struct.eye_pos = eye_mods[1] = 0;
 }
 
 void player_set_eye(int8_t eyecntl)
 {
-   int32_t theta = MAX_EYE_ANGLE*eyecntl/CONTROL_MAX_VAL;
-   player_struct.eye_pos = theta;
+    int32_t theta = MAX_EYE_ANGLE*eyecntl/CONTROL_MAX_VAL;
+    player_struct.eye_pos = theta;
 
-   if (theta < 0)
-      theta += 2*FIXANG_PI;
-   eye_mods[1] = theta;
+    if (theta < 0)
+        theta += 2*FIXANG_PI;
+    eye_mods[1] = theta;
 }
 
 int8_t player_get_eye(void)
 {
-   int32_t theta = eye_mods[1];
-   if (theta > FIXANG_PI)
-      theta -= 2*FIXANG_PI;
-   return (int8_t)(theta*CONTROL_MAX_VAL/MAX_EYE_ANGLE);
+    int32_t theta = eye_mods[1];
+    if (theta > FIXANG_PI)
+        theta -= 2*FIXANG_PI;
+    return (int8_t)(theta*CONTROL_MAX_VAL/MAX_EYE_ANGLE);
 }
 
 void player_set_eye_fixang(int32_t ang)
 {
-   int32_t theta = ang;
-   if (abs(ang) > MAX_EYE_ANGLE)
-      theta = (ang < 0) ? -MAX_EYE_ANGLE : MAX_EYE_ANGLE;
-   player_struct.eye_pos = theta;
-   if (theta < 0)
-      theta += 2*FIXANG_PI;
-   eye_mods[1] = theta;
+    int32_t theta = ang;
+    if (abs(ang) > MAX_EYE_ANGLE)
+        theta = (ang < 0) ? -MAX_EYE_ANGLE : MAX_EYE_ANGLE;
+    player_struct.eye_pos = theta;
+    if (theta < 0)
+        theta += 2*FIXANG_PI;
+    eye_mods[1] = theta;
 }
 
 int32_t player_get_eye_fixang(void)
 {
-   int32_t theta = eye_mods[1];
-   if (theta > FIXANG_PI)
-      theta -= 2*FIXANG_PI;
-   return theta;
+    int32_t theta = eye_mods[1];
+    if (theta > FIXANG_PI)
+        theta -= 2*FIXANG_PI;
+    return theta;
 }
 
 bool eye_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
 {
-   int16_t x = ev->pos.x - r->abs_x;
-   int16_t y = ev->pos.y - r->abs_y;
-   extern bool hack_takeover;
-   if (hack_takeover || global_fullmap->cyber) return false;
-   if (x < 0 || x >= EYEMETER_W) return false;
-   eye_fine_mode = 2*x > EYEMETER_W;
-   if (!eye_fine_mode) y = discrete_eye_height[y*DISCRETE_EYE_POSITIONS/EYEMETER_H];
-   if (ev->buttons & (1 << MOUSE_LBUTTON))
-   {
-      int32_t theta;
-      if ((ev->action & MOUSE_LDOWN) == 0
-         && uiLastMouseRegion[MOUSE_LBUTTON] != r)
-            return false;
-      if (eye_fine_mode) theta = -2*MAX_EYE_ANGLE*(y)/(EYEMETER_H-1) + MAX_EYE_ANGLE;
-      else theta = -FIXANG_PI/6*(y*DISCRETE_EYE_POSITIONS/EYEMETER_H-1);
-//      ui_mouse_constrain_xy(ev->pos.x,r->abs_y,ev->pos.x,r->abs_y+EYEMETER_H-1);
-      player_set_eye_fixang(theta);
-      physics_set_relax(CONTROL_YZROT,false);
-   }
-   if (ev->buttons == 0)
-   {
-//      mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
-   }
-   return true;
+    int16_t x = ev->pos.x - r->abs_x;
+    int16_t y = ev->pos.y - r->abs_y;
+    extern bool hack_takeover;
+    if (hack_takeover || global_fullmap->cyber) return false;
+    if (x < 0 || x >= EYEMETER_W) return false;
+    eye_fine_mode = 2*x > EYEMETER_W;
+    if (!eye_fine_mode) y = discrete_eye_height[y*DISCRETE_EYE_POSITIONS/EYEMETER_H];
+    if (ev->buttons & (1 << MOUSE_LBUTTON))
+    {
+        int32_t theta;
+        if ((ev->action & MOUSE_LDOWN) == 0
+            && uiLastMouseRegion[MOUSE_LBUTTON] != r)
+                return false;
+        if (eye_fine_mode) theta = -2*MAX_EYE_ANGLE*(y)/(EYEMETER_H-1) + MAX_EYE_ANGLE;
+        else theta = -FIXANG_PI/6*(y*DISCRETE_EYE_POSITIONS/EYEMETER_H-1);
+//        ui_mouse_constrain_xy(ev->pos.x,r->abs_y,ev->pos.x,r->abs_y+EYEMETER_H-1);
+        player_set_eye_fixang(theta);
+        physics_set_relax(CONTROL_YZROT,false);
+    }
+    if (ev->buttons == 0)
+    {
+//        mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
+    }
+    return true;
 }
 
 
 bool lean_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
 {
-   int16_t x = ev->pos.x - r->abs_x - LEANOMETER_XOFF;
-   int16_t y = ev->pos.y - r->abs_y - LEANOMETER_YOFF;
-   if (x < 0 || x >= LEANOMETER_W || global_fullmap->cyber) return false;
-   if (ev->buttons & (1 << MOUSE_LBUTTON))
-   {
-      int16_t posture = y*3/LEANOMETER_H;
-      int16_t xlean = x*220/(LEANOMETER_W-1)-110;
-      if ((ev->action & MOUSE_LDOWN) == 0
-         && uiLastMouseRegion[MOUSE_LBUTTON] != r)
-            return false;
-      if (xlean>10) xlean-=10; else if (xlean<-10) xlean+=10; else xlean=0;
-      if (posture != player_struct.posture)
-         player_set_posture(posture);
-      player_set_lean(xlean,player_struct.leany);
-      physics_set_relax(CONTROL_XZROT,false);
-//     ui_mouse_constrain_xy(LEANOMETER_X(),LEANOMETER_Y()+posture*LEANOMETER_H/3+1,LEANOMETER_X()+LEANOMETER_W-1,LEANOMETER_Y()+(posture+1)*LEANOMETER_H/3-1);
-   }
-   if (ev->buttons == 0)
-   {
-      extern void mouse_unconstrain(void);
-//      mouse_unconstrain();
-   }
-   return true;
+    int16_t x = ev->pos.x - r->abs_x - LEANOMETER_XOFF;
+    int16_t y = ev->pos.y - r->abs_y - LEANOMETER_YOFF;
+    if (x < 0 || x >= LEANOMETER_W || global_fullmap->cyber) return false;
+    if (ev->buttons & (1 << MOUSE_LBUTTON))
+    {
+        int16_t posture = y*3/LEANOMETER_H;
+        int16_t xlean = x*220/(LEANOMETER_W-1)-110;
+        if ((ev->action & MOUSE_LDOWN) == 0
+            && uiLastMouseRegion[MOUSE_LBUTTON] != r)
+                return false;
+        if (xlean>10) xlean-=10; else if (xlean<-10) xlean+=10; else xlean=0;
+        if (posture != player_struct.posture)
+            player_set_posture(posture);
+        player_set_lean(xlean,player_struct.leany);
+        physics_set_relax(CONTROL_XZROT,false);
+//      ui_mouse_constrain_xy(LEANOMETER_X(),LEANOMETER_Y()+posture*LEANOMETER_H/3+1,LEANOMETER_X()+LEANOMETER_W-1,LEANOMETER_Y()+(posture+1)*LEANOMETER_H/3-1);
+    }
+    if (ev->buttons == 0)
+    {
+        extern void mouse_unconstrain(void);
+//        mouse_unconstrain();
+    }
+    return true;
 }
 
 
@@ -458,224 +458,224 @@ bool lean_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
 
 void init_posture_meters(LGRegion* root, bool fullscreen)
 {
-   LGRegion* reg = PICK_METER_REGION(fullscreen);
-   int32_t id;
-   LGRect r = { { 0, 0},
-      {LEANOMETER_W + LEANOMETER_XOFF, EYEMETER_H} };
-   errtype err;
+    LGRegion* reg = PICK_METER_REGION(fullscreen);
+    int32_t id;
+    LGRect r = { { 0, 0},
+        {LEANOMETER_W + LEANOMETER_XOFF, EYEMETER_H} };
+    errtype err;
 
-   if (fullscreen)
-   {
-      RECT_MOVE(&r,MakePoint(FULL_EYEMETER_X,FULL_EYEMETER_Y));
-   }
-   else
-   {
-      RECT_MOVE(&r,MakePoint(SLOT_EYEMETER_X,SLOT_EYEMETER_Y));
-   }
-   err = region_create(root,reg,&r,0,0,REG_USER_CONTROLLED|AUTODESTROY_FLAG,NULL,NULL,NULL,NULL);
-   if (err != OK) critical_error(BAD_REGION_CRITERR);
-   uiInstallRegionHandler(reg,UI_EVENT_MOUSE|UI_EVENT_MOUSE_MOVE,(uiHandlerProc)eye_mouse_handler,NULL,&id);
-   uiInstallRegionHandler(reg,UI_EVENT_MOUSE|UI_EVENT_MOUSE_MOVE,(uiHandlerProc)lean_mouse_handler,NULL,&id);
+    if (fullscreen)
+    {
+        RECT_MOVE(&r,MakePoint(FULL_EYEMETER_X,FULL_EYEMETER_Y));
+    }
+    else
+    {
+        RECT_MOVE(&r,MakePoint(SLOT_EYEMETER_X,SLOT_EYEMETER_Y));
+    }
+    err = region_create(root,reg,&r,0,0,REG_USER_CONTROLLED|AUTODESTROY_FLAG,NULL,NULL,NULL,NULL);
+    if (err != OK) critical_error(BAD_REGION_CRITERR);
+    uiInstallRegionHandler(reg,UI_EVENT_MOUSE|UI_EVENT_MOUSE_MOVE,(uiHandlerProc)eye_mouse_handler,NULL,&id);
+    uiInstallRegionHandler(reg,UI_EVENT_MOUSE|UI_EVENT_MOUSE_MOVE,(uiHandlerProc)lean_mouse_handler,NULL,&id);
 }
 
 
 
 void update_lean_meter(bool force)
 {
-	static bool 		 last_shield = false;
-	static uint8_t	 last_shieldstr = 0;
-	static int32_t		 last_lean_icon = -1;
-	static LGPoint	 last_lean_pos = { -1, -1};
+    static bool          last_shield = false;
+    static uint8_t     last_shieldstr = 0;
+    static int32_t         last_lean_icon = -1;
+    static LGPoint     last_lean_pos = { -1, -1};
 
-	LGRect			r;
-	LGPoint			pos;
-	int16_t				a,b,c,d;
-	grs_bitmap	*icon;
-	int32_t				inum;
-	bool				shield = WareActive(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]) != 0;
-//	int32_t				shieldstr = SHIELD_SETTING(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]);
-	int32_t				shieldstr;
-	int8_t				saveMode;
-	bool				saveBio;
+    LGRect            r;
+    LGPoint            pos;
+    int16_t                a,b,c,d;
+    grs_bitmap    *icon;
+    int32_t                inum;
+    bool                shield = WareActive(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]) != 0;
+//    int32_t                shieldstr = SHIELD_SETTING(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]);
+    int32_t                shieldstr;
+    int8_t                saveMode;
+    bool                saveBio;
 
-//	if(player_struct.hardwarez[CPTRIP(SHIELD_HARD_TRIPLE)]==SHIELD_VERSIONS)
-//		shieldstr=SHIELD_VERSIONS-1;
+//    if(player_struct.hardwarez[CPTRIP(SHIELD_HARD_TRIPLE)]==SHIELD_VERSIONS)
+//        shieldstr=SHIELD_VERSIONS-1;
 
-	current_meter_region = PICK_METER_REGION(full_game_3d);
-	set_base_lean_bmap(shield);
-	lean_icon(&pos,&icon,&inum);
+    current_meter_region = PICK_METER_REGION(full_game_3d);
+    set_base_lean_bmap(shield);
+    lean_icon(&pos,&icon,&inum);
 
-	if (shield_bmap_res > 0)
-		shieldstr = shield_bmap_res - RES_leanShield1;
-	else
-		shieldstr = 0;
+    if (shield_bmap_res > 0)
+        shieldstr = shield_bmap_res - RES_leanShield1;
+    else
+        shieldstr = 0;
 
-	if (!force && PointsEqual(pos,last_lean_pos)						// If this is not a force update, and we're drawing
-		  && MKREF(lean_bmap_res,inum) == last_lean_icon		// the same lean icon in the same position as last
-		  && shield == last_shield												// time, then do nothing.
-		  && shieldstr == last_shieldstr )
-		  return;
+    if (!force && PointsEqual(pos,last_lean_pos)                        // If this is not a force update, and we're drawing
+          && MKREF(lean_bmap_res,inum) == last_lean_icon        // the same lean icon in the same position as last
+          && shield == last_shield                                                // time, then do nothing.
+          && shieldstr == last_shieldstr )
+          return;
 
-	STORE_CLIP(a,b,c,d);
-	ss_safe_set_cliprect(LEANOMETER_X(),LEANOMETER_Y(),LEANOMETER_X()+LEANOMETER_W,LEANOMETER_Y()+LEANOMETER_H);
+    STORE_CLIP(a,b,c,d);
+    ss_safe_set_cliprect(LEANOMETER_X(),LEANOMETER_Y(),LEANOMETER_X()+LEANOMETER_W,LEANOMETER_Y()+LEANOMETER_H);
 
-	saveBio = gBioInited;											// Turn off biometer while updating the lean meter.
-	gBioInited = false;
+    saveBio = gBioInited;                                            // Turn off biometer while updating the lean meter.
+    gBioInited = false;
 
-	if (force || last_lean_icon != -1)
-	{
-		r.ul = MakePoint(SCONV_X(LEANOMETER_X()), SCONV_Y(LEANOMETER_Y()));
-		r.lr = MakePoint(r.ul.x + 46, r.ul.y + 53);
-		undraw_meter_area(&r);
-	}
-	r.ul.x = pos.x;
-	r.ul.y = pos.y;
-	r.lr.x = r.ul.x + icon->w;
-	r.lr.y = r.ul.y + icon->h;
+    if (force || last_lean_icon != -1)
+    {
+        r.ul = MakePoint(SCONV_X(LEANOMETER_X()), SCONV_Y(LEANOMETER_Y()));
+        r.lr = MakePoint(r.ul.x + 46, r.ul.y + 53);
+        undraw_meter_area(&r);
+    }
+    r.ul.x = pos.x;
+    r.ul.y = pos.y;
+    r.lr.x = r.ul.x + icon->w;
+    r.lr.y = r.ul.y + icon->h;
 
-	saveMode = convert_use_mode;
-	convert_use_mode = 0;
-	if (is_onscreen()) uiHideMouse(&r);
-	gr_bitmap(icon, r.ul.x, r.ul.y);
+    saveMode = convert_use_mode;
+    convert_use_mode = 0;
+    if (is_onscreen()) uiHideMouse(&r);
+    gr_bitmap(icon, r.ul.x, r.ul.y);
 
-	if (shield)
-	{
-		uint8_t			*bp;
-		grs_bitmap	*sbm;
-		LGPoint			offset;
+    if (shield)
+    {
+        uint8_t            *bp;
+        grs_bitmap    *sbm;
+        LGPoint            offset;
 
-		// Get a pointer to the corresponding lean bitmap.
-		bp = (uint8_t *)ResPtr(shield_bmap_res);
-		if (bp)
-		{
-			RefTable	*prt = (RefTable *)bp;
-			FrameDesc	*f = (FrameDesc *)(((uint8_t *)prt) + (prt->offset[inum]));
-			f->bm.bits = (uint8_t *)(f + 1);
-			sbm = &(f->bm);
-		}
-		else
-			DebugStr("\pNo shield resource bitmap!");
+        // Get a pointer to the corresponding lean bitmap.
+        bp = (uint8_t *)ResPtr(shield_bmap_res);
+        if (bp)
+        {
+            RefTable    *prt = (RefTable *)bp;
+            FrameDesc    *f = (FrameDesc *)(((uint8_t *)prt) + (prt->offset[inum]));
+            f->bm.bits = (uint8_t *)(f + 1);
+            sbm = &(f->bm);
+        }
+        else
+            DebugStr("\pNo shield resource bitmap!");
 
-		offset = shield_offsets[inum];
-		gr_bitmap(sbm, r.ul.x - offset.x, r.ul.y - offset.y);
-	}
+        offset = shield_offsets[inum];
+        gr_bitmap(sbm, r.ul.x - offset.x, r.ul.y - offset.y);
+    }
 
-   gBioInited = saveBio;
+    gBioInited = saveBio;
 
-   if (is_onscreen()) uiShowMouse(&r);
-   convert_use_mode = saveMode;
+    if (is_onscreen()) uiShowMouse(&r);
+    convert_use_mode = saveMode;
 
-   last_lean_pos = pos;
-   last_lean_icon = MKREF(lean_bmap_res,inum);
-   last_shield = shield;
-   last_shieldstr = shieldstr;
-   RESTORE_CLIP(a,b,c,d);
+    last_lean_pos = pos;
+    last_lean_icon = MKREF(lean_bmap_res,inum);
+    last_shield = shield;
+    last_shieldstr = shieldstr;
+    RESTORE_CLIP(a,b,c,d);
 }
 
 
 void draw_eye_bitmap(grs_bitmap *eye_bmap, LGPoint pos, int32_t lasty)
 {
-	LGRect	r;
-	int8_t		saveMode;
+    LGRect    r;
+    int8_t        saveMode;
 
-	current_meter_region = PICK_METER_REGION(full_game_3d);
-	pos.x += SCONV_X(EYEMETER_X());
-	pos.y += SCONV_X(EYEMETER_Y());
-	r.ul = pos;
-	r.lr.x = pos.x + eye_bmap->w;
-	r.ul.y = lasty;
-	r.lr.y = lasty + eye_bmap->h+1;
-	undraw_meter_area(&r);
-	r.ul.y = pos.y;
-	r.lr.y = pos.y + eye_bmap->h;
+    current_meter_region = PICK_METER_REGION(full_game_3d);
+    pos.x += SCONV_X(EYEMETER_X());
+    pos.y += SCONV_X(EYEMETER_Y());
+    r.ul = pos;
+    r.lr.x = pos.x + eye_bmap->w;
+    r.ul.y = lasty;
+    r.lr.y = lasty + eye_bmap->h+1;
+    undraw_meter_area(&r);
+    r.ul.y = pos.y;
+    r.lr.y = pos.y + eye_bmap->h;
 
-	saveMode = convert_use_mode;
-	convert_use_mode = 0;
-	if (is_onscreen()) uiHideMouse(&r);
-	gr_bitmap(eye_bmap, r.ul.x, r.ul.y);
-	if (is_onscreen()) uiShowMouse(&r);
-	convert_use_mode = saveMode;
+    saveMode = convert_use_mode;
+    convert_use_mode = 0;
+    if (is_onscreen()) uiHideMouse(&r);
+    gr_bitmap(eye_bmap, r.ul.x, r.ul.y);
+    if (is_onscreen()) uiShowMouse(&r);
+    convert_use_mode = saveMode;
 }
 
 
 
-#define	HIRES_EYEMETER_H	53
+#define    HIRES_EYEMETER_H    53
 
 void update_eye_meter(bool force)
 {
-   static int16_t last_y = 0;
-   static int16_t last_ly = 0;
-   static bool last_mode = false;
+    static int16_t last_y = 0;
+    static int16_t last_ly = 0;
+    static bool last_mode = false;
 
-   int16_t a,b,c,d;
-   fix pos = eye_mods[1];
-   int32_t yang = pos%(2*FIXANG_PI);
-   int16_t y;
-   int16_t lefty;
-   grs_bitmap *eye_rbmap = eye_bmap_r(!eye_fine_mode);
-   grs_bitmap *eye_lbmap = eye_bmap_l( eye_fine_mode);
-   bool	saveBio;
+    int16_t a,b,c,d;
+    fix pos = eye_mods[1];
+    int32_t yang = pos%(2*FIXANG_PI);
+    int16_t y;
+    int16_t lefty;
+    grs_bitmap *eye_rbmap = eye_bmap_r(!eye_fine_mode);
+    grs_bitmap *eye_lbmap = eye_bmap_l( eye_fine_mode);
+    bool    saveBio;
 
-   if (yang > FIXANG_PI) yang -= 2* FIXANG_PI;
-   y =  - (HIRES_EYEMETER_H * yang / (2*MAX_EYE_ANGLE) );
+    if (yang > FIXANG_PI) yang -= 2* FIXANG_PI;
+    y =  - (HIRES_EYEMETER_H * yang / (2*MAX_EYE_ANGLE) );
 
-   // Hey, let's take gruesome advantange of the fact that
-   // booleans are zero or one.
-   lefty = hires_eye_height[1 + (yang < 0) - (yang > 0)];
-   lefty -= (eye_lbmap->h)/2;
-   y +=  HIRES_EYEMETER_H/2 - 2 - (eye_rbmap->h/2)/2;
+    // Hey, let's take gruesome advantange of the fact that
+    // booleans are zero or one.
+    lefty = hires_eye_height[1 + (yang < 0) - (yang > 0)];
+    lefty -= (eye_lbmap->h)/2;
+    y +=  HIRES_EYEMETER_H/2 - 2 - (eye_rbmap->h/2)/2;
 
-   if (!force
-      && y == last_y
-      && lefty == last_ly
-      && eye_fine_mode == last_mode) return;
-   STORE_CLIP(a,b,c,d);
-   ss_safe_set_cliprect(EYEMETER_X(),EYEMETER_Y(),EYEMETER_X()+EYEMETER_W,EYEMETER_Y()+EYEMETER_H);
+    if (!force
+        && y == last_y
+        && lefty == last_ly
+        && eye_fine_mode == last_mode) return;
+    STORE_CLIP(a,b,c,d);
+    ss_safe_set_cliprect(EYEMETER_X(),EYEMETER_Y(),EYEMETER_X()+EYEMETER_W,EYEMETER_Y()+EYEMETER_H);
 
-	saveBio = gBioInited;											// Turn off biometer while updating the eye meter.
-	gBioInited = false;
+    saveBio = gBioInited;                                            // Turn off biometer while updating the eye meter.
+    gBioInited = false;
 
-   if (force)
-   {
-      LGRect r = { {0,0}, {42,53} };
-      RECT_MOVE(&r,MakePoint(SCONV_X(EYEMETER_X()), SCONV_Y(EYEMETER_Y())));
-      undraw_meter_area(&r);
-   }
-   draw_eye_bitmap(eye_lbmap,MakePoint(3,lefty),last_ly);
-   draw_eye_bitmap(eye_rbmap,MakePoint(38-eye_rbmap->w,y),last_y);
+    if (force)
+    {
+        LGRect r = { {0,0}, {42,53} };
+        RECT_MOVE(&r,MakePoint(SCONV_X(EYEMETER_X()), SCONV_Y(EYEMETER_Y())));
+        undraw_meter_area(&r);
+    }
+    draw_eye_bitmap(eye_lbmap,MakePoint(3,lefty),last_ly);
+    draw_eye_bitmap(eye_rbmap,MakePoint(38-eye_rbmap->w,y),last_y);
 
-   gBioInited = saveBio;
+    gBioInited = saveBio;
 
-   RESTORE_CLIP(a,b,c,d);
-   last_y = y;
-   last_ly = lefty;
-   last_mode = eye_fine_mode;
+    RESTORE_CLIP(a,b,c,d);
+    last_y = y;
+    last_ly = lefty;
+    last_mode = eye_fine_mode;
 }
 
 
 void update_meters(bool force)
 {
-   current_meter_region = PICK_METER_REGION(full_game_3d);
-   update_eye_meter(force);
-   update_lean_meter(force);
+    current_meter_region = PICK_METER_REGION(full_game_3d);
+    update_eye_meter(force);
+    update_lean_meter(force);
 }
 
 
 void zoom_to_lean_meter(void)
 {
-   extern void zoom_rect(LGRect*,LGRect*);
-   extern bool DoubleSize;
+    extern void zoom_rect(LGRect*,LGRect*);
+    extern bool DoubleSize;
 
-   LGPoint pos;
-   LGRect start = { { -5,-5}, {+5,+5}};
-   LGRect end =   { { 0, 0},
-                  {LEANOMETER_W, LEANOMETER_H }};
+    LGPoint pos;
+    LGRect start = { { -5,-5}, {+5,+5}};
+    LGRect end =    { { 0, 0},
+                        {LEANOMETER_W, LEANOMETER_H }};
 
-   current_meter_region = PICK_METER_REGION(full_game_3d);
-   RECT_MOVE(&end,MakePoint(LEANOMETER_X(),LEANOMETER_Y()));
-   mouse_get_xy(&pos.x,&pos.y);
-   if (!DoubleSize)
-      ss_point_convert(&(pos.x),&(pos.y),true);
-   RECT_MOVE(&start,pos);
-   zoom_rect(&start,&end);
+    current_meter_region = PICK_METER_REGION(full_game_3d);
+    RECT_MOVE(&end,MakePoint(LEANOMETER_X(),LEANOMETER_Y()));
+    mouse_get_xy(&pos.x,&pos.y);
+    if (!DoubleSize)
+        ss_point_convert(&(pos.x),&(pos.y),true);
+    RECT_MOVE(&start,pos);
+    zoom_rect(&start,&end);
 }

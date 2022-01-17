@@ -57,18 +57,18 @@ void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, 
 
 // The four vertices of every face
 //static int32_t faces[6][4] = { {0,1,5,4},{1,2,6,5},{2,3,7,6}
-//                   ,{3,0,4,7},{3,2,1,0},{4,5,6,7}};
+//                         ,{3,0,4,7},{3,2,1,0},{4,5,6,7}};
 
 // The dz direction of every face
 //static int32_t dzs[6][3] = { {0,0,1},{-1,0,0},{0,0,-1},{1,0,0},{0,1,0},{0,-1,0} };
 
 // The coordinates of every vertex
 // static int32_t ver[8][3] = { {-1,-1,-1},{1,-1,-1},{1,-1,1},{-1,-1,1}
-//                      ,{-1,1,-1},{1,1,-1},{1,1,1},{-1,1,1} };
+//                             ,{-1,1,-1},{1,1,-1},{1,1,1},{-1,1,1} };
 
 // gives which visible faces for dominant vertex
 // static int32_t corners[8][3] = { {0,3,4}, {0,1,4}, {1,2,4}, {2,3,4}
-//                     ,{3,0,5}, {0,1,5}, {1,2,5}, {2,3,5} };
+//                            ,{3,0,5}, {0,1,5}, {1,2,5}, {2,3,5} };
 
 
 //#define CIRCLES
@@ -78,207 +78,207 @@ void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, 
 
 void vx_render(vxs_vox *vx)
 {
-   fix a,b;
-   //int f;
-   int32_t near_ver;   //which vertex is nearest
-   g3s_vector p[4];
-   g3s_phandle tmp[4];
-   int32_t i;
-   int32_t psx,psy;
-   fix maxdx;
-   fix maxdy;
-   bool clip;
-   fix tx,ty,tz;
-   fix min_z;
+    fix a,b;
+    //int f;
+    int32_t near_ver;    //which vertex is nearest
+    g3s_vector p[4];
+    g3s_phandle tmp[4];
+    int32_t i;
+    int32_t psx,psy;
+    fix maxdx;
+    fix maxdy;
+    bool clip;
+    fix tx,ty,tz;
+    fix min_z;
 
 
-   // static int32_t f=0;
+    // static int32_t f=0;
 
-   #ifdef BBOX
-   // for debugging
-   fix x[4],y[4];
-   #endif
+    #ifdef BBOX
+    // for debugging
+    fix x[4],y[4];
+    #endif
 
-   // spot to render on screen
-   p[0].gX = p[0].gY = p[0].gZ = 0;
-   // dx's and dy's and stuff
-   p[1].gX = vx->pix_dist; p[1].gY = 0; p[1].gZ = 0;
-   p[2].gX = 0; p[2].gY = vx->pix_dist; p[2].gZ = 0;
-   p[3].gX = 0; p[3].gY = 0; p[3].gZ = vx->pix_dist;
+    // spot to render on screen
+    p[0].gX = p[0].gY = p[0].gZ = 0;
+    // dx's and dy's and stuff
+    p[1].gX = vx->pix_dist; p[1].gY = 0; p[1].gZ = 0;
+    p[2].gX = 0; p[2].gY = vx->pix_dist; p[2].gZ = 0;
+    p[3].gX = 0; p[3].gY = 0; p[3].gZ = vx->pix_dist;
 
-   g3_alloc_list(4,tmp);
-   g3_transform_list(4,tmp,p);
+    g3_alloc_list(4,tmp);
+    g3_transform_list(4,tmp,p);
 
-   // assuming face zero, all relative to p[0]
-   // tmp[1] contains dxdu dydu
-   // tmp[2] contains dxdv dydv
-   // tmp[3] contains dxdz dydz
+    // assuming face zero, all relative to p[0]
+    // tmp[1] contains dxdu dydu
+    // tmp[2] contains dxdv dydv
+    // tmp[3] contains dxdz dydz
 
-   // return if it's behind you
-   if (tmp[0]->gZ < 0) {
-      g3_free_list(4,tmp);
-      return;
-   }
+    // return if it's behind you
+    if (tmp[0]->gZ < 0) {
+        g3_free_list(4,tmp);
+        return;
+    }
 
-   // find max and min x and y
-   // note that maxdx and maxdy are in fix
-   //mprintf("tmp[0]->sx,sy = %x %x\n",tmp[0]->sx,tmp[0]->sy);
+    // find max and min x and y
+    // note that maxdx and maxdy are in fix
+    //mprintf("tmp[0]->sx,sy = %x %x\n",tmp[0]->sx,tmp[0]->sy);
   // mprintf("tmp[1]->sx,sy = %x %x\n",tmp[1]->sx,tmp[1]->sy);
-   //mprintf("tmp[2]->sx,sy = %x %x\n",tmp[2]->sx,tmp[2]->sy);
-   //mprintf("tmp[3]->sx,sy = %x %x\n",tmp[3]->sx,tmp[3]->sy);
+    //mprintf("tmp[2]->sx,sy = %x %x\n",tmp[2]->sx,tmp[2]->sy);
+    //mprintf("tmp[3]->sx,sy = %x %x\n",tmp[3]->sx,tmp[3]->sy);
 
-   // turn vectors into deltas
-   for (i=1;i<4;++i) {
-      tmp[i]->sx -= tmp[0]->sx;
-      tmp[i]->sy -= tmp[0]->sy;
-   }
+    // turn vectors into deltas
+    for (i=1;i<4;++i) {
+        tmp[i]->sx -= tmp[0]->sx;
+        tmp[i]->sy -= tmp[0]->sy;
+    }
 
-   a = tmp[0]->sx - ((vx->w*tmp[1]->sx+vx->h*tmp[2]->sx+vx->d*tmp[3]->sx)>>1);
-   b = tmp[0]->sy - ((vx->w*tmp[1]->sy+vx->h*tmp[2]->sy+vx->d*tmp[3]->sy)>>1);
+    a = tmp[0]->sx - ((vx->w*tmp[1]->sx+vx->h*tmp[2]->sx+vx->d*tmp[3]->sx)>>1);
+    b = tmp[0]->sy - ((vx->w*tmp[1]->sy+vx->h*tmp[2]->sy+vx->d*tmp[3]->sy)>>1);
 
 #ifdef CIRCLES
-   // Top line from vertex 0 to 1 just for debugging
-   gr_set_fcolor(255);
-   gr_int_disk(fix_rint(tmp[0]->sx),fix_rint(tmp[0]->sy),5);
+    // Top line from vertex 0 to 1 just for debugging
+    gr_set_fcolor(255);
+    gr_int_disk(fix_rint(tmp[0]->sx),fix_rint(tmp[0]->sy),5);
 #endif
 
 #ifdef BMAPS
-   gr_bitmap(vx->col,fix_rint(tmp[0]->sx),fix_rint(tmp[0]->sy));
-   gr_bitmap(vx->ht,fix_rint(tmp[0]->sx)-vx->w,fix_rint(tmp[0]->sy)-vx->h);
+    gr_bitmap(vx->col,fix_rint(tmp[0]->sx),fix_rint(tmp[0]->sy));
+    gr_bitmap(vx->ht,fix_rint(tmp[0]->sx)-vx->w,fix_rint(tmp[0]->sy)-vx->h);
 #endif
 
-   //calculate pixel size
-   psy = fix_div(grd_bm.w * vx->pix_size,tmp[0]->gZ)>>1;
-   psx = fix_mul(psy,grd_cap->aspect);
+    //calculate pixel size
+    psy = fix_div(grd_bm.w * vx->pix_size,tmp[0]->gZ)>>1;
+    psx = fix_mul(psy,grd_cap->aspect);
 
-//   mprintf("psx = %x psy = %x\n",psx,psy);
+//    mprintf("psx = %x psy = %x\n",psx,psy);
 
-   // make them at least one pixel
-   if (psy<FIX_UNIT) psy = FIX_UNIT;
-   if (psx<FIX_UNIT) psx = FIX_UNIT;
+    // make them at least one pixel
+    if (psy<FIX_UNIT) psy = FIX_UNIT;
+    if (psx<FIX_UNIT) psx = FIX_UNIT;
 
-   maxdx = (psx<<1) + (vx->w*fix_abs(tmp[1]->sx) + vx->h*fix_abs(tmp[2]->sx) + vx->d*fix_abs(tmp[3]->sx));
-   maxdy = (psy<<1) + (vx->w*fix_abs(tmp[1]->sy) + vx->h*fix_abs(tmp[2]->sy) + vx->d*fix_abs(tmp[3]->sy));
-   //mprintf("maxdx = %x maxdy = %x\n",maxdx,maxdy);
+    maxdx = (psx<<1) + (vx->w*fix_abs(tmp[1]->sx) + vx->h*fix_abs(tmp[2]->sx) + vx->d*fix_abs(tmp[3]->sx));
+    maxdy = (psy<<1) + (vx->w*fix_abs(tmp[1]->sy) + vx->h*fix_abs(tmp[2]->sy) + vx->d*fix_abs(tmp[3]->sy));
+    //mprintf("maxdx = %x maxdy = %x\n",maxdx,maxdy);
 
-   // these can overflow and become negative in extreme situations causing it not to clip
-   if ((maxdy < 0) || (maxdx < 0)) {
-      g3_free_list(4,tmp);
-      return;
-   }
+    // these can overflow and become negative in extreme situations causing it not to clip
+    if ((maxdy < 0) || (maxdx < 0)) {
+        g3_free_list(4,tmp);
+        return;
+    }
 
-   maxdx = maxdx >> 1;
-   maxdy = maxdy >> 1;
+    maxdx = maxdx >> 1;
+    maxdy = maxdy >> 1;
 
-   tx = fix_abs(tmp[0]->gX);
-   ty = fix_abs(tmp[0]->gY);
-   tz = tmp[0]->gZ;
+    tx = fix_abs(tmp[0]->gX);
+    ty = fix_abs(tmp[0]->gY);
+    tz = tmp[0]->gZ;
 
-   // clip if it SEEMS to be out of bounds, or if psx is bigger than 10.  Kind of a hack to compensate
-   // for weirdo fixed point saturation.
-   clip = ((tmp[0]->sx - maxdx) < 0) || ((tmp[0]->sx + maxdx) > fix_make(grd_bm.w,0)) ||
-      ((tmp[0]->sy - maxdy) < 0) || ((tmp[0]->sy + maxdy) > fix_make(grd_bm.h,0)) || (psx > fix_make(10,0));
+    // clip if it SEEMS to be out of bounds, or if psx is bigger than 10.  Kind of a hack to compensate
+    // for weirdo fixed point saturation.
+    clip = ((tmp[0]->sx - maxdx) < 0) || ((tmp[0]->sx + maxdx) > fix_make(grd_bm.w,0)) ||
+        ((tmp[0]->sy - maxdy) < 0) || ((tmp[0]->sy + maxdy) > fix_make(grd_bm.h,0)) || (psx > fix_make(10,0));
 
-   #ifdef STATS
-   mprintf("vx: tx = %g ty = %g tz = %g\n",(float)tx/65536.0,(float)ty/65536.0,(float)tz/65536.0);
-   mprintf("pd = %g vx->w = %d vx->h %d\n",(float)vx->pix_dist/65536.0,vx->w,vx->h);
-   mprintf("c = %d tx/tz = %g  ty/tz = %g\n",clip,(float)fix_div(tx,tz)/65536.0,(float)fix_div(ty,tz)/65536.0);
-   mprintf("minus tx/tz = %g ty/tz = %g\n",(float)fix_div(tx- vx->pix_dist * vx->w,tz)/65536.0,
-      (float)fix_div(ty- vx->pix_dist * vx->h,tz)/65536.0);
-   #endif
+    #ifdef STATS
+    mprintf("vx: tx = %g ty = %g tz = %g\n",(float)tx/65536.0,(float)ty/65536.0,(float)tz/65536.0);
+    mprintf("pd = %g vx->w = %d vx->h %d\n",(float)vx->pix_dist/65536.0,vx->w,vx->h);
+    mprintf("c = %d tx/tz = %g  ty/tz = %g\n",clip,(float)fix_div(tx,tz)/65536.0,(float)fix_div(ty,tz)/65536.0);
+    mprintf("minus tx/tz = %g ty/tz = %g\n",(float)fix_div(tx- vx->pix_dist * vx->w,tz)/65536.0,
+        (float)fix_div(ty- vx->pix_dist * vx->h,tz)/65536.0);
+    #endif
 
-   if ( (tx-(vx->pix_dist * vx->w) > tz ) || (ty-(vx->pix_dist * vx->h) > tz)) {
-      #ifdef BBOX
-      mprintf("vox: punting due to out of view cone\n");
-      #endif
-      g3_free_list(4,tmp);
-      return;
-   }
+    if ( (tx-(vx->pix_dist * vx->w) > tz ) || (ty-(vx->pix_dist * vx->h) > tz)) {
+        #ifdef BBOX
+        mprintf("vox: punting due to out of view cone\n");
+        #endif
+        g3_free_list(4,tmp);
+        return;
+    }
 
 #ifdef BBOX
-   // different color when clipping
-   gr_set_fcolor(0x4c+clip*0x10);
-   x[0] = a;
-   y[0] = b;
-   x[1] = a+(vx->w)*(tmp[1]->sx);
-   y[1] = b+(vx->w)*(tmp[1]->sy);
-   x[2] = x[1]+(vx->h)*(tmp[2]->sx);
-   y[2] = y[1]+(vx->h)*(tmp[2]->sy);
-   x[3] = a+(vx->h)*(tmp[2]->sx);
-   y[3] = b+(vx->h)*(tmp[2]->sy);
+    // different color when clipping
+    gr_set_fcolor(0x4c+clip*0x10);
+    x[0] = a;
+    y[0] = b;
+    x[1] = a+(vx->w)*(tmp[1]->sx);
+    y[1] = b+(vx->w)*(tmp[1]->sy);
+    x[2] = x[1]+(vx->h)*(tmp[2]->sx);
+    y[2] = y[1]+(vx->h)*(tmp[2]->sy);
+    x[3] = a+(vx->h)*(tmp[2]->sx);
+    y[3] = b+(vx->h)*(tmp[2]->sy);
 
-   gr_fix_line(x[0],y[0],x[1],y[1]);
-   gr_fix_line(x[1],y[1],x[2],y[2]);
-   gr_fix_line(x[2],y[2],x[3],y[3]);
-   gr_fix_line(x[3],y[3],x[0],y[0]);
+    gr_fix_line(x[0],y[0],x[1],y[1]);
+    gr_fix_line(x[1],y[1],x[2],y[2]);
+    gr_fix_line(x[2],y[2],x[3],y[3]);
+    gr_fix_line(x[3],y[3],x[0],y[0]);
 
-   for (i=0;i<4;++i) {
-      x[i] += (vx->d)*(tmp[3]->sx);
-      y[i] += (vx->d)*(tmp[3]->sy);
-   }
+    for (i=0;i<4;++i) {
+        x[i] += (vx->d)*(tmp[3]->sx);
+        y[i] += (vx->d)*(tmp[3]->sy);
+    }
 
-   gr_fix_line(x[0],y[0],x[1],y[1]);
-   gr_fix_line(x[1],y[1],x[2],y[2]);
-   gr_fix_line(x[2],y[2],x[3],y[3]);
-   gr_fix_line(x[3],y[3],x[0],y[0]);
+    gr_fix_line(x[0],y[0],x[1],y[1]);
+    gr_fix_line(x[1],y[1],x[2],y[2]);
+    gr_fix_line(x[2],y[2],x[3],y[3]);
+    gr_fix_line(x[3],y[3],x[0],y[0]);
 #endif
 
-   //mprintf("f = %d clip = %d\n",f++,clip);
+    //mprintf("f = %d clip = %d\n",f++,clip);
 
-   //   if (f==97)
-   //      mprintf("uh oh\n");
+    //    if (f==97)
+    //        mprintf("uh oh\n");
 
-   //   x[0] = tmp[0]->sx + maxdx;
-   //   x[1] = tmp[0]->sx - maxdx;
-   //   y[0] = tmp[0]->sy + maxdy;
-   //   y[1] = tmp[0]->sy - maxdy;
-   //   gr_fix_line(x[0],y[0],x[1],y[0]);
-   //   gr_fix_line(x[1],y[0],x[1],y[1]);
-   //   gr_fix_line(x[1],y[1],x[0],y[1]);
-   //   gr_fix_line(x[0],y[1],x[0],y[0]);
+    //    x[0] = tmp[0]->sx + maxdx;
+    //    x[1] = tmp[0]->sx - maxdx;
+    //    y[0] = tmp[0]->sy + maxdy;
+    //    y[1] = tmp[0]->sy - maxdy;
+    //    gr_fix_line(x[0],y[0],x[1],y[0]);
+    //    gr_fix_line(x[1],y[0],x[1],y[1]);
+    //    gr_fix_line(x[1],y[1],x[0],y[1]);
+    //    gr_fix_line(x[0],y[1],x[0],y[0]);
 
-   // find near vertex
-   near_ver = 0;
-   min_z = tmp[0]->gZ;
+    // find near vertex
+    near_ver = 0;
+    min_z = tmp[0]->gZ;
 
-   // check for vertex 1
-   if (tmp[1]->gZ < min_z) {
-      near_ver = 1;
-      min_z = tmp[1]->gZ;
-   }
-   if (tmp[1]->gZ + tmp[2]->gZ < min_z) {
-      near_ver = 2;
-      min_z = tmp[1]->gZ + tmp[2]->gZ;
-   }
-   if (tmp[2]->gZ < min_z) {
-      near_ver = 3;
-      min_z = tmp[2]->gZ;
-   }
+    // check for vertex 1
+    if (tmp[1]->gZ < min_z) {
+        near_ver = 1;
+        min_z = tmp[1]->gZ;
+    }
+    if (tmp[1]->gZ + tmp[2]->gZ < min_z) {
+        near_ver = 2;
+        min_z = tmp[1]->gZ + tmp[2]->gZ;
+    }
+    if (tmp[2]->gZ < min_z) {
+        near_ver = 3;
+        min_z = tmp[2]->gZ;
+    }
 
-   //mprintf("near_ver = %d\n",near_ver);
+    //mprintf("near_ver = %d\n",near_ver);
 
-   // calculate face 1
-   //   for(i=0;i<1;++i) {
-   //      // defines which faces visible at that vertex
-   //      f = corners[near_ver][i];
-   //      f = 0;
-   //      for(j=0;j<4;++j) {
-   //         // faces gives vertices at each face
-   //         x[j] = a+v[faces[f][j]] [0];
-   //         y[j] = b+v[faces[f][j]] [1];
-   //      }
+    // calculate face 1
+    //    for(i=0;i<1;++i) {
+    //        // defines which faces visible at that vertex
+    //        f = corners[near_ver][i];
+    //        f = 0;
+    //        for(j=0;j<4;++j) {
+    //            // faces gives vertices at each face
+    //            x[j] = a+v[faces[f][j]] [0];
+    //            y[j] = b+v[faces[f][j]] [1];
+    //        }
 
-   // find out which one of the vertices is the near_ver
-   // faces looks for all the vertices there
-   //for(j=0;j<4;++j) {
-   //   if (near_ver == faces[f][j]) break;
-   //}
-   // f= 0;
+    // find out which one of the vertices is the near_ver
+    // faces looks for all the vertices there
+    //for(j=0;j<4;++j) {
+    //    if (near_ver == faces[f][j]) break;
+    //}
+    // f= 0;
 
-   //mprintf("clip = %d\n",clip);
-   //mprintf("tmp[0]->gZ = %x\n",tmp[0]->gZ);
+    //mprintf("clip = %d\n",clip);
+    //mprintf("tmp[0]->gZ = %x\n",tmp[0]->gZ);
 
-   vmap_dot(a,b,tmp[1]->sx,tmp[1]->sy,tmp[2]->sx,tmp[2]->sy,tmp[3]->sx,tmp[3]->sy,near_ver,vx,fix_rint(psx),fix_rint(psy),clip);
+    vmap_dot(a,b,tmp[1]->sx,tmp[1]->sy,tmp[2]->sx,tmp[2]->sy,tmp[3]->sx,tmp[3]->sy,near_ver,vx,fix_rint(psx),fix_rint(psy),clip);
 
-   g3_free_list(4,tmp);
+    g3_free_list(4,tmp);
 }

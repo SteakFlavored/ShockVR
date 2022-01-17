@@ -33,20 +33,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 
-#define NUM_ACCESS_CODES   32
+#define NUM_ACCESS_CODES    32
 
-#define PICKUP_USE_MODE    0
-#define USE_USE_MODE       1
-#define NULL_USE_MODE      (INVENT_USEMODE >> INVENT_USEMODE_SHF)
+#define PICKUP_USE_MODE     0
+#define USE_USE_MODE         1
+#define NULL_USE_MODE        (INVENT_USEMODE >> INVENT_USEMODE_SHF)
 
 extern uint8_t use_distance_mod;
 extern uint8_t pickup_distance_mod;
 
 #define BASE_PICKUP_DIST (FIX_UNIT*20/8)
-#define BASE_USE_DIST    BASE_PICKUP_DIST
+#define BASE_USE_DIST     BASE_PICKUP_DIST
 
-#define MAX_PICKUP_DIST    (BASE_PICKUP_DIST + fix_make(pickup_distance_mod,0))
-#define MAX_USE_DIST       (BASE_USE_DIST    + fix_make(use_distance_mod,0))
+#define MAX_PICKUP_DIST     (BASE_PICKUP_DIST + fix_make(pickup_distance_mod,0))
+#define MAX_USE_DIST         (BASE_USE_DIST     + fix_make(use_distance_mod,0))
 
 
 #define USE_MODE(x) ((ObjProps[OPNUM((x))].flags & INVENT_USEMODE) >> INVENT_USEMODE_SHF)
@@ -55,10 +55,10 @@ extern uint8_t pickup_distance_mod;
 // Typedefs
 typedef struct
 {
-   uint16_t timestamp;
-   uint16_t type;
-   ObjID door_id;
-   uint16_t secret_code;
+    uint16_t timestamp;
+    uint16_t type;
+    ObjID door_id;
+    uint16_t secret_code;
 } DoorSchedEvent;
 
 // Prototypes

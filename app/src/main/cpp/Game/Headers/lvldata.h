@@ -54,19 +54,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _level_data
 {
-   int16_t size; // size of this structure.
-   uint8_t mist;
-   uint8_t gravity;
-   struct _hazard
-   {
-      uint8_t rad;
-      uint8_t bio; // post-exposure damage, or gravity level
-      uint8_t zerogbio; // if this is true, bio is interpreted as zero gravity
-      uint8_t bio_h;
-      uint8_t rad_h;
-   } hazard;
-   uint32_t exit_time;  // timestamp at which we exited the level
-   curAMap auto_maps[NUM_O_AMAP];
+    int16_t size; // size of this structure.
+    uint8_t mist;
+    uint8_t gravity;
+    struct _hazard
+    {
+        uint8_t rad;
+        uint8_t bio; // post-exposure damage, or gravity level
+        uint8_t zerogbio; // if this is true, bio is interpreted as zero gravity
+        uint8_t bio_h;
+        uint8_t rad_h;
+    } hazard;
+    uint32_t exit_time;  // timestamp at which we exited the level
+    curAMap auto_maps[NUM_O_AMAP];
 } LevelData;
 
 extern LevelData level_gamedata;

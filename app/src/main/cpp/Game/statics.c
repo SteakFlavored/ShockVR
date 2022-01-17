@@ -40,31 +40,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include "textmaps.h"
-uint8_t       tmap_static_mem[NUM_STATIC_TMAPS*SIZE_STATIC_TMAP];
+uint8_t         tmap_static_mem[NUM_STATIC_TMAPS*SIZE_STATIC_TMAP];
 #ifdef SVGA_CUTSCENES
-uint8_t       tmap_big_buffer[NUM_STATIC_TMAPS * SIZE_BIG_TMAP];
+uint8_t         tmap_big_buffer[NUM_STATIC_TMAPS * SIZE_BIG_TMAP];
 #endif
 
 #include "objects.h"
 #include "objapp.h"
-Obj         objs[NUM_OBJECTS];
-ObjRef      objRefs[NUM_REF_OBJECTS];
-uint8_t       objsDealt[NUM_OBJECTS/8];
+Obj            objs[NUM_OBJECTS];
+ObjRef        objRefs[NUM_REF_OBJECTS];
+uint8_t         objsDealt[NUM_OBJECTS/8];
 
 // put rest of obj system here, define after it
 
 #include "mfddims.h"
 #define FRAME_BUFFER_SIZE  (320*200) + 4096
-uint8_t       frameBuffer[FRAME_BUFFER_SIZE];
-#define WACKY_SVGA_MFD_SIZE   52744
-uint8_t       frameBuffer2[WACKY_SVGA_MFD_SIZE];
+uint8_t         frameBuffer[FRAME_BUFFER_SIZE];
+#define WACKY_SVGA_MFD_SIZE    52744
+uint8_t         frameBuffer2[WACKY_SVGA_MFD_SIZE];
 
 uint8_t *mfd_canvas_bits = frameBuffer2;
 
-#define ALTERNATE_BUFFER_SIZE    ((MFD_VIEW_HGT * MFD_VIEW_WID) + FRAME_BUFFER_SIZE)
+#define ALTERNATE_BUFFER_SIZE     ((MFD_VIEW_HGT * MFD_VIEW_WID) + FRAME_BUFFER_SIZE)
 
 #include "map.h"
-#define STATIC_MAP_SIZE    16 << (DEFAULT_XSHF + DEFAULT_YSHF)
+#define STATIC_MAP_SIZE     16 << (DEFAULT_XSHF + DEFAULT_YSHF)
 
 uint8_t static_map[STATIC_MAP_SIZE];
 
@@ -78,5 +78,5 @@ uint8_t svga_cursor_bits[SVGA_CURSOR_WIDTH * SVGA_CURSOR_HEIGHT];
 grs_bitmap svga_cursor_bmp;
 
 #define MAX_OPT_WID  154
-#define MAX_OPT_HT   58
+#define MAX_OPT_HT    58
 uint8_t svga_options_cursor_bits[MAX_OPT_WID * MAX_OPT_HT];

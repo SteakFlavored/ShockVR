@@ -47,50 +47,50 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if 0
 // MLA - this doesn't appear to be used anywhere
 void memmove (uint8_t *dst, uint8_t *src, int32_t n);
-#pragma aux memmove =      \
-   "mov  eax,ecx" \
-   "shr  ecx,2"   \
-   "rep  movsd"   \
-   "mov  ecx,eax" \
-   "and  ecx,3"   \
-   "rep  movsb"   \
-   parm [edi] [esi] [ecx]  \
-   modify [eax ecx edi esi];
+#pragma aux memmove =        \
+    "mov  eax,ecx" \
+    "shr  ecx,2"    \
+    "rep  movsd"    \
+    "mov  ecx,eax" \
+    "and  ecx,3"    \
+    "rep  movsb"    \
+    parm [edi] [esi] [ecx]  \
+    modify [eax ecx edi esi];
 #endif
 
 void gen_flat24_ubitmap (grs_bitmap *bm, int16_t x0, int16_t y0)
 {
-   int16_t x, y;
-   uint8_t *p, *lp;
+    int16_t x, y;
+    uint8_t *p, *lp;
 
-   p = bm->bits;
-   if (bm->flags & BMF_TRANS)
-      for (y=y0; y<y0+bm->h; y++) {
-         lp = p;
-         for (x=x0; x<x0+bm->w; x++, p+=3)
-            if (*((int32_t *)p) & 0x00ffffff)
-               gr_set_upixel24 (*((int32_t *)p)&0x00ffffff, x, y);
-         p = lp+bm->row;
-      }
-   else
-      for (y=y0; y<y0+bm->h; y++) {
-         lp = p;
-         for (x=x0; x<x0+bm->w; x++, p+=3)
-            gr_set_upixel24 (*((int32_t *)p)&0x00ffffff, x, y);
-         p = lp+bm->row;
-      }
+    p = bm->bits;
+    if (bm->flags & BMF_TRANS)
+        for (y=y0; y<y0+bm->h; y++) {
+            lp = p;
+            for (x=x0; x<x0+bm->w; x++, p+=3)
+                if (*((int32_t *)p) & 0x00ffffff)
+                    gr_set_upixel24 (*((int32_t *)p)&0x00ffffff, x, y);
+            p = lp+bm->row;
+        }
+    else
+        for (y=y0; y<y0+bm->h; y++) {
+            lp = p;
+            for (x=x0; x<x0+bm->w; x++, p+=3)
+                gr_set_upixel24 (*((int32_t *)p)&0x00ffffff, x, y);
+            p = lp+bm->row;
+        }
 }
 
 int32_t gen_flat24_bitmap (grs_bitmap *bm, int16_t x0, int16_t y0)
 {
-   int32_t r;
-   int16_t w,h;
-   uint8_t *b;
+    int32_t r;
+    int16_t w,h;
+    uint8_t *b;
 
-   b = bm->bits; w = bm->w; h = bm->h;
-   r = gr_clip_flat24_bitmap (bm, &x0, &y0);
-   if (r != CLIP_ALL)
-      gr_flat24_ubitmap (bm, x0, y0);
-   bm->bits = b; bm->w = w; bm->h = h;
-   return r;
+    b = bm->bits; w = bm->w; h = bm->h;
+    r = gr_clip_flat24_bitmap (bm, &x0, &y0);
+    if (r != CLIP_ALL)
+        gr_flat24_ubitmap (bm, x0, y0);
+    bm->bits = b; bm->w = w; bm->h = h;
+    return r;
 }

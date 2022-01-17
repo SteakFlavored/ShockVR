@@ -97,10 +97,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Defines
 extern int32_t height_colors[MAP_HEIGHTS];
 
-#define MAX_HIGHLIGHTS     8
-#define NEW_HIGHLIGHT      8
+#define MAX_HIGHLIGHTS      8
+#define NEW_HIGHLIGHT        8
 
-#define SOLID_TERR_COLOR      (BLUE_BASE + 0x8)
+#define SOLID_TERR_COLOR        (BLUE_BASE + 0x8)
 #define HEIGHT2COLOR(h)  (height_colors[h])
 #define TEXTURE2COLOR(t) ((t)*2+32)
 #define CAMERA_COLOR (BROWN_BASE+5)
@@ -112,8 +112,8 @@ typedef void (*tile_drawfunc)(struct _tilemap* t, LGPoint square, MapElem* elem,
 
 typedef struct _tiledraw
 {
-   tile_drawfunc func;
-   void* data;
+    tile_drawfunc func;
+    void* data;
 } TileDraw;
 
 
@@ -122,30 +122,30 @@ typedef struct _tiledraw
 
 typedef struct _tilemap
 {
-   LGRegion  reg;
-   MapElem *map;
-   FullMap *fmap;
-   uint16_t zoom; // pixels per tile.
-   LGPoint topleft;
-   TileDraw draw;
-   bool  showcursor;
-   LGPoint cursor;           // Cursor for keyboard input.
-   uint8_t highlights[MAP_ROWS][MAP_COLS];
-   uint8_t hilitebits;
-   TileCamera cameras[NUM_CAMERAS];
-   bool cameras_used[NUM_CAMERAS];
+    LGRegion  reg;
+    MapElem *map;
+    FullMap *fmap;
+    uint16_t zoom; // pixels per tile.
+    LGPoint topleft;
+    TileDraw draw;
+    bool  showcursor;
+    LGPoint cursor;              // Cursor for keyboard input.
+    uint8_t highlights[MAP_ROWS][MAP_COLS];
+    uint8_t hilitebits;
+    TileCamera cameras[NUM_CAMERAS];
+    bool cameras_used[NUM_CAMERAS];
 }  TileMap;
 
 // user-defined event types
-#define CURSOR_CHANGE  0   // signalled when the cursor changes
-#define ZOOM_CHANGE    1   // signalled when zoom factor changes.
+#define CURSOR_CHANGE  0    // signalled when the cursor changes
+#define ZOOM_CHANGE     1    // signalled when zoom factor changes.
 
 typedef struct _tilemap_event
 {
-   UIEVFRONT
-   int16_t subtype;
-   TileMap* tilemap;
-   UIEVBACK(sizeof(TileMap*));
+    UIEVFRONT
+    int16_t subtype;
+    TileMap* tilemap;
+    UIEVBACK(sizeof(TileMap*));
 }  TileMapEvent;
 
 
@@ -153,8 +153,8 @@ typedef struct _tilemap_event
 // Prototypes
 
 errtype TileMapInit(TileMap* t, LGRegion* parent, LGRect* boundingrect, int32_t z,
-                    FullMap* fmap, uint16_t zoompix,
-                  LGPoint topleft, TileDraw draw);
+                          FullMap* fmap, uint16_t zoompix,
+                        LGPoint topleft, TileDraw draw);
 // Initialize a tilemap.
 // Cursor defaults to on and in the top left.
 // camera defaults to off.

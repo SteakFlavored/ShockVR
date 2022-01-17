@@ -84,31 +84,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* bitmap types. */
 enum {
-   BMT_DEVICE,
-   BMT_MONO,
-   BMT_FLAT8,
-   BMT_FLAT24,
-   BMT_RSD8,
-   BMT_TLUC8,
-   BMT_SPAN,
-   BMT_GEN,
-   BMT_TYPES
+    BMT_DEVICE,
+    BMT_MONO,
+    BMT_FLAT8,
+    BMT_FLAT24,
+    BMT_RSD8,
+    BMT_TLUC8,
+    BMT_SPAN,
+    BMT_GEN,
+    BMT_TYPES
 };
 
 /* BMT_GEN and BMT_SPAN are not true bitmap types. */
 #define REAL_BMT_TYPES BMT_SPAN
 
 /* bitmap flags. */
-#define BMF_TRANS    1
-#define BMF_TLUC8    2
+#define BMF_TRANS     1
+#define BMF_TLUC8     2
 
 /* function prototypes for bitmap routines. */
 extern void gr_init_bitmap
-   (grs_bitmap *bm, uint8_t *p, uint8_t type, uint16_t flags, int16_t w, int16_t h);
+    (grs_bitmap *bm, uint8_t *p, uint8_t type, uint16_t flags, int16_t w, int16_t h);
 extern void gr_init_sub_bitmap
-   (grs_bitmap *sbm, grs_bitmap *dbm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *sbm, grs_bitmap *dbm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern grs_bitmap *gr_alloc_bitmap
-   (uint8_t type, uint16_t flags, int16_t w, int16_t h);
+    (uint8_t type, uint16_t flags, int16_t w, int16_t h);
 
 /* compatibility defines. */
 #define gr_init_bm gr_init_bitmap

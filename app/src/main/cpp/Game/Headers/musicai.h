@@ -49,69 +49,69 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DEFAULT_MOTION_MAX 100
 #define DEFAULT_MOTION_MIN 1
 
-#define NO_MUSIC_ZONE      0
-#define HOSPITAL_ZONE      1   // nee Residential
-#define EXECUTIVE_ZONE     2
-#define INDUSTRIAL_ZONE    3
-#define METAL_ZONE         4
-#define PARK_ZONE          5   // also used in access corridors
-#define BRIDGE_ZONE        6   // once Outer bridge
-#define ELEVATOR_ZONE      7
+#define NO_MUSIC_ZONE        0
+#define HOSPITAL_ZONE        1    // nee Residential
+#define EXECUTIVE_ZONE      2
+#define INDUSTRIAL_ZONE     3
+#define METAL_ZONE            4
+#define PARK_ZONE             5    // also used in access corridors
+#define BRIDGE_ZONE          6    // once Outer bridge
+#define ELEVATOR_ZONE        7
 
 #define NUM_EVENTS 9
 
-#define WALKING_SCORE    0
-#define PERIL_SCORE      4
-#define COMBAT_SCORE     6
+#define WALKING_SCORE     0
+#define PERIL_SCORE        4
+#define COMBAT_SCORE      6
 
-#define PERIL_THRESHOLD    70
+#define PERIL_THRESHOLD     70
 
-#define NO_MONSTER   -1
+#define NO_MONSTER    -1
 #define SMALL_ROBOT  0
 #define LARGE_ROBOT  1
-#define MUTANT       2
+#define MUTANT         2
 
-#define SAME_MODE    0
+#define SAME_MODE     0
 #define NORMAL_MODE  1
 #define TRANSITION_MODE 2
 
-#define NUM_TRANSITIONS       9
+#define NUM_TRANSITIONS         9
 
-#define TRANS_INTRO           0
-#define TRANS_WALK_TO_PERIL   1
-#define TRANS_PERIL_TO_COMB   2
-#define TRANS_DEATH           3
-#define TRANS_VICTORY         4
-#define TRANS_PERIL_TO_WALK   5
-#define TRANS_COMB_TO_WALK    6
-#define TRANS_COMB_TO_PERIL   7
-#define TRANS_WALK_TO_COMB    8
+#define TRANS_INTRO              0
+#define TRANS_WALK_TO_PERIL    1
+#define TRANS_PERIL_TO_COMB    2
+#define TRANS_DEATH              3
+#define TRANS_VICTORY            4
+#define TRANS_PERIL_TO_WALK    5
+#define TRANS_COMB_TO_WALK     6
+#define TRANS_COMB_TO_PERIL    7
+#define TRANS_WALK_TO_COMB     8
 
-#define MONSTER_MUSIC_MUTANT        0
-#define MONSTER_MUSIC_ROBOT         1
-#define MONSTER_MUSIC_CYBORG        2
-#define MONSTER_MUSIC_SMALL_ROBOT   3
+#define MONSTER_MUSIC_MUTANT          0
+#define MONSTER_MUSIC_ROBOT            1
+#define MONSTER_MUSIC_CYBORG          2
+#define MONSTER_MUSIC_SMALL_ROBOT    3
 
-#define NUM_SCORES                  				8
-#define NUM_LAYERABLE_SUPERCHUNKS	22
-#define FIRST_SUPERCHUNK_LAYER      	16
-#define NUM_LAYERS                  				32
-#define LAYER_BASE                  				32
+#define NUM_SCORES                                        8
+#define NUM_LAYERABLE_SUPERCHUNKS    22
+#define FIRST_SUPERCHUNK_LAYER            16
+#define NUM_LAYERS                                        32
+#define LAYER_BASE                                        32
 
-#define SUPERCHUNKS_PER_SCORE		4
-#define MAX_KEYS    							10
-#define KEY_BAR_RESOLUTION 			2
+#define SUPERCHUNKS_PER_SCORE        4
+#define MAX_KEYS                                 10
+#define KEY_BAR_RESOLUTION             2
 
-#define NUM_PARK_SOUNDS				10
-#define PARK_LAYER_BASE 				32
+#define NUM_PARK_SOUNDS                10
+#define PARK_LAYER_BASE                 32
 
-#define CYBERSPACE_SCORE_BASE		10
-#define NUM_NODE_THEMES				2
+#define CYBERSPACE_SCORE_BASE        10
+#define NUM_NODE_THEMES                2
 
-#define DANGER_LAYER_BASE				10    // actually one less than Danger1 since a minimum of 1 gets added to it...
-#define SUCCESS_LAYER_BASE			(DANGER_LAYER_BASE + 2)
-#define DECONSTRUCT_LAYER				15
-#define TRANSITION_LAYER_BASE		16
+#define DANGER_LAYER_BASE                10     // actually one less than Danger1 since a minimum of 1 gets added to it...
+#define SUCCESS_LAYER_BASE            (DANGER_LAYER_BASE + 2)
+#define DECONSTRUCT_LAYER                15
+#define TRANSITION_LAYER_BASE        16
 
 
 // Prototypes
@@ -127,15 +127,15 @@ errtype mai_player_death();
 errtype fade_into_location(int32_t x, int32_t y);
 errtype load_score_for_location(int32_t x, int32_t y);
 errtype load_score_from_cfg(int8_t *filename);
-void    load_score_guts(int8_t score_playing);
+void     load_score_guts(int8_t score_playing);
 errtype music_init();
 errtype digifx_init();
 errtype stop_digi_fx();
 void clear_digi_fx();
 int32_t play_digi_fx_master(int32_t sfx_code, int32_t num_loops, ObjID id, uint16_t x, uint16_t y);
-#define play_digi_fx(sfx_code, loops)                 play_digi_fx_master(sfx_code,loops,OBJ_NULL,0,0)
-#define play_digi_fx_obj(sfx_code, num_loops, id)     play_digi_fx_master(sfx_code,num_loops,id,0,0)
-#define play_digi_fx_loc(sfx_code, num_loops, x, y)   play_digi_fx_master(sfx_code,num_loops,OBJ_NULL,x,y)
+#define play_digi_fx(sfx_code, loops)                      play_digi_fx_master(sfx_code,loops,OBJ_NULL,0,0)
+#define play_digi_fx_obj(sfx_code, num_loops, id)      play_digi_fx_master(sfx_code,num_loops,id,0,0)
+#define play_digi_fx_loc(sfx_code, num_loops, x, y)    play_digi_fx_master(sfx_code,num_loops,OBJ_NULL,x,y)
 errtype play_sound_effect(int8_t *filename);
 bool digi_fx_playing(int32_t fx_id, int32_t *handle_ptr);
 errtype output_text(int8_t *);
@@ -159,7 +159,7 @@ int32_t *output_table;
 bool wait_flag;
 int32_t next_mode, ai_cycle;
 bool music_card=false, music_on=false;
-//KLC no sfx_card, sfx_on moved to DIGIFX.C     bool sfx_card=false, sfx_on=false;
+//KLC no sfx_card, sfx_on moved to DIGIFX.C      bool sfx_card=false, sfx_on=false;
 int32_t cur_digi_channels=4;
 #else
 extern int32_t mlimbs_peril, mlimbs_positive, mlimbs_motion, mlimbs_monster;

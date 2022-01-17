@@ -66,9 +66,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 typedef struct iaaiiaia{
-   void (*f)();
-   struct iaaiiaia *next;
-   uint8_t flags;
+    void (*f)();
+    struct iaaiiaia *next;
+    uint8_t flags;
 } grs_func_chain;
 
 extern int16_t grd_pixel_index;

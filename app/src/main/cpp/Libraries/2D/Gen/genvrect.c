@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * $Log: genvrect.c $
  * Revision 1.3  1993/10/19  09:57:56  kaboom
- * Replaced #include   new headers.
+ * Replaced #include    new headers.
  *
  * Revision 1.2  1993/10/08  01:15:54  kaboom
  * Changed quotes in #include lines to angle brackets for Watcom.
@@ -40,72 +40,72 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* x and y are the screen x and y's in fixed point of the vertices of this voxel piece
-   dz[0] is the difference in x for a delta one in z
-   dz[1] is the difference in y for a delta one in z
-   near_ver is which vertex is closest to the viewer, so it knows which way to traverse
-   col is the color map
-   ht is the height map, 0 means at the surface of the bounding box, positive goes in
-   dotw and doth are the height and width of the rectangles to use at each point */
+    dz[0] is the difference in x for a delta one in z
+    dz[1] is the difference in y for a delta one in z
+    near_ver is which vertex is closest to the viewer, so it knows which way to traverse
+    col is the color map
+    ht is the height map, 0 means at the surface of the bounding box, positive goes in
+    dotw and doth are the height and width of the rectangles to use at each point */
 
 void gen_vox_rect(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht,int32_t dotw,int32_t doth)
 {
-   int32_t du,dv,initu,endu,initv,endv;
-   int32_t i,j;
-   int32_t c;
-   int32_t z;
-   int32_t far_ver;
+    int32_t du,dv,initu,endu,initv,endv;
+    int32_t i,j;
+    int32_t c;
+    int32_t z;
+    int32_t far_ver;
 
-   /* Test of broadcasting system */
-   fix fdxdu,fdydu,fdxdv,fdydv;
-   fix fcurx,fcury;
-   int32_t fxp,fyp;
-   int32_t fdxdz,fdydz;
-   int32_t oldcurx;
-   int32_t oldcury;
+    /* Test of broadcasting system */
+    fix fdxdu,fdydu,fdxdv,fdydv;
+    fix fcurx,fcury;
+    int32_t fxp,fyp;
+    int32_t fdxdz,fdydz;
+    int32_t oldcurx;
+    int32_t oldcury;
 
-   far_ver = (near_ver+2)%4;
+    far_ver = (near_ver+2)%4;
 
-   /* How to scan given near_ver */
-   if (near_ver == 0 || near_ver == 3) { initu = col->w -1; du = -1; endu = -1; }
-   else { initu = 0; du = 1; endu = col->w ; }
-   if (near_ver < 2) { initv = col->h-1; dv = -1; endv = -1; }
-   else { initv = 0; dv = 1; endv = col->h; }
+    /* How to scan given near_ver */
+    if (near_ver == 0 || near_ver == 3) { initu = col->w -1; du = -1; endu = -1; }
+    else { initu = 0; du = 1; endu = col->w ; }
+    if (near_ver < 2) { initv = col->h-1; dv = -1; endv = -1; }
+    else { initv = 0; dv = 1; endv = col->h; }
 
-   fdxdu = (x[1]-x[0])/(col->w-1);
-   fdydu = (y[1]-y[0])/(col->w-1);
-   fdxdv = (x[2]-x[1])/(col->h-1);
-   fdydv = (y[2]-y[1])/(col->h-1);
+    fdxdu = (x[1]-x[0])/(col->w-1);
+    fdydu = (y[1]-y[0])/(col->w-1);
+    fdxdv = (x[2]-x[1])/(col->h-1);
+    fdydv = (y[2]-y[1])/(col->h-1);
 
-   fdxdz = dz[0];
-   fdydz = dz[1];
+    fdxdz = dz[0];
+    fdydz = dz[1];
 
-   oldcurx = fcurx = x[0] + fdxdu*initu + fdxdv*initv;
-   oldcury = fcury = y[0] + fdydu*initu + fdydv*initv;
+    oldcurx = fcurx = x[0] + fdxdu*initu + fdxdv*initv;
+    oldcury = fcury = y[0] + fdydu*initu + fdydv*initv;
 
-   fdxdu *= du;
-   fdydu *= du;
-   fdxdv *= dv;
-   fdydv *= dv;
+    fdxdu *= du;
+    fdydu *= du;
+    fdxdv *= dv;
+    fdydv *= dv;
 
-   for(j=initv;j!=endv;j+=dv) {
-      for(i=initu;i!=endu;i+=du) {
-         c = *(col->bits + i + j*col->row);
-         //c = get_pal(col,i,j);
-         if (c != 0) {
-            z = *(ht->bits + i+ j*ht->row);
-            //z = get_pal(ht,i,j);
-            fxp = (fcurx + fdxdz*z)>>16;
-            fyp = (fcury + fdydz*z)>>16;
+    for(j=initv;j!=endv;j+=dv) {
+        for(i=initu;i!=endu;i+=du) {
+            c = *(col->bits + i + j*col->row);
+            //c = get_pal(col,i,j);
+            if (c != 0) {
+                z = *(ht->bits + i+ j*ht->row);
+                //z = get_pal(ht,i,j);
+                fxp = (fcurx + fdxdz*z)>>16;
+                fyp = (fcury + fdydz*z)>>16;
 
-            gr_set_fcolor(c);
-            gr_rect(fxp,fyp,fxp+dotw,fyp+doth);
-         }
-         fcurx += fdxdu;
-         fcury += fdydu;
-      }
-      fcurx = (oldcurx += fdxdv);
-      fcury = (oldcury += fdydv);
-   }
+                gr_set_fcolor(c);
+                gr_rect(fxp,fyp,fxp+dotw,fyp+doth);
+            }
+            fcurx += fdxdu;
+            fcury += fdydu;
+        }
+        fcurx = (oldcurx += fdxdv);
+        fcury = (oldcury += fdydv);
+    }
 }
 
 

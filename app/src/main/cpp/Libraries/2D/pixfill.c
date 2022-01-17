@@ -32,16 +32,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // gri_set_fill_globals was inline in 2D.h, moved to here
 void gri_set_fill_globals(int32_t *fill_type_ptr, int32_t fill_type,
-                          void (***function_table_ptr)(), void (**function_table)(),
-                          grt_uline_fill **line_vector_ptr, grt_uline_fill *line_vector);
+                                  void (***function_table_ptr)(), void (**function_table)(),
+                                  grt_uline_fill **line_vector_ptr, grt_uline_fill *line_vector);
 
 void gri_set_fill_globals(int32_t *fill_type_ptr, int32_t fill_type,
-                          void (***function_table_ptr)(), void (**function_table)(),
-                          grt_uline_fill **line_vector_ptr, grt_uline_fill *line_vector)
+                                  void (***function_table_ptr)(), void (**function_table)(),
+                                  grt_uline_fill **line_vector_ptr, grt_uline_fill *line_vector)
  {
-	*fill_type_ptr = fill_type;
-	*function_table_ptr = function_table;
-	*line_vector_ptr = line_vector;
+    *fill_type_ptr = fill_type;
+    *function_table_ptr = function_table;
+    *line_vector_ptr = line_vector;
  }
 
 

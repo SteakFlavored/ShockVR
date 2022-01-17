@@ -31,12 +31,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdrv.h"
 
 void (**grd_canvas_table_list[])() = {
-   NULL,                /* device driver-initialized by gr_set_mode */
-   NULL,                /* monochrome-not supported */
-   flat8_canvas_table,  /* flat 8 canvas */
-   NULL,                /* flat 24-not supported */
-   NULL,                /* doubling, RSD8 canvas-not supported */
-   NULL,                /* translucent 8-not supported */
-   NULL,                /* span-obsolete */
-   NULL                 /* generic-initialized by gr_force_generic */
+    NULL,                     /* device driver-initialized by gr_set_mode */
+    NULL,                     /* monochrome-not supported */
+    flat8_canvas_table,  /* flat 8 canvas */
+    NULL,                     /* flat 24-not supported */
+    NULL,                     /* doubling, RSD8 canvas-not supported */
+    NULL,                     /* translucent 8-not supported */
+    NULL,                     /* span-obsolete */
+    NULL                      /* generic-initialized by gr_force_generic */
 };

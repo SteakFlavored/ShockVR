@@ -46,37 +46,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 
 /* clips the top, left, right, and bottom edges of a rectangle to the current
-   clip rectangle.  pointers to the values are passed in so the values can be
-   modified.  returns the clip code. */
+    clip rectangle.  pointers to the values are passed in so the values can be
+    modified.  returns the clip code. */
 int32_t gr_clip_rect (int16_t *left, int16_t *top, int16_t *right, int16_t *bot)
 {
-   int32_t code = CLIP_NONE;
+    int32_t code = CLIP_NONE;
 
-   if (*right<=grd_clip.left || *left>=grd_clip.right ||
-       *bot<=grd_clip.top  || *top>=grd_clip.bot)
-      /* rect is completely clipped. */
-      return CLIP_ALL;
+    if (*right<=grd_clip.left || *left>=grd_clip.right ||
+         *bot<=grd_clip.top  || *top>=grd_clip.bot)
+        /* rect is completely clipped. */
+        return CLIP_ALL;
 
-   if (*left < grd_clip.left) {
-      /* rect is off the left edge of the window. */
-      *left = grd_clip.left;
-      code |= CLIP_LEFT;
-   }
-   if (*right > grd_clip.right) {
-      /* off the right edge of the window. */
-      *right = grd_clip.right;
-      code |= CLIP_RIGHT;
-   }
-   if (*top < grd_clip.top) {
-      /* off the top of the window. */
-      *top = grd_clip.top;
-      code |= CLIP_TOP;
-   }
-   if (*bot > grd_clip.bot) {
-      /* off the bottom of the window. */
-      *bot = grd_clip.bot;
-      code |= CLIP_BOT;
-   }
+    if (*left < grd_clip.left) {
+        /* rect is off the left edge of the window. */
+        *left = grd_clip.left;
+        code |= CLIP_LEFT;
+    }
+    if (*right > grd_clip.right) {
+        /* off the right edge of the window. */
+        *right = grd_clip.right;
+        code |= CLIP_RIGHT;
+    }
+    if (*top < grd_clip.top) {
+        /* off the top of the window. */
+        *top = grd_clip.top;
+        code |= CLIP_TOP;
+    }
+    if (*bot > grd_clip.bot) {
+        /* off the bottom of the window. */
+        *bot = grd_clip.bot;
+        code |= CLIP_BOT;
+    }
 
-   return code;
+    return code;
 }

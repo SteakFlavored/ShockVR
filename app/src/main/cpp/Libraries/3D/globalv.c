@@ -48,134 +48,134 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // point allocation vars
 
-g3s_point 	*point_list=0;   //   dd      0       ;ptr to point buffer
-int16_t				n_points=0;      //   dw      0       ;num points allocated
-g3s_point 	*first_free=0;   //   dd      0       ;ptr to first free pnt
+g3s_point     *point_list=0;    //    dd        0         ;ptr to point buffer
+int16_t                n_points=0;        //    dw        0         ;num points allocated
+g3s_point     *first_free=0;    //    dd        0         ;ptr to first free pnt
 
-g3s_matrix	unscaled_matrix; // g3s_matrix <>   ;unscaled & unadjusted
+g3s_matrix    unscaled_matrix; // g3s_matrix <>    ;unscaled & unadjusted
 
 // note: view_matrix and view_position must remain in this order!
-g3s_matrix 	view_matrix;     // g3s_matrix <>
-g3s_vector	_view_position;  // g3s_vector <>
-fix					_view_zoom;      // fix     ?
-fix					view_heading;    // fix     ?
-fix					view_pitch;      // fix     ?
-fix					view_bank;       // fix     ?
+g3s_matrix     view_matrix;      // g3s_matrix <>
+g3s_vector    _view_position;  // g3s_vector <>
+fix                    _view_zoom;        // fix      ?
+fix                    view_heading;     // fix      ?
+fix                    view_pitch;        // fix      ?
+fix                    view_bank;         // fix      ?
 
 //are to save inverse object to world matrix and position
 //to go from world to object, take Ax + a (like in real 3d)
-g3s_matrix	_wtoo_matrix;  		//  g3s_matrix <>
-g3s_vector	_wtoo_position;		//  g3s_vector <>
+g3s_matrix    _wtoo_matrix;          //  g3s_matrix <>
+g3s_vector    _wtoo_position;        //  g3s_vector <>
 
 
-fix 				pixel_ratio;    		//  fix     ?       ;copy from 2d drv_cap
+fix                 pixel_ratio;             //  fix      ?         ;copy from 2d drv_cap
 
-int32_t				window_width;  		//  dd      ?
-int32_t				window_height; 		//  dd      ?
+int32_t                window_width;          //  dd        ?
+int32_t                window_height;         //  dd        ?
 
-int32_t				ww2;  							//  dd      ?       ;one-half widht,height
-int32_t				wh2; 							//  dd      ?       ;..for texture mapper
+int32_t                ww2;                              //  dd        ?         ;one-half widht,height
+int32_t                wh2;                             //  dd        ?         ;..for texture mapper
 
-int32_t				_scrw; 						//  dd      ?       ;need to do double-word mul
-int32_t				_scrh;  						//	dd      ?
+int32_t                _scrw;                         //  dd        ?         ;need to do double-word mul
+int32_t                _scrh;                          //    dd        ?
 
-fix					_biasx;  					//	fix     ?
-fix					_biasy; 						// fix     ?
+fix                    _biasx;                      //    fix      ?
+fix                    _biasy;                         // fix      ?
 
-g3s_vector	_matrix_scale;  		//  <>   ;how the columns are scaled
-g3s_vector	horizon_vector; 		//  <>   ;info for drawing the horizon
+g3s_vector    _matrix_scale;          //  <>    ;how the columns are scaled
+g3s_vector    horizon_vector;         //  <>    ;info for drawing the horizon
 
 //this tables tells you many bits to shift to get zero
 uint8_t shift_table[256] ={0,
-												1,
-												2,2,
-												3,3,3,3,
-												4,4,4,4,4,4,4,4,
-												5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
-												6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
-												7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-												7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-												8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-												8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-												8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-												8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8};
-/*  db      0
-	db      1
-	db      2   dup (2)
-	db      4   dup (3)
-	db      8   dup (4)
-	db      16  dup (5)
-	db      32  dup (6)
-	db      64  dup (7)
-	db      128 dup (8)*/
+                                                1,
+                                                2,2,
+                                                3,3,3,3,
+                                                4,4,4,4,4,4,4,4,
+                                                5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+                                                6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+                                                7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+                                                7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+                                                8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+                                                8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+                                                8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+                                                8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8};
+/*  db        0
+    db        1
+    db        2    dup (2)
+    db        4    dup (3)
+    db        8    dup (4)
+    db        16  dup (5)
+    db        32  dup (6)
+    db        64  dup (7)
+    db        128 dup (8)*/
 
 //these vars describe the translation from the user's coordinate system
 //to our coordinate system
 
-int32_t			up_axis;			// dd      ?
+int32_t            up_axis;            // dd        ?
 
 //which axis is our x,y,z?
-int32_t			axis_x;			//  dd      ?
-int32_t			axis_z;			//  dd      ?
-int32_t			axis_y;			//  dd      ?
+int32_t            axis_x;            //  dd        ?
+int32_t            axis_z;            //  dd        ?
+int32_t            axis_y;            //  dd        ?
 
 //offset into matrix of axis which is x,y,z
-int32_t			axis_x_ofs;			//      dd      ?
-int32_t			axis_z_ofs;			//      dd      ?
-int32_t			axis_y_ofs;			//      dd      ?
+int32_t            axis_x_ofs;            //        dd        ?
+int32_t            axis_z_ofs;            //        dd        ?
+int32_t            axis_y_ofs;            //        dd        ?
 
-int8_t			axis_swap_flag; 	// 			db      ?
-int8_t			axis_neg_flag;   //			db      ?
+int8_t            axis_swap_flag;     //             db        ?
+int8_t            axis_neg_flag;    //            db        ?
 
 // Lighting globals
-int8_t 			_g3d_light_type=0;		// db      0       ; The lighting type, see above
+int8_t             _g3d_light_type=0;        // db        0         ; The lighting type, see above
 
-fix				_g3d_amb_light=0;  				// fix    0       ; amount of ambient light
-fix				_g3d_diff_light=0x10000; 	// fix    10000h  ; intensity of light source
-fix				_g3d_spec_light=0; 				// fix    0       ; amount of spec light
-fix				_g3d_flash=0;       			// fix    0       ; specular flash point below which none is applied
+fix                _g3d_amb_light=0;                  // fix     0         ; amount of ambient light
+fix                _g3d_diff_light=0x10000;     // fix     10000h  ; intensity of light source
+fix                _g3d_spec_light=0;                 // fix     0         ; amount of spec light
+fix                _g3d_flash=0;                     // fix     0         ; specular flash point below which none is applied
 // note that specular light is used to provide a "flash" mostly
 // so you can artificially inflate it a bit, or we could try
 // funny functions to make it "flash" only within a certain
 // range.
 
-g3s_vector	_g3d_light_src;			//  g3s_vector      <>      ; light source, either local or vector
-g3s_vector	_g3d_light_trans;		//  g3s_vector   		<>      ; point source in view coords
-g3s_vector	_g3d_light_vec;			//  g3s_vector      <>      ; current light vector, computed from src and flag
+g3s_vector    _g3d_light_src;            //  g3s_vector        <>        ; light source, either local or vector
+g3s_vector    _g3d_light_trans;        //  g3s_vector            <>        ; point source in view coords
+g3s_vector    _g3d_light_vec;            //  g3s_vector        <>        ; current light vector, computed from src and flag
 
-g3s_vector	_g3d_view_vec;				//  g3s_vector      <>      ; current viewing vector, may have to be computed periodically
+g3s_vector    _g3d_view_vec;                //  g3s_vector        <>        ; current viewing vector, may have to be computed periodically
 
-fix					_g3d_ldotv;  				//  fix     ?       ; light vector dotted with view vector (for specular only)
-fix					_g3d_sdotl;    			//  fix     ?       ; surface vector dotted with light vector (for diffuse and spec)
-fix					_g3d_sdotv;    			//  fix     ?       ; surface vector dotted with view vector (ostensibly jnorm)
+fix                    _g3d_ldotv;                  //  fix      ?         ; light vector dotted with view vector (for specular only)
+fix                    _g3d_sdotl;                 //  fix      ?         ; surface vector dotted with light vector (for diffuse and spec)
+fix                    _g3d_sdotv;                 //  fix      ?         ; surface vector dotted with view vector (ostensibly jnorm)
 
-int32_t				_g3d_light_tab=0;		//  dd      0       ; lighting table with 32 or 24 entries.  Should go from black to white,
+int32_t                _g3d_light_tab=0;        //  dd        0         ; lighting table with 32 or 24 entries.  Should go from black to white,
 
 
 // stereo globals, read em and weep
-fix					_g3d_eyesep_raw=0;       //  fix     0     ;raw 3d sep between eyes
-fix					_g3d_eyesep=0;           //  fix     0     ;scaled eye sep between eyes
-int32_t				_g3d_stereo_base=0;      //   dd     0     ;stereo point offset, default zero, means non
-int32_t				_g3d_stereo_list=0;      //   dd     0     ;start of stereo point list, makes it easy to detect
-int8_t				_g3d_stereo=0;           //   db     0     ;stereo this frame
-int32_t				_g3d_rt_canv=0;          //   dd     0     ;pointer to right eye canvas
-int32_t				_g3d_rt_canv_bits=0;     //   dd     0     ;pointer to bits of rt canvas
-int32_t				_g3d_lt_canv_bits=0;     //   dd     0     ;pointer to bits of lt canvas
-int32_t				_g3d_stereo_tmp[14];     //   dd     14 dup (?) ;temporary point list
+fix                    _g3d_eyesep_raw=0;         //  fix      0      ;raw 3d sep between eyes
+fix                    _g3d_eyesep=0;              //  fix      0      ;scaled eye sep between eyes
+int32_t                _g3d_stereo_base=0;        //    dd      0      ;stereo point offset, default zero, means non
+int32_t                _g3d_stereo_list=0;        //    dd      0      ;start of stereo point list, makes it easy to detect
+int8_t                _g3d_stereo=0;              //    db      0      ;stereo this frame
+int32_t                _g3d_rt_canv=0;             //    dd      0      ;pointer to right eye canvas
+int32_t                _g3d_rt_canv_bits=0;      //    dd      0      ;pointer to bits of rt canvas
+int32_t                _g3d_lt_canv_bits=0;      //    dd      0      ;pointer to bits of lt canvas
+int32_t                _g3d_stereo_tmp[14];      //    dd      14 dup (?) ;temporary point list
 
 
 //palette base for gouraud-shaded polys
 
-sfix				gouraud_base;  					 //  sfix    ?
+sfix                gouraud_base;                       //  sfix     ?
 
 //for statistics
-/*	ifdef   dbg_on
+/*    ifdef    dbg_on
 
-n_polys dw      ?
-n_polys_drawn   dw      ?
-n_polys_triv_acc        dw      ?
-n_polys_triv_rej        dw      ?
-n_polys_clip_2d dw      ?
-n_polys_clip_3d dw      ?
+n_polys dw        ?
+n_polys_drawn    dw        ?
+n_polys_triv_acc          dw        ?
+n_polys_triv_rej          dw        ?
+n_polys_clip_2d dw        ?
+n_polys_clip_3d dw        ?
 
-	endif*/
+    endif*/

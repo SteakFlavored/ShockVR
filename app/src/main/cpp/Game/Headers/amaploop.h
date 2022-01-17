@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define AMAP_FULLEXPOSE (LL_CHG_BASE<<1)
-#define AMAP_MAP_EV     (LL_CHG_BASE<<2)
+#define AMAP_MAP_EV      (LL_CHG_BASE<<2)
 #define AMAP_BUTTON_EV  (LL_CHG_BASE<<3)
 #define AMAP_MESSAGE_EV (LL_CHG_BASE<<4)
 

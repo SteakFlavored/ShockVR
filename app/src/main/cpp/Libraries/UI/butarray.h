@@ -91,7 +91,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // buttonarray is automatically computed from these parameters.  The upper left of the button array is
 // indicated by the coord parameter.  If NULL is passed as the style parameter, the default style is used.
 Gadget *gad_buttonarray_create(Gadget *parent, LGPoint coord, int32_t z, int32_t msize_x, int32_t msize_y, int32_t window_x, int32_t window_y,
-   int32_t bsize_x, int32_t bsize_y, int32_t num_sel, uint16_t options, TNGStyle *sty, int8_t *name);
+    int32_t bsize_x, int32_t bsize_y, int32_t num_sel, uint16_t options, TNGStyle *sty, int8_t *name);
 
 // Fills in a slot in the button array with a button of type type, with display information disp_data.
 // The button will occupy the first empty slot.

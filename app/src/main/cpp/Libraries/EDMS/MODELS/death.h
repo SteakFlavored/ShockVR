@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//	This seems silly now, but later it will all make sense, sensei...
-//	=================================================================
-int32_t	make_death( Q init_state[6][3], Q params[10] );
+//    This seems silly now, but later it will all make sense, sensei...
+//    =================================================================
+int32_t    make_death( Q init_state[6][3], Q params[10] );
 

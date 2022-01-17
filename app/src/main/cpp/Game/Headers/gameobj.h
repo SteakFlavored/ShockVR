@@ -30,19 +30,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void show_obj(ObjRefID oRef);
 
 // list of special obj numbers for renderer
-#define FAUBJ_UNKNOWN   0
+#define FAUBJ_UNKNOWN    0
 #define FAUBJ_TEXTPOLY  1
-#define FAUBJ_BITMAP    2
-#define FAUBJ_TPOLY     3
-#define FAUBJ_CRIT      4
+#define FAUBJ_BITMAP     2
+#define FAUBJ_TPOLY      3
+#define FAUBJ_CRIT        4
 #define FAUBJ_ANIMPOLY  5
-#define FAUBJ_VOX       6
-#define FAUBJ_NOOBJ     7
+#define FAUBJ_VOX         6
+#define FAUBJ_NOOBJ      7
 #define FAUBJ_TEXBITMAP 8
 #define FAUBJ_FLATPOLY  9
 #define FAUBJ_MULTIVIEW 10
-#define FAUBJ_SPECIAL   11
-#define FAUBJ_TL_POLY   12
+#define FAUBJ_SPECIAL    11
+#define FAUBJ_TL_POLY    12
 
 #define NUM_OBJ_RENDER_TYPES  (FAUBJ_TL_POLY+1)
 

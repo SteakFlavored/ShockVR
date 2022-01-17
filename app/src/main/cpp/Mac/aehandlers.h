@@ -18,17 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //====================================================================
 //
-//		System Shock - Macintosh.
+//        System Shock - Macintosh.
 //
-//		High-Level Event handling code.
+//        High-Level Event handling code.
 //
 //====================================================================
 
 #include <AppleEvents.h>
 
-void				DoAEInstallation(void);
-OSErr 			RequiredCheck(AppleEvent *theAppleEvent);
-pascal OSErr	HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
-pascal OSErr	HandleODOC(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
-pascal OSErr	HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
-pascal OSErr	HandleQUIT(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
+void                DoAEInstallation(void);
+OSErr             RequiredCheck(AppleEvent *theAppleEvent);
+pascal OSErr    HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
+pascal OSErr    HandleODOC(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
+pascal OSErr    HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
+pascal OSErr    HandleQUIT(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);

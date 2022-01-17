@@ -40,24 +40,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "flat8.h"
 
 /* draw an unclipped, horizontally flipped flat 8 bitmap to a flat 8
-   canvas through a color lookup table (clut). */
+    canvas through a color lookup table (clut). */
 void flat8_clut_hflip_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y,uint8_t *cl)
 {
-	int16_t w;                   /* bitmap width */
-	int16_t h;                   /* height */
-	uint8_t *src;                /* pointer into source bitmap */
-	uint8_t *dst;                /* pointer into canvas memory */
-	uint16_t	row;
+    int16_t w;                         /* bitmap width */
+    int16_t h;                         /* height */
+    uint8_t *src;                     /* pointer into source bitmap */
+    uint8_t *dst;                     /* pointer into canvas memory */
+    uint16_t    row;
 
-	if (cl == NULL) cl=gr_get_clut();
-	h = bm->h;
-	src = bm->bits;
-	dst = grd_bm.bits + y*grd_bm.row + x+bm->w-1;
-	while (h--) {
-	w = bm->w;
-	while (w--)
-	 *dst-- = cl[*src++];
-	src += bm->row-bm->w;
-	dst += grd_bm.row+bm->w;
-	}
+    if (cl == NULL) cl=gr_get_clut();
+    h = bm->h;
+    src = bm->bits;
+    dst = grd_bm.bits + y*grd_bm.row + x+bm->w-1;
+    while (h--) {
+    w = bm->w;
+    while (w--)
+     *dst-- = cl[*src++];
+    src += bm->row-bm->w;
+    dst += grd_bm.row+bm->w;
+    }
 }

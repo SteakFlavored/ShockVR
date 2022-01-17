@@ -78,10 +78,10 @@ extern int32_t gr_clip_flat8_bitmap (grs_bitmap *bm, int16_t *x, int16_t *y);
 extern int32_t gr_clip_flat24_bitmap (grs_bitmap *bm, int16_t *x, int16_t *y);
 
 /* clip codes. */
-#define CLIP_NONE    0
-#define CLIP_LEFT    1
-#define CLIP_TOP     2
-#define CLIP_RIGHT   4
-#define CLIP_BOT     8
-#define CLIP_ALL     16
+#define CLIP_NONE     0
+#define CLIP_LEFT     1
+#define CLIP_TOP      2
+#define CLIP_RIGHT    4
+#define CLIP_BOT      8
+#define CLIP_ALL      16
 #endif /* !__CLIP_H */

@@ -72,7 +72,7 @@ void gr_set_gamma_pal (int32_t start, int32_t n, fix gamma)
 
   /* set gamma corrected values from grd_pal into tmp buf */
   for (i=start*3;i<3*(start+n);++i)
-    tmp_pal[i] = (uint8_t)fix_rint(fix_pow(fix_make(grd_pal[i],0)/255,gamma)*255);
+     tmp_pal[i] = (uint8_t)fix_rint(fix_pow(fix_make(grd_pal[i],0)/255,gamma)*255);
 
   /* write tmp buf into hardware */
   gr_set_screen_pal (0, 256, tmp_pal);
@@ -81,25 +81,25 @@ void gr_set_gamma_pal (int32_t start, int32_t n, fix gamma)
 /* copy user's palette into shadow palette, then set real palette. */
 void gr_set_pal (int32_t start, int32_t n, uint8_t *pal_data)
 {
-   int32_t i;
-   uint8_t r,g,b;            /* red,green,blue values */
+    int32_t i;
+    uint8_t r,g,b;                /* red,green,blue values */
 
-   if (n <= 0)
-      return;
-   memcpy (grd_pal+3*start, pal_data, 3*n);
-   for (i=start; i<start+n; i++) {
-      r = grd_pal[3*i];
-      g = grd_pal[3*i+1];
-      b = grd_pal[3*i+2];
-      grd_bpal[i] = gr_bind_rgb (r, g, b);
-   }
-   gr_set_screen_pal (start, n, grd_pal+3*start);
+    if (n <= 0)
+        return;
+    memcpy (grd_pal+3*start, pal_data, 3*n);
+    for (i=start; i<start+n; i++) {
+        r = grd_pal[3*i];
+        g = grd_pal[3*i+1];
+        b = grd_pal[3*i+2];
+        grd_bpal[i] = gr_bind_rgb (r, g, b);
+    }
+    gr_set_screen_pal (start, n, grd_pal+3*start);
 }
 
 /* copy the shadow palette to a destination buffer. */
 void gr_get_pal (int32_t start, int32_t n, uint8_t *pal_data)
 {
-   if (n <= 0)
-      return;
-   memcpy (pal_data, grd_pal+3*start, 3*n);
+    if (n <= 0)
+        return;
+    memcpy (pal_data, grd_pal+3*start, 3*n);
 }

@@ -28,8 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
-#define CHAR_SOFTCR     0x01            // soft carriage return (wrapped text)
-#define CHAR_SOFTSP     0x02            // soft space (wrapped text)
+#define CHAR_SOFTCR      0x01                // soft carriage return (wrapped text)
+#define CHAR_SOFTSP      0x02                // soft space (wrapped text)
 
 extern int32_t wrap_text(int8_t *ps, int16_t width);
 extern void unwrap_text(int8_t *s);

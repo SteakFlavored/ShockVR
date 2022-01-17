@@ -30,18 +30,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // bit masks for the player_struct email inventory
 
 
-#define EMAIL_GOT          0x80  // we've got the email
-#define EMAIL_READ         0x40  // we've read it.
-#define EMAIL_SEQ          0x3F  /* sequence number of emails
-                                    from this sender */
-#define EMAIL_SEQ_SHF      0
+#define EMAIL_GOT             0x80  // we've got the email
+#define EMAIL_READ            0x40  // we've read it.
+#define EMAIL_SEQ             0x3F  /* sequence number of emails
+                                                from this sender */
+#define EMAIL_SEQ_SHF        0
 
 
 // flavors of data
 
-#define EMAIL_VER    0
-#define LOG_VER      1
-#define DATA_VER     2
+#define EMAIL_VER     0
+#define LOG_VER        1
+#define DATA_VER      2
 
 #endif // __EMAILBIT_H
 

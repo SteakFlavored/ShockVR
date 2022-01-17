@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * takes grs_font* as first arg, #define in str.h for compatibility
  *
  * Revision 1.4  1993/10/19  02:57:51  kaboom
- * Replaced #include   new headers.
+ * Replaced #include    new headers.
  *
  * Revision 1.3  1993/10/08  01:15:04  kaboom
  * Changed quotes in #include liness to angle brackets for Watcom problem.
@@ -53,11 +53,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* returns the width in pixels of c in the specified font. */
 int16_t gr_font_char_width (grs_font *f, int8_t c)
 {
-   int16_t *off_tab;            /* character offset table */
-   int16_t offset;              /* offset of current character */
+    int16_t *off_tab;                /* character offset table */
+    int16_t offset;                  /* offset of current character */
 
-   if ((uint8_t)c < f->min || (uint8_t)c > f->max) return 0;
-   off_tab = f->off_tab;
-   offset = off_tab[(uint8_t)c - f->min];
-   return off_tab[(uint8_t)c - f->min+1]-offset;
+    if ((uint8_t)c < f->min || (uint8_t)c > f->max) return 0;
+    off_tab = f->off_tab;
+    offset = off_tab[(uint8_t)c - f->min];
+    return off_tab[(uint8_t)c - f->min+1]-offset;
 }

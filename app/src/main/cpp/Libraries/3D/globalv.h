@@ -48,109 +48,109 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // point allocation vars
 
-extern g3s_point	*point_list;   //   dd      0       ;ptr to point buffer
-extern int16_t			n_points;      //   dw      0       ;num points allocated
-extern g3s_point 	*first_free;   //   dd      0       ;ptr to first free pnt
+extern g3s_point    *point_list;    //    dd        0         ;ptr to point buffer
+extern int16_t            n_points;        //    dw        0         ;num points allocated
+extern g3s_point     *first_free;    //    dd        0         ;ptr to first free pnt
 
-extern g3s_matrix	unscaled_matrix; // g3s_matrix <>   ;unscaled & unadjusted
+extern g3s_matrix    unscaled_matrix; // g3s_matrix <>    ;unscaled & unadjusted
 
 // note: view_matrix and view_position must remain in this order!
-extern g3s_matrix 	view_matrix;     // g3s_matrix <>
-extern g3s_vector	_view_position;  // g3s_vector <>
-extern fix					_view_zoom;      // fix     ?
-extern fix					view_heading;    // fix     ?
-extern fix					view_pitch;      // fix     ?
-extern fix					view_bank;       // fix     ?
+extern g3s_matrix     view_matrix;      // g3s_matrix <>
+extern g3s_vector    _view_position;  // g3s_vector <>
+extern fix                    _view_zoom;        // fix      ?
+extern fix                    view_heading;     // fix      ?
+extern fix                    view_pitch;        // fix      ?
+extern fix                    view_bank;         // fix      ?
 
 //are to save inverse object to world matrix and position
 //to go from world to object, take Ax + a (like in real 3d)
-extern g3s_matrix	_wtoo_matrix;  		//  g3s_matrix <>
-extern g3s_vector	_wtoo_position;		//  g3s_vector <>
+extern g3s_matrix    _wtoo_matrix;          //  g3s_matrix <>
+extern g3s_vector    _wtoo_position;        //  g3s_vector <>
 
 
-extern fix 				pixel_ratio;    		//  fix     ?       ;copy from 2d drv_cap
+extern fix                 pixel_ratio;             //  fix      ?         ;copy from 2d drv_cap
 
-extern int32_t				window_width;  		//  dd      ?
-extern int32_t				window_height; 		//  dd      ?
+extern int32_t                window_width;          //  dd        ?
+extern int32_t                window_height;         //  dd        ?
 
-extern int32_t				ww2;  							//  dd      ?       ;one-half widht,height
-extern int32_t				wh2; 							//  dd      ?       ;..for texture mapper
+extern int32_t                ww2;                              //  dd        ?         ;one-half widht,height
+extern int32_t                wh2;                             //  dd        ?         ;..for texture mapper
 
-extern int32_t				_scrw; 						//  dd      ?       ;need to do double-word mul
-extern int32_t				_scrh;  						//	dd      ?
+extern int32_t                _scrw;                         //  dd        ?         ;need to do double-word mul
+extern int32_t                _scrh;                          //    dd        ?
 
-extern fix					_biasx;  					//	fix     ?
-extern fix					_biasy; 						// fix     ?
+extern fix                    _biasx;                      //    fix      ?
+extern fix                    _biasy;                         // fix      ?
 
-extern g3s_vector	_matrix_scale;  		//  <>   ;how the columns are scaled
-extern g3s_vector	horizon_vector; 		//  <>   ;info for drawing the horizon
+extern g3s_vector    _matrix_scale;          //  <>    ;how the columns are scaled
+extern g3s_vector    horizon_vector;         //  <>    ;info for drawing the horizon
 
 //this tables tells you many bits to shift to get zero
 extern uint8_t shift_table[];
-extern int32_t			up_axis;			// dd      ?
+extern int32_t            up_axis;            // dd        ?
 
 //which axis is our x,y,z?
-extern int32_t			axis_x;			//  dd      ?
-extern int32_t			axis_z;			//  dd      ?
-extern int32_t			axis_y;			//  dd      ?
+extern int32_t            axis_x;            //  dd        ?
+extern int32_t            axis_z;            //  dd        ?
+extern int32_t            axis_y;            //  dd        ?
 
 //offset into matrix of axis which is x,y,z
-extern int32_t			axis_x_ofs;			//      dd      ?
-extern int32_t			axis_z_ofs;			//      dd      ?
-extern int32_t			axis_y_ofs;			//      dd      ?
+extern int32_t            axis_x_ofs;            //        dd        ?
+extern int32_t            axis_z_ofs;            //        dd        ?
+extern int32_t            axis_y_ofs;            //        dd        ?
 
-extern int8_t			axis_swap_flag; 	// 			db      ?
-extern int8_t			axis_neg_flag;   //			db      ?
+extern int8_t            axis_swap_flag;     //             db        ?
+extern int8_t            axis_neg_flag;    //            db        ?
 
 // Lighting globals
-extern int8_t 			_g3d_light_type;		// db      0       ; The lighting type, see above
+extern int8_t             _g3d_light_type;        // db        0         ; The lighting type, see above
 
-extern fix				_g3d_amb_light;  				// fix    0       ; amount of ambient light
-extern fix				_g3d_diff_light; 	// fix    10000h  ; intensity of light source
-extern fix				_g3d_spec_light; 				// fix    0       ; amount of spec light
-extern fix				_g3d_flash;       			// fix    0       ; specular flash point below which none is applied
+extern fix                _g3d_amb_light;                  // fix     0         ; amount of ambient light
+extern fix                _g3d_diff_light;     // fix     10000h  ; intensity of light source
+extern fix                _g3d_spec_light;                 // fix     0         ; amount of spec light
+extern fix                _g3d_flash;                     // fix     0         ; specular flash point below which none is applied
 // note that specular light is used to provide a "flash" mostly
 // so you can artificially inflate it a bit, or we could try
 // funny functions to make it "flash" only within a certain
 // range.
 
-extern g3s_vector	_g3d_light_src;			//  g3s_vector      <>      ; light source, either local or vector
-extern g3s_vector	_g3d_light_trans;		//  g3s_vector   		<>      ; point source in view coords
-extern g3s_vector	_g3d_light_vec;			//  g3s_vector      <>      ; current light vector, computed from src and flag
+extern g3s_vector    _g3d_light_src;            //  g3s_vector        <>        ; light source, either local or vector
+extern g3s_vector    _g3d_light_trans;        //  g3s_vector            <>        ; point source in view coords
+extern g3s_vector    _g3d_light_vec;            //  g3s_vector        <>        ; current light vector, computed from src and flag
 
-extern g3s_vector	_g3d_view_vec;				//  g3s_vector      <>      ; current viewing vector, may have to be computed periodically
+extern g3s_vector    _g3d_view_vec;                //  g3s_vector        <>        ; current viewing vector, may have to be computed periodically
 
-extern fix					_g3d_ldotv;  				//  fix     ?       ; light vector dotted with view vector (for specular only)
-extern fix					_g3d_sdotl;    			//  fix     ?       ; surface vector dotted with light vector (for diffuse and spec)
-extern fix					_g3d_sdotv;    			//  fix     ?       ; surface vector dotted with view vector (ostensibly jnorm)
+extern fix                    _g3d_ldotv;                  //  fix      ?         ; light vector dotted with view vector (for specular only)
+extern fix                    _g3d_sdotl;                 //  fix      ?         ; surface vector dotted with light vector (for diffuse and spec)
+extern fix                    _g3d_sdotv;                 //  fix      ?         ; surface vector dotted with view vector (ostensibly jnorm)
 
-extern int32_t				_g3d_light_tab;		//  dd      0       ; lighting table with 32 or 24 entries.  Should go from black to white,
+extern int32_t                _g3d_light_tab;        //  dd        0         ; lighting table with 32 or 24 entries.  Should go from black to white,
 
 
 // stereo globals, read em and weep
-extern fix				_g3d_eyesep_raw;       //  fix     0     ;raw 3d sep between eyes
-extern fix				_g3d_eyesep;           //  fix     0     ;scaled eye sep between eyes
-extern int32_t				_g3d_stereo_base;      //   dd     0     ;stereo point offset, default zero, means non
-extern int32_t				_g3d_stereo_list;      //   dd     0     ;start of stereo point list, makes it easy to detect
-extern int8_t				_g3d_stereo;           //   db     0     ;stereo this frame
-extern int32_t				_g3d_rt_canv;          //   dd     0     ;pointer to right eye canvas
-extern int32_t				_g3d_rt_canv_bits;     //   dd     0     ;pointer to bits of rt canvas
-extern int32_t				_g3d_lt_canv_bits;     //   dd     0     ;pointer to bits of lt canvas
-extern int32_t				_g3d_stereo_tmp[14];     //   dd     14 dup (?) ;temporary point list
+extern fix                _g3d_eyesep_raw;         //  fix      0      ;raw 3d sep between eyes
+extern fix                _g3d_eyesep;              //  fix      0      ;scaled eye sep between eyes
+extern int32_t                _g3d_stereo_base;        //    dd      0      ;stereo point offset, default zero, means non
+extern int32_t                _g3d_stereo_list;        //    dd      0      ;start of stereo point list, makes it easy to detect
+extern int8_t                _g3d_stereo;              //    db      0      ;stereo this frame
+extern int32_t                _g3d_rt_canv;             //    dd      0      ;pointer to right eye canvas
+extern int32_t                _g3d_rt_canv_bits;      //    dd      0      ;pointer to bits of rt canvas
+extern int32_t                _g3d_lt_canv_bits;      //    dd      0      ;pointer to bits of lt canvas
+extern int32_t                _g3d_stereo_tmp[14];      //    dd      14 dup (?) ;temporary point list
 
 
 //palette base for gouraud-shaded polys
 
-extern sfix				gouraud_base;  					 //  sfix    ?
+extern sfix                gouraud_base;                       //  sfix     ?
 
 //for statistics
-/*	ifdef   dbg_on
+/*    ifdef    dbg_on
 
-n_polys dw      ?
-n_polys_drawn   dw      ?
-n_polys_triv_acc        dw      ?
-n_polys_triv_rej        dw      ?
-n_polys_clip_2d dw      ?
-n_polys_clip_3d dw      ?
+n_polys dw        ?
+n_polys_drawn    dw        ?
+n_polys_triv_acc          dw        ?
+n_polys_triv_rej          dw        ?
+n_polys_clip_2d dw        ?
+n_polys_clip_3d dw        ?
 
-	endif*/
+    endif*/

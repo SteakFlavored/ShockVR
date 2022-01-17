@@ -36,21 +36,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fix.h"
 
 typedef struct {
-   uint8_t ltol, wftol;
-   fix cltol;
+    uint8_t ltol, wftol;
+    fix cltol;
 } gr_per_detail_level;
 
 enum {
-   GR_LOW_PER_DETAIL,
-   GR_MEDIUM_PER_DETAIL,
-   GR_HIGH_PER_DETAIL,
-   GR_NUM_PER_DETAIL_LEVELS
+    GR_LOW_PER_DETAIL,
+    GR_MEDIUM_PER_DETAIL,
+    GR_HIGH_PER_DETAIL,
+    GR_NUM_PER_DETAIL_LEVELS
 };
 
 extern void gr_set_per_tol(uint8_t linear_tol, uint8_t wall_floor_tol);
 extern void gr_set_clut_lit_tol(fix clut_lit_tol);
 extern void gr_set_per_detail_level(int32_t detail_level);
 extern void gr_set_per_detail_level_param
-   (int32_t linear_tol, int32_t wall_floor_tol, fix clut_lit_tol, int32_t detail_level);
+    (int32_t linear_tol, int32_t wall_floor_tol, fix clut_lit_tol, int32_t detail_level);
 
 #endif

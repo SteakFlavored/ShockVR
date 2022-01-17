@@ -29,8 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 //#define OLH_QBIT 0x91
-extern bool		olh_active;
-extern bool 	olh_overlay_on;
+extern bool        olh_active;
+extern bool     olh_overlay_on;
 
 void olh_do_hudobjs(int16_t xl, int16_t yl);
 void olh_overlay(void);

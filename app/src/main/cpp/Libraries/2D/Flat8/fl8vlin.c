@@ -64,69 +64,69 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void gri_flat8_uvline_ns (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-	uint8_t *p;
-	int16_t  t;
-	int32_t		 grow = grd_bm.row;
+    uint8_t *p;
+    int16_t  t;
+    int32_t         grow = grd_bm.row;
 
-	if (y0 > y1) {
-	  t = y0; y0 = y1; y1 = t;
-	}
-	if (gr_get_fill_type() ==  FILL_SOLID)
-	 c = (uint8_t)parm;
+    if (y0 > y1) {
+      t = y0; y0 = y1; y1 = t;
+    }
+    if (gr_get_fill_type() ==  FILL_SOLID)
+     c = (uint8_t)parm;
 
-	p = grd_bm.bits + y0*grow + x0;
-	for (; y0<=y1; y0++) {
-	  *p = c;
-	  p += grow;
-	}
+    p = grd_bm.bits + y0*grow + x0;
+    for (; y0<=y1; y0++) {
+      *p = c;
+      p += grow;
+    }
 }
 
 void gri_flat8_uvline_clut (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-	uint8_t *p;
-	int16_t  t;
-	int32_t		 grow = grd_bm.row;
+    uint8_t *p;
+    int16_t  t;
+    int32_t         grow = grd_bm.row;
 
-	if (y0 > y1) {
-	  t = y0; y0 = y1; y1 = t;
-	}
-	c = (int32_t) (((uint8_t *) parm) [c]);
-	p = grd_bm.bits + y0*grow + x0;
-	for (; y0<=y1; y0++) {
-	  *p = c;
-	  p += grow;
-	}
+    if (y0 > y1) {
+      t = y0; y0 = y1; y1 = t;
+    }
+    c = (int32_t) (((uint8_t *) parm) [c]);
+    p = grd_bm.bits + y0*grow + x0;
+    for (; y0<=y1; y0++) {
+      *p = c;
+      p += grow;
+    }
 }
 
 void gri_flat8_uvline_xor (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-	uint8_t *p;
-	int16_t  t;
-	int32_t		 grow = grd_bm.row;
+    uint8_t *p;
+    int16_t  t;
+    int32_t         grow = grd_bm.row;
 
-	if (y0 > y1) {
-	  t = y0; y0 = y1; y1 = t;
-	}
-	p = grd_bm.bits + y0*grow + x0;
-	for (; y0<=y1; y0++) {
-	  *p = *p ^ c;
-	  p += grow;
-	}
+    if (y0 > y1) {
+      t = y0; y0 = y1; y1 = t;
+    }
+    p = grd_bm.bits + y0*grow + x0;
+    for (; y0<=y1; y0++) {
+      *p = *p ^ c;
+      p += grow;
+    }
 }
 
 /* punt */
 void gri_flat8_uvline_blend (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-	uint8_t *p;
-	int16_t  t;
-	int32_t		 grow = grd_bm.row;
+    uint8_t *p;
+    int16_t  t;
+    int32_t         grow = grd_bm.row;
 
-	if (y0 > y1) {
-	  t = y0; y0 = y1; y1 = t;
-	}
-	p = grd_bm.bits + y0*grow + x0;
-	for (; y0<=y1; y0++) {
-	  *p = c;
-	  p += grow;
-	}
+    if (y0 > y1) {
+      t = y0; y0 = y1; y1 = t;
+    }
+    p = grd_bm.bits + y0*grow + x0;
+    for (; y0<=y1; y0++) {
+      *p = c;
+      p += grow;
+    }
 }

@@ -47,40 +47,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tng.h"
 
 typedef struct {
-   TNG *tng_data;
-   LGPoint size;
-   int16_t last_key;
-   uint32_t options;
-   TextTool *tt;
-   TNG *hscroll_tng, *vscroll_tng;
+    TNG *tng_data;
+    LGPoint size;
+    int16_t last_key;
+    uint32_t options;
+    TextTool *tt;
+    TNG *hscroll_tng, *vscroll_tng;
 } TNG_textgadget;
 
-#define TNG_TG_TEXTAREA   0x0001
+#define TNG_TG_TEXTAREA    0x0001
 #define TNG_TG_HSCROLL  0x0002
 #define TNG_TG_VSCROLL  0x0004
 
-#define TNG_TG_BORDER_WIDTH   1
-#define TNG_TG_SCROLL_X       14
-#define TNG_TG_SCROLL_Y       14
+#define TNG_TG_BORDER_WIDTH    1
+#define TNG_TG_SCROLL_X         14
+#define TNG_TG_SCROLL_Y         14
 
-#define TNG_TG_RETURN_KEY          0xd
-#define TNG_TG_UP_KEY              0x48
-#define TNG_TG_DOWN_KEY            0x50
-#define TNG_TG_LEFT_KEY            0x4b
-#define TNG_TG_RIGHT_KEY           0x4d
-#define TNG_TG_SCROLL_LEFT_KEY     0x47
-#define TNG_TG_SCROLL_RIGHT_KEY    0x4f
-#define TNG_TG_SCROLL_UP_KEY       0x49
-#define TNG_TG_SCROLL_DOWN_KEY     0x51
+#define TNG_TG_RETURN_KEY             0xd
+#define TNG_TG_UP_KEY                  0x48
+#define TNG_TG_DOWN_KEY                0x50
+#define TNG_TG_LEFT_KEY                0x4b
+#define TNG_TG_RIGHT_KEY              0x4d
+#define TNG_TG_SCROLL_LEFT_KEY      0x47
+#define TNG_TG_SCROLL_RIGHT_KEY     0x4f
+#define TNG_TG_SCROLL_UP_KEY         0x49
+#define TNG_TG_SCROLL_DOWN_KEY      0x51
 
-#define TNG_TG_SINGLE_LINE        0x0001
-#define TNG_TG_LINE_SET           0x0002
-#define TNG_TG_READ_ONLY          0x0004
+#define TNG_TG_SINGLE_LINE          0x0001
+#define TNG_TG_LINE_SET              0x0002
+#define TNG_TG_READ_ONLY             0x0004
 
-#define TNG_TG_HORZ_SCROLL        0x1000
-#define TNG_TG_VERT_SCROLL        0x2000
+#define TNG_TG_HORZ_SCROLL          0x1000
+#define TNG_TG_VERT_SCROLL          0x2000
 
-#define TNG_TG_SCROLLBARS   TNG_TG_HORZ_SCROLL | TNG_TG_VERT_SCROLL
+#define TNG_TG_SCROLLBARS    TNG_TG_HORZ_SCROLL | TNG_TG_VERT_SCROLL
 // Prototypes
 
 // Initializes the TNG

@@ -36,8 +36,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Priority Queue Abstraction
 // -----------------------------------
 /* Herein lies a binary heap implementation of a priority queue
-   The queue can have elements of any size, as the client specifies
-   the element size and comparison function.  */
+    The queue can have elements of any size, as the client specifies
+    the element size and comparison function.  */
 
 
 
@@ -52,12 +52,12 @@ typedef int32_t (*QueueCompare)(void* elem1, void* elem2);
 
 typedef struct _pqueue
 {
-   int32_t size;
-   int32_t fullness;
-   int32_t elemsize;
-   bool grow;
-   int8_t* vec;
-   QueueCompare comp;
+    int32_t size;
+    int32_t fullness;
+    int32_t elemsize;
+    bool grow;
+    int8_t* vec;
+    QueueCompare comp;
 } PQueue;
 
 // Prototypes

@@ -51,66 +51,66 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void flat8_mono_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   int16_t w, h;                /* working width and height */
-   int32_t bit;                   /* bit from 0-7 in source byte */
-   uint8_t *p_row;              /* pointer to current row of bitmap */
-   uint8_t *p_src;              /* pointer to source byte */
-   uint8_t *p_dst;
+    int16_t w, h;                     /* working width and height */
+    int32_t bit;                         /* bit from 0-7 in source byte */
+    uint8_t *p_row;                  /* pointer to current row of bitmap */
+    uint8_t *p_src;                  /* pointer to source byte */
+    uint8_t *p_dst;
 
-   h = bm->h;
-   p_row = bm->bits;
-   p_dst = grd_bm.bits + y*grd_bm.row + x;
+    h = bm->h;
+    p_row = bm->bits;
+    p_dst = grd_bm.bits + y*grd_bm.row + x;
 
-   if (bm->flags & BMF_TRANS)
-   {
-      /* transparent bitmap; draw 1's as fcolor, don't draw 0's. */
-      while (h-- > 0)
-      {
-         /* set up scanline. */
-         bit = bm->align;
-         p_src = p_row;
-         w = bm->w;
+    if (bm->flags & BMF_TRANS)
+    {
+        /* transparent bitmap; draw 1's as fcolor, don't draw 0's. */
+        while (h-- > 0)
+        {
+            /* set up scanline. */
+            bit = bm->align;
+            p_src = p_row;
+            w = bm->w;
 
-         while (w-- > 0)
-         {
-            /* do current scanline. */
-            if (*p_src & bitmask[bit])
-               *p_dst++ = grd_gc.fcolor;
-            else
-               p_dst++;
-            if (++bit > 7)
+            while (w-- > 0)
             {
-               bit = 0;
-               p_src++;
+                /* do current scanline. */
+                if (*p_src & bitmask[bit])
+                    *p_dst++ = grd_gc.fcolor;
+                else
+                    p_dst++;
+                if (++bit > 7)
+                {
+                    bit = 0;
+                    p_src++;
+                }
             }
-         }
-         p_dst += grd_bm.row-bm->w;
-         p_row += bm->row;
-      }
-   }
-   else
-   {
-      /* opaque bitmap; draw 1's as fcolor, 0's as bcolor. */
-      while (h-- > 0)
-      {
-         bit = bm->align;
-         p_src = p_row;
-         w = bm->w;
+            p_dst += grd_bm.row-bm->w;
+            p_row += bm->row;
+        }
+    }
+    else
+    {
+        /* opaque bitmap; draw 1's as fcolor, 0's as bcolor. */
+        while (h-- > 0)
+        {
+            bit = bm->align;
+            p_src = p_row;
+            w = bm->w;
 
-         while (w-- > 0)
-         {
-            if (*p_src & bitmask[bit])
-               *p_dst++ = grd_gc.fcolor;
-            else
-               *p_dst++ = grd_gc.bcolor;
-            if (++bit > 7)
+            while (w-- > 0)
             {
-               bit = 0;
-               p_src++;
+                if (*p_src & bitmask[bit])
+                    *p_dst++ = grd_gc.fcolor;
+                else
+                    *p_dst++ = grd_gc.bcolor;
+                if (++bit > 7)
+                {
+                    bit = 0;
+                    p_src++;
+                }
             }
-         }
-         p_dst += grd_bm.row-bm->w;
-         p_row += bm->row;
-      }
-   }
+            p_dst += grd_bm.row-bm->w;
+            p_row += bm->row;
+        }
+    }
 }

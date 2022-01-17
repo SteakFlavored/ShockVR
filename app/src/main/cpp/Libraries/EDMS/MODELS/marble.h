@@ -22,5 +22,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 int32_t make_marble( Q init_state[6][3], Q params[10] );
-void	marble_set_control( int32_t marble, Q X, Q Y, Q Z );
+void    marble_set_control( int32_t marble, Q X, Q Y, Q Z );
 

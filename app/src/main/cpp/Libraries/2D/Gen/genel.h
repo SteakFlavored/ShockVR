@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* these routines should really be in the canvas table, but that
-   would be a 2d.h re-compile
+    would be a 2d.h re-compile
  */
 
 extern void gr_int_uelipse (int32_t, int32_t, int32_t, int);

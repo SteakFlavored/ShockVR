@@ -41,8 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Typedefs
 typedef struct {
-   TNG *tng_data;
-   LGPoint size;
+    TNG *tng_data;
+    LGPoint size;
 } TNG_plain;
 
 // Prototypes

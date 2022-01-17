@@ -41,25 +41,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "flat8.h"
 
 /* draw an unclipped, horizontally flipped flat 8 bitmap to a flat 8
-   canvas. */
+    canvas. */
 void flat8_hflip_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-	int16_t w;                   /* bitmap width */
-	int16_t h;                   /* height */
-	uint8_t *src;                /* pointer into source bitmap */
-	uint8_t *dst;                /* pointer into canvas memory */
-	uint16_t	brow = bm->row;
-	uint16_t	grow = grd_bm.row;
-	int16_t	bw = bm->w;
+    int16_t w;                         /* bitmap width */
+    int16_t h;                         /* height */
+    uint8_t *src;                     /* pointer into source bitmap */
+    uint8_t *dst;                     /* pointer into canvas memory */
+    uint16_t    brow = bm->row;
+    uint16_t    grow = grd_bm.row;
+    int16_t    bw = bm->w;
 
-	h = bm->h;
-	src = bm->bits;
-	dst = grd_bm.bits + y*grow + x+bw-1;
-	while (h--) {
-	  w = bw;
-	  while (w--)
-	  	*dst-- = *src++;
-	  src += brow-bw;
-	  dst += grow+bw;
-	}
+    h = bm->h;
+    src = bm->bits;
+    dst = grd_bm.bits + y*grow + x+bw-1;
+    while (h--) {
+      w = bw;
+      while (w--)
+          *dst-- = *src++;
+      src += brow-bw;
+      dst += grow+bw;
+    }
 }

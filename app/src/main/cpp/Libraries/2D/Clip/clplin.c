@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Revision 1.11  1993/02/05  16:27:54  matt
  * 2. Added parens to gr_clip_fix_line to fix the case where both points were
- *    off screen.
+ *     off screen.
  * 3. Changed gr_clip_fix_line() to use new fix_mul_div() function.
  *
  * Revision 1.5  1992/11/12  13:31:58  kaboom
@@ -59,74 +59,74 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "clpfcn.h"
 
 /* Returns clip code for fixed-point coordinates for the Cohen-Sutherland
-   line clipper. */
+    line clipper. */
 int32_t gr_clip_fix_code (fix x, fix y)
 {
-   int32_t code = 0;
+    int32_t code = 0;
 
-   if (x < grd_fix_clip.left)
-      code |= CLIP_LEFT;
-   else if (x > grd_fix_clip.right-fix_make(1,0))
-      code |= CLIP_RIGHT;
-   if (y < grd_fix_clip.top)
-      code |= CLIP_TOP;
-   else if (y > grd_fix_clip.bot-fix_make(1,0))
-      code |= CLIP_BOT;
+    if (x < grd_fix_clip.left)
+        code |= CLIP_LEFT;
+    else if (x > grd_fix_clip.right-fix_make(1,0))
+        code |= CLIP_RIGHT;
+    if (y < grd_fix_clip.top)
+        code |= CLIP_TOP;
+    else if (y > grd_fix_clip.bot-fix_make(1,0))
+        code |= CLIP_BOT;
 
-   return code;
+    return code;
 }
 
 /* fixed-point Cohen-Sutherland line clipper. */
 int32_t gr_clip_fix_line (fix *x0, fix *y0, fix *x1, fix *y1)
 {
-   int32_t code0;                 /* clip code for (x0,y0) */
-   int32_t code1;                 /* code for (x1,y1) */
-   int32_t code;                  /* code for current point */
-   fix dx;                    /* x distance */
-   fix dy;                    /* y distance */
-   fix *px;                   /* pointer to x current coordinate */
-   fix *py;                   /*    " to current y */
+    int32_t code0;                      /* clip code for (x0,y0) */
+    int32_t code1;                      /* code for (x1,y1) */
+    int32_t code;                        /* code for current point */
+    fix dx;                          /* x distance */
+    fix dy;                          /* y distance */
+    fix *px;                         /* pointer to x current coordinate */
+    fix *py;                         /*     " to current y */
 
-   dx = *x1-*x0;
-   dy = *y1-*y0;
+    dx = *x1-*x0;
+    dy = *y1-*y0;
 
-   while (1) {
-      /* get codes for endpoints. */
-      code0 = gr_clip_fix_code (*x0, *y0);
-      code1 = gr_clip_fix_code (*x1, *y1);
+    while (1) {
+        /* get codes for endpoints. */
+        code0 = gr_clip_fix_code (*x0, *y0);
+        code1 = gr_clip_fix_code (*x1, *y1);
 
-      if (code0==0 && code1==0)        /* check trivial accept */
-         return CLIP_NONE;
-      else if ((code0&code1) != 0)     /* check for trivial reject */
-         return CLIP_ALL;
+        if (code0==0 && code1==0)          /* check trivial accept */
+            return CLIP_NONE;
+        else if ((code0&code1) != 0)      /* check for trivial reject */
+            return CLIP_ALL;
 
-      /* set current code and px&py.  first, for point0, then when it's
-         dealt with, point1. */
-      if (code0 != 0) {
-         px = x0;
-         py = y0;
-         code = code0;
-      } else {
-         px = x1;
-         py = y1;
-         code = code1;
-      }
+        /* set current code and px&py.  first, for point0, then when it's
+            dealt with, point1. */
+        if (code0 != 0) {
+            px = x0;
+            py = y0;
+            code = code0;
+        } else {
+            px = x1;
+            py = y1;
+            code = code1;
+        }
 
-      /* check for left/right clip; compute intersection. */
-      if (code & CLIP_LEFT) {
-         *py += fix_mul_div (dy, grd_fix_clip.left-*px, dx);
-         *px = grd_fix_clip.left;
-      } else if (code & CLIP_RIGHT) {
-         *py += fix_mul_div (dy, grd_fix_clip.right-fix_make(1,0)-*px, dx);
-         *px = grd_fix_clip.right-fix_make(1,0);
-      }
-      /* check for top/bottom clip; compute intersection. */
-      if (code & CLIP_TOP) {
-         *px += fix_mul_div (dx, grd_fix_clip.top-*py, dy);
-         *py = grd_fix_clip.top;
-      } else if (code & CLIP_BOT) {
-         *px += fix_mul_div (dx, grd_fix_clip.bot-fix_make(1,0)-*py, dy);
-         *py = grd_fix_clip.bot-fix_make(1,0);
-      }
-   }
+        /* check for left/right clip; compute intersection. */
+        if (code & CLIP_LEFT) {
+            *py += fix_mul_div (dy, grd_fix_clip.left-*px, dx);
+            *px = grd_fix_clip.left;
+        } else if (code & CLIP_RIGHT) {
+            *py += fix_mul_div (dy, grd_fix_clip.right-fix_make(1,0)-*px, dx);
+            *px = grd_fix_clip.right-fix_make(1,0);
+        }
+        /* check for top/bottom clip; compute intersection. */
+        if (code & CLIP_TOP) {
+            *px += fix_mul_div (dx, grd_fix_clip.top-*py, dy);
+            *py = grd_fix_clip.top;
+        } else if (code & CLIP_BOT) {
+            *px += fix_mul_div (dx, grd_fix_clip.bot-fix_make(1,0)-*py, dy);
+            *py = grd_fix_clip.bot-fix_make(1,0);
+        }
+    }
 }

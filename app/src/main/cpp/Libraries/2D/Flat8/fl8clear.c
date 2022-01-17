@@ -46,285 +46,285 @@ aint32_t with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if (defined(powerc) || defined(__powerc))
 void flat8_clear (int32_t color)
 {
-   uint8_t 	*p;
-   int32_t	 	h;
-	 int32_t		w;
-	 int32_t	  row;
-   uint16_t	short_val;
-	 double	double_stack,doub_vl;
-	 uint32_t 	firstbytes,middoubles,lastbytes,fb,md,lb;
-	 uint8_t 	*dst;
-   double *dst_doub;
-   uint		temp;
+    uint8_t     *p;
+    int32_t         h;
+     int32_t        w;
+     int32_t      row;
+    uint16_t    short_val;
+     double    double_stack,doub_vl;
+     uint32_t     firstbytes,middoubles,lastbytes,fb,md,lb;
+     uint8_t     *dst;
+    double *dst_doub;
+    uint        temp;
 
-	 color &= 0x00ff;
-   p = grd_bm.bits;
-   h = grd_bm.h;
-	 w = grd_bm.w;
-	 row = grd_bm.row;
-	 if (w>=16)	// only do doubles if at least two of them (16 bytes)
-	  {
-	 	 	// get a 64 bit version of color in doub_vl
-	 	 	short_val = (uint8_t) color | color<<8;
-	 	 	color = (int32_t) short_val |  ((int32_t) short_val)<<16;
-	 	 	* (int32_t *) (&double_stack) = color;
-	 	 	* ((int32_t *) (&double_stack)+1) = color;
-	 	 	doub_vl = double_stack;
+     color &= 0x00ff;
+    p = grd_bm.bits;
+    h = grd_bm.h;
+     w = grd_bm.w;
+     row = grd_bm.row;
+     if (w>=16)    // only do doubles if at least two of them (16 bytes)
+      {
+              // get a 64 bit version of color in doub_vl
+              short_val = (uint8_t) color | color<<8;
+              color = (int32_t) short_val |  ((int32_t) short_val)<<16;
+              * (int32_t *) (&double_stack) = color;
+              * ((int32_t *) (&double_stack)+1) = color;
+              doub_vl = double_stack;
 
-			lastbytes = w;
-		 	if (firstbytes = (int32_t) p & 3) // check for boundary problems
-			 	lastbytes -= firstbytes;
+            lastbytes = w;
+             if (firstbytes = (int32_t) p & 3) // check for boundary problems
+                 lastbytes -= firstbytes;
 
-		 	middoubles = lastbytes>>3;
-		 	lastbytes -= middoubles<<3;
-	  }
-	 else
-	 	{lastbytes = w; middoubles = 0;}
+             middoubles = lastbytes>>3;
+             lastbytes -= middoubles<<3;
+      }
+     else
+         {lastbytes = w; middoubles = 0;}
 
-	 fb = firstbytes,md = middoubles,lb = lastbytes;
-   while (h--)
-   {
+     fb = firstbytes,md = middoubles,lb = lastbytes;
+    while (h--)
+    {
 // MLA - inlined this code
-//		memset (p, color, w);
-     {
-		  firstbytes = fb,middoubles = md,lastbytes = lb;
-		 	dst = p;
+//        memset (p, color, w);
+      {
+          firstbytes = fb,middoubles = md,lastbytes = lb;
+             dst = p;
 
-		 	if (middoubles)
-		 	 {
-		 	 	// first get to a 4 byte boundary
-		 		while (firstbytes--) *(dst++) = color;
-		 	 	dst_doub = (double *) dst;
+             if (middoubles)
+              {
+                  // first get to a 4 byte boundary
+                 while (firstbytes--) *(dst++) = color;
+                  dst_doub = (double *) dst;
 
-		 	 	// now do doubles
-		 	 	while (middoubles--) *(dst_doub++) = doub_vl;
-		 	 	dst = (uint8_t *) dst_doub;
-		 	 }
+                  // now do doubles
+                  while (middoubles--) *(dst_doub++) = doub_vl;
+                  dst = (uint8_t *) dst_doub;
+              }
 
-		 	// do remaining bytes
-		 	while (lastbytes--) *(dst++) = color;
-     }
+             // do remaining bytes
+             while (lastbytes--) *(dst++) = color;
+      }
 
-    p += row;
-   }
+     p += row;
+    }
 }
 #else
 // 68k version
 asm void flat8_clear (int32_t color)
 {
-	move.l	4(a7),d0		// get color
-	movem.l	d3-d6,-(sp)
-	move.b	d0,d1
-	ror.w		#8,d0
-	move.b	d1,d0
-	move.w	d0,d1
-	swap		d0
-	move.w	d1,d0				// get long of color in d0
+    move.l    4(a7),d0        // get color
+    movem.l    d3-d6,-(sp)
+    move.b    d0,d1
+    ror.w        #8,d0
+    move.b    d1,d0
+    move.w    d0,d1
+    swap        d0
+    move.w    d1,d0                // get long of color in d0
 
- 	move.l	grd_canvas,a0
- 	move.l	(a0),a1			// dest
- 	move.w	8(a0),d1		// width
- 	move.w	10(a0),d2		// height
- 	move.w	12(a0),d3		// rowbytes
+     move.l    grd_canvas,a0
+     move.l    (a0),a1            // dest
+     move.w    8(a0),d1        // width
+     move.w    10(a0),d2        // height
+     move.w    12(a0),d3        // rowbytes
 
- 	sub.w		d1,d3				// rowbytes - width
- 	subq.w	#1,d2				// for dbra
+     sub.w        d1,d3                // rowbytes - width
+     subq.w    #1,d2                // for dbra
 
-	move.l	a1,d6
-	andi.w	#1,d6
-	beq.s		@aligned
-	subq.w	#1,d1
+    move.l    a1,d6
+    andi.w    #1,d6
+    beq.s        @aligned
+    subq.w    #1,d1
 @aligned:
-	lea			@CCopyLoop+320,a0
-	move.l	d1,d4
-	andi.l	#0x0003,d1			// catch any remaining bytes (less than 4) in d5
-	move.l	d1,d5
-	asr.w		#1,d4
-	andi.w	#0xfffE,d4			// clear low bit (4 bytes per move, 2 bytes per move instruction)
-	sub.w		d4,a0						// address to jump to
+    lea            @CCopyLoop+320,a0
+    move.l    d1,d4
+    andi.l    #0x0003,d1            // catch any remaining bytes (less than 4) in d5
+    move.l    d1,d5
+    asr.w        #1,d4
+    andi.w    #0xfffE,d4            // clear low bit (4 bytes per move, 2 bytes per move instruction)
+    sub.w        d4,a0                        // address to jump to
 
 @CLoop:
-	tst.w		d6
-	beq.s		@alignOK
-	move.b	d0,(a1)+
+    tst.w        d6
+    beq.s        @alignOK
+    move.b    d0,(a1)+
 @alignOK:
-	jmp			(a0)
+    jmp            (a0)
 
 @CCopyLoop:
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+			// 80
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+            // 80
 
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+
-	move.l	d0,(a1)+			// 160
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+
+    move.l    d0,(a1)+            // 160
 
-	bra.s		@CInLoop
+    bra.s        @CInLoop
 @CLLoop:
-	move.b	d0,(a1)+
+    move.b    d0,(a1)+
 @CInLoop:
-	dbra		d1,@CLLoop
+    dbra        d1,@CLLoop
 
-	move.w	d5,d1				// get width extra back
- 	add.w		d3,a1				// + rowbytes
- 	dbra		d2,@CLoop
+    move.w    d5,d1                // get width extra back
+     add.w        d3,a1                // + rowbytes
+     dbra        d2,@CLoop
 
- 	movem.l	(sp)+,d3-d6
- 	rts
+     movem.l    (sp)+,d3-d6
+     rts
 }
 #endif
 

@@ -76,8 +76,8 @@ typedef void (*CursorDrawFunc)(int32_t cmd, LGRegion* r, struct _cursor* c, LGPo
 //  c at point pos.  R is the region in which c was found.
 
 //  The commands are as follows:
-#define CURSOR_DRAW        0
-#define CURSOR_UNDRAW      1
+#define CURSOR_DRAW          0
+#define CURSOR_UNDRAW        1
 #define CURSOR_DRAW_HFLIP  2 // draw horizontally flipped.  Go figure.
 
 typedef struct _cursor
@@ -91,9 +91,9 @@ typedef struct _cursor
 // Every region has a cursor stack.
 typedef struct _cursorstack
 {
-   int32_t size;
-   int32_t fullness;
-   LGCursor** stack;
+    int32_t size;
+    int32_t fullness;
+    LGCursor** stack;
 } cursor_stack;
 
 
@@ -187,14 +187,14 @@ extern int32_t CursorMoveTolerance;
 //
 
 /*
-   Routines for manipulating cursor stacks.  This is kind of an
-   afterthought, but it's a good one, and in the future, when we have
-   light without heat and travel to the stars, all good ui clients will use it.
+    Routines for manipulating cursor stacks.  This is kind of an
+    afterthought, but it's a good one, and in the future, when we have
+    light without heat and travel to the stars, all good ui clients will use it.
 
-   The idea here is to *expose* the notion of cursor stack to the client, so it can do
-   clever things like have regions/slabs share cursor stacks.  In addition to this, we
-   implement the push-one and pop-every operations, which will only operate on cursor stacks
-   so that the API does not explode with element of { slab, region, stack} x { once, always} etc.
+    The idea here is to *expose* the notion of cursor stack to the client, so it can do
+    clever things like have regions/slabs share cursor stacks.  In addition to this, we
+    implement the push-one and pop-every operations, which will only operate on cursor stacks
+    so that the API does not explode with element of { slab, region, stack} x { once, always} etc.
 
 */
 

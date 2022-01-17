@@ -152,7 +152,7 @@ void _fr_change_detail(int32_t det);
 
 // Globals
 void  (*fr_mouse_hide)(void), (*fr_mouse_show)(void);
-int32_t   (*fr_get_idx)(void);
+int32_t    (*fr_get_idx)(void);
 bool  (*fr_obj_block)(void *vmptr, uint8_t *_sclip, int32_t *loc);
 void  (*fr_clip_start)(bool headnorth);
 void  (*fr_rend_start)(void);
@@ -167,15 +167,15 @@ bool DoubleSize = true;
 bool SkipLines = false;
 #endif
 
-int32_t   (*_fr_glob_draw_call)(void *dest_canvas, void *dest_bm, int32_t x, int32_t y, int32_t flags)=NULL;
+int32_t    (*_fr_glob_draw_call)(void *dest_canvas, void *dest_bm, int32_t x, int32_t y, int32_t flags)=NULL;
 void  (*_fr_glob_horizon_call)(void *dest_bm, int32_t flags)=NULL;
 void  (*_fr_glob_render_call)(void *dest_bm, int32_t flags)=NULL;
 
 //#define DOUBLE_DEF_STUPID_BLEND
 #ifdef DOUBLE_DEF_STUPID_BLEND
-uint8_t det_sizing[4][2]={{0,0},{1,0},{0,0},{0,0}};     /* setup for detail modes */
+uint8_t det_sizing[4][2]={{0,0},{1,0},{0,0},{0,0}};      /* setup for detail modes */
 #else
-uint8_t det_sizing[4][2]={{0,0},{0,0},{0,0},{0,0}};     /* sizing for detail modes */
+uint8_t det_sizing[4][2]={{0,0},{0,0},{0,0},{0,0}};      /* sizing for detail modes */
 #endif
 
 /* KLC - no stereo in Mac version
@@ -183,10 +183,10 @@ extern bool inp6d_headset;
 extern bool inp6d_stereo_active;
 extern int32_t inp6d_stereo_div;
 */
-fauxrend_context *_fr, *_sr;           /* current and default fauxrend contexts */
-uint32_t _fr_glob_flags;                   /* global flag settings */
-uint32_t _fr_curflags;                     /* settings for current rendering */
-uint8_t *_fr_clut_list[4];               /* various lighting fills */
+fauxrend_context *_fr, *_sr;              /* current and default fauxrend contexts */
+uint32_t _fr_glob_flags;                         /* global flag settings */
+uint32_t _fr_curflags;                            /* settings for current rendering */
+uint8_t *_fr_clut_list[4];                    /* various lighting fills */
 // the default setup/configuration for fr parameters, modifiable
 
 fauxrend_parameters _frp=
@@ -194,7 +194,7 @@ fauxrend_parameters _frp=
  {1,1,1,1,0,0},
  {0,0,0},
  {LIGHT_BITS_TERR|LIGHT_BITS_ANY,2,{0,3},{7,0},-fix_make(2,0x1500),fix_make(7,0x0000)},
- {1,2,0,3,0xff,{1,4,9},{1,4,9},18,0,0},		// MLA - 0xff is clear color, used to be 0
+ {1,2,0,3,0xff,{1,4,9},{1,4,9},18,0,0},        // MLA - 0xff is clear color, used to be 0
  {0,0,0,0}
 };
 int32_t _fr_last_detail=-1;
@@ -210,8 +210,8 @@ int32_t _fr_global_detail=3;
 
 void fr_closedown(void)
 {
-   fr_global_mod_flag(0,0xFFFFFFFF); // not totally sure this is right.
-   _frp.lighting.global_mod = 0;
+    fr_global_mod_flag(0,0xFFFFFFFF); // not totally sure this is right.
+    _frp.lighting.global_mod = 0;
 }
 
 #ifndef NO_FAKE_TMAPS
@@ -221,30 +221,30 @@ grs_bitmap tmap_bm[FAKE_TMAPS];  // this is dumb, yea yea
 
 void _fr_init_all_tmaps(void)
 {
-   uint8_t *dummy_tm;
-   int32_t i, x, y;
+    uint8_t *dummy_tm;
+    int32_t i, x, y;
 
-   for (i=0; i<FAKE_TMAPS; i++)
-	{
-      int32_t v1=(rand()&0xff), v2=(rand()&0xff), v3=(rand()&0xff), v4=(rand()&0xff);
-      dummy_tm=(uint8_t *)NewPtr(16*16);
-      for (x=0; x<16; x++)
-         for (y=0; y<16; y++)
-            dummy_tm[(x*16)+y]=(((x>>1)+(y>>1))&1)?((2*abs(8-x))>y)?v1:v2:((2*abs(8-x))>y)?v3:v4;
-      gr_init_bm(tmap_bm+i,dummy_tm,BMT_FLAT8,0,16,16);
- 	   g3_set_vtext(i, tmap_bm+i);
-   }
+    for (i=0; i<FAKE_TMAPS; i++)
+    {
+        int32_t v1=(rand()&0xff), v2=(rand()&0xff), v3=(rand()&0xff), v4=(rand()&0xff);
+        dummy_tm=(uint8_t *)NewPtr(16*16);
+        for (x=0; x<16; x++)
+            for (y=0; y<16; y++)
+                dummy_tm[(x*16)+y]=(((x>>1)+(y>>1))&1)?((2*abs(8-x))>y)?v1:v2:((2*abs(8-x))>y)?v3:v4;
+        gr_init_bm(tmap_bm+i,dummy_tm,BMT_FLAT8,0,16,16);
+         g3_set_vtext(i, tmap_bm+i);
+    }
 #ifdef RANDOMLY_SET_VCOLORS
-   for (i=0; i<16; i++)    // hack hack hack
-    { g3_set_vcolor(i, 0x33+(i<<2)); }
+    for (i=0; i<16; i++)     // hack hack hack
+     { g3_set_vcolor(i, 0x33+(i<<2)); }
 #endif
 }
 
 void _fr_free_all_tmaps(void)
 {
-   int32_t i;
-   for (i=0; i<FAKE_TMAPS; i++)
-      DisposePtr((Ptr)tmap_bm[i].bits);
+    int32_t i;
+    for (i=0; i<FAKE_TMAPS; i++)
+        DisposePtr((Ptr)tmap_bm[i].bits);
 }
 #else
 #define _fr_init_all_tmaps()
@@ -252,59 +252,59 @@ void _fr_free_all_tmaps(void)
 #endif
 
 extern int32_t _game_fr_tmap;
-void        fr_default_mouse(void)           {}
-int32_t         fr_default_idx(void)             {return (64+(((8*_fdt_y)+_fdt_x)&0x3f));}
-int32_t         fr_pickup_idx(void)              {gr_set_fill_parm(_game_fr_tmap+1); return _game_fr_tmap+1;}
+void          fr_default_mouse(void)              {}
+int32_t            fr_default_idx(void)                 {return (64+(((8*_fdt_y)+_fdt_x)&0x3f));}
+int32_t            fr_pickup_idx(void)                  {gr_set_fill_parm(_game_fr_tmap+1); return _game_fr_tmap+1;}
 #ifndef NO_FAKE_TMAPS
-grs_bitmap *fr_default_tmap(void)            {return &tmap_bm[fr_default_idx()%FAKE_TMAPS];}
+grs_bitmap *fr_default_tmap(void)                {return &tmap_bm[fr_default_idx()%FAKE_TMAPS];}
 #else
-grs_bitmap *fr_default_tmap(void)            {return NULL;}
+grs_bitmap *fr_default_tmap(void)                {return NULL;}
 #endif
-bool        fr_default_block(void *, uint8_t *, int32_t *) {return false;}
-void        fr_default_clip_start(bool ) {}
-void        fr_default_rend_start(void)      {}
+bool          fr_default_block(void *, uint8_t *, int32_t *) {return false;}
+void          fr_default_clip_start(bool ) {}
+void          fr_default_rend_start(void)        {}
 
 void fr_set_default_ptrs(void)
 {
-   fr_mouse_hide=fr_mouse_show=fr_default_mouse;
-   fr_get_idx=fr_default_idx;
-   fr_get_tmap=fr_default_tmap;
-   fr_obj_block=fr_default_block;
-   fr_clip_start=fr_default_clip_start;
-   fr_rend_start=fr_default_rend_start;
+    fr_mouse_hide=fr_mouse_show=fr_default_mouse;
+    fr_get_idx=fr_default_idx;
+    fr_get_tmap=fr_default_tmap;
+    fr_obj_block=fr_default_block;
+    fr_clip_start=fr_default_clip_start;
+    fr_rend_start=fr_default_rend_start;
 }
 
 // actually init the 3d, as one might expect, also set up global statics for the renderer
 void fr_startup(void)
 {
-   // should be dynamic and flippable....
+    // should be dynamic and flippable....
 #ifdef STEREO_SUPPORT
-   g3_init_stereo(FR_PT_CNT,AXIS_ORDER);
-   g3_set_eyesep(FIX_UNIT/35);
+    g3_init_stereo(FR_PT_CNT,AXIS_ORDER);
+    g3_set_eyesep(FIX_UNIT/35);
 #else
-   g3_init(FR_PT_CNT,AXIS_ORDER);
+    g3_init(FR_PT_CNT,AXIS_ORDER);
 #endif
-   _fr_init_all_tmaps();
-   fr_tables_build();
-   _fr_glob_flags=0; _fr=_sr=NULL;
-   fr_set_default_ptrs();
-   fr_tfunc_grab_start();
+    _fr_init_all_tmaps();
+    fr_tables_build();
+    _fr_glob_flags=0; _fr=_sr=NULL;
+    fr_set_default_ptrs();
+    fr_tfunc_grab_start();
 #ifdef _FR_PIXPROF
-   pixprof_setup();
+    pixprof_setup();
 #endif
 }
 
 // lets hit the fucking road
 void fr_shutdown(void)
 {
-   _fr_free_all_tmaps();
-	g3_shutdown();
+    _fr_free_all_tmaps();
+    g3_shutdown();
 }
 
 // you taught me everything about a poison apple
 void fr_set_cluts(uint8_t *base, uint8_t *bwclut, uint8_t *greenclut, uint8_t *amberclut)
 {
-   _fr_clut_list[0]=base; _fr_clut_list[1]=bwclut; _fr_clut_list[2]=greenclut; _fr_clut_list[3]=amberclut;
+    _fr_clut_list[0]=base; _fr_clut_list[1]=bwclut; _fr_clut_list[2]=greenclut; _fr_clut_list[3]=amberclut;
 }
 
 //======== view control/setup
@@ -317,112 +317,112 @@ g3s_angvec viewer_orientation;
 // set the default view for NULL argument passing to the system
 int32_t fr_set_view(frc *view)
 {
-   _chkNull(view);
-   _sr=(fauxrend_context *)view;
-   _fr_ret;
+    _chkNull(view);
+    _sr=(fauxrend_context *)view;
+    _fr_ret;
 }
 
 // free the memory (frame buffers+structures) associated with view view
 int32_t fr_free_view(frc *view)
 {
-   _fr_top(view);
-   if (_fr!=NULL)
-   {
-      if (_fr==_sr) _sr=NULL;          /* no longer a default rendering context */
-      if ((_fr->flags&FR_DOUBLEB_MASK)&&((_fr->flags&FR_OWNBITS_MASK)==0))
-      {
-//         DisposePtr((Ptr)_fr->main_canvas.bm.bits);  // deal w/any other canvii
-		DebugStr("\pHey!  We shouldn't ever be doing this!");
-		DisposePtr(_fr->realCanvasPtr);
-      }
-  	 DisposePtr((Ptr)_fr);
-   }
-   _fr_ret;
+    _fr_top(view);
+    if (_fr!=NULL)
+    {
+        if (_fr==_sr) _sr=NULL;             /* no longer a default rendering context */
+        if ((_fr->flags&FR_DOUBLEB_MASK)&&((_fr->flags&FR_OWNBITS_MASK)==0))
+        {
+//            DisposePtr((Ptr)_fr->main_canvas.bm.bits);  // deal w/any other canvii
+        DebugStr("\pHey!  We shouldn't ever be doing this!");
+        DisposePtr(_fr->realCanvasPtr);
+        }
+       DisposePtr((Ptr)_fr);
+    }
+    _fr_ret;
 }
 
 int32_t fr_mod_cams(frc *fr, void *v_cam, int32_t mod_fac)
 {
-	cams *cam=(cams *)v_cam;
+    cams *cam=(cams *)v_cam;
 
-	_fr_top(fr);
-	_fr->viewer_zoom = fix_mul(_fr->viewer_zoom,mod_fac);
-	if (_fr->viewer_zoom==0)
-		_fr->viewer_zoom=1;
-	if ((uint32_t) _fr->viewer_zoom > 0x7fffffff)
-		_fr->viewer_zoom=0x7fffffff;
-	if ((int32_t)cam != -1)
-		if (cam == NULL)
-			_fr->camptr = fr_camera_getdef();
-		else
-			_fr->camptr = cam;
-	_fr_ret;
+    _fr_top(fr);
+    _fr->viewer_zoom = fix_mul(_fr->viewer_zoom,mod_fac);
+    if (_fr->viewer_zoom==0)
+        _fr->viewer_zoom=1;
+    if ((uint32_t) _fr->viewer_zoom > 0x7fffffff)
+        _fr->viewer_zoom=0x7fffffff;
+    if ((int32_t)cam != -1)
+        if (cam == NULL)
+            _fr->camptr = fr_camera_getdef();
+        else
+            _fr->camptr = cam;
+    _fr_ret;
 }
 // we put
 // eachother
 // down
-int32_t fr_context_mod_flag (frc *fr, int32_t pflags_on, int32_t pflags_off)       // change flags
+int32_t fr_context_mod_flag (frc *fr, int32_t pflags_on, int32_t pflags_off)         // change flags
 {
-   _fr_top(fr);
-   _fr->flags&=~pflags_off;
-   _fr->flags|=pflags_on;
-   _fr_ret;
+    _fr_top(fr);
+    _fr->flags&=~pflags_off;
+    _fr->flags|=pflags_on;
+    _fr_ret;
 }
 
 #if _fr_defdbg(ALTCAM)
 extern int32_t _fr_altcamx, _fr_altcamy;
 int32_t fr_mod_xtracam(frc *fr, void *v_xtra_cam)
 {
-   cams *xtra_cam=(cams *)v_xtra_cam;
-   _fr_top(fr);
-   _fr->xtracam=xtra_cam;
-   _fr_ret;
+    cams *xtra_cam=(cams *)v_xtra_cam;
+    _fr_top(fr);
+    _fr->xtracam=xtra_cam;
+    _fr_ret;
 }
 #endif
 
 // we never want the truth.... to be found
 int32_t fr_global_mod_flag(int32_t flags_on, int32_t flags_off)
 {
-   _fr_glob_flags&=~flags_off;
-   _fr_glob_flags|=flags_on;
-   _fr_ret;
+    _fr_glob_flags&=~flags_off;
+    _fr_glob_flags|=flags_on;
+    _fr_ret;
 }
 
 // we are all bigots
 // so filled with hatred
 // we release our poisons
-int32_t fr_mod_size (frc *view, int32_t xc, int32_t yc, int32_t wid, int32_t hgt)    // move us around
+int32_t fr_mod_size (frc *view, int32_t xc, int32_t yc, int32_t wid, int32_t hgt)     // move us around
 {
-   int32_t detail;
-   _fr_top(view);
-   // should leard to deal with built zoom and such, so on
-   detail=_fr->detail;
-   fr_place_view(_fr,_fr->camptr,NULL,_fr->flags,_fr->axis,_fr->fov,xc,yc,wid,hgt);
-   _fr->detail=detail;
-   _fr_ret;
+    int32_t detail;
+    _fr_top(view);
+    // should leard to deal with built zoom and such, so on
+    detail=_fr->detail;
+    fr_place_view(_fr,_fr->camptr,NULL,_fr->flags,_fr->axis,_fr->fov,xc,yc,wid,hgt);
+    _fr->detail=detail;
+    _fr_ret;
 }
 
 // like styrofoam
 int32_t fr_set_callbacks(frc *view,
-								int32_t (*draw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg),
-                     				void (*horizon)(void *dstbm, int32_t flg),
-                     				void (*render)(void *dstbm, int32_t flg))
+                                int32_t (*draw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg),
+                                            void (*horizon)(void *dstbm, int32_t flg),
+                                            void (*render)(void *dstbm, int32_t flg))
 {  // build local context setup for render
-   _fr_top(view);
-   _fr->draw_call = draw;
-   _fr->horizon_call = horizon;
-   _fr->render_call = render;
-   _fr_ret;
+    _fr_top(view);
+    _fr->draw_call = draw;
+    _fr->horizon_call = horizon;
+    _fr->render_call = render;
+    _fr_ret;
 }
 
 // like styrofoam
 int32_t fr_set_global_callbacks( int32_t (*draw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg),
-                     							void (*horizon)(void *dstbm, int32_t flg),
-              								void (*render)(void *dstbm, int32_t flg) )
+                                                        void (*horizon)(void *dstbm, int32_t flg),
+                                                  void (*render)(void *dstbm, int32_t flg) )
 {  // build local context setup for render
-   _fr_glob_draw_call = draw;
-   _fr_glob_horizon_call = horizon;
-   _fr_glob_render_call = render;
-   _fr_ret;
+    _fr_glob_draw_call = draw;
+    _fr_glob_horizon_call = horizon;
+    _fr_glob_render_call = render;
+    _fr_ret;
 }
 
 //---------------------------------------------------------------------------------
@@ -431,102 +431,102 @@ int32_t fr_set_global_callbacks( int32_t (*draw)(void *dstc, void *dstbm, int32_
 //---------------------------------------------------------------------------------
 frc *fr_place_view (frc *view, void *v_cam, void *cnvs, int32_t pflags, int8_t axis, int32_t fov, int32_t xc, int32_t yc, int32_t wid, int32_t hgt)
 {
-	cams *cam=(cams *)v_cam;
-	fauxrend_context *fr;
+    cams *cam=(cams *)v_cam;
+    fauxrend_context *fr;
 
-	if (view==NULL)
-		fr = (fauxrend_context *)NewPtr(sizeof(fauxrend_context));
+    if (view==NULL)
+        fr = (fauxrend_context *)NewPtr(sizeof(fauxrend_context));
 /* KLC - this never actually happens
-	else        // are their other canvii to free here...
-	{
-		fr = (fauxrend_context *)view;
-		if (fr->flags & FR_DOUBLEB_MASK)
-//			DisposePtr((Ptr)fr->main_canvas.bm.bits);
-			DisposePtr(fr->realCanvasPtr);
-	}
+    else          // are their other canvii to free here...
+    {
+        fr = (fauxrend_context *)view;
+        if (fr->flags & FR_DOUBLEB_MASK)
+//            DisposePtr((Ptr)fr->main_canvas.bm.bits);
+            DisposePtr(fr->realCanvasPtr);
+    }
 */
-	if (pflags&FR_DOUBLEB_MASK)
-	{
-		if (cnvs==NULL)
-		{
+    if (pflags&FR_DOUBLEB_MASK)
+    {
+        if (cnvs==NULL)
+        {
 DebugStr("\pHey! I though we always supplied a canvas");
 /*
-			uint8_t *p;
-			int32_t	rowbytes = (wid + 31) & 0xFFFFFFE0;
+            uint8_t *p;
+            int32_t    rowbytes = (wid + 31) & 0xFFFFFFE0;
 
-			// if the number of cache lines is even, then add a cache line width to improve
-			// even/odd line usage for vertical drawing.
-			if (!((rowbytes / 64) & 1))
-				rowbytes += 64;
-			p = (uint8_t *)NewPtr(rowbytes*hgt + 32);
-			if (p == NULL)
-				return NULL;
-			fr->realCanvasPtr = (Ptr)p;
-			gr_init_canvas(&fr->main_canvas, (uint8_t *)((uint32_t)(p+31) & 0xFFFFFFE0), BMT_FLAT8, wid, hgt);
-			fr->main_canvas.bm.row = rowbytes;
+            // if the number of cache lines is even, then add a cache line width to improve
+            // even/odd line usage for vertical drawing.
+            if (!((rowbytes / 64) & 1))
+                rowbytes += 64;
+            p = (uint8_t *)NewPtr(rowbytes*hgt + 32);
+            if (p == NULL)
+                return NULL;
+            fr->realCanvasPtr = (Ptr)p;
+            gr_init_canvas(&fr->main_canvas, (uint8_t *)((uint32_t)(p+31) & 0xFFFFFFE0), BMT_FLAT8, wid, hgt);
+            fr->main_canvas.bm.row = rowbytes;
 */
-		}
-		else
-		{
-			// lets pretend we are getting a bitmap instead, eh?
-			//         fr->main_canvas=*((grs_canvas *)cnvs);
-			gr_init_canvas(&fr->main_canvas,(uint8_t *)cnvs,BMT_FLAT8,wid,hgt);
-			pflags|=FR_OWNBITS_MASK;
-		}
-	}
-	else
-		gr_init_sub_canvas(grd_screen_canvas,&fr->main_canvas,xc,yc,wid,hgt);
+        }
+        else
+        {
+            // lets pretend we are getting a bitmap instead, eh?
+            //            fr->main_canvas=*((grs_canvas *)cnvs);
+            gr_init_canvas(&fr->main_canvas,(uint8_t *)cnvs,BMT_FLAT8,wid,hgt);
+            pflags|=FR_OWNBITS_MASK;
+        }
+    }
+    else
+        gr_init_sub_canvas(grd_screen_canvas,&fr->main_canvas,xc,yc,wid,hgt);
 
-	gr_init_sub_canvas(grd_screen_canvas,&fr->hack_canvas,xc,yc,wid,hgt);
-	// set everything and its brothers brother, first inherit global callbacks, then set up axis and window and all
-	fr->draw_call=_fr_glob_draw_call; fr->horizon_call=_fr_glob_horizon_call; fr->render_call=_fr_glob_render_call;
-	fr->draw_canvas=fr->main_canvas; fr->axis=axis; fr->fov=fov;
-	fr->xtop=xc; fr->ytop=yc; fr->xwid=wid; fr->ywid=hgt; fr->flags=pflags; fr->camptr=cam;
-	if (fov==0) fov=FR_DEF_FOV; if (axis==0) axis=FR_DEF_AXIS;
-	fr->viewer_zoom=g3_get_zoom(axis,build_fix_angle(fov),wid,hgt);
-	fr->detail=_fr_default_detail; /* default to lowest detail level. */
-	fr->last_detail=-1; /* always need to init detail. */
-	return (frc*)fr;
+    gr_init_sub_canvas(grd_screen_canvas,&fr->hack_canvas,xc,yc,wid,hgt);
+    // set everything and its brothers brother, first inherit global callbacks, then set up axis and window and all
+    fr->draw_call=_fr_glob_draw_call; fr->horizon_call=_fr_glob_horizon_call; fr->render_call=_fr_glob_render_call;
+    fr->draw_canvas=fr->main_canvas; fr->axis=axis; fr->fov=fov;
+    fr->xtop=xc; fr->ytop=yc; fr->xwid=wid; fr->ywid=hgt; fr->flags=pflags; fr->camptr=cam;
+    if (fov==0) fov=FR_DEF_FOV; if (axis==0) axis=FR_DEF_AXIS;
+    fr->viewer_zoom=g3_get_zoom(axis,build_fix_angle(fov),wid,hgt);
+    fr->detail=_fr_default_detail; /* default to lowest detail level. */
+    fr->last_detail=-1; /* always need to init detail. */
+    return (frc*)fr;
 }
 
 void fr_use_global_detail(frc *view)
 {
-   if (view!=NULL) ((fauxrend_context *)view)->detail=FR_USE_GLOBAL_DETAIL;
+    if (view!=NULL) ((fauxrend_context *)view)->detail=FR_USE_GLOBAL_DETAIL;
 }
 
 int32_t fr_view_resize(frc *view, int32_t wid, int32_t hgt)
 {
-   int32_t nw, nh, nxt, nyt;
-   int32_t detail;
-   _fr_top(view);
-   nw=_fr->xwid; nh=_fr->ywid; nxt=_fr->xtop; nyt=_fr->ytop;           /* get base new coors */
-   if ((nw+nxt<=wid)&&(nh+nyt<=hgt))
-      ;  /* all ok... */
-   else
-   {
-	   if (nw<wid) nxt=(wid-nw)/2; else { nw=wid; nxt=0; }               /* either center old size, or fill new */
-	   if (nh<hgt) nyt=(hgt-nh)/2; else { nh=hgt; nyt=0; }               /* either center old size, or fill new */
-   }
-   detail=_fr->detail;
-   fr_place_view(_fr,_fr->camptr,NULL,_fr->flags,_fr->axis,_fr->fov,nxt,nyt,nw,nh);
-   _fr->detail=detail;
-   _fr_ret;
+    int32_t nw, nh, nxt, nyt;
+    int32_t detail;
+    _fr_top(view);
+    nw=_fr->xwid; nh=_fr->ywid; nxt=_fr->xtop; nyt=_fr->ytop;              /* get base new coors */
+    if ((nw+nxt<=wid)&&(nh+nyt<=hgt))
+        ;  /* all ok... */
+    else
+    {
+        if (nw<wid) nxt=(wid-nw)/2; else { nw=wid; nxt=0; }                    /* either center old size, or fill new */
+        if (nh<hgt) nyt=(hgt-nh)/2; else { nh=hgt; nyt=0; }                    /* either center old size, or fill new */
+    }
+    detail=_fr->detail;
+    fr_place_view(_fr,_fr->camptr,NULL,_fr->flags,_fr->axis,_fr->fov,nxt,nyt,nw,nh);
+    _fr->detail=detail;
+    _fr_ret;
 }
 
 int32_t fr_view_full(frc *view, int32_t wid, int32_t hgt)
 {
-   int32_t detail;
-   _fr_top(view);
-   detail=_fr->detail;
-   fr_place_view(_fr,_fr->camptr,NULL,_fr->flags,_fr->axis,_fr->fov,0,0,wid,hgt);
-   _fr->detail=detail;
-   _fr_ret;
+    int32_t detail;
+    _fr_top(view);
+    detail=_fr->detail;
+    fr_place_view(_fr,_fr->camptr,NULL,_fr->flags,_fr->axis,_fr->fov,0,0,wid,hgt);
+    _fr->detail=detail;
+    _fr_ret;
 }
 
 void *fr_get_canvas(frc *view)
 {
-   _fr_top_cast(view,(void *));
-   return &_fr->draw_canvas;
+    _fr_top_cast(view,(void *));
+    return &_fr->draw_canvas;
 }
 
 // they're all talking bout, beatles songs
@@ -537,11 +537,11 @@ void *fr_get_canvas(frc *view)
 // run when context detail has changed.
 void _fr_update_context(int32_t det)
 {
-   if (_fr->flags&FR_DOUBLEB_MASK)
-	   gr_init_canvas(&_fr->draw_canvas,_fr->main_canvas.bm.bits,BMT_FLAT8,_fr->xwid>>det_sizing[det][0],_fr->ywid>>det_sizing[det][1]);
-   else                                         // 0,0 was xtop,ytop
-      gr_init_sub_canvas(&_fr->main_canvas,&_fr->draw_canvas,0,0,_fr->xwid>>det_sizing[det][0],_fr->ywid>>det_sizing[det][1]);
-   _fr->last_detail=det;
+    if (_fr->flags&FR_DOUBLEB_MASK)
+        gr_init_canvas(&_fr->draw_canvas,_fr->main_canvas.bm.bits,BMT_FLAT8,_fr->xwid>>det_sizing[det][0],_fr->ywid>>det_sizing[det][1]);
+    else                                                      // 0,0 was xtop,ytop
+        gr_init_sub_canvas(&_fr->main_canvas,&_fr->draw_canvas,0,0,_fr->xwid>>det_sizing[det][0],_fr->ywid>>det_sizing[det][1]);
+    _fr->last_detail=det;
 }
 
 // run when current context detail is different from the last rendered context detail.
@@ -552,35 +552,35 @@ extern void gr_reset_per();
 
 void _fr_change_detail(int32_t det)
 {
-   // note: pixel_ratio 5 data types before scrw, if order is preserved
-   int32_t tmpz, fov;
+    // note: pixel_ratio 5 data types before scrw, if order is preserved
+    int32_t tmpz, fov;
 #ifdef DOUBLE_DEF_STUPID_BLEND
-   if ((det==1)&&(_fr_last_detail!=1))
-    { /*_fr->viewer_zoom<<=1; */ *(fix *)((&scrw)-5)>>=1; }
-   if ((det!=1)&&(_fr_last_detail==1))
-    { /*_fr->viewer_zoom>>=1; */ *(fix *)((&scrw)-5)<<=1; }
+    if ((det==1)&&(_fr_last_detail!=1))
+     { /*_fr->viewer_zoom<<=1; */ *(fix *)((&scrw)-5)>>=1; }
+    if ((det!=1)&&(_fr_last_detail==1))
+     { /*_fr->viewer_zoom>>=1; */ *(fix *)((&scrw)-5)<<=1; }
 #endif
-   switch (det) {
-      case 0:
-         g3_set_tmaps_linear();
-         gr_set_per_detail_level(GR_LOW_PER_DETAIL);
-         break;
-      case 1:
-         g3_reset_tmaps();
-         gr_set_per_detail_level(GR_LOW_PER_DETAIL);
-         break;
-      case 2:
-         g3_reset_tmaps();
-         gr_set_per_detail_level(GR_MEDIUM_PER_DETAIL);
-         break;
-      case 3:
-         g3_reset_tmaps();
-         gr_set_per_detail_level(GR_HIGH_PER_DETAIL);
-   }
-   if (_fr->fov==0) fov=FR_DEF_FOV; else fov=_fr->fov;
-   tmpz=g3_get_zoom(FR_DEF_AXIS,fov,_fr->draw_canvas.bm.w,_fr->draw_canvas.bm.h);
+    switch (det) {
+        case 0:
+            g3_set_tmaps_linear();
+            gr_set_per_detail_level(GR_LOW_PER_DETAIL);
+            break;
+        case 1:
+            g3_reset_tmaps();
+            gr_set_per_detail_level(GR_LOW_PER_DETAIL);
+            break;
+        case 2:
+            g3_reset_tmaps();
+            gr_set_per_detail_level(GR_MEDIUM_PER_DETAIL);
+            break;
+        case 3:
+            g3_reset_tmaps();
+            gr_set_per_detail_level(GR_HIGH_PER_DETAIL);
+    }
+    if (_fr->fov==0) fov=FR_DEF_FOV; else fov=_fr->fov;
+    tmpz=g3_get_zoom(FR_DEF_AXIS,fov,_fr->draw_canvas.bm.w,_fr->draw_canvas.bm.h);
 // mprintf("Tmpz %x, vz %x (%d <- %d), ps. %x\n",tmpz,_fr->viewer_zoom,_fr->detail,_fr_last_detail,*(fix *)((&scrw)-5));
-   _fr_last_detail=det;
+    _fr_last_detail=det;
 }
 
 /* sets global fr
@@ -589,18 +589,18 @@ void _fr_change_detail(int32_t det)
  */
 int32_t fr_prepare_view(frc *view)
 {
-   int32_t det;
-   _fr_top(view);
-   _fr_curflags=_fr_glob_flags|_fr->flags;       // for now, simply merge
-   if (_fr->detail==FR_USE_GLOBAL_DETAIL)
-      det = _fr_global_detail;
-   else
-      det = _fr->detail;
-   if (_fr_last_detail!=det)
-      _fr_change_detail(det);
-   if (_fr->last_detail!=det)
-      _fr_update_context(det);
-   _fr_ret;
+    int32_t det;
+    _fr_top(view);
+    _fr_curflags=_fr_glob_flags|_fr->flags;         // for now, simply merge
+    if (_fr->detail==FR_USE_GLOBAL_DETAIL)
+        det = _fr_global_detail;
+    else
+        det = _fr->detail;
+    if (_fr_last_detail!=det)
+        _fr_change_detail(det);
+    if (_fr->last_detail!=det)
+        _fr_update_context(det);
+    _fr_ret;
 }
 
 /* For cyberspace model which uses g3_start_object_matrix()...*/
@@ -621,140 +621,140 @@ extern int32_t (*_fr_lit_per_func)(int32_t, g3s_phandle *, grs_bitmap *);
 extern int32_t (*_fr_per_func)(int32_t, g3s_phandle *, grs_bitmap *);
 int32_t fr_start_view(void)
 {
-   g3s_matrix system_matrix;
-   int32_t use_zoom;
-   uint8_t old_cam_type;
-   int32_t detail;
+    g3s_matrix system_matrix;
+    int32_t use_zoom;
+    uint8_t old_cam_type;
+    int32_t detail;
 
-   // check detail for canvas sizing
-   gr_set_canvas(&_fr->draw_canvas);
-   if (_fr_curflags&FR_PICKUPM_MASK)
-    { gr_set_fill_type(FILL_SOLID); gr_set_fill_parm(0); }
-   else
-      gr_set_fill_type(FILL_NORM);
-   if (_fr_curflags&FR_CURVIEW_MASK)
-      old_cam_type=fr_camera_modtype(_fr->camptr,((_fr->flags&FR_CURVIEW_MASK)>>FR_CURVIEW_SHFT)<<CAMANG_S,CAMBIT_ANG);
-   fr_camera_getpos(_fr->camptr);        /* loads into camera_last */
-   // this is a total hack, goddamn....
-   if ((_fr_curflags&FR_SFX_MASK)==FR_SFX_SHAKE)
-    { fr_camera_last[4]+=(rand()&0x03ff)-0x200; fr_camera_last[5]+=(rand()&0x03ff)-0x200; }
-   if (_fr_curflags&FR_CURVIEW_MASK)
-      fr_camera_modtype(_fr->camptr,old_cam_type&CAMANG_S,CAMBIT_ANG);
-   viewer_position.xaxis   = coor(EYE_X); viewer_position.yaxis   =-coor(EYE_Z); viewer_position.zaxis   = coor(EYE_Y);
-   viewer_orientation.pitch=  ang(EYE_P); viewer_orientation.bank =  ang(EYE_B); viewer_orientation.head =  ang(EYE_H);
+    // check detail for canvas sizing
+    gr_set_canvas(&_fr->draw_canvas);
+    if (_fr_curflags&FR_PICKUPM_MASK)
+     { gr_set_fill_type(FILL_SOLID); gr_set_fill_parm(0); }
+    else
+        gr_set_fill_type(FILL_NORM);
+    if (_fr_curflags&FR_CURVIEW_MASK)
+        old_cam_type=fr_camera_modtype(_fr->camptr,((_fr->flags&FR_CURVIEW_MASK)>>FR_CURVIEW_SHFT)<<CAMANG_S,CAMBIT_ANG);
+    fr_camera_getpos(_fr->camptr);          /* loads into camera_last */
+    // this is a total hack, goddamn....
+    if ((_fr_curflags&FR_SFX_MASK)==FR_SFX_SHAKE)
+     { fr_camera_last[4]+=(rand()&0x03ff)-0x200; fr_camera_last[5]+=(rand()&0x03ff)-0x200; }
+    if (_fr_curflags&FR_CURVIEW_MASK)
+        fr_camera_modtype(_fr->camptr,old_cam_type&CAMANG_S,CAMBIT_ANG);
+    viewer_position.xaxis    = coor(EYE_X); viewer_position.yaxis    =-coor(EYE_Z); viewer_position.zaxis    = coor(EYE_Y);
+    viewer_orientation.pitch=  ang(EYE_P); viewer_orientation.bank =  ang(EYE_B); viewer_orientation.head =  ang(EYE_H);
 
-   if (_fr->detail==FR_USE_GLOBAL_DETAIL)
-      detail = _fr_global_detail;
-   else
-      detail = _fr->detail;
-   if (detail!=0) {
-      /* check viewer orientation.  Use wall/floor/full perspective texture maps accordingly. */
-      _fr_lit_per_func=g3_light_tmap;
-      _fr_per_func=g3_draw_tmap;
-      if (((viewer_orientation.bank+(FIXANG_EPS/2))&FIXANG_MASK)<FIXANG_EPS) {
-         _fr_lit_floor_func=g3_light_floor_map;
-         _fr_floor_func=g3_draw_floor_map;
-         if (((viewer_orientation.pitch+(FIXANG_EPS/2))&FIXANG_MASK)<FIXANG_EPS) {
-            _fr_lit_wall_func=g3_light_wall_map;
-            _fr_wall_func=g3_draw_wall_map;
-         } else {
+    if (_fr->detail==FR_USE_GLOBAL_DETAIL)
+        detail = _fr_global_detail;
+    else
+        detail = _fr->detail;
+    if (detail!=0) {
+        /* check viewer orientation.  Use wall/floor/full perspective texture maps accordingly. */
+        _fr_lit_per_func=g3_light_tmap;
+        _fr_per_func=g3_draw_tmap;
+        if (((viewer_orientation.bank+(FIXANG_EPS/2))&FIXANG_MASK)<FIXANG_EPS) {
+            _fr_lit_floor_func=g3_light_floor_map;
+            _fr_floor_func=g3_draw_floor_map;
+            if (((viewer_orientation.pitch+(FIXANG_EPS/2))&FIXANG_MASK)<FIXANG_EPS) {
+                _fr_lit_wall_func=g3_light_wall_map;
+                _fr_wall_func=g3_draw_wall_map;
+            } else {
+                _fr_lit_wall_func=g3_light_tmap;
+                _fr_wall_func=g3_draw_tmap;
+            }
+        } else {
+            _fr_lit_floor_func=g3_light_tmap;
+            _fr_floor_func=g3_draw_tmap;
             _fr_lit_wall_func=g3_light_tmap;
             _fr_wall_func=g3_draw_tmap;
-         }
-      } else {
-         _fr_lit_floor_func=g3_light_tmap;
-         _fr_floor_func=g3_draw_tmap;
-         _fr_lit_wall_func=g3_light_tmap;
-         _fr_wall_func=g3_draw_tmap;
-      }
-   } else {
-      /* Use linear texture maps unless 1d wall applicable. */
-      if ((((viewer_orientation.bank+(FIXANG_EPS/2))&FIXANG_MASK)<FIXANG_EPS)&&
-            (((viewer_orientation.pitch+(FIXANG_EPS/2))&FIXANG_MASK)<FIXANG_EPS)) {
-         _fr_lit_wall_func=g3_light_wall_map;
-         _fr_wall_func=g3_draw_wall_map;
-      } else {
-         _fr_lit_wall_func=g3_light_lmap;
-         _fr_wall_func=g3_draw_lmap;
-      }
-      _fr_lit_floor_func=g3_light_lmap;
-      _fr_floor_func=g3_draw_lmap;
-      _fr_lit_per_func=g3_light_lmap;
-      _fr_per_func=g3_draw_lmap;
-   }
+        }
+    } else {
+        /* Use linear texture maps unless 1d wall applicable. */
+        if ((((viewer_orientation.bank+(FIXANG_EPS/2))&FIXANG_MASK)<FIXANG_EPS)&&
+                (((viewer_orientation.pitch+(FIXANG_EPS/2))&FIXANG_MASK)<FIXANG_EPS)) {
+            _fr_lit_wall_func=g3_light_wall_map;
+            _fr_wall_func=g3_draw_wall_map;
+        } else {
+            _fr_lit_wall_func=g3_light_lmap;
+            _fr_wall_func=g3_draw_lmap;
+        }
+        _fr_lit_floor_func=g3_light_lmap;
+        _fr_floor_func=g3_draw_lmap;
+        _fr_lit_per_func=g3_light_lmap;
+        _fr_per_func=g3_draw_lmap;
+    }
 
 #ifdef _FR_PIXPROF
-   gr_start_frame();
+    gr_start_frame();
 #endif
 
 #ifdef STEREO_SUPPORT
-   if (((_fr_curflags&(FR_PICKUPM_MASK|FR_HACKCAM_MASK))==0)&&inp6d_stereo_active&&
-        ((_fr_curflags&FR_CURVIEW_MASK)==FR_CURVIEW_STRT))
-   {
-      extern uint8_t g3d_stereo;
-      i6_video(I6VID_FRM_START,NULL);  // lets go
-      i6_video(I6VID_FRM_INFIN,NULL);  // begin infinite region
-      gr_set_canvas(i6d_ss->cf_infin);
-//      gr_clear(0x78);
-      gr_clear(0);
-      i6_video(I6VID_FRM_STEREO,NULL); // now, the stereo set
-      gr_set_canvas(i6d_ss->cf_left);
-      if (i6d_device == I6D_CTM)
-         grd_cap->aspect<<=1;
-      g3_set_eyesep(inp6d_stereo_div/96);    // stereo div is in fix inches...
-      g3_start_stereo_frame(i6d_ss->cf_right);
-//      g3d_stereo=0;
-   }
-   else
+    if (((_fr_curflags&(FR_PICKUPM_MASK|FR_HACKCAM_MASK))==0)&&inp6d_stereo_active&&
+          ((_fr_curflags&FR_CURVIEW_MASK)==FR_CURVIEW_STRT))
+    {
+        extern uint8_t g3d_stereo;
+        i6_video(I6VID_FRM_START,NULL);  // lets go
+        i6_video(I6VID_FRM_INFIN,NULL);  // begin infinite region
+        gr_set_canvas(i6d_ss->cf_infin);
+//        gr_clear(0x78);
+        gr_clear(0);
+        i6_video(I6VID_FRM_STEREO,NULL); // now, the stereo set
+        gr_set_canvas(i6d_ss->cf_left);
+        if (i6d_device == I6D_CTM)
+            grd_cap->aspect<<=1;
+        g3_set_eyesep(inp6d_stereo_div/96);     // stereo div is in fix inches...
+        g3_start_stereo_frame(i6d_ss->cf_right);
+//        g3d_stereo=0;
+    }
+    else
 #endif
-      g3_start_frame();
+        g3_start_frame();
 
 /*KLC - stereo
-   if (inp6d_headset)
-   {
-      extern int32_t inp6d_curr_fov;
-	   use_zoom=g3_get_zoom(FR_DEF_AXIS,build_fix_angle(inp6d_curr_fov),320,200);
-      std_size=2;
-   }
-   else*/
-   {
-      use_zoom=_fr->viewer_zoom;
-      std_size=1;
-   }
+    if (inp6d_headset)
+    {
+        extern int32_t inp6d_curr_fov;
+        use_zoom=g3_get_zoom(FR_DEF_AXIS,build_fix_angle(inp6d_curr_fov),320,200);
+        std_size=2;
+    }
+    else*/
+    {
+        use_zoom=_fr->viewer_zoom;
+        std_size=1;
+    }
 
-   if ( _frp.faces.cyber ) {
+    if ( _frp.faces.cyber ) {
 
-        system_matrix.m1 = EDMS_Dirac_basis[0];
-        system_matrix.m2 = EDMS_Dirac_basis[1];
-        system_matrix.m3 = EDMS_Dirac_basis[2];
-        system_matrix.m4 = EDMS_Dirac_basis[3];
-        system_matrix.m5 = EDMS_Dirac_basis[4];
-        system_matrix.m6 = EDMS_Dirac_basis[5];
-        system_matrix.m7 = EDMS_Dirac_basis[6];
-        system_matrix.m8 = EDMS_Dirac_basis[7];
-        system_matrix.m9 = EDMS_Dirac_basis[8];
+          system_matrix.m1 = EDMS_Dirac_basis[0];
+          system_matrix.m2 = EDMS_Dirac_basis[1];
+          system_matrix.m3 = EDMS_Dirac_basis[2];
+          system_matrix.m4 = EDMS_Dirac_basis[3];
+          system_matrix.m5 = EDMS_Dirac_basis[4];
+          system_matrix.m6 = EDMS_Dirac_basis[5];
+          system_matrix.m7 = EDMS_Dirac_basis[6];
+          system_matrix.m8 = EDMS_Dirac_basis[7];
+          system_matrix.m9 = EDMS_Dirac_basis[8];
 
-      g3_set_view_matrix(&viewer_position,&system_matrix,_fr->viewer_zoom);
-//    g3_set_view_angles(&viewer_position,&viewer_orientation,ANGLE_ORDER,use_zoom);
-   } else
-      g3_set_view_angles(&viewer_position,&viewer_orientation,ANGLE_ORDER,use_zoom);
+        g3_set_view_matrix(&viewer_position,&system_matrix,_fr->viewer_zoom);
+//     g3_set_view_angles(&viewer_position,&viewer_orientation,ANGLE_ORDER,use_zoom);
+    } else
+        g3_set_view_angles(&viewer_position,&viewer_orientation,ANGLE_ORDER,use_zoom);
 
-   g3_set_bitmap_scale(fix_make(0,(int32_t)(2048/3)),fix_make(0,(int32_t)(2048/3)));
-//	g3_get_FOV(&x_fov,&y_fov);
-   if (!_fr->flags&FR_DOUBLEB_MASK)
-      (*fr_mouse_hide)();
-   else
-      if (_fr->horizon_call)
-         _fr->horizon_call(&_fr->draw_canvas.bm, _fr_curflags);
-//KLC      else if (global_fullmap->cyber)
-		gr_clear(_frp.view.clear_color);
+    g3_set_bitmap_scale(fix_make(0,(int32_t)(2048/3)),fix_make(0,(int32_t)(2048/3)));
+//    g3_get_FOV(&x_fov,&y_fov);
+    if (!_fr->flags&FR_DOUBLEB_MASK)
+        (*fr_mouse_hide)();
+    else
+        if (_fr->horizon_call)
+            _fr->horizon_call(&_fr->draw_canvas.bm, _fr_curflags);
+//KLC        else if (global_fullmap->cyber)
+        gr_clear(_frp.view.clear_color);
 
-   // now have everything set up for 3d view
-   // if wacky secondary camera mode, set up
+    // now have everything set up for 3d view
+    // if wacky secondary camera mode, set up
 #if _fr_defdbg(ALTCAM)
-   _fr_sdbg(ALTCAM,{fr_camera_getpos(_fr->xtracam);_fr_altcamx=coor(EYE_X)>>(16);_fr_altcamy=coor(EYE_Y)>>(16);})
+    _fr_sdbg(ALTCAM,{fr_camera_getpos(_fr->xtracam);_fr_altcamx=coor(EYE_X)>>(16);_fr_altcamy=coor(EYE_Y)>>(16);})
 #endif
-   return true;
+    return true;
 }
 
 //#define JUST_SHOW_THE_THING
@@ -768,102 +768,102 @@ extern bool view360_is_rendering;
 
 int32_t fr_send_view (void)
 {
-   bool 	snd_frm=true;
-   bool	ok_to_double;
+    bool     snd_frm=true;
+    bool    ok_to_double;
 
-   // JAEMZ JAEMZ JAEMZ
-   // render the stars, if there were
-   // no stars in this scene it simply returns
-   // spin it, spin it more when reactor blown
-   // rotation every 20 minutes, every 1 minute after explosion
+    // JAEMZ JAEMZ JAEMZ
+    // render the stars, if there were
+    // no stars in this scene it simply returns
+    // spin it, spin it more when reactor blown
+    // rotation every 20 minutes, every 1 minute after explosion
 
-   g3_start_object_angles_y(&zvec, QUESTBIT_GET(0x14) ? player_struct.game_time * 3 : player_struct.game_time / 5 );
+    g3_start_object_angles_y(&zvec, QUESTBIT_GET(0x14) ? player_struct.game_time * 3 : player_struct.game_time / 5 );
 
-   star_render();
-   g3_end_object();
+    star_render();
+    g3_end_object();
 
-   g3_end_frame();
+    g3_end_frame();
 
-      // stereo support - closedown ??
+        // stereo support - closedown ??
 #ifdef STEREO_SUPPORT
-   if (((_fr_curflags&(FR_PICKUPM_MASK|FR_HACKCAM_MASK))==0)&&inp6d_stereo_active&&
-        ((_fr_curflags&FR_CURVIEW_MASK)==FR_CURVIEW_STRT))
-   {
-      gr_set_canvas(grd_screen_canvas);
-      if (_fr->draw_call) snd_frm=_fr->draw_call(grd_screen_canvas, &_fr->draw_canvas.bm,_fr->xtop,_fr->ytop,_fr_curflags);
-      gr_set_canvas(i6d_ss->cf_left);
-	   (*fr_mouse_show)();
-      gr_set_canvas(i6d_ss->cf_right);
-	   (*fr_mouse_show)();
-      i6_video(I6VID_FRM_DONE,NULL);
-      i6_video(I6VID_FRM_COPY,NULL);   // send it's butt
-      gr_set_canvas(i6d_ss->cf_left);
-      if (i6d_device == I6D_CTM)
-         grd_cap->aspect>>=1;
-      _fr_ret;
-   }
+    if (((_fr_curflags&(FR_PICKUPM_MASK|FR_HACKCAM_MASK))==0)&&inp6d_stereo_active&&
+          ((_fr_curflags&FR_CURVIEW_MASK)==FR_CURVIEW_STRT))
+    {
+        gr_set_canvas(grd_screen_canvas);
+        if (_fr->draw_call) snd_frm=_fr->draw_call(grd_screen_canvas, &_fr->draw_canvas.bm,_fr->xtop,_fr->ytop,_fr_curflags);
+        gr_set_canvas(i6d_ss->cf_left);
+        (*fr_mouse_show)();
+        gr_set_canvas(i6d_ss->cf_right);
+        (*fr_mouse_show)();
+        i6_video(I6VID_FRM_DONE,NULL);
+        i6_video(I6VID_FRM_COPY,NULL);    // send it's butt
+        gr_set_canvas(i6d_ss->cf_left);
+        if (i6d_device == I6D_CTM)
+            grd_cap->aspect>>=1;
+        _fr_ret;
+    }
 #endif
 
-	// If we're rendering just the quick mono bitmap (for clicking on items, on-line help, etc),
-	// then return here.
-	if (_fr_curflags&FR_PICKUPM_MASK)
-	{
-		gr_set_canvas(grd_screen_canvas);
-		_fr_ret;
-	}
+    // If we're rendering just the quick mono bitmap (for clicking on items, on-line help, etc),
+    // then return here.
+    if (_fr_curflags&FR_PICKUPM_MASK)
+    {
+        gr_set_canvas(grd_screen_canvas);
+        _fr_ret;
+    }
 
-	// Determine if it's okay to double (it's not okay when rendering the 360 view).
-	ok_to_double = (DoubleSize && !view360_is_rendering);
+    // Determine if it's okay to double (it's not okay when rendering the 360 view).
+    ok_to_double = (DoubleSize && !view360_is_rendering);
 
-	// If double sizing, double-size the rendered bitmap onto the intermediate buffer,
-	// before doing any overlays.  Don't do it if rendering the 360 view.
-	if (ok_to_double)
-	{
-		gr_set_canvas(&gDoubleSizeOffCanvas);
-		if (full_game_3d)
-			FastFullscreenDouble2Canvas(&_fr->draw_canvas.bm, &gDoubleSizeOffCanvas, _fr->xwid, _fr->ywid);
-		else
-			FastSlotDouble2Canvas(&_fr->draw_canvas.bm, &gDoubleSizeOffCanvas, _fr->xwid, _fr->ywid);
-	}
+    // If double sizing, double-size the rendered bitmap onto the intermediate buffer,
+    // before doing any overlays.  Don't do it if rendering the 360 view.
+    if (ok_to_double)
+    {
+        gr_set_canvas(&gDoubleSizeOffCanvas);
+        if (full_game_3d)
+            FastFullscreenDouble2Canvas(&_fr->draw_canvas.bm, &gDoubleSizeOffCanvas, _fr->xwid, _fr->ywid);
+        else
+            FastSlotDouble2Canvas(&_fr->draw_canvas.bm, &gDoubleSizeOffCanvas, _fr->xwid, _fr->ywid);
+    }
 
-	// Draw the overlays
-	if (_fr->draw_call)
-		snd_frm = _fr->draw_call(grd_screen_canvas,
-												(ok_to_double) ? &gDoubleSizeOffCanvas.bm : &_fr->draw_canvas.bm,
-												_fr->xtop,_fr->ytop,_fr_curflags);
+    // Draw the overlays
+    if (_fr->draw_call)
+        snd_frm = _fr->draw_call(grd_screen_canvas,
+                                                (ok_to_double) ? &gDoubleSizeOffCanvas.bm : &_fr->draw_canvas.bm,
+                                                _fr->xtop,_fr->ytop,_fr_curflags);
 
-	if (snd_frm)
-	{
-		(*fr_mouse_hide)();									// This actually draws the mouse into the rendered canvas.
-		gr_set_canvas(grd_screen_canvas);				// Now set us to the screen canvas.
+    if (snd_frm)
+    {
+        (*fr_mouse_hide)();                                    // This actually draws the mouse into the rendered canvas.
+        gr_set_canvas(grd_screen_canvas);                // Now set us to the screen canvas.
 
-		if (_fr_curflags&FR_DOUBLEB_MASK)		// If we're double-buffered (which we always are)
-		{
-//			if (_fr_curflags&FR_DOHFLIP_MASK)		// Does this ever occur?
-//				gr_hflip_ubitmap(&_fr->draw_canvas.bm,_fr->xtop,_fr->ytop);
-			if (view360_is_rendering)
-				gr_ubitmap(&_fr->draw_canvas.bm,_fr->xtop,_fr->ytop);
-			else
-			{
-				if (ok_to_double)								// If double-sizing, just copy the already double-sized
-				{														// scene from the temp offscreen canvas to the screen.
-					if (full_game_3d)
-						Fast_FullScreen_Copy(&gDoubleSizeOffCanvas.bm);
-					else
-						Fast_Slot_Copy(&gDoubleSizeOffCanvas.bm);
-				}
-				else													// For high-res, just copy from the draw canvas.
-				{
-					if (full_game_3d)
-						Fast_FullScreen_Copy(&_fr->draw_canvas.bm);
-					else
-						Fast_Slot_Copy(&_fr->draw_canvas.bm);
-				}
-			}
-		}
-		(*fr_mouse_show)();
-   }
-   else
-	 	gr_set_canvas(grd_screen_canvas);
-   _fr_ret;
+        if (_fr_curflags&FR_DOUBLEB_MASK)        // If we're double-buffered (which we always are)
+        {
+//            if (_fr_curflags&FR_DOHFLIP_MASK)        // Does this ever occur?
+//                gr_hflip_ubitmap(&_fr->draw_canvas.bm,_fr->xtop,_fr->ytop);
+            if (view360_is_rendering)
+                gr_ubitmap(&_fr->draw_canvas.bm,_fr->xtop,_fr->ytop);
+            else
+            {
+                if (ok_to_double)                                // If double-sizing, just copy the already double-sized
+                {                                                        // scene from the temp offscreen canvas to the screen.
+                    if (full_game_3d)
+                        Fast_FullScreen_Copy(&gDoubleSizeOffCanvas.bm);
+                    else
+                        Fast_Slot_Copy(&gDoubleSizeOffCanvas.bm);
+                }
+                else                                                    // For high-res, just copy from the draw canvas.
+                {
+                    if (full_game_3d)
+                        Fast_FullScreen_Copy(&_fr->draw_canvas.bm);
+                    else
+                        Fast_Slot_Copy(&_fr->draw_canvas.bm);
+                }
+            }
+        }
+        (*fr_mouse_show)();
+    }
+    else
+         gr_set_canvas(grd_screen_canvas);
+    _fr_ret;
 }

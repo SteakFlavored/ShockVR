@@ -19,95 +19,95 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Shock.h"
 
 
-#define CreditsID		7900
+#define CreditsID        7900
 
 void ScrollCredits(void)
 {
-	RGBColor	black = {0, 0, 0};
-	RGBColor	white = {0xffff, 0xffff, 0xffff};
-	RGBColor	greenish = {0, 0x9999, 0};
+    RGBColor    black = {0, 0, 0};
+    RGBColor    white = {0xffff, 0xffff, 0xffff};
+    RGBColor    greenish = {0, 0x9999, 0};
 
-	RGBBackColor(&black);			// Set background to black while scrolling
+    RGBBackColor(&black);            // Set background to black while scrolling
 
-	// prepare the draw rects
+    // prepare the draw rects
 
-	PicHandle pict = GetPicture(CreditsID);
-	int16_t picWidth = (**pict).picFrame.right - (**pict).picFrame.left;
-	int16_t picHeight = (**pict).picFrame.bottom - (**pict).picFrame.top;
+    PicHandle pict = GetPicture(CreditsID);
+    int16_t picWidth = (**pict).picFrame.right - (**pict).picFrame.left;
+    int16_t picHeight = (**pict).picFrame.bottom - (**pict).picFrame.top;
 
-	Rect txtRect;							// This is the rect you want to draw everything into
+    Rect txtRect;                            // This is the rect you want to draw everything into
 
-	txtRect.left = 160;
-	txtRect.top = 130;
-	txtRect.right = txtRect.left + picWidth;
-	txtRect.bottom = txtRect.top + 164;
+    txtRect.left = 160;
+    txtRect.top = 130;
+    txtRect.right = txtRect.left + picWidth;
+    txtRect.bottom = txtRect.top + 164;
 
-	Rect picFrame;							// This is the frame of the picture.  It's based on txtRect.
+    Rect picFrame;                            // This is the frame of the picture.  It's based on txtRect.
 
-	picFrame.top = txtRect.top;
-	picFrame.left = txtRect.left;
-	picFrame.bottom = picFrame.top + picHeight;
-	picFrame.right = picFrame.left + picWidth;
+    picFrame.top = txtRect.top;
+    picFrame.left = txtRect.left;
+    picFrame.bottom = picFrame.top + picHeight;
+    picFrame.right = picFrame.left + picWidth;
 
-	// save off old clip
+    // save off old clip
 
-	RgnHandle saveClipRgn = NewRgn();
-	GetClip(saveClipRgn);
+    RgnHandle saveClipRgn = NewRgn();
+    GetClip(saveClipRgn);
 
-	// draw a quickie green frame
+    // draw a quickie green frame
 
-	RGBForeColor(&greenish);
-	InsetRect(&txtRect, -1, -1);
-	FrameRect(&txtRect);
-	InsetRect(&txtRect, -1, -1);
-	FrameRect(&txtRect);
-	InsetRect(&txtRect, 2, 2);
-	RGBForeColor(&black);
+    RGBForeColor(&greenish);
+    InsetRect(&txtRect, -1, -1);
+    FrameRect(&txtRect);
+    InsetRect(&txtRect, -1, -1);
+    FrameRect(&txtRect);
+    InsetRect(&txtRect, 2, 2);
+    RGBForeColor(&black);
 
-	ClipRect(&txtRect);
+    ClipRect(&txtRect);
 
-	RgnHandle dud = NewRgn();
-	RgnHandle save = NewRgn();
+    RgnHandle dud = NewRgn();
+    RgnHandle save = NewRgn();
 
-	// Draw the initial pict and wait for a few seconds.
+    // Draw the initial pict and wait for a few seconds.
 
-	DrawPicture(pict, &picFrame);
-	int32_t	stupid;
-	Delay(120, &stupid);
+    DrawPicture(pict, &picFrame);
+    int32_t    stupid;
+    Delay(120, &stupid);
 
-	do
-	{
-		// scroll up a pixel
+    do
+    {
+        // scroll up a pixel
 
-		ScrollRect(&txtRect, 0, -1, dud);
-		picFrame.top -= 1;
-		picFrame.bottom -= 1;
+        ScrollRect(&txtRect, 0, -1, dud);
+        picFrame.top -= 1;
+        picFrame.bottom -= 1;
 
-		GetClip(save);
-		SetClip(dud);
+        GetClip(save);
+        SetClip(dud);
 
-		DrawPicture(pict, &picFrame);
+        DrawPicture(pict, &picFrame);
 
-		SetClip(save);
+        SetClip(save);
 
-		if (Button())
-			goto cleanup;
-	}
-	while (picFrame.bottom > txtRect.bottom);
-	Delay(90, &stupid);
+        if (Button())
+            goto cleanup;
+    }
+    while (picFrame.bottom > txtRect.bottom);
+    Delay(90, &stupid);
 
 cleanup:
-	DisposeRgn(dud);
-	DisposeRgn(save);
+    DisposeRgn(dud);
+    DisposeRgn(save);
 
-	// restore old clip & port
+    // restore old clip & port
 
-	SetClip(saveClipRgn);
-	DisposeRgn(saveClipRgn);
+    SetClip(saveClipRgn);
+    DisposeRgn(saveClipRgn);
 
-	// Redraw what was there.
-	InsetRect(&txtRect, -2, -2);
-	InvalRect(&txtRect);
+    // Redraw what was there.
+    InsetRect(&txtRect, -2, -2);
+    InvalRect(&txtRect);
 
-	RGBBackColor(&white);			// Restore background color.
+    RGBBackColor(&white);            // Restore background color.
 }

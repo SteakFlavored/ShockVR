@@ -34,30 +34,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "flat8.h"
 
 /* set an unclipped pixel in bank-switched memory.  draws 8-8-8 long
-   rgb c at (x,y). */
+    rgb c at (x,y). */
 void flat8_set_upixel24(int32_t c,int16_t x,int16_t y)
 {
-   uint8_t *p;
-   int32_t i;
+    uint8_t *p;
+    int32_t i;
 
-   i = gr_index_lrgb(c);
-   p = grd_bm.bits + grd_bm.row*y + x;
-   *p = grd_ipal[i];
+    i = gr_index_lrgb(c);
+    p = grd_bm.bits + grd_bm.row*y + x;
+    *p = grd_ipal[i];
 }
 
 /* set a clipped pixel in bank-switched memory.  draws an 8-8-8 long
-   rgb c at (x,y).  return the clip code. */
+    rgb c at (x,y).  return the clip code. */
 int32_t flat8_set_pixel24(int32_t c, int16_t x, int16_t y)
 {
-   uint8_t *p;
-   int32_t i;
+    uint8_t *p;
+    int32_t i;
 
-   if (x<grd_clip.left || x>grd_clip.right ||
-       y<grd_clip.top || y>grd_clip.bot)
-      return CLIP_ALL;
-   i = gr_index_lrgb(c);
-   p = grd_canvas->bm.bits + grd_canvas->bm.row*y + x;
-   *p = grd_ipal[i];
+    if (x<grd_clip.left || x>grd_clip.right ||
+         y<grd_clip.top || y>grd_clip.bot)
+        return CLIP_ALL;
+    i = gr_index_lrgb(c);
+    p = grd_canvas->bm.bits + grd_canvas->bm.row*y + x;
+    *p = grd_ipal[i];
 
-   return CLIP_NONE;
+    return CLIP_NONE;
 }

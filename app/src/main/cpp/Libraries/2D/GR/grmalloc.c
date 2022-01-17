@@ -31,9 +31,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grmalloc.h"
 
 /* dynamic memory allocation/deallocation is done through the indirected
-   functions gr_malloc() and gr_free(). they default to malloc() and
-   free(). library clients can change the default with gr_set_malloc()
-   and gr_set_free(). */
+    functions gr_malloc() and gr_free(). they default to malloc() and
+    free(). library clients can change the default with gr_set_malloc()
+    and gr_set_free(). */
 typedef void *(*ptr_type)(int32_t);
 typedef void (*free_type)(void *);
 
@@ -43,11 +43,11 @@ void (*gr_free)(void *m) = (free_type)free;
 /* set 2d's internal function pointer to a malloc routine. */
 void gr_set_malloc (void *(*malloc_func)(int32_t bytes))
 {
-   gr_malloc = malloc_func;
+    gr_malloc = malloc_func;
 }
 
 /* set 2d's internal function pointer to a free routine. */
 void gr_set_free (void (*free_func)(void *mem))
 {
-   gr_free = free_func;
+    gr_free = free_func;
 }

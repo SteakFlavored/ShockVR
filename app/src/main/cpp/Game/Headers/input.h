@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // DEFINES
 // -------
 
-#define NUM_HOTKEYS 50     // an arbitrary constant
+#define NUM_HOTKEYS 50      // an arbitrary constant
 
 // Hotkey contexts
 #define DEMO_CONTEXT  0x01

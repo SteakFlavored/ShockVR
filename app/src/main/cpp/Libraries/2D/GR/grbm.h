@@ -46,8 +46,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tabdat.h"
 
 #define gr_calc_row(w) \
-   ((int16_t (*)(int16_t _w)) grd_pixel_table[CALC_ROW])(w)
+    ((int16_t (*)(int16_t _w)) grd_pixel_table[CALC_ROW])(w)
 #define gr_sub_bitmap(bm, x, y, w, h) \
-   ((grs_bitmap *(*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h)) \
-   grd_pixel_table[SUB_BITMAP])(bm, x, y, w, h)
+    ((grs_bitmap *(*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h)) \
+    grd_pixel_table[SUB_BITMAP])(bm, x, y, w, h)
 #endif /* !__GRBM_H */

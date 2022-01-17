@@ -33,18 +33,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "linfcn.h"
 
 /* This just converts to fix-point, then calls the current uline
-   drawer, so this OK for all canvases, fill modes, etc.  In general,
-   you would prefer to take advantage of nice integer special cases to
-   avoid shifts, but this is probably overkill.
+    drawer, so this OK for all canvases, fill modes, etc.  In general,
+    you would prefer to take advantage of nice integer special cases to
+    avoid shifts, but this is probably overkill.
 */
 
 void gri_all_uiline_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   grs_vertex u0, u1;
+    grs_vertex u0, u1;
 
-   u0.x = fix_make(v0->x, 32768); u0.y = fix_make(v0->y, 32768);
-   u1.x = fix_make(v1->x, 32768); u1.y = fix_make(v1->y, 32768);
+    u0.x = fix_make(v0->x, 32768); u0.y = fix_make(v0->y, 32768);
+    u1.x = fix_make(v1->x, 32768); u1.y = fix_make(v1->y, 32768);
 
-   grd_uline_fill (c, parm, &u0, &u1);
+    grd_uline_fill (c, parm, &u0, &u1);
 }
 

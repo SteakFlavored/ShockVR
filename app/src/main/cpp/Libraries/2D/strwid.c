@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * added grs_font * as first argument, #define for compatibility
  *
  * Revision 1.4  1993/10/19  09:58:01  kaboom
- * Replaced #include   new headers.
+ * Replaced #include    new headers.
  *
  * Revision 1.3  1993/10/08  01:16:29  kaboom
  * Changed quotes in #include liness to angle brackets for Watcom problem.
@@ -55,24 +55,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int16_t gr_font_string_width (grs_font *f, int8_t *s)
 {
-   int16_t *offset_tab;         /* table of character offsets */
-   int16_t offset;              /* offset of current character */
-   int16_t w_lin=0;             /* current line's width so far */
-   int16_t w=0;                 /* width of widest line */
-   uint8_t c;                    /* current character */
+    int16_t *offset_tab;            /* table of character offsets */
+    int16_t offset;                  /* offset of current character */
+    int16_t w_lin=0;                 /* current line's width so far */
+    int16_t w=0;                      /* width of widest line */
+    uint8_t c;                          /* current character */
 
-   offset_tab = f->off_tab;
-   while ((c= (uint8_t) (*s++)) != '\0') {
-      if (c == CHAR_SOFTSP)
-         continue;
-      if (c=='\n' || c==CHAR_SOFTCR) {
-         if (w_lin>w) w=w_lin;
-         w_lin = 0;
-         continue;
-      }
-      offset = offset_tab[c-f->min];
-      w_lin += offset_tab[c-f->min+1]-offset;
-   }
-   return (w_lin>w) ? w_lin : w;
+    offset_tab = f->off_tab;
+    while ((c= (uint8_t) (*s++)) != '\0') {
+        if (c == CHAR_SOFTSP)
+            continue;
+        if (c=='\n' || c==CHAR_SOFTCR) {
+            if (w_lin>w) w=w_lin;
+            w_lin = 0;
+            continue;
+        }
+        offset = offset_tab[c-f->min];
+        w_lin += offset_tab[c-f->min+1]-offset;
+    }
+    return (w_lin>w) ? w_lin : w;
 
-   }
+    }

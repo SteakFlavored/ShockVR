@@ -31,61 +31,61 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objects.h"
 #include "combat.h"
 
-#define EXPLOSION_TYPE           1
-#define ENERGY_BEAM_TYPE         2
-#define MAGNETIC_TYPE            3
-#define RADIATION_TYPE           4
+#define EXPLOSION_TYPE              1
+#define ENERGY_BEAM_TYPE            2
+#define MAGNETIC_TYPE                3
+#define RADIATION_TYPE              4
 
-#define GAS_TYPE                 5
-#define TRANQ_TYPE               6
-#define NEEDLE_TYPE              7
-#define BIO_TYPE                 8
+#define GAS_TYPE                      5
+#define TRANQ_TYPE                    6
+#define NEEDLE_TYPE                  7
+#define BIO_TYPE                      8
 
 #define DAMAGE_TYPE2MASK(n) (1 << ((n) - 1))
 
-#define DAMAGE_TYPE_FIELD        0x00FF
-#define PRIMARY_DAMAGE_FIELD     0x0F00
-#define PRIMARY_DAMAGE(X)        (((X) >> 8) & 0xF)
-#define SUPER_DAMAGE_FIELD       0xF000
-#define SUPER_DAMAGE(X)          (((X) >> 12) & 0xF)
+#define DAMAGE_TYPE_FIELD          0x00FF
+#define PRIMARY_DAMAGE_FIELD      0x0F00
+#define PRIMARY_DAMAGE(X)          (((X) >> 8) & 0xF)
+#define SUPER_DAMAGE_FIELD         0xF000
+#define SUPER_DAMAGE(X)             (((X) >> 12) & 0xF)
 
-#define CYBER_EXPLOSION_TYPE     1
-#define CYBER_PROJECTILE_TYPE    2
-#define CYBER_DRILL_TYPE         3
+#define CYBER_EXPLOSION_TYPE      1
+#define CYBER_PROJECTILE_TYPE     2
+#define CYBER_DRILL_TYPE            3
 
-#define EXPLOSION_FLAG           (0x01 << (EXPLOSION_TYPE-1))
-#define ENERGY_BEAM_FLAG         (0x01 << (ENERGY_BEAM_TYPE-1))
-#define MAGNETIC_FLAG            (0x01 << (MAGNETIC_TYPE-1))
-#define RADIATION_FLAG           (0x01 << (RADIATION_TYPE-1))
-#define GAS_FLAG                 (0x01 << (GAS_TYPE-1))
-#define TRANQ_FLAG               (0x01 << (TRANQ_TYPE-1))
-#define NEEDLE_FLAG              (0x01 << (NEEDLE_TYPE-1))
-#define SLEEP_FLAG               (0x01 << (SLEEP_TYPE-1))
+#define EXPLOSION_FLAG              (0x01 << (EXPLOSION_TYPE-1))
+#define ENERGY_BEAM_FLAG            (0x01 << (ENERGY_BEAM_TYPE-1))
+#define MAGNETIC_FLAG                (0x01 << (MAGNETIC_TYPE-1))
+#define RADIATION_FLAG              (0x01 << (RADIATION_TYPE-1))
+#define GAS_FLAG                      (0x01 << (GAS_TYPE-1))
+#define TRANQ_FLAG                    (0x01 << (TRANQ_TYPE-1))
+#define NEEDLE_FLAG                  (0x01 << (NEEDLE_TYPE-1))
+#define SLEEP_FLAG                    (0x01 << (SLEEP_TYPE-1))
 
-#define CYBER_EXPLOSION_FLAG     (0x01 << (CYBER_EXPLOSION_TYPE-1))
-#define CYBER_PROJECTILE_FLAG    (0x01 << (CYBER_PROJECTILE_TYPE-1))
-#define CYBER_DRILL_FLAG         (0x01 << (CYBER_DRILL_TYPE-1))
+#define CYBER_EXPLOSION_FLAG      (0x01 << (CYBER_EXPLOSION_TYPE-1))
+#define CYBER_PROJECTILE_FLAG     (0x01 << (CYBER_PROJECTILE_TYPE-1))
+#define CYBER_DRILL_FLAG            (0x01 << (CYBER_DRILL_TYPE-1))
 
-#define DAMAGE_MIN     0
-#define DAMAGE_MAX     4
+#define DAMAGE_MIN      0
+#define DAMAGE_MAX      4
 #define DAMAGE_DEGREES 6
 
-#define DAMAGE_NONE        0
-#define DAMAGE_LIGHT       1
-#define DAMAGE_MEDIUM      2
-#define DAMAGE_SEVERE      3
-#define DAMAGE_CRITICAL    4
+#define DAMAGE_NONE          0
+#define DAMAGE_LIGHT         1
+#define DAMAGE_MEDIUM        2
+#define DAMAGE_SEVERE        3
+#define DAMAGE_CRITICAL     4
 #define DAMAGE_INEFFECTIVE 5
-#define DAMAGE_TRANQ       6
-#define DAMAGE_STUN        7
+#define DAMAGE_TRANQ         6
+#define DAMAGE_STUN          7
 
 // attack_object flags
-#define NO_SHIELD_ABSORBTION     0x01           // should the player's shield not absorb damage
-                                                // default is to absorb
-#define FLASH_BLOOD              0x02
-#define STUN_ATTACK              0x04
+#define NO_SHIELD_ABSORBTION      0x01              // should the player's shield not absorb damage
+                                                                // default is to absorb
+#define FLASH_BLOOD                  0x02
+#define STUN_ATTACK                  0x04
 
-#define MAX_DESTROYED_OBJS    100
+#define MAX_DESTROYED_OBJS     100
 
 #ifdef __COMBAT_C
 int16_t destroyed_obj_count = 0;
@@ -124,10 +124,10 @@ bool special_terrain_hit(ObjID cobjid);
 // attack_object()
 //
 // general all purpose attack/damage object
-//   target - the ObjID of the target being attacked
-//   weapon_triple - the triple for the bullet, grenade, or beam gun
-//   flags - see above
-//   power_level - will be ignored for projectile weapons, but used for grenades and beam guns
+//    target - the ObjID of the target being attacked
+//    weapon_triple - the triple for the bullet, grenade, or beam gun
+//    flags - see above
+//    power_level - will be ignored for projectile weapons, but used for grenades and beam guns
 //
 uint8_t attack_object(ObjID target, int32_t damage_type,int32_t damage_mod, uint8_t offense, uint8_t penet, uint8_t flags, int32_t power_level, uint8_t *effect_row, uint8_t *effect, uint8_t attack_effect_type, int32_t *damage_inflicted);
 

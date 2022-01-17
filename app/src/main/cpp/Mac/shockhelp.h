@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //====================================================================
 //
-//		System Shock - ©1994-1995 Looking Glass Technologies, Inc.
+//        System Shock - ©1994-1995 Looking Glass Technologies, Inc.
 //
-//		ShockHelp.h	-	Header file for Shock Help dialog.
+//        ShockHelp.h    -    Header file for Shock Help dialog.
 //
 //====================================================================
 

@@ -59,8 +59,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 typedef struct {
-   int8_t *name;
-   int32_t z;
+    int8_t *name;
+    int32_t z;
 } menu_struct;
 
 // Prototypes

@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //====================================================================================
 //
-//		System Shock - ©1994-1995 Looking Glass Technologies, Inc.
+//        System Shock - ©1994-1995 Looking Glass Technologies, Inc.
 //
-//		ShockBitmap.c	-	Manages off-screen bitmaps and palettes.
+//        ShockBitmap.c    -    Manages off-screen bitmaps and palettes.
 //
 //====================================================================================
 
@@ -30,18 +30,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 typedef struct
 {
-	Ptr		Address;
-	int32_t		RowBytes;
-	GrafPtr	bits;
-	Rect		bounds;
-	bool	Color;
+    Ptr        Address;
+    int32_t        RowBytes;
+    GrafPtr    bits;
+    Rect        bounds;
+    bool    Color;
 
-	BitMap	BWBits;			// B&W port & map
-	GrafPort BWPort;
+    BitMap    BWBits;            // B&W port & map
+    GrafPort BWPort;
 
-	CGrafPort	CPort;		// color port
+    CGrafPort    CPort;        // color port
 
-	Handle	OrigBits;
+    Handle    OrigBits;
 
 } ShockBitmap;
 
@@ -49,10 +49,10 @@ typedef struct
 //--------------------
 //  Globals
 //--------------------
-extern PixMapHandle 		gScreenPixMap;
-extern CTabHandle			gMainColorHand;
-extern bool				gChangedColors;
-extern ShockBitmap		gMainOffScreen;
+extern PixMapHandle         gScreenPixMap;
+extern CTabHandle            gMainColorHand;
+extern bool                gChangedColors;
+extern ShockBitmap        gMainOffScreen;
 
 
 //--------------------

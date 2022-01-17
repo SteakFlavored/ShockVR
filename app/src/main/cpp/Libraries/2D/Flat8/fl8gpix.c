@@ -43,21 +43,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* returns value of the unclipped pixel at (x, y). */
 int32_t flat8_get_upixel (int16_t x, int16_t y)
 {
-   uint8_t *p;
+    uint8_t *p;
 
-   p = grd_bm.bits + grd_bm.row*y + x;
-   return (int32_t)*p;
+    p = grd_bm.bits + grd_bm.row*y + x;
+    return (int32_t)*p;
 }
 
 /* returns value of the clipped pixel at (x, y).  returns -1 if pixel isn't
-   in the window bounds. */
+    in the window bounds. */
 int32_t flat8_get_pixel (int16_t x, int16_t y)
 {
-   uint8_t *p;
+    uint8_t *p;
 
-   if (x<grd_clip.left || x>grd_clip.right || y<grd_clip.top || y>grd_clip.bot)
-      return -1;
+    if (x<grd_clip.left || x>grd_clip.right || y<grd_clip.top || y>grd_clip.bot)
+        return -1;
 
-   p = grd_bm.bits + grd_bm.row*y + x;
-   return (int32_t)*p;
+    p = grd_bm.bits + grd_bm.row*y + x;
+    return (int32_t)*p;
 }

@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 // at which frame and above the door is considered "open" to physics....
-#define DOOR_OPEN_FRAME    3
+#define DOOR_OPEN_FRAME     3
 
 #define DOOR_CLOSED(id) (objs[(id)].info.current_frame < DOOR_OPEN_FRAME)
 #define DOOR_REALLY_CLOSED(id) (objs[(id)].info.current_frame==0)

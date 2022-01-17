@@ -192,8 +192,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "plytyp.h" /* must fix */
 
 /* the general-purpose driver has no entries for the following standard
-   functions: set_pixel, set_upixel, get_pixel, and get_upixel.  These
-   functions must be defined; they are the minimal components of a driver. */
+    functions: set_pixel, set_upixel, get_pixel, and get_upixel.  These
+    functions must be defined; they are the minimal components of a driver. */
 
 extern int32_t gen_set_pixel(int32_t color, int16_t x, int16_t y);
 extern int32_t gen_set_pixel_interrupt(int32_t color, int16_t x, int16_t y);
@@ -238,52 +238,52 @@ extern void gen_vox_cpoly(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitma
 extern void gen_interp2_ubitmap(grs_bitmap *bm);
 extern void gen_filter2_ubitmap(grs_bitmap *bm);
 extern void gen_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern int32_t gen_scale_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern void gen_rsd8_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern int32_t gen_rsd8_scale_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern void unpack_rsd8_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern int32_t unpack_rsd8_scale_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern void gen_tluc8_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern gen_tluc8_scale_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 
 extern void gen_rsd8_clut_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 extern int32_t gen_rsd8_clut_scale_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 extern void gen_rsd8_scale_solid_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, int32_t c);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, int32_t c);
 extern int32_t gen_rsd8_scale_solid_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, int32_t c);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, int32_t c);
 extern void unpack_rsd8_clut_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 extern int32_t unpack_rsd8_clut_scale_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 extern void gen_clut_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 extern void gen_clut_scale_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 
 extern void gen_roll_ubitmap
-   (grs_bitmap *bm, fix angle, int16_t x, int16_t y);
+    (grs_bitmap *bm, fix angle, int16_t x, int16_t y);
 extern gen_roll_bitmap ();
 
 extern void gen_flat8_wall_umap
-   (grs_bitmap *bm, int32_t n, fix **vpl);
+    (grs_bitmap *bm, int32_t n, fix **vpl);
 extern void gen_flat8_lit_wall_umap
-   (grs_bitmap *bm, int32_t n, fix **vpl);
+    (grs_bitmap *bm, int32_t n, fix **vpl);
 
 extern void gen_flat8_floor_umap
-   (grs_bitmap *bm, int32_t n, fix **vpl);
+    (grs_bitmap *bm, int32_t n, fix **vpl);
 extern void gen_flat8_lit_floor_umap
-   (grs_bitmap *bm, int32_t n, fix **vpl);
+    (grs_bitmap *bm, int32_t n, fix **vpl);
 
 extern void temp_point(int16_t x, int16_t y);
 extern void temp_upoint(int16_t x, int16_t y);
@@ -311,133 +311,133 @@ extern void temp_ustpoly (int32_t c, int32_t n, grs_vertex **vpl);
 
 
 extern void temp_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_lit_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_lit_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_clut_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern void temp_clut_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 
 extern void temp_wall_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_lit_wall_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_clut_wall_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 
 extern void temp_floor_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_lit_floor_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_clut_floor_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 
 extern void temp_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_lit_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void temp_clut_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern void temp_clut_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 
 extern void temp_scale_umap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern int32_t temp_scale_map
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern void temp_clut_scale_umap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 extern int32_t temp_clut_scale_map
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 
 extern void gen_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t gen_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void gen_lit_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t gen_lit_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void gen_clut_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern int32_t gen_clut_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern void gen_solid_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
 extern int32_t gen_solid_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
 
 extern void gen_rsd8_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t gen_rsd8_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void gen_rsd8_lit_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t gen_rsd8_lit_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void gen_rsd8_clut_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern int32_t gen_rsd8_clut_per_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 
 extern void gen_lin_lit_utmap
-   (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
+    (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
 extern int32_t gen_lin_lit_tmap
-   (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
+    (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
 extern void gen_bilin_lit_utmap
-   (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
+    (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
 extern int32_t gen_bilin_lit_tmap
-   (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
+    (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
 
 extern void gen_flat8_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t gen_flat8_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void gen_flat24_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t gen_flat24_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void gen_rsd8_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t gen_rsd8_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void gen_tluc8_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t gen_tluc8_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 
 extern void gen_lit_lin_umap
-   (int32_t n, grs_bitmap *bm, grs_vertex **vpl);
+    (int32_t n, grs_bitmap *bm, grs_vertex **vpl);
 extern int32_t gen_lit_lin_map
-   (int32_t n, grs_bitmap *bm, grs_vertex **vpl);
+    (int32_t n, grs_bitmap *bm, grs_vertex **vpl);
 
 extern void gen_clut_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern int32_t gen_clut_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern void gen_tluc8_clut_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern void gen_flat8_solid_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
 extern int32_t gen_flat8_solid_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
 
 extern void gen_rsd8_lit_lin_umap
-   (int32_t n, grs_bitmap *bm, grs_vertex **vpl);
+    (int32_t n, grs_bitmap *bm, grs_vertex **vpl);
 extern int32_t gen_rsd8_lit_lin_map
-   (int32_t n, grs_bitmap *bm, grs_vertex **vpl);
+    (int32_t n, grs_bitmap *bm, grs_vertex **vpl);
 
 extern void gen_rsd8_clut_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern int32_t gen_rsd8_clut_lin_map
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 
 extern void gen_int_ucircle (int16_t x, int16_t y, int16_t r);
 extern int32_t gen_int_circle (int16_t x0, int16_t y0, int16_t r);

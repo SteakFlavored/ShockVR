@@ -40,8 +40,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* format for vertex buffers. */
 typedef struct {
-   fix x, y;                  /* screen coordinates */
-   fix u, v, w;               /* texture parameters/rgb */
-   fix i;                     /* intensity */
+    fix x, y;                        /* screen coordinates */
+    fix u, v, w;                    /* texture parameters/rgb */
+    fix i;                            /* intensity */
 } grs_vertex;
 #endif /* !__PLYTYP */

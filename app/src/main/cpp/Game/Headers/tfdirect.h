@@ -29,19 +29,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __TFDIRECT_H
 
 // some useful constants, i hope
-#define fix_0         fix_make(0,0)
-#define fix_1         fix_make(1,0)
-#define fix_root2     fix_make(1,27146)   // 1.414
-#define fix_inv_root2 fix_make(0,46341)   // 0.707
+#define fix_0            fix_make(0,0)
+#define fix_1            fix_make(1,0)
+#define fix_root2      fix_make(1,27146)    // 1.414
+#define fix_inv_root2 fix_make(0,46341)    // 0.707
 
 // globals
 extern fix (*tf_vert_2d)[2];  // 4 elements
 extern int8_t  tf_norm_hnts[4]; // hint for each if used
-extern fix  *tf_pt;           // 3 elements: first 2 in plane, 3 is distance from plane
-extern fix   tf_loc_pt[3];
-extern fix   tf_raw_pt[3];     // raw world location of object
-extern int32_t   tf_ph;            // current physics handle
-extern fix   tf_rad;            // current physics handle
+extern fix  *tf_pt;              // 3 elements: first 2 in plane, 3 is distance from plane
+extern fix    tf_loc_pt[3];
+extern fix    tf_raw_pt[3];      // raw world location of object
+extern int32_t    tf_ph;                // current physics handle
+extern fix    tf_rad;                // current physics handle
 
 // masks and hints
 #define FACELET_MASK_N (1<<0)

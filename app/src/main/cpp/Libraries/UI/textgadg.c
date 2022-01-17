@@ -36,42 +36,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Gadget *gad_text_create(Gadget *parent, LGRect *dim, int32_t z, uint32_t options, TNGStyle *sty, int8_t *name)
 {
-   Gadget *retgad;
-   TNG *temp_tng;
-   LGPoint dsize, dloc;
+    Gadget *retgad;
+    TNG *temp_tng;
+    LGPoint dsize, dloc;
 
-   temp_tng = (TNG *)NewPtr(sizeof(TNG));
+    temp_tng = (TNG *)NewPtr(sizeof(TNG));
 
-   dsize.x = RectWidth(dim);
-   dsize.y = RectHeight(dim);
-   dloc.x = parent->rep->abs_x + dim->ul.x;
-   dloc.y = parent->rep->abs_y + dim->ul.y;
-   tng_textgadget_init(NULL, temp_tng, sty, options, dsize, dloc);
+    dsize.x = RectWidth(dim);
+    dsize.y = RectHeight(dim);
+    dloc.x = parent->rep->abs_x + dim->ul.x;
+    dloc.y = parent->rep->abs_y + dim->ul.y;
+    tng_textgadget_init(NULL, temp_tng, sty, options, dsize, dloc);
 
-   gadget_create_setup(&retgad, parent, CLASS_TEXT, dim, z, name);
-   DisposePtr((Ptr)retgad->tng_data);
-   temp_tng->ui_data = retgad;
-   retgad->tng_data = temp_tng;
+    gadget_create_setup(&retgad, parent, CLASS_TEXT, dim, z, name);
+    DisposePtr((Ptr)retgad->tng_data);
+    temp_tng->ui_data = retgad;
+    retgad->tng_data = temp_tng;
 
-   // Let the TNG get another shot...
-   tng_textgadget_init2(temp_tng);
+    // Let the TNG get another shot...
+    tng_textgadget_init2(temp_tng);
 
-   return (retgad);
+    return (retgad);
 }
 
 Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, uint32_t options, LGPoint size)
 {
-   LGRect newrect;
-   Gadget *rgad, *g;
-   int8_t new_name[128];
+    LGRect newrect;
+    Gadget *rgad, *g;
+    int8_t new_name[128];
 
-   g = (Gadget *)ui_data;
-   newrect.ul = loc;
-   newrect.lr.x = newrect.ul.x + size.x;
-   newrect.lr.y = newrect.ul.y + size.y;
-   strcpy(new_name, "textgadg-sub-");
-   strcat(new_name, GD_NAME(g->rep));
-   rgad = gad_text_create(g, &newrect, 0, options, sty, new_name);
-   *pptng = rgad->tng_data;
-   return(rgad);
+    g = (Gadget *)ui_data;
+    newrect.ul = loc;
+    newrect.lr.x = newrect.ul.x + size.x;
+    newrect.lr.y = newrect.ul.y + size.y;
+    strcpy(new_name, "textgadg-sub-");
+    strcat(new_name, GD_NAME(g->rep));
+    rgad = gad_text_create(g, &newrect, 0, options, sty, new_name);
+    *pptng = rgad->tng_data;
+    return(rgad);
 }

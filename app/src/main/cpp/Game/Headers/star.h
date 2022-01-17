@@ -38,10 +38,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // to a fix, since sts_vecs are normalized they can
 // be this size
 typedef struct {
-   int16_t x,y,z;
+    int16_t x,y,z;
 } sts_vec;
 
-extern   int32_t std_size;
+extern    int32_t std_size;
 
 // sets global pointers in the star library
 // to the number of stars, their positions, their colors

@@ -88,7 +88,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern LGPoint tng_absloc(TNG* ptng);
 #define TNG_ABSLOC(ptng) tng_absloc(ptng)
 
-#define GUI_MALLOC(uid, size)   NewPtr(size)
+#define GUI_MALLOC(uid, size)    NewPtr(size)
 #define GUI_DEALLOC(uid, victim) DisposePtr((Ptr)victim)
 
 #define TNG_GRAB_FOCUS(ptng, evmask) uiGrabFocus(((Gadget *)((ptng)->ui_data))->rep, evmask)
@@ -110,11 +110,11 @@ extern LGPoint tng_absloc(TNG* ptng);
 // Macros for creating supported TNGs....
 
 extern Gadget *gad_pushbutton_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t button_type,
-   void *display_data, LGPoint size);
+    void *display_data, LGPoint size);
 #define TNG_CREATE_PUSHBUTTON(ui_data, loc, pptng, sty, button_type, display_data, size) gad_pushbutton_create_from_tng(ui_data, loc, pptng, sty, button_type, display_data, size)
 
 extern Gadget *gad_slider_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max,
-   int32_t value, int32_t increment, LGPoint size);
+    int32_t value, int32_t increment, LGPoint size);
 #define TNG_CREATE_SLIDER(ui_data, loc, pptng, sty, alignment, min, max, value, increm, size) gad_slider_create_from_tng(ui_data, loc, pptng, sty, alignment, min, max, value, increm, size)
 
 extern Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, uint32_t options, LGPoint size);

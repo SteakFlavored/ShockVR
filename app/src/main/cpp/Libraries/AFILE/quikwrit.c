@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		QUIKWRIT.C		QuickTime file writing
-//		Rex E. Bradford
+//        QUIKWRIT.C        QuickTime file writing
+//        Rex E. Bradford
 
 /*
  * $Source: r:/prj/lib/src/afile/RCS/quikwrit.c $
@@ -55,7 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg.h"
 #include "quiktime.h"
 
-//	Handy macros
+//    Handy macros
 
 #define FIX8(v) ((v)>>8)
 #define DEFAULT_MACTIME 2855653576
@@ -63,562 +63,562 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FRAME_ALLOC_INCR 128
 #define MDHD_TIMESCALE 30
 
-//	Internal prototypes
+//    Internal prototypes
 
 void QuikStartSubChunk(QTM *pqtm, FILE *fp, QT_Ctype ctype, void *data,
-	int32_t len);
+    int32_t len);
 void QuikEndSubChunk(QTM *pqtm, FILE *fp);
 void QuikWriteMVHD(QTM *pqtm, FILE *fp, uint32_t timeTot);
 void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, uint32_t timeTot);
 void WriteChunkWithString(FILE *fp, QT_Ctype ctype, void *data,
-	int32_t len, int8_t *str);
+    int32_t len, int8_t *str);
 uint32_t QuikComputeTotalTime(QTM *pqtm);
 int32_t QuikSampleLenMsec(fix t, fix tlast);
 fix QuikSampleLenMsecBackToFix(int32_t msec);
 
-//	-------------------------------------------------------------
-//		MOVIE WRITING
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
+//        MOVIE WRITING
+//    -------------------------------------------------------------
 //
-//	QuikCreateMovie() creates a quiktime movie ready for writing.
+//    QuikCreateMovie() creates a quiktime movie ready for writing.
 
 void QuikCreateMovie(QTM *pqtm, FILE *fp)
 {
-	memset(pqtm, 0, sizeof(QTM));
+    memset(pqtm, 0, sizeof(QTM));
 
-	QuikStartSubChunk(pqtm, fp, QT_MDAT, NULL, 0);
+    QuikStartSubChunk(pqtm, fp, QT_MDAT, NULL, 0);
 }
 /*
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
 //
-//	QuikSetPal() sets the video track's palette
+//    QuikSetPal() sets the video track's palette
 
 void QuikSetPal(QTM *pqtm, uint8_t *pal)
 {
-	if (pqtm->pVideoTrack == NULL)
-		pqtm->pVideoTrack = &pqtm->track[pqtm->numTracks++];
+    if (pqtm->pVideoTrack == NULL)
+        pqtm->pVideoTrack = &pqtm->track[pqtm->numTracks++];
 
-	pqtm->pVideoTrack->palette = Malloc(768);
-	memcpy(pqtm->pVideoTrack->palette, pal, 768);
+    pqtm->pVideoTrack->palette = Malloc(768);
+    memcpy(pqtm->pVideoTrack->palette, pal, 768);
 }
 */
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
 //
-//	QuikAddVideoSample() adds a video sample
+//    QuikAddVideoSample() adds a video sample
 
 void QuikAddVideoSample(QTM *pqtm, FILE *fp, grs_bitmap *pbm, fix time)
 {
-	MovieTrack *ptrack;
-	uint8_t *p;
-	uint8_t *ppal;
-	uint8_t *pbuff;
-	uint8_t *pd;
-	uint8_t *prgb;
-	int32_t x,y;
-	uint16_t color16;
+    MovieTrack *ptrack;
+    uint8_t *p;
+    uint8_t *ppal;
+    uint8_t *pbuff;
+    uint8_t *pd;
+    uint8_t *prgb;
+    int32_t x,y;
+    uint16_t color16;
 
-//	Can't handle anything but 8-bit raw
+//    Can't handle anything but 8-bit raw
 
-	if (pbm->type != BMT_FLAT8)
-	{
-		printf("QuikAddVideoSample: only uncompressed bitmaps allowed\n");
-		return;
-	}
+    if (pbm->type != BMT_FLAT8)
+    {
+        printf("QuikAddVideoSample: only uncompressed bitmaps allowed\n");
+        return;
+    }
 
-//	Write out frame bits in 8-bit of 16-bit mode
+//    Write out frame bits in 8-bit of 16-bit mode
 
-	if (pqtm->depth16)
-	{
-		if ((pqtm->pVideoTrack == NULL) || (pqtm->pVideoTrack->palette == NULL))
-		{
-			printf("QuikAddVideoSample: need pal to convert to 16-bits!\n");
-			return;
-		}
-		ppal = pqtm->pVideoTrack->palette;
-		pbuff = (uint8_t *)malloc(pbm->w * sizeof(uint16_t));
-		for (y = 0, p = pbm->bits; y < pbm->h; y++, p += (pbm->row - pbm->w))
-		{
-			for (x = 0, pd = pbuff; x < pbm->w; x++)
-			{
-				prgb = &ppal[((uint16_t) *p++) * 3];
-				color16 = (uint16_t)(*prgb++ >> 3) << 10;
-				color16 |= (uint16_t)(*prgb++ >> 3) << 5;
-				color16 |= (uint16_t)(*prgb++ >> 3);
-				*pd++ = color16 >> 8;
-				*pd++ = color16 & 0xFF;
-			}
-			fwrite(pbuff, pbm->w * sizeof(uint16_t), 1, fp);
-		}
-		free(pbuff);
-	}
-	else
-	{
-		if (pbm->w == pbm->row)
-			fwrite(pbm->bits, (int32_t) pbm->w * (int32_t) pbm->h, 1, fp);
-		else
-		{
-			for (y = 0, p = pbm->bits; y < pbm->h; y++, p += pbm->row)
-				fwrite(p, pbm->w, 1, fp);
-		}
-	}
+    if (pqtm->depth16)
+    {
+        if ((pqtm->pVideoTrack == NULL) || (pqtm->pVideoTrack->palette == NULL))
+        {
+            printf("QuikAddVideoSample: need pal to convert to 16-bits!\n");
+            return;
+        }
+        ppal = pqtm->pVideoTrack->palette;
+        pbuff = (uint8_t *)malloc(pbm->w * sizeof(uint16_t));
+        for (y = 0, p = pbm->bits; y < pbm->h; y++, p += (pbm->row - pbm->w))
+        {
+            for (x = 0, pd = pbuff; x < pbm->w; x++)
+            {
+                prgb = &ppal[((uint16_t) *p++) * 3];
+                color16 = (uint16_t)(*prgb++ >> 3) << 10;
+                color16 |= (uint16_t)(*prgb++ >> 3) << 5;
+                color16 |= (uint16_t)(*prgb++ >> 3);
+                *pd++ = color16 >> 8;
+                *pd++ = color16 & 0xFF;
+            }
+            fwrite(pbuff, pbm->w * sizeof(uint16_t), 1, fp);
+        }
+        free(pbuff);
+    }
+    else
+    {
+        if (pbm->w == pbm->row)
+            fwrite(pbm->bits, (int32_t) pbm->w * (int32_t) pbm->h, 1, fp);
+        else
+        {
+            for (y = 0, p = pbm->bits; y < pbm->h; y++, p += pbm->row)
+                fwrite(p, pbm->w, 1, fp);
+        }
+    }
 
-//	If video track not assigned, assign it
+//    If video track not assigned, assign it
 
-	if (pqtm->pVideoTrack == NULL)
-		pqtm->pVideoTrack = &pqtm->track[pqtm->numTracks++];
+    if (pqtm->pVideoTrack == NULL)
+        pqtm->pVideoTrack = &pqtm->track[pqtm->numTracks++];
 
-	ptrack = pqtm->pVideoTrack;
+    ptrack = pqtm->pVideoTrack;
 
-//	If video track not set up, set it up
+//    If video track not set up, set it up
 
-	if (pqtm->compTypeQT == 0)
-	{
-		pqtm->compTypeQT = MAKE4('r','a','w',' ');
-		pqtm->frameWidth = pbm->w;
-		pqtm->frameHeight = pbm->h;
+    if (pqtm->compTypeQT == 0)
+    {
+        pqtm->compTypeQT = MAKE4('r','a','w',' ');
+        pqtm->frameWidth = pbm->w;
+        pqtm->frameHeight = pbm->h;
 
-		ptrack->qt_tkhd.flags[2] = 0x0F;
-		ptrack->qt_tkhd.createTime = DEFAULT_MACTIME;
-		ptrack->qt_tkhd.modTime = DEFAULT_MACTIME;
-		ptrack->qt_tkhd.trackId = (ptrack - &pqtm->track[0]) + 1;
-		ptrack->qt_tkhd.matrix[0] = FIX_UNIT;
-		ptrack->qt_tkhd.matrix[4] = FIX_UNIT;
-		ptrack->qt_tkhd.matrix[8] = fix_make(16384,0);
-		ptrack->qt_tkhd.trackWidth = fix_make(pbm->w, 0);
-		ptrack->qt_tkhd.trackHeight = fix_make(pbm->h, 0);
+        ptrack->qt_tkhd.flags[2] = 0x0F;
+        ptrack->qt_tkhd.createTime = DEFAULT_MACTIME;
+        ptrack->qt_tkhd.modTime = DEFAULT_MACTIME;
+        ptrack->qt_tkhd.trackId = (ptrack - &pqtm->track[0]) + 1;
+        ptrack->qt_tkhd.matrix[0] = FIX_UNIT;
+        ptrack->qt_tkhd.matrix[4] = FIX_UNIT;
+        ptrack->qt_tkhd.matrix[8] = fix_make(16384,0);
+        ptrack->qt_tkhd.trackWidth = fix_make(pbm->w, 0);
+        ptrack->qt_tkhd.trackHeight = fix_make(pbm->h, 0);
 
-		ptrack->qt_mdhd.createTime = DEFAULT_MACTIME;
-		ptrack->qt_mdhd.modTime = DEFAULT_MACTIME;
+        ptrack->qt_mdhd.createTime = DEFAULT_MACTIME;
+        ptrack->qt_mdhd.modTime = DEFAULT_MACTIME;
 
-		ptrack->qt_stsd.base.numEntries = 1;
-		if (pqtm->depth16)
-			ptrack->qt_stsd.idesc.descSize = 86;
-		else
-			ptrack->qt_stsd.idesc.descSize = 2142;
-		ptrack->qt_stsd.idesc.dataFormat = MAKE4('r','a','w',' ');
-		ptrack->qt_stsd.idesc.dataRefIndex = 1;
-		ptrack->qt_stsd.idesc.version = 1;
-		ptrack->qt_stsd.idesc.revLevel = 1;
-		ptrack->qt_stsd.idesc.vendor = MAKE4('a','p','p','l');
-		ptrack->qt_stsd.idesc.temporalQuality = 0;
-		ptrack->qt_stsd.idesc.spatialQuality = fix_make(0, 65536 / 50);
-		ptrack->qt_stsd.idesc.width = pbm->w;
-		ptrack->qt_stsd.idesc.height = pbm->h;
-		ptrack->qt_stsd.idesc.hRes = fix_make(72,0);
-		ptrack->qt_stsd.idesc.vRes = fix_make(72,0);
-		ptrack->qt_stsd.idesc.frameCount = 1;
-		strcpy((int8_t *)ptrack->qt_stsd.idesc.name, (int8_t *)"\pNone");
-		if (pqtm->depth16)
-		{
-			ptrack->qt_stsd.idesc.depth = 16;
-			ptrack->qt_stsd.idesc.clutId = -1;
-		}
-		else
-		{
-			ptrack->qt_stsd.idesc.depth = 8;
-			if (ptrack->palette)
-				ptrack->qt_stsd.idesc.clutId = 0;
-			else
-				ptrack->qt_stsd.idesc.clutId = 8;
-		}
+        ptrack->qt_stsd.base.numEntries = 1;
+        if (pqtm->depth16)
+            ptrack->qt_stsd.idesc.descSize = 86;
+        else
+            ptrack->qt_stsd.idesc.descSize = 2142;
+        ptrack->qt_stsd.idesc.dataFormat = MAKE4('r','a','w',' ');
+        ptrack->qt_stsd.idesc.dataRefIndex = 1;
+        ptrack->qt_stsd.idesc.version = 1;
+        ptrack->qt_stsd.idesc.revLevel = 1;
+        ptrack->qt_stsd.idesc.vendor = MAKE4('a','p','p','l');
+        ptrack->qt_stsd.idesc.temporalQuality = 0;
+        ptrack->qt_stsd.idesc.spatialQuality = fix_make(0, 65536 / 50);
+        ptrack->qt_stsd.idesc.width = pbm->w;
+        ptrack->qt_stsd.idesc.height = pbm->h;
+        ptrack->qt_stsd.idesc.hRes = fix_make(72,0);
+        ptrack->qt_stsd.idesc.vRes = fix_make(72,0);
+        ptrack->qt_stsd.idesc.frameCount = 1;
+        strcpy((int8_t *)ptrack->qt_stsd.idesc.name, (int8_t *)"\pNone");
+        if (pqtm->depth16)
+        {
+            ptrack->qt_stsd.idesc.depth = 16;
+            ptrack->qt_stsd.idesc.clutId = -1;
+        }
+        else
+        {
+            ptrack->qt_stsd.idesc.depth = 8;
+            if (ptrack->palette)
+                ptrack->qt_stsd.idesc.clutId = 0;
+            else
+                ptrack->qt_stsd.idesc.clutId = 8;
+        }
 
-		ptrack->numSamplesAlloced = FRAME_ALLOC_INCR;
-		ptrack->pSampleTime = (fix *)malloc(ptrack->numSamplesAlloced * sizeof(fix));
-	}
+        ptrack->numSamplesAlloced = FRAME_ALLOC_INCR;
+        ptrack->pSampleTime = (fix *)malloc(ptrack->numSamplesAlloced * sizeof(fix));
+    }
 
-//	Grow sample if need to
+//    Grow sample if need to
 
-	ptrack->pSampleTime[ptrack->numSamps++] = time;
-	if (ptrack->numSamps >= ptrack->numSamplesAlloced)
-	{
-		ptrack->numSamplesAlloced += FRAME_ALLOC_INCR;
-		ptrack->pSampleTime = (fix *)realloc(ptrack->pSampleTime,
-									 ptrack->numSamplesAlloced * sizeof(fix));
-	}
+    ptrack->pSampleTime[ptrack->numSamps++] = time;
+    if (ptrack->numSamps >= ptrack->numSamplesAlloced)
+    {
+        ptrack->numSamplesAlloced += FRAME_ALLOC_INCR;
+        ptrack->pSampleTime = (fix *)realloc(ptrack->pSampleTime,
+                                     ptrack->numSamplesAlloced * sizeof(fix));
+    }
 }
 
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
 //
-//	QuikWriteMovieAndClose() writes out movie and closes file
+//    QuikWriteMovieAndClose() writes out movie and closes file
 
 void QuikWriteMovieAndClose(QTM *pqtm, FILE *fp)
 {
-	uint32_t timeTot;
+    uint32_t timeTot;
 
-//	Close 'mdat' chunk
+//    Close 'mdat' chunk
 
-	QuikEndSubChunk(pqtm, fp);
+    QuikEndSubChunk(pqtm, fp);
 
-//	Write 'moov' chunk, which has everything else
+//    Write 'moov' chunk, which has everything else
 
-	QuikStartSubChunk(pqtm, fp, QT_MOOV, NULL, 0);
-	timeTot = QuikComputeTotalTime(pqtm);
-	QuikWriteMVHD(pqtm, fp, timeTot);
-	QuikWriteVideoTrack(pqtm, fp, timeTot);
+    QuikStartSubChunk(pqtm, fp, QT_MOOV, NULL, 0);
+    timeTot = QuikComputeTotalTime(pqtm);
+    QuikWriteMVHD(pqtm, fp, timeTot);
+    QuikWriteVideoTrack(pqtm, fp, timeTot);
 
-//	Unpop stacked chunk lengths
+//    Unpop stacked chunk lengths
 
-	while (pqtm->indexOffsetStack > 0)
-		QuikEndSubChunk(pqtm, fp);
+    while (pqtm->indexOffsetStack > 0)
+        QuikEndSubChunk(pqtm, fp);
 
-//	Close file and clean up
+//    Close file and clean up
 
-	fclose(fp);
-	QuikFreeMovie(pqtm);
-	memset(pqtm, 0, sizeof(QTM));
+    fclose(fp);
+    QuikFreeMovie(pqtm);
+    memset(pqtm, 0, sizeof(QTM));
 }
 
-//	-------------------------------------------------------------
-//		INTERNAL ROUTINES
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
+//        INTERNAL ROUTINES
+//    -------------------------------------------------------------
 //
-//	QuikStartSubChunk() starts a new subchunk.
+//    QuikStartSubChunk() starts a new subchunk.
 
 void QuikStartSubChunk(QTM *pqtm, FILE *fp, QT_Ctype ctype, void *data,
-	int32_t len)
+    int32_t len)
 {
-	if (pqtm->indexOffsetStack >= QTM_MAX_CHUNK_NESTING)
-	{
-		printf("QuikStartSubChunk: nesting too deep\n");
-		return;
-	}
+    if (pqtm->indexOffsetStack >= QTM_MAX_CHUNK_NESTING)
+    {
+        printf("QuikStartSubChunk: nesting too deep\n");
+        return;
+    }
 
-	pqtm->offsetStack[pqtm->indexOffsetStack++] = ftell(fp);
+    pqtm->offsetStack[pqtm->indexOffsetStack++] = ftell(fp);
 
-	QuikWriteChunk(fp, ctype, data, len);
+    QuikWriteChunk(fp, ctype, data, len);
 }
 
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
 //
-//	QuikEndSubChunk() ends a subchunk.
+//    QuikEndSubChunk() ends a subchunk.
 
 void QuikEndSubChunk(QTM *pqtm, FILE *fp)
 {
-	int32_t currPos,length;
+    int32_t currPos,length;
 
-	if (pqtm->indexOffsetStack == 0)
-	{
-		printf("QuikEndSubChunk: chunk nesting underflow\n");
-		return;
-	}
+    if (pqtm->indexOffsetStack == 0)
+    {
+        printf("QuikEndSubChunk: chunk nesting underflow\n");
+        return;
+    }
 
-	pqtm->indexOffsetStack--;
+    pqtm->indexOffsetStack--;
 
-	currPos = ftell(fp);
-	fseek(fp, pqtm->offsetStack[pqtm->indexOffsetStack], SEEK_SET);
-	length = currPos - ftell(fp);
-	QuikWriteChunkLength(fp, length);
-	fseek(fp, currPos, SEEK_SET);
+    currPos = ftell(fp);
+    fseek(fp, pqtm->offsetStack[pqtm->indexOffsetStack], SEEK_SET);
+    length = currPos - ftell(fp);
+    QuikWriteChunkLength(fp, length);
+    fseek(fp, currPos, SEEK_SET);
 }
 
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
 //
-//	QuikWriteMVHD() writes MVHD chunk
+//    QuikWriteMVHD() writes MVHD chunk
 
 void QuikWriteMVHD(QTM *pqtm, FILE *fp, uint32_t timeTot)
 {
-	pqtm->qt_mvhd.createTime = DEFAULT_MACTIME;
-	pqtm->qt_mvhd.modTime = DEFAULT_MACTIME;
-	pqtm->qt_mvhd.timeScale = DEFAULT_TIMESCALE;
-	if (pqtm->pVideoTrack)
-		pqtm->qt_mvhd.duration = timeTot;
-	pqtm->qt_mvhd.preferredRate = FIX_UNIT;
-	pqtm->qt_mvhd.preferredVol = FIX8(FIX_UNIT);
-	pqtm->qt_mvhd.matrix[0] = FIX_UNIT;
-	pqtm->qt_mvhd.matrix[4] = FIX_UNIT;
-	pqtm->qt_mvhd.matrix[8] = fix_make(16384,0);
-	pqtm->qt_mvhd.nextTrackId = 1 + (pqtm->pVideoTrack != NULL) +
-		(pqtm->pAudioTrack != NULL);
+    pqtm->qt_mvhd.createTime = DEFAULT_MACTIME;
+    pqtm->qt_mvhd.modTime = DEFAULT_MACTIME;
+    pqtm->qt_mvhd.timeScale = DEFAULT_TIMESCALE;
+    if (pqtm->pVideoTrack)
+        pqtm->qt_mvhd.duration = timeTot;
+    pqtm->qt_mvhd.preferredRate = FIX_UNIT;
+    pqtm->qt_mvhd.preferredVol = FIX8(FIX_UNIT);
+    pqtm->qt_mvhd.matrix[0] = FIX_UNIT;
+    pqtm->qt_mvhd.matrix[4] = FIX_UNIT;
+    pqtm->qt_mvhd.matrix[8] = fix_make(16384,0);
+    pqtm->qt_mvhd.nextTrackId = 1 + (pqtm->pVideoTrack != NULL) +
+        (pqtm->pAudioTrack != NULL);
 
-	QuikWriteChunk(fp, QT_MVHD, &pqtm->qt_mvhd, sizeof(pqtm->qt_mvhd));
+    QuikWriteChunk(fp, QT_MVHD, &pqtm->qt_mvhd, sizeof(pqtm->qt_mvhd));
 }
 
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
 //
-//	QuikWriteVideoTrack() writes video track out.
+//    QuikWriteVideoTrack() writes video track out.
 
 void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, uint32_t timeTot)
 {
-	MovieTrack *ptrack;
-	uint8_t *pStsd;
-	int32_t i,ilast;
-	uint16_t *ppw;
-	uint8_t *ppr;
-	uint16_t r,g,b;
-	int32_t len;
-	uint32_t offset;
-	int32_t tlen,tlenLast;
-	fix tlast;
-	int32_t sampSize;
-	QTS_ELST elst;
-	QTS_HDLR hdlr;
-	QTS_VMHD vmhd;
-	uint8_t dref[20];
+    MovieTrack *ptrack;
+    uint8_t *pStsd;
+    int32_t i,ilast;
+    uint16_t *ppw;
+    uint8_t *ppr;
+    uint16_t r,g,b;
+    int32_t len;
+    uint32_t offset;
+    int32_t tlen,tlenLast;
+    fix tlast;
+    int32_t sampSize;
+    QTS_ELST elst;
+    QTS_HDLR hdlr;
+    QTS_VMHD vmhd;
+    uint8_t dref[20];
 
-//	If no video track, don't write it obviously
+//    If no video track, don't write it obviously
 
-	ptrack = pqtm->pVideoTrack;
-	if (ptrack == NULL)
-		return;
+    ptrack = pqtm->pVideoTrack;
+    if (ptrack == NULL)
+        return;
 
-//	Write TRAK chunk hdr and TKHD chunk
+//    Write TRAK chunk hdr and TKHD chunk
 
-	QuikStartSubChunk(pqtm, fp, QT_TRAK, NULL, 0);
-	ptrack->qt_tkhd.duration = timeTot;
-	QuikWriteChunk(fp, QT_TKHD, &ptrack->qt_tkhd, sizeof(QTS_TKHD));
+    QuikStartSubChunk(pqtm, fp, QT_TRAK, NULL, 0);
+    ptrack->qt_tkhd.duration = timeTot;
+    QuikWriteChunk(fp, QT_TKHD, &ptrack->qt_tkhd, sizeof(QTS_TKHD));
 
-//	Write EDTS chunk hdr and ELST chunk
+//    Write EDTS chunk hdr and ELST chunk
 
-	QuikStartSubChunk(pqtm, fp, QT_EDTS, NULL, 0);
-	memset(&elst, 0, sizeof(elst));
-	elst.numEntries = 1;
-	elst.editList[0].trackDuration = timeTot;
-	elst.editList[0].mediaRate = FIX_UNIT;
-	QuikStartSubChunk(pqtm, fp, QT_ELST, &elst, sizeof(elst));
-	QuikEndSubChunk(pqtm, fp);
-	QuikEndSubChunk(pqtm, fp);
+    QuikStartSubChunk(pqtm, fp, QT_EDTS, NULL, 0);
+    memset(&elst, 0, sizeof(elst));
+    elst.numEntries = 1;
+    elst.editList[0].trackDuration = timeTot;
+    elst.editList[0].mediaRate = FIX_UNIT;
+    QuikStartSubChunk(pqtm, fp, QT_ELST, &elst, sizeof(elst));
+    QuikEndSubChunk(pqtm, fp);
+    QuikEndSubChunk(pqtm, fp);
 
-//	Write MDIA chunk hdr and MDHD chunk
+//    Write MDIA chunk hdr and MDHD chunk
 
-	QuikStartSubChunk(pqtm, fp, QT_MDIA, NULL, 0);
-	ptrack->qt_mdhd.timeScale = MDHD_TIMESCALE;
-	ptrack->qt_mdhd.duration = (timeTot * MDHD_TIMESCALE) / DEFAULT_TIMESCALE;
-	QuikWriteChunk(fp, QT_MDHD, &ptrack->qt_mdhd, sizeof(QTS_MDHD));
+    QuikStartSubChunk(pqtm, fp, QT_MDIA, NULL, 0);
+    ptrack->qt_mdhd.timeScale = MDHD_TIMESCALE;
+    ptrack->qt_mdhd.duration = (timeTot * MDHD_TIMESCALE) / DEFAULT_TIMESCALE;
+    QuikWriteChunk(fp, QT_MDHD, &ptrack->qt_mdhd, sizeof(QTS_MDHD));
 
-//	Write HDLR chunk
+//    Write HDLR chunk
 
-	memset(&hdlr, 0, sizeof(hdlr));
-	hdlr.compType = MAKE4('m','h','l','r');
-	hdlr.compSubtype = MAKE4('v','i','d','e');
-	hdlr.compManufacturer = MAKE4('a','p','p','l');
-	hdlr.compFlags = 0x40000000;
-	if (pqtm->depth16)
-		hdlr.compFlagsMask = 0x20072;
-	else
-		hdlr.compFlagsMask = 0x10011;
-	WriteChunkWithString(fp, QT_HDLR, &hdlr, sizeof(hdlr),
-		"Apple Video Media Handler");
+    memset(&hdlr, 0, sizeof(hdlr));
+    hdlr.compType = MAKE4('m','h','l','r');
+    hdlr.compSubtype = MAKE4('v','i','d','e');
+    hdlr.compManufacturer = MAKE4('a','p','p','l');
+    hdlr.compFlags = 0x40000000;
+    if (pqtm->depth16)
+        hdlr.compFlagsMask = 0x20072;
+    else
+        hdlr.compFlagsMask = 0x10011;
+    WriteChunkWithString(fp, QT_HDLR, &hdlr, sizeof(hdlr),
+        "Apple Video Media Handler");
 
-//	Write MINF chunk hdr and VMHD chunk
+//    Write MINF chunk hdr and VMHD chunk
 
-	QuikStartSubChunk(pqtm, fp, QT_MINF, NULL, 0);
-	memset(&vmhd, 0, sizeof(vmhd));
-	vmhd.flags[2] = 1;
-	vmhd.graphicsMode = 0x40;
-	vmhd.opColor[0] = 0x8000;
-	vmhd.opColor[1] = 0x8000;
-	vmhd.opColor[2] = 0x8000;
-	QuikWriteChunk(fp, QT_VMHD, &vmhd, sizeof(vmhd));
+    QuikStartSubChunk(pqtm, fp, QT_MINF, NULL, 0);
+    memset(&vmhd, 0, sizeof(vmhd));
+    vmhd.flags[2] = 1;
+    vmhd.graphicsMode = 0x40;
+    vmhd.opColor[0] = 0x8000;
+    vmhd.opColor[1] = 0x8000;
+    vmhd.opColor[2] = 0x8000;
+    QuikWriteChunk(fp, QT_VMHD, &vmhd, sizeof(vmhd));
 
-//	Write HDLR chunk
+//    Write HDLR chunk
 
-	memset(&hdlr, 0, sizeof(hdlr));
-	hdlr.compType = MAKE4('d','h','l','r');
-	hdlr.compSubtype = MAKE4('a','l','i','s');
-	hdlr.compManufacturer = MAKE4('a','p','p','l');
-	if (pqtm->depth16)
-		{
-		hdlr.compFlags = 0xC0000000;
-		hdlr.compFlagsMask = 0x1005D;
-		}
-	else
-		{
-		hdlr.compFlags = 0x40000000;
-		hdlr.compFlagsMask = 0x10016;
-		}
-	WriteChunkWithString(fp, QT_HDLR, &hdlr, sizeof(hdlr),
-		"Apple Alias Data Handler");
+    memset(&hdlr, 0, sizeof(hdlr));
+    hdlr.compType = MAKE4('d','h','l','r');
+    hdlr.compSubtype = MAKE4('a','l','i','s');
+    hdlr.compManufacturer = MAKE4('a','p','p','l');
+    if (pqtm->depth16)
+        {
+        hdlr.compFlags = 0xC0000000;
+        hdlr.compFlagsMask = 0x1005D;
+        }
+    else
+        {
+        hdlr.compFlags = 0x40000000;
+        hdlr.compFlagsMask = 0x10016;
+        }
+    WriteChunkWithString(fp, QT_HDLR, &hdlr, sizeof(hdlr),
+        "Apple Alias Data Handler");
 
-//	Write DINF chunk hdr and DREF chunk
+//    Write DINF chunk hdr and DREF chunk
 
-	QuikStartSubChunk(pqtm, fp, QT_DINF, NULL, 0);
-	memset(dref, 0, sizeof(dref));
-	dref[7] = 1;
-	dref[11] = 0x0C;
-	dref[12] = 'a';
-	dref[13] = 'l';
-	dref[14] = 'i';
-	dref[15] = 's';
-	dref[19] = 1;
-	QuikWriteChunk(fp, QT_DREF, dref, sizeof(dref));
-	QuikEndSubChunk(pqtm, fp);
+    QuikStartSubChunk(pqtm, fp, QT_DINF, NULL, 0);
+    memset(dref, 0, sizeof(dref));
+    dref[7] = 1;
+    dref[11] = 0x0C;
+    dref[12] = 'a';
+    dref[13] = 'l';
+    dref[14] = 'i';
+    dref[15] = 's';
+    dref[19] = 1;
+    QuikWriteChunk(fp, QT_DREF, dref, sizeof(dref));
+    QuikEndSubChunk(pqtm, fp);
 
-//	Write STBL chunk hdr and STSD chunk
+//    Write STBL chunk hdr and STSD chunk
 
-	QuikStartSubChunk(pqtm, fp, QT_STBL, NULL, 0);
-	pStsd = (uint8_t *)malloc(sizeof(ptrack->qt_stsd) + 0x0800 + 8);
-	memcpy(pStsd, &ptrack->qt_stsd, sizeof(ptrack->qt_stsd));
-	if (ptrack->palette && !pqtm->depth16)
-		{
-		ppw = (uint16_t *) (pStsd + sizeof(QTS_STSD_Base) +
-			sizeof(QT_ImageDesc) + 8);
-		*(ppw - 1) = 0xFF00;
-		ppr = ptrack->palette;
-		for (i = 0; i < 256; i++)
-			{
-			*ppw++ = i << 8;
-			r = *ppr++;
-			*ppw++ = (r << 8) | r;
-			g = *ppr++;
-			*ppw++ = (g << 8) | g;
-			b = *ppr++;
-			*ppw++ = (b << 8) | b;
-			}
-		}
-	QuikWriteChunk(fp, QT_STSD, pStsd, sizeof(ptrack->qt_stsd) + 0x0800 + 8);
-	free(pStsd);
+    QuikStartSubChunk(pqtm, fp, QT_STBL, NULL, 0);
+    pStsd = (uint8_t *)malloc(sizeof(ptrack->qt_stsd) + 0x0800 + 8);
+    memcpy(pStsd, &ptrack->qt_stsd, sizeof(ptrack->qt_stsd));
+    if (ptrack->palette && !pqtm->depth16)
+        {
+        ppw = (uint16_t *) (pStsd + sizeof(QTS_STSD_Base) +
+            sizeof(QT_ImageDesc) + 8);
+        *(ppw - 1) = 0xFF00;
+        ppr = ptrack->palette;
+        for (i = 0; i < 256; i++)
+            {
+            *ppw++ = i << 8;
+            r = *ppr++;
+            *ppw++ = (r << 8) | r;
+            g = *ppr++;
+            *ppw++ = (g << 8) | g;
+            b = *ppr++;
+            *ppw++ = (b << 8) | b;
+            }
+        }
+    QuikWriteChunk(fp, QT_STSD, pStsd, sizeof(ptrack->qt_stsd) + 0x0800 + 8);
+    free(pStsd);
 
-//	Write STTS chunk
+//    Write STTS chunk
 
-	ptrack->qt_stts = (QTS_STTS *)malloc(sizeof(QTS_STTS) +
-								  (sizeof(QT_Time2Samp) * ptrack->numSamps));
-	tlenLast = 0;
-	tlast = 0;
-	ilast = 1;
-	for (i = 1; i < ptrack->numSamps; i++)
-		{
-		tlen = QuikSampleLenMsec(ptrack->pSampleTime[i], tlast);
-		if (tlen != tlenLast)
-			{
-			if (i != 1)
-				{
-				ptrack->qt_stts->time2samp[ptrack->qt_stts->numEntries].count =
-					i - ilast;
-				ptrack->qt_stts->time2samp[ptrack->qt_stts->numEntries].duration =
-					tlenLast;
-				ptrack->qt_stts->numEntries++;
-				ilast = i;
-				}
-			tlenLast = tlen;
-			}
-		tlast += QuikSampleLenMsecBackToFix(tlen);
-		}
-	ptrack->qt_stts->time2samp[ptrack->qt_stts->numEntries].count =
-		(i - ilast) + 1;
-	ptrack->qt_stts->time2samp[ptrack->qt_stts->numEntries].duration =
-		tlen;
-	ptrack->qt_stts->numEntries++;
-	QuikWriteChunk(fp, QT_STTS, ptrack->qt_stts, sizeof(QTS_STTS) +
-		(sizeof(QT_Time2Samp) * (ptrack->qt_stts->numEntries - 1)));
+    ptrack->qt_stts = (QTS_STTS *)malloc(sizeof(QTS_STTS) +
+                                  (sizeof(QT_Time2Samp) * ptrack->numSamps));
+    tlenLast = 0;
+    tlast = 0;
+    ilast = 1;
+    for (i = 1; i < ptrack->numSamps; i++)
+        {
+        tlen = QuikSampleLenMsec(ptrack->pSampleTime[i], tlast);
+        if (tlen != tlenLast)
+            {
+            if (i != 1)
+                {
+                ptrack->qt_stts->time2samp[ptrack->qt_stts->numEntries].count =
+                    i - ilast;
+                ptrack->qt_stts->time2samp[ptrack->qt_stts->numEntries].duration =
+                    tlenLast;
+                ptrack->qt_stts->numEntries++;
+                ilast = i;
+                }
+            tlenLast = tlen;
+            }
+        tlast += QuikSampleLenMsecBackToFix(tlen);
+        }
+    ptrack->qt_stts->time2samp[ptrack->qt_stts->numEntries].count =
+        (i - ilast) + 1;
+    ptrack->qt_stts->time2samp[ptrack->qt_stts->numEntries].duration =
+        tlen;
+    ptrack->qt_stts->numEntries++;
+    QuikWriteChunk(fp, QT_STTS, ptrack->qt_stts, sizeof(QTS_STTS) +
+        (sizeof(QT_Time2Samp) * (ptrack->qt_stts->numEntries - 1)));
 
-//	Write STSC chunk
+//    Write STSC chunk
 
-	len = sizeof(QTS_STSC);
-	ptrack->qt_stsc = (QTS_STSC *)malloc(len);
-	ptrack->qt_stsc->numEntries = 1;
-	ptrack->qt_stsc->samp2chunk[0].firstChunk = 1;
-	ptrack->qt_stsc->samp2chunk[0].sampsPerChunk = 1;
-	ptrack->qt_stsc->samp2chunk[0].sampDescId = 1;
-	QuikWriteChunk(fp, QT_STSC, ptrack->qt_stsc, len);
+    len = sizeof(QTS_STSC);
+    ptrack->qt_stsc = (QTS_STSC *)malloc(len);
+    ptrack->qt_stsc->numEntries = 1;
+    ptrack->qt_stsc->samp2chunk[0].firstChunk = 1;
+    ptrack->qt_stsc->samp2chunk[0].sampsPerChunk = 1;
+    ptrack->qt_stsc->samp2chunk[0].sampDescId = 1;
+    QuikWriteChunk(fp, QT_STSC, ptrack->qt_stsc, len);
 
-//	Write STSZ chunk
+//    Write STSZ chunk
 
-	len = sizeof(QTS_STSZ) - sizeof(uint32_t);	// don't include sampSizeTab[]
-	ptrack->qt_stsz = (QTS_STSZ *)malloc(len);
-	sampSize = (int32_t) pqtm->frameWidth * (int32_t) pqtm->frameHeight;
-	if (pqtm->depth16)
-		sampSize *= 2;
-	ptrack->qt_stsz->sampSize = sampSize;
-	ptrack->qt_stsz->numEntries = ptrack->numSamps;
-	QuikWriteChunk(fp, QT_STSZ, ptrack->qt_stsz, len);
+    len = sizeof(QTS_STSZ) - sizeof(uint32_t);    // don't include sampSizeTab[]
+    ptrack->qt_stsz = (QTS_STSZ *)malloc(len);
+    sampSize = (int32_t) pqtm->frameWidth * (int32_t) pqtm->frameHeight;
+    if (pqtm->depth16)
+        sampSize *= 2;
+    ptrack->qt_stsz->sampSize = sampSize;
+    ptrack->qt_stsz->numEntries = ptrack->numSamps;
+    QuikWriteChunk(fp, QT_STSZ, ptrack->qt_stsz, len);
 
-//	Write STCO chunk
+//    Write STCO chunk
 
-	len = sizeof(QTS_STCO) + ((ptrack->numSamps - 1) * sizeof(uint32_t));
-	ptrack->qt_stco = (QTS_STCO *)malloc(len);
-	ptrack->qt_stco->numEntries = ptrack->numSamps;
-	offset = sizeof(QT_ChunkHdr);
-	for (i = 0; i < ptrack->numSamps; i++)
-		{
-		ptrack->qt_stco->offset[i] = offset;
-		offset += sampSize;
-		}
-	QuikWriteChunk(fp, QT_STCO, ptrack->qt_stco, len);
+    len = sizeof(QTS_STCO) + ((ptrack->numSamps - 1) * sizeof(uint32_t));
+    ptrack->qt_stco = (QTS_STCO *)malloc(len);
+    ptrack->qt_stco->numEntries = ptrack->numSamps;
+    offset = sizeof(QT_ChunkHdr);
+    for (i = 0; i < ptrack->numSamps; i++)
+        {
+        ptrack->qt_stco->offset[i] = offset;
+        offset += sampSize;
+        }
+    QuikWriteChunk(fp, QT_STCO, ptrack->qt_stco, len);
 }
 
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
 //
-//	SetPascalString() puts C string into PStr field.
+//    SetPascalString() puts C string into PStr field.
 
 static void SetPascalString(PStr *pstr, int8_t *str)
 {
-	pstr->len = strlen(str);
-	memcpy(pstr->str, str, pstr->len);
+    pstr->len = strlen(str);
+    memcpy(pstr->str, str, pstr->len);
 }
 
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
 //
-//	WriteChunkWithString() writes a var-length data chunk with trailing PStr.
+//    WriteChunkWithString() writes a var-length data chunk with trailing PStr.
 
 static void WriteChunkWithString(FILE *fp, QT_Ctype ctype, void *data,
-	int32_t len, int8_t *str)
+    int32_t len, int8_t *str)
 {
-	int8_t buff[128];
+    int8_t buff[128];
 
-	memcpy(buff, data, len - sizeof(PStr));
-	SetPascalString((PStr *) (buff + len - sizeof(PStr)), str);
-	QuikWriteChunk(fp, ctype, buff, (len - sizeof(PStr)) + strlen(str) + 1);
+    memcpy(buff, data, len - sizeof(PStr));
+    SetPascalString((PStr *) (buff + len - sizeof(PStr)), str);
+    QuikWriteChunk(fp, ctype, buff, (len - sizeof(PStr)) + strlen(str) + 1);
 }
 
-//	---------------------------------------------------------------
+//    ---------------------------------------------------------------
 //
-//	QuikComputeTotalTime() computes total time of movie.
+//    QuikComputeTotalTime() computes total time of movie.
 
 uint32_t QuikComputeTotalTime(QTM *pqtm)
 {
-	MovieTrack *ptrack;
-	fix fixtime;
+    MovieTrack *ptrack;
+    fix fixtime;
 
-	ptrack = pqtm->pVideoTrack;
-	if ((ptrack == NULL) || (ptrack->pSampleTime == NULL))
-		return(0);
+    ptrack = pqtm->pVideoTrack;
+    if ((ptrack == NULL) || (ptrack->pSampleTime == NULL))
+        return(0);
 
-	fixtime = ptrack->pSampleTime[ptrack->numSamps - 1] +
-		(ptrack->pSampleTime[ptrack->numSamps - 1] -
-			ptrack->pSampleTime[ptrack->numSamps - 2]);
-	return(fix_mul(fixtime, DEFAULT_TIMESCALE));
+    fixtime = ptrack->pSampleTime[ptrack->numSamps - 1] +
+        (ptrack->pSampleTime[ptrack->numSamps - 1] -
+            ptrack->pSampleTime[ptrack->numSamps - 2]);
+    return(fix_mul(fixtime, DEFAULT_TIMESCALE));
 }
 
-//	---------------------------------------------------------------
+//    ---------------------------------------------------------------
 //
-//	QuikSampleLenMsec() returns sample length in msecs.
+//    QuikSampleLenMsec() returns sample length in msecs.
 
 int32_t QuikSampleLenMsec(fix t, fix tlast)
 {
-	fix fixtime;
-	int32_t msec;
+    fix fixtime;
+    int32_t msec;
 
-	fixtime = t - tlast;
+    fixtime = t - tlast;
 #if MDHD_TIMESCALE == 1000
-	msec = ((fixtime * 125) + 0x1000) >> 13;	// overflows at about 8 minutes
+    msec = ((fixtime * 125) + 0x1000) >> 13;    // overflows at about 8 minutes
 #elif MDHD_TIMESCALE == 100
-	msec = ((fixtime * 25) + 0x2000) >> 14;
+    msec = ((fixtime * 25) + 0x2000) >> 14;
 #elif MDHD_TIMESCALE == 30
-	msec = ((fixtime * 15) + 0x4000) >> 15;
+    msec = ((fixtime * 15) + 0x4000) >> 15;
 #else
-	msec = 0;
-	Warning(("QuikSampleLenMsec: invalid MDHD_TIMESCALE\n"));
+    msec = 0;
+    Warning(("QuikSampleLenMsec: invalid MDHD_TIMESCALE\n"));
 #endif
-	return(msec);
+    return(msec);
 }
 
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
 //
-//	QuikSampleLenMsecBackToFix() converts msec to fix
+//    QuikSampleLenMsecBackToFix() converts msec to fix
 
 fix QuikSampleLenMsecBackToFix(int32_t msec)
 {
-	fix tfix;
+    fix tfix;
 
 #if MDHD_TIMESCALE == 1000
-	tfix = (msec << 13) / 125;
+    tfix = (msec << 13) / 125;
 #elif MDHD_TIMESCALE == 100
-	tfix = (msec << 14) / 25;
+    tfix = (msec << 14) / 25;
 #elif MDHD_TIMESCALE == 30
-	tfix = (msec << 15) / 15;
+    tfix = (msec << 15) / 15;
 #else
-	tfix = 0;
-	Warning(("QuikSampleLenMsecBackToFix: invalid MDHD_TIMESCALE\n"));
+    tfix = 0;
+    Warning(("QuikSampleLenMsecBackToFix: invalid MDHD_TIMESCALE\n"));
 #endif
-	return(tfix);
+    return(tfix);
 }

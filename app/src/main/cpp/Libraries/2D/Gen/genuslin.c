@@ -58,11 +58,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "linfcn.h"
 
 /* Draw a gouraud-shaded line, specified by indices into the palette.
-   be warned, weird precision bugs abound (check out test programs
-   in /project/lib/src/2d/test).
+    be warned, weird precision bugs abound (check out test programs
+    in /project/lib/src/2d/test).
 
-   5/94: Precision errors have been (entirely?) eliminated.  See
-   correctness argument in note.txt.
+    5/94: Precision errors have been (entirely?) eliminated.  See
+    correctness argument in note.txt.
 
 */
 
@@ -76,158 +76,158 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // MLA #pragma off (unreferenced)
-#define macro_plot_i(x,y,i) 	 grd_pixel_fill (i, parm, x, y)
+#define macro_plot_i(x,y,i)      grd_pixel_fill (i, parm, x, y)
 
 void gri_gen_usline_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   fix x0, y0, x1, y1;
-   fix dx, dy;                /* delta's in x and y */
-   fix t;                     /* temporary fix */
+    fix x0, y0, x1, y1;
+    fix dx, dy;                     /* delta's in x and y */
+    fix t;                            /* temporary fix */
 
-   fix i0, i1;
-   fix di;                    /* # colors per x-pixel */
+    fix i0, i1;
+    fix di;                          /* # colors per x-pixel */
 
-   /* set endpoints
-      note that this cannot go negative or change octant, since the ==
-      case is excluded */
+    /* set endpoints
+        note that this cannot go negative or change octant, since the ==
+        case is excluded */
 
-   x0 = v0->x; y0 = v0->y;
-   x1 = v1->x; y1 = v1->y;
+    x0 = v0->x; y0 = v0->y;
+    x1 = v1->x; y1 = v1->y;
 
-   i0 = (fix) v0->i; i1 = (fix) v1->i;
+    i0 = (fix) v0->i; i1 = (fix) v1->i;
 
-   if (x0 < x1) {
-      x1  -= 1;			/* e.g. - epsilon */
-   }
-   else if (x0 > x1) {
-      x0 -= 1;
-   }
+    if (x0 < x1) {
+        x1  -= 1;            /* e.g. - epsilon */
+    }
+    else if (x0 > x1) {
+        x0 -= 1;
+    }
 
-   if (y0 < y1) {
-      y1 -= 1;
-   }
-   else if (y0 > y1) {
-      y0 -= 1;
-   }
+    if (y0 < y1) {
+        y1 -= 1;
+    }
+    else if (y0 > y1) {
+        y0 -= 1;
+    }
 
-   dx = fix_trunc (x1) - fix_trunc(x0);	/* x extent in pixels, (macro is flakey) */
-   dx = fix_abs (dx);
-   dy = fix_trunc (y1) - fix_trunc(y0);	/* y extent in pixels */
-   dy = fix_abs (dy);
+    dx = fix_trunc (x1) - fix_trunc(x0);    /* x extent in pixels, (macro is flakey) */
+    dx = fix_abs (dx);
+    dy = fix_trunc (y1) - fix_trunc(y0);    /* y extent in pixels */
+    dy = fix_abs (dy);
 
-   if (dx == 0 && dy == 0)
-     return;
+    if (dx == 0 && dy == 0)
+      return;
 
-   /* three cases: absolute value dx < = > dy
+    /* three cases: absolute value dx < = > dy
 
-      along the longer dimension, the fixpoint x0 (or y0) is treated
-      as an int
+        along the longer dimension, the fixpoint x0 (or y0) is treated
+        as an int
 
-      the points are swapped if needed and the rgb initial and deltas
-      are calculated accordingly
+        the points are swapped if needed and the rgb initial and deltas
+        are calculated accordingly
 
-      there are two sub-cases - a horizontal or vertical line,
-      and the dx or dy being added
+        there are two sub-cases - a horizontal or vertical line,
+        and the dx or dy being added
 
-      it might be better to use a funky bit check (tm) and keep an
-      integer y, similar to the canvas, rather than keep doing shift
-      in the inner loop
+        it might be better to use a funky bit check (tm) and keep an
+        integer y, similar to the canvas, rather than keep doing shift
+        in the inner loop
 
-      the endpoints are walked inclusively in all cases, see above
+        the endpoints are walked inclusively in all cases, see above
 
-      45' degree lines are explicitly special cased -- because it
-      all runs as integers, but it's probably not frequent enough
-      to justify the check
+        45' degree lines are explicitly special cased -- because it
+        all runs as integers, but it's probably not frequent enough
+        to justify the check
 */
 
-   if (dx > dy) {
+    if (dx > dy) {
 
-      x0 = fix_int (x0); x1 = fix_int (x1);
+        x0 = fix_int (x0); x1 = fix_int (x1);
 
-      if (x0 > x1) {
-	 t = x0; x0 = x1; x1 = t;
-	 t = y0; y0 = y1; y1 = t;
-	 t = i0; i0 = i1; i1 = t;
-      }
+        if (x0 > x1) {
+     t = x0; x0 = x1; x1 = t;
+     t = y0; y0 = y1; y1 = t;
+     t = i0; i0 = i1; i1 = t;
+        }
 
-      di = fix_div ((i1-i0), dx);
+        di = fix_div ((i1-i0), dx);
 
-      if ((fix_int(y0)) == (fix_int(y1))) {
-	 y0 = fix_int (y0);
-	 while (x0 <= x1) {
-	    macro_plot_i (x0, y0, fix_fint (i0));
-	    x0++;
-	    i0 += di;
-	 }
-      }
-      else {
-	 dy = fix_div ((y1 - y0), dx);
-	 while (x0 <= x1) {
-	    macro_plot_i (x0, fix_int(y0), fix_fint(i0));
-	    x0 ++;
-	    y0 += dy;
-	    i0 += di;
-	 }
-      }
-   }
-   else if (dy > dx) {
+        if ((fix_int(y0)) == (fix_int(y1))) {
+     y0 = fix_int (y0);
+     while (x0 <= x1) {
+         macro_plot_i (x0, y0, fix_fint (i0));
+         x0++;
+         i0 += di;
+     }
+        }
+        else {
+     dy = fix_div ((y1 - y0), dx);
+     while (x0 <= x1) {
+         macro_plot_i (x0, fix_int(y0), fix_fint(i0));
+         x0 ++;
+         y0 += dy;
+         i0 += di;
+     }
+        }
+    }
+    else if (dy > dx) {
 
-      y0 = fix_int (y0); y1 = fix_int (y1);
+        y0 = fix_int (y0); y1 = fix_int (y1);
 
-      if (y0 > y1) {
-	 t = x0; x0 = x1; x1 = t;
-	 t = y0; y0 = y1; y1 = t;
-	 t = i0; i0 = i1; i1 = t;
-      }
+        if (y0 > y1) {
+     t = x0; x0 = x1; x1 = t;
+     t = y0; y0 = y1; y1 = t;
+     t = i0; i0 = i1; i1 = t;
+        }
 
-      di = fix_div((i1-i0), dy);
+        di = fix_div((i1-i0), dy);
 
-      if ((fix_int(x0)) == (fix_int(x1))) {
-	 x0 = fix_int (x0);
-	 while (y0 <= y1) {
-	    macro_plot_i (x0, y0, fix_fint(i0));
-	    y0++;
-	    i0 += di;
-	 }
-      }
-      else {
-	 dx = fix_div ((x1 - x0), dy);
-	 while (y0 <= y1) {
-	    macro_plot_i(fix_fint(x0), y0, fix_fint (i0));
-	    x0 += dx;
-	    y0++;
-	    i0 += di;
-	 }
-      }
-   }
-   else {			/* dy == dx, walk the x axis, all integers */
-      x0 = fix_int (x0); x1 = fix_int (x1);
-      y0 = fix_int (y0); y1 = fix_int (y1);
+        if ((fix_int(x0)) == (fix_int(x1))) {
+     x0 = fix_int (x0);
+     while (y0 <= y1) {
+         macro_plot_i (x0, y0, fix_fint(i0));
+         y0++;
+         i0 += di;
+     }
+        }
+        else {
+     dx = fix_div ((x1 - x0), dy);
+     while (y0 <= y1) {
+         macro_plot_i(fix_fint(x0), y0, fix_fint (i0));
+         x0 += dx;
+         y0++;
+         i0 += di;
+     }
+        }
+    }
+    else {            /* dy == dx, walk the x axis, all integers */
+        x0 = fix_int (x0); x1 = fix_int (x1);
+        y0 = fix_int (y0); y1 = fix_int (y1);
 
-      if (x0 > x1 ) {
-	 t = x0; x0 = x1; x1 = t;
-	 t = y0; y0 = y1; y1 = t;
-	 t = i0; i0 = i1; i1 = t;
-      }
+        if (x0 > x1 ) {
+     t = x0; x0 = x1; x1 = t;
+     t = y0; y0 = y1; y1 = t;
+     t = i0; i0 = i1; i1 = t;
+        }
 
-      di = fix_div((i1-i0),dx);
+        di = fix_div((i1-i0),dx);
 
-      if (y0 < y1) {
-	 while (y0 <= y1) {
-	    macro_plot_i(x0, y0, fix_fint(i0));
-	    x0++;
-	    y0++;
-	    i0+= di;
-	 }
-      }
-      else {
-	 while (y0 >= y1) {
-	    macro_plot_i(x0,y0, fix_fint (i0));
-	    x0++;
-	    y0--;
-	    i0 += di;
-	 }
-      }
-   }
+        if (y0 < y1) {
+     while (y0 <= y1) {
+         macro_plot_i(x0, y0, fix_fint(i0));
+         x0++;
+         y0++;
+         i0+= di;
+     }
+        }
+        else {
+     while (y0 >= y1) {
+         macro_plot_i(x0,y0, fix_fint (i0));
+         x0++;
+         y0--;
+         i0 += di;
+     }
+        }
+    }
 }
 

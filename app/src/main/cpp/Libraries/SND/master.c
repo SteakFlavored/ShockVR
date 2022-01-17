@@ -29,85 +29,85 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "digi.h"
 
-uint8_t	snd_digi_vol=0x100;
-//uint8_t          snd_midi_vol=MDI_DEFAULT_VOLUME;
-//void cdecl   (*snd_update)(snd_digi_parms *dprm)=NULL;
-void		(*snd_finish)(snd_digi_parms *dprm)=NULL;
-//void cdecl   (*snd_nblock)(snd_digi_parms *dprm)=NULL;
-//void cdecl   (*seq_miditrig)(snd_midi_parms *mprm, int32_t trig_value)=NULL;
-int32_t		snd_error=SND_OK;
-uint8_t	snd_stereo_reverse=0;
+uint8_t    snd_digi_vol=0x100;
+//uint8_t             snd_midi_vol=MDI_DEFAULT_VOLUME;
+//void cdecl    (*snd_update)(snd_digi_parms *dprm)=NULL;
+void        (*snd_finish)(snd_digi_parms *dprm)=NULL;
+//void cdecl    (*snd_nblock)(snd_digi_parms *dprm)=NULL;
+//void cdecl    (*seq_miditrig)(snd_midi_parms *mprm, int32_t trig_value)=NULL;
+int32_t        snd_error=SND_OK;
+uint8_t    snd_stereo_reverse=0;
 
 pascal void HandleSndCallBack(SndChannelPtr chan, SndCommand *cmd);
 
 
 //---------------------------------------------------------
-//	Install sound callback routine.
+//    Install sound callback routine.
 //---------------------------------------------------------
 void snd_startup(void)
 {
-	gDigiCallBackProcPtr = NewSndCallBackProc(HandleSndCallBack);
+    gDigiCallBackProcPtr = NewSndCallBackProc(HandleSndCallBack);
 }
 
-//	Nothing for the Mac to do here.
+//    Nothing for the Mac to do here.
 /*
 //---------------------------------------------------------
-//	Set preferences for AIL, path for sound files.
+//    Set preferences for AIL, path for sound files.
 //---------------------------------------------------------
 void snd_setup(void *d_path, int8_t *prefix)
 {
-   AIL_set_preference(DIG_USE_STEREO,YES);
-//   AIL_set_preference(DIG_USE_16_BITS,YES);
-   AIL_set_preference(DIG_HARDWARE_SAMPLE_RATE,22050);
-//   AIL_set_preference(DIG_HARDWARE_SAMPLE_RATE,22254);
+    AIL_set_preference(DIG_USE_STEREO,YES);
+//    AIL_set_preference(DIG_USE_16_BITS,YES);
+    AIL_set_preference(DIG_HARDWARE_SAMPLE_RATE,22050);
+//    AIL_set_preference(DIG_HARDWARE_SAMPLE_RATE,22254);
 
-   if (prefix!=NULL)
-      AIL_set_GTL_filename_prefix(prefix);
-   snd_dpath=d_path;
+    if (prefix!=NULL)
+        AIL_set_GTL_filename_prefix(prefix);
+    snd_dpath=d_path;
 
-   // Scan for hardware?
+    // Scan for hardware?
 
-   // set real malloc
+    // set real malloc
 }
 */
 
 //---------------------------------------------------------
-//	Shutdown sound system.
+//    Shutdown sound system.
 //---------------------------------------------------------
 void snd_shutdown(void)
 {
-	for (int32_t i=0; i < _snd_smp_cnt; i++)
-	{
-		SndDisposeChannel(_snd_smp_prm[i].sndChan, true);
-		DisposePtr((Ptr)_snd_smp_prm[i].sndChan);
-	}
+    for (int32_t i=0; i < _snd_smp_cnt; i++)
+    {
+        SndDisposeChannel(_snd_smp_prm[i].sndChan, true);
+        DisposePtr((Ptr)_snd_smp_prm[i].sndChan);
+    }
 
-	DisposeRoutineDescriptor(gDigiCallBackProcPtr);
-	gDigiCallBackProcPtr = NULL;
+    DisposeRoutineDescriptor(gDigiCallBackProcPtr);
+    gDigiCallBackProcPtr = NULL;
 }
 
 //---------------------------------------------------------
-//	Sound callback proc.
+//    Sound callback proc.
 //---------------------------------------------------------
 pascal void HandleSndCallBack(SndChannelPtr chan, SndCommand *cmd)
 {
-	snd_digi_parms *p = (snd_digi_parms *)cmd->param2;
+    snd_digi_parms *p = (snd_digi_parms *)cmd->param2;
 
-//	printf("Call-back!   loops:%d, pan:%x, vol:%x, sample:%x\n",
-//			p->loops, p->pan, p->vol, p->sample);
+//    printf("Call-back!    loops:%d, pan:%x, vol:%x, sample:%x\n",
+//            p->loops, p->pan, p->vol, p->sample);
 
-	// See if we need to repeat the sound.
+    // See if we need to repeat the sound.
 
-	if (p->loops == -1 || p->loops > 1)
-	{
-		if (p->loops > 1) p->loops--;
+    if (p->loops == -1 || p->loops > 1)
+    {
+        if (p->loops > 1) p->loops--;
 
-		SndPlay(chan, (SndListHandle)p->sample, true);		// Play the sound again.
-		SndDoCommand(chan, cmd, false);					// Call us back again.
-	}
-	else
-	{
-      		if (snd_finish)								// Do the regular callback.
-      			(*snd_finish)(p);
-	}
+        SndPlay(chan, (SndListHandle)p->sample, true);        // Play the sound again.
+        SndDoCommand(chan, cmd, false);                    // Call us back again.
+    }
+    else
+    {
+                if (snd_finish)                                // Do the regular callback.
+                    (*snd_finish)(p);
+    }
 }

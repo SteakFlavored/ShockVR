@@ -81,16 +81,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Game Object Includes
 
 // Defines
-// #define SL_RES_LEFT   REF_IMG_bmCursorLeft
+// #define SL_RES_LEFT    REF_IMG_bmCursorLeft
 // #define SL_RES_RIGHT  REF_IMG_bmCursorRight
-// #define SL_RES_UP     REF_IMG_bmCursorUp
-// #define SL_RES_DOWN   REF_IMG_bmCursorDown
+// #define SL_RES_UP      REF_IMG_bmCursorUp
+// #define SL_RES_DOWN    REF_IMG_bmCursorDown
 // #define SL_RES_SLIDER REF_IMG_bmHelmTinyHead
 
-// #define SL_RES_LEFT   REF_IMG_iconArrowLt
+// #define SL_RES_LEFT    REF_IMG_iconArrowLt
 // #define SL_RES_RIGHT  REF_IMG_iconArrowRt
-// #define SL_RES_UP     REF_IMG_iconArrowUp
-// #define SL_RES_DOWN   REF_IMG_iconArrowDn
+// #define SL_RES_UP      REF_IMG_iconArrowUp
+// #define SL_RES_DOWN    REF_IMG_iconArrowDn
 // #define SL_RES_SLIDER REF_IMG_bmHelmTinyHead
 
 #define SL_VERTICAL  TNG_SL_VERTICAL
@@ -106,14 +106,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Prototypes
 Gadget *gad_slider_create(Gadget *parent, LGRect *dim, int32_t z, int32_t alignment, int32_t increment,
-   int32_t min, int32_t max, TNGStyle *sty, int8_t *name);
+    int32_t min, int32_t max, TNGStyle *sty, int8_t *name);
 
 Gadget *gad_slider_create_full(Gadget *parent, LGRect *dim, int32_t z, int32_t alignment, int32_t increment,
-   int32_t min, int32_t max, TNGStyle *sty, int8_t *name, Ref res_left, Ref res_right, Ref res_up,
-   Ref res_down, Ref res_slider);
+    int32_t min, int32_t max, TNGStyle *sty, int8_t *name, Ref res_left, Ref res_right, Ref res_up,
+    Ref res_down, Ref res_slider);
 
 Gadget *gad_slider_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t alignemnt, int32_t min, int32_t max,
-   int32_t value, int32_t increment, LGPoint size);
+    int32_t value, int32_t increment, LGPoint size);
 
 // Globals
 

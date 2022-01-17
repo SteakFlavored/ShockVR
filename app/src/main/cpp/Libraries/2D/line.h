@@ -27,16 +27,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __LINE_H
 
 enum {
-   GR_LINE,
-   GR_ILINE,
-   GR_HLINE,
-   GR_VLINE,
-   GR_SLINE,
-   GR_CLINE,
-   GR_WIRE_POLY_LINE,
-   GR_WIRE_POLY_SLINE,
-   GR_WIRE_POLY_CLINE,
-   GRD_LINE_TYPES
+    GR_LINE,
+    GR_ILINE,
+    GR_HLINE,
+    GR_VLINE,
+    GR_SLINE,
+    GR_CLINE,
+    GR_WIRE_POLY_LINE,
+    GR_WIRE_POLY_SLINE,
+    GR_WIRE_POLY_CLINE,
+    GRD_LINE_TYPES
 };
 
 #endif

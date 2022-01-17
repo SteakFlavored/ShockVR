@@ -121,16 +121,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ZOOM_IN  0
 #define ZOOM_OUT 1
 
-#define TERRAIN_MODE    0
+#define TERRAIN_MODE     0
 #define TEXTURING_MODE  1
-#define OBJECT_MODE     2
-#define EYEBALL_MODE    3
-#define MUSIC_MODE      4
-#define BITS_MODE       5
-#define CUTPASTE_MODE   6
+#define OBJECT_MODE      2
+#define EYEBALL_MODE     3
+#define MUSIC_MODE        4
+#define BITS_MODE         5
+#define CUTPASTE_MODE    6
 
-#define POKE_MODE       0
-#define PAINT_MODE      1
+#define POKE_MODE         0
+#define PAINT_MODE        1
 #define RUBBERBAND_MODE 2
 
 // Prototypes

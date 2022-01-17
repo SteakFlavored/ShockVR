@@ -44,18 +44,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void flat8_get_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-	uint8_t *src;
-	uint8_t *dst;
-	int16_t h = bm->h;
-	int16_t w = bm->w;
-	uint16_t brow = bm->row;
-	uint16_t grow = grd_bm.row;
+    uint8_t *src;
+    uint8_t *dst;
+    int16_t h = bm->h;
+    int16_t w = bm->w;
+    uint16_t brow = bm->row;
+    uint16_t grow = grd_bm.row;
 
-	src = grd_bm.bits + grow*y + x;
-	dst = bm->bits;
-	while (h--) {
-	  memmove (dst, src, w);
-	  src += grow;
-	  dst += brow;
-	}
+    src = grd_bm.bits + grow*y + x;
+    dst = bm->bits;
+    while (h--) {
+      memmove (dst, src, w);
+      src += grow;
+      dst += brow;
+    }
 }

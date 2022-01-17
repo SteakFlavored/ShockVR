@@ -42,11 +42,11 @@ typedef void (*camera_setfunc)(struct _tilecamera *tc);
 
 typedef struct _tilecamera
 {
-   int32_t bcolor, fcolor;
-   fix x,y,theta;
-   bool show;
-   camera_setfunc func;
-   void* data;
+    int32_t bcolor, fcolor;
+    fix x,y,theta;
+    bool show;
+    camera_setfunc func;
+    void* data;
 } TileCamera;
 
 

@@ -21,10 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------
 //  Globals
 //------------------------
-Handle		gHeaderHdl;
-Handle		gTuneHdl;
-Handle		gOfsHdl;
-int32_t			*gOffsets;
+Handle        gHeaderHdl;
+Handle        gTuneHdl;
+Handle        gOfsHdl;
+int32_t            *gOffsets;
 
 
 //--------------------------------------------------------------------------
@@ -32,35 +32,35 @@ int32_t			*gOffsets;
 //--------------------------------------------------------------------------
 OSErr snd_load_theme(FSSpec *specPtr, TunePlayer thePlayer)
 {
-	OSErr	err;
+    OSErr    err;
 
-	int16_t	refNum = FSpOpenResFile(specPtr, fsRdPerm);
-	if (refNum >= 0)
-	{
-		gHeaderHdl = GetResource('thdr', 128);
-		gTuneHdl = GetResource('them', 128);
-		gOfsHdl = GetResource('tofs', 128);
+    int16_t    refNum = FSpOpenResFile(specPtr, fsRdPerm);
+    if (refNum >= 0)
+    {
+        gHeaderHdl = GetResource('thdr', 128);
+        gTuneHdl = GetResource('them', 128);
+        gOfsHdl = GetResource('tofs', 128);
 
-		DetachResource(gHeaderHdl);
-		DetachResource(gTuneHdl);
-		DetachResource(gOfsHdl);
+        DetachResource(gHeaderHdl);
+        DetachResource(gTuneHdl);
+        DetachResource(gOfsHdl);
 
-		CloseResFile(refNum);
+        CloseResFile(refNum);
 
-		// Set the tune header.
-		HLock(gHeaderHdl);
-		err = TuneSetHeader(thePlayer, (uint32_t *)*gHeaderHdl);
-		err = TunePreroll(thePlayer);
+        // Set the tune header.
+        HLock(gHeaderHdl);
+        err = TuneSetHeader(thePlayer, (uint32_t *)*gHeaderHdl);
+        err = TunePreroll(thePlayer);
 
-		// Lock down the offsets and data.
-		HLock(gTuneHdl);
-		HLock(gOfsHdl);
-		gOffsets = (int32_t *)*gOfsHdl;
+        // Lock down the offsets and data.
+        HLock(gTuneHdl);
+        HLock(gOfsHdl);
+        gOffsets = (int32_t *)*gOfsHdl;
 
-		return(0);
-	}
-	else
-		return(-1);
+        return(0);
+    }
+    else
+        return(-1);
 }
 
 //--------------------------------------------------------------------------
@@ -69,47 +69,47 @@ OSErr snd_load_theme(FSSpec *specPtr, TunePlayer thePlayer)
 //--------------------------------------------------------------------------
 void snd_release_current_theme(void)
 {
-	if (gHeaderHdl)
-	{
-		HUnlock(gHeaderHdl);
-		DisposeHandle(gHeaderHdl);
-	}
-	if (gTuneHdl)
-	{
-		HUnlock(gTuneHdl);
-		DisposeHandle(gTuneHdl);
-	}
-	if (gOfsHdl)
-	{
-		HUnlock(gOfsHdl);
-		DisposeHandle(gOfsHdl);
-	}
+    if (gHeaderHdl)
+    {
+        HUnlock(gHeaderHdl);
+        DisposeHandle(gHeaderHdl);
+    }
+    if (gTuneHdl)
+    {
+        HUnlock(gTuneHdl);
+        DisposeHandle(gTuneHdl);
+    }
+    if (gOfsHdl)
+    {
+        HUnlock(gOfsHdl);
+        DisposeHandle(gOfsHdl);
+    }
 }
 
 
 /*
 int8_t *snd_load_raw(int8_t *fname, int32_t *ldat)
 {
-   int32_t fh;
+    int32_t fh;
 
-   if ((fh=open(fname,O_RDONLY|O_BINARY))!=-1)
-   {
-      uint32_t len;
-      uint8_t *ptr;
-      len=lseek(fh,0,SEEK_END);
-      lseek(fh,0,SEEK_SET);
-      if ((ptr=(uint8_t *)Malloc(len))!=NULL)
-      {
-	      read(fh,ptr,len);
-         close(fh);
-	      if (ldat!=NULL)
-	       { ldat[0]=len; ldat[1]=(int32_t)ptr; }
-	      return ptr;
-      }
-      close(fh);
-   }
-   if (ldat!=NULL)
-    { ldat[0]=0; ldat[1]=NULL; }
-   return NULL;
+    if ((fh=open(fname,O_RDONLY|O_BINARY))!=-1)
+    {
+        uint32_t len;
+        uint8_t *ptr;
+        len=lseek(fh,0,SEEK_END);
+        lseek(fh,0,SEEK_SET);
+        if ((ptr=(uint8_t *)Malloc(len))!=NULL)
+        {
+            read(fh,ptr,len);
+            close(fh);
+            if (ldat!=NULL)
+             { ldat[0]=len; ldat[1]=(int32_t)ptr; }
+            return ptr;
+        }
+        close(fh);
+    }
+    if (ldat!=NULL)
+     { ldat[0]=0; ldat[1]=NULL; }
+    return NULL;
 }
 */

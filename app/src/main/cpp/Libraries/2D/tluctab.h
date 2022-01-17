@@ -62,7 +62,7 @@ extern int32_t gr_dump_tluc8_table(uint8_t *buf, int32_t nlit);
 extern void gr_read_tluc8_table(uint8_t *buf);
 
 #define gr_alloc_translucency_table(n) \
-   ((uint8_t *)NewPtr(n*256))
+    ((uint8_t *)NewPtr(n*256))
 #define gr_free_translucency_table(tab) (DisposePtr((Ptr) tab))
 
 #define gr_make_translucency_table(op, pu, co) \
@@ -73,16 +73,16 @@ extern void gr_read_tluc8_table(uint8_t *buf);
   (gr_init_lit_translucency_tables(gr_alloc_translucency_table(lnum), op, pu, co, lnum))
 
 #define gr_make_tluc8_table(num, op, pu, co) \
-   (tluc8tab[num]=gr_make_translucency_table(op, pu, co))
+    (tluc8tab[num]=gr_make_translucency_table(op, pu, co))
 #define gr_make_lit_tluc8_table(num, op, pu, co, li) \
-   (tluc8ltab[num]=gr_make_lit_translucency_tables(op, pu, co, li), \
-    gr_make_tluc8_table(num, op, pu, co))
+    (tluc8ltab[num]=gr_make_lit_translucency_tables(op, pu, co, li), \
+     gr_make_tluc8_table(num, op, pu, co))
 #define gr_alloc_tluc8_spoly_table(num) \
-   (tluc8nstab=num, tluc8stab=gr_alloc_translucency_table(num))
+    (tluc8nstab=num, tluc8stab=gr_alloc_translucency_table(num))
 #define gr_init_tluc8_spoly_table(num, op, pu, co, li) \
-   (gr_init_lit_translucency_table(tluc8stab+(256*num), op, pu, co, li))
+    (gr_init_lit_translucency_table(tluc8stab+(256*num), op, pu, co, li))
 #define gr_init_tluc8_spoly_tables(num, op, pu, co, li) \
-   (gr_init_lit_translucency_tables(tluc8stab+(256*num), op, pu, co, li))
+    (gr_init_lit_translucency_tables(tluc8stab+(256*num), op, pu, co, li))
 #define gr_bind_tluc8_table(num, p) (tluc8tab[num]=p)
 #define gr_bind_lit_tluc8_table(num, p) (tluc8ltab[num]=p)
 #define gr_bind_tluc8_spoly_table(p) (tluc8stab=p)

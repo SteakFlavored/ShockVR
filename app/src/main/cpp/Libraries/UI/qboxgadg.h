@@ -115,7 +115,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Gadget *gad_qbox_start(Gadget *parent, LGPoint coord, int32_t z, TNGStyle *sty, uint16_t options, int8_t *name, LGPoint ss);
 
 Gadget *gad_qbox_start_full(Gadget *parent, LGPoint coord, int32_t z, TNGStyle *sty, uint16_t options, int8_t *name, LGPoint ss, LGPoint spacing,
-   LGPoint border, Ref left_id, Ref right_id);
+    LGPoint border, Ref left_id, Ref right_id);
 
 // Add a line to a quickbox.  slot_type describes the type of slot, var is a pointer to the variable to be
 // displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o

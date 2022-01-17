@@ -39,8 +39,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _olh_data
 {
-   ObjID obj;
-   LGPoint loc;
+    ObjID obj;
+    LGPoint loc;
 } olh_data;
 
 extern olh_data olh_object;

@@ -28,18 +28,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Color defines for the Citadel Palette
 
 #define PURPLE_BASE  0x20
-#define TAN_BASE     0x29
-#define RED_BASE     0x30
+#define TAN_BASE      0x29
+#define RED_BASE      0x30
 #define ORANGE_YELLOW_BASE 0x3d
 #define GREEN_YELLOW_BASE  0x4b
-#define GREEN_BASE   0x58
+#define GREEN_BASE    0x58
 #define TURQUOISE_BASE  0x65
-#define BLUE_BASE    0x70
+#define BLUE_BASE     0x70
 #define RED_BROWN_BASE  0x7f
-#define BROWN_BASE   0x83
-#define TAN_GRAY_BASE   0xc0
-#define GRAY_BASE    0xd0
-#define BLACK        0x00
-#define WHITE        0x02
+#define BROWN_BASE    0x83
+#define TAN_GRAY_BASE    0xc0
+#define GRAY_BASE     0xd0
+#define BLACK          0x00
+#define WHITE          0x02
 
 #endif // __COLORS_H

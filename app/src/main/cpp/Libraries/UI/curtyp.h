@@ -32,6 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* the saveunder for bitmap cursors */
 struct _cursor_saveunder {
-   grs_bitmap bm;
-   int32_t mapsize;
+    grs_bitmap bm;
+    int32_t mapsize;
 };

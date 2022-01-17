@@ -56,43 +56,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------
 void cursor_draw_callback(mouse_event* e, void* data)
 {
-   LGPoint pos;
+    LGPoint pos;
 #ifndef NO_DUMMIES
-   void *dummy; dummy = (void *)e; dummy = data;
+    void *dummy; dummy = (void *)e; dummy = data;
 #endif
 
-   if (MouseLock > 0) return;
-   MouseLock++;
-   pos.x = e->x;
-   pos.y = e->y;
-   if (CurrentCursor != NULL)
-   {
-      pos.x -= CurrentCursor->hotspot.x;
-      pos.y -= CurrentCursor->hotspot.y;
-   }
-   if (LastCursor != NULL)
-   {
-      if (abs(LastCursorPos.x - pos.x) + abs(LastCursorPos.y - pos.y) <= CursorMoveTolerance)
-         goto out;
-      LastCursor->func(CURSOR_UNDRAW,LastCursorRegion,LastCursor,LastCursorPos);
-   }
-   if (CurrentCursor != NULL)
-   {
-      LGRect cr;
-      cr.ul = pos;
-      cr.lr.x = pos.x + CurrentCursor->w;
-      cr.lr.y = pos.y + CurrentCursor->h;
-      if (RECT_TEST_SECT(&HideRect[curhiderect],&cr))
-      {
-         goto out;
-      }
-      CurrentCursor->func(CURSOR_DRAW,CursorRegion,CurrentCursor,pos);
-      LastCursor = CurrentCursor;
-      LastCursorPos = pos;
-      LastCursorRegion = CursorRegion;
-   }
+    if (MouseLock > 0) return;
+    MouseLock++;
+    pos.x = e->x;
+    pos.y = e->y;
+    if (CurrentCursor != NULL)
+    {
+        pos.x -= CurrentCursor->hotspot.x;
+        pos.y -= CurrentCursor->hotspot.y;
+    }
+    if (LastCursor != NULL)
+    {
+        if (abs(LastCursorPos.x - pos.x) + abs(LastCursorPos.y - pos.y) <= CursorMoveTolerance)
+            goto out;
+        LastCursor->func(CURSOR_UNDRAW,LastCursorRegion,LastCursor,LastCursorPos);
+    }
+    if (CurrentCursor != NULL)
+    {
+        LGRect cr;
+        cr.ul = pos;
+        cr.lr.x = pos.x + CurrentCursor->w;
+        cr.lr.y = pos.y + CurrentCursor->h;
+        if (RECT_TEST_SECT(&HideRect[curhiderect],&cr))
+        {
+            goto out;
+        }
+        CurrentCursor->func(CURSOR_DRAW,CursorRegion,CurrentCursor,pos);
+        LastCursor = CurrentCursor;
+        LastCursorPos = pos;
+        LastCursorRegion = CursorRegion;
+    }
  out:
-   MouseLock--;
+    MouseLock--;
 }
 
 // ---------------------
@@ -104,65 +104,65 @@ void cursor_draw_callback(mouse_event* e, void* data)
 #define GR_HFLIP_BITMAP_IN_PLACE(x)
 
 static grs_canvas* old_canvas = NULL;
-bool	doubleUndraw = false;
+bool    doubleUndraw = false;
 
 //-----------------------------------------------------------
 void bitmap_cursor_drawfunc(int32_t cmd, LGRegion* r, LGCursor* c, LGPoint pos)
 {
-	grs_bitmap* bm = (grs_bitmap*)(c->state);
+    grs_bitmap* bm = (grs_bitmap*)(c->state);
 #ifndef NO_DUMMIES
-	LGRegion *dummy; dummy = r;
+    LGRegion *dummy; dummy = r;
 #endif
 
-	// set up screen canvas
-	old_canvas = grd_canvas;
-	gr_set_canvas(CursorCanvas);
-	switch(cmd)
-	{
-		case CURSOR_UNDRAW:
-			if (doubleUndraw)
-			{
-				grs_bitmap	temp;
-				gr_init_sub_bitmap(&SaveUnder.bm, &temp, 0, 0, SaveUnder.bm.w >> 1, SaveUnder.bm.h >> 1);
-				gr_scale_bitmap(&temp, pos.x, pos.y, SaveUnder.bm.w, SaveUnder.bm.h);
-			}
-			else
-				GR_BITMAP(&SaveUnder.bm,pos.x,pos.y);
-			break;
+    // set up screen canvas
+    old_canvas = grd_canvas;
+    gr_set_canvas(CursorCanvas);
+    switch(cmd)
+    {
+        case CURSOR_UNDRAW:
+            if (doubleUndraw)
+            {
+                grs_bitmap    temp;
+                gr_init_sub_bitmap(&SaveUnder.bm, &temp, 0, 0, SaveUnder.bm.w >> 1, SaveUnder.bm.h >> 1);
+                gr_scale_bitmap(&temp, pos.x, pos.y, SaveUnder.bm.w, SaveUnder.bm.h);
+            }
+            else
+                GR_BITMAP(&SaveUnder.bm,pos.x,pos.y);
+            break;
 
-		case CURSOR_DRAW:
-			// Get saveunder
-			gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
-			GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
-			// Blit over the save under
-			GR_BITMAP(bm,pos.x,pos.y);
-			doubleUndraw = false;
-			break;
+        case CURSOR_DRAW:
+            // Get saveunder
+            gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
+            GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
+            // Blit over the save under
+            GR_BITMAP(bm,pos.x,pos.y);
+            doubleUndraw = false;
+            break;
 
-		case CURSOR_DRAW_HFLIP:
-			pos.x -= bm->w-1;
-			// Get saveunder
-			gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
-//			GR_HFLIP_BITMAP_IN_PLACE(&SaveUnder.bm);
-			GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
-//			GR_HFLIP_BITMAP_IN_PLACE(&SaveUnder.bm);
-			// Blit over the save under
-			GR_BITMAP(bm,pos.x,pos.y);
-//			gr_hflip_bitmap(bm,pos.x,pos.y);
-//			doubleUndraw = false;
-			break;
+        case CURSOR_DRAW_HFLIP:
+            pos.x -= bm->w-1;
+            // Get saveunder
+            gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
+//            GR_HFLIP_BITMAP_IN_PLACE(&SaveUnder.bm);
+            GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
+//            GR_HFLIP_BITMAP_IN_PLACE(&SaveUnder.bm);
+            // Blit over the save under
+            GR_BITMAP(bm,pos.x,pos.y);
+//            gr_hflip_bitmap(bm,pos.x,pos.y);
+//            doubleUndraw = false;
+            break;
 
-		case 3:	// Scale cursor down half-size.
-			gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
-			GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
-			gr_scale_bitmap(bm, pos.x, pos.y, (bm->w >> 1), (bm->h >> 1));
-			doubleUndraw = true;
-			break;
+        case 3:    // Scale cursor down half-size.
+            gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
+            GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
+            gr_scale_bitmap(bm, pos.x, pos.y, (bm->w >> 1), (bm->h >> 1));
+            doubleUndraw = true;
+            break;
 
-		case 4:	// Scale cursor down half-size, don't save the background.
-			gr_scale_bitmap(bm, pos.x, pos.y, (bm->w >> 1), (bm->h >> 1));
-			doubleUndraw = false;
-			break;
-	}
-	gr_set_canvas(old_canvas);
+        case 4:    // Scale cursor down half-size, don't save the background.
+            gr_scale_bitmap(bm, pos.x, pos.y, (bm->w >> 1), (bm->h >> 1));
+            doubleUndraw = false;
+            break;
+    }
+    gr_set_canvas(old_canvas);
 }

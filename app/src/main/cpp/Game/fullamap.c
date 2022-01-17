@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lvldata.h"
 
 extern bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t but);
-extern bool amap_scroll_handler(uiEvent* ev, 	LGRegion* r, void* user_data);
+extern bool amap_scroll_handler(uiEvent* ev,     LGRegion* r, void* user_data);
 
 // -------------------
 //  INTERNAL PROTOTYPES
@@ -47,22 +47,22 @@ void amap_exit(void);
 
 bool amap_mouse_handler(uiEvent *ev, LGRegion *, void *)
 {
-   uiMouseEvent *mev = (uiMouseEvent *)ev;
-   if (mev->action & ~MOUSE_MOTION)
-      if (mev->action < 8)
-         return amap_ms_callback(oAMap(MFD_FULLSCR_MAP),mev->pos.x,mev->pos.y,mev->action,mev->buttons);
-   return(true);
+    uiMouseEvent *mev = (uiMouseEvent *)ev;
+    if (mev->action & ~MOUSE_MOTION)
+        if (mev->action < 8)
+            return amap_ms_callback(oAMap(MFD_FULLSCR_MAP),mev->pos.x,mev->pos.y,mev->action,mev->buttons);
+    return(true);
 }
 
 bool amap_kb_callback(curAMap *amptr, int32_t code);
 
 bool amap_key_handler(uiEvent *ev, LGRegion *r, void *user_data)
 {
-   uiCookedKeyEvent *kev = (uiCookedKeyEvent *)ev;
+    uiCookedKeyEvent *kev = (uiCookedKeyEvent *)ev;
 
-   if (amap_kb_callback(oAMap(MFD_FULLSCR_MAP),kev->code))
-      return false;
-   return(main_kb_callback(ev,r,user_data));
+    if (amap_kb_callback(oAMap(MFD_FULLSCR_MAP),kev->code))
+        return false;
+    return(main_kb_callback(ev,r,user_data));
 }
 
 
@@ -75,12 +75,12 @@ LGRegion amap_root_region;
 
 errtype amap_init(void)
 {
-	int32_t 		id;
-	LGRect	mac_rect = {{0,0},{640,480}};
+    int32_t         id;
+    LGRect    mac_rect = {{0,0},{640,480}};
 
-   generic_reg_init(true,&amap_root_region,&mac_rect,&amap_slab,amap_key_handler,amap_mouse_handler);
-   uiInstallRegionHandler(&amap_root_region,UI_EVENT_KBD_POLL|UI_EVENT_MOUSE_MOVE, amap_scroll_handler, NULL, &id);
-   return(OK);
+    generic_reg_init(true,&amap_root_region,&mac_rect,&amap_slab,amap_key_handler,amap_mouse_handler);
+    uiInstallRegionHandler(&amap_root_region,UI_EVENT_KBD_POLL|UI_EVENT_MOUSE_MOVE, amap_scroll_handler, NULL, &id);
+    return(OK);
 }
 
 // -------------------------------------------------------------
@@ -90,22 +90,22 @@ errtype amap_init(void)
 void amap_start()
 {
 #ifdef GADGET
-   _current_root = NULL;     /* got rid of pointer type mismatch
-                              * since one was a region and the other a gadget
-                              * someone should probably go and figure it out
-                              */
+    _current_root = NULL;      /* got rid of pointer type mismatch
+                                        * since one was a region and the other a gadget
+                                        * someone should probably go and figure it out
+                                        */
 #endif
-   _current_3d_flag = ANIM_UPDATE;
-   _current_fr_context = NULL;
-   _current_view = &amap_root_region;
-   static_change_copy();
-   message_info("");
+    _current_3d_flag = ANIM_UPDATE;
+    _current_fr_context = NULL;
+    _current_view = &amap_root_region;
+    static_change_copy();
+    message_info("");
 
-   HotkeyContext = AMAP_CONTEXT;
-   uiSetCurrentSlab(&amap_slab);
+    HotkeyContext = AMAP_CONTEXT;
+    uiSetCurrentSlab(&amap_slab);
 
-   fsmap_startup();
-   uiShowMouse(NULL);
+    fsmap_startup();
+    uiShowMouse(NULL);
 }
 
 // -----------------------------------------------
@@ -114,7 +114,7 @@ void amap_start()
 
 void amap_exit()
 {
-   fsmap_free();
-   uiHideMouse(NULL);
+    fsmap_free();
+    uiHideMouse(NULL);
 }
 

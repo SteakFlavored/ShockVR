@@ -25,18 +25,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* External defintions for clipped line drawers and line clippers.
 
-   In general, there would be a table of clipped line drawers.  Each
-   clipped line drawer would call the appropriate line clipper and
-   unclipped line drawer in whatever way it needed to for the kind of
-   clip.
+    In general, there would be a table of clipped line drawers.  Each
+    clipped line drawer would call the appropriate line clipper and
+    unclipped line drawer in whatever way it needed to for the kind of
+    clip.
 
-   NB: The vlin drawer can't easily call a clipper, since it is
-   compiled to be called from an interrupt.  It inlines the routine.
-   The hlin drawer also inlines it's clipper, since the fn call
-   overhead is significant.
+    NB: The vlin drawer can't easily call a clipper, since it is
+    compiled to be called from an interrupt.  It inlines the routine.
+    The hlin drawer also inlines it's clipper, since the fn call
+    overhead is significant.
 
-   (A stecil clipped line drawer might interleave clip and unclipped
-   line draw calls, for example.)
+    (A stecil clipped line drawer might interleave clip and unclipped
+    line draw calls, for example.)
 */
 
 #ifndef __CLPLTAB_H

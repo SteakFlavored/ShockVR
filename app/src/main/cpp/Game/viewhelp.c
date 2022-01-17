@@ -52,7 +52,7 @@ errtype mfd_viewhelp_init(MFD_Func* f);
 
 
 // ============================================================
-//                   THE VIEW HELP MFD
+//                         THE VIEW HELP MFD
 // ============================================================
 
 // ---------------
@@ -60,32 +60,32 @@ errtype mfd_viewhelp_init(MFD_Func* f);
 // ---------------
 
 /* This gets called whenever the MFD needs to redraw or
-   undraw.
-   The control value is a bitmask with the following bits:
-   MFD_EXPOSE: Update the mfd, if MFD_EXPOSE_FULL is not set,
-               update incrementally.
-   MFD_EXPOSE_FULL: Fully redraw the mfd, implies MFD_EXPOSE
+    undraw.
+    The control value is a bitmask with the following bits:
+    MFD_EXPOSE: Update the mfd, if MFD_EXPOSE_FULL is not set,
+                    update incrementally.
+    MFD_EXPOSE_FULL: Fully redraw the mfd, implies MFD_EXPOSE
 
-   if no bits are set, the mfd is being "unexposed;" its display
-   being pulled off the screen to make room for a different func.
+    if no bits are set, the mfd is being "unexposed;" its display
+    being pulled off the screen to make room for a different func.
 */
 
 #define MFD_VIEWHELP_FUNC 29
 
-#define LEFT_MARGIN     1
-#define TOP_MARGIN      1
-#define NUM_BUTTONS     4
-#define BARRY_HGT       (3*MFD_VIEW_HGT/4)
-#define BARRY_WID       (MFD_VIEW_WID - LEFT_MARGIN)
-#define BUTTON_WID      12
-#define BUTTON_HGT      11
-#define TEXT_HGT        5
+#define LEFT_MARGIN      1
+#define TOP_MARGIN        1
+#define NUM_BUTTONS      4
+#define BARRY_HGT         (3*MFD_VIEW_HGT/4)
+#define BARRY_WID         (MFD_VIEW_WID - LEFT_MARGIN)
+#define BUTTON_WID        12
+#define BUTTON_HGT        11
+#define TEXT_HGT          5
 
 #define COLOR_TITLE_Y (BARRY_HGT )
-#define COLORS_X      (MFD_VIEW_WID/4)
-#define COLORS_Y      (COLOR_TITLE_Y + 6)
-#define COLORS_HGT    (MFD_VIEW_HGT - COLORS_Y - 1)
-#define COLORS_WID    (MFD_VIEW_WID/2)
+#define COLORS_X        (MFD_VIEW_WID/4)
+#define COLORS_Y        (COLOR_TITLE_Y + 6)
+#define COLORS_HGT     (MFD_VIEW_HGT - COLORS_Y - 1)
+#define COLORS_WID     (MFD_VIEW_WID/2)
 #define COLORS_BWID  7
 #define COLORS_BHGT  7
 
@@ -99,7 +99,7 @@ errtype mfd_viewhelp_init(MFD_Func* f);
 #define BOOL_FIELD_STRING(n) (REF_STR_ViewHelpBase + (n))
 #define BOOL_FIELD_ON_MSG(n) (REF_STR_ViewHelpOnMsg + (n))
 #define BOOL_FIELD_OFF_MSG(n) (REF_STR_ViewHelpOffMsg + (n))
-#define BOOL_FIELD_BMAP(n)   (REF_IMG_ViewIcon1 +(n))
+#define BOOL_FIELD_BMAP(n)    (REF_IMG_ViewIcon1 +(n))
 
 #define BAR_SINISTER REF_IMG_BioIconNot
 
@@ -109,108 +109,108 @@ extern bool fullscrn_icons;
 
 struct _field_data
 {
-   bool* var;
-   bool fullscrn;
-   int32_t qvar;
+    bool* var;
+    bool fullscrn;
+    int32_t qvar;
 } checkbox_fields []  =
 {
-   { &fullscrn_vitals, true, FULLSCRN_VITAL_QVAR },
-   { &fullscrn_icons, true, FULLSCRN_ICON_QVAR},
-   { &map_notes_on, false, AMAP_NOTES_QVAR},
+    { &fullscrn_vitals, true, FULLSCRN_VITAL_QVAR },
+    { &fullscrn_icons, true, FULLSCRN_ICON_QVAR},
+    { &map_notes_on, false, AMAP_NOTES_QVAR},
 };
 
 #define NUM_CHECKBOX_FIELDS (sizeof(checkbox_fields)/sizeof(struct _field_data))
 
 void mfd_viewhelp_expose(MFD* mfd, uint8_t control)
 {
-   bool full = control & MFD_EXPOSE_FULL;
-   if (control == 0)  // MFD is drawing stuff
-   {
-      // Do unexpose stuff here.
-   }
-   if (control & MFD_EXPOSE) // Time to draw stuff
-   {
-      int32_t i;
-      uint8_t bits = 0;
-      // clear update rects
-      mfd_clear_rects();
-      // set up canvas
-      gr_push_canvas(pmfd_canvas);
-      ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+    bool full = control & MFD_EXPOSE_FULL;
+    if (control == 0)  // MFD is drawing stuff
+    {
+        // Do unexpose stuff here.
+    }
+    if (control & MFD_EXPOSE) // Time to draw stuff
+    {
+        int32_t i;
+        uint8_t bits = 0;
+        // clear update rects
+        mfd_clear_rects();
+        // set up canvas
+        gr_push_canvas(pmfd_canvas);
+        ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
-      // Clear the canvas by drawing the background bitmap
-      if (!full_game_3d)
-//KLC - chg for new art         ss_bitmap(&mfd_background, 0, 0);
-         gr_bitmap(&mfd_background, 0, 0);
+        // Clear the canvas by drawing the background bitmap
+        if (!full_game_3d)
+//KLC - chg for new art            ss_bitmap(&mfd_background, 0, 0);
+            gr_bitmap(&mfd_background, 0, 0);
 
-      // figure out where to start, and what tracks are active.
-      for (i = 0; i < NUM_CHECKBOX_FIELDS; i++)
-      {
-         struct _field_data *fd = &checkbox_fields[i];
+        // figure out where to start, and what tracks are active.
+        for (i = 0; i < NUM_CHECKBOX_FIELDS; i++)
+        {
+            struct _field_data *fd = &checkbox_fields[i];
 
-         if (*fd->var)
-         {
-            bits |= 1 << i;
-         }
-      }
-      full = full || bits != LAST_ON_BITS(mfd->id) || hud_color_bank != LAST_HUD_COLOR(mfd->id);
-      if (full)
-      {
-         for (i = 0; i < NUM_CHECKBOX_FIELDS ; i++)
-         {
-            uint8_t clr = ITEM_COLOR;
-            int16_t w,h;
-            int8_t buf[50];
-            int16_t x,y;
-
-            x = LEFT_MARGIN;
-            y = TOP_MARGIN + BARRY_HGT*i/NUM_CHECKBOX_FIELDS;
-            draw_raw_resource_bm(BOOL_FIELD_BMAP(i),x,y);
-            if (!(bits & (1 << i)))
-               draw_raw_resource_bm(BAR_SINISTER,x,y);
-            mfd_add_rect(x,y,x+BARRY_WID,y+BARRY_HGT);
-            x += BUTTON_WID + LEFT_MARGIN;
-            get_string(BOOL_FIELD_STRING(i),buf,sizeof(buf));
-            gr_set_font((grs_font*)ResLock(MFD_FONT));
-            gr_string_size(buf,&w,&h);
-            y += (BUTTON_HGT-h)/2;
-            if (checkbox_fields[i].fullscrn && !full_game_3d)
-               clr = DULL_ITEM_COLOR;
-            mfd_draw_string(buf, x, y, clr, true);
-            ResUnlock(MFD_FONT);
-
-         }
-         mfd_draw_string(get_temp_string(REF_STR_HudColorsTitle),COLORS_X, COLOR_TITLE_Y, ITEM_COLOR, true);
-         for (i = 0; i < HUD_COLOR_BANKS; i++)
-         {
-            int16_t x = COLORS_X + (COLORS_WID-COLORS_BWID)*i/(HUD_COLOR_BANKS-1);
-            gr_set_fcolor(hud_colors[i][2]);
-            ss_rect(x,COLORS_Y,x + COLORS_BWID, COLORS_Y + COLORS_BHGT);
-            gr_set_fcolor(hud_colors[i][0]);
-            ss_rect(x+2,COLORS_Y+2,x + COLORS_BWID-2, COLORS_Y + COLORS_BHGT-2);
-            if (i == hud_color_bank)
+            if (*fd->var)
             {
-               gr_set_fcolor(ITEM_COLOR);
-               ss_box(x-1,COLORS_Y-1,x+COLORS_BWID+1,COLORS_Y + COLORS_BHGT + 1);
+                bits |= 1 << i;
             }
-         }
+        }
+        full = full || bits != LAST_ON_BITS(mfd->id) || hud_color_bank != LAST_HUD_COLOR(mfd->id);
+        if (full)
+        {
+            for (i = 0; i < NUM_CHECKBOX_FIELDS ; i++)
+            {
+                uint8_t clr = ITEM_COLOR;
+                int16_t w,h;
+                int8_t buf[50];
+                int16_t x,y;
 
-      }
-      LAST_ON_BITS(mfd->id) = bits;
-      LAST_HUD_COLOR(mfd->id) = hud_color_bank;
+                x = LEFT_MARGIN;
+                y = TOP_MARGIN + BARRY_HGT*i/NUM_CHECKBOX_FIELDS;
+                draw_raw_resource_bm(BOOL_FIELD_BMAP(i),x,y);
+                if (!(bits & (1 << i)))
+                    draw_raw_resource_bm(BAR_SINISTER,x,y);
+                mfd_add_rect(x,y,x+BARRY_WID,y+BARRY_HGT);
+                x += BUTTON_WID + LEFT_MARGIN;
+                get_string(BOOL_FIELD_STRING(i),buf,sizeof(buf));
+                gr_set_font((grs_font*)ResLock(MFD_FONT));
+                gr_string_size(buf,&w,&h);
+                y += (BUTTON_HGT-h)/2;
+                if (checkbox_fields[i].fullscrn && !full_game_3d)
+                    clr = DULL_ITEM_COLOR;
+                mfd_draw_string(buf, x, y, clr, true);
+                ResUnlock(MFD_FONT);
 
-      // on a full expose, make sure to draw everything
+            }
+            mfd_draw_string(get_temp_string(REF_STR_HudColorsTitle),COLORS_X, COLOR_TITLE_Y, ITEM_COLOR, true);
+            for (i = 0; i < HUD_COLOR_BANKS; i++)
+            {
+                int16_t x = COLORS_X + (COLORS_WID-COLORS_BWID)*i/(HUD_COLOR_BANKS-1);
+                gr_set_fcolor(hud_colors[i][2]);
+                ss_rect(x,COLORS_Y,x + COLORS_BWID, COLORS_Y + COLORS_BHGT);
+                gr_set_fcolor(hud_colors[i][0]);
+                ss_rect(x+2,COLORS_Y+2,x + COLORS_BWID-2, COLORS_Y + COLORS_BHGT-2);
+                if (i == hud_color_bank)
+                {
+                    gr_set_fcolor(ITEM_COLOR);
+                    ss_box(x-1,COLORS_Y-1,x+COLORS_BWID+1,COLORS_Y + COLORS_BHGT + 1);
+                }
+            }
 
-      if (full)
-         mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+        }
+        LAST_ON_BITS(mfd->id) = bits;
+        LAST_HUD_COLOR(mfd->id) = hud_color_bank;
 
-      // Pop the canvas
-      gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the
-      // updated mfd to screen
-      mfd_update_rects(mfd);
+        // on a full expose, make sure to draw everything
 
-   }
+        if (full)
+            mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+
+        // Pop the canvas
+        gr_pop_canvas();
+        // Now that we've popped the canvas, we can send the
+        // updated mfd to screen
+        mfd_update_rects(mfd);
+
+    }
 
 }
 
@@ -221,49 +221,49 @@ void mfd_viewhelp_expose(MFD* mfd, uint8_t control)
 
 bool mfd_viewhelp_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 {
-   int32_t track = -1;
-   int32_t i = bttn.y;
-   if (!(ev->subtype & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)))
-      return false;
-   *checkbox_fields[i].var = !*checkbox_fields[i].var;
-   QUESTVAR_SET(checkbox_fields[i].qvar, *checkbox_fields[i].var);
-   string_message_info((*checkbox_fields[i].var)? BOOL_FIELD_ON_MSG(i) : BOOL_FIELD_OFF_MSG(i));
-   mfd_notify_func(MFD_VIEWHELP_FUNC,MFD_INFO_SLOT,false,MFD_ACTIVE,false);
-   return true;
+    int32_t track = -1;
+    int32_t i = bttn.y;
+    if (!(ev->subtype & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)))
+        return false;
+    *checkbox_fields[i].var = !*checkbox_fields[i].var;
+    QUESTVAR_SET(checkbox_fields[i].qvar, *checkbox_fields[i].var);
+    string_message_info((*checkbox_fields[i].var)? BOOL_FIELD_ON_MSG(i) : BOOL_FIELD_OFF_MSG(i));
+    mfd_notify_func(MFD_VIEWHELP_FUNC,MFD_INFO_SLOT,false,MFD_ACTIVE,false);
+    return true;
 }
 
 bool mfd_viewhelp_color_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 {
-   if (!(ev->subtype & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)))
-      return false;
-   hud_color_bank = bttn.x;
-   QUESTVAR_SET(HUDCOLOR_QVAR, hud_color_bank);
-   mfd_notify_func(MFD_VIEWHELP_FUNC,MFD_INFO_SLOT,false,MFD_ACTIVE,false);
-   return true;
+    if (!(ev->subtype & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)))
+        return false;
+    hud_color_bank = bttn.x;
+    QUESTVAR_SET(HUDCOLOR_QVAR, hud_color_bank);
+    mfd_notify_func(MFD_VIEWHELP_FUNC,MFD_INFO_SLOT,false,MFD_ACTIVE,false);
+    return true;
 }
 
 errtype install_color_handler(MFD_Func* f)
 {
-   errtype err;
-   LGPoint bsize = { COLORS_BWID, COLORS_BHGT};
-   LGPoint bdims = { HUD_COLOR_BANKS, 1 };
-   LGRect r = { { COLORS_X, COLORS_Y},
-              { COLORS_X + COLORS_WID, COLORS_Y + COLORS_HGT }};
+    errtype err;
+    LGPoint bsize = { COLORS_BWID, COLORS_BHGT};
+    LGPoint bdims = { HUD_COLOR_BANKS, 1 };
+    LGRect r = { { COLORS_X, COLORS_Y},
+                  { COLORS_X + COLORS_WID, COLORS_Y + COLORS_HGT }};
 
-   err = MFDBttnArrayInit(&f->handlers[f->handler_count++],&r,bdims,bsize,mfd_viewhelp_color_handler,NULL);
-   return err;
+    err = MFDBttnArrayInit(&f->handlers[f->handler_count++],&r,bdims,bsize,mfd_viewhelp_color_handler,NULL);
+    return err;
 }
 
 
 errtype mfd_viewhelp_init(MFD_Func* f)
 {
-   errtype err;
-   LGPoint bsize = { BARRY_WID, BUTTON_HGT};
-   LGPoint bdims = { 1, NUM_CHECKBOX_FIELDS};
-   LGRect r = { { LEFT_MARGIN, TOP_MARGIN},
-              { LEFT_MARGIN + BARRY_WID, TOP_MARGIN + BARRY_HGT }};
-   err = MFDBttnArrayInit(&f->handlers[0],&r,bdims,bsize,mfd_viewhelp_button_handler,NULL);
-   if (err != OK) return err;
-   f->handler_count = 1;
-   return install_color_handler(f);
+    errtype err;
+    LGPoint bsize = { BARRY_WID, BUTTON_HGT};
+    LGPoint bdims = { 1, NUM_CHECKBOX_FIELDS};
+    LGRect r = { { LEFT_MARGIN, TOP_MARGIN},
+                  { LEFT_MARGIN + BARRY_WID, TOP_MARGIN + BARRY_HGT }};
+    err = MFDBttnArrayInit(&f->handlers[0],&r,bdims,bsize,mfd_viewhelp_button_handler,NULL);
+    if (err != OK) return err;
+    f->handler_count = 1;
+    return install_color_handler(f);
 }

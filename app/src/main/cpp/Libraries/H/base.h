@@ -54,8 +54,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <types.h>
 
 typedef struct {
-   int16_t x;
-   int16_t y;
+    int16_t x;
+    int16_t y;
 } Point;
 
 // macros to make comparing Points easier
@@ -64,8 +64,8 @@ typedef struct {
 #define PointCheckNull(p) ((p).x == -1 && (p).y == -1)
 
 typedef struct {
-   Point ul;
-   Point lr;
+    Point ul;
+    Point lr;
 } Rect;
 
 #endif

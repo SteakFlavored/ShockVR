@@ -54,18 +54,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 
-#define SI_NONE    0xff
+#define SI_NONE     0xff
 
-#define SI_FIRST   0
+#define SI_FIRST    0
 #define SI_SECOND  1
-#define SI_THIRD   2
+#define SI_THIRD    2
 #define SI_FOURTH  3
-#define SI_FIFTH   4
-#define SI_SIXTH   5
+#define SI_FIFTH    4
+#define SI_SIXTH    5
 #define SI_SEVENTH 6
 #define SI_EIGHTH  7
-#define SI_NINTH   8
-#define SI_TENTH   9
+#define SI_NINTH    8
+#define SI_TENTH    9
 
 // Typedefs
 
@@ -83,6 +83,6 @@ errtype side_icon_free_bitmaps();
 // Globals
 
 #define macro_region_create_with_autodestroy(parent,child,LGRect) \
-   region_create(parent,child,LGRect,0,0,REG_USER_CONTROLLED|AUTODESTROY_FLAG,NULL,NULL,NULL,NULL)
+    region_create(parent,child,LGRect,0,0,REG_USER_CONTROLLED|AUTODESTROY_FLAG,NULL,NULL,NULL,NULL)
 
 #endif // __SIDEICON_H

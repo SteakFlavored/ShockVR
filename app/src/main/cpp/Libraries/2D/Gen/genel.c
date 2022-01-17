@@ -60,23 +60,23 @@ void gr_int_uelipse (int32_t x0, int32_t y0, int32_t a, int32_t b)
 
   while (t1 > t2) {
 
-    if (d1 < 0) {
-      d1 += fix24_mul(b_sq,((x<<9)+(3<<8)));
-      x++;
-    }
-    else {
-      d1 += fix24_mul(b_sq,((x<<9)+(3<<8)));
-      d1 += fix24_mul(a_sq,(((-y)<<9)+(2<<8)));
-      x++; y--;
-    }
+     if (d1 < 0) {
+        d1 += fix24_mul(b_sq,((x<<9)+(3<<8)));
+        x++;
+     }
+     else {
+        d1 += fix24_mul(b_sq,((x<<9)+(3<<8)));
+        d1 += fix24_mul(a_sq,(((-y)<<9)+(2<<8)));
+        x++; y--;
+     }
 
-    gr_set_upixel(grd_gc.fcolor,x0+x,y0+y);
-    gr_set_upixel(grd_gc.fcolor,x0-x,y0+y);
-    gr_set_upixel(grd_gc.fcolor,x0+x,y0-y);
-    gr_set_upixel(grd_gc.fcolor,x0-x,y0-y);
+     gr_set_upixel(grd_gc.fcolor,x0+x,y0+y);
+     gr_set_upixel(grd_gc.fcolor,x0-x,y0+y);
+     gr_set_upixel(grd_gc.fcolor,x0+x,y0-y);
+     gr_set_upixel(grd_gc.fcolor,x0-x,y0-y);
 
-    t1 = fix24_mul(a_sq,((y<<8)-128));
-    t2 = fix24_mul(b_sq,((x+1)<<8));
+     t1 = fix24_mul(a_sq,((y<<8)-128));
+     t2 = fix24_mul(b_sq,((x+1)<<8));
   }
 
   t1 = fix24_mul(((x<<8)+128),((x<<8)+128));
@@ -89,21 +89,21 @@ void gr_int_uelipse (int32_t x0, int32_t y0, int32_t a, int32_t b)
   d2 -= t1;
 
   while (y > 0) {
-    if (d2 < 0) {
-      t1 = fix24_mul(((x<<9)+(2<<8)),b_sq);
-      t2 = fix24_mul(((3<<8)-(y<<9)),a_sq);
-      d2 = d2 + t1 + t2;
-      x++; y--;
-    }
-    else {
-      t2 = fix24_mul(((3<<8)-(y<<9)),a_sq);
-      d2 += t2;
-      y--;
-    }
-    gr_set_upixel(grd_gc.fcolor,x0+x,y0+y);
-    gr_set_upixel(grd_gc.fcolor,x0-x,y0+y);
-    gr_set_upixel(grd_gc.fcolor,x0+x,y0-y);
-    gr_set_upixel(grd_gc.fcolor,x0-x,y0-y);
+     if (d2 < 0) {
+        t1 = fix24_mul(((x<<9)+(2<<8)),b_sq);
+        t2 = fix24_mul(((3<<8)-(y<<9)),a_sq);
+        d2 = d2 + t1 + t2;
+        x++; y--;
+     }
+     else {
+        t2 = fix24_mul(((3<<8)-(y<<9)),a_sq);
+        d2 += t2;
+        y--;
+     }
+     gr_set_upixel(grd_gc.fcolor,x0+x,y0+y);
+     gr_set_upixel(grd_gc.fcolor,x0-x,y0+y);
+     gr_set_upixel(grd_gc.fcolor,x0+x,y0-y);
+     gr_set_upixel(grd_gc.fcolor,x0-x,y0-y);
   }
 }
 
@@ -118,8 +118,8 @@ int32_t gr_int_elipse (int32_t x0, int32_t y0, int32_t a, int32_t b)
   /* trivial clipping */
 
   if (x0+a<=grd_clip.left || x0-a>grd_clip.right ||
-      y0+b<=grd_clip.top || y0-b>grd_clip.bot)
-    return CLIP_ALL;
+        y0+b<=grd_clip.top || y0-b>grd_clip.bot)
+     return CLIP_ALL;
 
 
   a_sq = (a * a)<<8;
@@ -137,23 +137,23 @@ int32_t gr_int_elipse (int32_t x0, int32_t y0, int32_t a, int32_t b)
 
   while (t1 > t2) {
 
-    if (d1 < 0) {
-      d1 += fix24_mul(b_sq,((x<<9)+(3<<8)));
-      x++;
-    }
-    else {
-      d1 += fix24_mul(b_sq,((x<<9)+(3<<8)));
-      d1 += fix24_mul(a_sq,(((-y)<<9)+(2<<8)));
-      x++; y--;
-    }
+     if (d1 < 0) {
+        d1 += fix24_mul(b_sq,((x<<9)+(3<<8)));
+        x++;
+     }
+     else {
+        d1 += fix24_mul(b_sq,((x<<9)+(3<<8)));
+        d1 += fix24_mul(a_sq,(((-y)<<9)+(2<<8)));
+        x++; y--;
+     }
 
-    gr_set_pixel(grd_gc.fcolor,x0+x,y0+y);
-    gr_set_pixel(grd_gc.fcolor,x0-x,y0+y);
-    gr_set_pixel(grd_gc.fcolor,x0+x,y0-y);
-    gr_set_pixel(grd_gc.fcolor,x0-x,y0-y);
+     gr_set_pixel(grd_gc.fcolor,x0+x,y0+y);
+     gr_set_pixel(grd_gc.fcolor,x0-x,y0+y);
+     gr_set_pixel(grd_gc.fcolor,x0+x,y0-y);
+     gr_set_pixel(grd_gc.fcolor,x0-x,y0-y);
 
-    t1 = fix24_mul(a_sq,((y<<8)-128));
-    t2 = fix24_mul(b_sq,((x+1)<<8));
+     t1 = fix24_mul(a_sq,((y<<8)-128));
+     t2 = fix24_mul(b_sq,((x+1)<<8));
   }
 
   t1 = fix24_mul(((x<<8)+128),((x<<8)+128));
@@ -166,21 +166,21 @@ int32_t gr_int_elipse (int32_t x0, int32_t y0, int32_t a, int32_t b)
   d2 -= t1;
 
   while (y > 0) {
-    if (d2 < 0) {
-      t1 = fix24_mul(((x<<9)+(2<<8)),b_sq);
-      t2 = fix24_mul(((3<<8)-(y<<9)),a_sq);
-      d2 = d2 + t1 + t2;
-      x++; y--;
-    }
-    else {
-      t2 = fix24_mul(((3<<8)-(y<<9)),a_sq);
-      d2 += t2;
-      y--;
-    }
-    gr_set_pixel(grd_gc.fcolor,x0+x,y0+y);
-    gr_set_pixel(grd_gc.fcolor,x0-x,y0+y);
-    gr_set_pixel(grd_gc.fcolor,x0+x,y0-y);
-    gr_set_pixel(grd_gc.fcolor,x0-x,y0-y);
+     if (d2 < 0) {
+        t1 = fix24_mul(((x<<9)+(2<<8)),b_sq);
+        t2 = fix24_mul(((3<<8)-(y<<9)),a_sq);
+        d2 = d2 + t1 + t2;
+        x++; y--;
+     }
+     else {
+        t2 = fix24_mul(((3<<8)-(y<<9)),a_sq);
+        d2 += t2;
+        y--;
+     }
+     gr_set_pixel(grd_gc.fcolor,x0+x,y0+y);
+     gr_set_pixel(grd_gc.fcolor,x0-x,y0+y);
+     gr_set_pixel(grd_gc.fcolor,x0+x,y0-y);
+     gr_set_pixel(grd_gc.fcolor,x0-x,y0-y);
   }
 
   /* could be more specific */

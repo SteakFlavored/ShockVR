@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Citadel Renderer
  *  various clippers for terrain, including basic cone clip and the later day
- *   tile based clipper
+ *    tile based clipper
  *
  * $Log: frcompil.c $
  * Revision 1.8  1994/04/23  09:21:25  dc
@@ -43,30 +43,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void fr_compile_rect(fmp *fmptr, int32_t llx, int32_t lly, int32_t ulx, int32_t uly, bool seen_bits)
 {
-   FullMap *fm = (FullMap *)fmptr;
-   int32_t x,y;
-   MapElem *mptr;
+    FullMap *fm = (FullMap *)fmptr;
+    int32_t x,y;
+    MapElem *mptr;
 
-   if (lly>0) lly--; else lly=0;
-   if (llx>0) llx--; else llx=0;
-   if (uly<fm_y_sz(fm)-1) uly++; else uly=fm_y_sz(fm)-1;
-   if (ulx<fm_x_sz(fm)-1) ulx++; else ulx=fm_x_sz(fm)-1;
-   y=lly; x=llx;
-   for (; y<=uly; y++)
-	{
-      x=llx;
-		mptr=FULLMAP_GET_XY(fm,x,y);
-      for (; x<=ulx; x++, mptr++)
-      {
-         me_clearsolid_set(mptr,0);  // we know nothing
-         if (seen_bits) me_bits_seen_clear(mptr);
-      }
-   }
+    if (lly>0) lly--; else lly=0;
+    if (llx>0) llx--; else llx=0;
+    if (uly<fm_y_sz(fm)-1) uly++; else uly=fm_y_sz(fm)-1;
+    if (ulx<fm_x_sz(fm)-1) ulx++; else ulx=fm_x_sz(fm)-1;
+    y=lly; x=llx;
+    for (; y<=uly; y++)
+    {
+        x=llx;
+        mptr=FULLMAP_GET_XY(fm,x,y);
+        for (; x<=ulx; x++, mptr++)
+        {
+            me_clearsolid_set(mptr,0);  // we know nothing
+            if (seen_bits) me_bits_seen_clear(mptr);
+        }
+    }
 }
 
 void fr_compile_restart(fmp *fmptr)
 {
-	FullMap *fm = (FullMap *)fmptr;
-	fr_pipe_resize(fm_x_sz(fm),fm_y_sz(fm),fm_z_shft(fm),fm_map(fm));
-	fr_compile_rect(fm,0,0,fm_x_sz(fm),fm_y_sz(fm),false);
+    FullMap *fm = (FullMap *)fmptr;
+    fr_pipe_resize(fm_x_sz(fm),fm_y_sz(fm),fm_z_shft(fm),fm_map(fm));
+    fr_compile_rect(fm,0,0,fm_x_sz(fm),fm_y_sz(fm),false);
 }

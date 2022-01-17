@@ -18,13 +18,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "gamescr.h"
 
-#define MAX_SHODAN_LEVEL      120
+#define MAX_SHODAN_LEVEL        120
 // a little less than a half-second per level
-#define SHODAN_TIME_SHIFT     7
-#define SHODAN_CONQUER_REF              REF_IMG_bmSHODANEndgame
-#define SHODAN_FULLSCRN_CONQUER_REF     REF_IMG_bmSHODANEndgameFull
-#define SHODAN_BITMASK_SIZE   (320 * 200)
-#define SHODAN_INTERVAL    CIT_CYCLE >> 4
+#define SHODAN_TIME_SHIFT      7
+#define SHODAN_CONQUER_REF                  REF_IMG_bmSHODANEndgame
+#define SHODAN_FULLSCRN_CONQUER_REF      REF_IMG_bmSHODANEndgameFull
+#define SHODAN_BITMASK_SIZE    (320 * 200)
+#define SHODAN_INTERVAL     CIT_CYCLE >> 4
 
 #define LOWER_SHODAN_X (full_game_3d) ? 15  : 5
 #define UPPER_SHODAN_X (full_game_3d) ? 305 : 263

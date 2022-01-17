@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		RefAcc.c		Resource reference access
-//		Rex E. Bradford
+//        RefAcc.c        Resource reference access
+//        Rex E. Bradford
 /*
 * $Header: r:/prj/lib/src/res/rcs/refacc.c 1.4 1994/08/30 15:18:38 rex Exp $
 * $Log: refacc.c $
@@ -43,485 +43,485 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <lzw.h>
 
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RefLock() locks a compound resource and returns ptr to item.
+//    RefLock() locks a compound resource and returns ptr to item.
 //
-//		ref = resource reference
+//        ref = resource reference
 //
-//	Returns: ptr to item within locked compound resource.
-//	---------------------------------------------------------
+//    Returns: ptr to item within locked compound resource.
+//    ---------------------------------------------------------
 //  For Mac version:  Change 'ptr' refs to 'hdl', lock resource handle and return ptr.
 
 void *RefLock(Ref ref)
 {
-	ResDesc *prd;
-	RefTable *prt;
-	RefIndex index;
+    ResDesc *prd;
+    RefTable *prt;
+    RefIndex index;
 
-	//	Check for valid ref
+    //    Check for valid ref
 
-//	DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return NULL;});
+//    DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return NULL;});
 
-	//	Add to cumulative stats
+    //    Add to cumulative stats
 
-//	CUMSTATS(REFID(ref),numLocks);
+//    CUMSTATS(REFID(ref),numLocks);
 
-	//	Load block if not in RAM
+    //    Load block if not in RAM
 
-	prd = RESDESC(REFID(ref));
-	if (ResLoadResource(REFID(ref)) == NULL)
-		return(NULL);
-//	if (prd->lock == 0)
-//		ResRemoveFromLRU(prd);
+    prd = RESDESC(REFID(ref));
+    if (ResLoadResource(REFID(ref)) == NULL)
+        return(NULL);
+//    if (prd->lock == 0)
+//        ResRemoveFromLRU(prd);
 
-	//	Tally stats
+    //    Tally stats
 
-//	DBG(DSRC_RES_Stat, {if (prd->lock == 0) resStat.numLocked++;});
+//    DBG(DSRC_RES_Stat, {if (prd->lock == 0) resStat.numLocked++;});
 
-	//	Bump lock count
+    //    Bump lock count
 
-//	DBG(DSRC_RES_ChkLock, {if (prd->lock == RES_MAXLOCK) prd->lock--;});
-	prd->lock++;
+//    DBG(DSRC_RES_ChkLock, {if (prd->lock == RES_MAXLOCK) prd->lock--;});
+    prd->lock++;
 
-	//	Index into ref table
+    //    Index into ref table
 
-	if (prd->lock == 1)
-		HLock(prd->hdl);
-	prt = (RefTable *)*prd->hdl;
-	index = REFINDEX(ref);
-//	DBG(DSRC_RES_ChkIdRef, {if (!RefIndexValid(prt,index)) \
-//		Warning(("RefLock: reference: $%x bad, index out of range\n", ref));});
+    if (prd->lock == 1)
+        HLock(prd->hdl);
+    prt = (RefTable *)*prd->hdl;
+    index = REFINDEX(ref);
+//    DBG(DSRC_RES_ChkIdRef, {if (!RefIndexValid(prt,index)) \
+//        Warning(("RefLock: reference: $%x bad, index out of range\n", ref));});
 
-	//	Return ptr
+    //    Return ptr
 
-	if (!RefIndexValid(prt, index))
-		return (NULL);
-	else
-		return (((uint8_t *)prt) + (prt->offset[index]));
+    if (!RefIndexValid(prt, index))
+        return (NULL);
+    else
+        return (((uint8_t *)prt) + (prt->offset[index]));
 }
 
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RefGet() gets a ptr to an item in a compound resource (ref).
+//    RefGet() gets a ptr to an item in a compound resource (ref).
 //
-//		ref = resource reference
+//        ref = resource reference
 //
-//	Returns: ptr to item (ptr only guaranteed until next Malloc(),
-//				Lock(), Get(), etc.
-//	---------------------------------------------------------
+//    Returns: ptr to item (ptr only guaranteed until next Malloc(),
+//                Lock(), Get(), etc.
+//    ---------------------------------------------------------
 //  For Mac version:  Lose debug and stats.  Change 'ptr' refs to 'hdl'.  Locks the
 //  resource handle before returning the ref ptr.
 
 void *RefGet(Ref ref)
 {
-	ResDesc *prd;
-	RefTable *prt;
-	RefIndex index;
+    ResDesc *prd;
+    RefTable *prt;
+    RefIndex index;
 
-	//	Check for valid ref
+    //    Check for valid ref
 
-//	DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return NULL;});
+//    DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return NULL;});
 
-	//	Add to cumulative stats
+    //    Add to cumulative stats
 
-//	CUMSTATS(REFID(ref),numGets);
+//    CUMSTATS(REFID(ref),numGets);
 
-	//	Get hold of ref
+    //    Get hold of ref
 
-	prd = RESDESC(REFID(ref));
-	if (ResLoadResource(REFID(ref)) == NULL)
-		return(NULL);
-//		ResAddToTail(prd);
-//	else if (prd->lock == 0)
-//		ResMoveToTail(prd);
+    prd = RESDESC(REFID(ref));
+    if (ResLoadResource(REFID(ref)) == NULL)
+        return(NULL);
+//        ResAddToTail(prd);
+//    else if (prd->lock == 0)
+//        ResMoveToTail(prd);
 
-	//	Index into ref table
+    //    Index into ref table
 
-	HLock(prd->hdl);
-	prt = (RefTable *)*prd->hdl;
-	index = REFINDEX(ref);
-//	DBG(DSRC_RES_ChkIdRef, {if (!RefIndexValid(prt,index)) \
-//		Warning(("RefGet: reference: $%x bad, index out of range\n", ref));});
+    HLock(prd->hdl);
+    prt = (RefTable *)*prd->hdl;
+    index = REFINDEX(ref);
+//    DBG(DSRC_RES_ChkIdRef, {if (!RefIndexValid(prt,index)) \
+//        Warning(("RefGet: reference: $%x bad, index out of range\n", ref));});
 
-//	Return ptr
+//    Return ptr
 
-	if (!RefIndexValid(prt, index))
-		return (NULL);
-	else
-		return (((uint8_t *)prt) + (prt->offset[index]));
+    if (!RefIndexValid(prt, index))
+        return (NULL);
+    else
+        return (((uint8_t *)prt) + (prt->offset[index]));
 }
 
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	ResReadRefTable() reads a compound resource's ref table.
+//    ResReadRefTable() reads a compound resource's ref table.
 //
-//		id = id of compound resource
+//        id = id of compound resource
 //
-//	Returns: ptr to reftable allocated with Malloc(), or NULL
-//	---------------------------------------------------------
+//    Returns: ptr to reftable allocated with Malloc(), or NULL
+//    ---------------------------------------------------------
 //  For Mac version:  Use "ReadPartialResource" to mimic this code's functionality.
 
 RefTable *ResReadRefTable(Id id)
 {
-	ResDesc 	*prd;
-	Handle		resHdl;
-	RefIndex	numRefs;
-	int16_t			tableSize;
-	RefTable 	*prt;
-	int16_t			err;
+    ResDesc     *prd;
+    Handle        resHdl;
+    RefIndex    numRefs;
+    int16_t            tableSize;
+    RefTable     *prt;
+    int16_t            err;
 
-	prd = RESDESC(id);
+    prd = RESDESC(id);
 
-	SetResLoad(false);													// Get resource handle without
-	resHdl = GetResource(resMacTypes[prd->type], id);		// actually loading res into mem
-	SetResLoad(true);
+    SetResLoad(false);                                                    // Get resource handle without
+    resHdl = GetResource(resMacTypes[prd->type], id);        // actually loading res into mem
+    SetResLoad(true);
 
-	ReadPartialResource(resHdl, 0, &numRefs, sizeof(RefIndex));	// Get number of refs
-	tableSize = REFTABLESIZE(numRefs);										// to determine table size
+    ReadPartialResource(resHdl, 0, &numRefs, sizeof(RefIndex));    // Get number of refs
+    tableSize = REFTABLESIZE(numRefs);                                        // to determine table size
 
-	prt = (RefTable *)NewPtr(tableSize);							// Now allocate a buffer for the
-	if (prt)																		// table and read it in.
-	{
-		ReadPartialResource(resHdl, 0, (Ptr)prt, tableSize);
-		err = ResError();
-		if (err != 0)
-		{
-			DebugStr("\pResReadRefTable: Can't partial read the RefTable\n");
-			return (NULL);
-		}
-	}
-	else
-	{
-		DebugStr("\pResReadRefTable: Can't allocate pointer for RefTable\n");
-	}
+    prt = (RefTable *)NewPtr(tableSize);                            // Now allocate a buffer for the
+    if (prt)                                                                        // table and read it in.
+    {
+        ReadPartialResource(resHdl, 0, (Ptr)prt, tableSize);
+        err = ResError();
+        if (err != 0)
+        {
+            DebugStr("\pResReadRefTable: Can't partial read the RefTable\n");
+            return (NULL);
+        }
+    }
+    else
+    {
+        DebugStr("\pResReadRefTable: Can't allocate pointer for RefTable\n");
+    }
 
-	return (prt);
+    return (prt);
 /*
-	//	Check id and file number and make sure compound
+    //    Check id and file number and make sure compound
 
-	DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return(NULL);});
-	prd = RESDESC(id);
-	fd = resFile[prd->filenum].fd;
-	DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
-		Warning(("ResReadRefTable: id $%x doesn't exist\n", id)); \
-		return(NULL); \
-		}});
-	if ((ResFlags(id) & RDF_COMPOUND) == 0)
-		{
-		DBG(DSRC_RES_ChkIdRef, { \
-			Warning(("ResReadRefTable: id $%x is not compound\n", id)); \
-			});
-		return(NULL);
-		}
+    DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return(NULL);});
+    prd = RESDESC(id);
+    fd = resFile[prd->filenum].fd;
+    DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
+        Warning(("ResReadRefTable: id $%x doesn't exist\n", id)); \
+        return(NULL); \
+        }});
+    if ((ResFlags(id) & RDF_COMPOUND) == 0)
+        {
+        DBG(DSRC_RES_ChkIdRef, { \
+            Warning(("ResReadRefTable: id $%x is not compound\n", id)); \
+            });
+        return(NULL);
+        }
 
-	//	Seek to data, read numrefs, allocate table, read in offsets
+    //    Seek to data, read numrefs, allocate table, read in offsets
 
-	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
-	read(fd, &numRefs, sizeof(RefIndex));
-	prt = Malloc(REFTABLESIZE(numRefs));
-	prt->numRefs = numRefs;
-	read(fd, &prt->offset[0], sizeof(int32_t) * (numRefs + 1));
+    lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
+    read(fd, &numRefs, sizeof(RefIndex));
+    prt = Malloc(REFTABLESIZE(numRefs));
+    prt->numRefs = numRefs;
+    read(fd, &prt->offset[0], sizeof(int32_t) * (numRefs + 1));
 
-	return(prt);
+    return(prt);
 */
 }
 
 /*
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	ResExtractRefTable() extracts a compound res's ref table.
+//    ResExtractRefTable() extracts a compound res's ref table.
 //
-//		id   = id of compound resource
-//		prt  = ptr to ref table
-//		size = size of ref table in bytes
+//        id    = id of compound resource
+//        prt  = ptr to ref table
+//        size = size of ref table in bytes
 //
-//	Returns: 0 if ok, -1 if error
+//    Returns: 0 if ok, -1 if error
 
 int32_t ResExtractRefTable(Id id, RefTable *prt, int32_t size)
 {
-	ResDesc *prd;
-	int32_t fd;
+    ResDesc *prd;
+    int32_t fd;
 
-//	Check id and file number and make sure compound
+//    Check id and file number and make sure compound
 
-	DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return(-1);});
-	prd = RESDESC(id);
-	fd = resFile[prd->filenum].fd;
-	DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
-		Warning(("ResExtractRefTable: id $%x doesn't exist\n", id)); \
-		return(-1); \
-		}});
-	if ((ResFlags(id) & RDF_COMPOUND) == 0)
-		{
-		DBG(DSRC_RES_ChkIdRef, { \
-			Warning(("ResExtractRefTable: id $%x is not compound\n", id)); \
-			});
-		return(-1);
-		}
+    DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return(-1);});
+    prd = RESDESC(id);
+    fd = resFile[prd->filenum].fd;
+    DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
+        Warning(("ResExtractRefTable: id $%x doesn't exist\n", id)); \
+        return(-1); \
+        }});
+    if ((ResFlags(id) & RDF_COMPOUND) == 0)
+        {
+        DBG(DSRC_RES_ChkIdRef, { \
+            Warning(("ResExtractRefTable: id $%x is not compound\n", id)); \
+            });
+        return(-1);
+        }
 
-//	Seek to data, read numrefs, check table size, read in offsets
+//    Seek to data, read numrefs, check table size, read in offsets
 
-	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
-	read(fd, &prt->numRefs, sizeof(RefIndex));
-	if (REFTABLESIZE(prt->numRefs) > size)
-		{
-		Warning(("ResExtractRefTable: ref table too large for buffer\n"));
-		return(-1);
-		}
-	read(fd, &prt->offset[0], sizeof(int32_t) * (prt->numRefs + 1));
+    lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
+    read(fd, &prt->numRefs, sizeof(RefIndex));
+    if (REFTABLESIZE(prt->numRefs) > size)
+        {
+        Warning(("ResExtractRefTable: ref table too large for buffer\n"));
+        return(-1);
+        }
+    read(fd, &prt->offset[0], sizeof(int32_t) * (prt->numRefs + 1));
 
-	return(0);
+    return(0);
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
 // return number of refs, or -1 if error
 //
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 int32_t ResNumRefs(Id id)
 {
-	ResDesc *prd;
+    ResDesc *prd;
 
-//	Check id and file number and make sure compound
+//    Check id and file number and make sure compound
 
-	DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return(-1);});
-	if ((ResFlags(id) & RDF_COMPOUND) == 0)
-		{
-		DBG(DSRC_RES_ChkIdRef, { \
-			Warning(("ResNumRefs: id $%x is not compound\n", id)); \
-			});
-		return(-1);
-		}
-	prd = RESDESC(id);
-   if (prd->ptr != NULL)
-   {
-      return ((RefTable*)prd->ptr)->numRefs;
-   }
-   else
-   {
-      int32_t fd = resFile[prd->filenum].fd;
-      RefIndex result;
-   	DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
-	   	Warning(("ResNumRefs: id $%x doesn't exist\n", id)); \
-		   return(-1); \
-		   }});
-   	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
-	   read(fd, &result, sizeof(RefIndex));
-      return result;
-   }
+    DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return(-1);});
+    if ((ResFlags(id) & RDF_COMPOUND) == 0)
+        {
+        DBG(DSRC_RES_ChkIdRef, { \
+            Warning(("ResNumRefs: id $%x is not compound\n", id)); \
+            });
+        return(-1);
+        }
+    prd = RESDESC(id);
+    if (prd->ptr != NULL)
+    {
+        return ((RefTable*)prd->ptr)->numRefs;
+    }
+    else
+    {
+        int32_t fd = resFile[prd->filenum].fd;
+        RefIndex result;
+        DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
+            Warning(("ResNumRefs: id $%x doesn't exist\n", id)); \
+            return(-1); \
+            }});
+        lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
+        read(fd, &result, sizeof(RefIndex));
+        return result;
+    }
 }
 */
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RefExtract() extracts a ref item from a compound resource.
+//    RefExtract() extracts a ref item from a compound resource.
 //
-//		prt  = ptr to ref table
-//		ref  = ref
-//		buff = ptr to buffer (use RefSize() to compute needed buffer size)
+//        prt  = ptr to ref table
+//        ref  = ref
+//        buff = ptr to buffer (use RefSize() to compute needed buffer size)
 //
-//	Returns: ptr to supplied buffer, or NULL if problem
-//	---------------------------------------------------------
+//    Returns: ptr to supplied buffer, or NULL if problem
+//    ---------------------------------------------------------
 //  For Mac version:  Use "ReadPartialResource" to get just the reference specified.
-//   For now, ignore LZW.
+//    For now, ignore LZW.
 
 void *RefExtract(RefTable *prt, Ref ref, void *buff)
 {
-	RefIndex	index = REFINDEX(ref);
-	ResDesc		*prd = RESDESC(REFID(ref));
-	Handle		resHdl;
-	int16_t			err;
+    RefIndex    index = REFINDEX(ref);
+    ResDesc        *prd = RESDESC(REFID(ref));
+    Handle        resHdl;
+    int16_t            err;
 
-	SetResLoad(false);													// Get resource handle without
-	resHdl = GetResource(resMacTypes[prd->type], REFID(ref));
-	SetResLoad(true);														// actually loading res into mem
+    SetResLoad(false);                                                    // Get resource handle without
+    resHdl = GetResource(resMacTypes[prd->type], REFID(ref));
+    SetResLoad(true);                                                        // actually loading res into mem
 
-	if (prd->flags & RDF_LZW)
-	{
+    if (prd->flags & RDF_LZW)
+    {
 /*
-		rs = RefSize(prt, index);
-		compPtr = NewPtr(rs + 100);								// Just to be safe.
-		if (compPtr == NULL)
-		{
-			Warning(("RefExtract: Can't allocate ptr for compressed ref.\n"));
-			return (NULL);
-		}
-		ReadPartialResource(resHdl, prt->offset[index], buff, RefSize(prt, index));
+        rs = RefSize(prt, index);
+        compPtr = NewPtr(rs + 100);                                // Just to be safe.
+        if (compPtr == NULL)
+        {
+            Warning(("RefExtract: Can't allocate ptr for compressed ref.\n"));
+            return (NULL);
+        }
+        ReadPartialResource(resHdl, prt->offset[index], buff, RefSize(prt, index));
 
-		LzwExpandFd2Buff(fd, buff,
-			prt->offset[index] - REFTABLESIZE(prt->numRefs),	// skip amt
-			RefSize(prt, index));												// data amt
+        LzwExpandFd2Buff(fd, buff,
+            prt->offset[index] - REFTABLESIZE(prt->numRefs),    // skip amt
+            RefSize(prt, index));                                                // data amt
 */
-		DebugStr("\pRefExtract: Not implemented for compressed compound resources.\n");
-		return (NULL);
-	}
-	else
-	{
-		ReadPartialResource(resHdl, prt->offset[index], buff, RefSize(prt, index));
-		err = ResError();
-		if (err != 0)
-		{
-			DebugStr("\pRefExtract: Can't partial read the normal resource.\n");
-			return (NULL);
-		}
-	}
-	return (buff);
+        DebugStr("\pRefExtract: Not implemented for compressed compound resources.\n");
+        return (NULL);
+    }
+    else
+    {
+        ReadPartialResource(resHdl, prt->offset[index], buff, RefSize(prt, index));
+        err = ResError();
+        if (err != 0)
+        {
+            DebugStr("\pRefExtract: Can't partial read the normal resource.\n");
+            return (NULL);
+        }
+    }
+    return (buff);
 
 /*
-	int32_t fd;
-   int32_t refsize;
-   RefIndex numrefs;
-   int32_t offset;
+    int32_t fd;
+    int32_t refsize;
+    RefIndex numrefs;
+    int32_t offset;
 
-//	Check id, get file number
+//    Check id, get file number
 
-	prd = RESDESC(REFID(ref));
-	fd = resFile[prd->filenum].fd;
-	index = REFINDEX(ref);
+    prd = RESDESC(REFID(ref));
+    fd = resFile[prd->filenum].fd;
+    index = REFINDEX(ref);
 
-   // get reftable date from rt or by seeking.
-   if (prt != NULL)
-   {
-      refsize = RefSize(prt,index);
-      numrefs = prt->numRefs;
-      offset  = prt->offset[index];
-   }
-   else
-   {
-      // seek into the file and find the stuff.
-   	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
-   	read(fd, &numrefs, sizeof(RefIndex));
-   	lseek(fd, index*sizeof(int32_t), SEEK_CUR);
-      read(fd,&offset,sizeof(int32_t));
-      read(fd,&refsize,sizeof(int32_t));
-      refsize -= offset;
-      Warning(("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs));
-   }
-	DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return(NULL);});
-	DBG(DSRC_RES_ChkIdRef, {if (index >= prt->numRefs) { \
-		Warning(("RefExtract: ref $%x index too large\n", ref)); \
-		return(NULL); \
-		}});
-	prd = RESDESC(REFID(ref));
-	fd = resFile[prd->filenum].fd;
+    // get reftable date from rt or by seeking.
+    if (prt != NULL)
+    {
+        refsize = RefSize(prt,index);
+        numrefs = prt->numRefs;
+        offset  = prt->offset[index];
+    }
+    else
+    {
+        // seek into the file and find the stuff.
+        lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
+        read(fd, &numrefs, sizeof(RefIndex));
+        lseek(fd, index*sizeof(int32_t), SEEK_CUR);
+        read(fd,&offset,sizeof(int32_t));
+        read(fd,&refsize,sizeof(int32_t));
+        refsize -= offset;
+        Warning(("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs));
+    }
+    DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return(NULL);});
+    DBG(DSRC_RES_ChkIdRef, {if (index >= prt->numRefs) { \
+        Warning(("RefExtract: ref $%x index too large\n", ref)); \
+        return(NULL); \
+        }});
+    prd = RESDESC(REFID(ref));
+    fd = resFile[prd->filenum].fd;
 
-//	Add to cumulative stats
+//    Add to cumulative stats
 
-	CUMSTATS(REFID(ref),numExtracts);
+    CUMSTATS(REFID(ref),numExtracts);
 
-//	Seek to start of all data in compound resource
+//    Seek to start of all data in compound resource
 
-	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset) + REFTABLESIZE(numrefs),
-		SEEK_SET);
+    lseek(fd, RES_OFFSET_DESC2REAL(prd->offset) + REFTABLESIZE(numrefs),
+        SEEK_SET);
 
-//	If LZW, extract with skipping, else seek & read
+//    If LZW, extract with skipping, else seek & read
 
-	if (ResFlags(REFID(ref)) & RDF_LZW)
-		{
-		LzwExpandFd2Buff(fd, buff,
-			offset - REFTABLESIZE(numrefs),	// skip amt
-			refsize);										// data amt
-		}
-	else
-		{
-		lseek(fd, offset - REFTABLESIZE(numrefs), SEEK_CUR);
-		read(fd, buff, refsize);
-		}
+    if (ResFlags(REFID(ref)) & RDF_LZW)
+        {
+        LzwExpandFd2Buff(fd, buff,
+            offset - REFTABLESIZE(numrefs),    // skip amt
+            refsize);                                        // data amt
+        }
+    else
+        {
+        lseek(fd, offset - REFTABLESIZE(numrefs), SEEK_CUR);
+        read(fd, buff, refsize);
+        }
 
-	return(buff);
+    return(buff);
 */
 }
 
 /*
 int32_t RefInject(RefTable *prt, Ref ref, void *buff)
 {
-	RefIndex index;
-	ResDesc *prd;
-	int32_t fd;
-   int32_t refsize;
-   RefIndex numrefs;
-   int32_t offset;
+    RefIndex index;
+    ResDesc *prd;
+    int32_t fd;
+    int32_t refsize;
+    RefIndex numrefs;
+    int32_t offset;
 
-//	Check id, get file number
+//    Check id, get file number
 
-	if (ResFlags(REFID(ref)) & RDF_LZW)
-   {
-      return 0;
-   }
-
-
-	prd = RESDESC(REFID(ref));
-	fd = resFile[prd->filenum].fd;
-	index = REFINDEX(ref);
-
-   // get reftable date from rt or by seeking.
-   if (prt != NULL)
-   {
-      refsize = RefSize(prt,index);
-      numrefs = prt->numRefs;
-      offset  = prt->offset[index];
-   }
-   else
-   {
-      // seek into the file and find the stuff.
-   	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
-   	read(fd, &numrefs, sizeof(RefIndex));
-   	lseek(fd, index*sizeof(int32_t), SEEK_CUR);
-      read(fd,&offset,sizeof(int32_t));
-      read(fd,&refsize,sizeof(int32_t));
-      refsize -= offset;
-      Warning(("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs));
-   }
-	DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return(NULL);});
-	DBG(DSRC_RES_ChkIdRef, {if (index >= numrefs) { \
-		Warning(("RefExtract: ref $%x index too large\n", ref)); \
-		return(NULL); \
-		}});
-
-//	Add to cumulative stats
-
-	CUMSTATS(REFID(ref),numExtracts);
-
-//	Seek to start of all data in compound resource
-
-	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset) + REFTABLESIZE(numrefs),
-		SEEK_SET);
+    if (ResFlags(REFID(ref)) & RDF_LZW)
+    {
+        return 0;
+    }
 
 
-	lseek(fd, offset - REFTABLESIZE(numrefs), SEEK_CUR);
-	return write(fd, buff, refsize);
+    prd = RESDESC(REFID(ref));
+    fd = resFile[prd->filenum].fd;
+    index = REFINDEX(ref);
+
+    // get reftable date from rt or by seeking.
+    if (prt != NULL)
+    {
+        refsize = RefSize(prt,index);
+        numrefs = prt->numRefs;
+        offset  = prt->offset[index];
+    }
+    else
+    {
+        // seek into the file and find the stuff.
+        lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
+        read(fd, &numrefs, sizeof(RefIndex));
+        lseek(fd, index*sizeof(int32_t), SEEK_CUR);
+        read(fd,&offset,sizeof(int32_t));
+        read(fd,&refsize,sizeof(int32_t));
+        refsize -= offset;
+        Warning(("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs));
+    }
+    DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return(NULL);});
+    DBG(DSRC_RES_ChkIdRef, {if (index >= numrefs) { \
+        Warning(("RefExtract: ref $%x index too large\n", ref)); \
+        return(NULL); \
+        }});
+
+//    Add to cumulative stats
+
+    CUMSTATS(REFID(ref),numExtracts);
+
+//    Seek to start of all data in compound resource
+
+    lseek(fd, RES_OFFSET_DESC2REAL(prd->offset) + REFTABLESIZE(numrefs),
+        SEEK_SET);
+
+
+    lseek(fd, offset - REFTABLESIZE(numrefs), SEEK_CUR);
+    return write(fd, buff, refsize);
 
 }
 */
 
 /*
-//	---------------------------------------------------------
-//		INTERNAL ROUTINES
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
+//        INTERNAL ROUTINES
+//    ---------------------------------------------------------
 //
-//	RefCheckRef() checks if ref valid.
+//    RefCheckRef() checks if ref valid.
 //
-//		ref = ref to be checked
+//        ref = ref to be checked
 //
-//	Returns: true if ref ok, false if invalid & prints warning
+//    Returns: true if ref ok, false if invalid & prints warning
 
 bool RefCheckRef(Ref ref)
 {
-	Id id;
+    Id id;
 
-	id = REFID(ref);
-	if (!ResCheckId(id))
-		return false;
+    id = REFID(ref);
+    if (!ResCheckId(id))
+        return false;
 
-	if ((ResFlags(id) & RDF_COMPOUND) == 0)
-		{
-		Warning(("RefCheckRef: id $%x is not a compound resource\n", id));
-		return false;
-		}
+    if ((ResFlags(id) & RDF_COMPOUND) == 0)
+        {
+        Warning(("RefCheckRef: id $%x is not a compound resource\n", id));
+        return false;
+        }
 
-	return true;
+    return true;
 }
 */

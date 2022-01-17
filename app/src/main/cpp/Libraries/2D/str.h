@@ -65,38 +65,38 @@ extern void gr_font_string_unwrap (int8_t *s);
 
 
 #define gr_string_size(s, w, h) \
-   gr_font_string_size ((grs_font *) gr_get_font(), s, w, h)
+    gr_font_string_size ((grs_font *) gr_get_font(), s, w, h)
 
 #define gr_string_nsize(s, n, w, h) \
-   gr_font_string_nsize ((grs_font *) gr_get_font(), s, n, w, h)
+    gr_font_string_nsize ((grs_font *) gr_get_font(), s, n, w, h)
 
 #define gr_string_width(s) \
-   gr_font_string_width ((grs_font *)gr_get_font(), s)
+    gr_font_string_width ((grs_font *)gr_get_font(), s)
 
 #define gr_string_nwidth(s, n) \
-   gr_font_string_nwidth ((grs_font *) gr_get_font(), s, n)
+    gr_font_string_nwidth ((grs_font *) gr_get_font(), s, n)
 
 #define gr_string_height(s) \
-   gr_font_string_height ((grs_font *)gr_get_font(), s)
+    gr_font_string_height ((grs_font *)gr_get_font(), s)
 
 #define gr_string_nheight(s, n) \
-   gr_font_string_nheight ((grs_font *) gr_get_font(), s, n)
+    gr_font_string_nheight ((grs_font *) gr_get_font(), s, n)
 
 #define gr_string_uclear(s, x, y) \
-   gr_font_string_uclear ((grs_font *) gr_get_font, s, x, y)
+    gr_font_string_uclear ((grs_font *) gr_get_font, s, x, y)
 
 #define gr_string_clear(s, x, y) \
-    gr_font_string_clear ((grs_font *) gr_get_font(), s, x, y)
+     gr_font_string_clear ((grs_font *) gr_get_font(), s, x, y)
 
 #define gr_char_width(c) \
-    gr_font_char_width ((grs_font *) gr_get_font(), c)
+     gr_font_char_width ((grs_font *) gr_get_font(), c)
 
 #define gr_char_size(c, w, h) \
-    gr_font_char_size ((grs_font *) gr_get_font(), c, w, h)
+     gr_font_char_size ((grs_font *) gr_get_font(), c, w, h)
 
 #define gr_char_uclear(c, x, y) \
-    gr_font_char_uclear ((grs_font *) gr_get_font(), c, x, y)
+     gr_font_char_uclear ((grs_font *) gr_get_font(), c, x, y)
 
 #define gr_char_clear(c, x, y) \
-    gr_font_char_clear ((grs_font *) gr_get_font(), c, x, y)
+     gr_font_char_clear ((grs_font *) gr_get_font(), c, x, y)
 

@@ -29,13 +29,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "plytyp.h"
 
 typedef
-   void *grt_line_clip_fill;
+    void *grt_line_clip_fill;
 
 typedef
-   int32_t (*grt_line_clip_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    int32_t (*grt_line_clip_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
 
 typedef
-   int32_t (*grt_line_clip_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
+    int32_t (*grt_line_clip_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
 
 extern grt_line_clip_fill *grd_line_clip_fill_vector;
 

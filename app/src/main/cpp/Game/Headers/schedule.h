@@ -31,18 +31,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "schedtyp.h"
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-   DER SCHEDUMIFIERINEN
-   -----------------------------------------
-   The game has a number of schedules, probably one
-   in the map and another in the player struct.
-   A schedule is a queue of events.  Each event has
-   an event type, a timestamp, and some satellite data.
-   When a schedule runs, all events whose timestamp is earlier
-   than the current time are dispatched to the event handler
-   for that type.  The event handlers are stored in a global
-   function array indexed on event type.
-   Each schedule can have a different notion of time;
-   although typically we will schedule on player_struct.game_time.
+    DER SCHEDUMIFIERINEN
+    -----------------------------------------
+    The game has a number of schedules, probably one
+    in the map and another in the player struct.
+    A schedule is a queue of events.  Each event has
+    an event type, a timestamp, and some satellite data.
+    When a schedule runs, all events whose timestamp is earlier
+    than the current time are dispatched to the event handler
+    for that type.  The event handlers are stored in a global
+    function array indexed on event type.
+    Each schedule can have a different notion of time;
+    although typically we will schedule on player_struct.game_time.
 
 */
 
@@ -53,9 +53,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _sched_event
 {
-   uint16_t timestamp;
-   uint16_t type;
-   int8_t data[SCHED_DATASIZ];
+    uint16_t timestamp;
+    uint16_t type;
+    int8_t data[SCHED_DATASIZ];
 } SchedEvent;
 
 typedef void (*SchedHandler)(Schedule* s, SchedEvent* ev);
@@ -70,24 +70,24 @@ typedef void (*SchedHandler)(Schedule* s, SchedEvent* ev);
 #define TICKS2TSTAMP(t) ((uint16_t)(((t) >> 4) & 0xFFFF))
 #define TSTAMP2TICKS(t) ((t) << 4)
 
-#define NULL_SCHED_EVENT         0
-#define GRENADE_SCHED_EVENT      1
-#define EXPLOSION_SCHED_EVENT    2
-#define DOOR_SCHED_EVENT         3
-#define TRAP_SCHED_EVENT         4
-#define EXPOSE_SCHED_EVENT       5
-#define FLOOR_SCHED_EVENT        6
-#define CEIL_SCHED_EVENT         7
-#define LIGHT_SCHED_EVENT        8
-#define BARK_SCHED_EVENT         9
-#define EMAIL_SCHED_EVENT        10
+#define NULL_SCHED_EVENT            0
+#define GRENADE_SCHED_EVENT        1
+#define EXPLOSION_SCHED_EVENT     2
+#define DOOR_SCHED_EVENT            3
+#define TRAP_SCHED_EVENT            4
+#define EXPOSE_SCHED_EVENT         5
+#define FLOOR_SCHED_EVENT          6
+#define CEIL_SCHED_EVENT            7
+#define LIGHT_SCHED_EVENT          8
+#define BARK_SCHED_EVENT            9
+#define EMAIL_SCHED_EVENT          10
 
 typedef struct _expose_data
 {
-   int8_t damage;
-   uint8_t type;
-   uint8_t tsecs;
-   uint8_t count;
+    int8_t damage;
+    uint8_t type;
+    uint8_t tsecs;
+    uint8_t count;
 } SchedExposeData;
 
 // Prototypes

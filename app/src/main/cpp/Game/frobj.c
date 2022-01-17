@@ -52,47 +52,47 @@ bool pick_best_ref(ObjRefID cRef);
 
 bool pick_best_ref(ObjRefID cRef)
 {
-   int32_t bdist, cdist, ldist;
-   ObjRefID curLRef, BRef;
+    int32_t bdist, cdist, ldist;
+    ObjRefID curLRef, BRef;
 
-   // really, need to sort so SCOOC should do it once we are done with clip + pipe
-   if ((me_subclip(_fdt_mptr)!=SUBCLIP_OUT_OF_CONE)&&(me_tiletype(_fdt_mptr)!=TILE_SOLID))
-   {
-	   bdist=cdist=_fdt_dist;
-		BRef=cRef;    // find correct version of object, initially, first guess is best
-      _fr_sdbg(OBJ_TALK,mprintf("First version ok %d at %d %d\n",bdist,_fdt_x,_fdt_y));
-   }
-   else bdist=cdist=0xffff;
-   curLRef=objRefs[cRef].nextref;                  // init the examine others loop
-   while (curLRef!=cRef)
-   {  // this should know to check the map for not actually seen
-      int32_t x,y;
-      MapElem *mp;
+    // really, need to sort so SCOOC should do it once we are done with clip + pipe
+    if ((me_subclip(_fdt_mptr)!=SUBCLIP_OUT_OF_CONE)&&(me_tiletype(_fdt_mptr)!=TILE_SOLID))
+    {
+        bdist=cdist=_fdt_dist;
+        BRef=cRef;     // find correct version of object, initially, first guess is best
+        _fr_sdbg(OBJ_TALK,mprintf("First version ok %d at %d %d\n",bdist,_fdt_x,_fdt_y));
+    }
+    else bdist=cdist=0xffff;
+    curLRef=objRefs[cRef].nextref;                        // init the examine others loop
+    while (curLRef!=cRef)
+    {  // this should know to check the map for not actually seen
+        int32_t x,y;
+        MapElem *mp;
 
-      x=objRefs[curLRef].state.bin.sq.x;
-      y=objRefs[curLRef].state.bin.sq.y;
+        x=objRefs[curLRef].state.bin.sq.x;
+        y=objRefs[curLRef].state.bin.sq.y;
 
-      mp=MAP_GET_XY(x,y);
+        mp=MAP_GET_XY(x,y);
 
-      _fr_sdbg(OBJ_TALK,mprintf("check %d %d..sc %x\n",x,y,me_subclip(mp)));
+        _fr_sdbg(OBJ_TALK,mprintf("check %d %d..sc %x\n",x,y,me_subclip(mp)));
 
-      if ((me_subclip(mp)!=SUBCLIP_OUT_OF_CONE)&&(me_tiletype(mp)!=TILE_SOLID))
-      {
-	      // this is super gross, but what to do
-	      ldist=abs(x-_fr_x_cen)+abs(y-_fr_y_cen);
-	      if (ldist<bdist)
-	       { bdist=ldist; BRef=curLRef; }
-         _fr_sdbg(OBJ_TALK,mprintf("tried it got %d bdist %d\n",ldist,bdist));
-      }
-	   curLRef=objRefs[curLRef].nextref;                 /* we are us */
-   }
-   if (bdist!=0xffff)
-   {
-	   CitrefSetDealt(BRef);
-	   return (BRef==cRef);
-   }
-   else
-      return false;
+        if ((me_subclip(mp)!=SUBCLIP_OUT_OF_CONE)&&(me_tiletype(mp)!=TILE_SOLID))
+        {
+            // this is super gross, but what to do
+            ldist=abs(x-_fr_x_cen)+abs(y-_fr_y_cen);
+            if (ldist<bdist)
+             { bdist=ldist; BRef=curLRef; }
+            _fr_sdbg(OBJ_TALK,mprintf("tried it got %d bdist %d\n",ldist,bdist));
+        }
+        curLRef=objRefs[curLRef].nextref;                      /* we are us */
+    }
+    if (bdist!=0xffff)
+    {
+        CitrefSetDealt(BRef);
+        return (BRef==cRef);
+    }
+    else
+        return false;
 }
 
 // this is a total mess
@@ -102,61 +102,61 @@ bool pick_best_ref(ObjRefID cRef)
 void render_parse_obj(void)
 {
 #ifndef __RENDTEST__
-   ObjRefID curORef;
-   ObjID cobjid;
+    ObjRefID curORef;
+    ObjID cobjid;
 
-   curORef=_fdt_mptr->objRef;
-   while (curORef!=OBJ_REF_NULL)
-   {
-      bool show_here;
-      cobjid=objRefs[curORef].obj;
-      if (!ObjCheckDealt(cobjid))
-      {
-         show_here=pick_best_ref(curORef);
-         ObjSetDealt(cobjid);
-      }
-      else
-         show_here=CitrefCheckDealt(curORef);
+    curORef=_fdt_mptr->objRef;
+    while (curORef!=OBJ_REF_NULL)
+    {
+        bool show_here;
+        cobjid=objRefs[curORef].obj;
+        if (!ObjCheckDealt(cobjid))
+        {
+            show_here=pick_best_ref(curORef);
+            ObjSetDealt(cobjid);
+        }
+        else
+            show_here=CitrefCheckDealt(curORef);
 
-      if (show_here)
-      {
-         _fr_sdbg(OBJ_TALK,mprintf("Rendering %d at %d %d\n",curORef,_fdt_x,_fdt_y));
-         sort_show_obj(cobjid);
-      }
-//      else
-//         mprintf("not rend %d @ %d %d\n",curORef,_fdt_x,_fdt_y);
-      curORef = objRefs[curORef].next;
-   }
-   render_sorted_objs();
+        if (show_here)
+        {
+            _fr_sdbg(OBJ_TALK,mprintf("Rendering %d at %d %d\n",curORef,_fdt_x,_fdt_y));
+            sort_show_obj(cobjid);
+        }
+//        else
+//            mprintf("not rend %d @ %d %d\n",curORef,_fdt_x,_fdt_y);
+        curORef = objRefs[curORef].next;
+    }
+    render_sorted_objs();
 #else
-   uint16_t curORef;
-   curORef=_fdt_mptr->objRef;
-   _fr_sdbg(OBJ_TALK,mprintf("Rendering %d at %d %d\n",curORef,_fdt_x,_fdt_y));
-   // perhaps draw a box or something
+    uint16_t curORef;
+    curORef=_fdt_mptr->objRef;
+    _fr_sdbg(OBJ_TALK,mprintf("Rendering %d at %d %d\n",curORef,_fdt_x,_fdt_y));
+    // perhaps draw a box or something
 #endif
 }
 
 void facelet_parse_obj(void)
 {
 #ifndef __RENDTEST__
-   ObjRefID curORef;
-   ObjID cobjid;
+    ObjRefID curORef;
+    ObjID cobjid;
 
-   curORef=_fdt_mptr->objRef;
-   while (curORef!=OBJ_REF_NULL)
-   {
-      cobjid=objRefs[curORef].obj;
-      if (!ObjCheckDealt(cobjid))
-      {
-         facelet_obj(cobjid);
-         ObjSetDealt(cobjid);
-      }
-      curORef = objRefs[curORef].next;
-   }
+    curORef=_fdt_mptr->objRef;
+    while (curORef!=OBJ_REF_NULL)
+    {
+        cobjid=objRefs[curORef].obj;
+        if (!ObjCheckDealt(cobjid))
+        {
+            facelet_obj(cobjid);
+            ObjSetDealt(cobjid);
+        }
+        curORef = objRefs[curORef].next;
+    }
 #else
-   uint16_t curORef;
-   curORef=_fdt_mptr->objRef;
-   _fr_sdbg(OBJ_TALK,mprintf("Rendering %d at %d %d\n",curORef,_fdt_x,_fdt_y));
-   // perhaps draw a box or something
+    uint16_t curORef;
+    curORef=_fdt_mptr->objRef;
+    _fr_sdbg(OBJ_TALK,mprintf("Rendering %d at %d %d\n",curORef,_fdt_x,_fdt_y));
+    // perhaps draw a box or something
 #endif
 }

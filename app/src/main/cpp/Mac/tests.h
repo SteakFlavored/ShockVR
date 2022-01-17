@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //===========================================================
 //
-//		System Shock - ©1994-1995 Looking Glass Technologies, Inc.
+//        System Shock - ©1994-1995 Looking Glass Technologies, Inc.
 //
-//		Tests.h	-	Code to do test commands.
+//        Tests.h    -    Code to do test commands.
 //
 //===========================================================
 
@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Globals
 //--------------------
-extern int16_t		gCurrTest;
+extern int16_t        gCurrTest;
 
 //--------------------
 //  Prototypes

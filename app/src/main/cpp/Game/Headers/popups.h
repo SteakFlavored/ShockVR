@@ -27,12 +27,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#define POPUP_MFD_LEFT     0
-#define POPUP_MFD_RIGHT    1
-#define POPUP_DOWN         2
-#define POPUP_ICON_LEFT    3
-#define POPUP_ICON_RIGHT   4
-#define NUM_POPUPS         5
+#define POPUP_MFD_LEFT      0
+#define POPUP_MFD_RIGHT     1
+#define POPUP_DOWN            2
+#define POPUP_ICON_LEFT     3
+#define POPUP_ICON_RIGHT    4
+#define NUM_POPUPS            5
 
 void init_popups(void);
 // initalizes popup cursors
@@ -48,11 +48,11 @@ void make_email_cursor(LGCursor* c, grs_bitmap* bm, uint8_t page, bool init);
 
 void load_string_array(Ref first, int8_t *arry[], int8_t buf[], int32_t sz, int32_t n);
 /*
-   Loads N seuquential strings (starting with <first>) into buf.
-   Fills the array arry with pointers to each of the strings.
+    Loads N seuquential strings (starting with <first>) into buf.
+    Fills the array arry with pointers to each of the strings.
 */
 
-extern bool 	popup_cursors;
+extern bool     popup_cursors;
 
 #endif // __POPUPS_H
 

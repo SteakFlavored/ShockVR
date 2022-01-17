@@ -46,10 +46,10 @@ extern int32_t ClassBaseArray[16][16];
 #define OBJ_CURRENT_CAMERA 2
 #define OBJ_DYNAMIC_CAMERA 3
 
-#define FIND_TRIPLE     0
-#define FIND_SUBCLASS   1
-#define FIND_CLASS      2
-#define FIND_ALL        3
+#define FIND_TRIPLE      0
+#define FIND_SUBCLASS    1
+#define FIND_CLASS        2
+#define FIND_ALL          3
 
 // Functions for getting the bitmap for a given critter on a specific frame, from a specific view
 // macros for now -- this is basically a cheap interface to the resource system's LRU cache
@@ -80,8 +80,8 @@ Ref obj_cache_ref(ObjID id);
 // steal that top bit, rather than this gruesome nightmare
 #define BMAP_NUM_3D(x)  (((x) & 0x3FF) + (((x) & (0x8000)) >> 5))
 #define FRAME_NUM_3D(x) (((x) & 0x7000) >> 12)
-#define REPEAT_3D(x)    (((x) & 0x0800) >> 11)
-#define ANIM_3D(x)      (((x) & 0x0400) >> 10)
+#define REPEAT_3D(x)     (((x) & 0x0800) >> 11)
+#define ANIM_3D(x)        (((x) & 0x0400) >> 10)
 
 // Textured Polygons
 grs_bitmap *bitmap_from_tpoly_data(int32_t tpdata, uint8_t *scale, int32_t *index, uint8_t *type, Ref *ref);

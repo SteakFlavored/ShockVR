@@ -51,33 +51,33 @@ errtype render_run(void);
 extern LGRect* rendrect;
 
 #ifdef __RENDER_SRC
-bool fr_texture           = true;
-bool fr_txt_walls         = true;
-bool fr_txt_floors        = true;
-bool fr_txt_ceilings      = true;
-bool fr_lights_out        = false;
-bool fr_lighting          = true;
-bool fr_play_lighting     = false;
-bool fr_normal_lights     = true;
-int32_t  fr_detail_value      = 100;
+bool fr_texture              = true;
+bool fr_txt_walls            = true;
+bool fr_txt_floors          = true;
+bool fr_txt_ceilings        = true;
+bool fr_lights_out          = false;
+bool fr_lighting             = true;
+bool fr_play_lighting      = false;
+bool fr_normal_lights      = true;
+int32_t  fr_detail_value        = 100;
 int32_t  fr_drop[TM_SIZE_CNT] ={1,4,10};
-int32_t  fr_view_radius       = 10;
-int32_t  fr_clear_color       = 0;
-bool fr_show_tilecursor   = false;
-bool fr_cont_tilecursor   = false;
-bool fr_show_all          = true;
-int32_t  fr_qscale_obj        = 2;
-int32_t  fr_qscale_crit       = 2;
-bool fr_highlights        = false;
-int32_t  fr_normal_shf        = 2;
-int32_t  fr_lite_rad1         = 0,
-     fr_lite_base1        = 10,
-     fr_lite_rad2         = 7,
-     fr_lite_base2        = 0;
-fix  fr_lite_slope        = (-fix_make(2,0)+fix_make(0,0x5000)),
-     fr_lite_yint         = fix_make(12,0x2000);
-int32_t  fr_detail_master     = 3;         /* 0-3 master detail */
-int32_t  fr_pseudo_spheres    = 0;
+int32_t  fr_view_radius         = 10;
+int32_t  fr_clear_color         = 0;
+bool fr_show_tilecursor    = false;
+bool fr_cont_tilecursor    = false;
+bool fr_show_all             = true;
+int32_t  fr_qscale_obj          = 2;
+int32_t  fr_qscale_crit         = 2;
+bool fr_highlights          = false;
+int32_t  fr_normal_shf          = 2;
+int32_t  fr_lite_rad1            = 0,
+      fr_lite_base1          = 10,
+      fr_lite_rad2            = 7,
+      fr_lite_base2          = 0;
+fix  fr_lite_slope          = (-fix_make(2,0)+fix_make(0,0x5000)),
+      fr_lite_yint            = fix_make(12,0x2000);
+int32_t  fr_detail_master      = 3;            /* 0-3 master detail */
+int32_t  fr_pseudo_spheres     = 0;
 #else
 extern bool fr_texture;
 extern bool fr_txt_walls;
@@ -100,12 +100,12 @@ extern int32_t  fr_detail_master;
 extern int32_t  fr_pseudo_spheres;
 #endif
 
-#define MAX_CAMERAS_VISIBLE   2
-#define NUM_HACK_CAMERAS      8
+#define MAX_CAMERAS_VISIBLE    2
+#define NUM_HACK_CAMERAS        8
 // hack cameras are "custom textures" 7c through 7f
 // (so, factoring in type, the low byte is fc to ff
-//#define FIRST_CAMERA_TMAP     (int16_t)0x80 - NUM_HACK_CAMERAS
-#define FIRST_CAMERA_TMAP     0x78
+//#define FIRST_CAMERA_TMAP      (int16_t)0x80 - NUM_HACK_CAMERAS
+#define FIRST_CAMERA_TMAP      0x78
 
 errtype init_hack_cameras(void);
 errtype shutdown_hack_cameras(void);

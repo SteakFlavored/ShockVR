@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // This is the only thing defined here. To minimize dependency.
 typedef struct _schedule
 {
-   PQueue queue;
+    PQueue queue;
 }  Schedule;
 
 #endif // __SCHEDTYPE_H

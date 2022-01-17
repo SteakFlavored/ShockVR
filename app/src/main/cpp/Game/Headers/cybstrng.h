@@ -16,20 +16,20 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
 #ifndef __CYBSTRNG_H
 #define __CYBSTRNG_H
 
-#define RES_traps 0x867		// (2151)
+#define RES_traps 0x867        // (2151)
 #define REF_STR_TrapZeroMessage 0x8670000
-#define RES_words 0x868		// (2152)
+#define RES_words 0x868        // (2152)
 #define REF_STR_WordZero 0x8680000
-#define RES_names 0x869		// (2153)
+#define RES_names 0x869        // (2153)
 #define REF_STR_Name0 0x8690000
-#define RES_texnames 0x86a		// (2154)
-#define RES_texuse 0x86b		// (2155)
-#define RES_inventory 0x86c		// (2156)
+#define RES_texnames 0x86a        // (2154)
+#define RES_texuse 0x86b        // (2155)
+#define RES_inventory 0x86c        // (2156)
 #define REF_STR_Null 0x86c0000
 #define REF_STR_WeaponTitle 0x86c0001
 #define REF_STR_AmmoTitle 0x86c0002
@@ -83,7 +83,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_IconCursor 0x86c0046
 #define REF_STR_NoAutomap 0x86c0050
 #define REF_STR_AmmoTypeLetters 0x86c0051
-#define RES_objshortnames 0x86d		// (2157)
+#define RES_objshortnames 0x86d        // (2157)
 #define REF_STR_MINIPISTOL_SHT 0x86d0000
 #define REF_STR_DARTPISTOL_SHT 0x86d0001
 #define REF_STR_MAGNUM_SHT 0x86d0002
@@ -560,7 +560,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_CYBERGUARD2_SHT 0x86d01d9
 #define REF_STR_ROBOBABE_SHT 0x86d01da
 #define REF_STR_DIEGO_SHT 0x86d01db
-#define RES_targeting 0x86e		// (2158)
+#define RES_targeting 0x86e        // (2158)
 #define REF_STR_NoTarget 0x86e0000
 #define REF_STR_NoTargetWare 0x86e0001
 #define REF_STR_TargetID 0x86e0002
@@ -574,7 +574,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_BabeDmg 0x86e001e
 #define REF_STR_CritMoods 0x86e0024
 #define REF_STR_CritClasses 0x86e002c
-#define RES_HUDstrings 0x86f		// (2159)
+#define RES_HUDstrings 0x86f        // (2159)
 #define REF_STR_InfraredOn 0x86f0000
 #define REF_STR_ExplosionDetect 0x86f0001
 #define REF_STR_oClock 0x86f0002
@@ -602,7 +602,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_TargetDamageBase 0x86f0018
 #define REF_STR_EnviroAbsorb 0x86f0020
 #define REF_STR_EnviroDrain 0x86f0021
-#define RES_lognames 0x870		// (2160)
+#define RES_lognames 0x870        // (2160)
 #define REF_STR_LogName0 0x8700000
 #define REF_STR_LogName1 0x8700001
 #define REF_STR_LogName2 0x8700002
@@ -618,7 +618,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_LogName12 0x870000c
 #define REF_STR_LogName13 0x870000d
 #define REF_STR_LogName14 0x870000e
-#define RES_messages 0x871		// (2161)
+#define RES_messages 0x871        // (2161)
 #define REF_STR_InvCybFailSoft 0x8710000
 #define REF_STR_InvCybFailHard 0x8710001
 #define REF_STR_InvLiveGrenade 0x8710002
@@ -715,10 +715,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_FSMode 0x8710070
 #define REF_STR_NoMapMessage 0x8710071
 #define REF_STR_DropMessage 0x8710072
-#define RES_intro 0x872		// (2162)
-#define RES_death 0x873		// (2163)
-#define RES_win 0x874		// (2164)
-#define RES_plotware 0x875		// (2165)
+#define RES_intro 0x872        // (2162)
+#define RES_death 0x873        // (2163)
+#define RES_win 0x874        // (2164)
+#define RES_plotware 0x875        // (2165)
 #define REF_STR_pwPage0 0x8750000
 #define REF_STR_pwNull 0x8750003
 #define REF_STR_pwShodometer 0x8750004
@@ -759,7 +759,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_pwGamma0 0x875003e
 #define REF_STR_pwDelta 0x875003f
 #define REF_STR_pwDelta0 0x8750040
-#define RES_objIconNames 0x876		// (2166)
+#define RES_objIconNames 0x876        // (2166)
 #define REF_STR_IconName0 0x8760000
 #define REF_STR_IconName1 0x8760001
 #define REF_STR_IconName2 0x8760002
@@ -778,17 +778,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_IconName15 0x876000f
 #define REF_STR_IconName16 0x8760010
 #define REF_STR_IconName17 0x8760011
-#define RES_screenText 0x877		// (2167)
+#define RES_screenText 0x877        // (2167)
 #define REF_STR_ScreenZero 0x8770000
 #define REF_STR_ScreenOne 0x8770001
 #define REF_STR_ScreenTwo 0x8770002
-#define RES_cyberspaceText 0x878		// (2168)
+#define RES_cyberspaceText 0x878        // (2168)
 #define REF_STR_CspaceInfoBase 0x8780000
-#define RES_accessCards 0x879		// (2169)
-#define RES_dataletText 0x87a		// (2170)
+#define RES_accessCards 0x879        // (2169)
+#define RES_dataletText 0x87a        // (2170)
 #define REF_STR_DataletZero 0x87a0000
 #define REF_STR_DataletBinaryZero 0x87a0012
-#define RES_wrapperPanelText 0x87b		// (2171)
+#define RES_wrapperPanelText 0x87b        // (2171)
 #define REF_STR_WrapperText 0x87b0000
 #define REF_STR_MusicText 0x87b0008
 #define REF_STR_OptionsText 0x87b000d
@@ -836,9 +836,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_JoystickTypes 0x87b0069
 #define REF_STR_KeyEquivs6 0x87b006d
 #define REF_STR_MoreHeadset 0x87b006e
-#define RES_credits 0x87c		// (2172)
-#define RES_keyhelp 0x87d		// (2173)
-#define RES_miscellaneous 0x87e		// (2174)
+#define RES_credits 0x87c        // (2172)
+#define RES_keyhelp 0x87d        // (2173)
+#define RES_miscellaneous 0x87e        // (2174)
 #define REF_STR_ResurrectBase 0x87e0000
 #define REF_STR_StartHeartString 0x87e0001
 #define REF_STR_StartBrainString 0x87e0003
@@ -864,7 +864,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_DirectionAbbrev 0x87e0028
 #define REF_STR_Level 0x87e0030
 #define REF_STR_AutomapMFDButtons 0x87e0031
-#define RES_olh_strings 0x87f		// (2175)
+#define RES_olh_strings 0x87f        // (2175)
 #define REF_STR_helpTake 0x87f0000
 #define REF_STR_helpUse 0x87f0001
 #define REF_STR_helpSearch 0x87f0002
@@ -883,21 +883,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_helpAttackAuto 0x87f000f
 #define REF_STR_helpAttackHTH 0x87f0010
 #define REF_STR_helpSecurity 0x87f0011
-#define RES_diffscreenText 0x880		// (2176)
+#define RES_diffscreenText 0x880        // (2176)
 #define REF_STR_journeyOpts 0x8800000
 #define REF_STR_diffStart 0x8800004
 #define REF_STR_diffName 0x8800005
 #define REF_STR_diffCategories 0x8800006
 #define REF_STR_diffStrings 0x880000a
 #define REF_STR_BadVersion 0x880001a
-#define RES_endgameStat 0x881		// (2177)
-#define RES_itemspew 0x882		// (2178)
+#define RES_endgameStat 0x881        // (2177)
+#define RES_itemspew 0x882        // (2178)
 #define REF_STR_drugSpew0 0x8820000
 #define REF_STR_wareSpew0 0x8820007
 #define REF_STR_wareSpew1 0x882000c
 #define REF_STR_gearSpew0 0x88200a7
 #define REF_STR_plotSpew0 0x88200ad
-#define RES_games 0x883		// (2179)
+#define RES_games 0x883        // (2179)
 #define REF_STR_GamesMenu 0x8830000
 #define REF_STR_DontPlay 0x8830001
 #define REF_STR_NotInstalled 0x8830002
@@ -926,7 +926,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_WingForm 0x8830067
 #define REF_STR_NoWing 0x8830074
 #define REF_STR_WingYouDied 0x8830075
-#define RES_objlongnames 0x24		// (36)
+#define RES_objlongnames 0x24        // (36)
 #define REF_STR_MINIPISTOL_LNG 0x240000
 #define REF_STR_DARTPISTOL_LNG 0x240001
 #define REF_STR_MAGNUM_LNG 0x240002
@@ -1403,163 +1403,163 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_STR_CYBERGUARD2_LNG 0x2401d9
 #define REF_STR_ROBOBABE_LNG 0x2401da
 #define REF_STR_DIEGO_LNG 0x2401db
-#define RES_paper0 0x3c		// (60)
-#define RES_paper1 0x3d		// (61)
-#define RES_paper2 0x3e		// (62)
-#define RES_paper3 0x3f		// (63)
-#define RES_paper4 0x40		// (64)
-#define RES_paper5 0x41		// (65)
-#define RES_paper6 0x42		// (66)
-#define RES_paper7 0x43		// (67)
-#define RES_paper8 0x44		// (68)
-#define RES_paper9 0x45		// (69)
-#define RES_paper10 0x46		// (70)
-#define RES_email0 0x989		// (2441)
-#define RES_email1 0x98a		// (2442)
-#define RES_email2 0x98b		// (2443)
-#define RES_email3 0x98c		// (2444)
-#define RES_email4 0x98d		// (2445)
-#define RES_email5 0x98e		// (2446)
-#define RES_email6 0x98f		// (2447)
-#define RES_email7 0x990		// (2448)
-#define RES_email8 0x991		// (2449)
-#define RES_email9 0x992		// (2450)
-#define RES_email10 0x993		// (2451)
-#define RES_email11 0x994		// (2452)
-#define RES_email12 0x995		// (2453)
-#define RES_email13 0x996		// (2454)
-#define RES_email14 0x997		// (2455)
-#define RES_email15 0x998		// (2456)
-#define RES_email16 0x999		// (2457)
-#define RES_email17 0x99a		// (2458)
-#define RES_email18 0x99b		// (2459)
-#define RES_email19 0x99c		// (2460)
-#define RES_email20 0x99d		// (2461)
-#define RES_email21 0x99e		// (2462)
-#define RES_email22 0x99f		// (2463)
-#define RES_email23 0x9a0		// (2464)
-#define RES_email24 0x9a1		// (2465)
-#define RES_email25 0x9a2		// (2466)
-#define RES_email26 0x9a3		// (2467)
-#define RES_email27 0x9a4		// (2468)
-#define RES_email28 0x9a5		// (2469)
-#define RES_email29 0x9a6		// (2470)
-#define RES_email30 0x9a7		// (2471)
-#define RES_email31 0x9a8		// (2472)
-#define RES_email32 0x9a9		// (2473)
-#define RES_email33 0x9aa		// (2474)
-#define RES_email34 0x9ab		// (2475)
-#define RES_email35 0x9ac		// (2476)
-#define RES_email36 0x9ad		// (2477)
-#define RES_email37 0x9ae		// (2478)
-#define RES_email38 0x9af		// (2479)
-#define RES_email39 0x9b0		// (2480)
-#define RES_email40 0x9b1		// (2481)
-#define RES_email41 0x9b2		// (2482)
-#define RES_email42 0x9b3		// (2483)
-#define RES_email43 0x9b4		// (2484)
-#define RES_email44 0x9b5		// (2485)
-#define RES_email45 0x9b6		// (2486)
-#define RES_log00 0x9b8		// (2488)
-#define RES_log01 0x9b9		// (2489)
-#define RES_log02 0x9ba		// (2490)
-#define RES_log03 0x9bb		// (2491)
-#define RES_log04 0x9bc		// (2492)
-#define RES_log05 0x9bd		// (2493)
-#define RES_log10 0x9c8		// (2504)
-#define RES_log11 0x9c9		// (2505)
-#define RES_log12 0x9ca		// (2506)
-#define RES_log13 0x9cb		// (2507)
-#define RES_log14 0x9cc		// (2508)
-#define RES_log15 0x9cd		// (2509)
-#define RES_log16 0x9ce		// (2510)
-#define RES_log17 0x9cf		// (2511)
-#define RES_log18 0x9d0		// (2512)
-#define RES_log19 0x9d1		// (2513)
-#define RES_log110 0x9d2		// (2514)
-#define RES_log111 0x9d3		// (2515)
-#define RES_log112 0x9d4		// (2516)
-#define RES_log113 0x9d5		// (2517)
-#define RES_log114 0x9d6		// (2518)
-#define RES_log115 0x9d7		// (2519)
-#define RES_log20 0x9d8		// (2520)
-#define RES_log21 0x9d9		// (2521)
-#define RES_log22 0x9da		// (2522)
-#define RES_log23 0x9db		// (2523)
-#define RES_log24 0x9dc		// (2524)
-#define RES_log25 0x9dd		// (2525)
-#define RES_log26 0x9de		// (2526)
-#define RES_log27 0x9df		// (2527)
-#define RES_log28 0x9e0		// (2528)
-#define RES_log29 0x9e1		// (2529)
-#define RES_log210 0x9e2		// (2530)
-#define RES_log211 0x9e3		// (2531)
-#define RES_log212 0x9e4		// (2532)
-#define RES_log30 0x9e8		// (2536)
-#define RES_log31 0x9e9		// (2537)
-#define RES_log32 0x9ea		// (2538)
-#define RES_log33 0x9eb		// (2539)
-#define RES_log34 0x9ec		// (2540)
-#define RES_log35 0x9ed		// (2541)
-#define RES_log36 0x9ee		// (2542)
-#define RES_log37 0x9ef		// (2543)
-#define RES_log38 0x9f0		// (2544)
-#define RES_log40 0x9f8		// (2552)
-#define RES_log41 0x9f9		// (2553)
-#define RES_log42 0x9fa		// (2554)
-#define RES_log43 0x9fb		// (2555)
-#define RES_log44 0x9fc		// (2556)
-#define RES_log45 0x9fd		// (2557)
-#define RES_log46 0x9fe		// (2558)
-#define RES_log50 0xa08		// (2568)
-#define RES_log51 0xa09		// (2569)
-#define RES_log52 0xa0a		// (2570)
-#define RES_log53 0xa0b		// (2571)
-#define RES_log54 0xa0c		// (2572)
-#define RES_log55 0xa0d		// (2573)
-#define RES_log56 0xa0e		// (2574)
-#define RES_log57 0xa0f		// (2575)
-#define RES_log58 0xa10		// (2576)
-#define RES_log59 0xa11		// (2577)
-#define RES_log510 0xa12		// (2578)
-#define RES_log511 0xa13		// (2579)
-#define RES_log60 0xa18		// (2584)
-#define RES_log61 0xa19		// (2585)
-#define RES_log62 0xa1a		// (2586)
-#define RES_log63 0xa1b		// (2587)
-#define RES_log64 0xa1c		// (2588)
-#define RES_log65 0xa1d		// (2589)
-#define RES_log66 0xa1e		// (2590)
-#define RES_log67 0xa1f		// (2591)
-#define RES_log68 0xa20		// (2592)
-#define RES_log69 0xa21		// (2593)
-#define RES_log70 0xa28		// (2600)
-#define RES_log71 0xa29		// (2601)
-#define RES_log72 0xa2a		// (2602)
-#define RES_log73 0xa2b		// (2603)
-#define RES_log74 0xa2c		// (2604)
-#define RES_log75 0xa2d		// (2605)
-#define RES_log76 0xa2e		// (2606)
-#define RES_log77 0xa2f		// (2607)
-#define RES_log78 0xa30		// (2608)
-#define RES_log80 0xa38		// (2616)
-#define RES_log81 0xa39		// (2617)
-#define RES_log82 0xa3a		// (2618)
-#define RES_log83 0xa3b		// (2619)
-#define RES_log84 0xa3c		// (2620)
-#define RES_log85 0xa3d		// (2621)
-#define RES_data0 0xa98		// (2712)
-#define RES_data1 0xa99		// (2713)
-#define RES_data2 0xa9a		// (2714)
-#define RES_data3 0xa9b		// (2715)
-#define RES_data4 0xa9c		// (2716)
-#define RES_data5 0xa9d		// (2717)
-#define RES_data6 0xa9e		// (2718)
-#define RES_data7 0xa9f		// (2719)
-#define RES_data8 0xaa0		// (2720)
-#define RES_data9 0xaa1		// (2721)
-#define RES_data10 0xaa2		// (2722)
-#define RES_data11 0xaa3		// (2723)
-#define RES_data12 0xaa4		// (2724)
+#define RES_paper0 0x3c        // (60)
+#define RES_paper1 0x3d        // (61)
+#define RES_paper2 0x3e        // (62)
+#define RES_paper3 0x3f        // (63)
+#define RES_paper4 0x40        // (64)
+#define RES_paper5 0x41        // (65)
+#define RES_paper6 0x42        // (66)
+#define RES_paper7 0x43        // (67)
+#define RES_paper8 0x44        // (68)
+#define RES_paper9 0x45        // (69)
+#define RES_paper10 0x46        // (70)
+#define RES_email0 0x989        // (2441)
+#define RES_email1 0x98a        // (2442)
+#define RES_email2 0x98b        // (2443)
+#define RES_email3 0x98c        // (2444)
+#define RES_email4 0x98d        // (2445)
+#define RES_email5 0x98e        // (2446)
+#define RES_email6 0x98f        // (2447)
+#define RES_email7 0x990        // (2448)
+#define RES_email8 0x991        // (2449)
+#define RES_email9 0x992        // (2450)
+#define RES_email10 0x993        // (2451)
+#define RES_email11 0x994        // (2452)
+#define RES_email12 0x995        // (2453)
+#define RES_email13 0x996        // (2454)
+#define RES_email14 0x997        // (2455)
+#define RES_email15 0x998        // (2456)
+#define RES_email16 0x999        // (2457)
+#define RES_email17 0x99a        // (2458)
+#define RES_email18 0x99b        // (2459)
+#define RES_email19 0x99c        // (2460)
+#define RES_email20 0x99d        // (2461)
+#define RES_email21 0x99e        // (2462)
+#define RES_email22 0x99f        // (2463)
+#define RES_email23 0x9a0        // (2464)
+#define RES_email24 0x9a1        // (2465)
+#define RES_email25 0x9a2        // (2466)
+#define RES_email26 0x9a3        // (2467)
+#define RES_email27 0x9a4        // (2468)
+#define RES_email28 0x9a5        // (2469)
+#define RES_email29 0x9a6        // (2470)
+#define RES_email30 0x9a7        // (2471)
+#define RES_email31 0x9a8        // (2472)
+#define RES_email32 0x9a9        // (2473)
+#define RES_email33 0x9aa        // (2474)
+#define RES_email34 0x9ab        // (2475)
+#define RES_email35 0x9ac        // (2476)
+#define RES_email36 0x9ad        // (2477)
+#define RES_email37 0x9ae        // (2478)
+#define RES_email38 0x9af        // (2479)
+#define RES_email39 0x9b0        // (2480)
+#define RES_email40 0x9b1        // (2481)
+#define RES_email41 0x9b2        // (2482)
+#define RES_email42 0x9b3        // (2483)
+#define RES_email43 0x9b4        // (2484)
+#define RES_email44 0x9b5        // (2485)
+#define RES_email45 0x9b6        // (2486)
+#define RES_log00 0x9b8        // (2488)
+#define RES_log01 0x9b9        // (2489)
+#define RES_log02 0x9ba        // (2490)
+#define RES_log03 0x9bb        // (2491)
+#define RES_log04 0x9bc        // (2492)
+#define RES_log05 0x9bd        // (2493)
+#define RES_log10 0x9c8        // (2504)
+#define RES_log11 0x9c9        // (2505)
+#define RES_log12 0x9ca        // (2506)
+#define RES_log13 0x9cb        // (2507)
+#define RES_log14 0x9cc        // (2508)
+#define RES_log15 0x9cd        // (2509)
+#define RES_log16 0x9ce        // (2510)
+#define RES_log17 0x9cf        // (2511)
+#define RES_log18 0x9d0        // (2512)
+#define RES_log19 0x9d1        // (2513)
+#define RES_log110 0x9d2        // (2514)
+#define RES_log111 0x9d3        // (2515)
+#define RES_log112 0x9d4        // (2516)
+#define RES_log113 0x9d5        // (2517)
+#define RES_log114 0x9d6        // (2518)
+#define RES_log115 0x9d7        // (2519)
+#define RES_log20 0x9d8        // (2520)
+#define RES_log21 0x9d9        // (2521)
+#define RES_log22 0x9da        // (2522)
+#define RES_log23 0x9db        // (2523)
+#define RES_log24 0x9dc        // (2524)
+#define RES_log25 0x9dd        // (2525)
+#define RES_log26 0x9de        // (2526)
+#define RES_log27 0x9df        // (2527)
+#define RES_log28 0x9e0        // (2528)
+#define RES_log29 0x9e1        // (2529)
+#define RES_log210 0x9e2        // (2530)
+#define RES_log211 0x9e3        // (2531)
+#define RES_log212 0x9e4        // (2532)
+#define RES_log30 0x9e8        // (2536)
+#define RES_log31 0x9e9        // (2537)
+#define RES_log32 0x9ea        // (2538)
+#define RES_log33 0x9eb        // (2539)
+#define RES_log34 0x9ec        // (2540)
+#define RES_log35 0x9ed        // (2541)
+#define RES_log36 0x9ee        // (2542)
+#define RES_log37 0x9ef        // (2543)
+#define RES_log38 0x9f0        // (2544)
+#define RES_log40 0x9f8        // (2552)
+#define RES_log41 0x9f9        // (2553)
+#define RES_log42 0x9fa        // (2554)
+#define RES_log43 0x9fb        // (2555)
+#define RES_log44 0x9fc        // (2556)
+#define RES_log45 0x9fd        // (2557)
+#define RES_log46 0x9fe        // (2558)
+#define RES_log50 0xa08        // (2568)
+#define RES_log51 0xa09        // (2569)
+#define RES_log52 0xa0a        // (2570)
+#define RES_log53 0xa0b        // (2571)
+#define RES_log54 0xa0c        // (2572)
+#define RES_log55 0xa0d        // (2573)
+#define RES_log56 0xa0e        // (2574)
+#define RES_log57 0xa0f        // (2575)
+#define RES_log58 0xa10        // (2576)
+#define RES_log59 0xa11        // (2577)
+#define RES_log510 0xa12        // (2578)
+#define RES_log511 0xa13        // (2579)
+#define RES_log60 0xa18        // (2584)
+#define RES_log61 0xa19        // (2585)
+#define RES_log62 0xa1a        // (2586)
+#define RES_log63 0xa1b        // (2587)
+#define RES_log64 0xa1c        // (2588)
+#define RES_log65 0xa1d        // (2589)
+#define RES_log66 0xa1e        // (2590)
+#define RES_log67 0xa1f        // (2591)
+#define RES_log68 0xa20        // (2592)
+#define RES_log69 0xa21        // (2593)
+#define RES_log70 0xa28        // (2600)
+#define RES_log71 0xa29        // (2601)
+#define RES_log72 0xa2a        // (2602)
+#define RES_log73 0xa2b        // (2603)
+#define RES_log74 0xa2c        // (2604)
+#define RES_log75 0xa2d        // (2605)
+#define RES_log76 0xa2e        // (2606)
+#define RES_log77 0xa2f        // (2607)
+#define RES_log78 0xa30        // (2608)
+#define RES_log80 0xa38        // (2616)
+#define RES_log81 0xa39        // (2617)
+#define RES_log82 0xa3a        // (2618)
+#define RES_log83 0xa3b        // (2619)
+#define RES_log84 0xa3c        // (2620)
+#define RES_log85 0xa3d        // (2621)
+#define RES_data0 0xa98        // (2712)
+#define RES_data1 0xa99        // (2713)
+#define RES_data2 0xa9a        // (2714)
+#define RES_data3 0xa9b        // (2715)
+#define RES_data4 0xa9c        // (2716)
+#define RES_data5 0xa9d        // (2717)
+#define RES_data6 0xa9e        // (2718)
+#define RES_data7 0xa9f        // (2719)
+#define RES_data8 0xaa0        // (2720)
+#define RES_data9 0xaa1        // (2721)
+#define RES_data10 0xaa2        // (2722)
+#define RES_data11 0xaa3        // (2723)
+#define RES_data12 0xaa4        // (2724)
 
 #endif

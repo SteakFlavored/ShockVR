@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		AQTM.C		Animfile handler for Quicktime movie files
-//		Rex E. Bradford (REX)
+//        AQTM.C        Animfile handler for Quicktime movie files
+//        Rex E. Bradford (REX)
 //
 /*
 * $Header: r:/prj/lib/src/afile/RCS/aqtm.c 1.4 1994/10/18 16:00:44 rex Exp $
@@ -48,17 +48,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "compose.h"
 #include "quiktime.h"
 
-//	--------------------------------------------------------------
-//		VIRTUAL FUNCTION TABLE AND RELATED INFO
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
+//        VIRTUAL FUNCTION TABLE AND RELATED INFO
+//    --------------------------------------------------------------
 
-//	Type-specific information
+//    Type-specific information
 
 typedef struct {
-	QTM qtm;
+    QTM qtm;
 } AqtmInfo;
 
-//	Methods
+//    Methods
 
 int32_t AqtmReadHeader(Afile *paf);
 int32_t AqtmReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime);
@@ -70,161 +70,161 @@ int32_t AqtmWriteFramePal(Afile *paf, Apalette *ppal);
 int32_t AqtmWriteClose(Afile *paf);
 
 Amethods qtmMethods = {
-	AqtmReadHeader,
-	AqtmReadFrame,
-	NULL,					// f_ReadFramePal
-	NULL,					// f_ReadAudio
-	AqtmReadReset,
-	AqtmReadClose,
-	AqtmWriteBegin,
-	NULL,					// f_WriteAudio
-	AqtmWriteFrame,
-   AqtmWriteFramePal,
-	AqtmWriteClose,
+    AqtmReadHeader,
+    AqtmReadFrame,
+    NULL,                    // f_ReadFramePal
+    NULL,                    // f_ReadAudio
+    AqtmReadReset,
+    AqtmReadClose,
+    AqtmWriteBegin,
+    NULL,                    // f_WriteAudio
+    AqtmWriteFrame,
+    AqtmWriteFramePal,
+    AqtmWriteClose,
 };
 
-//	------------------------------------------------------
-//		READER METHODS
-//	------------------------------------------------------
+//    ------------------------------------------------------
+//        READER METHODS
+//    ------------------------------------------------------
 //
-//	AqtmReadHeader() reads in quiktime chunks & verifies.
+//    AqtmReadHeader() reads in quiktime chunks & verifies.
 
 int32_t AqtmReadHeader(Afile *paf)
 {
-	printf("AqtmReadHeader not implemented yet!\n");
+    printf("AqtmReadHeader not implemented yet!\n");
 /*
-	AqtmInfo *pqi;
-	QTM *pqtm;
+    AqtmInfo *pqi;
+    QTM *pqtm;
 
-	paf->pspec = Calloc(sizeof(AqtmInfo));
-	pqi = paf->pspec;
-	pqtm = &pqi->qtm;
+    paf->pspec = Calloc(sizeof(AqtmInfo));
+    pqi = paf->pspec;
+    pqtm = &pqi->qtm;
 
-//	Read in Quiktime header chunks
+//    Read in Quiktime header chunks
 
-	QuikReadMovie(pqtm, paf->fp);
+    QuikReadMovie(pqtm, paf->fp);
 
-//	Record header information
+//    Record header information
 
-	if (pqtm->pVideoTrack)
-		{
-		paf->v.frameRate = QuikComputeFrameRate(pqtm);
-		paf->v.width = pqtm->pVideoTrack->qt_stsd.idesc.width;
-		paf->v.height = pqtm->pVideoTrack->qt_stsd.idesc.height;
-		paf->v.numBits = pqtm->pVideoTrack->qt_stsd.idesc.depth;
-		paf->v.numFrames = pqtm->pVideoTrack->numSamps;
-		if (pqtm->pVideoTrack->palette)
-			{
-			paf->v.pal.index = 0;
-			paf->v.pal.numcols = 256;
-			memcpy(paf->v.pal.rgb, pqtm->pVideoTrack->palette, 256 * 3);
-			}
-		}
+    if (pqtm->pVideoTrack)
+        {
+        paf->v.frameRate = QuikComputeFrameRate(pqtm);
+        paf->v.width = pqtm->pVideoTrack->qt_stsd.idesc.width;
+        paf->v.height = pqtm->pVideoTrack->qt_stsd.idesc.height;
+        paf->v.numBits = pqtm->pVideoTrack->qt_stsd.idesc.depth;
+        paf->v.numFrames = pqtm->pVideoTrack->numSamps;
+        if (pqtm->pVideoTrack->palette)
+            {
+            paf->v.pal.index = 0;
+            paf->v.pal.numcols = 256;
+            memcpy(paf->v.pal.rgb, pqtm->pVideoTrack->palette, 256 * 3);
+            }
+        }
 
-//	Return
+//    Return
 */
-	return(0);
+    return(0);
 }
 
-//	----------------------------------------------------------
+//    ----------------------------------------------------------
 //
-//	AqtmReadFrame() reads the next frame.
+//    AqtmReadFrame() reads the next frame.
 
 int32_t AqtmReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
 {
-	printf("AqtmReadFrame not implemented yet!\n");
+    printf("AqtmReadFrame not implemented yet!\n");
 /*
-	AqtmInfo *pqi;
-	QTM *pqtm;
-	void *p;
-	int32_t length;
-	fix time;
-	uint8_t bmtype;
+    AqtmInfo *pqi;
+    QTM *pqtm;
+    void *p;
+    int32_t length;
+    fix time;
+    uint8_t bmtype;
 
-	pqi = paf->pspec;
-	pqtm = &pqi->qtm;
+    pqi = paf->pspec;
+    pqtm = &pqi->qtm;
 
-	p = QuikGetVideoSample(pqtm, paf->currFrame, paf->fp, &length, &bmtype,
-		&time);
+    p = QuikGetVideoSample(pqtm, paf->currFrame, paf->fp, &length, &bmtype,
+        &time);
 
-	pbm->type = bmtype;
-	memcpy(pbm->bits, p, length);
+    pbm->type = bmtype;
+    memcpy(pbm->bits, p, length);
 
-	*ptime = time;
+    *ptime = time;
 
-	return(length);
+    return(length);
 */
 }
 
-//	----------------------------------------------------------
+//    ----------------------------------------------------------
 //
-//	AqtmReadReset() resets the movie for reading.
+//    AqtmReadReset() resets the movie for reading.
 
 int32_t AqtmReadReset(Afile *paf)
 {
-	return(0);
+    return(0);
 }
 
-//	----------------------------------------------------------
+//    ----------------------------------------------------------
 //
-//	AqtmReadClose() does cleanup and closes file.
+//    AqtmReadClose() does cleanup and closes file.
 
 int32_t AqtmReadClose(Afile *paf)
 {
-	printf("AqtmReadClose not implemented yet!\n");
+    printf("AqtmReadClose not implemented yet!\n");
 /*
-	AqtmInfo *pqi;
+    AqtmInfo *pqi;
 
-	pqi = paf->pspec;
-	QuikFreeMovie(&pqi->qtm);
+    pqi = paf->pspec;
+    QuikFreeMovie(&pqi->qtm);
 
-	fclose(paf->fp);
+    fclose(paf->fp);
 */
-	return(0);
+    return(0);
 }
 
-//	------------------------------------------------------
-//		WRITER METHODS
-//	------------------------------------------------------
+//    ------------------------------------------------------
+//        WRITER METHODS
+//    ------------------------------------------------------
 //
-//	AqtmWriteBegin() starts up writer.
+//    AqtmWriteBegin() starts up writer.
 
 int32_t AqtmWriteBegin(Afile *paf)
 {
-	AqtmInfo *pqi;
+    AqtmInfo *pqi;
 
-//	Allocate type-specific info
+//    Allocate type-specific info
 
-	paf->pspec = malloc(sizeof(AqtmInfo));
-	pqi = (AqtmInfo *)paf->pspec;
+    paf->pspec = malloc(sizeof(AqtmInfo));
+    pqi = (AqtmInfo *)paf->pspec;
 
-//	Start creating movie
+//    Start creating movie
 
-	QuikCreateMovie(&pqi->qtm, paf->fp);
+    QuikCreateMovie(&pqi->qtm, paf->fp);
 
-//	We don't need no stinkin' rsd!
+//    We don't need no stinkin' rsd!
 
-	paf->writerWantsRsd = false;
+    paf->writerWantsRsd = false;
 
-//	Return
+//    Return
 
-	return(0);
+    return(0);
 }
 
-//	------------------------------------------------------
+//    ------------------------------------------------------
 //
-//	AqtmWriteFrame() writes out next frame.
+//    AqtmWriteFrame() writes out next frame.
 
 int32_t AqtmWriteFrame(Afile *paf, grs_bitmap *pbm, int32_t bmlength, fix time)
 {
-	AqtmInfo *pqi;
+    AqtmInfo *pqi;
 
-	pqi = (AqtmInfo *)paf->pspec;
-	if ((paf->currFrame == 0) && paf->v.pal.numcols)
-		QuikSetPal(&pqi->qtm, paf->v.pal.rgb);
-	QuikAddVideoSample(&pqi->qtm, paf->fp, pbm, time);
+    pqi = (AqtmInfo *)paf->pspec;
+    if ((paf->currFrame == 0) && paf->v.pal.numcols)
+        QuikSetPal(&pqi->qtm, paf->v.pal.rgb);
+    QuikAddVideoSample(&pqi->qtm, paf->fp, pbm, time);
 
-	return(0);
+    return(0);
 }
 
 // -------------------------------------------------------
@@ -233,34 +233,34 @@ int32_t AqtmWriteFrame(Afile *paf, grs_bitmap *pbm, int32_t bmlength, fix time)
 
 int32_t AqtmWriteFramePal(Afile *paf, Apalette *ppal)
 {
-	AqtmInfo *pqi;
-	QTM *pqtm;
+    AqtmInfo *pqi;
+    QTM *pqtm;
 
-	pqi = (AqtmInfo *)paf->pspec;
-	pqtm = &pqi->qtm;
-	if (pqtm->depth16 && pqtm->pVideoTrack && pqtm->pVideoTrack->palette)
-	{
-		memcpy(pqtm->pVideoTrack->palette + (ppal->index * 3),
-		ppal->rgb + (ppal->index * 3), ppal->numcols * 3);
-	}
+    pqi = (AqtmInfo *)paf->pspec;
+    pqtm = &pqi->qtm;
+    if (pqtm->depth16 && pqtm->pVideoTrack && pqtm->pVideoTrack->palette)
+    {
+        memcpy(pqtm->pVideoTrack->palette + (ppal->index * 3),
+        ppal->rgb + (ppal->index * 3), ppal->numcols * 3);
+    }
 
-   return(0);
+    return(0);
 }
 
-//	-------------------------------------------------------
+//    -------------------------------------------------------
 //
-//	AqtmWriteClose() closes output movie
+//    AqtmWriteClose() closes output movie
 
 int32_t AqtmWriteClose(Afile *paf)
 {
-	AqtmInfo *pqi;
+    AqtmInfo *pqi;
 
-	pqi = (AqtmInfo *)paf->pspec;
+    pqi = (AqtmInfo *)paf->pspec;
 
-	QuikWriteMovieAndClose(&pqi->qtm, paf->fp);
-	free(pqi);
-	fclose(paf->fp);
+    QuikWriteMovieAndClose(&pqi->qtm, paf->fp);
+    free(pqi);
+    fclose(paf->fp);
 
-	return(0);
+    return(0);
 }
 

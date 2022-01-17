@@ -72,145 +72,145 @@ Obj  *fr_objslew_list_to_obj(int32_t *flist, Obj *cobj, int32_t count);
 
 int32_t *fr_objslew_obj_to_list(int32_t *flist, Obj *cobj, int32_t count)
 {
-   switch (count-1)
-   {
-   case 5: flist[5]=(cobj->loc.b<<8);
-   case 4: flist[4]=(cobj->loc.p<<8);
-   case 3: flist[3]=(cobj->loc.h<<8);
-   case 2: flist[2]=(cobj->loc.z<<SLOPE_SHIFT_D);
-   default:
-   case 1: flist[1]=cobj->loc.y;
-   case 0: flist[0]=cobj->loc.x;
-      break;
-   }
-   return flist;
+    switch (count-1)
+    {
+    case 5: flist[5]=(cobj->loc.b<<8);
+    case 4: flist[4]=(cobj->loc.p<<8);
+    case 3: flist[3]=(cobj->loc.h<<8);
+    case 2: flist[2]=(cobj->loc.z<<SLOPE_SHIFT_D);
+    default:
+    case 1: flist[1]=cobj->loc.y;
+    case 0: flist[0]=cobj->loc.x;
+        break;
+    }
+    return flist;
 }
 
 Obj  *fr_objslew_list_to_obj(int32_t *flist, Obj *cobj, int32_t count)
 {
-   switch (count-1)
-   {
-   case 5: cobj->loc.b=(flist[5]>>8);
-   case 4: cobj->loc.p=(flist[4]>>8);
-   case 3: cobj->loc.h=(flist[3]>>8);
-   case 2: cobj->loc.z=(flist[2]>>SLOPE_SHIFT_D);
-   default:
-   case 1: cobj->loc.y=flist[1];
-   case 0: cobj->loc.x=flist[0];
-      break;
-   }
-   return cobj;
+    switch (count-1)
+    {
+    case 5: cobj->loc.b=(flist[5]>>8);
+    case 4: cobj->loc.p=(flist[4]>>8);
+    case 3: cobj->loc.h=(flist[3]>>8);
+    case 2: cobj->loc.z=(flist[2]>>SLOPE_SHIFT_D);
+    default:
+    case 1: cobj->loc.y=flist[1];
+    case 0: cobj->loc.x=flist[0];
+        break;
+    }
+    return cobj;
 }
 
 // returns whether the camera moved or not
 bool fr_objslew_go_real_height(Obj *cobj, int32_t *eye)
 {
-   int32_t     leye[3];
-   int32_t      x,y,z;
-   MapElem *o_t;
+    int32_t      leye[3];
+    int32_t        x,y,z;
+    MapElem *o_t;
 
-   if (cobj!=NULL) { eye=leye; fr_objslew_obj_to_list(eye,cobj,3); }
-   x=eye[0]>>MAP_SH; y=eye[1]>>MAP_SH;
-   o_t=MAP_GET_XY(x,y);
-   z=me_height_flr(o_t);
-   z*=MAP_SC>>SLOPE_SHIFT;
-   // someday should teach this about other tile types....
-   if (me_bits_mirror(o_t)!=MAP_FFLAT)
-	   if ((me_tiletype(o_t)>=TILE_SLOPEUP_N)&&(me_tiletype(o_t)<=TILE_SLOPEUP_W))
-	   {
-	      int32_t diff;
-	      switch (me_tiletype(o_t))
-	      {
-	      case TILE_SLOPEUP_N: diff=eye[1]&MAP_MK; break;
-	      case TILE_SLOPEUP_E: diff=eye[0]&MAP_MK; break;
-	      case TILE_SLOPEUP_S: diff=MAP_MK-(eye[1]&MAP_MK); break;
-	      case TILE_SLOPEUP_W: diff=MAP_MK-(eye[0]&MAP_MK); break;
-	      }
-	      z+=(diff*me_param(o_t))>>SLOPE_SHIFT;
-	   }
-   // now add height of current posture...
-   eye[2]=z+PLAYER_HEIGHT/2;             /* this should probably be fixed */
-   if (cobj!=NULL) fr_objslew_list_to_obj(eye,cobj,3);
-   return true;
+    if (cobj!=NULL) { eye=leye; fr_objslew_obj_to_list(eye,cobj,3); }
+    x=eye[0]>>MAP_SH; y=eye[1]>>MAP_SH;
+    o_t=MAP_GET_XY(x,y);
+    z=me_height_flr(o_t);
+    z*=MAP_SC>>SLOPE_SHIFT;
+    // someday should teach this about other tile types....
+    if (me_bits_mirror(o_t)!=MAP_FFLAT)
+        if ((me_tiletype(o_t)>=TILE_SLOPEUP_N)&&(me_tiletype(o_t)<=TILE_SLOPEUP_W))
+        {
+            int32_t diff;
+            switch (me_tiletype(o_t))
+            {
+            case TILE_SLOPEUP_N: diff=eye[1]&MAP_MK; break;
+            case TILE_SLOPEUP_E: diff=eye[0]&MAP_MK; break;
+            case TILE_SLOPEUP_S: diff=MAP_MK-(eye[1]&MAP_MK); break;
+            case TILE_SLOPEUP_W: diff=MAP_MK-(eye[0]&MAP_MK); break;
+            }
+            z+=(diff*me_param(o_t))>>SLOPE_SHIFT;
+        }
+    // now add height of current posture...
+    eye[2]=z+PLAYER_HEIGHT/2;                 /* this should probably be fixed */
+    if (cobj!=NULL) fr_objslew_list_to_obj(eye,cobj,3);
+    return true;
 }
 
 bool fr_objslew_allowed(Obj *cobj, int32_t *eye)
 {
-   int32_t x,y; //z
-   MapElem *o_t;
+    int32_t x,y; //z
+    MapElem *o_t;
 
-   if (cobj!=NULL) fr_objslew_obj_to_list(eye,cobj,3);
-   x=eye[0]>>MAP_SH; y=eye[1]>>MAP_SH;
-   if ((x<0)||(x>=MAP_XSIZE)||(y<0)||(y>=MAP_YSIZE))
-      return false;
-   o_t=MAP_GET_XY(x,y);
-   if (me_tiletype(o_t)==TILE_SOLID)
-      return false;
-   if (cobj!=NULL) fr_objslew_list_to_obj(eye,cobj,3);
-   return true;
+    if (cobj!=NULL) fr_objslew_obj_to_list(eye,cobj,3);
+    x=eye[0]>>MAP_SH; y=eye[1]>>MAP_SH;
+    if ((x<0)||(x>=MAP_XSIZE)||(y<0)||(y>=MAP_YSIZE))
+        return false;
+    o_t=MAP_GET_XY(x,y);
+    if (me_tiletype(o_t)==TILE_SOLID)
+        return false;
+    if (cobj!=NULL) fr_objslew_list_to_obj(eye,cobj,3);
+    return true;
 }
 
 // to physics teleport or not
 // should teach it not to slam all velocities!
 bool fr_objslew_moveone(Obj *cobj, ObjID objnum, int32_t which, int32_t how, bool conform)
 {
-   int32_t eye[4];
-   bool valid_pos=true;
+    int32_t eye[4];
+    bool valid_pos=true;
 
-   if (cobj==NULL) cobj=&objs[objnum];
-   fr_objslew_obj_to_list(eye,cobj,4);
-   switch (which)
-   {
-   case EYE_HEADH: eye_mods[0]+=how*cam_slew_scale[which]; return valid_pos; // break;
-   case EYE_H:     cobj->loc.h+=(how*cam_slew_scale[which])>>8; break;
-   case EYE_RESET: eye_mods[0]=eye_mods[1]=eye_mods[2]=0; return valid_pos; // break;
-   case EYE_B:
-   case EYE_P:     eye_mods[which-3]+=how*cam_slew_scale[which]; return valid_pos; // break;
-   case EYE_Z:     eye[2]+=how<<SLOPE_SHIFT_D; break;
-   case EYE_Y:
-   case EYE_X:
-	   {
-	      fix v[2], tot;
-	      tot=how*cam_slew_scale[which];
-	      fix_sincos((fixang)(eye[3]+(which==EYE_X?0x4000:0)),v+0,v+1);
-	      eye[0]+=fix_int(fix_mul(v[0],tot));
-	      eye[1]+=fix_int(fix_mul(v[1],tot));
-		   if (conform)
-	         if ((valid_pos=fr_objslew_allowed(NULL,eye))==true)
-			      fr_objslew_go_real_height(NULL,eye);
-         break;
-	   }
-   }
-   fr_objslew_list_to_obj(eye,cobj,3);
-   obj_move_to(cobj-objs, &cobj->loc, true);
-   return valid_pos;
+    if (cobj==NULL) cobj=&objs[objnum];
+    fr_objslew_obj_to_list(eye,cobj,4);
+    switch (which)
+    {
+    case EYE_HEADH: eye_mods[0]+=how*cam_slew_scale[which]; return valid_pos; // break;
+    case EYE_H:      cobj->loc.h+=(how*cam_slew_scale[which])>>8; break;
+    case EYE_RESET: eye_mods[0]=eye_mods[1]=eye_mods[2]=0; return valid_pos; // break;
+    case EYE_B:
+    case EYE_P:      eye_mods[which-3]+=how*cam_slew_scale[which]; return valid_pos; // break;
+    case EYE_Z:      eye[2]+=how<<SLOPE_SHIFT_D; break;
+    case EYE_Y:
+    case EYE_X:
+        {
+            fix v[2], tot;
+            tot=how*cam_slew_scale[which];
+            fix_sincos((fixang)(eye[3]+(which==EYE_X?0x4000:0)),v+0,v+1);
+            eye[0]+=fix_int(fix_mul(v[0],tot));
+            eye[1]+=fix_int(fix_mul(v[1],tot));
+            if (conform)
+                if ((valid_pos=fr_objslew_allowed(NULL,eye))==true)
+                    fr_objslew_go_real_height(NULL,eye);
+            break;
+        }
+    }
+    fr_objslew_list_to_obj(eye,cobj,3);
+    obj_move_to(cobj-objs, &cobj->loc, true);
+    return valid_pos;
 }
 
 // to physics teleport or not
 //#pragma disable_message(202)
 bool fr_objslew_setone(int32_t which, int32_t l_new)
 {
-   switch (which)
-   {
-   case EYE_HEADH:
-	      eye_mods[0]=l_new;
-         return true;
-   case EYE_H:
-      break;
-   case EYE_RESET: eye_mods[0]=eye_mods[1]=eye_mods[2]=0; return true;
-   case EYE_P:     eye_mods[1]=l_new; return true;
-   case EYE_B:     eye_mods[2]=l_new; return true;
-   case EYE_Z:
-   case EYE_Y:
-   case EYE_X:     break;
-   }
-   return true;
+    switch (which)
+    {
+    case EYE_HEADH:
+            eye_mods[0]=l_new;
+            return true;
+    case EYE_H:
+        break;
+    case EYE_RESET: eye_mods[0]=eye_mods[1]=eye_mods[2]=0; return true;
+    case EYE_P:      eye_mods[1]=l_new; return true;
+    case EYE_B:      eye_mods[2]=l_new; return true;
+    case EYE_Z:
+    case EYE_Y:
+    case EYE_X:      break;
+    }
+    return true;
 }
 //#pragma enable_message(202)
 
 /* KLC - not used
 bool fr_objslew_tele_to(Obj *, int32_t , int32_t )
 {
-   return true;
+    return true;
 }
 */

@@ -28,38 +28,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define INVISIBLE_FLAG 0x80000000
 
 
-#define EVENT_CB     0x0001UL
-#define EXPOSE_CB    0x0002UL
+#define EVENT_CB      0x0001UL
+#define EXPOSE_CB     0x0002UL
 #define SAVEUNDER_CB 0x0004UL
-#define REPLACE_CB   0x0008UL
+#define REPLACE_CB    0x0008UL
 
-#define AUTOMANAGE_FLAG        0x0100
-#define DISPLAY_ON_CREATION    0x0200
-#define STENCIL_CLIPPING       0x0400
-#define OBSCURATION_CHECK      0x0800
-#define AUTODESTROY_FLAG       0x1000
+#define AUTOMANAGE_FLAG          0x0100
+#define DISPLAY_ON_CREATION     0x0200
+#define STENCIL_CLIPPING         0x0400
+#define OBSCURATION_CHECK        0x0800
+#define AUTODESTROY_FLAG         0x1000
 
-#define UI_LINKED    1
+#define UI_LINKED     1
 
 typedef struct _Region
 {
-	int32_t     abs_x, abs_y;			// upper left in absolute coords
-	LGRect  *r;						// rectangle covered by this region, in coord frame of parent.
-	int32_t     z;						// z-coordinate to determine stacking
-	int32_t 	moving;
-	bool 	(*expose)(struct _Region *reg, LGRect *r);		// function to draw a given rectangle
-	bool 	(*save_under)(struct _Region *reg, LGRect *r);	// function to save under a given rectangle
-	bool 	(*replace)(struct _Region *reg, LGRect *r);
-	uint32_t  	status_flags;
-	int32_t    	device_type;
-	void 	*handler;
-	void 	*cursors;
-	void 	*user_data;				// user-provided region information for callback use
-	int32_t    	event_order;
-	struct 	_Region *sub_region;   	// Head of children regions
-	struct 	_Region *next_region;	// next region at same level
-	struct 	_Region *parent; 		// parent of this region
-    LGRect real_rect;
+    int32_t      abs_x, abs_y;            // upper left in absolute coords
+    LGRect  *r;                        // rectangle covered by this region, in coord frame of parent.
+    int32_t      z;                        // z-coordinate to determine stacking
+    int32_t     moving;
+    bool     (*expose)(struct _Region *reg, LGRect *r);        // function to draw a given rectangle
+    bool     (*save_under)(struct _Region *reg, LGRect *r);    // function to save under a given rectangle
+    bool     (*replace)(struct _Region *reg, LGRect *r);
+    uint32_t      status_flags;
+    int32_t         device_type;
+    void     *handler;
+    void     *cursors;
+    void     *user_data;                // user-provided region information for callback use
+    int32_t         event_order;
+    struct     _Region *sub_region;        // Head of children regions
+    struct     _Region *next_region;    // next region at same level
+    struct     _Region *parent;         // parent of this region
+     LGRect real_rect;
 } LGRegion;
 
 typedef bool (*RectCallback)(LGRegion *reg, LGRect *r);  // all in relative coords
@@ -95,14 +95,14 @@ errtype region_init();
 // will then be inherited by each subregion as they are created.
 
 errtype region_create(LGRegion *parent, LGRegion *ret, LGRect *r, int32_t z, int32_t event_order,
-   uint32_t status, RectCallback expose,
-   RectCallback save_under, RectCallback replace, void *user_data);
+    uint32_t status, RectCallback expose,
+    RectCallback save_under, RectCallback replace, void *user_data);
 
-#define REG_USER_CONTROLLED   EVENT_CB | EXPOSE_CB | SAVEUNDER_CB | REPLACE_CB
-#define REG_NORMAL            EVENT_CB | EXPOSE_CB | SAVEUNDER_CB | REPLACE_CB | AUTOMANAGE_FLAG | DISPLAY_ON_CREATION
-#define REG_AUTOMATIC         AUTOMANAGE_FLAG | EXPOSE_CB | EVENT_CB | DISPLAY_ON_CREATION
-#define REG_TRANSPARENT       EVENT_CB  // Dunno whether this will actually work...
-#define REG_NONEXISTANT       0x0000
+#define REG_USER_CONTROLLED    EVENT_CB | EXPOSE_CB | SAVEUNDER_CB | REPLACE_CB
+#define REG_NORMAL                EVENT_CB | EXPOSE_CB | SAVEUNDER_CB | REPLACE_CB | AUTOMANAGE_FLAG | DISPLAY_ON_CREATION
+#define REG_AUTOMATIC            AUTOMANAGE_FLAG | EXPOSE_CB | EVENT_CB | DISPLAY_ON_CREATION
+#define REG_TRANSPARENT         EVENT_CB  // Dunno whether this will actually work...
+#define REG_NONEXISTANT         0x0000
 
 // Removes a region from the system, along with all it's children.
 // Returns whether or not the operation was successful.  Any newly exposed
@@ -168,19 +168,19 @@ errtype region_set_invisible(LGRegion* reg, bool invis);
 errtype region_get_invisible(LGRegion* reg, bool* invis);
 // determines whether a region is currently invisible.
 
-#define UNOBSCURED            0
-#define PARTIALLY_OBSCURED    1
-#define COMPLETELY_OBSCURED   2
+#define UNOBSCURED                0
+#define PARTIALLY_OBSCURED     1
+#define COMPLETELY_OBSCURED    2
 
-#define TOP_TO_BOTTOM   0
-#define BOTTOM_TO_TOP   1
+#define TOP_TO_BOTTOM    0
+#define BOTTOM_TO_TOP    1
 
 #define RECT_EXPAND_ARGS(pr) (pr)->ul.x,(pr)->ul.y,(pr)->lr.x,(pr)->lr.y
 #define RECT_PRINT_ARGS(pr) RECT_EXPAND_ARGS(pr)
 #define RECT_MULTIPLY(rc,factor) { (rc)->ul.x = (rc)->ul.x * (factor); \
-   (rc)->ul.y = (rc)->ul.y * (factor); (rc)->lr.x = (rc)->lr.x * (factor); (rc)->lr.y = (rc)->lr.y * (factor); }
+    (rc)->ul.y = (rc)->ul.y * (factor); (rc)->lr.x = (rc)->lr.x * (factor); (rc)->lr.y = (rc)->lr.y * (factor); }
 #define POINT_MULTIPLY(pt,factor) (pt).x = (pt).x * factor; (pt).y = (pt).y * (factor)
 #define SCALE_RECT(rc, scale_pt) { (rc)->ul.x = (rc)->ul.x * (scale_pt).x; (rc)->lr.x = (rc)->lr.x * (scale_pt).x ;\
-      (rc)->ul.y = (rc)->ul.y * (scale_pt).y; (rc)->lr.y = (rc)->lr.y * (scale_pt).y; }
+        (rc)->ul.y = (rc)->ul.y * (scale_pt).y; (rc)->lr.y = (rc)->lr.y * (scale_pt).y; }
 
 #endif // __REGION_H

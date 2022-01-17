@@ -44,41 +44,41 @@ typedef void (**ptr_type)();
 
 // Mac device function table
 void (**mac_device_table[])() = {
-				(ptr_type) gr_null,                     //init device
-				(ptr_type) gr_null,                     //close device
-				(ptr_type) mac_set_mode,								//set mode
-        (ptr_type) gr_null,                     //get mode
-        (ptr_type) mac_set_state,								//set state
-        (ptr_type) mac_get_state,								//get state
-        (ptr_type) mac_stat_htrace,
-        (ptr_type) mac_stat_vtrace,
-        (ptr_type) mac_set_pal,									//set palette
-        (ptr_type) mac_get_pal,									//get palette
-        (ptr_type) gr_null,											//set width
-        (ptr_type) gr_null,                     //get width
-        (ptr_type) mac_set_focus,								//set focus
-        (ptr_type) mac_get_focus,								//get focus
-        (ptr_type) gr_null,                     //canvas table
-        (ptr_type) gr_null};                    //span table
+                (ptr_type) gr_null,                            //init device
+                (ptr_type) gr_null,                            //close device
+                (ptr_type) mac_set_mode,                                //set mode
+          (ptr_type) gr_null,                            //get mode
+          (ptr_type) mac_set_state,                                //set state
+          (ptr_type) mac_get_state,                                //get state
+          (ptr_type) mac_stat_htrace,
+          (ptr_type) mac_stat_vtrace,
+          (ptr_type) mac_set_pal,                                    //set palette
+          (ptr_type) mac_get_pal,                                    //get palette
+          (ptr_type) gr_null,                                            //set width
+          (ptr_type) gr_null,                            //get width
+          (ptr_type) mac_set_focus,                                //set focus
+          (ptr_type) mac_get_focus,                                //get focus
+          (ptr_type) gr_null,                            //canvas table
+          (ptr_type) gr_null};                          //span table
 
 
 //========================================================================
 // Mac specific device routines
 //========================================================================
 
-extern Ptr		gScreenAddress;
+extern Ptr        gScreenAddress;
 
 //------------------------------------------------------------------------
 // init the graphics mode, set up function tables and screen base address
 //
 void mac_set_mode(void)
  {
- 	grd_mode_cap.vbase = (uint8_t *) gScreenAddress;
- 	grd_valloc_mode = 0;
+     grd_mode_cap.vbase = (uint8_t *) gScreenAddress;
+     grd_valloc_mode = 0;
 
- 	grd_canvas_table_list[BMT_DEVICE] = flat8_canvas_table;
- 	grd_function_table_list[BMT_DEVICE] = (grt_function_table *) flat8_function_table;
- 	grd_uline_fill_table_list[BMT_DEVICE] = (grt_uline_fill_table *) flat8_uline_fill_table;
+     grd_canvas_table_list[BMT_DEVICE] = flat8_canvas_table;
+     grd_function_table_list[BMT_DEVICE] = (grt_function_table *) flat8_function_table;
+     grd_uline_fill_table_list[BMT_DEVICE] = (grt_uline_fill_table *) flat8_uline_fill_table;
  }
 
 
@@ -87,47 +87,47 @@ void mac_set_mode(void)
 // and ResetCTSeed).
 void mac_set_pal (int32_t start, int32_t n, uint8_t *pal_data)
  {
- 	if (n)	// ignore if count == 0
- 	 {
- 	 	int16_t			i;
- 	 	ColorSpec	*cSpec;
+     if (n)    // ignore if count == 0
+      {
+          int16_t            i;
+          ColorSpec    *cSpec;
 
- 	 	// if we're starting at 0, skip it, we can't change that one
- 	 	if (!start) {start++; n--; pal_data+=3;}
- 	 	if (start+n>=255) n--; // can't set last entry either
+          // if we're starting at 0, skip it, we can't change that one
+          if (!start) {start++; n--; pal_data+=3;}
+          if (start+n>=255) n--; // can't set last entry either
 
- 	 	cSpec = &(*gMainColorHand)->ctTable[start];
- 	 	for (i=start; i<start+n; i++)
- 	 	 {
- 	 	 	cSpec->rgb.red = (uint16_t) (*(pal_data++)) << 8;
- 	 	 	cSpec->rgb.green = (uint16_t) (*(pal_data++)) << 8;
- 	 	 	cSpec->rgb.blue = (uint16_t) (*(pal_data++)) << 8;
- 	 	 	cSpec++;
- 	 	 }
+          cSpec = &(*gMainColorHand)->ctTable[start];
+          for (i=start; i<start+n; i++)
+           {
+               cSpec->rgb.red = (uint16_t) (*(pal_data++)) << 8;
+               cSpec->rgb.green = (uint16_t) (*(pal_data++)) << 8;
+               cSpec->rgb.blue = (uint16_t) (*(pal_data++)) << 8;
+               cSpec++;
+           }
 
-		SetEntries(start, n, &(**(gMainColorHand)).ctTable[start]);
-		ResetCTSeed();
- 	 }
+        SetEntries(start, n, &(**(gMainColorHand)).ctTable[start]);
+        ResetCTSeed();
+      }
  }
 
 //------------------------------------------------------------------------
 // get the current color palette (copy entries from gMainColorHand)
 void mac_get_pal (int32_t start, int32_t n, uint8_t *pal_data)
  {
- 	if (n)	// ignore if count == 0
- 	 {
- 	 	int16_t			i;
- 	 	ColorSpec	*cSpec;
+     if (n)    // ignore if count == 0
+      {
+          int16_t            i;
+          ColorSpec    *cSpec;
 
- 	 	cSpec = &(*gMainColorHand)->ctTable[start];
- 	 	for (i=start; i<start+n; i++)
- 	 	 {
- 	 	 	*(pal_data++) = cSpec->rgb.red >> 8;
- 	 	 	*(pal_data++) = cSpec->rgb.green >> 8;
- 	 	 	*(pal_data++) = cSpec->rgb.blue >> 8;
- 	 	 	cSpec++;
- 	 	 }
-	 }
+          cSpec = &(*gMainColorHand)->ctTable[start];
+          for (i=start; i<start+n; i++)
+           {
+               *(pal_data++) = cSpec->rgb.red >> 8;
+               *(pal_data++) = cSpec->rgb.green >> 8;
+               *(pal_data++) = cSpec->rgb.blue >> 8;
+               cSpec++;
+           }
+     }
  }
 
 
@@ -138,13 +138,13 @@ void mac_get_pal (int32_t start, int32_t n, uint8_t *pal_data)
 //------------------------------------------------------------------------
 int32_t mac_set_state(void *buf,int32_t clear)
  {
- 	return(0);
+     return(0);
  }
 
 //------------------------------------------------------------------------
 int32_t mac_get_state(void *buf,int32_t flags)
  {
- 	return(0);
+     return(0);
  }
 
 // set and get focus don't currently do anything, since its not apparent

@@ -99,40 +99,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "plytyp.h"
 
 typedef struct {
-   fix x,y,u,v,i;
-   union {fix dx,dy;};
-   fix du,dv,di;
+    fix x,y,u,v,i;
+    union {fix dx,dy;};
+    fix du,dv,di;
 } grs_tmap_edge;
 
 typedef struct {
-   int32_t n;                     /* number of lines */
-   union {                    /* destination pointer/scanline coord */
-      uint8_t *d;
-      int32_t x,y;
-   };
-   union {
-      grs_bitmap bm;
-      struct {
-         uint8_t *s;                                        /* bitmap bits pointer */
-         uint8_t bm_type,bm_align;
-         int16_t bm_flags,bm_w,bm_h,bm_row;                 /* bitmap width & height */
-         uint8_t wlog;
-         union {uint8_t hlog,loop;};
-      };
-   };
-   fix w;
-   /* edge data */
-   union {grs_tmap_edge left,top;};
-   union {grs_tmap_edge right,bot;};
-   fix dw;
-   uint32_t u_mask;
-   union {uint32_t v_mask,mask;};
-   uint8_t *clut;               /* color lookup table */
-   int32_t *vtab;                /* for non power of 2 widths */
-   void (*scanline_func)();   /* function for individual scanline */
-   void (*loop_func)();       /* actually, chunk function */
-   union {void (*left_edge_func)(), (*top_edge_func)();};
-   union {void (*right_edge_func)(),(*bot_edge_func)();};
+    int32_t n;                            /* number of lines */
+    union {                          /* destination pointer/scanline coord */
+        uint8_t *d;
+        int32_t x,y;
+    };
+    union {
+        grs_bitmap bm;
+        struct {
+            uint8_t *s;                                                     /* bitmap bits pointer */
+            uint8_t bm_type,bm_align;
+            int16_t bm_flags,bm_w,bm_h,bm_row;                      /* bitmap width & height */
+            uint8_t wlog;
+            union {uint8_t hlog,loop;};
+        };
+    };
+    fix w;
+    /* edge data */
+    union {grs_tmap_edge left,top;};
+    union {grs_tmap_edge right,bot;};
+    fix dw;
+    uint32_t u_mask;
+    union {uint32_t v_mask,mask;};
+    uint8_t *clut;                    /* color lookup table */
+    int32_t *vtab;                     /* for non power of 2 widths */
+    void (*scanline_func)();    /* function for individual scanline */
+    void (*loop_func)();         /* actually, chunk function */
+    union {void (*left_edge_func)(), (*top_edge_func)();};
+    union {void (*right_edge_func)(),(*bot_edge_func)();};
 } grs_tmap_loop_info;
 
 #define TMS_RIGHT 0

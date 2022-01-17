@@ -32,23 +32,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objects.h"
 
 // Defines
-#define ENTRY_TRIGGER_TYPE              0
-#define NULL_TRIGGER_TYPE               1
-#define FLOOR_TRIGGER_TYPE              2
-#define PLAYER_DEATH_TRIGGER_TYPE       3
-#define DEATHWATCH_TRIGGER_TYPE         4
-#define AREA_ENTRY_TRIGGER_TYPE         5
-#define AREA_CONTINUOUS_TRIGGER_TYPE    6
+#define ENTRY_TRIGGER_TYPE                  0
+#define NULL_TRIGGER_TYPE                    1
+#define FLOOR_TRIGGER_TYPE                  2
+#define PLAYER_DEATH_TRIGGER_TYPE         3
+#define DEATHWATCH_TRIGGER_TYPE            4
+#define AREA_ENTRY_TRIGGER_TYPE            5
+#define AREA_CONTINUOUS_TRIGGER_TYPE     6
 
 
 
 // Typedefs
 typedef struct
 {
-   uint16_t timestamp;
-   uint16_t type;
-   ObjID target_id;
-   ObjID source_id;
+    uint16_t timestamp;
+    uint16_t type;
+    ObjID target_id;
+    ObjID source_id;
 } TrapSchedEvent;
 
 #define HEIGHT_STEP_TIME 3
@@ -59,30 +59,30 @@ typedef struct
 
 typedef struct
 {
-   uint16_t timestamp;
-   uint16_t type;
-   int8_t semaphor;
-   int8_t key;
-   int8_t steps_remaining;
-   int8_t sfx_code;
+    uint16_t timestamp;
+    uint16_t type;
+    int8_t semaphor;
+    int8_t key;
+    int8_t steps_remaining;
+    int8_t sfx_code;
 } HeightSchedEvent;
 
 // sfx_codes --
 // 0x1 for no terrain sound
 
 typedef struct {
-   uint8_t x;
-   uint8_t y;
-   uint8_t floor:1;
-   uint8_t key:7;
-   int8_t inuse;
+    uint8_t x;
+    uint8_t y;
+    uint8_t floor:1;
+    uint8_t key:7;
+    int8_t inuse;
 } height_semaphor;
 
 typedef struct _EmailSchedEvent
 {
-   uint16_t timestamp;
-   uint16_t type;
-   int16_t datamunge;
+    uint16_t timestamp;
+    uint16_t type;
+    int16_t datamunge;
 } EmailSchedEvent;
 
 // Prototypes

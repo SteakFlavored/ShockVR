@@ -223,77 +223,77 @@ extern void flat8_tluc8_upoly(int32_t c, int32_t n,grs_vertex **vpl);
 extern void flat8_tluc8_uspoly(int32_t c, int32_t n,grs_vertex **vpl);
 
 extern void flat8_flat8_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void flat8_lit_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void flat8_clut_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern void flat8_flat8_solid_lin_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
 
 extern void flat8_flat8_wall_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void flat8_flat8_lit_wall_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void flat8_flat8_clut_wall_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 
 extern void flat8_flat8_floor_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void flat8_flat8_lit_floor_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern void flat8_flat8_clut_floor_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 
 extern int32_t flat8_flat8_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t flat8_flat8_lit_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
 extern int32_t flat8_flat8_clut_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
 extern int32_t flat8_flat8_solid_per_umap
-   (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
+    (grs_bitmap *bm, int32_t n, grs_vertex **vpl, int32_t c);
 
 extern void flat8_lin_lit_utmap (int32_t n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
 
 extern void flat8_scale_ubitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 extern int32_t flat8_scale_bitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 
 
 extern void flat8_mono_scale_ubitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 extern int32_t flat8_mono_scale_bitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 
 extern void flat8_rsd8_scale_ubitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 extern int32_t flat8_rsd8_scale_bitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 
 extern void flat8_flat8_clut_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 
 extern void flat8_rsd8_clut_scale_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 extern int32_t flat8_rsd8_clut_scale_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
 
 extern void flat8_rsd8_scale_solid_ubitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, int32_t c);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, int32_t c);
 extern int32_t flat8_rsd8_scale_solid_bitmap
-   (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, int32_t c);
+    (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, int32_t c);
 
 extern void flat8_tluc8_scale_ubitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 extern int32_t flat8_tluc8_scale_bitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 
 extern void flat8_tluc8_clut_scale_ubitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h, uint8_t *cl);
+    int16_t w, int16_t h, uint8_t *cl);
 extern int32_t flat8_tluc8_clut_scale_bitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h, uint8_t *cl);
+    int16_t w, int16_t h, uint8_t *cl);
 
 // internal scaler/mapper prototypes
 int32_t gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **vert);
@@ -331,7 +331,7 @@ extern void flat8_clut_hflip_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y
 /* device-specific routines. */
 extern int16_t flat8_calc_row (int16_t w);
 extern grs_bitmap *flat8_sub_bitmap (grs_bitmap *bm, int16_t x, int16_t y,
-   int16_t w, int16_t h);
+    int16_t w, int16_t h);
 
 /* bitmap doubling routines. */
 extern void flat8_flat8_h_double_ubitmap (grs_bitmap *bm);

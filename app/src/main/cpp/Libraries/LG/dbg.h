@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		DBG.H		Error/debug system
-//		Rex E. Bradford (REX)
+//        DBG.H        Error/debug system
+//        Rex E. Bradford (REX)
 /*
 * $Header: r:/prj/lib/src/lg/rcs/dbg.h 1.24 1994/08/12 17:03:24 jak Exp $
 * $Log: dbg.h $
@@ -126,16 +126,16 @@ void DoWarningMsg(int8_t *msg);
 #include <stdio.h>
 #include "types.h"
 
-//	The 4 levels of reporting
+//    The 4 levels of reporting
 
-#define DBG_ERROR 3			// report & go to DOS
-#define DBG_WARNUSER 2		// alert user somehow
-#define DBG_WARNING 1		// warn developer
-#define DBG_SPEW 0			// be happy
+#define DBG_ERROR 3            // report & go to DOS
+#define DBG_WARNUSER 2        // alert user somehow
+#define DBG_WARNING 1        // warn developer
+#define DBG_SPEW 0            // be happy
 
-//	'sources' combine a bank (0-31 in high 5 bits) and one or many of 27 lower
-//	'slot' bits.  You can make your own sources with DBGSRC() macro.
-//	The bank portion of a source can be extracted using DBGBANK().
+//    'sources' combine a bank (0-31 in high 5 bits) and one or many of 27 lower
+//    'slot' bits.  You can make your own sources with DBGSRC() macro.
+//    The bank portion of a source can be extracted using DBGBANK().
 
 #define NUM_DBG_BANKS 32
 #define NUM_DBG_SLOTS 27
@@ -144,11 +144,11 @@ void DoWarningMsg(int8_t *msg);
 #define DBGSRC(bank,bits) (((bank)<<NUM_DBG_SLOTS)|((bits)&DBG_SLOT_MASK))
 #define DBGBANK(src) ((uint32_t)(src)>>NUM_DBG_SLOTS)
 
-//	If DBG_ON is defined, debug system is defined, else macros
-//	are used to compile calls and macros out
+//    If DBG_ON is defined, debug system is defined, else macros
+//    are used to compile calls and macros out
 
-//	The DbgBank structure maintains most information about the
-//	run-time debugging desires of banks & slots.
+//    The DbgBank structure maintains most information about the
+//    run-time debugging desires of banks & slots.
 
 #define MAX_BANKNAMELEN 8
 #define MAX_SLOTNAMELEN 8
@@ -160,19 +160,19 @@ void DoWarningMsg(int8_t *msg);
 #define DG_NUM 4
 
 typedef struct {
-	uint32_t gate[DG_NUM];		// gates for: dbg, spew, warn, mono
-	uint8_t file_index[NUM_DBG_SLOTS];		// which log file for each slot
-	int8_t bank_name[MAX_BANKNAMELEN+1];	// bank's name
-	int8_t **ppBankSlotNames;	// ptr to bank slot names
-	int8_t pad[8];				// padding
-} DbgBank;		// 64 bytes each
+    uint32_t gate[DG_NUM];        // gates for: dbg, spew, warn, mono
+    uint8_t file_index[NUM_DBG_SLOTS];        // which log file for each slot
+    int8_t bank_name[MAX_BANKNAMELEN+1];    // bank's name
+    int8_t **ppBankSlotNames;    // ptr to bank slot names
+    int8_t pad[8];                // padding
+} DbgBank;        // 64 bytes each
 
 #ifdef DBG_ON
 // this is here for C, and in ASM we have it hand coded into
 // the dbgmacro.inc, because h2inc is so cool
-extern DbgBank dbgBank[NUM_DBG_BANKS];		// 2K total bank storage
+extern DbgBank dbgBank[NUM_DBG_BANKS];        // 2K total bank storage
 
-//	These macros set & get gates.
+//    These macros set & get gates.
 
 #define DbgSetDbg(bank,slots) dbgBank[bank].gate[DG_DBG] = ((slots) & DBG_SLOT_MASK)
 #define DbgGetDbg(bank) (dbgBank[bank].gate[DG_DBG])
@@ -181,8 +181,8 @@ extern DbgBank dbgBank[NUM_DBG_BANKS];		// 2K total bank storage
 #define DbgSetFunc(bank,slots) dbgBank[bank].gate[DG_FUNC] = ((slots) & DBG_SLOT_MASK)
 #define DbgGetFunc(bank) (dbgBank[bank].gate[DG_FUNC])
 
-//	Each bank can be given a name, and an array of slot names also.
-//	This is used by human-operated config routines.
+//    Each bank can be given a name, and an array of slot names also.
+//    This is used by human-operated config routines.
 
 #define DbgSetBankName(bank,name) strncpy(dbgBank[bank].bank_name,name,MAX_BANKNAMELEN);
 void DbgSetSlotNames(int32_t bank, int8_t **namelist);
@@ -190,16 +190,16 @@ void DbgSetSlotName(int32_t bank, int32_t slot, int8_t *name);
 int32_t DbgFindBankName(int8_t *name);
 int32_t DbgFindSlotName(int32_t bank, int8_t *name);
 
-//	Debug info can be directed to one of several files.  This data structure
-//	keeps track of the debug files which are in use.  All logfiles must be
-//	in the same directory.
+//    Debug info can be directed to one of several files.  This data structure
+//    keeps track of the debug files which are in use.  All logfiles must be
+//    in the same directory.
 
 #define MAX_DBG_LOGFILENAME 12
 
 typedef struct {
-	int8_t name[MAX_DBG_LOGFILENAME+1];
-	FILE *fp;
-	int16_t refCount;
+    int8_t name[MAX_DBG_LOGFILENAME+1];
+    FILE *fp;
+    int16_t refCount;
 } DbgLogFile;
 
 #define NUM_DBG_LOGFILES 16
@@ -207,8 +207,8 @@ extern DbgLogFile dbgLogFile[NUM_DBG_LOGFILES];
 extern int8_t dbgLogPath[128];
 extern int32_t errErrCode;
 
-//	The DBG() macro is used to conditionally compile debugging code,
-//	based on DBG_ON, which we checked at the top of the file.
+//    The DBG() macro is used to conditionally compile debugging code,
+//    based on DBG_ON, which we checked at the top of the file.
 #define DBG(src,stuff) if ((dbgBank[DBGBANK(src)].gate[DG_DBG]&(src))==((src)&DBG_SLOT_MASK)) stuff
 
 // This macro is like DBG(), in that it conditionally compiles code, except
@@ -221,13 +221,13 @@ extern int32_t errErrCode;
 #define DBGS(src,stuff)
 #endif
 
-//	The important macros:
+//    The important macros:
 //
-//		Error(int8_t *msg, ...)		  - Fatal error
-//		WarnUser(int8_t *msg, ...)	  - Warn User
-//		Warning(int8_t *msg, ...)		  - Warn developer
-//		Assert(expr, int8_t *msg, ...) - Test expression, warn if false
-//		Spew(flags, int8_t *msg, ...)  - Spew message
+//        Error(int8_t *msg, ...)          - Fatal error
+//        WarnUser(int8_t *msg, ...)      - Warn User
+//        Warning(int8_t *msg, ...)          - Warn developer
+//        Assert(expr, int8_t *msg, ...) - Test expression, warn if false
+//        Spew(flags, int8_t *msg, ...)  - Spew message
 
 #define Error DbgReportError
 #define WarnUser DbgReportWarnUser
@@ -236,8 +236,8 @@ extern int32_t errErrCode;
 #define Warning(msg) DbgReportWarning msg
 #define Assert(expr,msg) if (!(expr)) DbgReportWarning msg ; else
 #else
-#define Warning(msg)          do {} while (0)
-#define Assert(expr,msg)      do {} while (0)
+#define Warning(msg)             do {} while (0)
+#define Assert(expr,msg)        do {} while (0)
 #endif
 
 #define Assrt(expr) Assert(expr,("Assert in %s at line %d in %s\n", #expr, __LINE__, __FILE__))
@@ -245,11 +245,11 @@ extern int32_t errErrCode;
 #ifdef SPEW_ON
 #define Spew(src,msg) do { if (DbgSpewTest(src)) DbgDoSpew msg; } while (0)
 #else
-#define Spew(src,msg)         do {} while (0)
+#define Spew(src,msg)            do {} while (0)
 #endif
 
-//	These are prototypes for the 4 reporting routines, which should be
-//	called via the macros given above, and not directly.
+//    These are prototypes for the 4 reporting routines, which should be
+//    called via the macros given above, and not directly.
 
 #ifdef __cplusplus
 extern "C" {
@@ -261,30 +261,30 @@ void DbgReportWarning(int8_t *msg, ...);
 bool DbgSpewTest(uint32_t src);
 void DbgDoSpew(int8_t *msg, ...);
 
-//	Set debug config screen to use function for getting keys
+//    Set debug config screen to use function for getting keys
 
 extern int32_t (*f_getch)();
 #define DbgInstallGetch(f) (f_getch = (f))
 
-//	All logfiles are written to the same directory, which defaults to
-//	the current directory, but can be changed.
+//    All logfiles are written to the same directory, which defaults to
+//    the current directory, but can be changed.
 
 void DbgSetLogPath(int8_t *path);
 
-//	This routine sets the log file associated with a source.
-//	Opening, writing, and closing of the log file is automatic, as
-//	is sharing of files with the same name.
+//    This routine sets the log file associated with a source.
+//    Opening, writing, and closing of the log file is automatic, as
+//    is sharing of files with the same name.
 
 bool DbgSetLogFile(uint32_t src, int8_t *name);
 
-//	These are really internal things
+//    These are really internal things
 
 bool DbgOpenLogFile(int32_t index);
 void DbgCloseLogFiles();
 void DbgHandle(int32_t reportType, uint32_t src, int8_t *buff);
 extern int8_t *dbgTags[];
 
-//	Set a routine to be called to present reports.
+//    Set a routine to be called to present reports.
 
 // C++ doesn't like the following:
 //
@@ -296,13 +296,13 @@ extern int8_t *dbgTags[];
 typedef void ReportRoutine(int32_t reportType, int8_t *msg);
 void DbgSetReportRoutine(ReportRoutine *);
 
-//	Allows user to configure debug system
+//    Allows user to configure debug system
 
-void DbgInit();							// auto-loads settings from "debug.dbg"
-void DbgMonoConfig();					// let operator config on mono screen
-bool DbgAddConfigPath(int8_t *path);	// add path for finding config files
-int32_t DbgLoadConfig(int8_t *fname);		// load config file
-int32_t DbgSaveConfig(int8_t *fname);		// save config file
+void DbgInit();                            // auto-loads settings from "debug.dbg"
+void DbgMonoConfig();                    // let operator config on mono screen
+bool DbgAddConfigPath(int8_t *path);    // add path for finding config files
+int32_t DbgLoadConfig(int8_t *fname);        // load config file
+int32_t DbgSaveConfig(int8_t *fname);        // save config file
 
 #ifdef __cplusplus
 }
@@ -312,8 +312,8 @@ int32_t DbgSaveConfig(int8_t *fname);		// save config file
 // alone and lonely in the middle of the file
 #else
 
-//	If DBG_ON not defined, most macros and functions are macro'ed to
-//	nothing or (0).  A few functions remain
+//    If DBG_ON not defined, most macros and functions are macro'ed to
+//    nothing or (0).  A few functions remain
 
 #define DbgSetDbg(bank,slots)
 #define DbgGetDbg(bank) (0)
@@ -353,15 +353,15 @@ void DbgSetReportRoutine(ReportRoutine *);
 #endif
 
 // look ma, an important thing to do
-#ifdef _H2INC						//include assembly macros
-#include "dbgmacro.h"		  //dummy file; converts to 'include dbgmacro.inc'
+#ifdef _H2INC                        //include assembly macros
+#include "dbgmacro.h"          //dummy file; converts to 'include dbgmacro.inc'
 #endif
 
-//	These routines are in exit.c, and handle exit functions.
+//    These routines are in exit.c, and handle exit functions.
 
-void Exit(int32_t errcode, int8_t *msg);	// shut down with msg
-#define AtExit(func) atexit(func);	// add func to atexit list
-void PrintExitMsg();						// prints exit message
+void Exit(int32_t errcode, int8_t *msg);    // shut down with msg
+#define AtExit(func) atexit(func);    // add func to atexit list
+void PrintExitMsg();                        // prints exit message
 
 #define SetExitMsg(str) pExitMsg=str
 extern int8_t *pExitMsg;

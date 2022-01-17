@@ -32,11 +32,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int8_t pal_fade_id;
 int8_t cyc_id0, cyc_id1, cyc_id2, cyc_id3, cyc_id4, cyc_id5;
 
-#define FADE_DOWN_DELAY   3
-#define FADE_DOWN_STEPS   30
+#define FADE_DOWN_DELAY    3
+#define FADE_DOWN_STEPS    30
 
-#define FADE_UP_DELAY   0
-#define FADE_UP_STEPS   30
+#define FADE_UP_DELAY    0
+#define FADE_UP_STEPS    30
 
 // Internal Prototypes
 void finish_pal_effect(int8_t id);
@@ -46,67 +46,67 @@ int8_t palfx_start_fade_up(uint8_t *new_pal);
 //-------------------------------------
 void finish_pal_effect(int8_t id)
 {
-   while (palette_query_effect(id) == ACTIVE)
-      palette_advance_effect(id, 1);
+    while (palette_query_effect(id) == ACTIVE)
+        palette_advance_effect(id, 1);
 }
 
 
 //-------------------------------------
 void palfx_fade_down()
 {
-   int8_t id;
-   static uint8_t blackp[768];
-   static uint8_t savep[768];
+    int8_t id;
+    static uint8_t blackp[768];
+    static uint8_t savep[768];
 
-   memset(blackp, 0, sizeof(blackp));
-   gr_get_pal(0, 256, savep);
+    memset(blackp, 0, sizeof(blackp));
+    gr_get_pal(0, 256, savep);
 
-   if ((num_installed_shifts >= 1) &&
-       (pal_fade_id >= 0) &&
-       (palette_query_effect(pal_fade_id) == ACTIVE))
-      { palette_remove_effect(pal_fade_id); }
+    if ((num_installed_shifts >= 1) &&
+         (pal_fade_id >= 0) &&
+         (palette_query_effect(pal_fade_id) == ACTIVE))
+        { palette_remove_effect(pal_fade_id); }
 
-   id = palette_install_fade(REAL_TIME, 0, 255, FADE_DOWN_DELAY, FADE_DOWN_STEPS, savep, blackp);
-   finish_pal_effect(id);
+    id = palette_install_fade(REAL_TIME, 0, 255, FADE_DOWN_DELAY, FADE_DOWN_STEPS, savep, blackp);
+    finish_pal_effect(id);
 
-   return;
+    return;
 }
 
 
 //-------------------------------------
 int8_t palfx_start_fade_up(uint8_t *new_pal)
 {
-   static uint8_t blackp[768];
-   int8_t id;
+    static uint8_t blackp[768];
+    int8_t id;
 
-   memset(blackp, 0, sizeof(blackp));
-   id = palette_install_fade(REAL_TIME, 0, 255, FADE_UP_DELAY, FADE_UP_STEPS, blackp, new_pal);
-   palette_advance_effect(id, 1);
-   return(id);
+    memset(blackp, 0, sizeof(blackp));
+    id = palette_install_fade(REAL_TIME, 0, 255, FADE_UP_DELAY, FADE_UP_STEPS, blackp, new_pal);
+    palette_advance_effect(id, 1);
+    return(id);
 }
 
 
 //-------------------------------------
 void palfx_fade_up(bool do_now)
 {
-   // ppall is defined as the main shadow palette in init.c
-   pal_fade_id=palfx_start_fade_up(ppall);
+    // ppall is defined as the main shadow palette in init.c
+    pal_fade_id=palfx_start_fade_up(ppall);
 
-   if (do_now)
-      finish_pal_effect(pal_fade_id);
+    if (do_now)
+        finish_pal_effect(pal_fade_id);
 }
 
 
 //-------------------------------------
 void palfx_init()
 {
-   palette_initialize(8);     // 1 time unit per frame, 8 effects max
-   palette_set_rate(1);
+    palette_initialize(8);      // 1 time unit per frame, 8 effects max
+    palette_set_rate(1);
 
-   cyc_id0 = palette_install_cbank(REAL_TIME, 0x03, 0x07, 68);	// 80
-   cyc_id1 = palette_install_cbank(REAL_TIME, 0x0b, 0x0f, 40);	// 50
-   cyc_id2 = palette_install_cbank(REAL_TIME, 0x10, 0x14, 20);	// 25
-   cyc_id3 = palette_install_cbank(REAL_TIME, 0x15, 0x17, 108);	// 125
-   cyc_id4 = palette_install_cbank(REAL_TIME, 0x18, 0x1a, 84);	// 100
-   cyc_id5 = palette_install_cbank(REAL_TIME, 0x1b, 0x1f, 64);	// 75
+    cyc_id0 = palette_install_cbank(REAL_TIME, 0x03, 0x07, 68);    // 80
+    cyc_id1 = palette_install_cbank(REAL_TIME, 0x0b, 0x0f, 40);    // 50
+    cyc_id2 = palette_install_cbank(REAL_TIME, 0x10, 0x14, 20);    // 25
+    cyc_id3 = palette_install_cbank(REAL_TIME, 0x15, 0x17, 108);    // 125
+    cyc_id4 = palette_install_cbank(REAL_TIME, 0x18, 0x1a, 84);    // 100
+    cyc_id5 = palette_install_cbank(REAL_TIME, 0x1b, 0x1f, 64);    // 75
 }

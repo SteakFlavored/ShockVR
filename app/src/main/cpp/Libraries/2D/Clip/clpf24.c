@@ -44,42 +44,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int32_t gr_clip_flat24_bitmap (grs_bitmap *bm, int16_t *x, int16_t *y)
 {
-   int32_t code = CLIP_NONE;
-   int32_t extra;
-   int32_t l, r, t, b;
+    int32_t code = CLIP_NONE;
+    int32_t extra;
+    int32_t l, r, t, b;
 
-   l=*x; r=l+bm->w; t=*y; b=t+bm->h;
-   if (l>grd_clip.right || r<grd_clip.left ||
-       t>grd_clip.bot || b<grd_clip.top)
-      /* bitmap is completely clipped. */
-      return CLIP_ALL;
+    l=*x; r=l+bm->w; t=*y; b=t+bm->h;
+    if (l>grd_clip.right || r<grd_clip.left ||
+         t>grd_clip.bot || b<grd_clip.top)
+        /* bitmap is completely clipped. */
+        return CLIP_ALL;
 
-   if (l < grd_clip.left) {
-      /* bitmap is off the left edge of the window. */
-      extra = grd_clip.left-l;
-      bm->w -= extra;
-      bm->bits += 3*extra;
-      *x = grd_clip.left;
-      code |= CLIP_LEFT;
-   }
-   if (r > grd_clip.right) {
-      /* off the right edge of the window. */
-      bm->w -= r-grd_clip.right;
-      code |= CLIP_RIGHT;
-   }
-   if (t < grd_clip.top) {
-      /* off the top of the window. */
-      extra = grd_clip.top-t;
-      bm->h -= extra;
-      bm->bits += bm->row*extra;
-      *y = grd_clip.top;
-      code |= CLIP_TOP;
-   }
-   if (b > grd_clip.bot) {
-      /* off the bottom of the window. */
-      bm->h -= b-grd_clip.bot;
-      code |= CLIP_BOT;
-   }
+    if (l < grd_clip.left) {
+        /* bitmap is off the left edge of the window. */
+        extra = grd_clip.left-l;
+        bm->w -= extra;
+        bm->bits += 3*extra;
+        *x = grd_clip.left;
+        code |= CLIP_LEFT;
+    }
+    if (r > grd_clip.right) {
+        /* off the right edge of the window. */
+        bm->w -= r-grd_clip.right;
+        code |= CLIP_RIGHT;
+    }
+    if (t < grd_clip.top) {
+        /* off the top of the window. */
+        extra = grd_clip.top-t;
+        bm->h -= extra;
+        bm->bits += bm->row*extra;
+        *y = grd_clip.top;
+        code |= CLIP_TOP;
+    }
+    if (b > grd_clip.bot) {
+        /* off the bottom of the window. */
+        bm->h -= b-grd_clip.bot;
+        code |= CLIP_BOT;
+    }
 
-   return code;
+    return code;
 }

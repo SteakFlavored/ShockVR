@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		Rect.H		Rectangle routines header file
-//		Rex E. Bradford (REX)
+//        Rect.H        Rectangle routines header file
+//        Rex E. Bradford (REX)
 /*
 * $Header: n:/project/lib/src/dstruct/RCS/rect.h 1.5 1994/04/05 11:02:15 rex Exp $
 * $Log: rect.h $
@@ -49,25 +49,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef RECT_H
 #define RECT_H
 
-//	Here are the Point and LGRect structs
+//    Here are the Point and LGRect structs
 
 typedef struct {
-	int16_t x;
-	int16_t y;
+    int16_t x;
+    int16_t y;
 } LGPoint;
 
 typedef struct {
-	LGPoint ul;
-	LGPoint lr;
+    LGPoint ul;
+    LGPoint lr;
 } LGRect;
 
-//	Point macros
+//    Point macros
 
 #define PointsEqual(p1,p2) (*(int32_t*)(&(p1)) == *(int32_t*)(&(p2)))
 #define PointSetNull(p) do {(p).x = -1; (p).y = -1;} while (0);
 #define PointCheckNull(p) ((p).x == -1 && (p).y == -1)
 
-//	LGRect macros: get width & height
+//    LGRect macros: get width & height
 
 #define RectWidth(pr) ((pr)->lr.x - (pr)->ul.x)
 #define RectHeight(pr) ((pr)->lr.y - (pr)->ul.y)
@@ -75,56 +75,56 @@ typedef struct {
 // Unwrap macros
 
 #define RECT_UNWRAP(pr)  ((pr)->ul.x),((pr)->ul.y),((pr)->lr.x),((pr)->lr.y)
-#define PT_UNWRAP(pt)    ((pt).x),((pt).y)
+#define PT_UNWRAP(pt)     ((pt).x),((pt).y)
 
-//	These macros are faster, fatter versions of their function counterparts
+//    These macros are faster, fatter versions of their function counterparts
 
 #define RECT_TEST_SECT(pr1,pr2) ( \
-	((pr1)->ul.y < (pr2)->lr.y) && \
-	((pr1)->lr.y > (pr2)->ul.y) && \
-	((pr1)->ul.x < (pr2)->lr.x) && \
-	((pr1)->lr.x > (pr2)->ul.x))
+    ((pr1)->ul.y < (pr2)->lr.y) && \
+    ((pr1)->lr.y > (pr2)->ul.y) && \
+    ((pr1)->ul.x < (pr2)->lr.x) && \
+    ((pr1)->lr.x > (pr2)->ul.x))
 
 #define RECT_UNION(pr1,pr2,prunion) { \
-	(prunion)->ul.x = (pr1)->ul.x < (pr2)->ul.x ? (pr1)->ul.x : (pr2)->ul.x; \
-	(prunion)->lr.x = (pr1)->lr.x > (pr2)->lr.x ? (pr1)->lr.x : (pr2)->lr.x; \
-	(prunion)->ul.y = (pr1)->ul.y < (pr2)->ul.y ? (pr1)->ul.y : (pr2)->ul.y; \
-	(prunion)->lr.y = (pr1)->lr.y > (pr2)->lr.y ? (pr1)->lr.y : (pr2)->lr.y; \
-	}
+    (prunion)->ul.x = (pr1)->ul.x < (pr2)->ul.x ? (pr1)->ul.x : (pr2)->ul.x; \
+    (prunion)->lr.x = (pr1)->lr.x > (pr2)->lr.x ? (pr1)->lr.x : (pr2)->lr.x; \
+    (prunion)->ul.y = (pr1)->ul.y < (pr2)->ul.y ? (pr1)->ul.y : (pr2)->ul.y; \
+    (prunion)->lr.y = (pr1)->lr.y > (pr2)->lr.y ? (pr1)->lr.y : (pr2)->lr.y; \
+    }
 
 #define RECT_ENCLOSES(pr1,pr2) ( \
-	((pr1)->ul.y <= (pr2)->ul.y) && \
-	((pr1)->lr.y >= (pr2)->lr.y) && \
-	((pr1)->ul.x <= (pr2)->ul.x) && \
-	((pr1)->lr.x >= (pr2)->lr.x))
+    ((pr1)->ul.y <= (pr2)->ul.y) && \
+    ((pr1)->lr.y >= (pr2)->lr.y) && \
+    ((pr1)->ul.x <= (pr2)->ul.x) && \
+    ((pr1)->lr.x >= (pr2)->lr.x))
 
 #define RECT_TEST_PT(prect,pt) ( \
-	((pt).y >= (prect)->ul.y) && ((pt).y < (prect)->lr.y) && \
-	((pt).x >= (prect)->ul.x) && ((pt).x < (prect)->lr.x))
+    ((pt).y >= (prect)->ul.y) && ((pt).y < (prect)->lr.y) && \
+    ((pt).x >= (prect)->ul.x) && ((pt).x < (prect)->lr.x))
 
 #define RECT_MOVE(prect,pt) { \
-	(prect)->ul.x += pt.x; \
-	(prect)->ul.y += pt.y; \
-	(prect)->lr.x += pt.x; \
-	(prect)->lr.y += pt.y; \
-	}
+    (prect)->ul.x += pt.x; \
+    (prect)->ul.y += pt.y; \
+    (prect)->lr.x += pt.x; \
+    (prect)->lr.y += pt.y; \
+    }
 
 #define RECT_OFFSETTED_RECT(pr1,pt,proff) { \
-	(proff)->ul.x = (pr1)->ul.x + (pt).x; \
-	(proff)->ul.y = (pr1)->ul.y + (pt).y; \
-	(proff)->lr.x = (pr1)->lr.x + (pt).x; \
-	(proff)->lr.y = (pr1)->lr.y + (pt).y; \
-	}
+    (proff)->ul.x = (pr1)->ul.x + (pt).x; \
+    (proff)->ul.y = (pr1)->ul.y + (pt).y; \
+    (proff)->lr.x = (pr1)->lr.x + (pt).x; \
+    (proff)->lr.y = (pr1)->lr.y + (pt).y; \
+    }
 
 #define RECT_FILL(pr,x,y,x2,y2) \
-   { \
-      (pr)->ul.x = (x);  \
-      (pr)->ul.y = (y);  \
-      (pr)->lr.x = (x2); \
-      (pr)->lr.y = (y2); \
-   }
+    { \
+        (pr)->ul.x = (x);  \
+        (pr)->ul.y = (y);  \
+        (pr)->lr.x = (x2); \
+        (pr)->lr.y = (y2); \
+    }
 
-//	These are the functional versions of the above macros
+//    These are the functional versions of the above macros
 
 int32_t RectTestSect(LGRect *pr1, LGRect *pr2);
 void RectUnion(LGRect *pr1, LGRect *pr2, LGRect *prunion);
@@ -133,11 +133,11 @@ int32_t RectTestPt(LGRect *prect, LGPoint pt);
 void RectMove(LGRect *pr, LGPoint delta);
 void RectOffsettedRect(LGRect *pr, LGPoint delta, LGRect *proff);
 
-//	These functions have no macro counterparts
+//    These functions have no macro counterparts
 int32_t RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect);
 int32_t RectClipCode(LGRect *prect, LGPoint pt);
 
-// guess why this isnt a macro        // hah, you cant
+// guess why this isnt a macro          // hah, you cant
 //Point MakePoint(int16_t x, int16_t y);  // Guess what this does.
 //#define MakePoint(x,y) (Point)(((uint16_t)y<<16)+((uint16_t)x))
 // oh, doug is mocked, you cant cast to a non-scaler type
@@ -147,11 +147,11 @@ LGPoint MakePoint(int16_t x, int16_t y);
 // take this, note ax and bx passed but use whole thing... oooooh
 Point MakePointInline(uint16_t x, uint16_t y);
 #pragma aux MakePointInline = \
-   "shl     ebx,10H"          \
-   "and     eax,0000ffffH"    \
-   "add     eax,ebx"          \
-   parm [ax] [bx]             \
-   modify [eax ebx];
+    "shl      ebx,10H"             \
+    "and      eax,0000ffffH"     \
+    "add      eax,ebx"             \
+    parm [ax] [bx]                 \
+    modify [eax ebx];
 // and this
 #define MakePoint(x,y) MakePointInline((uint16_t)x,(uint16_t)y)
 // curse you

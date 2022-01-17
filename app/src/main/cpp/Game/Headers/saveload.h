@@ -43,8 +43,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 #define CFG_LEVEL_VAR "LEVEL"
-#define OLD_LEVEL_ID_NUM   540
-#define LEVEL_ID_NUM       100
+#define OLD_LEVEL_ID_NUM    540
+#define LEVEL_ID_NUM         100
 
 // Prototypes
 errtype save_current_map(FSSpec* fSpec, Id id_num, bool flush_mem, bool pack);

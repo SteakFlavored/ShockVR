@@ -47,76 +47,76 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void unpack_rsd8_ubitmap(grs_bitmap *bm, int16_t x, int16_t y)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
-         gr_ubitmap(&tbm,x,y);
-   }
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
+            gr_ubitmap(&tbm,x,y);
+    }
 }
 
 int32_t unpack_rsd8_bitmap(grs_bitmap *bm, int16_t x, int16_t y)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
-         return gr_bitmap(&tbm,x,y);
-   }
-   return CLIP_ALL;
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
+            return gr_bitmap(&tbm,x,y);
+    }
+    return CLIP_ALL;
 }
 
 void unpack_rsd8_scale_ubitmap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
-         gr_scale_ubitmap(&tbm,x,y,w,h);
-   }
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
+            gr_scale_ubitmap(&tbm,x,y,w,h);
+    }
 }
 
 int32_t unpack_rsd8_scale_bitmap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
-         return gr_scale_bitmap(&tbm,x,y,w,h);
-   }
-   return CLIP_ALL;
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
+            return gr_scale_bitmap(&tbm,x,y,w,h);
+    }
+    return CLIP_ALL;
 }
 
 void unpack_rsd8_clut_scale_ubitmap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
-         gr_clut_scale_ubitmap(&tbm,x,y,w,h,cl);
-   }
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
+            gr_clut_scale_ubitmap(&tbm,x,y,w,h,cl);
+    }
 }
 
 int32_t unpack_rsd8_clut_scale_bitmap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
-         return gr_clut_scale_bitmap(&tbm,x,y,w,h,cl);
-   }
-   return CLIP_ALL;
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
+            return gr_clut_scale_bitmap(&tbm,x,y,w,h,cl);
+    }
+    return CLIP_ALL;
 }
 
 void unpack_rsd8_clut_ubitmap(grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
-         gr_clut_ubitmap(&tbm,x,y,cl);
-   }
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
+            gr_clut_ubitmap(&tbm,x,y,cl);
+    }
 }
 
 int32_t unpack_rsd8_clut_bitmap(grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
-   if (grd_unpack_buf!=NULL) {
-      grs_bitmap tbm;
-      if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
-         return gr_clut_bitmap(&tbm,x,y,cl);
-   }
-   return CLIP_ALL;
+    if (grd_unpack_buf!=NULL) {
+        grs_bitmap tbm;
+        if (gr_rsd8_convert(bm,&tbm)==GR_UNPACK_RSD8_OK)
+            return gr_clut_bitmap(&tbm,x,y,cl);
+    }
+    return CLIP_ALL;
 }

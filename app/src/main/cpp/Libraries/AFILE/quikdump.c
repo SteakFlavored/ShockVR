@@ -16,12 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//	===============================================================
+//    ===============================================================
 //
-//		QUIKDUMP		QuickTime movie file dumper
-//		Ken Cobb - Adapted from program by Rex E. Bradford
+//        QUIKDUMP        QuickTime movie file dumper
+//        Ken Cobb - Adapted from program by Rex E. Bradford
 //
-//	===============================================================
+//    ===============================================================
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,260 +48,260 @@ void PrintSTTS(uint8_t *data, int8_t *indent);
 // Globals
 QT_ChunkInfo chunkInfo[] =
 {
-	QT_CLIP,false,
-	QT_CRGN,true,
-	QT_DINF,false,
-	QT_DREF,true,
-	QT_EDTS,false,
-	QT_ELST,true,
-	QT_HDLR,true,
-	QT_KMAT,true,
-	QT_MATT,false,
-	QT_MDAT,true,
-	QT_MDIA,false,
-	QT_MDHD,true,
-	QT_MINF,false,
-	QT_MOOV,false,
-	QT_MVHD,true,
-	QT_SMHD,true,
-	QT_STBL,false,
-	QT_STCO,true,
-	QT_STSC,true,
-	QT_STSD,true,
-	QT_STSH,true,
-	QT_STSS,true,
-	QT_STSZ,true,
-	QT_STTS,true,
-	QT_TKHD,true,
-	QT_TRAK,false,
-	QT_UDTA,false,
-	QT_VMHD,true,
-	0,0
+    QT_CLIP,false,
+    QT_CRGN,true,
+    QT_DINF,false,
+    QT_DREF,true,
+    QT_EDTS,false,
+    QT_ELST,true,
+    QT_HDLR,true,
+    QT_KMAT,true,
+    QT_MATT,false,
+    QT_MDAT,true,
+    QT_MDIA,false,
+    QT_MDHD,true,
+    QT_MINF,false,
+    QT_MOOV,false,
+    QT_MVHD,true,
+    QT_SMHD,true,
+    QT_STBL,false,
+    QT_STCO,true,
+    QT_STSC,true,
+    QT_STSD,true,
+    QT_STSH,true,
+    QT_STSS,true,
+    QT_STSZ,true,
+    QT_STTS,true,
+    QT_TKHD,true,
+    QT_TRAK,false,
+    QT_UDTA,false,
+    QT_VMHD,true,
+    0,0
 };
 
 TrackType currTrackType;
 
 
-//	--------------------------------------------------------------
-//		MAIN PROGRAM
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
+//        MAIN PROGRAM
+//    --------------------------------------------------------------
 
 void main(int32_t argc, int8_t **argv)
 {
-	FILE *fp;
-	int32_t iarg,istack;
-	bool badArgs,dumpChunks;
-	uint8_t *dbuff;
-	uint32_t dbuffLen;
-	QT_ChunkHdr chunkHdr;
-	QT_ChunkInfo *pinfo;
-	int8_t filename[128];
-	uint32_t offsetStack[64];
-	int8_t indent[128];
+    FILE *fp;
+    int32_t iarg,istack;
+    bool badArgs,dumpChunks;
+    uint8_t *dbuff;
+    uint32_t dbuffLen;
+    QT_ChunkHdr chunkHdr;
+    QT_ChunkInfo *pinfo;
+    int8_t filename[128];
+    uint32_t offsetStack[64];
+    int8_t indent[128];
 
-	dumpChunks = true;
-	filename[0] = 0;
+    dumpChunks = true;
+    filename[0] = 0;
 
-// 	Get the input file
+//     Get the input file
 
-	printf ("File to dump: ");
-	fgets (filename, sizeof(filename), stdin);
-	filename[strlen(filename)-1] = 0;
-	if (strchr(filename, '.') == NULL)
-		strcat(filename, ".mov");
+    printf ("File to dump: ");
+    fgets (filename, sizeof(filename), stdin);
+    filename[strlen(filename)-1] = 0;
+    if (strchr(filename, '.') == NULL)
+        strcat(filename, ".mov");
 
-//	Open file
+//    Open file
 
-	fp = fopen(filename, "rb");
-	if (fp == NULL)
-	{
-		printf("Can't open: %s\n", filename);
-		exit(1);
-	}
+    fp = fopen(filename, "rb");
+    if (fp == NULL)
+    {
+        printf("Can't open: %s\n", filename);
+        exit(1);
+    }
 
-//	Allocate initial data buffer
+//    Allocate initial data buffer
 
-	if (dumpChunks)
-	{
-		dbuffLen = 64000;
-		dbuff = (uint8_t *)malloc(dbuffLen);
-	}
+    if (dumpChunks)
+    {
+        dbuffLen = 64000;
+        dbuff = (uint8_t *)malloc(dbuffLen);
+    }
 
-//	Dump chunks
+//    Dump chunks
 
-	istack = 0;
-	MakeIndentString(indent, istack);
+    istack = 0;
+    MakeIndentString(indent, istack);
 
-	while (true)
-	{
-		if (!QuikReadChunkHdr(fp, &chunkHdr))
-			break;
-		WriteChunk(chunkHdr.ctype, chunkHdr.length,
-			ftell(fp) - sizeof(QT_ChunkHdr), indent);
-		if (chunkHdr.length == 0)
-			break;
-		pinfo = QuikFindChunkInfo(&chunkHdr);
-		if (pinfo->isleaf)
-		{
-			if ((chunkHdr.ctype != QT_MDAT) && dumpChunks)
-			{
-				if (chunkHdr.length > dbuffLen)
-				{
-					dbuffLen = chunkHdr.length;
-					dbuff = (uint8_t *)realloc(dbuff, dbuffLen);
-				}
-				fread(dbuff, chunkHdr.length - sizeof(QT_ChunkHdr), 1, fp);
-				MakeIndentString(indent, istack + 1);
-				if (chunkHdr.ctype == QT_STTS)
-					PrintSTTS(dbuff, indent);
-				if (chunkHdr.ctype == QT_STCO)
-					PrintSTCO(dbuff, indent);
-				MakeIndentString(indent, istack);
-			}
-			else
-				QuikSkipChunk(fp, &chunkHdr);
-		}
-		else
-		{
-			if (chunkHdr.length > sizeof(QT_ChunkHdr))
-			{
-				offsetStack[istack++] = ftell(fp) +
-					chunkHdr.length - sizeof(QT_ChunkHdr);
-				MakeIndentString(indent, istack);
-			}
-		}
-		while ((istack > 0) && (ftell(fp) >= offsetStack[istack - 1]))
-			MakeIndentString(indent, --istack);
-	}
+    while (true)
+    {
+        if (!QuikReadChunkHdr(fp, &chunkHdr))
+            break;
+        WriteChunk(chunkHdr.ctype, chunkHdr.length,
+            ftell(fp) - sizeof(QT_ChunkHdr), indent);
+        if (chunkHdr.length == 0)
+            break;
+        pinfo = QuikFindChunkInfo(&chunkHdr);
+        if (pinfo->isleaf)
+        {
+            if ((chunkHdr.ctype != QT_MDAT) && dumpChunks)
+            {
+                if (chunkHdr.length > dbuffLen)
+                {
+                    dbuffLen = chunkHdr.length;
+                    dbuff = (uint8_t *)realloc(dbuff, dbuffLen);
+                }
+                fread(dbuff, chunkHdr.length - sizeof(QT_ChunkHdr), 1, fp);
+                MakeIndentString(indent, istack + 1);
+                if (chunkHdr.ctype == QT_STTS)
+                    PrintSTTS(dbuff, indent);
+                if (chunkHdr.ctype == QT_STCO)
+                    PrintSTCO(dbuff, indent);
+                MakeIndentString(indent, istack);
+            }
+            else
+                QuikSkipChunk(fp, &chunkHdr);
+        }
+        else
+        {
+            if (chunkHdr.length > sizeof(QT_ChunkHdr))
+            {
+                offsetStack[istack++] = ftell(fp) +
+                    chunkHdr.length - sizeof(QT_ChunkHdr);
+                MakeIndentString(indent, istack);
+            }
+        }
+        while ((istack > 0) && (ftell(fp) >= offsetStack[istack - 1]))
+            MakeIndentString(indent, --istack);
+    }
 
-	fclose(fp);
+    fclose(fp);
 }
 
-//	-------------------------------------------------------------
-//		SUPPORT ROUTINES
-//	-------------------------------------------------------------
+//    -------------------------------------------------------------
+//        SUPPORT ROUTINES
+//    -------------------------------------------------------------
 
 void WriteChunk(uint32_t ctype, uint32_t length, int32_t offset, int8_t *indent)
 {
-	printf("%s%c%c%c%c: {offset: $%x  size: $%x}\n", indent,
-		ctype >> 24, (ctype >> 16) & 0xFF, (ctype >> 8) & 0xFF, ctype & 0xFF,
-		offset, length);
+    printf("%s%c%c%c%c: {offset: $%x  size: $%x}\n", indent,
+        ctype >> 24, (ctype >> 16) & 0xFF, (ctype >> 8) & 0xFF, ctype & 0xFF,
+        offset, length);
 }
 
 #define NUM_SPACES_PER_INDENT 3
 
 void MakeIndentString(int8_t *str, int32_t istack)
 {
-	int32_t i;
+    int32_t i;
 
-	for (i = 0; i < (istack * NUM_SPACES_PER_INDENT); i++)
-		str[i] = ' ';
-	str[i] = 0;
+    for (i = 0; i < (istack * NUM_SPACES_PER_INDENT); i++)
+        str[i] = ' ';
+    str[i] = 0;
 }
 
-//	===============================================================
+//    ===============================================================
 //
-//	QuickTime file dumping routines.
+//    QuickTime file dumping routines.
 //
-//	===============================================================
+//    ===============================================================
 
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
 //
-//	QuikReadChunkHdr() reads in the next chunk header, returns true if ok.
+//    QuikReadChunkHdr() reads in the next chunk header, returns true if ok.
 
 bool QuikReadChunkHdr(FILE *fp, QT_ChunkHdr *phdr)
 {
-	fread(phdr, sizeof(QT_ChunkHdr), 1, fp);
+    fread(phdr, sizeof(QT_ChunkHdr), 1, fp);
 
-	switch (phdr->ctype)
-	{
-		case QT_TRAK:
-			currTrackType = TRACK_OTHER;
-			break;
+    switch (phdr->ctype)
+    {
+        case QT_TRAK:
+            currTrackType = TRACK_OTHER;
+            break;
 
-		case QT_VMHD:
-			currTrackType = TRACK_VIDEO;
-			break;
+        case QT_VMHD:
+            currTrackType = TRACK_VIDEO;
+            break;
 
-		case QT_SMHD:
-			currTrackType = TRACK_AUDIO;
-			break;
-	}
+        case QT_SMHD:
+            currTrackType = TRACK_AUDIO;
+            break;
+    }
 
-	return(feof(fp) == 0);
+    return(feof(fp) == 0);
 }
 
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
 //
-//	QuikFindChunkInfo() finds info for a chunk.
+//    QuikFindChunkInfo() finds info for a chunk.
 
 QT_ChunkInfo *QuikFindChunkInfo(QT_ChunkHdr *phdr)
 {
 static QT_Ctype lastType = 0;
 static QT_ChunkInfo *lastInfoPtr = NULL;
 
-	QT_ChunkInfo *pinfo;
+    QT_ChunkInfo *pinfo;
 
-	if (lastType == phdr->ctype)
-		return((QT_ChunkInfo *) lastInfoPtr);
+    if (lastType == phdr->ctype)
+        return((QT_ChunkInfo *) lastInfoPtr);
 
-	pinfo = chunkInfo;
-	while (pinfo->ctype)
-		{
-		if (pinfo->ctype == phdr->ctype)
-			{
-			lastType = phdr->ctype;
-			lastInfoPtr = pinfo;
-			return((QT_ChunkInfo *) pinfo);
-			}
-		++pinfo;
-		}
-	return NULL;
+    pinfo = chunkInfo;
+    while (pinfo->ctype)
+        {
+        if (pinfo->ctype == phdr->ctype)
+            {
+            lastType = phdr->ctype;
+            lastInfoPtr = pinfo;
+            return((QT_ChunkInfo *) pinfo);
+            }
+        ++pinfo;
+        }
+    return NULL;
 }
 
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
 //
-//	QuikSkipChunk() skips over the data in the current chunk.
+//    QuikSkipChunk() skips over the data in the current chunk.
 
 void QuikSkipChunk(FILE *fp, QT_ChunkHdr *phdr)
 {
-	fseek(fp, phdr->length - sizeof(QT_ChunkHdr), SEEK_CUR);
+    fseek(fp, phdr->length - sizeof(QT_ChunkHdr), SEEK_CUR);
 }
 
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
 //
-//	PrintSTCO() prints the Chunk Offset Table.
+//    PrintSTCO() prints the Chunk Offset Table.
 
 void PrintSTCO(uint8_t *data, int8_t *indent)
 {
-	QTS_STCO *p;
-	int32_t i;
+    QTS_STCO *p;
+    int32_t i;
 
-	p = (QTS_STCO *)data;
+    p = (QTS_STCO *)data;
 
-	printf("%sversion: %d\n", indent, p->version);
-	printf("%sflags: $%x $%x $%x\n", indent, p->flags[0], p->flags[1], p->flags[2]);
-	printf("%snumEntries: %d\n", indent, p->numEntries);
-	for (i = 0; i < p->numEntries; i++)
-		printf("%s   offset[%d]: %d ($%x)\n",
-			indent, i, p->offset[i], p->offset[i]);
+    printf("%sversion: %d\n", indent, p->version);
+    printf("%sflags: $%x $%x $%x\n", indent, p->flags[0], p->flags[1], p->flags[2]);
+    printf("%snumEntries: %d\n", indent, p->numEntries);
+    for (i = 0; i < p->numEntries; i++)
+        printf("%s    offset[%d]: %d ($%x)\n",
+            indent, i, p->offset[i], p->offset[i]);
 }
 
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
 //
-//	PrintSTTS() prints the Sample to Time table.
+//    PrintSTTS() prints the Sample to Time table.
 
 void PrintSTTS(uint8_t *data, int8_t *indent)
 {
-	QTS_STTS *p;
-	int32_t i;
+    QTS_STTS *p;
+    int32_t i;
 
-	p = (QTS_STTS *)data;
+    p = (QTS_STTS *)data;
 
-	printf("%sversion: %d\n", indent, p->version);
-	printf("%sflags: $%x $%x $%x\n", indent, p->flags[0], p->flags[1], p->flags[2]);
-	printf("%snumEntries: %d\n", indent, p->numEntries);
-	for (i = 0; i < p->numEntries; i++)
-		printf("%s   count: %4d   duration: %6d\n", indent,
-			p->time2samp[i].count, p->time2samp[i].duration);
+    printf("%sversion: %d\n", indent, p->version);
+    printf("%sflags: $%x $%x $%x\n", indent, p->flags[0], p->flags[1], p->flags[2]);
+    printf("%snumEntries: %d\n", indent, p->numEntries);
+    for (i = 0; i < p->numEntries; i++)
+        printf("%s    count: %4d    duration: %6d\n", indent,
+            p->time2samp[i].count, p->time2samp[i].duration);
 }

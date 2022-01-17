@@ -61,7 +61,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Defines
-#define EDITVIEW_UPDATE    LL_CHG_BASE<<1
+#define EDITVIEW_UPDATE     LL_CHG_BASE<<1
 
 // Prototypes
 void edit_loop(void);

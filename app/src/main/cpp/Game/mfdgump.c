@@ -46,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamescr.h"
 
 // ============================================================
-//                   MFD CONTAINER GUMPS
+//                         MFD CONTAINER GUMPS
 // ============================================================
 
 
@@ -70,7 +70,7 @@ extern void container_stuff(ObjID *pidlist, int32_t numobjs, int32_t* d1, int32_
 extern bool is_container(ObjID id, int32_t** d1, int32_t** d2);
 
 #define LAST_INPUT_ROW (player_struct.mfd_func_data[MFD_GUMP_FUNC][0])
-#define LAST_DOUBLE    (player_struct.mfd_func_data[MFD_GUMP_FUNC][1])
+#define LAST_DOUBLE     (player_struct.mfd_func_data[MFD_GUMP_FUNC][1])
 
 
 // -------
@@ -95,14 +95,14 @@ bool mfd_gump_handler(MFD* m, uiEvent* uie);
 // ---------------
 
 /* This gets called whenever the MFD needs to redraw or
-   undraw.
-   The control value is a bitmask with the following bits:
-   MFD_EXPOSE: Update the mfd, if MFD_EXPOSE_FULL is not set,
-               update incrementally.
-   MFD_EXPOSE_FULL: Fully redraw the mfd, implies MFD_EXPOSE
+    undraw.
+    The control value is a bitmask with the following bits:
+    MFD_EXPOSE: Update the mfd, if MFD_EXPOSE_FULL is not set,
+                    update incrementally.
+    MFD_EXPOSE_FULL: Fully redraw the mfd, implies MFD_EXPOSE
 
-   if no bits are set, the mfd is being "unexposed;" its display
-   being pulled off the screen to make room for a different func.
+    if no bits are set, the mfd is being "unexposed;" its display
+    being pulled off the screen to make room for a different func.
 */
 
 extern void check_panel_ref(bool punt);
@@ -110,78 +110,78 @@ extern void check_panel_ref(bool punt);
 
 void mfd_gump_expose(MFD* mfd, uint8_t control)
 {
-   bool full = control & MFD_EXPOSE_FULL;
-   if (control == 0)  // MFD is drawing stuff
-   {
-      panel_ref_unexpose(mfd->id,MFD_GUMP_FUNC);
-      return;
-   }
-   if (control & MFD_EXPOSE) // Time to draw stuff
-   {
-      extern void mfd_item_micro_expose(bool full,int32_t triple);
-      ObjID id = player_struct.panel_ref;
-      uint8_t i;
+    bool full = control & MFD_EXPOSE_FULL;
+    if (control == 0)  // MFD is drawing stuff
+    {
+        panel_ref_unexpose(mfd->id,MFD_GUMP_FUNC);
+        return;
+    }
+    if (control & MFD_EXPOSE) // Time to draw stuff
+    {
+        extern void mfd_item_micro_expose(bool full,int32_t triple);
+        ObjID id = player_struct.panel_ref;
+        uint8_t i;
 
-      // clear update rects
-      mfd_clear_rects();
-      // set up canvas
-      gr_push_canvas(pmfd_canvas);
-      ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+        // clear update rects
+        mfd_clear_rects();
+        // set up canvas
+        gr_push_canvas(pmfd_canvas);
+        ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
-      // Clear the canvas by drawing the background bitmap
-      if (!full_game_3d)
-//KLC - chg for new art         ss_bitmap(&mfd_background, 0, 0);
-         gr_bitmap(&mfd_background, 0, 0);
-      mfd_item_micro_expose(full,ID2TRIP(id));
+        // Clear the canvas by drawing the background bitmap
+        if (!full_game_3d)
+//KLC - chg for new art            ss_bitmap(&mfd_background, 0, 0);
+            gr_bitmap(&mfd_background, 0, 0);
+        mfd_item_micro_expose(full,ID2TRIP(id));
 
-      if (full)
-      {
-         int32_t *d1,*d2;
-         is_container(id,&d1,&d2); // fill in d1 and d2;
-         gump_num_objs = container_extract(gump_idlist,*d1,(d2 != NULL) ? *d2 : 0);
-         for (i = gump_num_objs; i < sizeof(gump_idlist)/sizeof(gump_idlist[0]); i++)
-            gump_idlist[i] = OBJ_NULL;
-         LAST_INPUT_ROW = 0xFF;
-      }
-      gr_set_font((grs_font*)ResLock(MFD_FONT));
-      if (gump_num_objs == 0)
-      {
-         int16_t x,y;
-         int8_t* s = get_temp_string(REF_STR_EmptyGump);
-         gr_string_size(s,&x,&y);
-         x = (MFD_VIEW_WID - x) /2;
-         y = (MFD_VIEW_HGT - y) /2;
-         mfd_draw_string(s,x,y,GREEN_YELLOW_BASE,true);
-      }
-      else
-         for (i = 0; i < gump_num_objs; i++)
-         {
+        if (full)
+        {
+            int32_t *d1,*d2;
+            is_container(id,&d1,&d2); // fill in d1 and d2;
+            gump_num_objs = container_extract(gump_idlist,*d1,(d2 != NULL) ? *d2 : 0);
+            for (i = gump_num_objs; i < sizeof(gump_idlist)/sizeof(gump_idlist[0]); i++)
+                gump_idlist[i] = OBJ_NULL;
+            LAST_INPUT_ROW = 0xFF;
+        }
+        gr_set_font((grs_font*)ResLock(MFD_FONT));
+        if (gump_num_objs == 0)
+        {
             int16_t x,y;
-            uint8_t r = i/2,c = i%2;
-            if (gump_idlist[i] != OBJ_NULL)
+            int8_t* s = get_temp_string(REF_STR_EmptyGump);
+            gr_string_size(s,&x,&y);
+            x = (MFD_VIEW_WID - x) /2;
+            y = (MFD_VIEW_HGT - y) /2;
+            mfd_draw_string(s,x,y,GREEN_YELLOW_BASE,true);
+        }
+        else
+            for (i = 0; i < gump_num_objs; i++)
             {
-               grs_bitmap* bm = bitmaps_2d[OPNUM(gump_idlist[i])];
-               x = LEFT_MARGIN  + ((c == 0) ? 0 : CONTENTS_WID) + (CONTENTS_WID - bm->w)/2;
-               y = FIRST_ITEM_Y + ((r == 0) ? 0 : CONTENTS_HGT) + (CONTENTS_HGT - bm->h)/2;
-               ss_bitmap(bm,x,y);
+                int16_t x,y;
+                uint8_t r = i/2,c = i%2;
+                if (gump_idlist[i] != OBJ_NULL)
+                {
+                    grs_bitmap* bm = bitmaps_2d[OPNUM(gump_idlist[i])];
+                    x = LEFT_MARGIN  + ((c == 0) ? 0 : CONTENTS_WID) + (CONTENTS_WID - bm->w)/2;
+                    y = FIRST_ITEM_Y + ((r == 0) ? 0 : CONTENTS_HGT) + (CONTENTS_HGT - bm->h)/2;
+                    ss_bitmap(bm,x,y);
+                }
+                // the +1 in the last argument is to get
+                // mfd_add_rect to union adjacents...
             }
-            // the +1 in the last argument is to get
-            // mfd_add_rect to union adjacents...
-         }
-      mfd_add_rect(LEFT_MARGIN,FIRST_ITEM_Y,LEFT_MARGIN+2*CONTENTS_WID,FIRST_ITEM_Y+2*CONTENTS_HGT);
-      ResUnlock(MFD_FONT);
-      // on a full expose, make sure to draw everything
+        mfd_add_rect(LEFT_MARGIN,FIRST_ITEM_Y,LEFT_MARGIN+2*CONTENTS_WID,FIRST_ITEM_Y+2*CONTENTS_HGT);
+        ResUnlock(MFD_FONT);
+        // on a full expose, make sure to draw everything
 
-      if (full)
-         mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+        if (full)
+            mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
-      // Pop the canvas
-      gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the
-      // updated mfd to screen
-      mfd_update_rects(mfd);
+        // Pop the canvas
+        gr_pop_canvas();
+        // Now that we've popped the canvas, we can send the
+        // updated mfd to screen
+        mfd_update_rects(mfd);
 
-   }
+    }
 
 }
 
@@ -192,122 +192,122 @@ extern void mouse_unconstrain(void);
 
 void gump_clear(void)
 {
-   int32_t i;
+    int32_t i;
 
-   for(i=0;i<NUM_CONTENTS;i++)
-      gump_idlist[i]=OBJ_NULL;
+    for(i=0;i<NUM_CONTENTS;i++)
+        gump_idlist[i]=OBJ_NULL;
 }
 
 bool gump_pickup(int8_t row)
 {
-   int32_t *d1, *d2;
-   ObjID cont = player_struct.panel_ref;
-   extern void check_panel_ref(bool puntme);
+    int32_t *d1, *d2;
+    ObjID cont = player_struct.panel_ref;
+    extern void check_panel_ref(bool puntme);
 
-//KLC   mouse_unconstrain();
-   if (row < 0 || row >= gump_num_objs || gump_idlist[row] == OBJ_NULL) return false;
-   push_cursor_object(gump_idlist[row]);
-   gump_idlist[row] = OBJ_NULL;
-   if (row == gump_num_objs-1)
-      gump_num_objs--;
-   LAST_INPUT_ROW = 0xFF;
-   LAST_DOUBLE = false;
-   // Here's where we update the container object
-   is_container(cont,&d1,&d2);
-   container_stuff(gump_idlist,gump_num_objs,d1,d2);
+//KLC    mouse_unconstrain();
+    if (row < 0 || row >= gump_num_objs || gump_idlist[row] == OBJ_NULL) return false;
+    push_cursor_object(gump_idlist[row]);
+    gump_idlist[row] = OBJ_NULL;
+    if (row == gump_num_objs-1)
+        gump_num_objs--;
+    LAST_INPUT_ROW = 0xFF;
+    LAST_DOUBLE = false;
+    // Here's where we update the container object
+    is_container(cont,&d1,&d2);
+    container_stuff(gump_idlist,gump_num_objs,d1,d2);
 
-   if(*d1==0 && (d2==NULL || *d2==0))
-      check_panel_ref(true); // punt empty gump
-   else
-      mfd_notify_func(MFD_GUMP_FUNC,MFD_ITEM_SLOT,false,MFD_ACTIVE,false);
-   return true;
+    if(*d1==0 && (d2==NULL || *d2==0))
+        check_panel_ref(true); // punt empty gump
+    else
+        mfd_notify_func(MFD_GUMP_FUNC,MFD_ITEM_SLOT,false,MFD_ACTIVE,false);
+    return true;
 }
 
 bool gump_get_useful(void)
 {
-   int32_t row;
-   bool useless;
-   bool obj_is_useless(ObjID oid);
+    int32_t row;
+    bool useless;
+    bool obj_is_useless(ObjID oid);
 
-   for(useless=0;useless<=1;useless++) {
-      for(row=0;row<gump_num_objs;row++) {
-         if(gump_idlist[row] && obj_is_useless(gump_idlist[row])==useless) {
-            return(gump_pickup(row));
-         }
-      }
-   }
-   return false;
+    for(useless=0;useless<=1;useless++) {
+        for(row=0;row<gump_num_objs;row++) {
+            if(gump_idlist[row] && obj_is_useless(gump_idlist[row])==useless) {
+                return(gump_pickup(row));
+            }
+        }
+    }
+    return false;
 }
 
 bool mfd_gump_handler(MFD* m, uiEvent* uie)
 {
-   uiMouseEvent	*e = (uiMouseEvent *)uie;
-   LGPoint pos = e->pos;
-   int8_t row;
-   int16_t x,y;
-   grs_bitmap* bm;
+    uiMouseEvent    *e = (uiMouseEvent *)uie;
+    LGPoint pos = e->pos;
+    int8_t row;
+    int16_t x,y;
+    grs_bitmap* bm;
 
-   pos.x -= m->rect.ul.x;
-   pos.y -= m->rect.ul.y;
-   row = (pos.y - FIRST_ITEM_Y)/CONTENTS_HGT;
-   row = 2*row + (pos.x - LEFT_MARGIN)/CONTENTS_WID;
+    pos.x -= m->rect.ul.x;
+    pos.y -= m->rect.ul.y;
+    row = (pos.y - FIRST_ITEM_Y)/CONTENTS_HGT;
+    row = 2*row + (pos.x - LEFT_MARGIN)/CONTENTS_WID;
 
 #ifdef RIGHT_BUTTON_GUMP_UI
-   if (LAST_INPUT_ROW != 0xFF && row != LAST_INPUT_ROW)
-   {
-      if (e->buttons & (1 << MOUSE_RBUTTON))
-      {
-         return gump_pickup(LAST_INPUT_ROW);
-      }
-   }
+    if (LAST_INPUT_ROW != 0xFF && row != LAST_INPUT_ROW)
+    {
+        if (e->buttons & (1 << MOUSE_RBUTTON))
+        {
+            return gump_pickup(LAST_INPUT_ROW);
+        }
+    }
 #endif // RIGHT_BUTTON_GUMP_UI
-   if (row < 0 || row >= gump_num_objs)
-      return false;
-   if (LAST_DOUBLE && (e->action & MOUSE_LUP))
-   {
-      return gump_pickup(row);
-   }
-   if (!(e->action & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)))
-      return false;
+    if (row < 0 || row >= gump_num_objs)
+        return false;
+    if (LAST_DOUBLE && (e->action & MOUSE_LUP))
+    {
+        return gump_pickup(row);
+    }
+    if (!(e->action & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)))
+        return false;
 #ifdef RIGHT_BUTTON_GUMP_UI
-   if (!(e->action & (MOUSE_LDOWN|MOUSE_RDOWN|UI_MOUSE_LDOUBLE))
-      && !(e->buttons & (1 << MOUSE_RBUTTON)))
-         return false;
+    if (!(e->action & (MOUSE_LDOWN|MOUSE_RDOWN|UI_MOUSE_LDOUBLE))
+        && !(e->buttons & (1 << MOUSE_RBUTTON)))
+            return false;
 #endif // RIGHT_BUTTON_GUMP_UI
-   // Hey, this is a little extra work, but it gets the job done.
-   bm = bitmaps_2d[OPNUM(gump_idlist[row])];
-   x = LEFT_MARGIN  + ((row%2 == 0) ? 0 : CONTENTS_WID) + (CONTENTS_WID - bm->w)/2;
-   y = FIRST_ITEM_Y + ((row/2 == 0) ? 0 : CONTENTS_HGT) + (CONTENTS_HGT - bm->h)/2;
-   if (pos.x >= x && pos.x < x + bm->w && pos.y >= y && pos.y < y + bm->h)
-   {
-      if (e->action == UI_MOUSE_LDOUBLE)
-      {
-         LAST_DOUBLE = true;
-         return true;
-      }
-      LAST_DOUBLE = false;
-      if (e->action & MOUSE_LDOWN)
-      {
-         extern void look_at_object(ObjID);
-         if (gump_idlist[row] != OBJ_NULL)
-            look_at_object(gump_idlist[row]);
-      }
+    // Hey, this is a little extra work, but it gets the job done.
+    bm = bitmaps_2d[OPNUM(gump_idlist[row])];
+    x = LEFT_MARGIN  + ((row%2 == 0) ? 0 : CONTENTS_WID) + (CONTENTS_WID - bm->w)/2;
+    y = FIRST_ITEM_Y + ((row/2 == 0) ? 0 : CONTENTS_HGT) + (CONTENTS_HGT - bm->h)/2;
+    if (pos.x >= x && pos.x < x + bm->w && pos.y >= y && pos.y < y + bm->h)
+    {
+        if (e->action == UI_MOUSE_LDOUBLE)
+        {
+            LAST_DOUBLE = true;
+            return true;
+        }
+        LAST_DOUBLE = false;
+        if (e->action & MOUSE_LDOWN)
+        {
+            extern void look_at_object(ObjID);
+            if (gump_idlist[row] != OBJ_NULL)
+                look_at_object(gump_idlist[row]);
+        }
 #ifdef RIGHT_BUTTON_GUMP_UI
-      if (e->action & MOUSE_RDOWN)
-      {
-//KLC         mouse_constrain_xy(m->rect.ul.x,m->rect.ul.y,m->rect.lr.x-1,m->rect.lr.y-1);
-         LAST_INPUT_ROW = row;
-         return true;
-      }
-      if (e->action & MOUSE_RUP)
-         return gump_pickup(row);
+        if (e->action & MOUSE_RDOWN)
+        {
+//KLC            mouse_constrain_xy(m->rect.ul.x,m->rect.ul.y,m->rect.lr.x-1,m->rect.lr.y-1);
+            LAST_INPUT_ROW = row;
+            return true;
+        }
+        if (e->action & MOUSE_RUP)
+            return gump_pickup(row);
 #endif // RIGHT_BUTTON_GUMP_UI
-   }
-   else if (e->buttons & (1 << MOUSE_RBUTTON))
-   {
-      return gump_pickup(row);
-   }
-   LAST_DOUBLE = false;
-//KLC   mouse_unconstrain();
-   return false;
+    }
+    else if (e->buttons & (1 << MOUSE_RBUTTON))
+    {
+        return gump_pickup(row);
+    }
+    LAST_DOUBLE = false;
+//KLC    mouse_unconstrain();
+    return false;
 }

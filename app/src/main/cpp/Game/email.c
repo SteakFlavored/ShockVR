@@ -84,18 +84,18 @@ bool email_cursor_currently=false;
 bool shodan_sfx_go = false;
 
 #define MFD_EMAILMUG_FUNC 14
-#define EMAIL_BASE_ID   RES_email0
+#define EMAIL_BASE_ID    RES_email0
 
 #define CHAR_SOFTSP 2
 
 #define BASE_VMAIL 256
 
-#define MUGSHOT_IDX     0
-#define TITLE_IDX       1
-#define SENDER_IDX      2
-#define SUBJECT_IDX     3
-#define MESSAGE_IDX     4
-#define EMAIL_MESSAGE_IDX     (really_an_email ? MESSAGE_IDX : 0)
+#define MUGSHOT_IDX      0
+#define TITLE_IDX         1
+#define SENDER_IDX        2
+#define SUBJECT_IDX      3
+#define MESSAGE_IDX      4
+#define EMAIL_MESSAGE_IDX      (really_an_email ? MESSAGE_IDX : 0)
 
 #define EMAIL_INACTIVE 0xFF
 
@@ -110,34 +110,34 @@ bool shodan_sfx_go = false;
 #define current_email (player_struct.current_email)
 
 //==========================================
-//       INVENTORY PANEL TEXT DISPLAY
+//         INVENTORY PANEL TEXT DISPLAY
 //==========================================
 
 extern LGRegion* inventory_region;
 extern grs_canvas *pinv_canvas;
 
 #define MESSAGE_COLOR 0x5A
-#define MORE_COLOR    0x4C
+#define MORE_COLOR     0x4C
 
 #define MESSAGE_X (1)
 #define MESSAGE_Y (2)
 
-#define BOTTOM_MARGIN   10
+#define BOTTOM_MARGIN    10
 #define EMAIL_INTERCEPT 0xFE
-#define EMAIL_DONE     0xFF
+#define EMAIL_DONE      0xFF
 
 bool email_big_font=true;
 
-int8_t   email_buffer[256];
+int8_t    email_buffer[256];
 #define EMAIL_BUFSIZ (sizeof(email_buffer))
-uint8_t   next_text_line = EMAIL_DONE;
-uint8_t   last_text_line = 0;
-uint8_t   email_curr_page;
-int16_t   old_invent_page=0;
+uint8_t    next_text_line = EMAIL_DONE;
+uint8_t    last_text_line = 0;
+uint8_t    email_curr_page;
+int16_t    old_invent_page=0;
 Id current_email_base = EMAIL_BASE_ID;
 
-static uint8_t   intercept_hack_num;
-static uint8_t   email_flags;
+static uint8_t    intercept_hack_num;
+static uint8_t    email_flags;
 
 #define EMAIL_FLAG_BEEN_READ 0x1
 #define EMAIL_FLAG_TRANSITORY 0x2
@@ -178,11 +178,11 @@ void email_slam_hack(int16_t which);
 
 int8_t* get_email_string(int32_t id, int8_t *text, int32_t siz)
 {
-   get_string(id,text,siz);
+    get_string(id,text,siz);
 #ifdef TOUPPER_EMAILS
-   strtoupper(text);
+    strtoupper(text);
 #endif
-   return text;
+    return text;
 }
 
 
@@ -196,256 +196,256 @@ int8_t* get_email_string(int32_t id, int8_t *text, int32_t siz)
 
 int32_t get_sender_emailnum(int32_t num)
 {
-   int8_t* s = get_temp_string(MKREF(EMAIL_BASE_ID+num, MUGSHOT_IDX));
+    int8_t* s = get_temp_string(MKREF(EMAIL_BASE_ID+num, MUGSHOT_IDX));
 
-   for(; *s != '\0'; s++)
-      if (toupper(*s) == 'S')
-      {
-         int32_t sid = atoi(s+1);
-         return (sid < MAX_SENDERS && sid >= 0) ? sid : NULL_SENDER;
-      }
-   return NULL_SENDER;
+    for(; *s != '\0'; s++)
+        if (toupper(*s) == 'S')
+        {
+            int32_t sid = atoi(s+1);
+            return (sid < MAX_SENDERS && sid >= 0) ? sid : NULL_SENDER;
+        }
+    return NULL_SENDER;
 }
 
 void set_email_flags(int32_t n)
 {
-   int32_t sender_num = get_sender_emailnum(n);
-   int32_t cnt;
+    int32_t sender_num = get_sender_emailnum(n);
+    int32_t cnt;
 
-   if (((player_struct.email[n] & EMAIL_SEQ) >> EMAIL_SEQ_SHF) > 0
-      || sender_num == NULL_SENDER) return;
-   cnt = ++player_struct.email_sender_counts[sender_num];
-   player_struct.email[n] &= ~(EMAIL_SEQ << EMAIL_SEQ_SHF);
-   player_struct.email[n] |=  cnt << EMAIL_SEQ_SHF;
+    if (((player_struct.email[n] & EMAIL_SEQ) >> EMAIL_SEQ_SHF) > 0
+        || sender_num == NULL_SENDER) return;
+    cnt = ++player_struct.email_sender_counts[sender_num];
+    player_struct.email[n] &= ~(EMAIL_SEQ << EMAIL_SEQ_SHF);
+    player_struct.email[n] |=  cnt << EMAIL_SEQ_SHF;
 }
 
 int8_t* get_email_title_string(int32_t n, int8_t *text, int32_t siz)
 {
-   int32_t cnt = (player_struct.email[n] & EMAIL_SEQ) >> EMAIL_SEQ_SHF; // get the email's sequence number.
-   Ref title = MKREF(EMAIL_BASE_ID+n,TITLE_IDX);
+    int32_t cnt = (player_struct.email[n] & EMAIL_SEQ) >> EMAIL_SEQ_SHF; // get the email's sequence number.
+    Ref title = MKREF(EMAIL_BASE_ID+n,TITLE_IDX);
 
-   get_string(title,text,siz);
-   if (cnt > 0) // if in fact the email has a sequence number, tack it on the end.
-   {
-      lg_sprintf(text,get_temp_string(title),cnt);
-   }
-   return text;
+    get_string(title,text,siz);
+    if (cnt > 0) // if in fact the email has a sequence number, tack it on the end.
+    {
+        lg_sprintf(text,get_temp_string(title),cnt);
+    }
+    return text;
 }
 
 #define EMAIL_MACRO_PAD_CHARS 20
 void apply_email_macros(int8_t *text, int8_t *newval)
 {
-   int16_t cold=0,cnew=0,len;
-   int8_t buf[256];
-   int8_t i, stupid;
-   int32_t score;
-   extern void second_format(int32_t sec_remain, int8_t *s);
+    int16_t cold=0,cnew=0,len;
+    int8_t buf[256];
+    int8_t i, stupid;
+    int32_t score;
+    extern void second_format(int32_t sec_remain, int8_t *s);
 
-   len=strlen(text);
+    len=strlen(text);
 
-   while (cold < len)
-   {
-      if (text[cold] == '$')
-      {
-         switch(text[cold+1])
-         {
-            // player's name
-            case 'N':
-            case 'n':
-               strcpy(newval+cnew,player_struct.name);
+    while (cold < len)
+    {
+        if (text[cold] == '$')
+        {
+            switch(text[cold+1])
+            {
+                // player's name
+                case 'N':
+                case 'n':
+                    strcpy(newval+cnew,player_struct.name);
 #ifdef TOUPPER_EMAILS
-               if(email_big_font)
-                  strtoupper(newval+cnew);
+                    if(email_big_font)
+                        strtoupper(newval+cnew);
 #else
-               if(islower(*(newval+cnew)))
-                  *(newval+cnew)-='a'-'A';
+                    if(islower(*(newval+cnew)))
+                        *(newval+cnew)-='a'-'A';
 #endif
-               cnew += strlen(player_struct.name);
-               break;
-            // number of kills
-            case 'K':
-            case 'k':
-               numtostring(player_struct.num_victories,buf);
-               strcpy(newval+cnew, buf);
-               cnew += strlen(buf);
-               break;
-            // time playing
-            case 'T':
-            case 't':
-               second_format(player_struct.game_time / CIT_CYCLE, buf);
-               strcpy(newval+cnew, buf);
-               cnew += strlen(buf);
-               break;
-            // number of revivals
-            case 'D':
-            case 'd':
-               numtostring(player_struct.num_deaths,buf);
-               strcpy(newval+cnew, buf);
-               cnew += strlen(buf);
-               break;
-            // difficulty index
-            case 'C':
-            case 'c':
-               stupid = 0;
-               for (i=0; i < 4; i++)
-                  stupid += (player_struct.difficulty[i] * player_struct.difficulty[i]);
-               numtostring(stupid,buf);
-               strcpy(newval+cnew, buf);
-               cnew += strlen(buf);
-               break;
-            // score
-            case 'S':
-            case 's':
-               stupid = 0;
-               for (i=0; i < 4; i++)
-                  stupid += (player_struct.difficulty[i] * player_struct.difficulty[i]);
-               // death is 10 anti-kills, but you always keep at least a third of your kills.
-               score = player_struct.num_victories - min(player_struct.num_deaths * 10, player_struct.num_victories * 2 / 3);
-               score = score * 10000;
-               score = score - min(score * 2 / 3, ((player_struct.game_time / (CIT_CYCLE * 36)) * 100));
-               score = score * (stupid + 1) / 37;  // 9 * 4 + 1 is best difficulty factor
-               if (stupid == 36)
-                  score += 2222222; // secret kevin bonus
-               numtostring(score,buf);
-               strcpy(newval+cnew, buf);
-               cnew += strlen(buf);
-               break;
-            default:
-               newval[cnew]='$';
-               newval[cnew+1]=text[cold+1];
-               break;
-         }
-         cold += 2;
-      }
-      else {
-         newval[cnew]=text[cold];
-         cold++;
-         cnew++;
-      }
-   }
-   newval[cnew]='\0';
-   return;
+                    cnew += strlen(player_struct.name);
+                    break;
+                // number of kills
+                case 'K':
+                case 'k':
+                    numtostring(player_struct.num_victories,buf);
+                    strcpy(newval+cnew, buf);
+                    cnew += strlen(buf);
+                    break;
+                // time playing
+                case 'T':
+                case 't':
+                    second_format(player_struct.game_time / CIT_CYCLE, buf);
+                    strcpy(newval+cnew, buf);
+                    cnew += strlen(buf);
+                    break;
+                // number of revivals
+                case 'D':
+                case 'd':
+                    numtostring(player_struct.num_deaths,buf);
+                    strcpy(newval+cnew, buf);
+                    cnew += strlen(buf);
+                    break;
+                // difficulty index
+                case 'C':
+                case 'c':
+                    stupid = 0;
+                    for (i=0; i < 4; i++)
+                        stupid += (player_struct.difficulty[i] * player_struct.difficulty[i]);
+                    numtostring(stupid,buf);
+                    strcpy(newval+cnew, buf);
+                    cnew += strlen(buf);
+                    break;
+                // score
+                case 'S':
+                case 's':
+                    stupid = 0;
+                    for (i=0; i < 4; i++)
+                        stupid += (player_struct.difficulty[i] * player_struct.difficulty[i]);
+                    // death is 10 anti-kills, but you always keep at least a third of your kills.
+                    score = player_struct.num_victories - min(player_struct.num_deaths * 10, player_struct.num_victories * 2 / 3);
+                    score = score * 10000;
+                    score = score - min(score * 2 / 3, ((player_struct.game_time / (CIT_CYCLE * 36)) * 100));
+                    score = score * (stupid + 1) / 37;  // 9 * 4 + 1 is best difficulty factor
+                    if (stupid == 36)
+                        score += 2222222; // secret kevin bonus
+                    numtostring(score,buf);
+                    strcpy(newval+cnew, buf);
+                    cnew += strlen(buf);
+                    break;
+                default:
+                    newval[cnew]='$';
+                    newval[cnew+1]=text[cold+1];
+                    break;
+            }
+            cold += 2;
+        }
+        else {
+            newval[cnew]=text[cold];
+            cold++;
+            cnew++;
+        }
+    }
+    newval[cnew]='\0';
+    return;
 }
 
 void email_intercept(void)
 {
-   switch(intercept_hack_num)
-   {
-      default:
-         inventory_clear();
-         next_text_line = EMAIL_DONE;
-         pop_inventory_cursors();
-         email_cursor_currently=false;
-//         Free(email_cursor_bitmap.bits);
-         read_email(0,intercept_hack_num);
-         shodan_sfx_go = true;
+    switch(intercept_hack_num)
+    {
+        default:
+            inventory_clear();
+            next_text_line = EMAIL_DONE;
+            pop_inventory_cursors();
+            email_cursor_currently=false;
+//            Free(email_cursor_bitmap.bits);
+            read_email(0,intercept_hack_num);
+            shodan_sfx_go = true;
 #ifdef AUDIOLOGS
-         if (!audiolog_setting)
+            if (!audiolog_setting)
 #endif
-         {
-            if (!digi_fx_playing(SFX_SHODAN_STRONG, NULL))
-               play_digi_fx(SFX_SHODAN_STRONG, -1);
-         }
-         break;
-   }
+            {
+                if (!digi_fx_playing(SFX_SHODAN_STRONG, NULL))
+                    play_digi_fx(SFX_SHODAN_STRONG, -1);
+            }
+            break;
+    }
 }
 
 int8_t* email_draw_string(int8_t* text,int16_t* x, int16_t* y,bool last)
 {
-   int16_t w,h;
-   gr_set_fcolor(MESSAGE_COLOR);
-   gr_char_size('X',&w,&h);
-   while (isspace(*text))
-   {
-      if (*text == '\n') {
-         *y += h, *x = 0;
-      }
-      else
-         *x += gr_char_width(*text);
-      text++;
-   }
-   while(*y + BOTTOM_MARGIN < INVENTORY_PANEL_HEIGHT)
-   {
-      while (*x < INVENTORY_PANEL_WIDTH)
-      {
-         int8_t temp = '\0';
-         int8_t *end;
-         end = text;
-         while(!isspace(*end) && *end != '\0' && *end != '\n')
-            end++;
-         temp = *end;
-         *end = '\0';
-         gr_string_size(text,&w,&h);
-         if (*x + w > INVENTORY_PANEL_WIDTH)
-         {
-            int16_t hyphensiz,dum;
-            int8_t sav;
+    int16_t w,h;
+    gr_set_fcolor(MESSAGE_COLOR);
+    gr_char_size('X',&w,&h);
+    while (isspace(*text))
+    {
+        if (*text == '\n') {
+            *y += h, *x = 0;
+        }
+        else
+            *x += gr_char_width(*text);
+        text++;
+    }
+    while(*y + BOTTOM_MARGIN < INVENTORY_PANEL_HEIGHT)
+    {
+        while (*x < INVENTORY_PANEL_WIDTH)
+        {
+            int8_t temp = '\0';
+            int8_t *end;
+            end = text;
+            while(!isspace(*end) && *end != '\0' && *end != '\n')
+                end++;
+            temp = *end;
+            *end = '\0';
+            gr_string_size(text,&w,&h);
+            if (*x + w > INVENTORY_PANEL_WIDTH)
+            {
+                int16_t hyphensiz,dum;
+                int8_t sav;
 
-            *end = temp;
-            gr_char_size('-',&hyphensiz,&dum);
-            for(;end>text;end--) {
-               if(*end==CHAR_SOFTSP||*end=='-') {
-                  sav=*end;
-                  *end='\0';
-                  gr_string_size(text,&w,&h);
-                  if(*x+w+hyphensiz<=INVENTORY_PANEL_WIDTH) {
-                     draw_shadowed_string(text,MESSAGE_X+*x,MESSAGE_Y+*y,full_game_3d);
-                     draw_shadowed_string("-",MESSAGE_X+*x+w,MESSAGE_Y+*y,full_game_3d);
-                     *end=sav;
-                     text=end+1;
-                     break;
-                  }
-                  else
-                     *end=sav;
-               }
+                *end = temp;
+                gr_char_size('-',&hyphensiz,&dum);
+                for(;end>text;end--) {
+                    if(*end==CHAR_SOFTSP||*end=='-') {
+                        sav=*end;
+                        *end='\0';
+                        gr_string_size(text,&w,&h);
+                        if(*x+w+hyphensiz<=INVENTORY_PANEL_WIDTH) {
+                            draw_shadowed_string(text,MESSAGE_X+*x,MESSAGE_Y+*y,full_game_3d);
+                            draw_shadowed_string("-",MESSAGE_X+*x+w,MESSAGE_Y+*y,full_game_3d);
+                            *end=sav;
+                            text=end+1;
+                            break;
+                        }
+                        else
+                            *end=sav;
+                    }
+                }
+                break;
             }
-            break;
-         }
-         draw_shadowed_string(text,MESSAGE_X+*x,MESSAGE_Y+*y,full_game_3d);
-         *x += w;
-         *end = temp;
-         if (temp == '\0' && end==text) return NULL;
-         text = end;
-         if (temp == '\n')
-         {
-            text++;
-            break;
-         }
+            draw_shadowed_string(text,MESSAGE_X+*x,MESSAGE_Y+*y,full_game_3d);
+            *x += w;
+            *end = temp;
+            if (temp == '\0' && end==text) return NULL;
+            text = end;
+            if (temp == '\n')
+            {
+                text++;
+                break;
+            }
 
-         // now, assess the length of the whitespace after the token.
-         while(isspace(*end) && *end != '\n') end++;
-         if (*end == '\n')
-         {
-            text = end + 1;
-            break;
-         }
-         temp = *end;
-         *end = '\0';
-         w = gr_string_width(text);
-         *x+= w;
-         *end = temp;
-         if (*end == '\0') return NULL;
-         text = end;
+            // now, assess the length of the whitespace after the token.
+            while(isspace(*end) && *end != '\n') end++;
+            if (*end == '\n')
+            {
+                text = end + 1;
+                break;
+            }
+            temp = *end;
+            *end = '\0';
+            w = gr_string_width(text);
+            *x+= w;
+            *end = temp;
+            if (*end == '\0') return NULL;
+            text = end;
+        }
+        *x = 0;
+        *y += h;
+    }
+    if (last)
+    {
+      gr_string_size(text,&w,&h);
+      if (w < INVENTORY_PANEL_WIDTH) //  && *y + h < INVENTORY_PANEL_HEIGHT)
+      {
+          draw_shadowed_string(text,MESSAGE_X,*y+MESSAGE_Y,full_game_3d);
+          *x = w; *y += h;
+          return NULL;
       }
-      *x = 0;
-      *y += h;
-   }
-   if (last)
-   {
-     gr_string_size(text,&w,&h);
-     if (w < INVENTORY_PANEL_WIDTH) //  && *y + h < INVENTORY_PANEL_HEIGHT)
-     {
-        draw_shadowed_string(text,MESSAGE_X,*y+MESSAGE_Y,full_game_3d);
-        *x = w; *y += h;
-        return NULL;
-     }
-   }
-   return text;
+    }
+    return text;
 }
 
 void free_email_buffer(void)
 {
-   email_buffer[0] = '\0';
+    email_buffer[0] = '\0';
 }
 
 #define PAGE_STR_BUFSIZE 16
@@ -455,173 +455,173 @@ void free_email_buffer(void)
 
 void draw_more_string(int32_t x, int32_t y, uint8_t footermask)
 {
-   gr_set_fcolor(MORE_COLOR);
+    gr_set_fcolor(MORE_COLOR);
 
-   if(footermask & FOOTER_MORE_MASK)
-      res_draw_string(email_font,REF_STR_More,x+MESSAGE_X,y+MESSAGE_Y);
-   if(footermask & FOOTER_PAGE_MASK) {
-      // print page number
-      // in the future, this string will be in messages.txt
-      // and everyone will drive electric cars.
-      int8_t pagen[PAGE_STR_BUFSIZE];
-      int16_t w,h,len;
+    if(footermask & FOOTER_MORE_MASK)
+        res_draw_string(email_font,REF_STR_More,x+MESSAGE_X,y+MESSAGE_Y);
+    if(footermask & FOOTER_PAGE_MASK) {
+        // print page number
+        // in the future, this string will be in messages.txt
+        // and everyone will drive electric cars.
+        int8_t pagen[PAGE_STR_BUFSIZE];
+        int16_t w,h,len;
 
-      get_email_string(REF_STR_WordPage,pagen,PAGE_STR_BUFSIZE);
-      len=strlen(pagen);
-      pagen[len++]=' ';
-      numtostring(email_curr_page,pagen+len);
-      gr_string_size(pagen,&w,&h);
-      draw_shadowed_string(pagen,INVENTORY_PANEL_WIDTH-w-2,y+MESSAGE_Y,full_game_3d);
-   }
+        get_email_string(REF_STR_WordPage,pagen,PAGE_STR_BUFSIZE);
+        len=strlen(pagen);
+        pagen[len++]=' ';
+        numtostring(email_curr_page,pagen+len);
+        gr_string_size(pagen,&w,&h);
+        draw_shadowed_string(pagen,INVENTORY_PANEL_WIDTH-w-2,y+MESSAGE_Y,full_game_3d);
+    }
 }
 
 void email_draw_text(int16_t email_id, bool really_an_email)
 {
-   int16_t x = 0,y = 0;
-   int8_t* remains = NULL;
-   int8_t buf[256] = "";
+    int16_t x = 0,y = 0;
+    int8_t* remains = NULL;
+    int8_t buf[256] = "";
 #ifdef SVGA_SUPPORT
-   uint8_t old_over;
+    uint8_t old_over;
 #endif
 
-   email_curr_page++;
+    email_curr_page++;
 
-   uiHideMouse(NULL);
-   make_email_cursor(&email_cursor,&email_cursor_bitmap,email_curr_page,email_curr_page==1);
-   if(!email_cursor_currently)
-   {
-      push_inventory_cursors(&email_cursor);
-      email_cursor_currently=true;
-   }
-   uiShowMouse(NULL);
+    uiHideMouse(NULL);
+    make_email_cursor(&email_cursor,&email_cursor_bitmap,email_curr_page,email_curr_page==1);
+    if(!email_cursor_currently)
+    {
+        push_inventory_cursors(&email_cursor);
+        email_cursor_currently=true;
+    }
+    uiShowMouse(NULL);
 
-   if (!ResInUse(email_id)) {
-      return;
-   }
-   if (really_an_email)
-   {
-      if (current_email == EMAIL_INACTIVE)
-      {
-         current_email = EMAIL_INACTIVE;
-         return;
-      }
-      if (next_text_line == EMAIL_INTERCEPT) {
-         email_intercept();
-         return;
-      }
-   }
-   if (next_text_line == EMAIL_DONE) {
-      return;
-   }
-   last_text_line = next_text_line;
+    if (!ResInUse(email_id)) {
+        return;
+    }
+    if (really_an_email)
+    {
+        if (current_email == EMAIL_INACTIVE)
+        {
+            current_email = EMAIL_INACTIVE;
+            return;
+        }
+        if (next_text_line == EMAIL_INTERCEPT) {
+            email_intercept();
+            return;
+        }
+    }
+    if (next_text_line == EMAIL_DONE) {
+        return;
+    }
+    last_text_line = next_text_line;
 #ifdef SVGA_SUPPORT
-   old_over = gr2ss_override;
-   gr2ss_override = OVERRIDE_ALL;
+    old_over = gr2ss_override;
+    gr2ss_override = OVERRIDE_ALL;
 #endif
-   gr_push_canvas(pinv_canvas);
-   gr_set_font((grs_font*)ResLock(email_font));
-   if (!full_game_3d)
-      uiHideMouse(inventory_region->r);
-   inventory_clear();
-   if (*email_buffer != '\0')
-   {
-      uint8_t line = EMAIL_MESSAGE_IDX + next_text_line;
-      int8_t* next = get_temp_string(MKREF(email_id,line));
-      bool last;
+    gr_push_canvas(pinv_canvas);
+    gr_set_font((grs_font*)ResLock(email_font));
+    if (!full_game_3d)
+        uiHideMouse(inventory_region->r);
+    inventory_clear();
+    if (*email_buffer != '\0')
+    {
+        uint8_t line = EMAIL_MESSAGE_IDX + next_text_line;
+        int8_t* next = get_temp_string(MKREF(email_id,line));
+        bool last;
 
-      last = (next==NULL || next[0]=='\0');
-      if ((remains = email_draw_string(email_buffer,&x,&y,last)) != NULL)
-      {
-         strncpy(buf,remains,sizeof(buf));
-         remains = buf;
-         goto more;
-      }
-      *email_buffer = '\0';
-      x += gr_char_width(' ');
-      if (last)
-      {
-         next_text_line = EMAIL_DONE;
-         current_email_base = EMAIL_BASE_ID;
-         goto done;
-      }
-   }
-   while(remains == NULL || gr_string_width(remains) < INVENTORY_PANEL_WIDTH)
-   {
-      int32_t len;
-      int8_t* next;
-      bool last;
-      int8_t tmp[256];
-      uint8_t line = EMAIL_MESSAGE_IDX  + next_text_line++;
-      if (remains == NULL)
-         get_email_string(MKREF(email_id,line),buf,sizeof(buf));
-      else
-         get_email_string(MKREF(email_id,line),buf+strlen(remains),sizeof(buf)-strlen(remains));
-      apply_email_macros(buf,tmp);
-      strcpy(buf,tmp);
-      if(buf[0]=='\0') {
-         next_text_line = EMAIL_DONE;
-         current_email_base = EMAIL_BASE_ID;
-         goto done;
-      }
-      len = strlen(buf);
-      if (!isspace(buf[len-1]))
-         strcpy(buf+len," ");
-      next = get_temp_string(MKREF(email_id,line+1));
-      last = next[0] == '\0';
-      remains = email_draw_string(buf,&x,&y,last);
-      if (last)
-      {
-         if (remains == NULL)
-         {
-            ResUnlock(email_id);								//KLC - we're done with it.
+        last = (next==NULL || next[0]=='\0');
+        if ((remains = email_draw_string(email_buffer,&x,&y,last)) != NULL)
+        {
+            strncpy(buf,remains,sizeof(buf));
+            remains = buf;
+            goto more;
+        }
+        *email_buffer = '\0';
+        x += gr_char_width(' ');
+        if (last)
+        {
             next_text_line = EMAIL_DONE;
             current_email_base = EMAIL_BASE_ID;
             goto done;
-         }
-         else goto more;
-      }
-      if (remains != NULL)
-      {
-         int8_t buf2[sizeof(buf)];
-         strcpy(buf2,remains);
-         strcpy(buf,buf2);
-         remains = buf;
-      }
-   }
-   // Print the "more" message.
+        }
+    }
+    while(remains == NULL || gr_string_width(remains) < INVENTORY_PANEL_WIDTH)
+    {
+        int32_t len;
+        int8_t* next;
+        bool last;
+        int8_t tmp[256];
+        uint8_t line = EMAIL_MESSAGE_IDX  + next_text_line++;
+        if (remains == NULL)
+            get_email_string(MKREF(email_id,line),buf,sizeof(buf));
+        else
+            get_email_string(MKREF(email_id,line),buf+strlen(remains),sizeof(buf)-strlen(remains));
+        apply_email_macros(buf,tmp);
+        strcpy(buf,tmp);
+        if(buf[0]=='\0') {
+            next_text_line = EMAIL_DONE;
+            current_email_base = EMAIL_BASE_ID;
+            goto done;
+        }
+        len = strlen(buf);
+        if (!isspace(buf[len-1]))
+            strcpy(buf+len," ");
+        next = get_temp_string(MKREF(email_id,line+1));
+        last = next[0] == '\0';
+        remains = email_draw_string(buf,&x,&y,last);
+        if (last)
+        {
+            if (remains == NULL)
+            {
+                ResUnlock(email_id);                                //KLC - we're done with it.
+                next_text_line = EMAIL_DONE;
+                current_email_base = EMAIL_BASE_ID;
+                goto done;
+            }
+            else goto more;
+        }
+        if (remains != NULL)
+        {
+            int8_t buf2[sizeof(buf)];
+            strcpy(buf2,remains);
+            strcpy(buf,buf2);
+            remains = buf;
+        }
+    }
+    // Print the "more" message.
  more:
-   if (remains != NULL)
-   {
-      if (strlen(remains) >= EMAIL_BUFSIZ)
-      {
-         critical_error(0x3005);
-      }
-      strcpy(email_buffer,remains);
-   }
-   draw_more_string(x,y,FOOTER_MORE_MASK);
+    if (remains != NULL)
+    {
+        if (strlen(remains) >= EMAIL_BUFSIZ)
+        {
+            critical_error(0x3005);
+        }
+        strcpy(email_buffer,remains);
+    }
+    draw_more_string(x,y,FOOTER_MORE_MASK);
  done:
-   if(next_text_line==EMAIL_DONE) {
-      int16_t w,h;
+    if(next_text_line==EMAIL_DONE) {
+        int16_t w,h;
 
-      if (email_flags&EMAIL_FLAG_TRANSITORY) {
-         player_struct.email[current_email] &= ~(EMAIL_GOT|EMAIL_READ);
-      }
-      gr_char_size('X',&w,&h);
-      x=0; y+=h;
-      if(intercept_hack_num>0) {
-         next_text_line = EMAIL_INTERCEPT;
-         gr_set_fcolor(MORE_COLOR);
-         draw_more_string(x,y,FOOTER_MORE_MASK);
-      }
-      else if (email_curr_page>1)
-         draw_more_string(x,y,0);
-   }
-   ResUnlock(email_font);
-   if (!full_game_3d)
-      uiShowMouse(inventory_region->r);
-   gr_pop_canvas();
+        if (email_flags&EMAIL_FLAG_TRANSITORY) {
+            player_struct.email[current_email] &= ~(EMAIL_GOT|EMAIL_READ);
+        }
+        gr_char_size('X',&w,&h);
+        x=0; y+=h;
+        if(intercept_hack_num>0) {
+            next_text_line = EMAIL_INTERCEPT;
+            gr_set_fcolor(MORE_COLOR);
+            draw_more_string(x,y,FOOTER_MORE_MASK);
+        }
+        else if (email_curr_page>1)
+            draw_more_string(x,y,0);
+    }
+    ResUnlock(email_font);
+    if (!full_game_3d)
+        uiShowMouse(inventory_region->r);
+    gr_pop_canvas();
 #ifdef SVGA_SUPPORT
-   gr2ss_override = old_over;
+    gr2ss_override = old_over;
 #endif
 }
 
@@ -630,57 +630,57 @@ void email_draw_text(int16_t email_id, bool really_an_email)
 
 void email_page_exit(void)
 {
-   int32_t mid;
+    int32_t mid;
 
-   current_email=EMAIL_INACTIVE;
-   pop_inventory_cursors();
-   email_cursor_currently=false;
-//   Free(email_cursor_bitmap.bits);
-   next_text_line = EMAIL_DONE;
-   for(mid=0;mid<NUM_MFDS;mid++) {
-      if(mfd_get_func(mid,player_struct.mfd_current_slots[mid])==MFD_EMAILMUG_FUNC)
-         restore_mfd_slot(mid);
-   }
+    current_email=EMAIL_INACTIVE;
+    pop_inventory_cursors();
+    email_cursor_currently=false;
+//    Free(email_cursor_bitmap.bits);
+    next_text_line = EMAIL_DONE;
+    for(mid=0;mid<NUM_MFDS;mid++) {
+        if(mfd_get_func(mid,player_struct.mfd_current_slots[mid])==MFD_EMAILMUG_FUNC)
+            restore_mfd_slot(mid);
+    }
 }
 
 
 bool email_invpanel_input_handler(uiEvent* ev, LGRegion*, void*)
 {
-   if (input_cursor_mode == INPUT_OBJECT_CURSOR) return false;
-   if (inventory_page != INV_EMAILTEXT_PAGE)
-   {
-      if(email_cursor_currently) {
-         email_page_exit();
-      }
-      return false;
-   }
-   if(ev->type==UI_EVENT_MOUSE_MOVE) return true;
-   if (current_email == EMAIL_INACTIVE) return false;
-   if (ev->type == UI_EVENT_MOUSE && !(ev->subtype & (MOUSE_LDOWN|MOUSE_RDOWN|MOUSE_CDOWN)))
-      return true;
-//   if (ev->type == UI_EVENT_KBD_COOKED &&  (ev->subtype & BAD_EMAIL_KEYFLAGS))
-//      return false;
-   if (ev->type == UI_EVENT_KBD_COOKED && !((ev->subtype & KB_FLAG_DOWN) != 0 && (ev->subtype & 0xFF) == ' '))
-      return false;
-   if (next_text_line == EMAIL_DONE)
-   {
-      email_page_exit();
-      inventory_draw_new_page(old_invent_page);
-   }
-   else email_draw_text(current_email_base + current_email,current_email_base == EMAIL_BASE_ID);
-   return true;
+    if (input_cursor_mode == INPUT_OBJECT_CURSOR) return false;
+    if (inventory_page != INV_EMAILTEXT_PAGE)
+    {
+        if(email_cursor_currently) {
+            email_page_exit();
+        }
+        return false;
+    }
+    if(ev->type==UI_EVENT_MOUSE_MOVE) return true;
+    if (current_email == EMAIL_INACTIVE) return false;
+    if (ev->type == UI_EVENT_MOUSE && !(ev->subtype & (MOUSE_LDOWN|MOUSE_RDOWN|MOUSE_CDOWN)))
+        return true;
+//    if (ev->type == UI_EVENT_KBD_COOKED &&  (ev->subtype & BAD_EMAIL_KEYFLAGS))
+//        return false;
+    if (ev->type == UI_EVENT_KBD_COOKED && !((ev->subtype & KB_FLAG_DOWN) != 0 && (ev->subtype & 0xFF) == ' '))
+        return false;
+    if (next_text_line == EMAIL_DONE)
+    {
+        email_page_exit();
+        inventory_draw_new_page(old_invent_page);
+    }
+    else email_draw_text(current_email_base + current_email,current_email_base == EMAIL_BASE_ID);
+    return true;
 }
 
 
 // ============================================
-//            THE SELECTED EMAIL MFD
+//                THE SELECTED EMAIL MFD
 // ============================================
 
 #define EMAILMUG_SLOT MFD_INFO_SLOT
 
 #define EMAIL_SUBJECT_Y (MFD_VIEW_HGT-1)
 
-#define LAST_MUG(mfd)   (*(int16_t*)&player_struct.mfd_func_data[MFD_EMAILMUG_FUNC][mfd*2])
+#define LAST_MUG(mfd)    (*(int16_t*)&player_struct.mfd_func_data[MFD_EMAILMUG_FUNC][mfd*2])
 
 #define COLOR_ESC_CHAR 'c'
 #define INTERCEPT_ESC_CHAR 'i'
@@ -689,373 +689,373 @@ bool email_invpanel_input_handler(uiEvent* ev, LGRegion*, void*)
 
 void parse_email_mugs(int8_t* mug, uint8_t* mcolor, uint16_t mugnums[NUM_MFDS], bool setup)
 {
-   int16_t i, fwid;
-   int8_t* s, *sfront;
-   int16_t lastmug = -1;
-   uint8_t esc_param, different;
-   extern void cap_mfds_with_func(uint8_t func, uint8_t max);
-   extern int32_t str_to_hex(int8_t);
-   int8_t buf[64];
+    int16_t i, fwid;
+    int8_t* s, *sfront;
+    int16_t lastmug = -1;
+    uint8_t esc_param, different;
+    extern void cap_mfds_with_func(uint8_t func, uint8_t max);
+    extern int32_t str_to_hex(int8_t);
+    int8_t buf[64];
 
-   s = buf;
-   sfront = s;
-   strcpy(s,mug);
+    s = buf;
+    sfront = s;
+    strcpy(s,mug);
 
-   if(mug && *mug) {
+    if(mug && *mug) {
 
-      intercept_hack_num=0;
-      while(!isdigit(*s) && *s!='\0') {
+        intercept_hack_num=0;
+        while(!isdigit(*s) && *s!='\0') {
 
-         fwid=0;
+            fwid=0;
 
-         if(*s==COLOR_ESC_CHAR||*s==INTERCEPT_ESC_CHAR||*s==WHOAMI_ESC_CHAR) {
-            // goofy 2-digit hex parse
-            esc_param=0;
-            if(*(s+1) && *(s+2)) {
-               esc_param=(str_to_hex(*(s+1))<<4)+str_to_hex(*(s+2));
-               fwid=2;
+            if(*s==COLOR_ESC_CHAR||*s==INTERCEPT_ESC_CHAR||*s==WHOAMI_ESC_CHAR) {
+                // goofy 2-digit hex parse
+                esc_param=0;
+                if(*(s+1) && *(s+2)) {
+                    esc_param=(str_to_hex(*(s+1))<<4)+str_to_hex(*(s+2));
+                    fwid=2;
+                }
             }
-         }
 
-         switch(*s) {
-            case TRANSITORY_ESC_CHAR:
-               email_flags|=EMAIL_FLAG_TRANSITORY;
-               break;
-            case COLOR_ESC_CHAR:
-               if(mcolor) {
-                  *mcolor=esc_param;
-               }
-               break;
-            case INTERCEPT_ESC_CHAR:
-               if(!(email_flags&EMAIL_FLAG_BEEN_READ))
-                  intercept_hack_num=esc_param;
-               break;
-         }
-         s+=fwid+1;
-         while(!isalpha(*s) && !isdigit(*s) && *s!='\0') s++;
-      }
-   }
-   different=0;
-   for (i = 0; i < NUM_MFDS; i++)
-   {
-      if (!isdigit(*s))
-      {
-         mugnums[i] = lastmug;
-         continue;
-      }
-      mugnums[i] = atoi(s);
-      if(mugnums[i]!=lastmug)
-         different++;
-      lastmug = mugnums[i];
-      while(isdigit(*s)) s++;
-      while(!isdigit(*s) && *s != '\0') s++;
-   }
-   if(setup)
-      cap_mfds_with_func(MFD_EMAILMUG_FUNC,different);
+            switch(*s) {
+                case TRANSITORY_ESC_CHAR:
+                    email_flags|=EMAIL_FLAG_TRANSITORY;
+                    break;
+                case COLOR_ESC_CHAR:
+                    if(mcolor) {
+                        *mcolor=esc_param;
+                    }
+                    break;
+                case INTERCEPT_ESC_CHAR:
+                    if(!(email_flags&EMAIL_FLAG_BEEN_READ))
+                        intercept_hack_num=esc_param;
+                    break;
+            }
+            s+=fwid+1;
+            while(!isalpha(*s) && !isdigit(*s) && *s!='\0') s++;
+        }
+    }
+    different=0;
+    for (i = 0; i < NUM_MFDS; i++)
+    {
+        if (!isdigit(*s))
+        {
+            mugnums[i] = lastmug;
+            continue;
+        }
+        mugnums[i] = atoi(s);
+        if(mugnums[i]!=lastmug)
+            different++;
+        lastmug = mugnums[i];
+        while(isdigit(*s)) s++;
+        while(!isdigit(*s) && *s != '\0') s++;
+    }
+    if(setup)
+        cap_mfds_with_func(MFD_EMAILMUG_FUNC,different);
 
 }
 
 void mfd_emailmug_expose(MFD* mfd, uint8_t control)
 {
-   bool full = control & MFD_EXPOSE_FULL;
-   int32_t msg = current_email_base+current_email;
-   if (control == 0)  // MFD is drawing stuff
-   {
-      int32_t hnd;
-      // Do unexpose stuff here.
-      if (shodan_sfx_go)
-         shodan_sfx_go = false;
-      if (digi_fx_playing(SFX_SHODAN_STRONG, &hnd))
-         snd_end_sample(hnd);
-      return;
-   }
-   if (!ResInUse(msg))
-   {
-      current_email = EMAIL_INACTIVE;
-   }
-   if (current_email == EMAIL_INACTIVE)
-   {
-      mfd_notify_func(MFD_EMPTY_FUNC,EMAILMUG_SLOT,true,MFD_EMPTY,true);
-      return;
-   }
-   if (control & MFD_EXPOSE) // Time to draw stuff
-   {
-      int8_t buf[256];
-      uint16_t mnums[NUM_MFDS];
-      uint16_t mugnum;
-      int16_t mid = NUM_MFDS;
-      int32_t mug;
-      uint8_t mcolor=MESSAGE_COLOR;
-      parse_email_mugs((int8_t*)RefGet(MKREF(msg,MUGSHOT_IDX)),&mcolor,mnums,false);
-      for (mid = 0; mid < NUM_MFDS; mid++)
-         if (player_struct.mfd_current_slots[mid] == EMAILMUG_SLOT)
-         {
-            break;
-         }
-      if (mid > mfd->id) mid = 0;
-      mugnum = mnums[mfd->id-mid];
-      if (mugnum != LAST_MUG(mfd->id))
-         full = true;
-      LAST_MUG(mfd->id) = mugnum;
-      if (!full) goto out;
+    bool full = control & MFD_EXPOSE_FULL;
+    int32_t msg = current_email_base+current_email;
+    if (control == 0)  // MFD is drawing stuff
+    {
+        int32_t hnd;
+        // Do unexpose stuff here.
+        if (shodan_sfx_go)
+            shodan_sfx_go = false;
+        if (digi_fx_playing(SFX_SHODAN_STRONG, &hnd))
+            snd_end_sample(hnd);
+        return;
+    }
+    if (!ResInUse(msg))
+    {
+        current_email = EMAIL_INACTIVE;
+    }
+    if (current_email == EMAIL_INACTIVE)
+    {
+        mfd_notify_func(MFD_EMPTY_FUNC,EMAILMUG_SLOT,true,MFD_EMPTY,true);
+        return;
+    }
+    if (control & MFD_EXPOSE) // Time to draw stuff
+    {
+        int8_t buf[256];
+        uint16_t mnums[NUM_MFDS];
+        uint16_t mugnum;
+        int16_t mid = NUM_MFDS;
+        int32_t mug;
+        uint8_t mcolor=MESSAGE_COLOR;
+        parse_email_mugs((int8_t*)RefGet(MKREF(msg,MUGSHOT_IDX)),&mcolor,mnums,false);
+        for (mid = 0; mid < NUM_MFDS; mid++)
+            if (player_struct.mfd_current_slots[mid] == EMAILMUG_SLOT)
+            {
+                break;
+            }
+        if (mid > mfd->id) mid = 0;
+        mugnum = mnums[mfd->id-mid];
+        if (mugnum != LAST_MUG(mfd->id))
+            full = true;
+        LAST_MUG(mfd->id) = mugnum;
+        if (!full) goto out;
 
-      mug = REF_IMG_EmailMugShotBase + mugnum;
-      // clear update rects
-      mfd_clear_rects();
-      // set up canvas
-      gr_push_canvas(pmfd_canvas);
-      ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+        mug = REF_IMG_EmailMugShotBase + mugnum;
+        // clear update rects
+        mfd_clear_rects();
+        // set up canvas
+        gr_push_canvas(pmfd_canvas);
+        ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
-      // Clear the canvas by drawing the background bitmap
-      if (!full_game_3d)
-//KLC - chg for new art         ss_bitmap(&mfd_background, 0, 0);
-         gr_bitmap(&mfd_background, 0, 0);
+        // Clear the canvas by drawing the background bitmap
+        if (!full_game_3d)
+//KLC - chg for new art            ss_bitmap(&mfd_background, 0, 0);
+            gr_bitmap(&mfd_background, 0, 0);
 
-      // Slam in the mug shot, centered.
-      if ((mugnum<BASE_VMAIL)
+        // Slam in the mug shot, centered.
+        if ((mugnum<BASE_VMAIL)
 #ifdef PLAYTEST
   && RefIndexValid((RefTable*)ResGet(REFID(mug)),REFINDEX(mug)))
 #else
-         )   // god, I love this job
+            )    // god, I love this job
 #endif
-      {
-         grs_bitmap bm;
-         bm.bits = NULL;
-         extract_temp_res_bitmap(&bm,mug);
-//KLC - chg for new art         ss_bitmap(&bm,(MFD_VIEW_WID-bm.w)/2,(MFD_VIEW_HGT-bm.h)/2);
-         gr_bitmap(&bm,(SCONV_X(MFD_VIEW_WID)-bm.w)/2, (SCONV_Y(MFD_VIEW_HGT)-bm.h)/2);
-      }
+        {
+            grs_bitmap bm;
+            bm.bits = NULL;
+            extract_temp_res_bitmap(&bm,mug);
+//KLC - chg for new art            ss_bitmap(&bm,(MFD_VIEW_WID-bm.w)/2,(MFD_VIEW_HGT-bm.h)/2);
+            gr_bitmap(&bm,(SCONV_X(MFD_VIEW_WID)-bm.w)/2, (SCONV_Y(MFD_VIEW_HGT)-bm.h)/2);
+        }
 
 #ifdef AUDIOLOGS
-      if (!audiolog_setting)
+        if (!audiolog_setting)
 #endif
-         if (shodan_sfx_go)
-         {
-            if (!digi_fx_playing(SFX_SHODAN_STRONG, NULL))
-               play_digi_fx(SFX_SHODAN_STRONG, -1);
-         }
-      // Now, the text
-      if (mugnum == mnums[0])
-      {
-         int8_t *sub;
-         int16_t w,h;
+            if (shodan_sfx_go)
+            {
+                if (!digi_fx_playing(SFX_SHODAN_STRONG, NULL))
+                    play_digi_fx(SFX_SHODAN_STRONG, -1);
+            }
+        // Now, the text
+        if (mugnum == mnums[0])
+        {
+            int8_t *sub;
+            int16_t w,h;
 
-         get_email_title_string(current_email,buf,sizeof(buf));
-         strcat(buf,"\n");
-         get_email_string(MKREF(msg,SENDER_IDX),buf+strlen(buf),sizeof(buf)-strlen(buf));
-         mfd_full_draw_string(buf,0,0,mcolor,email_font,true,true);
-         get_email_string(REF_STR_MessageSubject,buf,sizeof(buf));
-         sub=buf+strlen(buf);
-         get_email_string(MKREF(msg,SUBJECT_IDX),sub,sizeof(buf)-strlen(buf));
-         // draw subject field only if subject string is non-null.
-         if(*sub) {
-            wrap_text(buf,MFD_VIEW_WID-1);
-            gr_string_size(buf,&w,&h);
-            unwrap_text(buf);
-            mfd_full_draw_string(buf,0,EMAIL_SUBJECT_Y-h,mcolor,email_font,true,true);
-         }
-      }
+            get_email_title_string(current_email,buf,sizeof(buf));
+            strcat(buf,"\n");
+            get_email_string(MKREF(msg,SENDER_IDX),buf+strlen(buf),sizeof(buf)-strlen(buf));
+            mfd_full_draw_string(buf,0,0,mcolor,email_font,true,true);
+            get_email_string(REF_STR_MessageSubject,buf,sizeof(buf));
+            sub=buf+strlen(buf);
+            get_email_string(MKREF(msg,SUBJECT_IDX),sub,sizeof(buf)-strlen(buf));
+            // draw subject field only if subject string is non-null.
+            if(*sub) {
+                wrap_text(buf,MFD_VIEW_WID-1);
+                gr_string_size(buf,&w,&h);
+                unwrap_text(buf);
+                mfd_full_draw_string(buf,0,EMAIL_SUBJECT_Y-h,mcolor,email_font,true,true);
+            }
+        }
 
-      mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
-      if (mfd->id == MFD_LEFT && player_struct.mfd_current_slots[MFD_RIGHT] == EMAILMUG_SLOT)
-      {
-         mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,false,MFD_ACTIVE,true);
-      }
+        mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
+        if (mfd->id == MFD_LEFT && player_struct.mfd_current_slots[MFD_RIGHT] == EMAILMUG_SLOT)
+        {
+            mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,false,MFD_ACTIVE,true);
+        }
 
 
-      // Pop the canvas
-      gr_pop_canvas();
-      // Now that we've popped the canvas, we can send the
-      // updated mfd to screen
-      mfd_update_rects(mfd);
+        // Pop the canvas
+        gr_pop_canvas();
+        // Now that we've popped the canvas, we can send the
+        // updated mfd to screen
+        mfd_update_rects(mfd);
 
-   }
+    }
  out:
-   return;
+    return;
 
 }
 
 bool mfd_emailmug_handler(MFD *, uiEvent *ev)
 {
-   if (ev->type != UI_EVENT_MOUSE || !(ev->subtype & (MOUSE_LDOWN|MOUSE_RDOWN|MOUSE_CDOWN)))
-      return false;
-   if (player_struct.hardwarez[HARDWARE_EMAIL] == 0)
-   {
-      string_message_info(REF_STR_NoDataReader);
-      return true;
-   }
-   read_email(0,current_email);
-   return true;
+    if (ev->type != UI_EVENT_MOUSE || !(ev->subtype & (MOUSE_LDOWN|MOUSE_RDOWN|MOUSE_CDOWN)))
+        return false;
+    if (player_struct.hardwarez[HARDWARE_EMAIL] == 0)
+    {
+        string_message_info(REF_STR_NoDataReader);
+        return true;
+    }
+    read_email(0,current_email);
+    return true;
 }
 
 //==========================================================
-//                DISPLAY A MESSAGE
+//                     DISPLAY A MESSAGE
 //==========================================================
 
 void select_email(int32_t num, bool scr)
 {
-   int32_t id;
-   int32_t mug_num;
-   current_email_base = EMAIL_BASE_ID;
-   id  = current_email_base+num;
-   if (!ResInUse(id))
-   {
-      current_email = EMAIL_INACTIVE;
-      return;
-   }
+    int32_t id;
+    int32_t mug_num;
+    current_email_base = EMAIL_BASE_ID;
+    id  = current_email_base+num;
+    if (!ResInUse(id))
+    {
+        current_email = EMAIL_INACTIVE;
+        return;
+    }
 
-   mug_num=atoi((int8_t *)RefGet(MKREF(id,MUGSHOT_IDX)));
-   ResUnlock(id);
+    mug_num=atoi((int8_t *)RefGet(MKREF(id,MUGSHOT_IDX)));
+    ResUnlock(id);
 
-   if (mug_num>=BASE_VMAIL)
-      read_email(current_email_base, num);
-   if (scr)
-   {
-      current_email = num;
-      next_text_line = EMAIL_DONE;
-      mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,true,MFD_ACTIVE,true);
-      if (mug_num < BASE_VMAIL && inventory_page == INV_EMAILTEXT_PAGE)
-         read_email(0,num);
-   }
+    if (mug_num>=BASE_VMAIL)
+        read_email(current_email_base, num);
+    if (scr)
+    {
+        current_email = num;
+        next_text_line = EMAIL_DONE;
+        mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,true,MFD_ACTIVE,true);
+        if (mug_num < BASE_VMAIL && inventory_page == INV_EMAILTEXT_PAGE)
+            read_email(0,num);
+    }
 }
 
 
 #define FIRST_CDATA_NUM 0x10f
 void read_email(Id new_base, int32_t num)
 {
-   int32_t id;
-   int32_t mug_num;
+    int32_t id;
+    int32_t mug_num;
 #ifdef AUDIOLOGS
-   errtype alog_rv = ERR_NOEFFECT;
+    errtype alog_rv = ERR_NOEFFECT;
 #endif
-//KLC - use a global preference now   uint8_t terseness = player_struct.terseness;
-   uint8_t terseness = gShockPrefs.goMsgLength;
+//KLC - use a global preference now    uint8_t terseness = player_struct.terseness;
+    uint8_t terseness = gShockPrefs.goMsgLength;
 
-   email_curr_page = 0;
-   if (new_base != 0)
-      current_email_base = new_base;
-   // no intercept if we are reading a paper.  Bit sloppy to do it
-   // this way, but no sloppier than papers in general.
-   // And if you thought the hack for papers was bad, wait until you see the one for datas... -- X
-   if ((current_email_base==RES_paper0) || (num >= FIRST_CDATA_NUM)) {
-      intercept_hack_num=0;
-   }
-   id = current_email_base+num;
-   if (!ResInUse(id))
-   {
-      current_email = EMAIL_INACTIVE;
-      return;
-   }
+    email_curr_page = 0;
+    if (new_base != 0)
+        current_email_base = new_base;
+    // no intercept if we are reading a paper.  Bit sloppy to do it
+    // this way, but no sloppier than papers in general.
+    // And if you thought the hack for papers was bad, wait until you see the one for datas... -- X
+    if ((current_email_base==RES_paper0) || (num >= FIRST_CDATA_NUM)) {
+        intercept_hack_num=0;
+    }
+    id = current_email_base+num;
+    if (!ResInUse(id))
+    {
+        current_email = EMAIL_INACTIVE;
+        return;
+    }
 
-   email_flags=0;
-   if (current_email_base == EMAIL_BASE_ID)
-   {
+    email_flags=0;
+    if (current_email_base == EMAIL_BASE_ID)
+    {
 #ifdef AUDIOLOGS
-      alog_rv = audiolog_play(num);
+        alog_rv = audiolog_play(num);
 #endif
-      if(player_struct.email[num] & EMAIL_READ)
-         email_flags|=EMAIL_FLAG_BEEN_READ;
-      player_struct.email[num] |= EMAIL_READ;
-   }
-   else terseness = 0;
-   current_email = num;
-   if (inventory_page >= 0)
-      old_invent_page = inventory_page;
+        if(player_struct.email[num] & EMAIL_READ)
+            email_flags|=EMAIL_FLAG_BEEN_READ;
+        player_struct.email[num] |= EMAIL_READ;
+    }
+    else terseness = 0;
+    current_email = num;
+    if (inventory_page >= 0)
+        old_invent_page = inventory_page;
 #ifdef AUDIOLOGS
-   if ((alog_rv != OK) || (audiolog_setting == 2))
-   {
+    if ((alog_rv != OK) || (audiolog_setting == 2))
+    {
 #endif
-      inventory_draw_new_page(INV_EMAILTEXT_PAGE);
-      next_text_line = 0;
-      if (terseness > 0) // let's be terse
-      {
-         // skip ahead to the terse version
-         while(*get_temp_string(MKREF(current_email_base+num,MESSAGE_IDX+next_text_line)) != '\0')
+        inventory_draw_new_page(INV_EMAILTEXT_PAGE);
+        next_text_line = 0;
+        if (terseness > 0) // let's be terse
+        {
+            // skip ahead to the terse version
+            while(*get_temp_string(MKREF(current_email_base+num,MESSAGE_IDX+next_text_line)) != '\0')
+                next_text_line++;
             next_text_line++;
-         next_text_line++;
-      }
-      free_email_buffer();
+        }
+        free_email_buffer();
 #ifdef AUDIOLOGS
-   }
+    }
 #endif
 
-   if (current_email_base == EMAIL_BASE_ID)
-   {
-      player_struct.hardwarez_status[HARDWARE_EMAIL] &= ~(WARE_FLASH);
-      QUESTBIT_OFF(0x12c);
+    if (current_email_base == EMAIL_BASE_ID)
+    {
+        player_struct.hardwarez_status[HARDWARE_EMAIL] &= ~(WARE_FLASH);
+        QUESTBIT_OFF(0x12c);
 
-      mug_num=atoi((int8_t *)RefGet(MKREF(current_email_base+num,MUGSHOT_IDX)));
-      ResUnlock(current_email_base+num);
+        mug_num=atoi((int8_t *)RefGet(MKREF(current_email_base+num,MUGSHOT_IDX)));
+        ResUnlock(current_email_base+num);
 
-      if (mug_num>=BASE_VMAIL)  // video email
-      {
+        if (mug_num>=BASE_VMAIL)  // video email
+        {
 #ifdef AUDIOLOGS
-         if ((alog_rv != OK) || (audiolog_setting == 2))
-         {
-#endif
-            // draw the text for the vmail before playing vmail
-            email_draw_text(current_email_base + current_email,current_email_base == EMAIL_BASE_ID);
-            play_vmail(mug_num-BASE_VMAIL);
-#ifdef AUDIOLOGS
-         }
-         else
-         {
-         }
-#endif
-      }
-      else
-      {
-         mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,true,MFD_ACTIVE,true);
-         if (current_email != EMAIL_INACTIVE)
-         {
-            int32_t i;
-            uint16_t mnums[NUM_MFDS];
-            bool grab = true;
-            parse_email_mugs((int8_t *)RefGet(MKREF(current_email_base+num,MUGSHOT_IDX)),NULL,mnums,true);
-            for (i = 1; i < NUM_MFDS; i++)
+            if ((alog_rv != OK) || (audiolog_setting == 2))
             {
-               if (mnums[i] != mnums[i-1])
-               {
-                  save_mfd_slot(i);
-                  mfd_change_slot(i,EMAILMUG_SLOT);
-                  grab = false;
-               }
-            }
-            if (grab) {
-               i=mfd_grab_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT);
-               save_mfd_slot(i);
-               mfd_change_slot(i,EMAILMUG_SLOT);
-            }
-            else {
-               save_mfd_slot(0);
-               mfd_change_slot(0,EMAILMUG_SLOT);
-            }
-         }
-      }
-   }
-#ifdef AUDIOLOGS
-   if ((alog_rv != OK) || (audiolog_setting == 2))
-   {
 #endif
-      email_draw_text(current_email_base + current_email,current_email_base == EMAIL_BASE_ID);
+                // draw the text for the vmail before playing vmail
+                email_draw_text(current_email_base + current_email,current_email_base == EMAIL_BASE_ID);
+                play_vmail(mug_num-BASE_VMAIL);
 #ifdef AUDIOLOGS
-   }
-   else
-   {
-      if (_current_loop <= FULLSCREEN_LOOP)
-         chg_set_flg(INVENTORY_UPDATE);
-   }
+            }
+            else
+            {
+            }
+#endif
+        }
+        else
+        {
+            mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,true,MFD_ACTIVE,true);
+            if (current_email != EMAIL_INACTIVE)
+            {
+                int32_t i;
+                uint16_t mnums[NUM_MFDS];
+                bool grab = true;
+                parse_email_mugs((int8_t *)RefGet(MKREF(current_email_base+num,MUGSHOT_IDX)),NULL,mnums,true);
+                for (i = 1; i < NUM_MFDS; i++)
+                {
+                    if (mnums[i] != mnums[i-1])
+                    {
+                        save_mfd_slot(i);
+                        mfd_change_slot(i,EMAILMUG_SLOT);
+                        grab = false;
+                    }
+                }
+                if (grab) {
+                    i=mfd_grab_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT);
+                    save_mfd_slot(i);
+                    mfd_change_slot(i,EMAILMUG_SLOT);
+                }
+                else {
+                    save_mfd_slot(0);
+                    mfd_change_slot(0,EMAILMUG_SLOT);
+                }
+            }
+        }
+    }
+#ifdef AUDIOLOGS
+    if ((alog_rv != OK) || (audiolog_setting == 2))
+    {
+#endif
+        email_draw_text(current_email_base + current_email,current_email_base == EMAIL_BASE_ID);
+#ifdef AUDIOLOGS
+    }
+    else
+    {
+        if (_current_loop <= FULLSCREEN_LOOP)
+            chg_set_flg(INVENTORY_UPDATE);
+    }
 #endif
 }
 
 //=======================================================
-//                   INITIALIZATION
+//                         INITIALIZATION
 //=======================================================
 
 void add_email_handler(LGRegion* r)
 {
-   int32_t id;
-   uiInstallRegionHandler(r,UI_EVENT_MOUSE_MOVE|UI_EVENT_MOUSE|UI_EVENT_KBD_COOKED,email_invpanel_input_handler,NULL,&id);
+    int32_t id;
+    uiInstallRegionHandler(r,UI_EVENT_MOUSE_MOVE|UI_EVENT_MOUSE|UI_EVENT_KBD_COOKED,email_invpanel_input_handler,NULL,&id);
 }
 
 
@@ -1063,13 +1063,13 @@ void add_email_handler(LGRegion* r)
 
 
 //=====================================================
-//             THE EMAIL PAGE SELECT MFD
+//                 THE EMAIL PAGE SELECT MFD
 //=====================================================
 #define MFD_EMAILWARE_FUNC 15
 #define NUM_EMAIL_BUTTONS 3
 #define BUTTON_LIT_STATE(mfd,butt) (player_struct.mfd_func_data[MFD_EMAILWARE_FUNC][NUM_EMAIL_BUTTONS*(mfd)+(butt)])
 
-#define EMAIL_BARRAY_X   0
+#define EMAIL_BARRAY_X    0
 #define EMAIL_BARRAY_WD  (MFD_VIEW_WID)
 #define EMAIL_BARRAY_Y (MFD_VIEW_HGT - res_bm_height(REF_IMG_EmailButt0)-2)
 
@@ -1079,125 +1079,125 @@ static uint8_t email_pages[] = { 50,7,8};
 
 void mfd_emailware_expose(MFD* mfd, uint8_t control)
 {
-   extern void mfd_item_micro_hires_expose(bool full, int32_t triple);
-   extern void draw_mfd_item_spew(Ref id, int32_t n);
-   int32_t i;
-   bool full = control & MFD_EXPOSE_FULL;
-   bool on = (control & (MFD_EXPOSE|MFD_EXPOSE_FULL)) != 0;
-   uint8_t s = player_struct.hardwarez_status[HARDWARE_EMAIL];
-   if (control == 0)
-   {
-      int32_t mfd_id = NUM_MFDS;
+    extern void mfd_item_micro_hires_expose(bool full, int32_t triple);
+    extern void draw_mfd_item_spew(Ref id, int32_t n);
+    int32_t i;
+    bool full = control & MFD_EXPOSE_FULL;
+    bool on = (control & (MFD_EXPOSE|MFD_EXPOSE_FULL)) != 0;
+    uint8_t s = player_struct.hardwarez_status[HARDWARE_EMAIL];
+    if (control == 0)
+    {
+        int32_t mfd_id = NUM_MFDS;
 
-      // if we aren't showing the email hardware mfd any more, then
-      // turn off the MFD
-      while(mfd_yield_func(MFD_EMAILWARE_FUNC,&mfd_id))
-      {
-         if (mfd_id != mfd->id)
-            on = true;
-      }
-   }
-   if (((s & WARE_ON) != 0) != on)
-   {
-      use_ware(WARE_HARD,HARDWARE_EMAIL);
-   }
+        // if we aren't showing the email hardware mfd any more, then
+        // turn off the MFD
+        while(mfd_yield_func(MFD_EMAILWARE_FUNC,&mfd_id))
+        {
+            if (mfd_id != mfd->id)
+                on = true;
+        }
+    }
+    if (((s & WARE_ON) != 0) != on)
+    {
+        use_ware(WARE_HARD,HARDWARE_EMAIL);
+    }
 
-   if (control == 0) return;
-
-
-   mfd_clear_rects();
-   gr_push_canvas(pmfd_canvas);
-   ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
-
-   // Lay down the "background"
-//KLC - chg for new art   mfd_item_micro_expose(true,VIDTEX_HARD_TRIPLE);
-   mfd_item_micro_hires_expose(true,VIDTEX_HARD_TRIPLE);
-   if (full)
-   {
-      uint8_t n = HARDWARE_EMAIL;
-      uint8_t v = player_struct.hardwarez[n];
-      draw_mfd_item_spew(REF_STR_wareSpew0 + STRINGS_PER_WARE*n,v);
-   }
+    if (control == 0) return;
 
 
-   // clear rects so that we don't draw it if we don't have to
-   if (!full) mfd_clear_rects();
+    mfd_clear_rects();
+    gr_push_canvas(pmfd_canvas);
+    ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
-   for (i = 0; i < NUM_EMAIL_BUTTONS; i++)
-   {
-      bool lit = inventory_page == email_pages[i];
-      if (full || BUTTON_LIT_STATE(mfd->id,i) != lit)
-      {
-         int32_t id = (lit) ? REF_IMG_LitEmailButt0 + i : REF_IMG_EmailButt0 + i;
-         int16_t x = EMAIL_BARRAY_WD*i/NUM_EMAIL_BUTTONS+EMAIL_BARRAY_X;
-         int16_t y = EMAIL_BARRAY_Y;
-         draw_res_bm(id,x,y);
-         mfd_add_rect(x,y,x+res_bm_width(id),y+res_bm_height(id));
-         BUTTON_LIT_STATE(mfd->id,i) = lit;
-      }
-   }
-   gr_pop_canvas();
-   mfd_update_rects(mfd);
+    // Lay down the "background"
+//KLC - chg for new art    mfd_item_micro_expose(true,VIDTEX_HARD_TRIPLE);
+    mfd_item_micro_hires_expose(true,VIDTEX_HARD_TRIPLE);
+    if (full)
+    {
+        uint8_t n = HARDWARE_EMAIL;
+        uint8_t v = player_struct.hardwarez[n];
+        draw_mfd_item_spew(REF_STR_wareSpew0 + STRINGS_PER_WARE*n,v);
+    }
+
+
+    // clear rects so that we don't draw it if we don't have to
+    if (!full) mfd_clear_rects();
+
+    for (i = 0; i < NUM_EMAIL_BUTTONS; i++)
+    {
+        bool lit = inventory_page == email_pages[i];
+        if (full || BUTTON_LIT_STATE(mfd->id,i) != lit)
+        {
+            int32_t id = (lit) ? REF_IMG_LitEmailButt0 + i : REF_IMG_EmailButt0 + i;
+            int16_t x = EMAIL_BARRAY_WD*i/NUM_EMAIL_BUTTONS+EMAIL_BARRAY_X;
+            int16_t y = EMAIL_BARRAY_Y;
+            draw_res_bm(id,x,y);
+            mfd_add_rect(x,y,x+res_bm_width(id),y+res_bm_height(id));
+            BUTTON_LIT_STATE(mfd->id,i) = lit;
+        }
+    }
+    gr_pop_canvas();
+    mfd_update_rects(mfd);
 }
 
 bool mfd_email_button_handler(MFD*, LGPoint bttn, uiEvent*, void*)
 {
-   current_email_base = EMAIL_BASE_ID;
-   old_invent_page = bttn.x;
-   inventory_draw_new_page(email_pages[bttn.x]);
-   mfd_notify_func(MFD_EMAILWARE_FUNC, MFD_ITEM_SLOT, false, MFD_ACTIVE, false);
-   return true;
+    current_email_base = EMAIL_BASE_ID;
+    old_invent_page = bttn.x;
+    inventory_draw_new_page(email_pages[bttn.x]);
+    mfd_notify_func(MFD_EMAILWARE_FUNC, MFD_ITEM_SLOT, false, MFD_ACTIVE, false);
+    return true;
 }
 
 errtype mfd_emailware_init(MFD_Func* f)
 {
-   int32_t cnt = 0;
-   LGPoint bsize;
-   LGPoint bdims;
-   LGRect r;
-   errtype err;
-   bsize.x = res_bm_width(REF_IMG_EmailButt0);
-   bsize.y = res_bm_height(REF_IMG_EmailButt0);
-   bdims.x = NUM_EMAIL_BUTTONS;
-   bdims.y = 1;
-   r.ul.x = EMAIL_BARRAY_X;
-   r.ul.y = EMAIL_BARRAY_Y;
-   r.lr.x = r.ul.x + EMAIL_BARRAY_WD;
-   r.lr.y = r.ul.y + bsize.y;
-   err = MFDBttnArrayInit(&f->handlers[cnt++],&r,bdims,bsize,mfd_email_button_handler,NULL);
-   if (err != OK) return err;
-   f->handler_count = cnt;
-   return OK;
+    int32_t cnt = 0;
+    LGPoint bsize;
+    LGPoint bdims;
+    LGRect r;
+    errtype err;
+    bsize.x = res_bm_width(REF_IMG_EmailButt0);
+    bsize.y = res_bm_height(REF_IMG_EmailButt0);
+    bdims.x = NUM_EMAIL_BUTTONS;
+    bdims.y = 1;
+    r.ul.x = EMAIL_BARRAY_X;
+    r.ul.y = EMAIL_BARRAY_Y;
+    r.lr.x = r.ul.x + EMAIL_BARRAY_WD;
+    r.lr.y = r.ul.y + bsize.y;
+    err = MFDBttnArrayInit(&f->handlers[cnt++],&r,bdims,bsize,mfd_email_button_handler,NULL);
+    if (err != OK) return err;
+    f->handler_count = cnt;
+    return OK;
 }
 //=====================================================
-//                THE EMAIL WARE
+//                     THE EMAIL WARE
 //=====================================================
 int16_t last_email_taken = 0;
 
 void email_turnon(bool ,bool real_start)
 {
-   bool flash=player_struct.hardwarez_status[HARDWARE_EMAIL]&WARE_FLASH;
-   current_email_base = EMAIL_BASE_ID;
-   player_struct.hardwarez_status[HARDWARE_EMAIL] &= ~(WARE_FLASH);
-   QUESTBIT_OFF(0x12c);
-   if (real_start)
-   {
-      inventory_draw_new_page(email_pages[flash?EMAIL_VER:last_email_taken]);
-      set_inventory_mfd(MFD_INV_HARDWARE,HARDWARE_EMAIL,true);
-      mfd_change_slot(mfd_grab_func(MFD_EMAILWARE_FUNC,MFD_ITEM_SLOT),MFD_ITEM_SLOT);
-   }
+    bool flash=player_struct.hardwarez_status[HARDWARE_EMAIL]&WARE_FLASH;
+    current_email_base = EMAIL_BASE_ID;
+    player_struct.hardwarez_status[HARDWARE_EMAIL] &= ~(WARE_FLASH);
+    QUESTBIT_OFF(0x12c);
+    if (real_start)
+    {
+        inventory_draw_new_page(email_pages[flash?EMAIL_VER:last_email_taken]);
+        set_inventory_mfd(MFD_INV_HARDWARE,HARDWARE_EMAIL,true);
+        mfd_change_slot(mfd_grab_func(MFD_EMAILWARE_FUNC,MFD_ITEM_SLOT),MFD_ITEM_SLOT);
+    }
 }
 
 void email_turnoff(bool ,bool real_stop)
 {
-   if (real_stop)
-   {
-      int32_t mfd_id = NUM_MFDS;
-      while(mfd_yield_func(MFD_EMAILWARE_FUNC,&mfd_id))
-      {
-         restore_mfd_slot(mfd_id);
-      }
-   }
+    if (real_stop)
+    {
+        int32_t mfd_id = NUM_MFDS;
+        while(mfd_yield_func(MFD_EMAILWARE_FUNC,&mfd_id))
+        {
+            restore_mfd_slot(mfd_id);
+        }
+    }
 }
 
 // every 30 nerd seconds, check to see if we have unread email and flash the email ware
@@ -1207,42 +1207,42 @@ void email_turnoff(bool ,bool real_stop)
 
 void update_email_ware(void)
 {
-   int32_t i;
-   if ((player_struct.game_time >> APPROX_CIT_CYCLE_SHFT) % FLASH_TIME_INTERVAL != 0)
-      return;
+    int32_t i;
+    if ((player_struct.game_time >> APPROX_CIT_CYCLE_SHFT) % FLASH_TIME_INTERVAL != 0)
+        return;
 
-   for (i = 0; i < NUM_EMAIL_PROPER; i++)
-   {
-      uint8_t s = player_struct.email[i];
-      if ((s & EMAIL_GOT) != 0 && (s & EMAIL_READ) == 0)
-         goto found;
-   }
-   return;
+    for (i = 0; i < NUM_EMAIL_PROPER; i++)
+    {
+        uint8_t s = player_struct.email[i];
+        if ((s & EMAIL_GOT) != 0 && (s & EMAIL_READ) == 0)
+            goto found;
+    }
+    return;
 found:
-   player_struct.hardwarez_status[HARDWARE_EMAIL]|=WARE_FLASH;
+    player_struct.hardwarez_status[HARDWARE_EMAIL]|=WARE_FLASH;
 }
 
 //=====================================================
-//               THE EMAIL INVENTORY PAGE
+//                    THE EMAIL INVENTORY PAGE
 //=====================================================
 
 #define BUFSZ 50
 
 int8_t* email_name_func(void*, int32_t num, int8_t* buf)
 {
-   return get_email_title_string(num,buf,BUFSZ);
+    return get_email_title_string(num,buf,BUFSZ);
 }
 
 uint8_t email_color_func(void* , int32_t num)
 {
-   return(player_struct.email[num] & EMAIL_READ?0x5C:0x59);
+    return(player_struct.email[num] & EMAIL_READ?0x5C:0x59);
 }
 
 // SHODAN wacky earth destroying hacking
 void email_slam_hack(int16_t which)
 {
-   void add_email_datamunge(int16_t munge,bool select);
+    void add_email_datamunge(int16_t munge,bool select);
 
-   add_email_datamunge(which,true);
-   read_email(EMAIL_BASE_ID,which);
+    add_email_datamunge(which,true);
+    read_email(EMAIL_BASE_ID,which);
 }

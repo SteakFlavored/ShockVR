@@ -26,47 +26,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tngslidr.h"
 
 Gadget *gad_slider_create(Gadget *parent, LGRect *dim, int32_t z, int32_t alignment, int32_t increment,
-   int32_t min, int32_t max, TNGStyle *sty, int8_t *name)
+    int32_t min, int32_t max, TNGStyle *sty, int8_t *name)
 {
-   return(gad_slider_create_full(parent, dim, z, alignment, increment, min, max, sty, name,
-      NULL, NULL, NULL, NULL, NULL));
+    return(gad_slider_create_full(parent, dim, z, alignment, increment, min, max, sty, name,
+        NULL, NULL, NULL, NULL, NULL));
 }
 
 Gadget *gad_slider_create_full(Gadget *parent, LGRect *dim, int32_t z, int32_t alignment, int32_t increment,
-   int32_t min, int32_t max, TNGStyle *sty, int8_t *name, Ref res_left, Ref res_right, Ref res_up,
-   Ref res_down, Ref res_slider)
+    int32_t min, int32_t max, TNGStyle *sty, int8_t *name, Ref res_left, Ref res_right, Ref res_up,
+    Ref res_down, Ref res_slider)
 {
-   Gadget *retgad;
-//   TNG *sl_tng;
-   LGPoint size;
+    Gadget *retgad;
+//    TNG *sl_tng;
+    LGPoint size;
 
-   gadget_create_setup(&retgad, parent, CLASS_SLIDER, dim, z, name);
+    gadget_create_setup(&retgad, parent, CLASS_SLIDER, dim, z, name);
 
-   size.x = RectWidth(dim);
-   size.y = RectHeight(dim);
-   tng_slider_full_init(retgad, retgad->tng_data, sty, alignment, min, max,
-      min, increment, size, res_left, res_right, res_up, res_down, res_slider);
+    size.x = RectWidth(dim);
+    size.y = RectHeight(dim);
+    tng_slider_full_init(retgad, retgad->tng_data, sty, alignment, min, max,
+        min, increment, size, res_left, res_right, res_up, res_down, res_slider);
 
-   return (retgad);
+    return (retgad);
 }
 
 int8_t new_name[80];
 
 Gadget *gad_slider_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max,
-   int32_t value, int32_t increment, LGPoint size)
+    int32_t value, int32_t increment, LGPoint size)
 {
-   LGRect newrect;
-   Gadget *rgad;
+    LGRect newrect;
+    Gadget *rgad;
 
-   newrect.ul = loc;
-   newrect.lr.x = newrect.ul.x + size.x;
-   newrect.lr.y = newrect.ul.y + size.y;
-   strcpy(new_name,"slider-sub-");
-   strcat(new_name,GD_NAME(((Gadget *)ui_data)->rep));
-   rgad = gad_slider_create((Gadget *)ui_data, &newrect, 0, alignment, increment, min, max, sty, new_name);
-//      GD_NAME(((Gadget *)ui_data)->rep));
-   TNG_SL(rgad->tng_data)->value = value;
-   *pptng = rgad->tng_data;
-   return(rgad);
+    newrect.ul = loc;
+    newrect.lr.x = newrect.ul.x + size.x;
+    newrect.lr.y = newrect.ul.y + size.y;
+    strcpy(new_name,"slider-sub-");
+    strcat(new_name,GD_NAME(((Gadget *)ui_data)->rep));
+    rgad = gad_slider_create((Gadget *)ui_data, &newrect, 0, alignment, increment, min, max, sty, new_name);
+//        GD_NAME(((Gadget *)ui_data)->rep));
+    TNG_SL(rgad->tng_data)->value = value;
+    *pptng = rgad->tng_data;
+    return(rgad);
 }
 

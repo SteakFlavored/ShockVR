@@ -33,74 +33,74 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg.h"
 
 //--------------------------
-//	Types
+//    Types
 //--------------------------
 typedef struct
 {
-   SndChannelPtr	sndChan;	// Ptr to Mac sound channel.
-   uint8_t			pan;
-   uint8_t			pri;
-   uint16_t			vol;
-   uint8_t			flags;
-   int32_t			snd_ref;
-   int32_t			loops;
-   Handle			sample;		// Handle to Mac 'snd ' resource.
-   void			*data;
-   int32_t			len;
+    SndChannelPtr    sndChan;    // Ptr to Mac sound channel.
+    uint8_t            pan;
+    uint8_t            pri;
+    uint16_t            vol;
+    uint8_t            flags;
+    int32_t            snd_ref;
+    int32_t            loops;
+    Handle            sample;        // Handle to Mac 'snd ' resource.
+    void            *data;
+    int32_t            len;
 } snd_digi_parms;
 
 typedef struct
 {
-   uint8_t	pan;
-   uint8_t	vol;
-   uint8_t	pri;
-   uint8_t	flags;
-   int32_t	snd_ref;
-   void	*data;
-   int32_t	seq_num;
-   void	*internal_form;
+    uint8_t    pan;
+    uint8_t    vol;
+    uint8_t    pri;
+    uint8_t    flags;
+    int32_t    snd_ref;
+    void    *data;
+    int32_t    seq_num;
+    void    *internal_form;
 } snd_midi_parms;
 
 //typedef void LG_SND_DRIVER;
 
 //--------------------------
-//	Globals
+//    Globals
 //--------------------------
 //extern LG_SND_DRIVER *snd_digi;
 //extern LG_SND_DRIVER *snd_midi;
-extern uint8_t	snd_digi_vol;
-extern uint8_t          snd_midi_vol;
-//extern void cdecl   (*snd_update)(snd_digi_parms *dprm);
+extern uint8_t    snd_digi_vol;
+extern uint8_t             snd_midi_vol;
+//extern void cdecl    (*snd_update)(snd_digi_parms *dprm);
 extern void (*snd_finish)(snd_digi_parms *dprm);
-//extern void cdecl   (*snd_nblock)(snd_digi_parms *dprm);
+//extern void cdecl    (*snd_nblock)(snd_digi_parms *dprm);
 extern void (*seq_finish)(int32_t seq_ind);
-//extern void cdecl   (*seq_miditrig)(snd_midi_parms *mprm, int32_t trig_value);
-extern int32_t		snd_error;
-//extern int32_t            snd_genmidi_or_not;
-//extern uint8_t          snd_stereo_reverse;
+//extern void cdecl    (*seq_miditrig)(snd_midi_parms *mprm, int32_t trig_value);
+extern int32_t        snd_error;
+//extern int32_t                snd_genmidi_or_not;
+//extern uint8_t             snd_stereo_reverse;
 
 //--------------------------
-//	Defines
+//    Defines
 //--------------------------
-//#define snd_sample_ptr_from_parms(ps)   ((SAMPLE *)ps->internal_form)
+//#define snd_sample_ptr_from_parms(ps)    ((SAMPLE *)ps->internal_form)
 //#define snd_sequence_ptr_from_parms(ps) ((SEQUENCE *)ps->internal_form)
-//#define snd_sample_ptr_from_id(pid)     ((SAMPLE *)snd_get_sample(pid))
-#define snd_sequence_ptr_from_id(pid)   ((SEQUENCE *)snd_get_sequence(pid))
+//#define snd_sample_ptr_from_id(pid)      ((SAMPLE *)snd_get_sample(pid))
+#define snd_sequence_ptr_from_id(pid)    ((SEQUENCE *)snd_get_sequence(pid))
 
 //--------------------------
-//	Prototypes
+//    Prototypes
 //--------------------------
 void  snd_startup(void);
 void  snd_setup(void *d_path, int8_t *prefix);
 void  snd_shutdown(void);
-int32_t   snd_set_midi_sequences(int32_t chan_cnt);
-int32_t   snd_start_digital(void);
-int32_t   snd_stop_digital(void);
-int32_t   snd_set_digital_channels(int32_t chan_cnt);
-int32_t   snd_start_midi(void);
-int32_t   snd_stop_midi(void);
+int32_t    snd_set_midi_sequences(int32_t chan_cnt);
+int32_t    snd_start_digital(void);
+int32_t    snd_stop_digital(void);
+int32_t    snd_set_digital_channels(int32_t chan_cnt);
+int32_t    snd_start_midi(void);
+int32_t    snd_stop_midi(void);
 
-int32_t   snd_sample_play(int32_t snd_ref, int32_t len, uint8_t *smp, snd_digi_parms *dprm);
+int32_t    snd_sample_play(int32_t snd_ref, int32_t len, uint8_t *smp, snd_digi_parms *dprm);
 void  snd_end_sample(int32_t hnd_id);
 snd_digi_parms *snd_sample_parms(int32_t hnd_id);
 //void *snd_get_sample(int32_t hnd_id);
@@ -108,7 +108,7 @@ void  snd_kill_all_samples(void);
 void  snd_sample_reload_parms(snd_digi_parms *sdp);
 
 int32_t snd_find_free_sequence(void);
-//int   snd_sequence_play(int32_t snd_ref, uint8_t *seq_dat, int32_t seq_num, snd_midi_parms *mparm);
+//int    snd_sequence_play(int32_t snd_ref, uint8_t *seq_dat, int32_t seq_num, snd_midi_parms *mparm);
 //snd_midi_parms *snd_sequence_parms(int32_t hnd_id);
 TunePlayer snd_get_sequence(int32_t seq_id);
 void  snd_end_sequence(int32_t seq_id);
@@ -120,59 +120,59 @@ OSErr snd_load_theme(FSSpec *specPtr, TunePlayer thePlayer);
 void snd_release_current_theme(void);
 
 //--------------------------
-//	Parm + flag defines for digital
+//    Parm + flag defines for digital
 //--------------------------
-#define SND_DEF_PRI		0x3f
-#define SND_PARM_NULL	0xff
-#define SND_DEF_PAN 		64
+#define SND_DEF_PRI        0x3f
+#define SND_PARM_NULL    0xff
+#define SND_DEF_PAN         64
 
-#define SND_FLG_DOUBLE_BUFFER	0x01
-#define SND_FLG_INUSE          		0x08
-#define SND_FLG_RAWDATA        		0x80
-#define SND_FLG_RAWD_STEREO    	0x40
-#define SND_FLG_SPEED          		0x30
-#define SND_FLG_RAWMASK        	0xF0
-
-//--------------------------
-//	Size/scale defines
-//--------------------------
-#define SND_MAX_SAMPLES		8			// For Mac version.
-#define SND_MAX_SEQUENCES 	8			// Can I really handle this many?
+#define SND_FLG_DOUBLE_BUFFER    0x01
+#define SND_FLG_INUSE                     0x08
+#define SND_FLG_RAWDATA                  0x80
+#define SND_FLG_RAWD_STEREO         0x40
+#define SND_FLG_SPEED                     0x30
+#define SND_FLG_RAWMASK              0xF0
 
 //--------------------------
-//	Misc defines
+//    Size/scale defines
 //--------------------------
-#define SND_HND_FIELD          0       // where in user data handle is stored
+#define SND_MAX_SAMPLES        8            // For Mac version.
+#define SND_MAX_SEQUENCES     8            // Can I really handle this many?
 
 //--------------------------
-//	Capabilities field
+//    Misc defines
 //--------------------------
-#define SND_CAP_DIGI		1
-#define SND_CAP_MIDI		2
-#define SND_CAP_GENMIDI	4
-#define SND_CAP_STEREO	8
-#define SND_CAP_GAIN		16
+#define SND_HND_FIELD             0         // where in user data handle is stored
 
 //--------------------------
-//	Return/Error codes
+//    Capabilities field
 //--------------------------
-#define SND_OK					0x0000
+#define SND_CAP_DIGI        1
+#define SND_CAP_MIDI        2
+#define SND_CAP_GENMIDI    4
+#define SND_CAP_STEREO    8
+#define SND_CAP_GAIN        16
+
+//--------------------------
+//    Return/Error codes
+//--------------------------
+#define SND_OK                    0x0000
 
 // error codes
-#define SND_GENERIC_ERROR	0x0001
-#define SND_OUT_OF_MEMORY	0x0002
-#define SND_NO_DRIVER			0x0003
-#define SND_NOT_SUPPORTED	0x0004
+#define SND_GENERIC_ERROR    0x0001
+#define SND_OUT_OF_MEMORY    0x0002
+#define SND_NO_DRIVER            0x0003
+#define SND_NOT_SUPPORTED    0x0004
 
 // specialized errors
-#define SND_DRIVER_ALREADY	0x0100
-#define SND_NO_DRIVER_NAME	0x0101
-#define SND_CANT_INIT_DRIVER	0x0102
-#define SND_CANT_FIND_CARD	0x0103
+#define SND_DRIVER_ALREADY    0x0100
+#define SND_NO_DRIVER_NAME    0x0101
+#define SND_CANT_INIT_DRIVER    0x0102
+#define SND_CANT_FIND_CARD    0x0103
 
-#define SND_NO_HANDLE 		0x0200
+#define SND_NO_HANDLE         0x0200
 
 // to use with functions which want to return 0->n values
-#define SND_PERROR			-1
+#define SND_PERROR            -1
 
 #endif // __LGSNDX_H

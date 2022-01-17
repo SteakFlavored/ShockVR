@@ -16,19 +16,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		Rect.C		Rectangle-handling routines.
-//		Rex E. Bradford (REX)
+//        Rect.C        Rectangle-handling routines.
+//        Rex E. Bradford (REX)
 //
-//		This module implements a bunch of rectangle-manipulation
-//		routines.  Rectangles are defined such that the upper-left
-//		point is inside the rectangle, and the lower-right point is
-//		outside.
+//        This module implements a bunch of rectangle-manipulation
+//        routines.  Rectangles are defined such that the upper-left
+//        point is inside the rectangle, and the lower-right point is
+//        outside.
 //
-//		Thus, if the rect.ul.x == rect.lr.x OR rect.ul.y == rect.lr.y,
-//		the rectangle is empty.
+//        Thus, if the rect.ul.x == rect.lr.x OR rect.ul.y == rect.lr.y,
+//        the rectangle is empty.
 //
-//		Also, a rect's width = rect.lr.x - rect.ul.x,
-//		and its height = rect.lr.y - rect.ul.y.
+//        Also, a rect's width = rect.lr.x - rect.ul.x,
+//        and its height = rect.lr.y - rect.ul.y.
 /*
 * $Header: n:/project/lib/src/dstruct/RCS/rect.c 1.3 1994/04/05 04:04:13 dc Exp $
 * $log$
@@ -36,151 +36,151 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "rect.h"
 
-//	--------------------------------------------------------
+//    --------------------------------------------------------
 //
-//	RectTestSect() tests if two rectangles intersect.
+//    RectTestSect() tests if two rectangles intersect.
 //
-//		pr1 = ptr to 1st rectangle
-//		pr2 = ptr to 2nd rectangle
+//        pr1 = ptr to 1st rectangle
+//        pr2 = ptr to 2nd rectangle
 //
-//	returns: true if rectangles intersect, false if disjoint.
+//    returns: true if rectangles intersect, false if disjoint.
 
 int32_t RectTestSect(LGRect *pr1, LGRect *pr2)
 {
-	return(RECT_TEST_SECT(pr1,pr2));
+    return(RECT_TEST_SECT(pr1,pr2));
 }
 
-//	--------------------------------------------------------
+//    --------------------------------------------------------
 //
-//	RectSect() finds intersection of two rects.
+//    RectSect() finds intersection of two rects.
 //
-//		pr1    = ptr to 1st rectangle
-//		pr2    = ptr to 2nd rectangle
-//		prsect = ptr to rectangle, filled with intersection of the
-//			two rects (caution: if no intersection, this rect is undefined!)
+//        pr1     = ptr to 1st rectangle
+//        pr2     = ptr to 2nd rectangle
+//        prsect = ptr to rectangle, filled with intersection of the
+//            two rects (caution: if no intersection, this rect is undefined!)
 //
-//	returns: true IF rectangles intersect, false if disjoint (in this
-//		case, *prsect is undefined)
+//    returns: true IF rectangles intersect, false if disjoint (in this
+//        case, *prsect is undefined)
 
 int32_t RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect)
 {
-	if (!RECT_TEST_SECT(pr1, pr2))
-		return(false);
+    if (!RECT_TEST_SECT(pr1, pr2))
+        return(false);
 
-	prsect->ul.x = pr1->ul.x > pr2->ul.x ? pr1->ul.x : pr2->ul.x;
-	prsect->lr.x = pr1->lr.x < pr2->lr.x ? pr1->lr.x : pr2->lr.x;
-	prsect->ul.y = pr1->ul.y > pr2->ul.y ? pr1->ul.y : pr2->ul.y;
-	prsect->lr.y = pr1->lr.y < pr2->lr.y ? pr1->lr.y : pr2->lr.y;
+    prsect->ul.x = pr1->ul.x > pr2->ul.x ? pr1->ul.x : pr2->ul.x;
+    prsect->lr.x = pr1->lr.x < pr2->lr.x ? pr1->lr.x : pr2->lr.x;
+    prsect->ul.y = pr1->ul.y > pr2->ul.y ? pr1->ul.y : pr2->ul.y;
+    prsect->lr.y = pr1->lr.y < pr2->lr.y ? pr1->lr.y : pr2->lr.y;
 
-	return(true);
+    return(true);
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RectUnion() finds union of two rects.
+//    RectUnion() finds union of two rects.
 //
-//		pr1     = ptr to 1st rectangle
-//		pr2     = ptr to 2nd rectangle
-//		prunion = ptr to rectangle, filled with union of the two rects
+//        pr1      = ptr to 1st rectangle
+//        pr2      = ptr to 2nd rectangle
+//        prunion = ptr to rectangle, filled with union of the two rects
 
 void RectUnion(LGRect *pr1, LGRect *pr2, LGRect *prunion)
 {
-	RECT_UNION(pr1, pr2, prunion);
+    RECT_UNION(pr1, pr2, prunion);
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RectEncloses() tests whether first rect fully encloses second.
+//    RectEncloses() tests whether first rect fully encloses second.
 //
-//		pr1 = ptr to 1st rectangle
-//		pr2 = ptr to 2nd rectangle
+//        pr1 = ptr to 1st rectangle
+//        pr2 = ptr to 2nd rectangle
 //
-//	returns: true if *pr1 encloses *pr2, false otherwise
+//    returns: true if *pr1 encloses *pr2, false otherwise
 
 int32_t RectEncloses(LGRect *pr1, LGRect *pr2)
 {
-	return(RECT_ENCLOSES(pr1, pr2));
+    return(RECT_ENCLOSES(pr1, pr2));
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RectTestPt() tests whether point is inside rect.
+//    RectTestPt() tests whether point is inside rect.
 //
-//		prect = ptr to rectangle
-//		pt    = point to be tested
+//        prect = ptr to rectangle
+//        pt     = point to be tested
 //
-//	returns: true if point is within rectangle, false if outside
+//    returns: true if point is within rectangle, false if outside
 
 int32_t RectTestPt(LGRect *prect, LGPoint pt)
 {
-	return(RECT_TEST_PT(prect, pt));
+    return(RECT_TEST_PT(prect, pt));
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RectMove() moves a rectangle by a delta.
+//    RectMove() moves a rectangle by a delta.
 //
-//		pr    = ptr to rectangle
-//		delta = point to move rectangle by
+//        pr     = ptr to rectangle
+//        delta = point to move rectangle by
 
 void RectMove(LGRect *pr, LGPoint delta)
 {
-	RECT_MOVE(pr, delta);
+    RECT_MOVE(pr, delta);
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RectOffsettedRect() creates a rectangle, offsetted from another.
+//    RectOffsettedRect() creates a rectangle, offsetted from another.
 //
-//		pr    = ptr to original rect
-//		delta = pt to offset by
-//		proff = rectangle to fill in with offsetted rect
+//        pr     = ptr to original rect
+//        delta = pt to offset by
+//        proff = rectangle to fill in with offsetted rect
 
 void RectOffsettedRect(LGRect *pr, LGPoint delta, LGRect *proff)
 {
-	RECT_OFFSETTED_RECT(pr, delta, proff);
+    RECT_OFFSETTED_RECT(pr, delta, proff);
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	RectClipCode() calculates 4-bit clipcode for pt vs. rect.
+//    RectClipCode() calculates 4-bit clipcode for pt vs. rect.
 //
-//		prect = ptr to rectangle
-//		pt    = point to be tested
+//        prect = ptr to rectangle
+//        pt     = point to be tested
 //
-//	Returns: a 4-bit clipcode, bits set as follows:
+//    Returns: a 4-bit clipcode, bits set as follows:
 //
-//	000x: set to 1 if pt.x < rect.ul.x
-//	00x0: set to 1 if pt.x >= rect.lr.x
-//	0x00: set to 1 if pt.y < rect.ul.y
-//	x000: set to 1 if pt.y >= rect.lr.y
+//    000x: set to 1 if pt.x < rect.ul.x
+//    00x0: set to 1 if pt.x >= rect.lr.x
+//    0x00: set to 1 if pt.y < rect.ul.y
+//    x000: set to 1 if pt.y >= rect.lr.y
 //
-//	thus set to 0 if point is inside rect, although a cheaper test can be
-//	done (via RectTestPt()).
+//    thus set to 0 if point is inside rect, although a cheaper test can be
+//    done (via RectTestPt()).
 
 int32_t RectClipCode(LGRect *prect, LGPoint pt)
 {
-	int16_t flag;
+    int16_t flag;
 
-	flag = 0;
-	if (pt.x < prect->ul.x)
-		flag = 1;
-	if (pt.x >= prect->lr.x)
-		flag |= 2;
-	if (pt.y < prect->ul.y)
-		flag |= 4;
-	if (pt.y >= prect->lr.y)
-		flag |= 8;
+    flag = 0;
+    if (pt.x < prect->ul.x)
+        flag = 1;
+    if (pt.x >= prect->lr.x)
+        flag |= 2;
+    if (pt.y < prect->ul.y)
+        flag |= 4;
+    if (pt.y >= prect->lr.y)
+        flag |= 8;
 
-	return(flag);
+    return(flag);
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 LGPoint MakePoint(int16_t x, int16_t y)
 {
-	LGPoint	pt;
+    LGPoint    pt;
 
-	pt.x = x;
-	pt.y = y;
-	return (pt);
+    pt.x = x;
+    pt.y = y;
+    return (pt);
 }

@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //====================================================================================
 //
-//		System Shock - ©1994-1995 Looking Glass Technologies, Inc.
+//        System Shock - ©1994-1995 Looking Glass Technologies, Inc.
 //
-//		ShockDialogs.h	-	All the dialog boxes used in System Shock.
+//        ShockDialogs.h    -    All the dialog boxes used in System Shock.
 //
 //====================================================================================
 
@@ -28,43 +28,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Constants
 //--------------------
-#define kGameOptionsDlg				8000			// Dialog ID and items for the Game Options dialog.
-#define kRadNormal					4
-#define	kRadBrief						5
-#define	kChkPopupLabels			6
-#define	kChkOnScreenHelp			7
-#define	kPopLanguage					12
+#define kGameOptionsDlg                8000            // Dialog ID and items for the Game Options dialog.
+#define kRadNormal                    4
+#define    kRadBrief                        5
+#define    kChkPopupLabels            6
+#define    kChkOnScreenHelp            7
+#define    kPopLanguage                    12
 
-#define kSoundOptionsDlg			8100			// Dialog ID and items for the Sound Options dialog.
-#define	kChkBackMusic				4
-#define	kChkSoundFX					5
-#define	kStatVolume					8
-#define	kSldVolume					9
+#define kSoundOptionsDlg            8100            // Dialog ID and items for the Sound Options dialog.
+#define    kChkBackMusic                4
+#define    kChkSoundFX                    5
+#define    kStatVolume                    8
+#define    kSldVolume                    9
 
-#define kGraphicsOptionsDlg		8200			// Dialog ID and items for the Graphics Options dialog.
-#define kRadHighRes					4
-#define	kRadLowRes					5
-#define	kChkSkipLines				6
-#define	kPopDetail						11
-#define kSldGamma						13
+#define kGraphicsOptionsDlg        8200            // Dialog ID and items for the Graphics Options dialog.
+#define kRadHighRes                    4
+#define    kRadLowRes                    5
+#define    kChkSkipLines                6
+#define    kPopDetail                        11
+#define kSldGamma                        13
 
-#define kNewGameDlg					8300			// Dialog ID and items for the New Game dialog.
-#define kEdtPlayerName				6
-#define kGrpDifficulty				15
-#define	kPopCombat					11
-#define	kPopMission					12
-#define	kPopPuzzles					13
-#define	kPopCyberspace				14
+#define kNewGameDlg                    8300            // Dialog ID and items for the New Game dialog.
+#define kEdtPlayerName                6
+#define kGrpDifficulty                15
+#define    kPopCombat                    11
+#define    kPopMission                    12
+#define    kPopPuzzles                    13
+#define    kPopCyberspace                14
 
-#define kEndGameDlg					8400			// Dialog ID and items for the Endgame dialog.
-#define kStatTime						9
-#define kStatKills						10
-#define kStatRegens					11
-#define kStatDiff						12
-#define kStatScore						13
+#define kEndGameDlg                    8400            // Dialog ID and items for the Endgame dialog.
+#define kStatTime                        9
+#define kStatKills                        10
+#define kStatRegens                    11
+#define kStatDiff                        12
+#define kStatScore                        13
 
-#define kProgressTitles				2100			// String for progress dialog titles.
-#define kSaveStrings					2110			// Strings used for save dialog.
+#define kProgressTitles                2100            // String for progress dialog titles.
+#define kSaveStrings                    2110            // Strings used for save dialog.
 
 //--------------------
 //  Prototypes

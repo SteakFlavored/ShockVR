@@ -69,50 +69,50 @@ extern "C"
 
 int32_t fr_rend(frc *view)
 {
-   fr_prepare_view(view);              /* init _fr, load flags, so on */
-   if (!fr_start_view()) return -1;    /* broken broken - but what to really return */
-   if (_fr_curflags&(FR_NORENDR_MASK|FR_SOLIDFR_MASK))  /* dont really render, call a game thing */
-    { if (_fr->render_call) _fr->render_call(&_fr->draw_canvas.bm, _fr_curflags); }
-   else
-   {                                   /* actually do the 3d thang */
-      extern bool _g3d_enable_blend;
-      extern bool DoubleSize;
-      bool save_blend_flag;
+    fr_prepare_view(view);                  /* init _fr, load flags, so on */
+    if (!fr_start_view()) return -1;     /* broken broken - but what to really return */
+    if (_fr_curflags&(FR_NORENDR_MASK|FR_SOLIDFR_MASK))  /* dont really render, call a game thing */
+     { if (_fr->render_call) _fr->render_call(&_fr->draw_canvas.bm, _fr_curflags); }
+    else
+    {                                              /* actually do the 3d thang */
+        extern bool _g3d_enable_blend;
+        extern bool DoubleSize;
+        bool save_blend_flag;
 
-      if ((_fr_curflags&FR_PICKUPM_MASK) || DoubleSize) {
-         save_blend_flag=_g3d_enable_blend;
-         _g3d_enable_blend=false;
-      }
+        if ((_fr_curflags&FR_PICKUPM_MASK) || DoubleSize) {
+            save_blend_flag=_g3d_enable_blend;
+            _g3d_enable_blend=false;
+        }
 
-      // MLA - does nothing!
-      // synchronous_update();            // Make sure our time-sensitive updater gets run
+        // MLA - does nothing!
+        // synchronous_update();                // Make sure our time-sensitive updater gets run
 #ifdef AUDIOLOGS
-      audiolog_loop_callback();
+        audiolog_loop_callback();
 #endif
-      fr_pipe_start(-1);               /* set environment up */
-      fr_clip_cone();                  /* generate basic spans */
-      fr_clip_tile();                  /* clipping and obj sort pass */
-      // MLA - does nothing!
-      // synchronous_update();            // One more time
-//    	ClearCache(_fr->draw_canvas.bm.bits, (_fr->draw_canvas.bm.row >> 5) * _fr->ywid);
-     	fr_pipe_go_3();                  /* actually render the stuff */
-      fr_pipe_end();                   /* clean environment up */
-      // MLA - does nothing!
-      // synchronous_update();            // And one for the road.
+        fr_pipe_start(-1);                    /* set environment up */
+        fr_clip_cone();                        /* generate basic spans */
+        fr_clip_tile();                        /* clipping and obj sort pass */
+        // MLA - does nothing!
+        // synchronous_update();                // One more time
+//         ClearCache(_fr->draw_canvas.bm.bits, (_fr->draw_canvas.bm.row >> 5) * _fr->ywid);
+          fr_pipe_go_3();                        /* actually render the stuff */
+        fr_pipe_end();                         /* clean environment up */
+        // MLA - does nothing!
+        // synchronous_update();                // And one for the road.
 #ifdef AUDIOLOGS
-      audiolog_loop_callback();
+        audiolog_loop_callback();
 #endif
 
-      if ((_fr_curflags&FR_PICKUPM_MASK) || DoubleSize) {
-         _g3d_enable_blend=save_blend_flag;
-      }
-   }
-   fr_send_view();                     /* send it, whether it came from 3d or special */
-   if ((_fr->flags & FR_CURVIEW_MASK) == FR_CURVIEW_STRT)
-	   _frp.time.last_frame_cnt++;
-   return 1;
+        if ((_fr_curflags&FR_PICKUPM_MASK) || DoubleSize) {
+            _g3d_enable_blend=save_blend_flag;
+        }
+    }
+    fr_send_view();                            /* send it, whether it came from 3d or special */
+    if ((_fr->flags & FR_CURVIEW_MASK) == FR_CURVIEW_STRT)
+        _frp.time.last_frame_cnt++;
+    return 1;
 }
 
 #ifdef DEBUG_STUFF_FOR_LATER
-void    fr_show_stats(frc *view)
+void     fr_show_stats(frc *view)
 #endif

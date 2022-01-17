@@ -42,19 +42,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Defines
 // -------
 
-#define WARE_HARD          0
-#define WARE_SOFT_COMBAT   1
+#define WARE_HARD             0
+#define WARE_SOFT_COMBAT    1
 #define WARE_SOFT_DEFENSE  2
-#define WARE_SOFT_MISC     3
-#define NUM_WARE_TYPES     4
+#define WARE_SOFT_MISC      3
+#define NUM_WARE_TYPES      4
 
-#define WARE_UPDATE_FREQ    280              // How often all wares updated
+#define WARE_UPDATE_FREQ     280                  // How often all wares updated
 
-#define WARE_ON             0x01              // Player_struct status flags
-#define WARE_DAMAGED        0x02
-#define WARE_FLASH          0x04
+#define WARE_ON                 0x01                  // Player_struct status flags
+#define WARE_DAMAGED          0x02
+#define WARE_FLASH             0x04
 
-#define WARE_FLAGS_NONE     0x00              // Here will go various flag bits
+#define WARE_FLAGS_NONE      0x00                  // Here will go various flag bits
 
 // ----------
 // Ware Types
@@ -66,20 +66,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LAST_GOGGLE_WARE  4
 
 #define HARDWARE_GOGGLE_INFRARED 0
-#define HARDWARE_TARGET          1
-#define HARDWARE_360             2
-#define HARDWARE_AIM             3
-#define HARDWARE_HUD             4
-#define HARDWARE_BIOWARE         5
-#define HARDWARE_AUTOMAP         6
-#define HARDWARE_SHIELD          7
-#define HARDWARE_EMAIL           8
-#define HARDWARE_LANTERN         9
-#define HARDWARE_FULLSCREEN      10
-#define HARDWARE_ENVIROSUIT      11
-#define HARDWARE_MOTION          12
-#define HARDWARE_SKATES          13
-#define HARDWARE_STATUS          14
+#define HARDWARE_TARGET             1
+#define HARDWARE_360                 2
+#define HARDWARE_AIM                 3
+#define HARDWARE_HUD                 4
+#define HARDWARE_BIOWARE            5
+#define HARDWARE_AUTOMAP            6
+#define HARDWARE_SHIELD             7
+#define HARDWARE_EMAIL              8
+#define HARDWARE_LANTERN            9
+#define HARDWARE_FULLSCREEN        10
+#define HARDWARE_ENVIROSUIT        11
+#define HARDWARE_MOTION             12
+#define HARDWARE_SKATES             13
+#define HARDWARE_STATUS             14
 
 // Wacky ware-specific defines
 #define LAMP_MASK 0xC0
@@ -96,21 +96,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------
 
 typedef struct {
-   uint8_t flags;                   // Do we have a sideicon, etc.
-   uint8_t sideicon;                // Which sideicon corresponds
-   void  (*turnon)(bool visible, bool real_start);             // Function slots for turn on, etc.
-   void  (*effect)();
-   void  (*turnoff)(bool visible, bool real_stop);
-   bool  (*check)();
+    uint8_t flags;                         // Do we have a sideicon, etc.
+    uint8_t sideicon;                     // Which sideicon corresponds
+    void  (*turnon)(bool visible, bool real_start);                 // Function slots for turn on, etc.
+    void  (*effect)();
+    void  (*turnoff)(bool visible, bool real_stop);
+    bool  (*check)();
 } WARE;
 
 typedef struct
 {
-   uint16_t   timestamp;
-   uint16_t   type;
-   int8_t     light_value;
-   uint8_t    previous;         // was the light on before ??
-   uint8_t    filler;
+    uint16_t    timestamp;
+    uint16_t    type;
+    int8_t      light_value;
+    uint8_t     previous;            // was the light on before ??
+    uint8_t     filler;
 } LightSchedEvent;
 
 // ----------
@@ -118,7 +118,7 @@ typedef struct
 // ----------
 
 void get_ware_pointers(int32_t type, uint8_t **player_wares, uint8_t **player_status,
-                       WARE **wares, int32_t *n);
+                              WARE **wares, int32_t *n);
 // Sets several pointers as appropriate to a ware type: the approp. player_struct
 // arrays, the approp. global wares property array, and the number of different
 // wares for that type
@@ -153,9 +153,9 @@ void wares_update();
 // what mode are we using.
 extern uint8_t motionware_mode;
 #define MOTION_INACTIVE 0
-#define MOTION_SKATES   1
-#define MOTION_BOOST    2
-#define MOTION_JUMP     3
+#define MOTION_SKATES    1
+#define MOTION_BOOST     2
+#define MOTION_JUMP      3
 
 
 #endif // __WARES_H

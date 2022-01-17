@@ -53,92 +53,92 @@ uint8_t *grd_unpack_buf=NULL;
 /*************************************************/
 int32_t gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
 {
-   int16_t x_right,y_bot;                /* opposite edges of bitmap */
-   int16_t x,y;                          /* current position */
-   int32_t over_run;                       /* unwritten right edge */
-   uint8_t *p_dst;
-   uint8_t *rsd_src;                     /* rsd source buffer */
-   int16_t rsd_code;                     /* last rsd opcode */
-   int16_t rsd_count;                    /* count for last opcode */
-   int16_t op_count;                     /* operational count */
+    int16_t x_right,y_bot;                     /* opposite edges of bitmap */
+    int16_t x,y;                                  /* current position */
+    int32_t over_run;                              /* unwritten right edge */
+    uint8_t *p_dst;
+    uint8_t *rsd_src;                            /* rsd source buffer */
+    int16_t rsd_code;                            /* last rsd opcode */
+    int16_t rsd_count;                          /* count for last opcode */
+    int16_t op_count;                            /* operational count */
 
-   if (grd_unpack_buf==NULL) return GR_UNPACK_RSD8_NOBUF;
-   if (sbm->type != BMT_RSD8) return GR_UNPACK_RSD8_NOTRSD;
-   *dbm = *sbm;	// memcpy (dbm, sbm, sizeof (*sbm));
-   if (sbm->flags&BMF_TLUC8)
-      dbm->type = BMT_TLUC8;
-   else
-      dbm->type = BMT_FLAT8;
-   dbm->bits = grd_unpack_buf;
-   if (dbm->w==dbm->row) p_dst=gr_rsd8_unpack(sbm->bits,dbm->bits);
-   else {
-      rsd_src = sbm->bits;
-      x = y = rsd_count = 0;
-      x_right = sbm->w;
-      y_bot = sbm->h;
-      p_dst = dbm->bits;
-      over_run=dbm->row-sbm->w;
+    if (grd_unpack_buf==NULL) return GR_UNPACK_RSD8_NOBUF;
+    if (sbm->type != BMT_RSD8) return GR_UNPACK_RSD8_NOTRSD;
+    *dbm = *sbm;    // memcpy (dbm, sbm, sizeof (*sbm));
+    if (sbm->flags&BMF_TLUC8)
+        dbm->type = BMT_TLUC8;
+    else
+        dbm->type = BMT_FLAT8;
+    dbm->bits = grd_unpack_buf;
+    if (dbm->w==dbm->row) p_dst=gr_rsd8_unpack(sbm->bits,dbm->bits);
+    else {
+        rsd_src = sbm->bits;
+        x = y = rsd_count = 0;
+        x_right = sbm->w;
+        y_bot = sbm->h;
+        p_dst = dbm->bits;
+        over_run=dbm->row-sbm->w;
 
-      /* process each scanline, keeping track of x and splitting opcodes that
-         span across more than one line. */
-      while (y < y_bot) {
-         /* do enough opcodes to get to the end of the current scanline. */
-         while (x < x_right) {
-            if (rsd_count == 0)
-               RSD_GET_TOKEN ();
-            if (x+rsd_count <= x_right) {
-               /* current code is all on this scanline. */
-               switch (rsd_code) {
-               case RSD_RUN:
-                  memset (p_dst, *rsd_src, rsd_count);
-                  rsd_src++;
-                  break;
-               case RSD_SKIP:
-                  memset (p_dst, kSkipColor, rsd_count);
-                  break;
-               default: /* RSD_DUMP */
-                  memcpy (p_dst, rsd_src, rsd_count);
-                  rsd_src += rsd_count;
-                  break;
-               }
-               x += rsd_count;
-               p_dst += rsd_count;
-               rsd_count = 0;
+        /* process each scanline, keeping track of x and splitting opcodes that
+            span across more than one line. */
+        while (y < y_bot) {
+            /* do enough opcodes to get to the end of the current scanline. */
+            while (x < x_right) {
+                if (rsd_count == 0)
+                    RSD_GET_TOKEN ();
+                if (x+rsd_count <= x_right) {
+                    /* current code is all on this scanline. */
+                    switch (rsd_code) {
+                    case RSD_RUN:
+                        memset (p_dst, *rsd_src, rsd_count);
+                        rsd_src++;
+                        break;
+                    case RSD_SKIP:
+                        memset (p_dst, kSkipColor, rsd_count);
+                        break;
+                    default: /* RSD_DUMP */
+                        memcpy (p_dst, rsd_src, rsd_count);
+                        rsd_src += rsd_count;
+                        break;
+                    }
+                    x += rsd_count;
+                    p_dst += rsd_count;
+                    rsd_count = 0;
+                }
+                else {
+                    /* code goes over to next scanline, do the amount that will fit
+                        on this scanline, put off rest till next line. */
+                    op_count = x_right-x;
+                    switch (rsd_code) {
+                    case RSD_RUN:
+                        memset (p_dst, *rsd_src, op_count);
+                        break;
+                    case RSD_SKIP:
+                        memset (p_dst, kSkipColor, op_count);
+                        break;
+                    default: /* RSD_DUMP */
+                        memcpy (p_dst, rsd_src, op_count);
+                        rsd_src += op_count;
+                        break;
+                    }
+                    x += op_count;
+                    p_dst += op_count;
+                    rsd_count -= op_count;
+                }
             }
-            else {
-               /* code goes over to next scanline, do the amount that will fit
-                  on this scanline, put off rest till next line. */
-               op_count = x_right-x;
-               switch (rsd_code) {
-               case RSD_RUN:
-                  memset (p_dst, *rsd_src, op_count);
-                  break;
-               case RSD_SKIP:
-                  memset (p_dst, kSkipColor, op_count);
-                  break;
-               default: /* RSD_DUMP */
-                  memcpy (p_dst, rsd_src, op_count);
-                  rsd_src += op_count;
-                  break;
-               }
-               x += op_count;
-               p_dst += op_count;
-               rsd_count -= op_count;
-            }
-         }
 
-         /* reset x to be beginning of line and set y to next scanline. */
-         x -= sbm->w;
-         if (over_run) {
-            memset (p_dst, kSkipColor, over_run);
-            p_dst += over_run;
-         }
-         y++;
-      }
-   }
+            /* reset x to be beginning of line and set y to next scanline. */
+            x -= sbm->w;
+            if (over_run) {
+                memset (p_dst, kSkipColor, over_run);
+                p_dst += over_run;
+            }
+            y++;
+        }
+    }
 rsd_done:
-   if (over_run=(dbm->bits+dbm->row*dbm->h)-p_dst)
-      memset (p_dst, kSkipColor, over_run);
-   return GR_UNPACK_RSD8_OK;
+    if (over_run=(dbm->bits+dbm->row*dbm->h)-p_dst)
+        memset (p_dst, kSkipColor, over_run);
+    return GR_UNPACK_RSD8_OK;
 }
 

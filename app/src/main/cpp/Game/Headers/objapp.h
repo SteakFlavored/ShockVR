@@ -34,15 +34,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // It is made up of two parts:
 //
-//   - ObjRefStateBin is used to choose where to put an ObjRef
-//     in the world-wide data structure.  All ObjRefs with the
-//     same ObjRefStateBin are part of the same chain.
+//    - ObjRefStateBin is used to choose where to put an ObjRef
+//      in the world-wide data structure.  All ObjRefs with the
+//      same ObjRefStateBin are part of the same chain.
 //
-//   - ObjRefStateInfo is extra information associated with an
-//     ObjRef's location.  For example, in Freefall we specify
-//     here what rendering triangles an object overlaps.  If
-//     you have no such information in your application, then
-//     #define NO_OBJ_REF_STATE_INFO.
+//    - ObjRefStateInfo is extra information associated with an
+//      ObjRef's location.  For example, in Freefall we specify
+//      here what rendering triangles an object overlaps.  If
+//      you have no such information in your application, then
+//      #define NO_OBJ_REF_STATE_INFO.
 //
 // There must be a specific ObjRefStateBin which is "null".
 // For example, it is used to terminate lists of ObjRefStateBins.
@@ -67,8 +67,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // so that the object system can take the address of the result.
 
 ////////////////////////////// HERE IS THE STUFF YOU MUST CHANGE
-//                          //
-//                          ////////////////////////////////
+//                                  //
+//                                  ////////////////////////////////
 
 //#include <map.h>
 
@@ -79,53 +79,53 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ## INSERT NEW CLASS HERE
 
 typedef enum ObjClass {
-   CLASS_GUN,
-   CLASS_AMMO,
-   CLASS_PHYSICS,
-   CLASS_GRENADE,
-   CLASS_DRUG,
-   CLASS_HARDWARE,
-   CLASS_SOFTWARE,
-   CLASS_BIGSTUFF,
-   CLASS_SMALLSTUFF,
-   CLASS_FIXTURE,
-   CLASS_DOOR,
-   CLASS_ANIMATING,
-   CLASS_TRAP,
-   CLASS_CONTAINER,
-   CLASS_CRITTER,
-	NUM_CLASSES,
-	CLASS_FIRST = CLASS_GUN
+    CLASS_GUN,
+    CLASS_AMMO,
+    CLASS_PHYSICS,
+    CLASS_GRENADE,
+    CLASS_DRUG,
+    CLASS_HARDWARE,
+    CLASS_SOFTWARE,
+    CLASS_BIGSTUFF,
+    CLASS_SMALLSTUFF,
+    CLASS_FIXTURE,
+    CLASS_DOOR,
+    CLASS_ANIMATING,
+    CLASS_TRAP,
+    CLASS_CONTAINER,
+    CLASS_CRITTER,
+    NUM_CLASSES,
+    CLASS_FIRST = CLASS_GUN
 } ObjClass;
 
 // The total number of objects in the game, and of each type
 // ## INSERT NEW CLASS HERE
 //
 
-#define NUM_OBJECTS				        872
-#define NUM_OBJECTS_GUN               16
-#define NUM_OBJECTS_AMMO              32
-#define NUM_OBJECTS_PHYSICS           32
-#define NUM_OBJECTS_GRENADE           32
-#define NUM_OBJECTS_DRUG              32
-#define NUM_OBJECTS_HARDWARE          8
-#define NUM_OBJECTS_SOFTWARE          16
-#define NUM_OBJECTS_BIGSTUFF          176
-#define NUM_OBJECTS_SMALLSTUFF        128
-#define NUM_OBJECTS_FIXTURE           64
-#define NUM_OBJECTS_DOOR              64
-#define NUM_OBJECTS_ANIMATING         32
-#define NUM_OBJECTS_TRAP              160
-#define NUM_OBJECTS_CONTAINER         64
-#define NUM_OBJECTS_CRITTER           64
+#define NUM_OBJECTS                          872
+#define NUM_OBJECTS_GUN                    16
+#define NUM_OBJECTS_AMMO                  32
+#define NUM_OBJECTS_PHYSICS              32
+#define NUM_OBJECTS_GRENADE              32
+#define NUM_OBJECTS_DRUG                  32
+#define NUM_OBJECTS_HARDWARE             8
+#define NUM_OBJECTS_SOFTWARE             16
+#define NUM_OBJECTS_BIGSTUFF             176
+#define NUM_OBJECTS_SMALLSTUFF          128
+#define NUM_OBJECTS_FIXTURE              64
+#define NUM_OBJECTS_DOOR                  64
+#define NUM_OBJECTS_ANIMATING            32
+#define NUM_OBJECTS_TRAP                  160
+#define NUM_OBJECTS_CONTAINER            64
+#define NUM_OBJECTS_CRITTER              64
 
 // THe total number of references of objects
-#define NUM_REF_OBJECTS		1600
+#define NUM_REF_OBJECTS        1600
 
 // i hate cpp, no sizeof() in #if, so we have to do this
 #define SIZEOF_AN_OBJREFSTATEBIN 4
 typedef struct {
-	LGPoint sq;
+    LGPoint sq;
 } ObjRefStateBin;
 
 #define OBJREF_SQ(ori) (objRefs[ori].state.bin.sq)
@@ -133,7 +133,7 @@ typedef struct {
 // i hate cpp, no sizeof() in #if, so we have to do this
 #define SIZEOF_AN_OBJREFSTATEINFO 1
 typedef struct {
-	uint8_t flags;
+    uint8_t flags;
 } ObjRefStateInfo;
 
 #define ObjRefStateBinSetNull(bin) PointSetNull((bin).sq)
@@ -142,9 +142,9 @@ typedef struct {
 // i hate cpp, no sizeof() in #if, so we have to do this
 #define SIZEOF_AN_OBJLOC 8
 typedef struct {
-	uint16_t x, y;								// high 8 bits: what square      low 8 bits: where within square
-   uint8_t z;
-   uint8_t p, h, b;
+    uint16_t x, y;                                // high 8 bits: what square        low 8 bits: where within square
+    uint8_t z;
+    uint8_t p, h, b;
 } ObjLoc;
 
 #define OBJ_LOC_BIN_X(oloc) ((oloc).x >> 8)
@@ -158,23 +158,23 @@ typedef struct {
 #endif
 
 typedef struct {
-	int8_t ph;
-   int8_t type;
-   int16_t current_hp;
-   uint8_t make_info;                    // maker, as in Zortech MK III laser rifle or whatever
-   uint8_t current_frame;                // animdata
-   uint8_t time_remainder;               // animdata
-   uint8_t inst_flags;                   //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
+    int8_t ph;
+    int8_t type;
+    int16_t current_hp;
+    uint8_t make_info;                          // maker, as in Zortech MK III laser rifle or whatever
+    uint8_t current_frame;                     // animdata
+    uint8_t time_remainder;                    // animdata
+    uint8_t inst_flags;                         //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
 } ObjInfo;
 
 typedef struct {
-	int32_t ph;
-   int8_t type;
-   int16_t current_hp;
-   uint8_t make_info;                    // maker, as in Zortech MK III laser rifle or whatever
-   uint8_t current_frame;                // animdata
-   uint8_t time_remainder;               // animdata
-   uint8_t inst_flags;                   //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
+    int32_t ph;
+    int8_t type;
+    int16_t current_hp;
+    uint8_t make_info;                          // maker, as in Zortech MK III laser rifle or whatever
+    uint8_t current_frame;                     // animdata
+    uint8_t time_remainder;                    // animdata
+    uint8_t inst_flags;                         //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
 } old_ObjInfo;
 
 #ifdef HASH_OBJECTS
@@ -187,17 +187,17 @@ typedef struct {
 # define ObjRefHead(bin) (MAP_GET_XY((bin).sq.x,(bin).sq.y))->objRef
 #endif
 
-//                          ////////////////////////////////
-//                          //
+//                                  ////////////////////////////////
+//                                  //
 ////////////////////////////// WASN'T THAT EASY?
 
 typedef struct {
-	ObjRefStateBin bin;
+    ObjRefStateBin bin;
 } ObjRefState;
 
 typedef struct {
-	ObjRefStateBin bin;
-	ObjRefStateInfo info;
+    ObjRefStateBin bin;
+    ObjRefStateInfo info;
 } oldObjRefState;
 
 // The following macros perform simple comparing and copying operations.
@@ -232,19 +232,19 @@ typedef struct {
 #endif
 
 #if (SIZEOF_AN_OBJLOC==4)
-#define ObjLocEqual(bin1, bin2)        (*((int32_t *)(&bin1))==*((int32_t *)(&bin2)))
+#define ObjLocEqual(bin1, bin2)          (*((int32_t *)(&bin1))==*((int32_t *)(&bin2)))
 #elif (SIZEOF_AN_OBJLOC==2)
-#define ObjLocEqual(bin1, bin2)        (*((int16_t *)(&bin1))==*((int16_t *)(&bin2)))
+#define ObjLocEqual(bin1, bin2)          (*((int16_t *)(&bin1))==*((int16_t *)(&bin2)))
 #elif (SIZEOF_AN_OBJLOC==1)
-#define ObjLocEqual(bin1, bin2)        (*((int8_t *)(&bin1))==*((int8_t *)(&bin2)))
+#define ObjLocEqual(bin1, bin2)          (*((int8_t *)(&bin1))==*((int8_t *)(&bin2)))
 #else
-#define ObjLocEqual(bin1, bin2)        (!memcmp(&(bin1),&(bin2),sizeof(ObjLoc)))
+#define ObjLocEqual(bin1, bin2)          (!memcmp(&(bin1),&(bin2),sizeof(ObjLoc)))
 #endif
-#define ObjLocCopy(srcbin, dstbin)     do {dstbin = srcbin;} while (0)
+#define ObjLocCopy(srcbin, dstbin)      do {dstbin = srcbin;} while (0)
 
 ////////////////////////////// MORE STUFF YOU MUST CHANGE
-//                          //
-//                          ////////////////////////////////
+//                                  //
+//                                  ////////////////////////////////
 //
 // You can turn some of the following macros into functions, if they get complicated.
 //
@@ -258,8 +258,8 @@ typedef struct {
 #define ObjLocSprint(str,loc)
 #define ObjInfoSprint(str,info)
 
-//                          ////////////////////////////////
-//                          //
+//                                  ////////////////////////////////
+//                                  //
 ////////////////////////////// END OF STUFF YOU MUST CHANGE
 
 ////////////////////////////////////////////////////////////

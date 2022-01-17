@@ -36,22 +36,22 @@ uint8_t *grd_temp_p = grd_temp_buf;
 
 void *gr_alloc_temp (int32_t n)
 {
-   void *p;
+    void *p;
 
-   if (grd_temp_p+n+sizeof(int32_t) >= grd_temp_buf+GRD_TEMP_SIZE)
-      return NULL;
-   *((int32_t *)grd_temp_p) = n;
-   p = grd_temp_p+sizeof (int32_t);
-   grd_temp_p += n+sizeof (int32_t);
+    if (grd_temp_p+n+sizeof(int32_t) >= grd_temp_buf+GRD_TEMP_SIZE)
+        return NULL;
+    *((int32_t *)grd_temp_p) = n;
+    p = grd_temp_p+sizeof (int32_t);
+    grd_temp_p += n+sizeof (int32_t);
 
-   return p;
+    return p;
 }
 
 void gr_free_temp (void *p)
 {
-   int32_t n;
+    int32_t n;
 
-   n = *((int32_t *)p-1);
-   grd_temp_p -= n+sizeof (int32_t);
+    n = *((int32_t *)p-1);
+    grd_temp_p -= n+sizeof (int32_t);
 }
 #endif /* !GR_TEMP_USE_MEMSTACK */

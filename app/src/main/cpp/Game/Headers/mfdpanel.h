@@ -39,28 +39,28 @@ uint8_t mfd_solve_accesspanel(ObjID id);
 #define MAX_P_WIRES 6
 #define MAX_P_PINS  16
 
-#define ACCESSP_BTN_ROW    6
-#define ACCESSP_BTN_COL    2
-#define ACCESSP_BTN_WD     8
-#define ACCESSP_BTN_HGT    7
-#define ACCESSP_BTN_X      9
-#define ACCESSP_BTN_Y     15
-#define ACCESSP_FULL_WD   56
+#define ACCESSP_BTN_ROW     6
+#define ACCESSP_BTN_COL     2
+#define ACCESSP_BTN_WD      8
+#define ACCESSP_BTN_HGT     7
+#define ACCESSP_BTN_X        9
+#define ACCESSP_BTN_Y      15
+#define ACCESSP_FULL_WD    56
 #define ACCESSP_FULL_HGT  42
 
-#define ACCESSP_SCORE_X    4
-#define ACCESSP_SCORE_YT   3
-#define ACCESSP_SCORE_W   64
+#define ACCESSP_SCORE_X     4
+#define ACCESSP_SCORE_YT    3
+#define ACCESSP_SCORE_W    64
 #define ACCESSP_SCORE_YB  13
 #define ACCESSP_SCORE_SHF  2
 #define ACCESSP_SCORE_OFF  1
 
 #define ACCESSP_SCORE_COL  0x5B
 #define ACCESSP_SCORE_BOR  0x58
-#define ACCESSP_PIN_COL    0x43
-#define ACCESSP_CHIP_COL   0x40
-#define ACCESSP_HOT_COL    0x40
-#define ACCESSP_TARG_COL   0x35
+#define ACCESSP_PIN_COL     0x43
+#define ACCESSP_CHIP_COL    0x40
+#define ACCESSP_HOT_COL     0x40
+#define ACCESSP_TARG_COL    0x35
 
 #define get_delta(wpv) (wpv.lpos-wpv.rpos)
 
@@ -68,35 +68,35 @@ uint8_t mfd_solve_accesspanel(ObjID id);
 #define MAX_DIFFICULTY 3
 
 typedef struct {
-   uint8_t lpos;
-   uint8_t rpos;
+    uint8_t lpos;
+    uint8_t rpos;
 } wirePos;
 
 typedef struct {
-   wirePos cur;
-   wirePos targ;
+    wirePos cur;
+    wirePos targ;
 } wirePTrg;
 
 typedef struct {
-   uint8_t    wirecnt;
-   uint8_t    pincnt;
-   uint8_t    scale;
-   uint8_t    score;
-   wirePTrg wires[MAX_P_WIRES];     // internals for actual puzzle, 16 bytes
+    uint8_t     wirecnt;
+    uint8_t     pincnt;
+    uint8_t     scale;
+    uint8_t     score;
+    wirePTrg wires[MAX_P_WIRES];      // internals for actual puzzle, 16 bytes
 
-   uint8_t    left_tap, right_tap;
+    uint8_t     left_tap, right_tap;
 
-   uint8_t    last_score;             // stuff for interface, mfd layer, so on
-   uint8_t    tscore;                 // target score
-   uint8_t    wires_moved;
-   uint8_t    wire_in_motion;
-   uint8_t    wim_tick;
-   uint8_t    wim_shown;
-   uint8_t    scorealg;
-   uint8_t    special;
-   ObjID    our_id;
-   uint8_t    have_won;
-   uint8_t    pad[3];
+    uint8_t     last_score;                 // stuff for interface, mfd layer, so on
+    uint8_t     tscore;                      // target score
+    uint8_t     wires_moved;
+    uint8_t     wire_in_motion;
+    uint8_t     wim_tick;
+    uint8_t     wim_shown;
+    uint8_t     scorealg;
+    uint8_t     special;
+    ObjID     our_id;
+    uint8_t     have_won;
+    uint8_t     pad[3];
 } wirePosPuzzle;
 
 // WP_SCALE_SHF is the number of bits of fractional precision to be used in
@@ -107,10 +107,10 @@ typedef struct {
 
 #define P_CORRECT  6
 #define P_DELTA_OK 3
-#define P_POS_OK   2
+#define P_POS_OK    2
 
 #define D_DELTA_OK 3
-#define D_POS_OK   1
+#define D_POS_OK    1
 
 #define NO_WIRE_IN_MOTION 0xff
 #define BTN_MASK 0xf
@@ -140,40 +140,40 @@ typedef struct {
 // #define GRIDP_AUTO_SOLVE
 
 typedef struct {
-   ObjID our_id;                        // 2 bytes
-   uint8_t rows;			//:3;                        //  \_ 1 byte
-   uint8_t cols;			//:3;                        //  /  between us.
-   uint8_t control_alg;
-   uint8_t src;
-   uint8_t dest;
-   uint8_t have_won;
-   uint8_t winmove_r;	//:3;                   //  \_ 1 byte
-   uint8_t winmove_c;	//:3;                   //  /
-   uint8_t winmove_f;	//:1;                   // /
+    ObjID our_id;                                // 2 bytes
+    uint8_t rows;            //:3;                                //  \_ 1 byte
+    uint8_t cols;            //:3;                                //  /  between us.
+    uint8_t control_alg;
+    uint8_t src;
+    uint8_t dest;
+    uint8_t have_won;
+    uint8_t winmove_r;    //:3;                         //  \_ 1 byte
+    uint8_t winmove_c;    //:3;                         //  /
+    uint8_t winmove_f;    //:1;                         // /
 #ifdef GRIDP_AUTO_SOLVE
-   uint8_t solve_me;
+    uint8_t solve_me;
 #endif
 } gridFlowPuzzleLayout;
 
 #define GRIDP_PADSIZE (sizeof(player_struct.mfd_access_puzzles)-sizeof(gridFlowPuzzleLayout)-GRIDP_STATE_INTS*sizeof(uint))
 
 typedef struct {
-   gridFlowPuzzleLayout gfLayout;
-   uint32_t states[ GRIDP_STATE_INTS ];
-   uint8_t pad[ GRIDP_PADSIZE ];
+    gridFlowPuzzleLayout gfLayout;
+    uint32_t states[ GRIDP_STATE_INTS ];
+    uint8_t pad[ GRIDP_PADSIZE ];
 } gridFlowPuzzle;
 
 extern Region* mfd_regions[NUM_MFDS];
 
 typedef enum {
-   GPZ_EMPTY=0, GPZ_OPEN,
-   GPZ_CLOSED, GPZ_CLOSED_CHARGED,
-   GPZ_FULL, GPZ_FULL_CHARGED,
-   GPZ_GATE, GPZ_GATE_CHARGED
+    GPZ_EMPTY=0, GPZ_OPEN,
+    GPZ_CLOSED, GPZ_CLOSED_CHARGED,
+    GPZ_FULL, GPZ_FULL_CHARGED,
+    GPZ_GATE, GPZ_GATE_CHARGED
 } gpz_state;
 
 typedef enum {
-   GPZ_ROOK, GPZ_KING, GPZ_BISH, GPZ_QUEEN, GPZ_SIMPLE
+    GPZ_ROOK, GPZ_KING, GPZ_BISH, GPZ_QUEEN, GPZ_SIMPLE
 } gpz_control;
 
 #define GRIDP_X_OFFSET 0

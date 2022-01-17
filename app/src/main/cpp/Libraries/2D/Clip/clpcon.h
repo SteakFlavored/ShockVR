@@ -36,10 +36,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __CLPCON
 
 /* clip codes. */
-#define CLIP_NONE    0
-#define CLIP_LEFT    1
-#define CLIP_TOP     2
-#define CLIP_RIGHT   4
-#define CLIP_BOT     8
-#define CLIP_ALL     16
+#define CLIP_NONE     0
+#define CLIP_LEFT     1
+#define CLIP_TOP      2
+#define CLIP_RIGHT    4
+#define CLIP_BOT      8
+#define CLIP_ALL      16
 #endif /* !__CLPCON */

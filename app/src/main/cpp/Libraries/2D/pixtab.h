@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "pixfill.h"
 
 /* these tables are used in the 2d, but are not visible, except though the
-    current fill ptr (see pixfill.h)
+     current fill ptr (see pixfill.h)
 */
 
 // MLA (this won't compile?) extern grt_pixel_fill grd_pixel_fill_table[];

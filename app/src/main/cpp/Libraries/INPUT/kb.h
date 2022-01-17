@@ -32,10 +32,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __KBS_H
 #define __KBS_H
 typedef struct {
-   uint8_t code;
-   uint8_t state;
-   uint8_t ascii;				// Added for Mac version
-   uint8_t modifiers;			//   "    "   "     "
+    uint8_t code;
+    uint8_t state;
+    uint8_t ascii;                // Added for Mac version
+    uint8_t modifiers;            //    "     "    "      "
 } kbs_event;
 #endif /* !__KBS_H */
 
@@ -83,8 +83,8 @@ extern void kb_set_signal(uint8_t code, uint8_t int_no);
 extern int32_t kb_get_flags();
 extern void kb_set_flags(int32_t flags);
 extern void kb_generate(kbs_event e);
-//extern void kb_flush_bios(void);				// For Mac version
-#define kb_flush_bios	kb_flush
+//extern void kb_flush_bios(void);                // For Mac version
+#define kb_flush_bios    kb_flush
 extern bool kb_get_cooked(uint16_t* key);
 #define KBA_STATE (1)
 #define KBA_REPEAT (2)
@@ -99,9 +99,9 @@ extern int8_t * kbd_lowmem_start;
 #define KBE_PROT_HANDLER (4)
 #define KBE_MEM_LOCK (5)
 #define KBE_MEM_UNLOCK (6)
-#define KBF_BLOCK (1   )
-#define KBF_CHAIN (2   )
-#define KBF_SIGNAL (4   )
+#define KBF_BLOCK (1    )
+#define KBF_CHAIN (2    )
+#define KBF_SIGNAL (4    )
 #define KBD_GLOBAL_START (0)
 #define KBD_QUEUE_HEAD (KBD_GLOBAL_START)
 #define KBD_LAST_CODES (KBD_QUEUE_HEAD+4)

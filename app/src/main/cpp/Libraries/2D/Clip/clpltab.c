@@ -31,15 +31,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 grt_line_clip_fill grd_line_clip_fill_table [GRD_LINE_TYPES] =
 {
-   gri_line_clip_fill,
-   gri_iline_clip_fill,
-   gri_hline_clip_fill,
-   gri_vline_clip_fill,
-   gri_sline_clip_fill,
-   gri_cline_clip_fill,
-   gri_wire_poly_line_clip_fill,
-   gr_null,
-   gri_wire_poly_cline_clip_fill
+    gri_line_clip_fill,
+    gri_iline_clip_fill,
+    gri_hline_clip_fill,
+    gri_vline_clip_fill,
+    gri_sline_clip_fill,
+    gri_cline_clip_fill,
+    gri_wire_poly_line_clip_fill,
+    gr_null,
+    gri_wire_poly_cline_clip_fill
 };
 
 grt_line_clip_fill * grd_line_clip_fill_vector = grd_line_clip_fill_table;

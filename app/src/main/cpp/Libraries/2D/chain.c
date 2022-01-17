@@ -70,110 +70,110 @@ grs_func_chain *grd_chain_table[GRD_CANVAS_FUNCS];
 
 grs_func_chain *gr_chain_add_over(int32_t n, void (*f)())
 {
-   grs_func_chain *p = (grs_func_chain *)(NewPtr(sizeof(grs_func_chain)));	// was gr_malloc
-   if (grd_chain_table[n] == NULL) {
-      /* First time: stash and replace primitives */
-      int32_t k;
-      chn_primitives[n] = (void (**)())(NewPtr(BMT_TYPES*sizeof(void (*)())));	// was gr_malloc
-      for (k=0; k<BMT_TYPES; k++)
-          if (grd_canvas_table_list[k] != NULL)
-            chn_primitives[n][k] = grd_canvas_table_list[k][n];
-      for (k=0; k<BMT_TYPES; k++)
-          if (grd_canvas_table_list[k] != NULL)
-            grd_canvas_table_list[k][n] = chn_canvas_table[n];
-      /* The above two loops are kept apart for a reason:
-           two pointers may be the same, and we want to save the
-            initial values of them all. */
-   }
-   /* Hook into chain */
-   p->f = f;
-   p->next = grd_chain_table[n];
-   p->flags = 0;
-   grd_chain_table[n] = p;
-   return p;
+    grs_func_chain *p = (grs_func_chain *)(NewPtr(sizeof(grs_func_chain)));    // was gr_malloc
+    if (grd_chain_table[n] == NULL) {
+        /* First time: stash and replace primitives */
+        int32_t k;
+        chn_primitives[n] = (void (**)())(NewPtr(BMT_TYPES*sizeof(void (*)())));    // was gr_malloc
+        for (k=0; k<BMT_TYPES; k++)
+             if (grd_canvas_table_list[k] != NULL)
+                chn_primitives[n][k] = grd_canvas_table_list[k][n];
+        for (k=0; k<BMT_TYPES; k++)
+             if (grd_canvas_table_list[k] != NULL)
+                grd_canvas_table_list[k][n] = chn_canvas_table[n];
+        /* The above two loops are kept apart for a reason:
+              two pointers may be the same, and we want to save the
+                initial values of them all. */
+    }
+    /* Hook into chain */
+    p->f = f;
+    p->next = grd_chain_table[n];
+    p->flags = 0;
+    grd_chain_table[n] = p;
+    return p;
 }
 
 grs_func_chain *gr_chain_add_before(int32_t n, void (*f)(void))
 {
-   grs_func_chain *p;
-   p = gr_chain_add_over(n, f);
-   p->flags |= 1;
-   return p;
+    grs_func_chain *p;
+    p = gr_chain_add_over(n, f);
+    p->flags |= 1;
+    return p;
 }
 
 grs_func_chain *gr_chain_add_after(int32_t n, void (*f)(void))
 {
-   grs_func_chain *p = (grs_func_chain *)(NewPtr(sizeof(grs_func_chain)));	// was gr_malloc
-   p->f = f;
-   p->next = NULL;
-   p->flags = CHNF_VOID | CHNF_AFTER;
-   if (grd_chain_table[n] == NULL) {
-      /* First time: stash and replace primitives */
-      int32_t k;
-      chn_primitives[n] = (void (**)())(NewPtr(BMT_TYPES*sizeof(void (*)())));	// was gr_malloc
-      for (k=0; k<BMT_TYPES; k++)
-          if (grd_canvas_table_list[k] != NULL)
-            chn_primitives[n][k] = grd_canvas_table_list[k][n];
-      for (k=0; k<BMT_TYPES; k++)
-          if (grd_canvas_table_list[k] != NULL)
-            grd_canvas_table_list[k][n] = chn_canvas_table[n];
-      /* The above two loops are kept apart for a reason:
-           two pointers may be the same, and we want to save the
-            initial values of them all. */
-      grd_chain_table[n] = p;
-   }
-   else {
-      grs_func_chain *q = grd_chain_table[n];
-      while (q->next != NULL) q = q->next;
-      q->next = p;
-   }
-   return p;
+    grs_func_chain *p = (grs_func_chain *)(NewPtr(sizeof(grs_func_chain)));    // was gr_malloc
+    p->f = f;
+    p->next = NULL;
+    p->flags = CHNF_VOID | CHNF_AFTER;
+    if (grd_chain_table[n] == NULL) {
+        /* First time: stash and replace primitives */
+        int32_t k;
+        chn_primitives[n] = (void (**)())(NewPtr(BMT_TYPES*sizeof(void (*)())));    // was gr_malloc
+        for (k=0; k<BMT_TYPES; k++)
+             if (grd_canvas_table_list[k] != NULL)
+                chn_primitives[n][k] = grd_canvas_table_list[k][n];
+        for (k=0; k<BMT_TYPES; k++)
+             if (grd_canvas_table_list[k] != NULL)
+                grd_canvas_table_list[k][n] = chn_canvas_table[n];
+        /* The above two loops are kept apart for a reason:
+              two pointers may be the same, and we want to save the
+                initial values of them all. */
+        grd_chain_table[n] = p;
+    }
+    else {
+        grs_func_chain *q = grd_chain_table[n];
+        while (q->next != NULL) q = q->next;
+        q->next = p;
+    }
+    return p;
 }
 
 void gr_unchain(int32_t n)
 {
-   int32_t k;
-   /* check for unchained primitive */
-   if (chn_primitives[n] == NULL) return;
-   for (k=0; k<BMT_TYPES; k++)
-      if (grd_canvas_table_list[k] != NULL)
-         grd_canvas_table_list[k][n] = chn_primitives[n][k];
+    int32_t k;
+    /* check for unchained primitive */
+    if (chn_primitives[n] == NULL) return;
+    for (k=0; k<BMT_TYPES; k++)
+        if (grd_canvas_table_list[k] != NULL)
+            grd_canvas_table_list[k][n] = chn_primitives[n][k];
 }
 
 void gr_rechain(int32_t n)
 {
-   int32_t k;
-   if (chn_primitives[n] == NULL) return;
-   for (k=0; k<BMT_TYPES; k++)
-      if (grd_canvas_table_list[k] != NULL)
-         grd_canvas_table_list[k][n] = chn_canvas_table[n];
+    int32_t k;
+    if (chn_primitives[n] == NULL) return;
+    for (k=0; k<BMT_TYPES; k++)
+        if (grd_canvas_table_list[k] != NULL)
+            grd_canvas_table_list[k][n] = chn_canvas_table[n];
 }
 
 void gr_unchain_all()
 {
-   int32_t k;
-   for (k=0; k<GRD_CANVAS_FUNCS; k++) gr_unchain(k);
+    int32_t k;
+    for (k=0; k<GRD_CANVAS_FUNCS; k++) gr_unchain(k);
 }
 
 void gr_rechain_all()
 {
-   int32_t k;
-   for (k=0; k<GRD_CANVAS_FUNCS; k++) gr_rechain(k);
+    int32_t k;
+    for (k=0; k<GRD_CANVAS_FUNCS; k++) gr_rechain(k);
 }
 
 
 /* This returns the next function in the rest of the current chain. */
 void (*chain_rest())()
 {
-   for (gr_current_chain = gr_current_chain->next; gr_current_chain != NULL; gr_current_chain = gr_current_chain->next) {
-      if (!(gr_current_chain->flags & CHNF_VOID))
-         return gr_current_chain->f;
-      if (gr_current_chain->flags & CHNF_AFTER) break;
-      gr_current_chain->f();
-   }
-   if (gr_current_primitive <= GET_PIXEL24 || gr_current_primitive >= CALC_ROW)
-      return chn_primitives[gr_current_primitive][grd_pixel_index];
-   return chn_primitives[gr_current_primitive][grd_canvas_index];
+    for (gr_current_chain = gr_current_chain->next; gr_current_chain != NULL; gr_current_chain = gr_current_chain->next) {
+        if (!(gr_current_chain->flags & CHNF_VOID))
+            return gr_current_chain->f;
+        if (gr_current_chain->flags & CHNF_AFTER) break;
+        gr_current_chain->f();
+    }
+    if (gr_current_primitive <= GET_PIXEL24 || gr_current_primitive >= CALC_ROW)
+        return chn_primitives[gr_current_primitive][grd_pixel_index];
+    return chn_primitives[gr_current_primitive][grd_canvas_index];
 }
 
 #include "canvas.h"
@@ -185,16 +185,16 @@ void (*chain_rest())()
 
 void gr_force_generic()
 {
-   chn_flags |= CHN_GEN;
-   grd_canvas_table_list[BMT_GEN]=gen_canvas_table;
-   grd_function_table_list[BMT_GEN]= (grt_function_table *) gen_function_table;
-   if (grd_canvas_table != NULL)
-      gr_set_canvas(grd_canvas);
+    chn_flags |= CHN_GEN;
+    grd_canvas_table_list[BMT_GEN]=gen_canvas_table;
+    grd_function_table_list[BMT_GEN]= (grt_function_table *) gen_function_table;
+    if (grd_canvas_table != NULL)
+        gr_set_canvas(grd_canvas);
 }
 
 void gr_unforce_generic()
 {
-   chn_flags &= ~CHN_GEN;
-   gr_set_canvas(grd_canvas);
+    chn_flags &= ~CHN_GEN;
+    gr_set_canvas(grd_canvas);
 }
 

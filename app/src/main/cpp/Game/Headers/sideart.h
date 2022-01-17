@@ -16,11 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
 #ifndef __SIDEART_H
 #define __SIDEART_H
 
-#define RES_SideIconArt 0x550		// (1360)
+#define RES_SideIconArt 0x550        // (1360)
 
 #endif

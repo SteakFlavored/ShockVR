@@ -16,18 +16,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		lllist.C		Basic doubly-linked list
-//		Rex E. Bradford (REX)
+//        lllist.C        Basic doubly-linked list
+//        Rex E. Bradford (REX)
 //
-//		This module contains the few routines associated with the simple
-//		llist structure which are not macros.  These include:
+//        This module contains the few routines associated with the simple
+//        llist structure which are not macros.  These include:
 //
-//		llist_insert_queue() - insert a node into a sorted list
-//		llist_move_queue()   - move a node within a sorted list
-//		llist_num_nodes()    - count # nodes in a list
+//        llist_insert_queue() - insert a node into a sorted list
+//        llist_move_queue()    - move a node within a sorted list
+//        llist_num_nodes()     - count # nodes in a list
 //
-//		See llist.h for the rest of the functionality, or llist.txt
-//		for documentation on how to use llist's.
+//        See llist.h for the rest of the functionality, or llist.txt
+//        for documentation on how to use llist's.
 /*
 * $Header: n:/project/lib/src/dstruct/RCS/lllist.c 1.2 1993/04/16 12:02:19 rex Exp $
 * $log$
@@ -35,72 +35,72 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "llist.h"
 
-//	----------------------------------------------------------
-//		LITTLE LINKED LIST ROUTINES (SEE MACROS IN LLIST.H TOO)
-//	----------------------------------------------------------
+//    ----------------------------------------------------------
+//        LITTLE LINKED LIST ROUTINES (SEE MACROS IN LLIST.H TOO)
+//    ----------------------------------------------------------
 //
-//	llist_insert_queue() inserts a new queue item into list.
+//    llist_insert_queue() inserts a new queue item into list.
 
 void llist_insert_queue(llist_head *plh, queue *plq)
 {
-	queue *pxx;
+    queue *pxx;
 
-//	Point to element past new one in priority
+//    Point to element past new one in priority
 
-	pxx = (queue *) llist_head(plh);
-	while ((pxx != (queue *)llist_end(plh)) && (plq->priority <= pxx->priority))
-		pxx = pxx->pnext;
+    pxx = (queue *) llist_head(plh);
+    while ((pxx != (queue *)llist_end(plh)) && (plq->priority <= pxx->priority))
+        pxx = pxx->pnext;
 
-//	Patch us in before this element
+//    Patch us in before this element
 
-	llist_insert_before(plq,pxx);
+    llist_insert_before(plq,pxx);
 }
 
-//	---------------------------------------------------------
+//    ---------------------------------------------------------
 //
-//	llist_move_queue() moves a queue item after inserting new priority.
+//    llist_move_queue() moves a queue item after inserting new priority.
 
 bool llist_move_queue(llist_head *plh, queue *plq)
 {
-	bool moved;
+    bool moved;
 
-//	See if priority warrants moving the queue node
+//    See if priority warrants moving the queue node
 
-	moved = false;
-	if ((plq->pprev != (queue *)llist_beg(plh)) && (plq->priority > plq->pprev->priority))
-		moved = true;
-	else if ((plq->pnext != (queue *)llist_end(plh)) && (plq->priority < plq->pnext->priority))
-		moved = true;
+    moved = false;
+    if ((plq->pprev != (queue *)llist_beg(plh)) && (plq->priority > plq->pprev->priority))
+        moved = true;
+    else if ((plq->pnext != (queue *)llist_end(plh)) && (plq->priority < plq->pnext->priority))
+        moved = true;
 
-//	Yes, detach from queue and re-insert
+//    Yes, detach from queue and re-insert
 
-	if (moved)
-	{
-		llist_remove(plq);
-		llist_insert_queue(plh, plq);
-	}
+    if (moved)
+    {
+        llist_remove(plq);
+        llist_insert_queue(plh, plq);
+    }
 
-//	Report whether item had to be moved or not
+//    Report whether item had to be moved or not
 
-	return(moved);
+    return(moved);
 }
 
-//	----------------------------------------------------------
+//    ----------------------------------------------------------
 //
-//	llist_num_nodes() counts # nodes in list.
+//    llist_num_nodes() counts # nodes in list.
 //
-//		plh = ptr to list header
+//        plh = ptr to list header
 //
-//	Returns: # nodes in list
+//    Returns: # nodes in list
 
 int32_t llist_num_nodes(llist_head *plh)
 {
-	llist *pll;
-	int32_t num;
+    llist *pll;
+    int32_t num;
 
-	num = 0;
-	forallinlist(llist,plh,pll)
-		++num;
+    num = 0;
+    forallinlist(llist,plh,pll)
+        ++num;
 
-	return(num);
+    return(num);
 }

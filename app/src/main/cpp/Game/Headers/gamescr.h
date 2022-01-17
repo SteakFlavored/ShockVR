@@ -16,18 +16,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
 #ifndef __GAMESCR_H
 #define __GAMESCR_H
 
-#define RES_helpscreen_english 0x543		// (1347)
+#define RES_helpscreen_english 0x543        // (1347)
 #define REF_IMG_bmHelpOverlayEnglish 0x5430000
-#define RES_helpscreen_french 0x544		// (1348)
+#define RES_helpscreen_french 0x544        // (1348)
 #define REF_IMG_bmHelpOverlayFrench 0x5440000
-#define RES_helpscreen_german 0x545		// (1349)
+#define RES_helpscreen_german 0x545        // (1349)
 #define REF_IMG_bmHelpOverlayGerman 0x5450000
-#define RES_gamescrGfx 0x259		// (601)
+#define RES_gamescrGfx 0x259        // (601)
 #define REF_IMG_bmBlankMessageLine 0x2590000
 #define REF_IMG_bmBlankInventoryPanel 0x2590001
 #define REF_IMG_bmBlankMFD 0x2590002
@@ -56,19 +56,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_IMG_bm3dBackground6 0x2590019
 #define REF_IMG_bmMFDButtonBackground 0x259001a
 #define REF_IMG_bmInventoryButtonBackground 0x259001b
-#define RES_smallTechFont 0x25a		// (602)
-#define RES_tinyTechFont 0x25b		// (603)
-#define RES_mediumTechFont 0x25c		// (604)
-#define RES_largeTechFont 0x25d		// (605)
-#define RES_citadelFont 0x25e		// (606)
-#define RES_mediumLEDFont 0x25f		// (607)
-#define RES_bigLEDFont 0x260		// (608)
-#define RES_graffitiFont 0x261		// (609)
-#define RES_mfdFont 0x262		// (610)
-#define RES_cutsceneFont 0x263		// (611)
-#define RES_readingFont 0x264		// (612)
-#define RES_coloraliasedFont 0x265		// (613)
-#define RES_editorGfx 0x266		// (614)
+#define RES_smallTechFont 0x25a        // (602)
+#define RES_tinyTechFont 0x25b        // (603)
+#define RES_mediumTechFont 0x25c        // (604)
+#define RES_largeTechFont 0x25d        // (605)
+#define RES_citadelFont 0x25e        // (606)
+#define RES_mediumLEDFont 0x25f        // (607)
+#define RES_bigLEDFont 0x260        // (608)
+#define RES_graffitiFont 0x261        // (609)
+#define RES_mfdFont 0x262        // (610)
+#define RES_cutsceneFont 0x263        // (611)
+#define RES_readingFont 0x264        // (612)
+#define RES_coloraliasedFont 0x265        // (613)
+#define RES_editorGfx 0x266        // (614)
 #define REF_IMG_bmBitsIcon 0x2660000
 #define REF_IMG_bmHeightIcon 0x2660001
 #define REF_IMG_bmPokeIcon 0x2660002
@@ -179,17 +179,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_IMG_bmCritterCyborgIcon 0x266006b
 #define REF_IMG_bmCritterCyberIcon 0x266006c
 #define REF_IMG_bmCritterRobobabeIcon 0x266006d
-#define RES_leanmeterstub 0x267		// (615)
-#define RES_popups 0x268		// (616)
-#define RES_gamescrFull 0x269		// (617)
+#define RES_leanmeterstub 0x267        // (615)
+#define RES_popups 0x268        // (616)
+#define RES_gamescrFull 0x269        // (617)
 #define REF_IMG_bmGamescreenBackground 0x2690000
-#define RES_gamescrSHODAN 0x26a		// (618)
+#define RES_gamescrSHODAN 0x26a        // (618)
 #define REF_IMG_bmSHODANEndgame 0x26a0000
 #define REF_IMG_bmSHODANEndgameFull 0x26a0001
-#define RES_SideIconArt 0x550		// (1360)
-#define RES_FullAmapBack 0x551		// (1361)
+#define RES_SideIconArt 0x550        // (1360)
+#define RES_FullAmapBack 0x551        // (1361)
 #define REF_IMG_bmTriLogoBack 0x5510000
-#define RES_cursorNormal 0x552		// (1362)
+#define RES_cursorNormal 0x552        // (1362)
 #define REF_IMG_bmTargetCursor 0x5520000
 #define REF_IMG_bmUpCursor 0x5520001
 #define REF_IMG_bmUpLeftCursor 0x5520002
@@ -202,12 +202,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_IMG_bmSprintCursor 0x5520009
 #define REF_IMG_bmMfdPhaserCursor 0x552000a
 #define REF_IMG_bmVmailCursor 0x552000b
-#define RES_cursorMisc 0x553		// (1363)
+#define RES_cursorMisc 0x553        // (1363)
 #define REF_IMG_bmWaitCursor 0x5530000
 #define REF_IMG_bmOptionCursor 0x5530001
 #define REF_IMG_bmFireCursor 0x5530002
 #define REF_IMG_bmXCursor 0x5530003
-#define RES_cursorCyber 0x554		// (1364)
+#define RES_cursorCyber 0x554        // (1364)
 #define REF_IMG_bmCyberUpLeftCursor 0x5540000
 #define REF_IMG_bmCyberUpCursor 0x5540001
 #define REF_IMG_bmCyberUpRightCursor 0x5540002
@@ -217,25 +217,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_IMG_bmCyberRollLeftCursor 0x5540006
 #define REF_IMG_bmCyberDownCursor 0x5540007
 #define REF_IMG_bmCyberRollRightCursor 0x5540008
-#define RES_leanMeterBase 0x555		// (1365)
-#define RES_leanMeterBio 0x556		// (1366)
-#define RES_leanMeterRad 0x557		// (1367)
-#define RES_leanShield1 0x558		// (1368)
-#define RES_leanShield2 0x559		// (1369)
-#define RES_leanShield3 0x55a		// (1370)
-#define RES_leanShield4 0x55b		// (1371)
-#define RES_leanMeterBack 0x55c		// (1372)
+#define RES_leanMeterBase 0x555        // (1365)
+#define RES_leanMeterBio 0x556        // (1366)
+#define RES_leanMeterRad 0x557        // (1367)
+#define RES_leanShield1 0x558        // (1368)
+#define RES_leanShield2 0x559        // (1369)
+#define RES_leanShield3 0x55a        // (1370)
+#define RES_leanShield4 0x55b        // (1371)
+#define RES_leanMeterBack 0x55c        // (1372)
 #define REF_IMG_bmLeanBkgnd 0x55c0000
 #define REF_IMG_bmEyeIconL 0x55c0001
 #define REF_IMG_bmEyeIconLdark 0x55c0002
 #define REF_IMG_bmEyeIconR 0x55c0003
 #define REF_IMG_bmEyeIconRdark 0x55c0004
 #define REF_IMG_bmLeanBkgndTransp 0x55c0005
-#define RES_doubleTinyTechFont 0x730		// (1840)
-#define RES_megaTinyTechFont 0x731		// (1841)
-#define RES_doubleMediumLEDFont 0x732		// (1842)
-#define RES_megaMediumLEDFont 0x733		// (1843)
-#define RES_tallTinyTechFont 0x734		// (1844)
-#define RES_doubleCutsceneFont 0x735		// (1845)
+#define RES_doubleTinyTechFont 0x730        // (1840)
+#define RES_megaTinyTechFont 0x731        // (1841)
+#define RES_doubleMediumLEDFont 0x732        // (1842)
+#define RES_megaMediumLEDFont 0x733        // (1843)
+#define RES_tallTinyTechFont 0x734        // (1844)
+#define RES_doubleCutsceneFont 0x735        // (1845)
 
 #endif

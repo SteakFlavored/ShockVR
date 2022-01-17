@@ -30,13 +30,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------
 //  Globals
 //--------------------------
-//MDI_DRIVER     	*_snd_midi=NULL;
-TunePlayer       		_snd_seq_player[SND_MAX_SEQUENCES];
-int32_t             				_snd_seq_cnt;
-snd_midi_parms  	_snd_midi_prm[SND_MAX_SEQUENCES];
+//MDI_DRIVER          *_snd_midi=NULL;
+TunePlayer                 _snd_seq_player[SND_MAX_SEQUENCES];
+int32_t                                 _snd_seq_cnt;
+snd_midi_parms      _snd_midi_prm[SND_MAX_SEQUENCES];
 
 void (*seq_finish)(int32_t seq_ind) = NULL;
-TuneCallBackUPP	gTuneCBProcPtr;
+TuneCallBackUPP    gTuneCBProcPtr;
 
 //--------------------------
 //  Prototypes
@@ -50,24 +50,24 @@ pascal void HandleTuneCallBack(const TuneStatus *status, int32_t refCon);
 int32_t snd_start_midi(void)
 {
 /*
-   lib_PARMS libp, *lbpp;
-   int8_t *driv_file;
+    lib_PARMS libp, *lbpp;
+    int8_t *driv_file;
 
-   if (snd_midi!=NULL)
-      return SND_DRIVER_ALREADY;
-   midi_card->cap=SND_CAP_MIDI;
-   if ((driv_file=load_lib_PARMS(midi_card,&libp))==NULL)
-      return SND_NO_DRIVER_NAME;
-   lbpp=parm_eval(midi_card,&libp);
-   if ((snd_midi=(LG_SND_DRIVER *)AIL_install_MDI_driver_file(_snd_get_file(driv_file),lbpp))==NULL)
-      return SND_CANT_INIT_DRIVER;
-   if (!parm_checkup(lbpp))
-    { snd_stop_midi(); return SND_CANT_FIND_CARD; }
+    if (snd_midi!=NULL)
+        return SND_DRIVER_ALREADY;
+    midi_card->cap=SND_CAP_MIDI;
+    if ((driv_file=load_lib_PARMS(midi_card,&libp))==NULL)
+        return SND_NO_DRIVER_NAME;
+    lbpp=parm_eval(midi_card,&libp);
+    if ((snd_midi=(LG_SND_DRIVER *)AIL_install_MDI_driver_file(_snd_get_file(driv_file),lbpp))==NULL)
+        return SND_CANT_INIT_DRIVER;
+    if (!parm_checkup(lbpp))
+     { snd_stop_midi(); return SND_CANT_FIND_CARD; }
 */
-	gTuneCBProcPtr = NewTuneCallBackProc(HandleTuneCallBack);
+    gTuneCBProcPtr = NewTuneCallBackProc(HandleTuneCallBack);
 
-	_snd_seq_cnt = 0;
-	_midi_ret;
+    _snd_seq_cnt = 0;
+    _midi_ret;
 }
 
 //---------------------------------------------------------
@@ -75,43 +75,43 @@ int32_t snd_start_midi(void)
 //---------------------------------------------------------
 int32_t snd_set_midi_sequences(int32_t seq_cnt)
 {
-//   _midi_top;
-	if (seq_cnt > SND_MAX_SEQUENCES)
-		return SND_NOT_SUPPORTED;
+//    _midi_top;
+    if (seq_cnt > SND_MAX_SEQUENCES)
+        return SND_NOT_SUPPORTED;
 
 /* Only called once in the game, so this doesn't apply.
-	if (_snd_seq_cnt > seq_cnt)  							// See if we have to lower allocation
-	{
-		for (int32_t i=0; (i<_snd_seq_cnt)&&(seq_cnt<_snd_seq_cnt); )
-			switch (AIL_sequence_status(_snd_seq_hnd[i]))
-			{
-			case SMP_DONE:
-				AIL_release_sequence_handle(_snd_seq_hnd[i]);
-				if (i<--_snd_seq_cnt)
-					_snd_seq_hnd[i]=_snd_seq_hnd[_snd_seq_cnt];
-				break;
+    if (_snd_seq_cnt > seq_cnt)                              // See if we have to lower allocation
+    {
+        for (int32_t i=0; (i<_snd_seq_cnt)&&(seq_cnt<_snd_seq_cnt); )
+            switch (AIL_sequence_status(_snd_seq_hnd[i]))
+            {
+            case SMP_DONE:
+                AIL_release_sequence_handle(_snd_seq_hnd[i]);
+                if (i<--_snd_seq_cnt)
+                    _snd_seq_hnd[i]=_snd_seq_hnd[_snd_seq_cnt];
+                break;
 #ifdef SND_ANAL_DEBUG
-			case SMP_FREE:
-				Warning(("Hey, why do we have a handle for a FREE sample\n")); break;
+            case SMP_FREE:
+                Warning(("Hey, why do we have a handle for a FREE sample\n")); break;
 #endif
-			default:
-				i++; break;
-			}
-	}
-	else
+            default:
+                i++; break;
+            }
+    }
+    else
 */
-	if (_snd_seq_cnt < seq_cnt)
-	{
-		for (;_snd_seq_cnt < seq_cnt; _snd_seq_cnt++)
-		{
-			if ((_snd_seq_player[_snd_seq_cnt] = OpenDefaultComponent(kTunePlayerType, 0))==NULL)
-				return SND_OUT_OF_MEMORY;
+    if (_snd_seq_cnt < seq_cnt)
+    {
+        for (;_snd_seq_cnt < seq_cnt; _snd_seq_cnt++)
+        {
+            if ((_snd_seq_player[_snd_seq_cnt] = OpenDefaultComponent(kTunePlayerType, 0))==NULL)
+                return SND_OUT_OF_MEMORY;
 // Should we do something here?
-//			else
-//				AIL_set_sequence_user_data(_snd_seq_hnd[_snd_seq_cnt],0,_snd_seq_cnt);
-		}
-	}
-	_midi_ret;
+//            else
+//                AIL_set_sequence_user_data(_snd_seq_hnd[_snd_seq_cnt],0,_snd_seq_cnt);
+        }
+    }
+    _midi_ret;
 }
 
 //---------------------------------------------------------
@@ -119,25 +119,25 @@ int32_t snd_set_midi_sequences(int32_t seq_cnt)
 //---------------------------------------------------------
 int32_t snd_stop_midi(void)
 {
-	snd_kill_all_sequences();
-//	AIL_uninstall_MDI_driver(snd_midi);
-//	snd_midi=NULL;
-	for (int32_t i=0; i<_snd_seq_cnt; i++)
-	{
-		CloseComponent(_snd_seq_player[i]);
-	}
+    snd_kill_all_sequences();
+//    AIL_uninstall_MDI_driver(snd_midi);
+//    snd_midi=NULL;
+    for (int32_t i=0; i<_snd_seq_cnt; i++)
+    {
+        CloseComponent(_snd_seq_player[i]);
+    }
 
-	DisposeRoutineDescriptor(gTuneCBProcPtr);
-	gTuneCBProcPtr = NULL;
+    DisposeRoutineDescriptor(gTuneCBProcPtr);
+    gTuneCBProcPtr = NULL;
 
-	return SND_OK;
+    return SND_OK;
 }
 
 //--------------------------------------------------------------------------
-//	Call-back routine.  Get's called when tune is finished.
+//    Call-back routine.  Get's called when tune is finished.
 //--------------------------------------------------------------------------
 pascal void HandleTuneCallBack(const TuneStatus *, int32_t refCon)
 {
-	if (seq_finish)
-		(*seq_finish)(refCon);
+    if (seq_finish)
+        (*seq_finish)(refCon);
 }

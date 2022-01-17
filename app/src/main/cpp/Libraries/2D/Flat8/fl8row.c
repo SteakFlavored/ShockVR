@@ -36,5 +36,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int16_t flat8_calc_row (int16_t w)
 {
-   return w;
+    return w;
 }

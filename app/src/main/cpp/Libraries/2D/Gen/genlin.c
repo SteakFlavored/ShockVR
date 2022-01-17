@@ -77,35 +77,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* draw a clipped fractional-precision line, call the fixed-point line
-   drawer with the preferred (v0, v1, fill) interface
+    drawer with the preferred (v0, v1, fill) interface
  */
 
 int32_t gen_fix_line (fix x0, fix y0, fix x1, fix y1)
 {
-   int32_t r;
-   grs_vertex v0, v1;
+    int32_t r;
+    grs_vertex v0, v1;
 
-   v0.x = x0; v0.y = y0;
-   v1.x = x1; v1.y = y1;
+    v0.x = x0; v0.y = y0;
+    v1.x = x1; v1.y = y1;
 
-   r = grd_line_clip_fill (gr_get_fcolor(), gr_get_fill_parm(), &v0, &v1);
+    r = grd_line_clip_fill (gr_get_fcolor(), gr_get_fill_parm(), &v0, &v1);
 
-   return r;
+    return r;
 }
 
 int32_t gri_line_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   int32_t r;
-   grs_vertex u0, u1;
+    int32_t r;
+    grs_vertex u0, u1;
 
-   u0.x = v0->x; u0.y = v0->y;
-   u1.x = v1->x; u1.y = v1->y;
+    u0.x = v0->x; u0.y = v0->y;
+    u1.x = v1->x; u1.y = v1->y;
 
-   r = gri_line_clip (&u0, &u1);
+    r = gri_line_clip (&u0, &u1);
 
-   if (r != CLIP_ALL)
-     grd_uline_fill (c, parm, &u0, &u1);
+    if (r != CLIP_ALL)
+      grd_uline_fill (c, parm, &u0, &u1);
 
-   return r;
+    return r;
 }
 

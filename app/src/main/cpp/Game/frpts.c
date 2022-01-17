@@ -48,22 +48,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frparams.h"
 #include "frflags.h"
 
-#define ptLst(i)     pt_lsts[i]
+#define ptLst(i)      pt_lsts[i]
 #define ptLstx(i,x)  (*(ptLst(i)+x))
-#define ptRow(i)     pt_rowv[i]
+#define ptRow(i)      pt_rowv[i]
 #define ptRowx(i,x)  (*(ptRow(i)+x))
 
-#define pt_set_vec(x,y,z)     _pt_vec.xyz[0]=fix_make(x,0);_pt_vec.xyz[1]=fix_make(0,0); _pt_vec.xyz[2]=fix_make(z,0)
-#define pt_mk_point(pt)       pt=g3_transform_point(&_pt_vec)
+#define pt_set_vec(x,y,z)      _pt_vec.xyz[0]=fix_make(x,0);_pt_vec.xyz[1]=fix_make(0,0); _pt_vec.xyz[2]=fix_make(z,0)
+#define pt_mk_point(pt)         pt=g3_transform_point(&_pt_vec)
 
 #ifndef MAP_RESIZING
-#define _fr_pt_wid   (fm_x_sz(moose)+1)   // note we secretly know this arg wont be used
-static g3s_phandle   pt_lsts[2][_fr_pt_wid];
-static uint16_t        pt_rowv[2][_fr_pt_wid];
+#define _fr_pt_wid    (fm_x_sz(moose)+1)    // note we secretly know this arg wont be used
+static g3s_phandle    pt_lsts[2][_fr_pt_wid];
+static uint16_t          pt_rowv[2][_fr_pt_wid];
 #else
 static g3s_phandle *pt_lsts[2];
 static uint16_t *pt_rowv[2];
-static int32_t    _fr_pt_wid=0;
+static int32_t     _fr_pt_wid=0;
 #endif
 g3s_phandle *_fr_ptbase, *_fr_ptnext;  /* global place to get points from */
 
@@ -71,37 +71,37 @@ g3s_phandle *_fr_ptbase, *_fr_ptnext;  /* global place to get points from */
 // round and round the block i walked, pretending you were with me
 int32_t fr_pts_frame_start(void)
 {
-   memset(*(pt_rowv+0),0xffff,_fr_pt_wid*sizeof(uint16_t));
-   memset(*(pt_rowv+1),0xffff,_fr_pt_wid*sizeof(uint16_t));
-   _fr_ret;
+    memset(*(pt_rowv+0),0xffff,_fr_pt_wid*sizeof(uint16_t));
+    memset(*(pt_rowv+1),0xffff,_fr_pt_wid*sizeof(uint16_t));
+    _fr_ret;
 }
 
 int32_t fr_pts_freemem(void)
 {
 #ifdef MAP_RESIZING
-   int32_t i;
-   if (_fr_pt_wid==0) _fr_ret_val(FR_NO_NEED);
-   for (i=0; i<3; i++)
-    { Free(*(pt_rowv+i)); Free(*(pt_lsts+i)); }
-   _fr_pt_wid=0;
+    int32_t i;
+    if (_fr_pt_wid==0) _fr_ret_val(FR_NO_NEED);
+    for (i=0; i<3; i++)
+     { Free(*(pt_rowv+i)); Free(*(pt_lsts+i)); }
+    _fr_pt_wid=0;
 #endif
-   _fr_ret;
+    _fr_ret;
 }
 
 //#pragma disable_message(202)
-int32_t fr_pts_resize(int32_t , int32_t )					// x, y
+int32_t fr_pts_resize(int32_t , int32_t )                    // x, y
 {
 #ifdef MAP_RESIZING
-   int32_t i;
-   fr_pts_freemem();
-   _fr_pt_wid=x+1;
-   for (i=0; i<3; i++)
-   {
-      if (((*(pt_rowv+i))=Malloc(x*sizeof(uint16_t)))==NULL)      _fr_ret_val(FR_NOMEM);
-      if (((*(pt_lsts+i))=Malloc(x*sizeof(g3s_phandle)))==NULL) _fr_ret_val(FR_NOMEM);
-   }
+    int32_t i;
+    fr_pts_freemem();
+    _fr_pt_wid=x+1;
+    for (i=0; i<3; i++)
+    {
+        if (((*(pt_rowv+i))=Malloc(x*sizeof(uint16_t)))==NULL)        _fr_ret_val(FR_NOMEM);
+        if (((*(pt_lsts+i))=Malloc(x*sizeof(g3s_phandle)))==NULL) _fr_ret_val(FR_NOMEM);
+    }
 #endif
-   _fr_ret;
+    _fr_ret;
 }
 //#pragma enable_message(202)
 
@@ -109,67 +109,67 @@ int32_t fr_pts_resize(int32_t , int32_t )					// x, y
 void dumb_hack_for_now(int32_t x, int32_t y);
 void dumb_hack_for_now(int32_t x, int32_t y)
 {
-   bool tran_sv=false, d=true;
-   uint16_t *_cur_rowv, *_nxt_rowv;
-   g3s_phandle *_cur_pt, *_fr_curb, *_fr_curn;
-   g3s_vector   _pt_vec;
+    bool tran_sv=false, d=true;
+    uint16_t *_cur_rowv, *_nxt_rowv;
+    g3s_phandle *_cur_pt, *_fr_curb, *_fr_curn;
+    g3s_vector    _pt_vec;
 
-   _fr_sdbg(NEW_PTS,mprintf("dhon %d %d...",x,y));
+    _fr_sdbg(NEW_PTS,mprintf("dhon %d %d...",x,y));
 
-   if (pt_rowv[0][x]==y) // go from [0]
-      tran_sv=true;
-   else if (pt_rowv[1][x]==y)
-   {
-      tran_sv=true;
-      d=false;
-   }
-   else
-   {
-      if (*(pt_rowv[0]+x)==0xffff) // create a new one
-      {
-         pt_set_vec(x,0,y);
-         pt_mk_point(ptLstx(0,x));
-         _fr_sdbg(NEW_PTS,mprintf("New pt... "));
-      }
-      else
-      {
-         fix df=fix_make(y-*(pt_rowv[0]+x),0);
-         _cur_pt=ptLst(0)+x;
-         g3_add_delta_z(*_cur_pt,df);
-         _fr_sdbg(NEW_PTS,mprintf("Move pt by %x at %d last %d ",df,x,*(pt_rowv[0]+x)));
-      }
-   }
-   _fr_sdbg(NEW_PTS,if (tran_sv) mprintf("Found %d...",d));
+    if (pt_rowv[0][x]==y) // go from [0]
+        tran_sv=true;
+    else if (pt_rowv[1][x]==y)
+    {
+        tran_sv=true;
+        d=false;
+    }
+    else
+    {
+        if (*(pt_rowv[0]+x)==0xffff) // create a new one
+        {
+            pt_set_vec(x,0,y);
+            pt_mk_point(ptLstx(0,x));
+            _fr_sdbg(NEW_PTS,mprintf("New pt... "));
+        }
+        else
+        {
+            fix df=fix_make(y-*(pt_rowv[0]+x),0);
+            _cur_pt=ptLst(0)+x;
+            g3_add_delta_z(*_cur_pt,df);
+            _fr_sdbg(NEW_PTS,mprintf("Move pt by %x at %d last %d ",df,x,*(pt_rowv[0]+x)));
+        }
+    }
+    _fr_sdbg(NEW_PTS,if (tran_sv) mprintf("Found %d...",d));
 
-   _fr_ptbase=ptLst(d?0:1); _cur_rowv=ptRow(d?0:1)+x;
-   _fr_ptnext=ptLst(d?1:0); _nxt_rowv=ptRow(d?1:0)+x;
-   _fr_curb=_fr_ptbase+x;
-   _fr_curn=_fr_ptnext+x;
-   _fr_sdbg(NEW_PTS,mprintf("rose %d %d %d %d...",*_cur_rowv,*(_cur_rowv+1),*_nxt_rowv,*(_nxt_rowv+1)));
+    _fr_ptbase=ptLst(d?0:1); _cur_rowv=ptRow(d?0:1)+x;
+    _fr_ptnext=ptLst(d?1:0); _nxt_rowv=ptRow(d?1:0)+x;
+    _fr_curb=_fr_ptbase+x;
+    _fr_curn=_fr_ptnext+x;
+    _fr_sdbg(NEW_PTS,mprintf("rose %d %d %d %d...",*_cur_rowv,*(_cur_rowv+1),*_nxt_rowv,*(_nxt_rowv+1)));
 
-   // now *_fr_ptbase is at (x,y)
-   if (*(_cur_rowv+1)!=y)
-      if (*(_cur_rowv+1)!=0xffff)
-       { g3_replace_add_delta_x(*_fr_curb,*(_fr_curb+1),fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("x+1 replace")); }
-      else
-       { *(_fr_curb+1)=g3_copy_add_delta_x(*_fr_curb,fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("x+1 copy")); }
+    // now *_fr_ptbase is at (x,y)
+    if (*(_cur_rowv+1)!=y)
+        if (*(_cur_rowv+1)!=0xffff)
+         { g3_replace_add_delta_x(*_fr_curb,*(_fr_curb+1),fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("x+1 replace")); }
+        else
+         { *(_fr_curb+1)=g3_copy_add_delta_x(*_fr_curb,fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("x+1 copy")); }
 
-   if (*(_nxt_rowv)!=y+1)
-      if (*(_nxt_rowv)!=0xffff)
-       { g3_replace_add_delta_z(*_fr_curb,*_fr_curn,fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("y replace")); }
-      else
-       { *_fr_curn=g3_copy_add_delta_z(*_fr_curb,fix_make(1,0));_fr_sdbg(NEW_PTS,mprintf("y copy")); }
+    if (*(_nxt_rowv)!=y+1)
+        if (*(_nxt_rowv)!=0xffff)
+         { g3_replace_add_delta_z(*_fr_curb,*_fr_curn,fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("y replace")); }
+        else
+         { *_fr_curn=g3_copy_add_delta_z(*_fr_curb,fix_make(1,0));_fr_sdbg(NEW_PTS,mprintf("y copy")); }
 
-   if (*(_nxt_rowv+1)!=y+1)
-      if (*(_nxt_rowv+1)!=0xffff)
-       { g3_replace_add_delta_x(*_fr_curn,*(_fr_curn+1),fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("y+1 replace")); }
-      else
-       { *(_fr_curn+1)=g3_copy_add_delta_x(*_fr_curn,fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("y+1 copy")); }
+    if (*(_nxt_rowv+1)!=y+1)
+        if (*(_nxt_rowv+1)!=0xffff)
+         { g3_replace_add_delta_x(*_fr_curn,*(_fr_curn+1),fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("y+1 replace")); }
+        else
+         { *(_fr_curn+1)=g3_copy_add_delta_x(*_fr_curn,fix_make(1,0)); _fr_sdbg(NEW_PTS,mprintf("y+1 copy")); }
 
-   *_cur_rowv=y;   *(_cur_rowv+1)=y;
-   *_nxt_rowv=y+1; *(_nxt_rowv+1)=y+1;
+    *_cur_rowv=y;    *(_cur_rowv+1)=y;
+    *_nxt_rowv=y+1; *(_nxt_rowv+1)=y+1;
 
-   _fr_sdbg(NEW_PTS,mprintf("\n"));
+    _fr_sdbg(NEW_PTS,mprintf("\n"));
 }
 
 

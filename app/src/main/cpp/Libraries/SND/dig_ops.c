@@ -41,44 +41,44 @@ int32_t snd_find_free_handle(uint8_t smp_pri, bool check_only);
 //--------------------------------------------------------------------------
 snd_digi_parms *snd_sample_parms(int32_t hnd_id)
 {
-   return &_snd_smp_prm[hnd_id];
+    return &_snd_smp_prm[hnd_id];
 }
 
 /* Callback
 static void cdecl smp_EOS_callback(SAMPLE *S)
 {
-   int32_t hnd_id;
-   snd_digi_parms *our_p;
-   void cdecl (*smp_ecall)(snd_digi_parms *dprm);
+    int32_t hnd_id;
+    snd_digi_parms *our_p;
+    void cdecl (*smp_ecall)(snd_digi_parms *dprm);
 
-   hnd_id=AIL_sample_user_data(S,0);
-   our_p=&_snd_smp_prm[hnd_id];
-   if (our_p->flags&SND_FLG_INUSE)
-   {
-	   smp_ecall=(void cdecl (*)(snd_digi_parms *))AIL_sample_user_data(S,7);
-	   AIL_set_sample_user_data(S,7,NULL);
-	   if (smp_ecall!=NULL)
-	      (*smp_ecall)(our_p);
-   }
+    hnd_id=AIL_sample_user_data(S,0);
+    our_p=&_snd_smp_prm[hnd_id];
+    if (our_p->flags&SND_FLG_INUSE)
+    {
+        smp_ecall=(void cdecl (*)(snd_digi_parms *))AIL_sample_user_data(S,7);
+        AIL_set_sample_user_data(S,7,NULL);
+        if (smp_ecall!=NULL)
+            (*smp_ecall)(our_p);
+    }
 #ifdef SND_ANAL_DEBUG
-   else
-      snd_error=SND_NO_HANDLE;
+    else
+        snd_error=SND_NO_HANDLE;
 #endif
-   our_p->flags=0;
+    our_p->flags=0;
 }
 
 #ifdef USED
 static void cdecl smp_EOB_callback(SAMPLE *S)
 {
-   int32_t hnd_id;
-   snd_digi_parms *our_p;
+    int32_t hnd_id;
+    snd_digi_parms *our_p;
 
-   if (snd_update!=NULL)
-   {
-	   hnd_id=AIL_sample_user_data(S,0);
-	   our_p=&_snd_smp_prm[hnd_id];
-      (*snd_update)(our_p);
-   }
+    if (snd_update!=NULL)
+    {
+        hnd_id=AIL_sample_user_data(S,0);
+        our_p=&_snd_smp_prm[hnd_id];
+        (*snd_update)(our_p);
+    }
 }
 #endif
 */
@@ -88,20 +88,20 @@ static void cdecl smp_EOB_callback(SAMPLE *S)
 //--------------------------------------------------------------------------
 void snd_end_sample(int32_t hnd_id)
 {
-	SndCommand	sc;
+    SndCommand    sc;
 
-	sc.cmd = flushCmd;														// Flush any remaining commands.
-	sc.param1 = 0;
-	sc.param2 = 0;
-	SndDoImmediate(_snd_smp_prm[hnd_id].sndChan, &sc);
+    sc.cmd = flushCmd;                                                        // Flush any remaining commands.
+    sc.param1 = 0;
+    sc.param2 = 0;
+    SndDoImmediate(_snd_smp_prm[hnd_id].sndChan, &sc);
 
-	sc.cmd = quietCmd;														// Turn off the current command.
-	sc.param1 = 0;
-	sc.param2 = 0;
-	SndDoImmediate(_snd_smp_prm[hnd_id].sndChan, &sc);
+    sc.cmd = quietCmd;                                                        // Turn off the current command.
+    sc.param1 = 0;
+    sc.param2 = 0;
+    SndDoImmediate(_snd_smp_prm[hnd_id].sndChan, &sc);
 
-	if (snd_finish)															// Since we've flushed all commands, we
-		(*snd_finish)(&_snd_smp_prm[hnd_id]);				// have to do callback ourselves.
+    if (snd_finish)                                                            // Since we've flushed all commands, we
+        (*snd_finish)(&_snd_smp_prm[hnd_id]);                // have to do callback ourselves.
 }
 
 //--------------------------------------------------------------------------
@@ -109,15 +109,15 @@ void snd_end_sample(int32_t hnd_id)
 //--------------------------------------------------------------------------
 void snd_kill_all_samples(void)
 {
-	int32_t 			i;
-	SCStatus	stat;
+    int32_t             i;
+    SCStatus    stat;
 
-	for (i=0; i<_snd_smp_cnt; i++)
-	{
-		SndChannelStatus(_snd_smp_prm[i].sndChan, sizeof(SCStatus), &stat);
-		if (stat.scChannelBusy || stat.scChannelPaused)
-			snd_end_sample(i);
-	}
+    for (i=0; i<_snd_smp_cnt; i++)
+    {
+        SndChannelStatus(_snd_smp_prm[i].sndChan, sizeof(SCStatus), &stat);
+        if (stat.scChannelBusy || stat.scChannelPaused)
+            snd_end_sample(i);
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -125,31 +125,31 @@ void snd_kill_all_samples(void)
 //--------------------------------------------------------------------------
 int32_t snd_find_free_handle(uint8_t smp_pri, bool check_only)
 {
-	int32_t 			i;
-	SCStatus	stat;
+    int32_t             i;
+    SCStatus    stat;
 
-	// Return an available channel, if any.
-	for (i=0; i<_snd_smp_cnt; i++)
-	{
-		SndChannelStatus(_snd_smp_prm[i].sndChan, sizeof(SCStatus), &stat);
-		if (!stat.scChannelBusy && !stat.scChannelPaused)
-			return i;
-	}
+    // Return an available channel, if any.
+    for (i=0; i<_snd_smp_cnt; i++)
+    {
+        SndChannelStatus(_snd_smp_prm[i].sndChan, sizeof(SCStatus), &stat);
+        if (!stat.scChannelBusy && !stat.scChannelPaused)
+            return i;
+    }
 
-	// If there are no available channels, return one with a lower priority.
-	for (i=0; i<_snd_smp_cnt; i++)
-	{
-		int32_t lp = _snd_smp_prm[i].pri;
-		if (lp < smp_pri)
-		{
-			if (!check_only)
-				snd_end_sample(i);
-			return i;
-		}
-	}
+    // If there are no available channels, return one with a lower priority.
+    for (i=0; i<_snd_smp_cnt; i++)
+    {
+        int32_t lp = _snd_smp_prm[i].pri;
+        if (lp < smp_pri)
+        {
+            if (!check_only)
+                snd_end_sample(i);
+            return i;
+        }
+    }
 
-	// No channels available.
-	return SND_PERROR;
+    // No channels available.
+    return SND_PERROR;
 }
 
 
@@ -158,34 +158,34 @@ int32_t snd_find_free_handle(uint8_t smp_pri, bool check_only)
 //--------------------------------------------------------------------------
 void snd_sample_reload_parms(snd_digi_parms *sdp)
 {
-	SndChannelPtr	ourSC;
-	SndCommand		sc;
-	int32_t					ls, rs;
+    SndChannelPtr    ourSC;
+    SndCommand        sc;
+    int32_t                    ls, rs;
 
-	ourSC = sdp->sndChan;
+    ourSC = sdp->sndChan;
 
-	// Set the pan values.
+    // Set the pan values.
 
-	ls = rs = 0x100;
-	if (sdp->pan < 0x40)
-		rs = sdp->pan * 4;
-	else if (sdp->pan > 0x40)
-		ls = (0x7F - sdp->pan) * 4;
+    ls = rs = 0x100;
+    if (sdp->pan < 0x40)
+        rs = sdp->pan * 4;
+    else if (sdp->pan > 0x40)
+        ls = (0x7F - sdp->pan) * 4;
 
-	// Set the volume.
+    // Set the volume.
 
-	if (sdp->vol < 0x100)
-	{
-		ls = ls * sdp->vol / 0x100;
-		rs = rs * sdp->vol / 0x100;
-	}
+    if (sdp->vol < 0x100)
+    {
+        ls = ls * sdp->vol / 0x100;
+        rs = rs * sdp->vol / 0x100;
+    }
 
-	// Issue volume/pan command.
+    // Issue volume/pan command.
 
-	sc.cmd = volumeCmd;
-	sc.param1 = 0;
-	sc.param2 = (rs << 16) + ls;
-	SndDoImmediate(ourSC, &sc);
+    sc.cmd = volumeCmd;
+    sc.param1 = 0;
+    sc.param2 = (rs << 16) + ls;
+    SndDoImmediate(ourSC, &sc);
 }
 
 
@@ -200,81 +200,81 @@ void snd_sample_reload_parms(snd_digi_parms *sdp)
  *
  * overall plan
  *  - get a free sample handle
- *    if none, try to kick out a low priority sample
- *       if this fails, go home with none
- *    if some, take it and go
+ *     if none, try to kick out a low priority sample
+ *         if this fails, go home with none
+ *     if some, take it and go
  *  - AIL_init_sample to set up priorities
- *    fill in any custom fields
- *    fill in the address of the sample
+ *     fill in any custom fields
+ *     fill in the address of the sample
  *  - if single buffer, set sample address and start_sample
  *  - if double buffer, AIL_load_sample_buffer to start the
- *    playback and add to asynch_update flag
+ *     playback and add to asynch_update flag
  */
 //--------------------------------------------------------------------------
 int32_t snd_sample_play(int32_t snd_ref, int32_t len, uint8_t *smp, snd_digi_parms *dprm)
 {
-	int32_t 					hnd_id;
-	int32_t					lpri = SND_DEF_PRI;
-	snd_digi_parms *hnd_parm;
-	SndChannelPtr	ourSC;
-	Handle				sndHdl;
-	SndCommand		sc;
+    int32_t                     hnd_id;
+    int32_t                    lpri = SND_DEF_PRI;
+    snd_digi_parms *hnd_parm;
+    SndChannelPtr    ourSC;
+    Handle                sndHdl;
+    SndCommand        sc;
 
-//   mprintf("SSP: %x at %x, l %x... ",snd_ref,smp,len);
-	if (dprm != NULL)
-		lpri = dprm->pri;
+//    mprintf("SSP: %x at %x, l %x... ",snd_ref,smp,len);
+    if (dprm != NULL)
+        lpri = dprm->pri;
 
-	if ((hnd_id = snd_find_free_handle(lpri, false)) == SND_PERROR )
-	{
-		snd_error = SND_NO_HANDLE;
-//      mprintf("no free handle error %d\n",snd_error);
-		return SND_PERROR;
-	}
+    if ((hnd_id = snd_find_free_handle(lpri, false)) == SND_PERROR )
+    {
+        snd_error = SND_NO_HANDLE;
+//        mprintf("no free handle error %d\n",snd_error);
+        return SND_PERROR;
+    }
 
-	hnd_parm = &_snd_smp_prm[hnd_id];
-	ourSC = hnd_parm->sndChan;
-	if (dprm != NULL)
-		memcpy(hnd_parm, dprm, sizeof(snd_digi_parms));
-	else
-	{
-		memset(hnd_parm, 0, sizeof(snd_digi_parms));
-		hnd_parm->pan = SND_DEF_PAN;
-		hnd_parm->vol = 0x100;
-		hnd_parm->pri = lpri;
-		hnd_parm->loops = 1;
-	}
-	hnd_parm->sndChan = ourSC;
+    hnd_parm = &_snd_smp_prm[hnd_id];
+    ourSC = hnd_parm->sndChan;
+    if (dprm != NULL)
+        memcpy(hnd_parm, dprm, sizeof(snd_digi_parms));
+    else
+    {
+        memset(hnd_parm, 0, sizeof(snd_digi_parms));
+        hnd_parm->pan = SND_DEF_PAN;
+        hnd_parm->vol = 0x100;
+        hnd_parm->pri = lpri;
+        hnd_parm->loops = 1;
+    }
+    hnd_parm->sndChan = ourSC;
 
-	// For Mac version, return an error if there is no sample data.  Doesn't support
-	// double-buffered sound.
-	if (smp != NULL)
-	{
-		hnd_parm->len = len;
-		sndHdl = RecoverHandle((Ptr)smp);
-		hnd_parm->sample = sndHdl;
-	}
-	else
-	{
-		snd_error = SND_OUT_OF_MEMORY;
-		return SND_PERROR;
-	}
-	hnd_parm->snd_ref = snd_ref;
+    // For Mac version, return an error if there is no sample data.  Doesn't support
+    // double-buffered sound.
+    if (smp != NULL)
+    {
+        hnd_parm->len = len;
+        sndHdl = RecoverHandle((Ptr)smp);
+        hnd_parm->sample = sndHdl;
+    }
+    else
+    {
+        snd_error = SND_OUT_OF_MEMORY;
+        return SND_PERROR;
+    }
+    hnd_parm->snd_ref = snd_ref;
 
-	// Set up pan and volume.
+    // Set up pan and volume.
 
-	snd_sample_reload_parms(hnd_parm);
+    snd_sample_reload_parms(hnd_parm);
 
-	// Play the sound.
+    // Play the sound.
 
-	HLock(sndHdl);
-	SndPlay(ourSC, (SndListHandle)sndHdl, true);
+    HLock(sndHdl);
+    SndPlay(ourSC, (SndListHandle)sndHdl, true);
 
-	// Call our call-back routine when the sound is done playing.
+    // Call our call-back routine when the sound is done playing.
 
-	sc.cmd = callBackCmd;
-	sc.param1 = 1;							// Sound complete
-	sc.param2 = (int32_t)hnd_parm;		// Ptr to current sound parameters
-	SndDoCommand(ourSC, &sc, false);
+    sc.cmd = callBackCmd;
+    sc.param1 = 1;                            // Sound complete
+    sc.param2 = (int32_t)hnd_parm;        // Ptr to current sound parameters
+    SndDoCommand(ourSC, &sc, false);
 
-	return hnd_id;
+    return hnd_id;
 }

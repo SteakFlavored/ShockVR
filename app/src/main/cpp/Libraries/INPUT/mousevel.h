@@ -27,23 +27,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // --------------------------------------------------------------
-//                MOUSE-LIBRARY SUPPORT FOR MOUSE
-//              EMULATION BY VELOCITY-BASED DEVICES
+//                     MOUSE-LIBRARY SUPPORT FOR MOUSE
+//                  EMULATION BY VELOCITY-BASED DEVICES
 // --------------------------------------------------------------
 
 
 
 
 /* ------------------------------------------------------
-   These routines allow the client to set a _velocity_ for the mouse
-   pointer.   The mouse pointer will move at the specified velicity
-   whenever the mouse's current position is queried.   (Queries include
-   mouse_get_xy (always) and queue checks (when the queue is empty).)
-   Mouse velocity is specified in units of pixels per MOUSE_VEL_UNIT ticks,
-   where ticks are the unit of the mouse library timestamp register.
-   These routines are intended for use in emulating the mouse with other
-   non-positional devices.  (keyboard, joystick, cyberbat, etc.)
-   ------------------------------------------------------ */
+    These routines allow the client to set a _velocity_ for the mouse
+    pointer.    The mouse pointer will move at the specified velicity
+    whenever the mouse's current position is queried.    (Queries include
+    mouse_get_xy (always) and queue checks (when the queue is empty).)
+    Mouse velocity is specified in units of pixels per MOUSE_VEL_UNIT ticks,
+    where ticks are the unit of the mouse library timestamp register.
+    These routines are intended for use in emulating the mouse with other
+    non-positional devices.  (keyboard, joystick, cyberbat, etc.)
+    ------------------------------------------------------ */
 
 
 #define MOUSE_VEL_UNIT_SHF 16

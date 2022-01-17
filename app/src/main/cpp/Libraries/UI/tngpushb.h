@@ -50,18 +50,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Typedefs
 typedef struct {
-   TNG *tng_data;
-   LGPoint size;
-   int32_t type;
-   bool pressed;
-   void *disp_data;
+    TNG *tng_data;
+    LGPoint size;
+    int32_t type;
+    bool pressed;
+    void *disp_data;
 } TNG_pushbutton;
 
-#define TNG_NULL_TYPE       -1
-#define TNG_RESOURCE_TYPE    0
-#define TNG_TEXT_TYPE        1
+#define TNG_NULL_TYPE         -1
+#define TNG_RESOURCE_TYPE     0
+#define TNG_TEXT_TYPE          1
 #define TNG_TRANSPARENT_TYPE 2
-#define TNG_COLORED_TYPE     3
+#define TNG_COLORED_TYPE      3
 
 // Prototypes
 

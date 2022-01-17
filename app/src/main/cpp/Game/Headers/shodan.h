@@ -22,25 +22,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CREATURE_SHODODMETER
 
 #ifdef CREATURE_SHODOMETER
-#define CYBORG_DRONE_TRIPLE_VALUE   2
-#define WARRIOR_TRIPLE_VALUE        4
-#define ASSASSIN_TRIPLE_VALUE       4
-#define CYBERBABE_TRIPLE_VALUE      8
-#define ELITE_GUARD_TRIPLE_VALUE    20
+#define CYBORG_DRONE_TRIPLE_VALUE    2
+#define WARRIOR_TRIPLE_VALUE          4
+#define ASSASSIN_TRIPLE_VALUE         4
+#define CYBERBABE_TRIPLE_VALUE        8
+#define ELITE_GUARD_TRIPLE_VALUE     20
 #define CORTEX_REAVER_TRIPLE_VALUE  16
-#define MUTANT_BORG_TRIPLE_VALUE    10
+#define MUTANT_BORG_TRIPLE_VALUE     10
 #define SECURITY_BOT1_TRIPLE_VALUE  5
 #define SECURITY_BOT2_TRIPLE_VALUE  22
-#define EXECBOT_TRIPLE_VALUE        6
+#define EXECBOT_TRIPLE_VALUE          6
 #endif
-#define CAMERA_TRIPLE_VALUE         5
-#define SMALL_CPU_TRIPLE_VALUE      10
-#define LARGCPU_TRIPLE_VALUE        50
+#define CAMERA_TRIPLE_VALUE            5
+#define SMALL_CPU_TRIPLE_VALUE        10
+#define LARGCPU_TRIPLE_VALUE          50
 
-#define SHODAN_INTERVAL_SHIFT    6
-#define SHODAN_COLOR       0x4a
+#define SHODAN_INTERVAL_SHIFT     6
+#define SHODAN_COLOR         0x4a
 
-#define FIRST_SHODAN_QV    0x10
+#define FIRST_SHODAN_QV     0x10
 #define SHODAN_QV (FIRST_SHODAN_QV + player_struct.level)
 #define MAX_SHODOMETER_LEVEL  13
 
@@ -48,10 +48,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SHODAN_BARK_TIMEOUT 3
 #define DIEGO_BARK_CODE -2
 #define FIRST_SHODAN_BARK  0x666
-#define NUM_SHODAN_BARKS   4
-#define SHODAN_MUG      17
-#define DIEGO_MUG       4
-#define SHODAN_MUG_2    23
+#define NUM_SHODAN_BARKS    4
+#define SHODAN_MUG        17
+#define DIEGO_MUG         4
+#define SHODAN_MUG_2     23
 #define FIRST_SHODAN_MUG 31
 #define NUM_SHODAN_MUGS NUM_SHODAN_BARKS
 

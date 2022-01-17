@@ -46,103 +46,103 @@ void gri_clut_tpoly_init (grs_tmap_loop_info *ti);
 
 int32_t gri_poly_loop (grs_tmap_loop_info *ti)
 {
-	int32_t d;
-	uint8_t c=(uint8_t )(ti->bm.bits); /* actually, fill_parm */
-	uint8_t *bm_bits = ti->bm.bits;
-	uint8_t *ti_d = ti->d;
-	fix 	ti_left_x = ti->left.x;
-	fix		ti_right_x = ti->right.x;
-	uint8_t	*ti_clut = ti->clut;
-	uint8_t ti_hlog = ti->bm.hlog;
-	uint16_t	grow = grd_bm.row;
-	fix 	ti_left_dx = ti->left.dx;
-	fix 	ti_right_dx = ti->right.dx;
+    int32_t d;
+    uint8_t c=(uint8_t )(ti->bm.bits); /* actually, fill_parm */
+    uint8_t *bm_bits = ti->bm.bits;
+    uint8_t *ti_d = ti->d;
+    fix     ti_left_x = ti->left.x;
+    fix        ti_right_x = ti->right.x;
+    uint8_t    *ti_clut = ti->clut;
+    uint8_t ti_hlog = ti->bm.hlog;
+    uint16_t    grow = grd_bm.row;
+    fix     ti_left_dx = ti->left.dx;
+    fix     ti_right_dx = ti->right.dx;
 
-	do {
-	  if ((d=fix_cint(ti_right_x)-fix_cint(ti_left_x)) > 0) {
-	     switch (ti_hlog) {
-	        int32_t x;
-	     case GRL_OPAQUE:
-	        memset(ti_d+fix_cint(ti_left_x), c, d);
-	        break;
-	     case GRL_TLUC8:
-	        for (x=fix_cint(ti_left_x); x<fix_cint(ti_right_x); x++)
-	           ti_d[x]=bm_bits[ti_d[x]];
-	        break;
-	     case GRL_CLUT|GRL_TLUC8:
-	        for (x=fix_cint(ti_left_x); x<fix_cint(ti_right_x); x++)
-	           ti_d[x]=ti_clut[bm_bits[ti_d[x]]];
-	        break;
-	     }
-	  } else if (d<0) {
-	     return true;
-	  }
-	  /* update span extrema and destination. */
-	  ti_d+=grow;
-	  ti_left_x+=ti_left_dx;
-	  ti_right_x+=ti_right_dx;
-	} while ((--(ti->n))>0);
+    do {
+      if ((d=fix_cint(ti_right_x)-fix_cint(ti_left_x)) > 0) {
+          switch (ti_hlog) {
+              int32_t x;
+          case GRL_OPAQUE:
+              memset(ti_d+fix_cint(ti_left_x), c, d);
+              break;
+          case GRL_TLUC8:
+              for (x=fix_cint(ti_left_x); x<fix_cint(ti_right_x); x++)
+                  ti_d[x]=bm_bits[ti_d[x]];
+              break;
+          case GRL_CLUT|GRL_TLUC8:
+              for (x=fix_cint(ti_left_x); x<fix_cint(ti_right_x); x++)
+                  ti_d[x]=ti_clut[bm_bits[ti_d[x]]];
+              break;
+          }
+      } else if (d<0) {
+          return true;
+      }
+      /* update span extrema and destination. */
+      ti_d+=grow;
+      ti_left_x+=ti_left_dx;
+      ti_right_x+=ti_right_dx;
+    } while ((--(ti->n))>0);
 
-	ti->d = ti_d;
-	ti->right.x = ti_right_x;
-	ti->left.x = ti_left_x;
-	return false;
+    ti->d = ti_d;
+    ti->right.x = ti_right_x;
+    ti->left.x = ti_left_x;
+    return false;
 }
 
 void gri_solid_poly_init (grs_tmap_loop_info *ti)
 {
-   ti->bm.bits=ti->clut;      /* set fill_parm */
-   ti->bm.hlog=GRL_OPAQUE;
-   ti->d=ti->y*grd_bm.row+grd_bm.bits;
-   ti->loop_func= (void (*)()) gri_poly_loop;
-   ti->top_edge_func= (void (*)()) gri_x_edge;
-   ti->bot_edge_func= (void (*)()) gri_x_edge;
+    ti->bm.bits=ti->clut;        /* set fill_parm */
+    ti->bm.hlog=GRL_OPAQUE;
+    ti->d=ti->y*grd_bm.row+grd_bm.bits;
+    ti->loop_func= (void (*)()) gri_poly_loop;
+    ti->top_edge_func= (void (*)()) gri_x_edge;
+    ti->bot_edge_func= (void (*)()) gri_x_edge;
 }
 
 void gri_poly_init (grs_tmap_loop_info *ti)
 {
-   ti->bm.hlog=GRL_OPAQUE;
-   ti->d=ti->y*grd_bm.row+grd_bm.bits;
-   ti->loop_func= (void (*)()) gri_poly_loop;
-   ti->top_edge_func= (void (*)()) gri_x_edge;
-   ti->bot_edge_func= (void (*)()) gri_x_edge;
+    ti->bm.hlog=GRL_OPAQUE;
+    ti->d=ti->y*grd_bm.row+grd_bm.bits;
+    ti->loop_func= (void (*)()) gri_poly_loop;
+    ti->top_edge_func= (void (*)()) gri_x_edge;
+    ti->bot_edge_func= (void (*)()) gri_x_edge;
 }
 
 void gri_clut_poly_init (grs_tmap_loop_info *ti)
 {
-   ti->bm.bits=(uint8_t *)(ti->clut[(int32_t )(ti->bm.bits)]);
-   ti->bm.hlog=GRL_OPAQUE;
-   ti->d=ti->y*grd_bm.row+grd_bm.bits;
-   ti->loop_func= (void (*)()) gri_poly_loop;
-   ti->top_edge_func= (void (*)()) gri_x_edge;
-   ti->bot_edge_func= (void (*)()) gri_x_edge;
+    ti->bm.bits=(uint8_t *)(ti->clut[(int32_t )(ti->bm.bits)]);
+    ti->bm.hlog=GRL_OPAQUE;
+    ti->d=ti->y*grd_bm.row+grd_bm.bits;
+    ti->loop_func= (void (*)()) gri_poly_loop;
+    ti->top_edge_func= (void (*)()) gri_x_edge;
+    ti->bot_edge_func= (void (*)()) gri_x_edge;
 }
 
 void gri_tpoly_init (grs_tmap_loop_info *ti)
 {
-   if (tluc8tab[(uint8_t )(ti->bm.bits)]!=NULL) {
-      ti->bm.bits=tluc8tab[(uint8_t )(ti->bm.bits)];
-      ti->bm.hlog=GRL_TLUC8;
-   } else {
-      ti->bm.hlog=GRL_OPAQUE;
-   }
-   ti->d=ti->y*grd_bm.row+grd_bm.bits;
-   ti->loop_func= (void (*)()) gri_poly_loop;
-   ti->top_edge_func= (void (*)()) gri_x_edge;
-   ti->bot_edge_func= (void (*)()) gri_x_edge;
+    if (tluc8tab[(uint8_t )(ti->bm.bits)]!=NULL) {
+        ti->bm.bits=tluc8tab[(uint8_t )(ti->bm.bits)];
+        ti->bm.hlog=GRL_TLUC8;
+    } else {
+        ti->bm.hlog=GRL_OPAQUE;
+    }
+    ti->d=ti->y*grd_bm.row+grd_bm.bits;
+    ti->loop_func= (void (*)()) gri_poly_loop;
+    ti->top_edge_func= (void (*)()) gri_x_edge;
+    ti->bot_edge_func= (void (*)()) gri_x_edge;
 }
 
 void gri_clut_tpoly_init (grs_tmap_loop_info *ti)
 {
-   if (tluc8tab[(uint8_t )(ti->bm.bits)]!=NULL) {
-      ti->bm.bits=tluc8tab[(uint8_t )(ti->bm.bits)];
-      ti->bm.hlog=GRL_TLUC8|GRL_CLUT;
-   } else {
-      ti->bm.bits=(uint8_t *)(ti->clut[(int32_t )(ti->bm.bits)]);
-      ti->bm.hlog=GRL_OPAQUE;
-   }
-   ti->d=ti->y*grd_bm.row+grd_bm.bits;
-   ti->loop_func= (void (*)()) gri_poly_loop;
-   ti->top_edge_func= (void (*)()) gri_x_edge;
-   ti->bot_edge_func= (void (*)()) gri_x_edge;
+    if (tluc8tab[(uint8_t )(ti->bm.bits)]!=NULL) {
+        ti->bm.bits=tluc8tab[(uint8_t )(ti->bm.bits)];
+        ti->bm.hlog=GRL_TLUC8|GRL_CLUT;
+    } else {
+        ti->bm.bits=(uint8_t *)(ti->clut[(int32_t )(ti->bm.bits)]);
+        ti->bm.hlog=GRL_OPAQUE;
+    }
+    ti->d=ti->y*grd_bm.row+grd_bm.bits;
+    ti->loop_func= (void (*)()) gri_poly_loop;
+    ti->top_edge_func= (void (*)()) gri_x_edge;
+    ti->bot_edge_func= (void (*)()) gri_x_edge;
 }

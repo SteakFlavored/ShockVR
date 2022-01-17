@@ -29,18 +29,18 @@ int8_t compute_next_step(int8_t path_id, LGPoint *pt, int8_t step_num);
 bool pf_check_doors(MapElem *pme, int8_t dir, ObjID *open_door);
 bool pf_obj_doors(MapElem *pme1, MapElem *pme2, int8_t dir, ObjID *open_door);
 
-#define NUM_PATH_STEPS     64
-#define MAX_PATHS          16
+#define NUM_PATH_STEPS      64
+#define MAX_PATHS             16
 
 typedef struct {
-   LGPoint source;
-   LGPoint dest;
-   // dest_z and start_z are in objLoc height coordinates
-   uint8_t dest_z;
-   uint8_t start_z;
-   int8_t num_steps;
-   int8_t curr_step;
-   uint8_t moves[NUM_PATH_STEPS / 4];  // each char holds 4 steps, so we need 16 of 'em
+    LGPoint source;
+    LGPoint dest;
+    // dest_z and start_z are in objLoc height coordinates
+    uint8_t dest_z;
+    uint8_t start_z;
+    int8_t num_steps;
+    int8_t curr_step;
+    uint8_t moves[NUM_PATH_STEPS / 4];  // each char holds 4 steps, so we need 16 of 'em
 } Path;
 
 #ifdef __PATHFIND_SRC

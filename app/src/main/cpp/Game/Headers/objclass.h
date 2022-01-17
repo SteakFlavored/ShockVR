@@ -91,18 +91,18 @@ int32_t get_nth_from_triple(int32_t triple);
 
 // Defines
 /*
-#define COMMON_OBJSPEC_FIELDS 	\
-   union {                       \
-		ObjID id;						\
-		ObjSpecID headused;        \
-	};                            \
-	union {                       \
-		ObjSpecID next;				\
-		ObjSpecID headfree;        \
-	};                            \
-	ObjSpecID prev
+#define COMMON_OBJSPEC_FIELDS     \
+    union {                              \
+        ObjID id;                        \
+        ObjSpecID headused;          \
+    };                                     \
+    union {                              \
+        ObjSpecID next;                \
+        ObjSpecID headfree;          \
+    };                                     \
+    ObjSpecID prev
 
-#define COMMON_OBJSPEC_SIZE   (sizeof(ObjSpecID) * 3)
+#define COMMON_OBJSPEC_SIZE    (sizeof(ObjSpecID) * 3)
 */
 
 #endif // __OBJCLASS_H

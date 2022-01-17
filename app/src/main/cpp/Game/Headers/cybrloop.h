@@ -49,8 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Defines
-#define CL_VITALS_UPDATE   0
-#define CL_MFD_UPDATE      1
+#define CL_VITALS_UPDATE    0
+#define CL_MFD_UPDATE        1
 
 // Prototypes
 void cyber_loop(void);

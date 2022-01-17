@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //====================================================================================
 //
-//		System Shock - ©1994-1995 Looking Glass Technologies, Inc.
+//        System Shock - ©1994-1995 Looking Glass Technologies, Inc.
 //
-//		InitMac.h	-	Initialize Mac toolbox managers and setup the application's globals.
+//        InitMac.h    -    Initialize Mac toolbox managers and setup the application's globals.
 //
 //====================================================================================
 
@@ -32,13 +32,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------
 typedef struct
 {
-	TMTask			task;							// The actual TimeManager task structure
-	int32_t				*ticksPtr;					// Pointer to the ticks
+    TMTask            task;                            // The actual TimeManager task structure
+    int32_t                *ticksPtr;                    // Pointer to the ticks
 }
 ShockTask, *ShockTaskPtr;
-extern ShockTask	pShockTicksTask;
+extern ShockTask    pShockTicksTask;
 
-#define	kShockTicksFreq		-14286		//-3571
+#define    kShockTicksFreq        -14286        //-3571
 
 
 

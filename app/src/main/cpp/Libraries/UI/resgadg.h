@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
-#define RES_gadgetGfx 500		// (0x1f4)
+#define RES_gadgetGfx 500        // (0x1f4)
 #define REF_IMG_bmGadgetBackground 0x1f40000
 #define REF_IMG_bmCursorMid 0x1f40001
 #define REF_IMG_bmCursorUp 0x1f40002

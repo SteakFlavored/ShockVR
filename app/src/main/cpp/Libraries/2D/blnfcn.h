@@ -37,6 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* prototypes for blend table maintenance, true means success, false not */
 bool gr_free_blend(void);
 /* tab_cnt is how many blend steps, note cnt<=0 is equivalent to calling
-   free blend */
+    free blend */
 bool gr_init_blend(int32_t log_blend_levels);
 #endif /* !__BLNFCN */

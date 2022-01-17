@@ -34,44 +34,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Defines
 
 // type flags
-#define     GREN_CONTACT_TYPE       0x01
-#define     GREN_MOTION_TYPE        0x02
-#define     GREN_TIMING_TYPE        0x04
-#define     GREN_MINE_TYPE          0x08
+#define      GREN_CONTACT_TYPE         0x01
+#define      GREN_MOTION_TYPE          0x02
+#define      GREN_TIMING_TYPE          0x04
+#define      GREN_MINE_TYPE             0x08
 
 // instance flags
-#define     GREN_ACTIVE_FLAG        0x01
-#define     GREN_DUD_FLAG           0x02
-#define     GREN_MINE_STILL         0x04
+#define      GREN_ACTIVE_FLAG          0x01
+#define      GREN_DUD_FLAG              0x02
+#define      GREN_MINE_STILL            0x04
 
 typedef struct
 {
-   uint16_t   timestamp;
-   uint16_t   type;
-   ObjID    gren_id;
-   uint8_t    unique_id;
-   uint8_t    filler;
+    uint16_t    timestamp;
+    uint16_t    type;
+    ObjID     gren_id;
+    uint8_t     unique_id;
+    uint8_t     filler;
 } GrenSchedEvent;
 
 typedef struct
 {
-   fix      radius;
-   fix      radius_change;
-   int32_t      damage_mod;
-   int32_t      damage_change;
-   int32_t      dtype;
-   fix      knock_mass;
-   uint8_t    offense;
-   uint8_t    penet;
+    fix        radius;
+    fix        radius_change;
+    int32_t        damage_mod;
+    int32_t        damage_change;
+    int32_t        dtype;
+    fix        knock_mass;
+    uint8_t     offense;
+    uint8_t     penet;
 } ExplosionData;
 
-#define SMALL_GAME_EXPL    0
-#define MEDIUM_GAME_EXPL   1
-#define LARGE_GAME_EXPL    2
-#define GAME_EXPLS         3
+#define SMALL_GAME_EXPL     0
+#define MEDIUM_GAME_EXPL    1
+#define LARGE_GAME_EXPL     2
+#define GAME_EXPLS            3
 extern ExplosionData game_explosions[GAME_EXPLS];
 
-#define UNIQUE_LIMIT    255
+#define UNIQUE_LIMIT     255
 
 // Prototypes
 

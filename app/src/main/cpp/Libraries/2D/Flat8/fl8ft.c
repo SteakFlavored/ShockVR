@@ -41,24 +41,24 @@ typedef void (*ptr_type)();
 
 void (*flat8_function_table[GRD_FILL_TYPES][GRD_FUNCS*REAL_BMT_TYPES])() =
 {
-   {
-      /* normal fill type */
-      #include "fl8nft.h"
-   },
-   {
-      /* clut fill type */
-      #include "fl8cft.h"
-   },
-   {
-      /* xor fill type */
-      #include "fl8xft.h"
-   },
-   {
-      /* blend fill type */
-      #include "fl8bft.h"
-   },
-   {
-      /* solid fill type */
-      #include "fl8sft.h"
-   }
+    {
+        /* normal fill type */
+        #include "fl8nft.h"
+    },
+    {
+        /* clut fill type */
+        #include "fl8cft.h"
+    },
+    {
+        /* xor fill type */
+        #include "fl8xft.h"
+    },
+    {
+        /* blend fill type */
+        #include "fl8bft.h"
+    },
+    {
+        /* solid fill type */
+        #include "fl8sft.h"
+    }
 };

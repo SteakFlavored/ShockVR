@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 void MemStackInit (MemStack *ms)
 {
-   ms->topptr = ms->baseptr;
+    ms->topptr = ms->baseptr;
 }
 
 //////////////////////////////
@@ -54,17 +54,17 @@ void MemStackInit (MemStack *ms)
 //
 void *MemStackAlloc (MemStack *ms, int32_t size)
 {
-   int8_t *newptr = (int8_t *) ms->topptr + size;
-   int8_t *oldptr = (int8_t *) ms->topptr;
+    int8_t *newptr = (int8_t *) ms->topptr + size;
+    int8_t *oldptr = (int8_t *) ms->topptr;
 
-   if (newptr > (int8_t *) ms->baseptr + ms->sz)
-   {
-      Warning (("MemStackAlloc: can't alloc\n"));
-      return NULL;
-   }
+    if (newptr > (int8_t *) ms->baseptr + ms->sz)
+    {
+        Warning (("MemStackAlloc: can't alloc\n"));
+        return NULL;
+    }
 
-   ms->topptr = (void *) newptr;
-   return oldptr;
+    ms->topptr = (void *) newptr;
+    return oldptr;
 }
 
 //////////////////////////////
@@ -74,15 +74,15 @@ void *MemStackAlloc (MemStack *ms, int32_t size)
 //
 void *MemStackRealloc (MemStack *ms, void *ptr, int32_t newsize)
 {
-   int8_t *newptr = (int8_t *)ptr + newsize;
+    int8_t *newptr = (int8_t *)ptr + newsize;
 
-   if (newptr > (int8_t *)ms->baseptr + ms->sz)
-   {
-      Warning(("MemStackRealloc: can't realloc\n"));
-      return NULL;
-   }
-   ms->topptr = (int8_t *)ptr + newsize;
-   return ptr;
+    if (newptr > (int8_t *)ms->baseptr + ms->sz)
+    {
+        Warning(("MemStackRealloc: can't realloc\n"));
+        return NULL;
+    }
+    ms->topptr = (int8_t *)ptr + newsize;
+    return ptr;
 }
 
 //////////////////////////////
@@ -93,13 +93,13 @@ void *MemStackRealloc (MemStack *ms, void *ptr, int32_t newsize)
 //
 bool MemStackFree (MemStack *ms, void *ptr)
 {
-   if (ms->topptr < ptr)
-   {
-      Warning (("MemStackFree: freed in wrong order\n"));
-      return false;
-   }
+    if (ms->topptr < ptr)
+    {
+        Warning (("MemStackFree: freed in wrong order\n"));
+        return false;
+    }
 
-   // Return ms->topptr to where it was when we allocated ptr: namely, ptr
-   ms->topptr = ptr;
-   return true;
+    // Return ms->topptr to where it was when we allocated ptr: namely, ptr
+    ms->topptr = ptr;
+    return true;
 }

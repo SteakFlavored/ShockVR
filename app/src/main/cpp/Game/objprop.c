@@ -114,44 +114,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // subclass ANIMATING_SUBCLASS_OBJECTS, not ANIMATING_SUBCLASS_OBJECT.
 
 static uint8_t numtypes_array[NUM_CLASSES][MAX_SUBCLASSES] = {
-    { NUM_PISTOL_GUN, NUM_AUTO_GUN, NUM_SPECIAL_GUN, NUM_HANDTOHAND_GUN,
-      NUM_BEAM_GUN, NUM_BEAMPROJ_GUN, },
-    { NUM_PISTOL_AMMO, NUM_NEEDLE_AMMO, NUM_MAGNUM_AMMO, NUM_RIFLE_AMMO,
-      NUM_FLECHETTE_AMMO, NUM_AUTO_AMMO, NUM_PROJ_AMMO, },
-    { NUM_TRACER_PHYSICS, NUM_SLOW_PHYSICS, NUM_CAMERA_PHYSICS },
-    { NUM_DIRECT_GRENADE, NUM_TIMED_GRENADE, },
-    { NUM_STATS_DRUG, },
-    { NUM_GOGGLE_HARDWARE, NUM_HARDWARE_HARDWARE, },
-    { NUM_OFFENSE_SOFTWARE, NUM_DEFENSE_SOFTWARE, NUM_ONESHOT_SOFTWARE,
-      NUM_MISC_SOFTWARE, NUM_DATA_SOFTWARE, },
-    { NUM_ELECTRONIC_BIGSTUFF, NUM_FURNISHING_BIGSTUFF, NUM_ONTHEWALL_BIGSTUFF,
-      NUM_LIGHT_BIGSTUFF, NUM_LABGEAR_BIGSTUFF, NUM_TECHNO_BIGSTUFF,
-      NUM_DECOR_BIGSTUFF, NUM_TERRAIN_BIGSTUFF, },
-    { NUM_USELESS_SMALLSTUFF, NUM_BROKEN_SMALLSTUFF, NUM_CORPSELIKE_SMALLSTUFF,
-      NUM_GEAR_SMALLSTUFF, NUM_CARDS_SMALLSTUFF, NUM_CYBER_SMALLSTUFF,
-      NUM_ONTHEWALL_SMALLSTUFF, NUM_PLOT_SMALLSTUFF, },
-    { NUM_CONTROL_FIXTURE, NUM_RECEPTACLE_FIXTURE, NUM_TERMINAL_FIXTURE,
-      NUM_PANEL_FIXTURE, NUM_VENDING_FIXTURE, NUM_CYBER_FIXTURE, },
-    { NUM_NORMAL_DOOR, NUM_DOORWAYS_DOOR, NUM_FORCE_DOOR, NUM_ELEVATOR_DOOR,
-      NUM_SPECIAL_DOOR, },
-    { NUM_OBJECT_ANIMATING, NUM_TRANSITORY_ANIMATING, NUM_EXPLOSION_ANIMATING, },
-    { NUM_TRIGGER_TRAP, NUM_FEEDBACKS_TRAP, NUM_SECRET_TRAP, },
-    { NUM_ACTUAL_CONTAINER, NUM_WASTE_CONTAINER, NUM_LIQUID_CONTAINER,
-      NUM_MUTANT_CORPSE_CONTAINER, NUM_ROBOT_CORPSE_CONTAINER,
-      NUM_CYBORG_CORPSE_CONTAINER, NUM_OTHER_CORPSE_CONTAINER, },
-    { NUM_MUTANT_CRITTER, NUM_ROBOT_CRITTER, NUM_CYBORG_CRITTER,
-      NUM_CYBER_CRITTER, NUM_ROBOBABE_CRITTER, }
+     { NUM_PISTOL_GUN, NUM_AUTO_GUN, NUM_SPECIAL_GUN, NUM_HANDTOHAND_GUN,
+        NUM_BEAM_GUN, NUM_BEAMPROJ_GUN, },
+     { NUM_PISTOL_AMMO, NUM_NEEDLE_AMMO, NUM_MAGNUM_AMMO, NUM_RIFLE_AMMO,
+        NUM_FLECHETTE_AMMO, NUM_AUTO_AMMO, NUM_PROJ_AMMO, },
+     { NUM_TRACER_PHYSICS, NUM_SLOW_PHYSICS, NUM_CAMERA_PHYSICS },
+     { NUM_DIRECT_GRENADE, NUM_TIMED_GRENADE, },
+     { NUM_STATS_DRUG, },
+     { NUM_GOGGLE_HARDWARE, NUM_HARDWARE_HARDWARE, },
+     { NUM_OFFENSE_SOFTWARE, NUM_DEFENSE_SOFTWARE, NUM_ONESHOT_SOFTWARE,
+        NUM_MISC_SOFTWARE, NUM_DATA_SOFTWARE, },
+     { NUM_ELECTRONIC_BIGSTUFF, NUM_FURNISHING_BIGSTUFF, NUM_ONTHEWALL_BIGSTUFF,
+        NUM_LIGHT_BIGSTUFF, NUM_LABGEAR_BIGSTUFF, NUM_TECHNO_BIGSTUFF,
+        NUM_DECOR_BIGSTUFF, NUM_TERRAIN_BIGSTUFF, },
+     { NUM_USELESS_SMALLSTUFF, NUM_BROKEN_SMALLSTUFF, NUM_CORPSELIKE_SMALLSTUFF,
+        NUM_GEAR_SMALLSTUFF, NUM_CARDS_SMALLSTUFF, NUM_CYBER_SMALLSTUFF,
+        NUM_ONTHEWALL_SMALLSTUFF, NUM_PLOT_SMALLSTUFF, },
+     { NUM_CONTROL_FIXTURE, NUM_RECEPTACLE_FIXTURE, NUM_TERMINAL_FIXTURE,
+        NUM_PANEL_FIXTURE, NUM_VENDING_FIXTURE, NUM_CYBER_FIXTURE, },
+     { NUM_NORMAL_DOOR, NUM_DOORWAYS_DOOR, NUM_FORCE_DOOR, NUM_ELEVATOR_DOOR,
+        NUM_SPECIAL_DOOR, },
+     { NUM_OBJECT_ANIMATING, NUM_TRANSITORY_ANIMATING, NUM_EXPLOSION_ANIMATING, },
+     { NUM_TRIGGER_TRAP, NUM_FEEDBACKS_TRAP, NUM_SECRET_TRAP, },
+     { NUM_ACTUAL_CONTAINER, NUM_WASTE_CONTAINER, NUM_LIQUID_CONTAINER,
+        NUM_MUTANT_CORPSE_CONTAINER, NUM_ROBOT_CORPSE_CONTAINER,
+        NUM_CYBORG_CORPSE_CONTAINER, NUM_OTHER_CORPSE_CONTAINER, },
+     { NUM_MUTANT_CRITTER, NUM_ROBOT_CRITTER, NUM_CYBORG_CRITTER,
+        NUM_CYBER_CRITTER, NUM_ROBOBABE_CRITTER, }
 };
 
 int16_t num_types(uint8_t obclass, uint8_t subclass)
 {
-   if (obclass>=NUM_CLASSES || subclass>=num_subclasses[obclass])
-   {
-//      Warning(("Class and subclass given isn't a valid pair. Class - %d Subclass - %d.\n", obclass, subclass));
-      return(0);
-   }
+    if (obclass>=NUM_CLASSES || subclass>=num_subclasses[obclass])
+    {
+//        Warning(("Class and subclass given isn't a valid pair. Class - %d Subclass - %d.\n", obclass, subclass));
+        return(0);
+    }
 
-   return(numtypes_array[obclass][subclass]);
+    return(numtypes_array[obclass][subclass]);
 }
 
 // ---------------------------------------------------------------------------
@@ -163,31 +163,31 @@ int16_t num_types(uint8_t obclass, uint8_t subclass)
 
 int32_t get_triple_from_class_nth_item(uint8_t obclass, uint8_t n)
 {
-   uint8_t i, subclass_types, total_types;
-   int32_t   triple;
+    uint8_t i, subclass_types, total_types;
+    int32_t    triple;
 
-   total_types = 0;
+    total_types = 0;
 
-   // Cycle through all subclasses for this obclass
-   for (i = 0; i < num_subclasses[obclass]; i++) {
+    // Cycle through all subclasses for this obclass
+    for (i = 0; i < num_subclasses[obclass]; i++) {
 
-      // Skip the entire next subclass
-      subclass_types = num_types(obclass, i);
-      total_types   += subclass_types;
+        // Skip the entire next subclass
+        subclass_types = num_types(obclass, i);
+        total_types    += subclass_types;
 
-      // Aha! We've found or gone past the desired triple
-      if (total_types > n) {
+        // Aha! We've found or gone past the desired triple
+        if (total_types > n) {
 
-         triple = MAKETRIP(obclass, i, n - (total_types - subclass_types));
-         return triple;
-      }
-   }
+            triple = MAKETRIP(obclass, i, n - (total_types - subclass_types));
+            return triple;
+        }
+    }
 
-   // We've gone through all subclasses, and still haven't found what we're looking
-   // for.  Ah well...
-//   Warning(("Invalid obclass and n given to get_triple_from_class_nth_item"));
-//   Warning(("Class - %d N - %d\n", obclass, n));
-   return -1;
+    // We've gone through all subclasses, and still haven't found what we're looking
+    // for.  Ah well...
+//    Warning(("Invalid obclass and n given to get_triple_from_class_nth_item"));
+//    Warning(("Class - %d N - %d\n", obclass, n));
+    return -1;
 }
 
 
@@ -198,33 +198,33 @@ int32_t get_triple_from_class_nth_item(uint8_t obclass, uint8_t n)
 
 int32_t nth_after_triple(int32_t base, uint8_t n)
 {
-   uint8_t i, subclass_types, total_types;
-   int32_t   triple;
-   uint8_t obclass;
+    uint8_t i, subclass_types, total_types;
+    int32_t    triple;
+    uint8_t obclass;
 
-   total_types = 0;
+    total_types = 0;
 
-   // Cycle through all 16 members of the specified class
-   for (obclass = TRIP2CL(base); obclass < NUM_CLASSES; obclass++)
-      for (i = TRIP2SC(base); i < num_subclasses[obclass]; i++)
-      {
+    // Cycle through all 16 members of the specified class
+    for (obclass = TRIP2CL(base); obclass < NUM_CLASSES; obclass++)
+        for (i = TRIP2SC(base); i < num_subclasses[obclass]; i++)
+        {
 
-         // Skip the entire next subclass
-         subclass_types = num_types(obclass, i);
-         total_types   += subclass_types;
+            // Skip the entire next subclass
+            subclass_types = num_types(obclass, i);
+            total_types    += subclass_types;
 
-         // Aha! We've found or gone past the desired triple
-         if (total_types > n)
-         {
-            triple = MAKETRIP(obclass, i, n - (total_types - subclass_types));
-            return triple;
-         }
-      }
+            // Aha! We've found or gone past the desired triple
+            if (total_types > n)
+            {
+                triple = MAKETRIP(obclass, i, n - (total_types - subclass_types));
+                return triple;
+            }
+        }
 
-   // We've gone through all 16, and still haven't found what we're looking
-   // for.  Ah well...
+    // We've gone through all 16, and still haven't found what we're looking
+    // for.  Ah well...
 
-   return -1;
+    return -1;
 }
 
 
@@ -234,23 +234,23 @@ int32_t nth_after_triple(int32_t base, uint8_t n)
 
 int32_t get_nth_from_triple(int32_t triple)
 {
-   uint8_t    obclass, subclass;
-   int32_t      n, j;
+    uint8_t     obclass, subclass;
+    int32_t        n, j;
 
-   obclass = TRIP2CL(triple);
-   subclass = TRIP2SC(triple);
+    obclass = TRIP2CL(triple);
+    subclass = TRIP2SC(triple);
 
-   if (obclass > NUM_CLASSES)
-      return(0);
-   if (subclass > num_subclasses[obclass])
-      return(0);
+    if (obclass > NUM_CLASSES)
+        return(0);
+    if (subclass > num_subclasses[obclass])
+        return(0);
 
-   for (n=0,j=0;j<subclass;j++)
-      n += num_types(obclass, j);
+    for (n=0,j=0;j<subclass;j++)
+        n += num_types(obclass, j);
 
-   n += TRIP2TY(triple);
+    n += TRIP2TY(triple);
 
-   return(n);
+    return(n);
 }
 
 /*  Don't need this for Mac version!!
@@ -266,33 +266,33 @@ int32_t get_nth_from_triple(int32_t triple)
 // it will get more stoked as time goes by and people decide to add stuff to it.
 
 #define MAX_SIZE  253
-#define MAX_PEP   253
+#define MAX_PEP    253
 #define MAX_HARDNESS 253
 
 errtype sanity_check_obj_props()
 {
-   int32_t i;
-   extern Id posture_bases[];
-   extern Id critter_id_table[];
+    int32_t i;
+    extern Id posture_bases[];
+    extern Id critter_id_table[];
 
-   for (i = 0; i < NUM_OBJECT; i++)
-   {
-      if (ObjProps[i].physics_model != 0)
-      {
-         if (ObjProps[i].hardness > MAX_HARDNESS)
-            Warning(("object index %d, triple 0x%x, has hardness %d!\n",i,nth_after_triple(0,i),
-               ObjProps[i].hardness));
-         if (ObjProps[i].mass < 0)
-            Warning(("object index %d, triple 0x%x, has mass %d!\n",i,nth_after_triple(0,i),
-               ObjProps[i].mass));
-         if (ObjProps[i].physics_xr > MAX_SIZE)
-            Warning(("object index %d, triple 0x%x, has physics_xr %d!\n",i,nth_after_triple(0,i),
-               ObjProps[i].physics_xr));
-         if (ObjProps[i].pep > MAX_PEP)
-            Warning(("object index %d, triple 0x%x, has pep %d (model %d) !\n",i,nth_after_triple(0,i),
-               ObjProps[i].pep,ObjProps[i].physics_model));
-      }
-   }
-   return(OK);
+    for (i = 0; i < NUM_OBJECT; i++)
+    {
+        if (ObjProps[i].physics_model != 0)
+        {
+            if (ObjProps[i].hardness > MAX_HARDNESS)
+                Warning(("object index %d, triple 0x%x, has hardness %d!\n",i,nth_after_triple(0,i),
+                    ObjProps[i].hardness));
+            if (ObjProps[i].mass < 0)
+                Warning(("object index %d, triple 0x%x, has mass %d!\n",i,nth_after_triple(0,i),
+                    ObjProps[i].mass));
+            if (ObjProps[i].physics_xr > MAX_SIZE)
+                Warning(("object index %d, triple 0x%x, has physics_xr %d!\n",i,nth_after_triple(0,i),
+                    ObjProps[i].physics_xr));
+            if (ObjProps[i].pep > MAX_PEP)
+                Warning(("object index %d, triple 0x%x, has pep %d (model %d) !\n",i,nth_after_triple(0,i),
+                    ObjProps[i].pep,ObjProps[i].physics_model));
+        }
+    }
+    return(OK);
 }
 */

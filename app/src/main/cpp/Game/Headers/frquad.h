@@ -28,11 +28,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* note: 9 is unused
  *
- *     1 B 3
- *   0       2
- *   8   D   A
- *   4       6
- *     5 C 7
+ *      1 B 3
+ *    0         2
+ *    8    D    A
+ *    4         6
+ *      5 C 7
  */
 
 #define QUAD_N_BASE 0
@@ -43,26 +43,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define QUAD_CENTER 0xB
 
 /*
- *     1 0 2
- *   B       4
- *   9   C   3
- *   A       5
- *     8 6 7
+ *      1 0 2
+ *    B         4
+ *    9    C    3
+ *    A         5
+ *      8 6 7
  */
 
-#define QUAD2_BASE       0
+#define QUAD2_BASE         0
 #define QUAD2_RIGHT_FORK 1
 #define QUAD2_LEFT_FORK  2
-#define QUAD2_DELTA      3
-#define QUAD2_CENTER   0xC
+#define QUAD2_DELTA        3
+#define QUAD2_CENTER    0xC
 
 // masks for quadrant/octant free facing check
-#define FMK_NW         (1<<0)
-#define FMK_EW         (1<<1)
-#define FMK_SW         (1<<2)
-#define FMK_WW         (1<<3)
+#define FMK_NW            (1<<0)
+#define FMK_EW            (1<<1)
+#define FMK_SW            (1<<2)
+#define FMK_WW            (1<<3)
 
-#define FMK_INT_NW     (1<<(4+0))
-#define FMK_INT_EW     (1<<(4+1))
-#define FMK_INT_SW     (1<<(4+2))
-#define FMK_INT_WW     (1<<(4+3))
+#define FMK_INT_NW      (1<<(4+0))
+#define FMK_INT_EW      (1<<(4+1))
+#define FMK_INT_SW      (1<<(4+2))
+#define FMK_INT_WW      (1<<(4+3))

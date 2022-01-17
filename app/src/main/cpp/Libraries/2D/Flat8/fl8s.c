@@ -36,13 +36,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grpix.h"
 
 // globals
-int32_t	ADD_DEST_OFF;
-int32_t	ADD_DV_FRAC_OFF;
-int32_t	AND_BM_ROW_OFF;
-int32_t	ADD_SRC_OFF;
-int32_t	SET_REPS_OFF;
-int32_t	SET_OFFSET_OFF;
-int32_t	JMP_LOOP_MIDDLE_OFF;
+int32_t    ADD_DEST_OFF;
+int32_t    ADD_DV_FRAC_OFF;
+int32_t    AND_BM_ROW_OFF;
+int32_t    ADD_SRC_OFF;
+int32_t    SET_REPS_OFF;
+int32_t    SET_OFFSET_OFF;
+int32_t    JMP_LOOP_MIDDLE_OFF;
 
 #define unroll_num 4
 #define unroll_log 2
@@ -65,13 +65,13 @@ int32_t gri_scale_umap_loop_68K(grs_tmap_loop_info *tli);
 // opaque solid polygon scaler
 int32_t gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **vert)
  {
- 	info->left_edge_func = (void (*)()) gri_scale_edge;
- 	info->right_edge_func = (void (*)()) gr_null;
- 	info->bm.hlog = 0;
- 	info->bm.bits = info->clut;
- 	info->loop_func = (void (*)()) gri_poly_loop;
- 	info->d = ((uint8_t *) ((int32_t) grd_canvas->bm.row * (int32_t) info->y));
- 	info->d += (int32_t)grd_canvas->bm.bits;
+     info->left_edge_func = (void (*)()) gri_scale_edge;
+     info->right_edge_func = (void (*)()) gr_null;
+     info->bm.hlog = 0;
+     info->bm.bits = info->clut;
+     info->loop_func = (void (*)()) gri_poly_loop;
+     info->d = ((uint8_t *) ((int32_t) grd_canvas->bm.row * (int32_t) info->y));
+     info->d += (int32_t)grd_canvas->bm.bits;
   return(0);
  }
 
@@ -84,118 +84,118 @@ int32_t gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **
 // transparent solid polygon scaler
 int32_t gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
-	tli->bm.hlog=GRL_TRANS|GRL_SOLID;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_TRANS|GRL_SOLID;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // transparent bitmap scaler
 int32_t gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
-	tli->bm.hlog=GRL_TRANS;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_TRANS;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // opaque bitmap scaler
 int32_t gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
  {
-	tli->bm.hlog=GRL_OPAQUE;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_OPAQUE;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // transparent clut bitmap scaler
 int32_t gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
-	tli->bm.hlog=GRL_TRANS|GRL_CLUT;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_TRANS|GRL_CLUT;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // opaque clut bitmap scaler
 int32_t gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
-	tli->bm.hlog=GRL_OPAQUE|GRL_CLUT;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_OPAQUE|GRL_CLUT;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // main inside loop for PPC scalers
 int32_t gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli) {
-   fix u,ul,du;
-   int32_t x;
-   uint8_t k;
-   fix xl,xr,dx,d;
-   uint8_t *p_src,*p_dest;
+    fix u,ul,du;
+    int32_t x;
+    uint8_t k;
+    fix xl,xr,dx,d;
+    uint8_t *p_src,*p_dest;
 
-   xl=fix_cint(tli->left.x);
-   xr=fix_cint(tli->right.x);
-   if (xr<=xl) return true;
-   ul=tli->left.u;
-   dx=tli->right.x-tli->left.x;
-   du=fix_div(tli->right.u-ul,dx);
-   d =fix_ceil(tli->left.x)-tli->left.x;
-   ul+=fix_mul(du,d);
+    xl=fix_cint(tli->left.x);
+    xr=fix_cint(tli->right.x);
+    if (xr<=xl) return true;
+    ul=tli->left.u;
+    dx=tli->right.x-tli->left.x;
+    du=fix_div(tli->right.u-ul,dx);
+    d =fix_ceil(tli->left.x)-tli->left.x;
+    ul+=fix_mul(du,d);
 
-   do {
-      p_src=tli->bm.bits+tli->bm.row*fix_int(tli->left.v);
-      p_dest = grd_bm.bits + (grd_bm.row*tli->y) + xl;
-      switch (tli->bm.hlog) {
-      case GRL_OPAQUE:
-         for (x=xl,u=ul; x<xr; x++) {
-            *(p_dest++) = p_src[fix_fint(u)];		// gr_fill_upixel(k,x,tli->y);
-            u+=du;
-         }
-         break;
-      case GRL_TRANS:
-         for (x=xl,u=ul; x<xr; x++) {
-            if (k=p_src[fix_fint(u)]) *p_dest = k;		// gr_fill_upixel(k,x,tli->y);
-            u+=du;
-            p_dest++;
-         }
-         break;
-      case GRL_OPAQUE|GRL_CLUT:
-         for (x=xl,u=ul; x<xr; x++) {
-            *(p_dest++) = tli->clut[p_src[fix_fint(u)]];	// gr_fill_upixel(tli->clut[k],x,tli->y);
-            u+=du;
-         }
-         break;
-      case GRL_TRANS|GRL_CLUT:
-         for (x=xl,u=ul; x<xr; x++) {
-            if (k=p_src[fix_fint(u)]) *p_dest = tli->clut[k];	// gr_fill_upixel(tli->clut[k],x,tli->y);
-            u+=du;
-            p_dest++;
-         }
-         break;
-      case GRL_TRANS|GRL_SOLID:
-         for (x=xl,u=ul; x<xr; x++) {
-            if (k=p_src[fix_fint(u)]) *p_dest = (uint8_t )(tli->clut);	// gr_fill_upixel((uint8_t )(tli->clut),x,tli->y);
-            u+=du;
-            p_dest++;
-         }
-         break;
-      }
-      tli->left.v+=tli->left.dv;
-      tli->y++;
-   } while (--(tli->n) > 0);
+    do {
+        p_src=tli->bm.bits+tli->bm.row*fix_int(tli->left.v);
+        p_dest = grd_bm.bits + (grd_bm.row*tli->y) + xl;
+        switch (tli->bm.hlog) {
+        case GRL_OPAQUE:
+            for (x=xl,u=ul; x<xr; x++) {
+                *(p_dest++) = p_src[fix_fint(u)];        // gr_fill_upixel(k,x,tli->y);
+                u+=du;
+            }
+            break;
+        case GRL_TRANS:
+            for (x=xl,u=ul; x<xr; x++) {
+                if (k=p_src[fix_fint(u)]) *p_dest = k;        // gr_fill_upixel(k,x,tli->y);
+                u+=du;
+                p_dest++;
+            }
+            break;
+        case GRL_OPAQUE|GRL_CLUT:
+            for (x=xl,u=ul; x<xr; x++) {
+                *(p_dest++) = tli->clut[p_src[fix_fint(u)]];    // gr_fill_upixel(tli->clut[k],x,tli->y);
+                u+=du;
+            }
+            break;
+        case GRL_TRANS|GRL_CLUT:
+            for (x=xl,u=ul; x<xr; x++) {
+                if (k=p_src[fix_fint(u)]) *p_dest = tli->clut[k];    // gr_fill_upixel(tli->clut[k],x,tli->y);
+                u+=du;
+                p_dest++;
+            }
+            break;
+        case GRL_TRANS|GRL_SOLID:
+            for (x=xl,u=ul; x<xr; x++) {
+                if (k=p_src[fix_fint(u)]) *p_dest = (uint8_t )(tli->clut);    // gr_fill_upixel((uint8_t )(tli->clut),x,tli->y);
+                u+=du;
+                p_dest++;
+            }
+            break;
+        }
+        tli->left.v+=tli->left.dv;
+        tli->y++;
+    } while (--(tli->n) > 0);
 
-   return false; /* tmap OK */
+    return false; /* tmap OK */
 }
 
 // ------------------------------------------------------------------------
@@ -207,55 +207,55 @@ int32_t gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli) {
 // transparent solid polygon scaler
 int32_t gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
-	tli->bm.hlog=GRL_TRANS|GRL_SOLID;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_TRANS|GRL_SOLID;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // transparent bitmap scaler
 int32_t gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
-	tli->bm.hlog=GRL_TRANS;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_TRANS;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // opaque bitmap scaler
 int32_t gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
  {
-	tli->bm.hlog=GRL_OPAQUE;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_OPAQUE;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // transparent clut bitmap scaler
 int32_t gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
-	tli->bm.hlog=GRL_TRANS|GRL_CLUT;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_TRANS|GRL_CLUT;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 // ========================================================================
 // opaque clut bitmap scaler
 int32_t gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
-	tli->bm.hlog=GRL_OPAQUE|GRL_CLUT;
-	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
-	tli->right_edge_func=gr_null;
-	tli->left_edge_func=(void (*)()) gri_scale_edge;
- 	return(0);
+    tli->bm.hlog=GRL_OPAQUE|GRL_CLUT;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
+    tli->right_edge_func=gr_null;
+    tli->left_edge_func=(void (*)()) gri_scale_edge;
+     return(0);
  }
 
 asm void ILoop68k(int32_t count, fix ul, fix du, uint8_t *p_src, uint8_t *p_dest, grs_tmap_loop_info *tli);
@@ -263,23 +263,23 @@ asm void ILoop68k(int32_t count, fix ul, fix du, uint8_t *p_src, uint8_t *p_dest
 // ========================================================================
 // main inside loop for 68K scalers
 int32_t gri_scale_umap_loop_68K(grs_tmap_loop_info *tli) {
-   fix u,ul,du;
-   fix xl,xr,dx,d;
-   uint8_t *p_src,*p_dest;
+    fix u,ul,du;
+    fix xl,xr,dx,d;
+    uint8_t *p_src,*p_dest;
 
-   xl=fix_cint(tli->left.x);
-   xr=fix_cint(tli->right.x);
-   if (xr<=xl) return true;
-   ul=tli->left.u;
-   dx=tli->right.x-tli->left.x;
-   du=fix_div(tli->right.u-ul,dx);
-   d =fix_ceil(tli->left.x)-tli->left.x;
-   ul+=fix_mul(du,d);
+    xl=fix_cint(tli->left.x);
+    xr=fix_cint(tli->right.x);
+    if (xr<=xl) return true;
+    ul=tli->left.u;
+    dx=tli->right.x-tli->left.x;
+    du=fix_div(tli->right.u-ul,dx);
+    d =fix_ceil(tli->left.x)-tli->left.x;
+    ul+=fix_mul(du,d);
 
-   p_src=tli->bm.bits+tli->bm.row*fix_int(tli->left.v);
-   p_dest = grd_bm.bits + (grd_bm.row*tli->y) + xl;
-   ILoop68k(xr-xl, ul, du, p_src, p_dest, tli);
-   return false; /* tmap OK */
+    p_src=tli->bm.bits+tli->bm.row*fix_int(tli->left.v);
+    p_dest = grd_bm.bits + (grd_bm.row*tli->y) + xl;
+    ILoop68k(xr-xl, ul, du, p_src, p_dest, tli);
+    return false; /* tmap OK */
 }
 
 
@@ -287,268 +287,268 @@ int32_t gri_scale_umap_loop_68K(grs_tmap_loop_info *tli) {
 // 68K inner loop for scalers
 asm void ILoop68k(int32_t count, fix ul, fix du, uint8_t *p_src, uint8_t *p_dest, grs_tmap_loop_info *tli)
  {
- 	movem.l	d3-d7/a2-a4,-(sp)		// save regs
- 	movem.l	36(sp),d0-d2/a0-a2	// get parms
+     movem.l    d3-d7/a2-a4,-(sp)        // save regs
+     movem.l    36(sp),d0-d2/a0-a2    // get parms
 
- 	move.l	a1,d4		// save p_dest
- 	subq.w	#1,d0		// -1 for dbra
-	move.w	d0,a4		// save
+     move.l    a1,d4        // save p_dest
+     subq.w    #1,d0        // -1 for dbra
+    move.w    d0,a4        // save
 
-	move.l	d2,d5
-	swap		d5			// high word of du in d5
+    move.l    d2,d5
+    swap        d5            // high word of du in d5
 
-	move.b	0x17(a2),d0
-	bne.s		@Not_OPAQUE	// check type
+    move.b    0x17(a2),d0
+    bne.s        @Not_OPAQUE    // check type
 
 // --------------------------------------------------
 @OPAQUE:
-	move.w	a4,d0		// restore count
-	move.l	d1,d3		// d3 = u = ul
-	move.l	d3,d7
- 	swap		d7			// high word of u in d7
+    move.w    a4,d0        // restore count
+    move.l    d1,d3        // d3 = u = ul
+    move.l    d3,d7
+     swap        d7            // high word of u in d7
 
 @O_loop:
-	move.b	(a0,d7.w),(a1)+	// move pixel
-	add.w		d2,d3		// add low word
-	addx.w	d5,d7		// add high word with carry
- 	dbra		d0,@O_loop			// next pixel
+    move.b    (a0,d7.w),(a1)+    // move pixel
+    add.w        d2,d3        // add low word
+    addx.w    d5,d7        // add high word with carry
+     dbra        d0,@O_loop            // next pixel
 
 @O_done:
-	move.w	0x28(a2),d0
-	move.l	0x38(a2),d3
-	add.l		d3,0x28(a2)					//    tli->left.v+=tli->left.dv;
-	add.l		#1,4(a2)						//    tli->y++;
+    move.w    0x28(a2),d0
+    move.l    0x38(a2),d3
+    add.l        d3,0x28(a2)                    //     tli->left.v+=tli->left.dv;
+    add.l        #1,4(a2)                        //     tli->y++;
 
-  move.l	grd_canvas,a3
-	move.w	0x0c(a3),a1
-	add.l		d4,a1								// get new dest
-	move.l	a1,d4
+  move.l    grd_canvas,a3
+    move.w    0x0c(a3),a1
+    add.l        d4,a1                                // get new dest
+    move.l    a1,d4
 
-	sub.w		0x28(a2),d0					// move src ptr
-	neg.w		d0
-	beq.s		@O_skipit
-	subq.w	#1,d0
-	move.w	0x14(a2),a3
+    sub.w        0x28(a2),d0                    // move src ptr
+    neg.w        d0
+    beq.s        @O_skipit
+    subq.w    #1,d0
+    move.w    0x14(a2),a3
 
 @O_srcloop:
-	add.l		a3,a0								// p_src += tli->bm.row
-	dbra		d0,@O_srcloop
+    add.l        a3,a0                                // p_src += tli->bm.row
+    dbra        d0,@O_srcloop
 
 @O_skipit:
-	sub.l		#1,(a2)
-	bne.s		@OPAQUE							//   } while (--(tli->n) > 0);
-	bra			@exit
+    sub.l        #1,(a2)
+    bne.s        @OPAQUE                            //    } while (--(tli->n) > 0);
+    bra            @exit
 
 // --------------------------------------------------
 @Not_OPAQUE:
-	cmp.b		#GRL_TRANS,d0
-	bne.s		@Not_TRANS
+    cmp.b        #GRL_TRANS,d0
+    bne.s        @Not_TRANS
 
 @TRANS:
-	move.w	a4,d0		// restore count
-	move.l	d1,d3		// d3 = u = ul
-	move.l	d3,d7
- 	swap		d7			// high word of u in d7
+    move.w    a4,d0        // restore count
+    move.l    d1,d3        // d3 = u = ul
+    move.l    d3,d7
+     swap        d7            // high word of u in d7
 
 @T_loop:
-	move.b	(a0,d7.w),d6	// get pixel
-	beq.s		@T_skip				// transparent?
-	move.b	d6,(a1)+			// copy it
-	add.w		d2,d3		// add low word
-	addx.w	d5,d7		// add high word with carry
- 	dbra		d0,@T_loop			// next pixel
-	bra.s		@T_done
+    move.b    (a0,d7.w),d6    // get pixel
+    beq.s        @T_skip                // transparent?
+    move.b    d6,(a1)+            // copy it
+    add.w        d2,d3        // add low word
+    addx.w    d5,d7        // add high word with carry
+     dbra        d0,@T_loop            // next pixel
+    bra.s        @T_done
 
-@T_skip:									// don't copy
-	addq.w	#1,a1
-	add.w		d2,d3		// add low word
-	addx.w	d5,d7		// add high word with carry
- 	dbra		d0,@T_loop			// next pixel
+@T_skip:                                    // don't copy
+    addq.w    #1,a1
+    add.w        d2,d3        // add low word
+    addx.w    d5,d7        // add high word with carry
+     dbra        d0,@T_loop            // next pixel
 
 @T_done:
-	move.w	0x28(a2),d0
-	move.l	0x38(a2),d3
-	add.l		d3,0x28(a2)					//    tli->left.v+=tli->left.dv;
-	add.l		#1,4(a2)						//    tli->y++;
+    move.w    0x28(a2),d0
+    move.l    0x38(a2),d3
+    add.l        d3,0x28(a2)                    //     tli->left.v+=tli->left.dv;
+    add.l        #1,4(a2)                        //     tli->y++;
 
-  move.l	grd_canvas,a3
-	move.w	0x0c(a3),a1
-	add.l		d4,a1								// get new dest
-	move.l	a1,d4
+  move.l    grd_canvas,a3
+    move.w    0x0c(a3),a1
+    add.l        d4,a1                                // get new dest
+    move.l    a1,d4
 
-	sub.w		0x28(a2),d0					// move src ptr
-	neg.w		d0
-	beq.s		@T_skipit
-	subq.w	#1,d0
-	move.w	0x14(a2),a3
+    sub.w        0x28(a2),d0                    // move src ptr
+    neg.w        d0
+    beq.s        @T_skipit
+    subq.w    #1,d0
+    move.w    0x14(a2),a3
 
 @T_srcloop:
-	add.l		a3,a0								// p_src += tli->bm.row
-	dbra		d0,@T_srcloop
+    add.l        a3,a0                                // p_src += tli->bm.row
+    dbra        d0,@T_srcloop
 
 @T_skipit:
-	sub.l		#1,(a2)
-	bne.s		@TRANS							//   } while (--(tli->n) > 0);
-	bra			@exit
+    sub.l        #1,(a2)
+    bne.s        @TRANS                            //    } while (--(tli->n) > 0);
+    bra            @exit
 
 // --------------------------------------------------
 @Not_TRANS:
-	cmp.b		#(GRL_OPAQUE|GRL_CLUT),d0
-	bne.s		@Not_OPAQUE_CLUT
+    cmp.b        #(GRL_OPAQUE|GRL_CLUT),d0
+    bne.s        @Not_OPAQUE_CLUT
 
-	moveq		#0,d6
+    moveq        #0,d6
 @OPAQUE_CLUT:
-	move.l	0x70(a2),a3			// clut ptr in a3
-	move.w	a4,d0						// restore count
-	move.l	d1,d3						// d3 = u = ul
- 	swap		d3
+    move.l    0x70(a2),a3            // clut ptr in a3
+    move.w    a4,d0                        // restore count
+    move.l    d1,d3                        // d3 = u = ul
+     swap        d3
 
 @OC_loop:
-	move.b	(a0,d3.w),d6
-	move.b	(a3,d6.w),(a1)+	// move pixel
-	swap		d3
-	add.l		d2,d3
-	swap		d3
- 	dbra		d0,@OC_loop			// next pixel
+    move.b    (a0,d3.w),d6
+    move.b    (a3,d6.w),(a1)+    // move pixel
+    swap        d3
+    add.l        d2,d3
+    swap        d3
+     dbra        d0,@OC_loop            // next pixel
 
 @OC_done:
-	move.w	0x28(a2),d0
-	move.l	0x38(a2),d3
-	add.l		d3,0x28(a2)					//    tli->left.v+=tli->left.dv;
-	add.l		#1,4(a2)						//    tli->y++;
+    move.w    0x28(a2),d0
+    move.l    0x38(a2),d3
+    add.l        d3,0x28(a2)                    //     tli->left.v+=tli->left.dv;
+    add.l        #1,4(a2)                        //     tli->y++;
 
-  move.l	grd_canvas,a3
-	move.w	0x0c(a3),a1
-	add.l		d4,a1								// get new dest
-	move.l	a1,d4
+  move.l    grd_canvas,a3
+    move.w    0x0c(a3),a1
+    add.l        d4,a1                                // get new dest
+    move.l    a1,d4
 
-	sub.w		0x28(a2),d0					// move src ptr
-	neg.w		d0
-	beq.s		@OC_skipit
-	subq.w	#1,d0
-	move.w	0x14(a2),a3
+    sub.w        0x28(a2),d0                    // move src ptr
+    neg.w        d0
+    beq.s        @OC_skipit
+    subq.w    #1,d0
+    move.w    0x14(a2),a3
 
 @OC_srcloop:
-	add.l		a3,a0								// p_src += tli->bm.row
-	dbra		d0,@OC_srcloop
+    add.l        a3,a0                                // p_src += tli->bm.row
+    dbra        d0,@OC_srcloop
 
 @OC_skipit:
-	sub.l		#1,(a2)
-	bne.s		@OPAQUE_CLUT				//   } while (--(tli->n) > 0);
-	bra			@exit
+    sub.l        #1,(a2)
+    bne.s        @OPAQUE_CLUT                //    } while (--(tli->n) > 0);
+    bra            @exit
 
 // --------------------------------------------------
 @Not_OPAQUE_CLUT:
-	cmp.b		#(GRL_TRANS|GRL_CLUT),d0
-	bne.s		@Not_TRANS_CLUT
+    cmp.b        #(GRL_TRANS|GRL_CLUT),d0
+    bne.s        @Not_TRANS_CLUT
 
-	move		#0,d6
+    move        #0,d6
 @TRANS_CLUT:
-	move.l	0x70(a2),a3			// clut ptr in a3
-	move.w	a4,d0						// restore count
-	move.l	d1,d3						// d3 = u = ul
- 	swap		d3
+    move.l    0x70(a2),a3            // clut ptr in a3
+    move.w    a4,d0                        // restore count
+    move.l    d1,d3                        // d3 = u = ul
+     swap        d3
 
 @TC_loop:
-	move.b	(a0,d3.w),d6		// get pixel
-	beq.s		@TC_skip				// transparent?
-	move.b	(a3,d6.w),(a1)+	// move pixel
-	swap		d3
-	add.l		d2,d3
-	swap		d3
- 	dbra		d0,@TC_loop			// next pixel
-	bra.s		@TC_done
+    move.b    (a0,d3.w),d6        // get pixel
+    beq.s        @TC_skip                // transparent?
+    move.b    (a3,d6.w),(a1)+    // move pixel
+    swap        d3
+    add.l        d2,d3
+    swap        d3
+     dbra        d0,@TC_loop            // next pixel
+    bra.s        @TC_done
 
-@TC_skip:									// don't copy
-	addq.w	#1,a1
-	swap		d3
-	add.l		d2,d3
-	swap		d3
- 	dbra		d0,@TC_loop			// next pixel
+@TC_skip:                                    // don't copy
+    addq.w    #1,a1
+    swap        d3
+    add.l        d2,d3
+    swap        d3
+     dbra        d0,@TC_loop            // next pixel
 
 @TC_done:
-	move.w	0x28(a2),d0
-	move.l	0x38(a2),d3
-	add.l		d3,0x28(a2)					//    tli->left.v+=tli->left.dv;
-	add.l		#1,4(a2)						//    tli->y++;
+    move.w    0x28(a2),d0
+    move.l    0x38(a2),d3
+    add.l        d3,0x28(a2)                    //     tli->left.v+=tli->left.dv;
+    add.l        #1,4(a2)                        //     tli->y++;
 
-  move.l	grd_canvas,a3
-	move.w	0x0c(a3),a1
-	add.l		d4,a1								// get new dest
-	move.l	a1,d4
+  move.l    grd_canvas,a3
+    move.w    0x0c(a3),a1
+    add.l        d4,a1                                // get new dest
+    move.l    a1,d4
 
-	sub.w		0x28(a2),d0					// move src ptr
-	neg.w		d0
-	beq.s		@TC_skipit
-	subq.w	#1,d0
-	move.w	0x14(a2),a3
+    sub.w        0x28(a2),d0                    // move src ptr
+    neg.w        d0
+    beq.s        @TC_skipit
+    subq.w    #1,d0
+    move.w    0x14(a2),a3
 
 @TC_srcloop:
-	add.l		a3,a0								// p_src += tli->bm.row
-	dbra		d0,@TC_srcloop
+    add.l        a3,a0                                // p_src += tli->bm.row
+    dbra        d0,@TC_srcloop
 
 @TC_skipit:
-	sub.l		#1,(a2)
-	bne.s		@TRANS_CLUT					//   } while (--(tli->n) > 0);
-	bra			@exit
+    sub.l        #1,(a2)
+    bne.s        @TRANS_CLUT                    //    } while (--(tli->n) > 0);
+    bra            @exit
 
 // --------------------------------------------------
 @Not_TRANS_CLUT:
-	cmp.b		#(GRL_TRANS|GRL_SOLID),d0
-	bne.s		@exit
+    cmp.b        #(GRL_TRANS|GRL_SOLID),d0
+    bne.s        @exit
 
-	move.b	0x70(a2),d6			// solid color in d6
+    move.b    0x70(a2),d6            // solid color in d6
 @TRANS_SOLID:
-	move.w	a4,d0						// restore count
-	move.l	d1,d3						// d3 = u = ul
- 	swap		d3
+    move.w    a4,d0                        // restore count
+    move.l    d1,d3                        // d3 = u = ul
+     swap        d3
 
 @TS_loop:
-	tst.b		(a0,d3.w)				// get pixel
-	beq.s		@TS_skip				// transparent?
-	move.b	d6,(a1)+				// put pixel
-	swap		d3
-	add.l		d2,d3
-	swap		d3
- 	dbra		d0,@TS_loop			// next pixel
-	bra.s		@TS_done
+    tst.b        (a0,d3.w)                // get pixel
+    beq.s        @TS_skip                // transparent?
+    move.b    d6,(a1)+                // put pixel
+    swap        d3
+    add.l        d2,d3
+    swap        d3
+     dbra        d0,@TS_loop            // next pixel
+    bra.s        @TS_done
 
-@TS_skip:									// don't copy
-	addq.w	#1,a1
-	swap		d3
-	add.l		d2,d3
-	swap		d3
- 	dbra		d0,@TS_loop			// next pixel
+@TS_skip:                                    // don't copy
+    addq.w    #1,a1
+    swap        d3
+    add.l        d2,d3
+    swap        d3
+     dbra        d0,@TS_loop            // next pixel
 
 @TS_done:
-	move.w	0x28(a2),d0
-	move.l	0x38(a2),d3
-	add.l		d3,0x28(a2)					//    tli->left.v+=tli->left.dv;
-	add.l		#1,4(a2)						//    tli->y++;
+    move.w    0x28(a2),d0
+    move.l    0x38(a2),d3
+    add.l        d3,0x28(a2)                    //     tli->left.v+=tli->left.dv;
+    add.l        #1,4(a2)                        //     tli->y++;
 
-  move.l	grd_canvas,a3
-	move.w	0x0c(a3),a1
-	add.l		d4,a1								// get new dest
-	move.l	a1,d4
+  move.l    grd_canvas,a3
+    move.w    0x0c(a3),a1
+    add.l        d4,a1                                // get new dest
+    move.l    a1,d4
 
-	sub.w		0x28(a2),d0					// move src ptr
-	neg.w		d0
-	beq.s		@TS_skipit
-	subq.w	#1,d0
-	move.w	0x14(a2),a3
+    sub.w        0x28(a2),d0                    // move src ptr
+    neg.w        d0
+    beq.s        @TS_skipit
+    subq.w    #1,d0
+    move.w    0x14(a2),a3
 
 @TS_srcloop:
-	add.l		a3,a0								// p_src += tli->bm.row
-	dbra		d0,@TS_srcloop
+    add.l        a3,a0                                // p_src += tli->bm.row
+    dbra        d0,@TS_srcloop
 
 @TS_skipit:
-	sub.l		#1,(a2)
-	bne.s		@TRANS_SOLID				//   } while (--(tli->n) > 0);
+    sub.l        #1,(a2)
+    bne.s        @TRANS_SOLID                //    } while (--(tli->n) > 0);
 
 // --------------------------------------------------
 @exit:
- 	movem.l	(sp)+,d3-d7/a2-a4		// restore regs
- 	rts
+     movem.l    (sp)+,d3-d7/a2-a4        // restore regs
+     rts
  }
 
 

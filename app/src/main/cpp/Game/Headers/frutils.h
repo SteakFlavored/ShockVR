@@ -37,7 +37,7 @@ extern  asm void Fast_FullScreen_Double(grs_bitmap *bm, int32_t w, int32_t h);
 
 
 // Stuff for the low-res temporary offscreen buffer.
-extern grs_canvas		gDoubleSizeOffCanvas;
+extern grs_canvas        gDoubleSizeOffCanvas;
 
 int32_t AllocDoubleBuffer(int32_t w, int32_t h);
 void FreeDoubleBuffer(void);

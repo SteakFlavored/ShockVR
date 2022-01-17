@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		CIRCBUFF.H		Circular buffer
-//		Rex E. Bradford
+//        CIRCBUFF.H        Circular buffer
+//        Rex E. Bradford
 
 /*
  * $Source: r:/prj/lib/src/afile/RCS/circbuff.h $
@@ -38,10 +38,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 typedef struct {
-	uint8_t *buff;				// ptr to circular buffer
-	uint8_t *buffEnd;			// end of buffer
-	uint8_t *pput;				// ptr to put data to
-	uint8_t *pget;				// ptr to get data from
+    uint8_t *buff;                // ptr to circular buffer
+    uint8_t *buffEnd;            // end of buffer
+    uint8_t *pput;                // ptr to put data to
+    uint8_t *pget;                // ptr to get data from
 } CircBuff;
 
 void CircBuffInit(CircBuff *pcb, uint8_t *buff, int32_t length);

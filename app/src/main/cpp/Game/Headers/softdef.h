@@ -16,25 +16,25 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#define SOFTWARE_DRILL     0
-#define SOFTWARE_SPEW      1
-#define SOFTWARE_MINE      2
-#define SOFTWARE_DISC      3
-#define SOFTWARE_PULSER    4
+#define SOFTWARE_DRILL      0
+#define SOFTWARE_SPEW        1
+#define SOFTWARE_MINE        2
+#define SOFTWARE_DISC        3
+#define SOFTWARE_PULSER     4
 #define SOFTWARE_SCRAMBLER 5
-#define SOFTWARE_VIRUS     6
+#define SOFTWARE_VIRUS      6
 
-#define SOFTWARE_CSHIELD   0
+#define SOFTWARE_CSHIELD    0
 #define SOFTWARE_OLD_FAKEID  1
-#define SOFTWARE_ICE       2
+#define SOFTWARE_ICE         2
 
-#define SOFTWARE_TURBO     0
-#define SOFTWARE_FAKEID    1
-#define SOFTWARE_DECOY     2
-#define SOFTWARE_RECALL    3
+#define SOFTWARE_TURBO      0
+#define SOFTWARE_FAKEID     1
+#define SOFTWARE_DECOY      2
+#define SOFTWARE_RECALL     3
 
-#define SOFTWARE_FILTER    4
-#define SOFTWARE_MONITOR   5
+#define SOFTWARE_FILTER     4
+#define SOFTWARE_MONITOR    5
 #define SOFTWARE_IDENTIFY  6
-#define SOFTWARE_TRACE     7
-#define SOFTWARE_TOGGLE    8
+#define SOFTWARE_TRACE      7
+#define SOFTWARE_TOGGLE     8

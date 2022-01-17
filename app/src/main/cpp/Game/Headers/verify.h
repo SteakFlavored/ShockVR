@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#define SAVELOAD_VERIFICATION_ID     0xF9F
-#define OLD_VERIFY_COOKIE_VALID         0x2222
-#define VERIFY_COOKIE_VALID            0x4444
+#define SAVELOAD_VERIFICATION_ID      0xF9F
+#define OLD_VERIFY_COOKIE_VALID            0x2222
+#define VERIFY_COOKIE_VALID                0x4444
 
 

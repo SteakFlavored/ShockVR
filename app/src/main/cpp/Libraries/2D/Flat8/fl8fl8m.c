@@ -50,93 +50,93 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern int32_t gen_flat8_bitmap(grs_bitmap *bm, int16_t x, int16_t y);
 int32_t gri_flat8_mask_bitmap(grs_bitmap *bm, int16_t x, int16_t y, grs_stencil *sten)
 {
-   if (sten==NULL) return gen_flat8_bitmap(bm, x, y);
-   else {
-      int32_t yf=y+bm->h;
-      uint8_t *dst;
-      uint8_t *src=bm->bits-x;
-      if (yf>grd_clip.bot) yf=grd_clip.bot;
-      if (y<grd_clip.top) {
-         src+=(grd_clip.top-y)*bm->row;
-         y=grd_clip.top;
-      }
-      dst=grd_bm.bits+y*grd_bm.row;
-      for (;y<yf;y++) {
-         int32_t xi=x,xf=x+bm->w;
-         grs_sten_elem *s;
+    if (sten==NULL) return gen_flat8_bitmap(bm, x, y);
+    else {
+        int32_t yf=y+bm->h;
+        uint8_t *dst;
+        uint8_t *src=bm->bits-x;
+        if (yf>grd_clip.bot) yf=grd_clip.bot;
+        if (y<grd_clip.top) {
+            src+=(grd_clip.top-y)*bm->row;
+            y=grd_clip.top;
+        }
+        dst=grd_bm.bits+y*grd_bm.row;
+        for (;y<yf;y++) {
+            int32_t xi=x,xf=x+bm->w;
+            grs_sten_elem *s;
 #ifdef NEW_STENCILS
-         s=&(sten[y]);
+            s=&(sten[y]);
 #else
-         s=&((sten->elem)[y]);
+            s=&((sten->elem)[y]);
 #endif
-         for (;s->r<=xi;) {
-            s=s->n;
-            if (s==NULL) break;
-         }
-         if (s!=NULL) {
-            if (s->l>xi) xi=s->l;
-            if (s->r<xf) xf=s->r;
-            if (xf>xi) {
-               if (bm->flags & BMF_TRANS) {
-                  int32_t i;
-                  for (i=xi;i<xf;i++)
-                     if (src[i]) dst[i]=src[i];
-               } else {
-                  memmove(dst+xi,src+xi,xf-xi);
-               }
+            for (;s->r<=xi;) {
+                s=s->n;
+                if (s==NULL) break;
             }
-         }
-         src+=bm->row;
-         dst+=grd_bm.row;
-      }
-   }
-   return CLIP_NONE;  /* actually, who knows? */
+            if (s!=NULL) {
+                if (s->l>xi) xi=s->l;
+                if (s->r<xf) xf=s->r;
+                if (xf>xi) {
+                    if (bm->flags & BMF_TRANS) {
+                        int32_t i;
+                        for (i=xi;i<xf;i++)
+                            if (src[i]) dst[i]=src[i];
+                    } else {
+                        memmove(dst+xi,src+xi,xf-xi);
+                    }
+                }
+            }
+            src+=bm->row;
+            dst+=grd_bm.row;
+        }
+    }
+    return CLIP_NONE;  /* actually, who knows? */
 }
 
 extern int32_t gen_flat8_clut_bitmap(grs_bitmap *bm, int16_t x, int16_t y, uint8_t *clut);
 int32_t gri_flat8_mask_fill_clut_bitmap(grs_bitmap *bm, int16_t x, int16_t y, grs_stencil *sten)
 {
-   uint8_t *clut=(uint8_t *)(grd_gc.fill_parm);
-   if (sten==NULL) return gen_flat8_clut_bitmap(bm, x, y, clut);
-   else {
-      int32_t yf=y+bm->h;
-      uint8_t *dst;
-      uint8_t *src=bm->bits-x;
-      if (yf>grd_clip.bot) yf=grd_clip.bot;
-      if (y<grd_clip.top) {
-         src+=(grd_clip.top-y)*bm->row;
-         y=grd_clip.top;
-      }
-      dst=grd_bm.bits+y*grd_bm.row;
-      for (;y<yf;y++) {
-         int32_t xi=x,xf=x+bm->w;
-         grs_sten_elem *s;
+    uint8_t *clut=(uint8_t *)(grd_gc.fill_parm);
+    if (sten==NULL) return gen_flat8_clut_bitmap(bm, x, y, clut);
+    else {
+        int32_t yf=y+bm->h;
+        uint8_t *dst;
+        uint8_t *src=bm->bits-x;
+        if (yf>grd_clip.bot) yf=grd_clip.bot;
+        if (y<grd_clip.top) {
+            src+=(grd_clip.top-y)*bm->row;
+            y=grd_clip.top;
+        }
+        dst=grd_bm.bits+y*grd_bm.row;
+        for (;y<yf;y++) {
+            int32_t xi=x,xf=x+bm->w;
+            grs_sten_elem *s;
 #ifdef NEW_STENCILS
-         s=&(sten[y]);
+            s=&(sten[y]);
 #else
-         s=&((sten->elem)[y]);
+            s=&((sten->elem)[y]);
 #endif
-         for (;s->r<=xi;) {
-            s=s->n;
-            if (s==NULL) break;
-         }
-         if (s!=NULL) {
-            if (s->l>xi) xi=s->l;
-            if (s->r<xf) xf=s->r;
-            if (xf>xi) {
-               int32_t i;
-               if (bm->flags & BMF_TRANS) {
-                  for (i=xi;i<xf;i++)
-                     if (src[i]) dst[i]=clut[src[i]];
-               } else {
-                  for (i=xi;i<xf;i++)
-                     dst[i]=clut[src[i]];
-               }
+            for (;s->r<=xi;) {
+                s=s->n;
+                if (s==NULL) break;
             }
-         }
-         src+=bm->row;
-         dst+=grd_bm.row;
-      }
-   }
-   return CLIP_NONE;  /* actually, who knows? */
+            if (s!=NULL) {
+                if (s->l>xi) xi=s->l;
+                if (s->r<xf) xf=s->r;
+                if (xf>xi) {
+                    int32_t i;
+                    if (bm->flags & BMF_TRANS) {
+                        for (i=xi;i<xf;i++)
+                            if (src[i]) dst[i]=clut[src[i]];
+                    } else {
+                        for (i=xi;i<xf;i++)
+                            dst[i]=clut[src[i]];
+                    }
+                }
+            }
+            src+=bm->row;
+            dst+=grd_bm.row;
+        }
+    }
+    return CLIP_NONE;  /* actually, who knows? */
 }

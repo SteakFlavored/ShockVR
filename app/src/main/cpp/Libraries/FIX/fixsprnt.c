@@ -17,8 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 /*
-** fixsprnt.c	-	sprintf() routines for fixed-point numbers.
-**						you may want to use %f and %F in lg_sprintf() instead!
+** fixsprnt.c    -    sprintf() routines for fixed-point numbers.
+**                        you may want to use %f and %F in lg_sprintf() instead!
 **
 ** $Header: n:/project/lib/src/fix/RCS/fixsprnt.c 1.1 1993/11/04 11:06:24 rex Exp $
 ** $Log: fixsprnt.c $
@@ -39,44 +39,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 int8_t *fix_sprint (int8_t *str, fix x)
 {
-	uint32_t tmp;
-	bool neg = false;
+    uint32_t tmp;
+    bool neg = false;
 
-	if (x < 0)
-	{
-		x = -x;
-		neg = true;
-	}
+    if (x < 0)
+    {
+        x = -x;
+        neg = true;
+    }
 
-	tmp = x & 0xffff;	tmp *= 10000; tmp /= 0xffff;
+    tmp = x & 0xffff;    tmp *= 10000; tmp /= 0xffff;
 
-	if (!neg)
-		sprintf (str, "%d.%04lu", x >> 16, tmp);
-	else
-		sprintf (str, "-%d.%04lu", x >> 16, tmp);
+    if (!neg)
+        sprintf (str, "%d.%04lu", x >> 16, tmp);
+    else
+        sprintf (str, "-%d.%04lu", x >> 16, tmp);
 
-   return str;
+    return str;
 }
 
 int8_t *fix24_sprint (int8_t *str, fix24 x)
 {
-	uint32_t tmp;
-	bool neg = false;
+    uint32_t tmp;
+    bool neg = false;
 
-	if (x < 0)
-	{
-		x = -x;
-		neg = true;
-	}
+    if (x < 0)
+    {
+        x = -x;
+        neg = true;
+    }
 
-	tmp = x & 0xff; tmp *= 1000; tmp /= 0xff;
+    tmp = x & 0xff; tmp *= 1000; tmp /= 0xff;
 
-	if (!neg)
-		sprintf (str, "%ld.%03lu", x >> 8, tmp);
-	else
-		sprintf (str, "-%ld.%03lu", x >> 8, tmp);
+    if (!neg)
+        sprintf (str, "%ld.%03lu", x >> 8, tmp);
+    else
+        sprintf (str, "-%ld.%03lu", x >> 8, tmp);
 
-   return str;
+    return str;
 }
 
 ///////////////////////////////////////////////
@@ -84,18 +84,18 @@ int8_t *fix24_sprint (int8_t *str, fix24 x)
 // it might be better to do %d.%4x but im not sure, so for now we will do this
 int8_t *fix_sprint_hex (int8_t *str, fix x)
 {
-	bool neg = false;
-	if (x < 0) { x = -x; neg = true; }
-	if (!neg) sprintf (str, "%x.%04lx", x >> 16, x&0xffff);
-	else 		 sprintf (str, "-%x.%04lx", x >> 16, x&0xffff);
-   return str;
+    bool neg = false;
+    if (x < 0) { x = -x; neg = true; }
+    if (!neg) sprintf (str, "%x.%04lx", x >> 16, x&0xffff);
+    else          sprintf (str, "-%x.%04lx", x >> 16, x&0xffff);
+    return str;
 }
 
 int8_t *fix24_sprint_hex (int8_t *str, fix24 x)
 {
-	bool neg = false;
-	if (x < 0) { x = -x; neg = true;	}
-	if (!neg) sprintf (str, "%x.%02lx", x >> 8, x&0xff);
-	else      sprintf (str, "-%x.%02lx", x >> 8, x&0xff);
-   return str;
+    bool neg = false;
+    if (x < 0) { x = -x; neg = true;    }
+    if (!neg) sprintf (str, "%x.%02lx", x >> 8, x&0xff);
+    else        sprintf (str, "-%x.%02lx", x >> 8, x&0xff);
+    return str;
 }

@@ -30,40 +30,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Profiler.h"
 #endif
 
-WindowPtr	gMainWindow;
+WindowPtr    gMainWindow;
 
 extern void test_3d(void);
 
 void main (void)
  {
-	grs_screen 	*screen;
-	Str255			str;
-  int16_t 			w,h;
-	int32_t				time,i,j;
-	grs_bitmap  bm;
-	int8_t				temp[256];
-	Rect				r;
-	Ptr					p;
+    grs_screen     *screen;
+    Str255            str;
+  int16_t             w,h;
+    int32_t                time,i,j;
+    grs_bitmap  bm;
+    int8_t                temp[256];
+    Rect                r;
+    Ptr                    p;
 
-	InitMac();
-	CheckConfig();
+    InitMac();
+    CheckConfig();
 
-	SetupWindows(&gMainWindow);								// setup everything
-	SetupOffscreenBitmaps();
-
-#if __profile__
-	if (!ProfilerInit(collectDetailed, bestTimeBase, 20, 10))
-	{
-#endif
-
-	test_3d();
+    SetupWindows(&gMainWindow);                                // setup everything
+    SetupOffscreenBitmaps();
 
 #if __profile__
-		ProfilerDump("\p3dtest.prof");
-		ProfilerTerm();
-	}
+    if (!ProfilerInit(collectDetailed, bestTimeBase, 20, 10))
+    {
 #endif
 
-	CleanupAndExit();
+    test_3d();
+
+#if __profile__
+        ProfilerDump("\p3dtest.prof");
+        ProfilerTerm();
+    }
+#endif
+
+    CleanupAndExit();
 }
 

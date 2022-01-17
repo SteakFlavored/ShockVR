@@ -24,61 +24,61 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // this macro does a divs.l d3,d1:d0, with the fix_div setup for reg and zero checking
 #define fix_div_68k_d3(reg) \
-	tst.l		d3;							\
-	dc.w		0x6712;		    	\
- 	moveq		#0,d1; 					\
- 	move.l	reg,d0;					\
- 	swap		d0; 						\
- 	move.w	d0,d1; 					\
- 	ext.l		d1;							\
- 	clr.w		d0; 						\
-	dc.l		0x4C430C01;			\
-	dc.w		0x680C;		    	\
-	move.l	#0x7FFFFFFF,d0;	\
-	tst.l		reg;						\
-	dc.w		0x6A02;					\
-	neg.l		d0;
+    tst.l        d3;                            \
+    dc.w        0x6712;                 \
+     moveq        #0,d1;                     \
+     move.l    reg,d0;                    \
+     swap        d0;                         \
+     move.w    d0,d1;                     \
+     ext.l        d1;                            \
+     clr.w        d0;                         \
+    dc.l        0x4C430C01;            \
+    dc.w        0x680C;                 \
+    move.l    #0x7FFFFFFF,d0;    \
+    tst.l        reg;                        \
+    dc.w        0x6A02;                    \
+    neg.l        d0;
 
 /*
 // this macro does a divs.l d2,d1:d0, with the fix_div setup for reg and zero checking
 #define fix_div_68k_d2(reg) \
-	tst.l		d2;							\
-	dc.w		0x6712;					\
- 	moveq		#0,d1; 					\
- 	move.l	reg,d0;					\
- 	swap		d0; 						\
- 	move.w	d0,d1; 					\
- 	ext.l		d1;							\
- 	clr.w		d0; 						\
-	dc.l		0x4C420C01;			\
-	dc.w		0x680C;					\
-	move.l	#0x7FFFFFFF,d0;	\
-	tst.l		reg;						\
-	dc.w		0x6A02;					\
-	neg.l		d0;
+    tst.l        d2;                            \
+    dc.w        0x6712;                    \
+     moveq        #0,d1;                     \
+     move.l    reg,d0;                    \
+     swap        d0;                         \
+     move.w    d0,d1;                     \
+     ext.l        d1;                            \
+     clr.w        d0;                         \
+    dc.l        0x4C420C01;            \
+    dc.w        0x680C;                    \
+    move.l    #0x7FFFFFFF,d0;    \
+    tst.l        reg;                        \
+    dc.w        0x6A02;                    \
+    neg.l        d0;
 */
 
 // this macro does a divs.l d2,d1:d0, with the fix_div setup for reg and zero checking
 #define fix_div_68k_d2_d0(tempreg) \
-	move.l	d0,tempreg;			\
-	tst.l		d2;							\
-	dc.w		0x6710;					\
- 	moveq		#0,d1; 					\
- 	swap		d0; 						\
- 	move.w	d0,d1; 					\
- 	ext.l		d1;							\
- 	clr.w		d0; 						\
-	dc.l		0x4C420C01;			\
-	dc.w		0x680C;					\
-	move.l	#0x7FFFFFFF,d0;	\
-	tst.l		tempreg;				\
-	dc.w		0x6A02;					\
-	neg.l		d0;
+    move.l    d0,tempreg;            \
+    tst.l        d2;                            \
+    dc.w        0x6710;                    \
+     moveq        #0,d1;                     \
+     swap        d0;                         \
+     move.w    d0,d1;                     \
+     ext.l        d1;                            \
+     clr.w        d0;                         \
+    dc.l        0x4C420C01;            \
+    dc.w        0x680C;                    \
+    move.l    #0x7FFFFFFF,d0;    \
+    tst.l        tempreg;                \
+    dc.w        0x6A02;                    \
+    neg.l        d0;
 
-#define fix_mul_d2_d0(tempreg) 	\
-	dc.l		0x4C020C01;						\
-	move.w	d1,d0;								\
- 	swap		d0; 									\
-	move.l	d0,tempreg;
+#define fix_mul_d2_d0(tempreg)     \
+    dc.l        0x4C020C01;                        \
+    move.w    d1,d0;                                \
+     swap        d0;                                     \
+    move.l    d0,tempreg;
 
 #endif

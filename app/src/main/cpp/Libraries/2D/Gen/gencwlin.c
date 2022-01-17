@@ -35,34 +35,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int32_t gri_wire_poly_cline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   int32_t r;
-   grs_vertex u0, u1;
+    int32_t r;
+    grs_vertex u0, u1;
 
-   /* save inputs (don't really need whole struct) */
-   u0 = *v0;
-   u1 = *v1;
+    /* save inputs (don't really need whole struct) */
+    u0 = *v0;
+    u1 = *v1;
 
-   r = gri_cline_clip (&u0, &u1);
+    r = gri_cline_clip (&u0, &u1);
 
-   if (r != CLIP_ALL)
-     grd_wire_poly_ucline_fill (c, parm, &u0, &u1);
+    if (r != CLIP_ALL)
+      grd_wire_poly_ucline_fill (c, parm, &u0, &u1);
 
-   return r;
+    return r;
 }
 
 int32_t gri_wire_poly_line_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   int32_t r;
-   grs_vertex u0, u1;
+    int32_t r;
+    grs_vertex u0, u1;
 
-   /* save inputs (don't really need whole struct) */
-   u0 = *v0;
-   u1 = *v1;
+    /* save inputs (don't really need whole struct) */
+    u0 = *v0;
+    u1 = *v1;
 
-   r = gri_line_clip (&u0, &u1);
+    r = gri_line_clip (&u0, &u1);
 
-   if (r != CLIP_ALL)
-     grd_wire_poly_uline_fill (c, parm, &u0, &u1);
+    if (r != CLIP_ALL)
+      grd_wire_poly_uline_fill (c, parm, &u0, &u1);
 
-   return r;
+    return r;
 }

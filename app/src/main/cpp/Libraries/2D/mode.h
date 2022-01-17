@@ -43,40 +43,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grs.h"
 /* definitions for all supported device-independent graphics modes. */
 enum {
-   GRM_320x200x8,
-   GRM_320x200x8X,
-   GRM_320x400x8,
-   GRM_320x240x8,
-   GRM_320x480x8,
-   GRM_640x400x8,
-   GRM_640x480x8,
-   GRM_800x600x8,
-   GRM_1024x768x8,
-   GRM_1280x1024x8,
-   GRM_320x200x24,
-   GRM_640x480x24,
-   GRM_800x600x24,
-   GRM_1024x768x24,
-   GRM_1280x1024x24
+    GRM_320x200x8,
+    GRM_320x200x8X,
+    GRM_320x400x8,
+    GRM_320x240x8,
+    GRM_320x480x8,
+    GRM_640x400x8,
+    GRM_640x480x8,
+    GRM_800x600x8,
+    GRM_1024x768x8,
+    GRM_1280x1024x8,
+    GRM_320x200x24,
+    GRM_640x480x24,
+    GRM_800x600x24,
+    GRM_1024x768x24,
+    GRM_1280x1024x24
 };
 
 enum {
-   GRM_320X200X8,
-   GRM_320X200X8X,
-   GRM_320X400X8,
-   GRM_320X240X8,
-   GRM_320X480X8,
-   GRM_640X400X8,
-   GRM_640X480X8,
-   GRM_800X600X8,
-   GRM_1024X768X8,
-   GRM_1280X1024X8,
-   GRM_320X200X24,
-   GRM_640X480X24,
-   GRM_800X600X24,
-   GRM_1024X768X24,
-   GRM_1280X1024X24,
-   GRD_MODES
+    GRM_320X200X8,
+    GRM_320X200X8X,
+    GRM_320X400X8,
+    GRM_320X240X8,
+    GRM_320X480X8,
+    GRM_640X400X8,
+    GRM_640X480X8,
+    GRM_800X600X8,
+    GRM_1024X768X8,
+    GRM_1280X1024X8,
+    GRM_320X200X24,
+    GRM_640X480X24,
+    GRM_800X600X24,
+    GRM_1024X768X24,
+    GRM_1280X1024X24,
+    GRD_MODES
 };
 
 extern grs_mode_info grd_mode_info[];

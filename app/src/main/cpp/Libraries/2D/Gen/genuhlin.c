@@ -27,18 +27,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "linfcn.h"
 
 /* draw an unclipped horizontal line with integral coordinates.
-   the correct fill is obtained via grd_pixel_fill,
-   which in turn calls gr_set_upixel
+    the correct fill is obtained via grd_pixel_fill,
+    which in turn calls gr_set_upixel
  */
 
 void gri_gen_uhline_fill (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
 {
-   int16_t t;
+    int16_t t;
 
-   if (x0 > x1) {
-      t = x0; x0 = x1; x1 = t;
-   }
-   while (x0 <= x1)
-      grd_pixel_fill (c, parm, x0++, y0);
+    if (x0 > x1) {
+        t = x0; x0 = x1; x1 = t;
+    }
+    while (x0 <= x1)
+        grd_pixel_fill (c, parm, x0++, y0);
 }
 

@@ -163,14 +163,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg_types.h"
 
 // Globals
-extern int32_t	gOVResult;
+extern int32_t    gOVResult;
 
 
 //////////////////////////////
 //
 // First some math functions that don't use fixes.
 //
-/*   Change this
+/*    Change this
 // Returns 0 if x < 0
 uint16_t long_sqrt (int32_t x);
 #pragma aux long_sqrt parm [eax] value [ax] modify [eax ebx ecx edx esi edi]
@@ -192,8 +192,8 @@ int32_t long_safe_pyth_dist (int32_t a, int32_t b);
 //========================================
 
 /* these functions operate on fixed-point numbers with one bit of sign, 15
-   bits of integer, and 16 bits of fraction.  thus, a rational number a is
-   represented as a 32-bit number as a*2^16. */
+    bits of integer, and 16 bits of fraction.  thus, a rational number a is
+    represented as a 32-bit number as a*2^16. */
 
 typedef int32_t fix;
 typedef fix fix16;
@@ -261,7 +261,7 @@ typedef uint16_t fixang;
 
 #define fixrad_to_fixang(fixradian) (fix_frac(fix_div((fixradian),fix_2pi)))
 #define fixang_to_fixrad(ang) fix_div(fix_mul(ang,fix_2pi),0x10000)
-#define degrees_to_fixang(d)    ((fixang)(((d)*FIXANG_PI)/180))
+#define degrees_to_fixang(d)     ((fixang)(((d)*FIXANG_PI)/180))
 #define fixang_to_degrees(ang)  (((int32_t)(ang)*180)/FIXANG_PI)
 
 // turns a fixed point into a float.
@@ -375,7 +375,7 @@ fixang fix_atan2 (fix y, fix x);
 //
 //========================================
 
-//	Converts string into fixed-point
+//    Converts string into fixed-point
 fix atofix(int8_t *p);
 
 // Puts a decimal representation of x into str
@@ -438,10 +438,10 @@ fix24 asm fix24_div (fix24 a, fix24 b);
 /*  Fix this
 fix24 fix24_mul_div (fix24 m0, fix24 m1, fix24 d);
 #pragma aux fix24_mul_div =\
-   "imul    edx"     \
-   "idiv    ebx"     \
-   parm [eax] [edx] [ebx]  \
-   modify [eax edx];
+    "imul     edx"      \
+    "idiv     ebx"      \
+    parm [eax] [edx] [ebx]  \
+    modify [eax edx];
 */
 
 fix24 fix24_pyth_dist (fix24 a, fix24 b);
@@ -472,8 +472,8 @@ int8_t *fix24_sprint_hex (int8_t *str, fix24 x);
 //============================================
 struct AWide
 {
-	int32_t			hi;
-	uint32_t	lo;
+    int32_t            hi;
+    uint32_t    lo;
 };
 typedef struct AWide AWide;
 

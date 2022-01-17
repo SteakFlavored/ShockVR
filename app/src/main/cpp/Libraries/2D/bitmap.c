@@ -77,91 +77,91 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grbm.h"
 #include "grmalloc.h"
 
-extern int32_t		gScreenRowbytes;
+extern int32_t        gScreenRowbytes;
 
 /* initialize a new bitmap structure. set bits, type, flags, w, and h from
-   arguments. set align to 0 and calculate row from width depending on what
-   type of bitmap. */
+    arguments. set align to 0 and calculate row from width depending on what
+    type of bitmap. */
 void gr_init_bm (grs_bitmap *bm, uint8_t *p, uint8_t type, uint16_t flags,
-                 int16_t w, int16_t h)
+                      int16_t w, int16_t h)
  {
-	int32_t row;
+    int32_t row;
   int32_t v;
 
   /* calculate row from type and w. */
   switch (type) {
-		case BMT_DEVICE: row = gScreenRowbytes; break; 	// row = gr_calc_row (w); break;
-   	case BMT_MONO: row = (w+7)/8; break;
-  	case BMT_FLAT8: case BMT_TLUC8: row = w; break;
-   	case BMT_FLAT24: row = 3*w; break;
-   	case BMT_RSD8: row = 0; break;
-   	default: break;
-   }
+        case BMT_DEVICE: row = gScreenRowbytes; break;     // row = gr_calc_row (w); break;
+        case BMT_MONO: row = (w+7)/8; break;
+      case BMT_FLAT8: case BMT_TLUC8: row = w; break;
+        case BMT_FLAT24: row = 3*w; break;
+        case BMT_RSD8: row = 0; break;
+        default: break;
+    }
 
-	bm->bits = p;
-	bm->type = type;
-	bm->flags = flags;
-	bm->align = 0;
-	bm->w = w;
-	bm->h = h;
-	bm->row = row;
-	bm->wlog = bm->hlog = 0;
+    bm->bits = p;
+    bm->type = type;
+    bm->flags = flags;
+    bm->align = 0;
+    bm->w = w;
+    bm->h = h;
+    bm->row = row;
+    bm->wlog = bm->hlog = 0;
 
-	for (v=w>>1; v!=0; v>>=1)
-		bm->wlog++;
-	for (v=h>>1; v!=0; v>>=1)
-		bm->hlog++;
+    for (v=w>>1; v!=0; v>>=1)
+        bm->wlog++;
+    for (v=h>>1; v!=0; v>>=1)
+        bm->hlog++;
 }
 
 /* set up a new bitmap structure to be a subsection of an existing bitmap.
-   sbm is source bm, dbm destination. (0,0) of dbm maps to (x,y) of sbm,
-   and dbm is w x h in size. */
+    sbm is source bm, dbm destination. (0,0) of dbm maps to (x,y) of sbm,
+    and dbm is w x h in size. */
 void gr_init_sub_bm (grs_bitmap *sbm, grs_bitmap *dbm, int16_t x, int16_t y,
-                     int16_t w, int16_t h)
+                            int16_t w, int16_t h)
 {
-	*dbm = *sbm; 	// memcpy (dbm, sbm, sizeof (*sbm));
-	dbm->w = w; dbm->h = h;
+    *dbm = *sbm;     // memcpy (dbm, sbm, sizeof (*sbm));
+    dbm->w = w; dbm->h = h;
 
-	switch (sbm->type) {
-	case BMT_DEVICE:
-		/* chain to device sub bm. */
-		gr_sub_bitmap (dbm, x, y, w, h);
-		break;
-	case BMT_MONO:
-		dbm->bits += y*dbm->row + x/8;
-		if ((dbm->align+=x%8) > 7)  {
-			dbm->align -= 8;
-			dbm->bits++;
-		}
-		break;
-	case BMT_FLAT8:
-	case BMT_TLUC8:
-		dbm->bits += y*dbm->row + x;
-		break;
-	case BMT_FLAT24:
-		dbm->bits += y*dbm->row + 3*x;
-		break;
-	case BMT_RSD8: break;
-	default: break;
-	}
+    switch (sbm->type) {
+    case BMT_DEVICE:
+        /* chain to device sub bm. */
+        gr_sub_bitmap (dbm, x, y, w, h);
+        break;
+    case BMT_MONO:
+        dbm->bits += y*dbm->row + x/8;
+        if ((dbm->align+=x%8) > 7)  {
+            dbm->align -= 8;
+            dbm->bits++;
+        }
+        break;
+    case BMT_FLAT8:
+    case BMT_TLUC8:
+        dbm->bits += y*dbm->row + x;
+        break;
+    case BMT_FLAT24:
+        dbm->bits += y*dbm->row + 3*x;
+        break;
+    case BMT_RSD8: break;
+    default: break;
+    }
 }
 
 /* allocate memory for a bitmap structure and the data for a bitmap of
-   the specified type and flags of size w x h.  returns a pointer to the
-   new bitmap structure.  the returned pointer can be freed in order to
-   free both the structure and data memory. */
+    the specified type and flags of size w x h.  returns a pointer to the
+    new bitmap structure.  the returned pointer can be freed in order to
+    free both the structure and data memory. */
 grs_bitmap *gr_alloc_bitmap (uint8_t type, uint16_t flags, int16_t w, int16_t h)
 {
-  grs_bitmap tmp_bm;	  /* temporary space for bitmap init */
-	uint8_t *p;             /* pointer to allocated buffer */
+  grs_bitmap tmp_bm;      /* temporary space for bitmap init */
+    uint8_t *p;                 /* pointer to allocated buffer */
 
-	gr_init_bitmap(&tmp_bm, NULL, type, flags, w, h);
-//	p=(uint8_t *)gr_malloc(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
-	p=(uint8_t *) NewPtr(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
-	if (p)
-	 {
-		tmp_bm.bits = p+sizeof(tmp_bm);
-		* (grs_bitmap *) p = tmp_bm;	// memcpy(p, &tmp_bm, sizeof(tmp_bm));
-	 }
-	return (grs_bitmap *) p;
+    gr_init_bitmap(&tmp_bm, NULL, type, flags, w, h);
+//    p=(uint8_t *)gr_malloc(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
+    p=(uint8_t *) NewPtr(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
+    if (p)
+     {
+        tmp_bm.bits = p+sizeof(tmp_bm);
+        * (grs_bitmap *) p = tmp_bm;    // memcpy(p, &tmp_bm, sizeof(tmp_bm));
+     }
+    return (grs_bitmap *) p;
 }

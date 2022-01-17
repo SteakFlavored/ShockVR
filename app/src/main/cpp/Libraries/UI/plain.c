@@ -24,28 +24,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Gadget *gad_plain_create(Gadget *parent, LGRect *dim, int32_t z, int8_t *name)
 {
-   Gadget *retgad;
-   LGPoint size;
+    Gadget *retgad;
+    LGPoint size;
 
-   gadget_create_setup(&retgad, parent, CLASS_PLAIN, dim, z, name);
+    gadget_create_setup(&retgad, parent, CLASS_PLAIN, dim, z, name);
 
-   // Fill in class-specific data
-   size.x = RectWidth(dim);  size.y = RectHeight(dim);
-   tng_plain_init(retgad, retgad->tng_data, size);
+    // Fill in class-specific data
+    size.x = RectWidth(dim);  size.y = RectHeight(dim);
+    tng_plain_init(retgad, retgad->tng_data, size);
 
-   return (retgad);
+    return (retgad);
 }
 
 Gadget *gad_plain_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, LGPoint size)
 {
-   LGRect newrect;
-   Gadget *rgad;
+    LGRect newrect;
+    Gadget *rgad;
 
-   newrect.ul = loc;
-   newrect.lr.x = newrect.ul.x + size.x;
-   newrect.lr.y = newrect.ul.y + size.y;
-   rgad = gad_plain_create((Gadget *)ui_data, &newrect, 0, GD_NAME(((Gadget *)ui_data)->rep));
+    newrect.ul = loc;
+    newrect.lr.x = newrect.ul.x + size.x;
+    newrect.lr.y = newrect.ul.y + size.y;
+    rgad = gad_plain_create((Gadget *)ui_data, &newrect, 0, GD_NAME(((Gadget *)ui_data)->rep));
 
-   *pptng = rgad->tng_data;
-   return(rgad);
+    *pptng = rgad->tng_data;
+    return(rgad);
 }

@@ -43,9 +43,9 @@ fix convert_y[MAX_CONVERT_TYPES][MAX_USE_MODES];
 fix inv_convert_x[MAX_CONVERT_TYPES][MAX_USE_MODES];
 fix inv_convert_y[MAX_CONVERT_TYPES][MAX_USE_MODES];
 
-#define SVGA_CONV_NONE     0
-#define SVGA_CONV_NORMAL   1
-#define SVGA_CONV_SCREEN   2
+#define SVGA_CONV_NONE      0
+#define SVGA_CONV_NORMAL    1
+#define SVGA_CONV_SCREEN    2
 
 // Internal prototypes
 uint8_t perform_svga_conversion(uint8_t mask);
@@ -55,22 +55,22 @@ void mouse_unconstrain(void);
 
 uint8_t perform_svga_conversion(uint8_t mask)
 {
-	extern bool full_game_3d;
+    extern bool full_game_3d;
 
-	if (gr2ss_override & OVERRIDE_FAIL)
-		return(SVGA_CONV_NONE);
-	// for now -   if ((convert_use_mode == 0) && (!inp6d_stereo_active))
-	if (convert_use_mode == 0)
-		return(SVGA_CONV_NONE);
-	if (_fr->draw_canvas.bm.bits == grd_canvas->bm.bits)
-		return(SVGA_CONV_SCREEN);
-	if (grd_canvas->bm.bits == grd_screen_canvas->bm.bits)
-		return(SVGA_CONV_SCREEN);
-	if (gr2ss_override & mask)
-		return(SVGA_CONV_NORMAL);
-	if (convert_use_mode == 3)			// KLC - the normal mode for Mac Shock.
-		return(SVGA_CONV_SCREEN);
-	return(SVGA_CONV_NONE);
+    if (gr2ss_override & OVERRIDE_FAIL)
+        return(SVGA_CONV_NONE);
+    // for now -    if ((convert_use_mode == 0) && (!inp6d_stereo_active))
+    if (convert_use_mode == 0)
+        return(SVGA_CONV_NONE);
+    if (_fr->draw_canvas.bm.bits == grd_canvas->bm.bits)
+        return(SVGA_CONV_SCREEN);
+    if (grd_canvas->bm.bits == grd_screen_canvas->bm.bits)
+        return(SVGA_CONV_SCREEN);
+    if (gr2ss_override & mask)
+        return(SVGA_CONV_NORMAL);
+    if (convert_use_mode == 3)            // KLC - the normal mode for Mac Shock.
+        return(SVGA_CONV_SCREEN);
+    return(SVGA_CONV_NONE);
 }
 
 
@@ -81,399 +81,399 @@ uint8_t perform_svga_conversion(uint8_t mask)
 // Note, x and y already converted here!
 void ss_scale_string(int8_t *s, int16_t x, int16_t y)
 {
-   // needs to scale still!
-   // know about different fonts instead?  That would be better...
-   grs_font *ttfont = (grs_font *)ResLock(RES_tinyTechFont);
-   grs_font *mlfont = (grs_font *)ResLock(RES_mediumLEDFont);
-   grs_font *f = gr_get_font();
-   int32_t c = gr_get_fcolor();
-   Id use_font = ID_NULL;
+    // needs to scale still!
+    // know about different fonts instead?  That would be better...
+    grs_font *ttfont = (grs_font *)ResLock(RES_tinyTechFont);
+    grs_font *mlfont = (grs_font *)ResLock(RES_mediumLEDFont);
+    grs_font *f = gr_get_font();
+    int32_t c = gr_get_fcolor();
+    Id use_font = ID_NULL;
 #ifdef STEREO_SUPPORT
-   uint8_t rv = perform_svga_conversion(OVERRIDE_SCALE);
+    uint8_t rv = perform_svga_conversion(OVERRIDE_SCALE);
 #endif
-   if (convert_use_mode == 0)
-   {
-      gr_string(s,x,y);
-      return;
-   }
-   if ((f == ttfont) || (f == mlfont))
-   {
-      switch(convert_use_mode)
-      {
-         case 1:
-            if (f == ttfont)
-               use_font = RES_tallTinyTechFont;
-            break;
-         case 2:
-         case 3:
-            if (f == ttfont)
-               use_font = RES_doubleTinyTechFont;
-            else if (f == mlfont)
-               use_font = RES_doubleMediumLEDFont;
-            break;
-         case 4:
-            if (f == ttfont)
-               use_font = RES_megaTinyTechFont;
-            else if (f == mlfont)
-               use_font = RES_megaMediumLEDFont;
-            break;
-      }
+    if (convert_use_mode == 0)
+    {
+        gr_string(s,x,y);
+        return;
+    }
+    if ((f == ttfont) || (f == mlfont))
+    {
+        switch(convert_use_mode)
+        {
+            case 1:
+                if (f == ttfont)
+                    use_font = RES_tallTinyTechFont;
+                break;
+            case 2:
+            case 3:
+                if (f == ttfont)
+                    use_font = RES_doubleTinyTechFont;
+                else if (f == mlfont)
+                    use_font = RES_doubleMediumLEDFont;
+                break;
+            case 4:
+                if (f == ttfont)
+                    use_font = RES_megaTinyTechFont;
+                else if (f == mlfont)
+                    use_font = RES_megaMediumLEDFont;
+                break;
+        }
 #ifdef STEREO_SUPPORT
-      if ((rv == SVGA_CONV_SCREEN) && inp6d_stereo_active)
-      {
-         if (use_font == ID_NULL)
-         {
-            int16_t w,h;
-            gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
-            gr_push_canvas(i6d_ss->cf_left);
-            gr_set_font(f);
-            gr_set_fcolor(c);
-            gr_scale_string(s, x+S_DELTA, y,SCONV_X(w)+S_DELTA,SCONV_Y(h));
+        if ((rv == SVGA_CONV_SCREEN) && inp6d_stereo_active)
+        {
+            if (use_font == ID_NULL)
+            {
+                int16_t w,h;
+                gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
+                gr_push_canvas(i6d_ss->cf_left);
+                gr_set_font(f);
+                gr_set_fcolor(c);
+                gr_scale_string(s, x+S_DELTA, y,SCONV_X(w)+S_DELTA,SCONV_Y(h));
+                gr_pop_canvas();
+                gr_push_canvas(i6d_ss->cf_right);
+                gr_set_font(f);
+                gr_set_fcolor(c);
+                gr_scale_string(s,x-S_DELTA,y,SCONV_X(w)-S_DELTA,SCONV_Y(h));
+            }
+            else
+            {
+                gr_push_canvas(i6d_ss->cf_left);
+                gr_set_font((grs_font *)ResLock(use_font));
+                gr_set_fcolor(c);
+                gr_string(s,x+S_DELTA,y);
+                gr_pop_canvas();
+                gr_push_canvas(i6d_ss->cf_right);
+                gr_set_font((grs_font *)ResLock(use_font));
+                gr_set_fcolor(c);
+                gr_string(s,x-S_DELTA,y);
+            }
             gr_pop_canvas();
-            gr_push_canvas(i6d_ss->cf_right);
-            gr_set_font(f);
-            gr_set_fcolor(c);
-            gr_scale_string(s,x-S_DELTA,y,SCONV_X(w)-S_DELTA,SCONV_Y(h));
-         }
-         else
-         {
-            gr_push_canvas(i6d_ss->cf_left);
-            gr_set_font((grs_font *)ResLock(use_font));
-            gr_set_fcolor(c);
-            gr_string(s,x+S_DELTA,y);
-            gr_pop_canvas();
-            gr_push_canvas(i6d_ss->cf_right);
-            gr_set_font((grs_font *)ResLock(use_font));
-            gr_set_fcolor(c);
-            gr_string(s,x-S_DELTA,y);
-         }
-         gr_pop_canvas();
-      }
-      else
-      {
+        }
+        else
+        {
 #endif
-         if (use_font == ID_NULL)
-         {
-            int16_t w,h;
-            gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
-            gr_scale_string(s, x, y,SCONV_X(w),SCONV_Y(h));
-         }
-         else
-         {
-            gr_set_font((grs_font *)ResLock(use_font));
-            gr_string(s, x, y);
-         }
+            if (use_font == ID_NULL)
+            {
+                int16_t w,h;
+                gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
+                gr_scale_string(s, x, y,SCONV_X(w),SCONV_Y(h));
+            }
+            else
+            {
+                gr_set_font((grs_font *)ResLock(use_font));
+                gr_string(s, x, y);
+            }
 #ifdef STEREO_SUPPORT
-      }
+        }
 #endif
-      if (use_font != ID_NULL)
-         ResUnlock(use_font);
-      gr_set_font(ttfont);
-      ResUnlock(RES_tinyTechFont);
-      ResUnlock(RES_mediumLEDFont);
-   }
-   else
-   {
-      // Attempt to scale it
-      int16_t w,h;
-      gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
-      gr_scale_string(s, x, y,SCONV_X(w),SCONV_Y(h));
-   }
+        if (use_font != ID_NULL)
+            ResUnlock(use_font);
+        gr_set_font(ttfont);
+        ResUnlock(RES_tinyTechFont);
+        ResUnlock(RES_mediumLEDFont);
+    }
+    else
+    {
+        // Attempt to scale it
+        int16_t w,h;
+        gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
+        gr_scale_string(s, x, y,SCONV_X(w),SCONV_Y(h));
+    }
 }
 
 void ss_string(int8_t *s, int16_t x, int16_t y)
 {
-   uint8_t rv;
-   if (rv = perform_svga_conversion(OVERRIDE_SCALE))
-   {
+    uint8_t rv;
+    if (rv = perform_svga_conversion(OVERRIDE_SCALE))
+    {
 #ifdef STEREO_SUPPORT
-      if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
-      {
-         gr_push_canvas(i6d_ss->cf_left);
-         if (convert_use_mode)
-            ss_scale_string(s,SCONV_X(x)+S_DELTA, SCONV_Y(y));
-         else
-            ss_scale_string(s,x+S_DELTA,y);
-         gr_set_canvas(i6d_ss->cf_right);
-         if (convert_use_mode)
-            ss_scale_string(s, SCONV_X(x)-S_DELTA, SCONV_Y(y));
-         else
-            ss_scale_string(s,x-S_DELTA,y);
-         gr_pop_canvas();
-      }
-      else
+        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
+        {
+            gr_push_canvas(i6d_ss->cf_left);
+            if (convert_use_mode)
+                ss_scale_string(s,SCONV_X(x)+S_DELTA, SCONV_Y(y));
+            else
+                ss_scale_string(s,x+S_DELTA,y);
+            gr_set_canvas(i6d_ss->cf_right);
+            if (convert_use_mode)
+                ss_scale_string(s, SCONV_X(x)-S_DELTA, SCONV_Y(y));
+            else
+                ss_scale_string(s,x-S_DELTA,y);
+            gr_pop_canvas();
+        }
+        else
 #endif
-         ss_scale_string(s,SCONV_X(x),SCONV_Y(y));
-   }
-   else
-      gr_string(s,x,y);
+            ss_scale_string(s,SCONV_X(x),SCONV_Y(y));
+    }
+    else
+        gr_string(s,x,y);
 }
 
 void ss_bitmap(grs_bitmap *bmp, int16_t x, int16_t y)
 {
-   uint8_t rv;
-   if (rv = perform_svga_conversion(OVERRIDE_SCALE))
-   {
+    uint8_t rv;
+    if (rv = perform_svga_conversion(OVERRIDE_SCALE))
+    {
 #ifdef STEREO_SUPPORT
-      if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
-      {
-         gr_push_canvas(i6d_ss->cf_left);
-         if (convert_use_mode)
-            gr_scale_bitmap(bmp,SCONV_X(x)+S_DELTA,SCONV_Y(y),SCONV_X(bmp->w)+S_DELTA,SCONV_Y(bmp->h));
-         else
-            gr_bitmap(bmp,x+S_DELTA,y);
-         gr_set_canvas(i6d_ss->cf_right);
-         if (convert_use_mode)
-            gr_scale_bitmap(bmp,SCONV_X(x)-S_DELTA,SCONV_Y(y),SCONV_X(bmp->w)-S_DELTA,SCONV_Y(bmp->h));
-         else
-            gr_bitmap(bmp,x-S_DELTA,y);
-         gr_pop_canvas();
-      }
-      else
+        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
+        {
+            gr_push_canvas(i6d_ss->cf_left);
+            if (convert_use_mode)
+                gr_scale_bitmap(bmp,SCONV_X(x)+S_DELTA,SCONV_Y(y),SCONV_X(bmp->w)+S_DELTA,SCONV_Y(bmp->h));
+            else
+                gr_bitmap(bmp,x+S_DELTA,y);
+            gr_set_canvas(i6d_ss->cf_right);
+            if (convert_use_mode)
+                gr_scale_bitmap(bmp,SCONV_X(x)-S_DELTA,SCONV_Y(y),SCONV_X(bmp->w)-S_DELTA,SCONV_Y(bmp->h));
+            else
+                gr_bitmap(bmp,x-S_DELTA,y);
+            gr_pop_canvas();
+        }
+        else
 #endif
-         gr_scale_bitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h));
-//      Warning(("scaling %d x %d to %d x %d\n",bmp->w,bmp->h,SCONV_X(bmp->w),SCONV_Y(bmp->h)));
-   }
-   else
-      gr_bitmap(bmp, x, y);
+            gr_scale_bitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h));
+//        Warning(("scaling %d x %d to %d x %d\n",bmp->w,bmp->h,SCONV_X(bmp->w),SCONV_Y(bmp->h)));
+    }
+    else
+        gr_bitmap(bmp, x, y);
 }
 
 void ss_ubitmap(grs_bitmap *bmp, int16_t x, int16_t y)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_scale_ubitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h));
-   else
-      gr_ubitmap(bmp, x, y);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_scale_ubitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h));
+    else
+        gr_ubitmap(bmp, x, y);
 }
 
 void ss_noscale_bitmap(grs_bitmap *bmp, int16_t x, int16_t y)
 {
-   uint8_t rv;
-   if (rv = perform_svga_conversion(OVERRIDE_SCALE))    // ?
+    uint8_t rv;
+    if (rv = perform_svga_conversion(OVERRIDE_SCALE))     // ?
 #ifdef STEREO_SUPPORT
-      if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
-      {
-         gr_push_canvas(i6d_ss->cf_left);
-         if (convert_use_mode)
-            gr_bitmap(bmp,SCONV_X(x)+S_DELTA,SCONV_Y(y));
-         else
-            gr_bitmap(bmp,x+S_DELTA,y);
-         gr_set_canvas(i6d_ss->cf_right);
-         if (convert_use_mode)
-            gr_bitmap(bmp,SCONV_X(x)-S_DELTA,SCONV_Y(y));
-         else
-            gr_bitmap(bmp,x-S_DELTA,y);
-         gr_pop_canvas();
-      }
-      else
+        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
+        {
+            gr_push_canvas(i6d_ss->cf_left);
+            if (convert_use_mode)
+                gr_bitmap(bmp,SCONV_X(x)+S_DELTA,SCONV_Y(y));
+            else
+                gr_bitmap(bmp,x+S_DELTA,y);
+            gr_set_canvas(i6d_ss->cf_right);
+            if (convert_use_mode)
+                gr_bitmap(bmp,SCONV_X(x)-S_DELTA,SCONV_Y(y));
+            else
+                gr_bitmap(bmp,x-S_DELTA,y);
+            gr_pop_canvas();
+        }
+        else
 #endif
-         gr_bitmap(bmp, SCONV_X(x), SCONV_Y(y));
-   else
-      gr_bitmap(bmp, x, y);
+            gr_bitmap(bmp, SCONV_X(x), SCONV_Y(y));
+    else
+        gr_bitmap(bmp, x, y);
 }
 
 void ss_scale_bitmap(grs_bitmap *bmp, int16_t x, int16_t y, int16_t w, int16_t h)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_scale_bitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h));
-   else
-      gr_scale_bitmap(bmp, x, y,w,h);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_scale_bitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h));
+    else
+        gr_scale_bitmap(bmp, x, y,w,h);
 }
 
 void ss_rect(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
-   uint8_t rv;
-   if (rv = perform_svga_conversion(OVERRIDE_SCALE))
+    uint8_t rv;
+    if (rv = perform_svga_conversion(OVERRIDE_SCALE))
 #ifdef STEREO_SUPPORT
-      if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
-      {
-         int32_t c = gr_get_fcolor();
-         gr_push_canvas(i6d_ss->cf_left);
-         gr_set_fcolor(c);
-         if (convert_use_mode)
-            gr_rect(SCONV_X(x1)+S_DELTA,SCONV_Y(y1),SCONV_X(x2)+S_DELTA,SCONV_Y(y2));
-         else
-            gr_rect(x1+S_DELTA,y1,x2+S_DELTA,y2);
-         gr_set_canvas(i6d_ss->cf_right);
-         gr_set_fcolor(c);
-         if (convert_use_mode)
-            gr_rect(SCONV_X(x1)-S_DELTA,SCONV_Y(y1),SCONV_X(x2)-S_DELTA,SCONV_Y(y2));
-         else
-            gr_rect(x1-S_DELTA,y1,x2-S_DELTA,y2);
-         gr_pop_canvas();
-      }
-      else
+        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
+        {
+            int32_t c = gr_get_fcolor();
+            gr_push_canvas(i6d_ss->cf_left);
+            gr_set_fcolor(c);
+            if (convert_use_mode)
+                gr_rect(SCONV_X(x1)+S_DELTA,SCONV_Y(y1),SCONV_X(x2)+S_DELTA,SCONV_Y(y2));
+            else
+                gr_rect(x1+S_DELTA,y1,x2+S_DELTA,y2);
+            gr_set_canvas(i6d_ss->cf_right);
+            gr_set_fcolor(c);
+            if (convert_use_mode)
+                gr_rect(SCONV_X(x1)-S_DELTA,SCONV_Y(y1),SCONV_X(x2)-S_DELTA,SCONV_Y(y2));
+            else
+                gr_rect(x1-S_DELTA,y1,x2-S_DELTA,y2);
+            gr_pop_canvas();
+        }
+        else
 #endif
-         gr_rect(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
-   else
-      gr_rect(x1,y1,x2,y2);
+            gr_rect(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
+    else
+        gr_rect(x1,y1,x2,y2);
 }
 
 void ss_box(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
-   uint8_t rv;
-   if (rv = perform_svga_conversion(OVERRIDE_SCALE))
+    uint8_t rv;
+    if (rv = perform_svga_conversion(OVERRIDE_SCALE))
 #ifdef STEREO_SUPPORT
-      if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
-      {
-         int32_t c = gr_get_fcolor();
-         gr_push_canvas(i6d_ss->cf_left);
-         gr_set_fcolor(c);
-         if (convert_use_mode)
-            gr_box(SCONV_X(x1)+S_DELTA,SCONV_Y(y1),SCONV_X(x2)+S_DELTA,SCONV_Y(y2));
-         else
-            gr_box(x1+S_DELTA,y1,x2+S_DELTA,y2);
-         gr_set_canvas(i6d_ss->cf_right);
-         gr_set_fcolor(c);
-         if (convert_use_mode)
-            gr_box(SCONV_X(x1)-S_DELTA,SCONV_Y(y1),SCONV_X(x2)-S_DELTA,SCONV_Y(y2));
-         else
-            gr_box(x1-S_DELTA,y1,x2-S_DELTA,y2);
-         gr_pop_canvas();
-      }
-      else
+        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
+        {
+            int32_t c = gr_get_fcolor();
+            gr_push_canvas(i6d_ss->cf_left);
+            gr_set_fcolor(c);
+            if (convert_use_mode)
+                gr_box(SCONV_X(x1)+S_DELTA,SCONV_Y(y1),SCONV_X(x2)+S_DELTA,SCONV_Y(y2));
+            else
+                gr_box(x1+S_DELTA,y1,x2+S_DELTA,y2);
+            gr_set_canvas(i6d_ss->cf_right);
+            gr_set_fcolor(c);
+            if (convert_use_mode)
+                gr_box(SCONV_X(x1)-S_DELTA,SCONV_Y(y1),SCONV_X(x2)-S_DELTA,SCONV_Y(y2));
+            else
+                gr_box(x1-S_DELTA,y1,x2-S_DELTA,y2);
+            gr_pop_canvas();
+        }
+        else
 #endif
-         gr_box(RSCONV_X(x1),RSCONV_Y(y1),RSCONV_X(x2),RSCONV_Y(y2));
-   else
-      gr_box(x1,y1,x2,y2);
+            gr_box(RSCONV_X(x1),RSCONV_Y(y1),RSCONV_X(x2),RSCONV_Y(y2));
+    else
+        gr_box(x1,y1,x2,y2);
 }
 
 void ss_safe_set_cliprect(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
-   if (perform_svga_conversion(OVERRIDE_CLIP))
-   {
-//      Warning(("setting rect (%d, %d) (%d,%d)!\n",SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2)));
-      safe_set_cliprect(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
-   }
-   else
-      safe_set_cliprect(x1,y1,x2,y2);
+    if (perform_svga_conversion(OVERRIDE_CLIP))
+    {
+//        Warning(("setting rect (%d, %d) (%d,%d)!\n",SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2)));
+        safe_set_cliprect(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
+    }
+    else
+        safe_set_cliprect(x1,y1,x2,y2);
 }
 
 void ss_cset_cliprect(grs_canvas *pcanv, int16_t x, int16_t y, int16_t w, int16_t h)
 {
-   if (perform_svga_conversion(OVERRIDE_CLIP))
-   {
-//      Warning(("cset to %d,%d   %d, %d!\n",SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h)));
-      gr_cset_cliprect(pcanv, SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h));
-   }
-   else
-      gr_cset_cliprect(pcanv, x, y, w, h);
+    if (perform_svga_conversion(OVERRIDE_CLIP))
+    {
+//        Warning(("cset to %d,%d    %d, %d!\n",SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h)));
+        gr_cset_cliprect(pcanv, SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h));
+    }
+    else
+        gr_cset_cliprect(pcanv, x, y, w, h);
 }
 
 void ss_int_line(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_int_line(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
-   else
-      gr_int_line(x1,y1,x2,y2);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_int_line(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
+    else
+        gr_int_line(x1,y1,x2,y2);
 }
 
 void ss_thick_int_line(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-   {
-      int16_t min_y,max_y,use_y,min_x,max_x,use_x;
-      min_y = SCONV_Y(y1);
-      max_y = SCONV_Y(y1+1);
-      min_x = SCONV_X(x1);
-      max_x = SCONV_X(x1+1);
-      for (use_y = min_y; use_y < max_y; use_y++)
-         gr_int_line(SCONV_X(x1),use_y,SCONV_X(x2),SCONV_Y(y2) + use_y - min_y);
-      for (use_x = min_x; use_x < max_x; use_x++)
-         gr_int_line(use_x,SCONV_Y(y1),SCONV_X(x2) + use_x - min_x,SCONV_Y(y2));
-   }
-   else
-      gr_int_line(x1,y1,x2,y2);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+    {
+        int16_t min_y,max_y,use_y,min_x,max_x,use_x;
+        min_y = SCONV_Y(y1);
+        max_y = SCONV_Y(y1+1);
+        min_x = SCONV_X(x1);
+        max_x = SCONV_X(x1+1);
+        for (use_y = min_y; use_y < max_y; use_y++)
+            gr_int_line(SCONV_X(x1),use_y,SCONV_X(x2),SCONV_Y(y2) + use_y - min_y);
+        for (use_x = min_x; use_x < max_x; use_x++)
+            gr_int_line(use_x,SCONV_Y(y1),SCONV_X(x2) + use_x - min_x,SCONV_Y(y2));
+    }
+    else
+        gr_int_line(x1,y1,x2,y2);
 }
 
 void ss_int_disk(int16_t x1,int16_t y1,int16_t diam)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_int_disk(SCONV_X(x1),SCONV_Y(y1),SCONV_X(diam)>>1);
-        // Hm, should we convert rad?
-        // Yes, but sadly it's hosed in 320x400 mode, where
-        // we need to draw an ellipse.  This stuff really
-        // needs to be in the 2D.
-   else
-      gr_int_disk(x1,y1,diam>>1);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_int_disk(SCONV_X(x1),SCONV_Y(y1),SCONV_X(diam)>>1);
+          // Hm, should we convert rad?
+          // Yes, but sadly it's hosed in 320x400 mode, where
+          // we need to draw an ellipse.  This stuff really
+          // needs to be in the 2D.
+    else
+        gr_int_disk(x1,y1,diam>>1);
 }
 
 void ss_vline(int16_t x1,int16_t y1,int16_t y2)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_vline(SCONV_X(x1),SCONV_Y(y1),SCONV_Y(y2));
-   else
-      gr_vline(x1,y1,y2);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_vline(SCONV_X(x1),SCONV_Y(y1),SCONV_Y(y2));
+    else
+        gr_vline(x1,y1,y2);
 }
 
 void ss_hline(int16_t x1,int16_t y1,int16_t x2)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_hline(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2));
-   else
-      gr_hline(x1,y1,x2);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_hline(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2));
+    else
+        gr_hline(x1,y1,x2);
 }
 
 void ss_fix_line(fix x1, fix y1, fix x2, fix y2)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_fix_line(FIXCONV_X(x1),FIXCONV_Y(y1),FIXCONV_X(x2),FIXCONV_Y(y2));
-   else
-      gr_fix_line(x1,y1,x2,y2);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_fix_line(FIXCONV_X(x1),FIXCONV_Y(y1),FIXCONV_X(x2),FIXCONV_Y(y2));
+    else
+        gr_fix_line(x1,y1,x2,y2);
 }
 
 void ss_thick_fix_line(fix x1,fix y1,fix x2,fix y2)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-   {
-      fix min_y,max_y,use_y,min_x,max_x,use_x;
-      min_y = FIXCONV_Y(y1);
-      max_y = FIXCONV_Y(y1+FIX_UNIT);
-      min_x = FIXCONV_X(x1);
-      max_x = FIXCONV_X(x1+FIX_UNIT);
-      for (use_y = min_y; use_y < max_y; use_y = use_y + FIX_UNIT)
-         gr_fix_line(FIXCONV_X(x1),use_y,FIXCONV_X(x2),FIXCONV_Y(y2) + use_y - min_y);
-      for (use_x = min_x; use_x < max_x; use_x = use_x + FIX_UNIT)
-         gr_fix_line(use_x,FIXCONV_Y(y1),FIXCONV_X(x2) + use_x - min_x,FIXCONV_Y(y2));
-   }
-   else
-      gr_fix_line(x1,y1,x2,y2);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+    {
+        fix min_y,max_y,use_y,min_x,max_x,use_x;
+        min_y = FIXCONV_Y(y1);
+        max_y = FIXCONV_Y(y1+FIX_UNIT);
+        min_x = FIXCONV_X(x1);
+        max_x = FIXCONV_X(x1+FIX_UNIT);
+        for (use_y = min_y; use_y < max_y; use_y = use_y + FIX_UNIT)
+            gr_fix_line(FIXCONV_X(x1),use_y,FIXCONV_X(x2),FIXCONV_Y(y2) + use_y - min_y);
+        for (use_x = min_x; use_x < max_x; use_x = use_x + FIX_UNIT)
+            gr_fix_line(use_x,FIXCONV_Y(y1),FIXCONV_X(x2) + use_x - min_x,FIXCONV_Y(y2));
+    }
+    else
+        gr_fix_line(x1,y1,x2,y2);
 }
 
 void ss_get_bitmap(grs_bitmap *bmp, int16_t x, int16_t y)
 {
-   if (perform_svga_conversion(OVERRIDE_GET_BM))
-      gr_get_bitmap(bmp, SCONV_X(x), SCONV_Y(y));
-   else
-      gr_get_bitmap(bmp, x, y);
+    if (perform_svga_conversion(OVERRIDE_GET_BM))
+        gr_get_bitmap(bmp, SCONV_X(x), SCONV_Y(y));
+    else
+        gr_get_bitmap(bmp, x, y);
 }
 
 void ss_set_pixel(int32_t color, int16_t x, int16_t y)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_set_pixel(color, SCONV_X(x), SCONV_Y(y));
-   else
-      gr_set_pixel(color, x, y);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_set_pixel(color, SCONV_X(x), SCONV_Y(y));
+    else
+        gr_set_pixel(color, x, y);
 }
 
 void ss_set_thick_pixel(int32_t color, int16_t x, int16_t y)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-   {
-//      gr_set_pixel(color, SCONV_X(x), SCONV_Y(y));
-      gr_set_fcolor(color);
-      gr_box(SCONV_X(x),SCONV_Y(y),SCONV_X(x+1)-1,SCONV_Y(y+1)-1);
-   }
-   else
-      gr_set_pixel(color, x, y);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+    {
+//        gr_set_pixel(color, SCONV_X(x), SCONV_Y(y));
+        gr_set_fcolor(color);
+        gr_box(SCONV_X(x),SCONV_Y(y),SCONV_X(x+1)-1,SCONV_Y(y+1)-1);
+    }
+    else
+        gr_set_pixel(color, x, y);
 }
 
 void ss_clut_ubitmap(grs_bitmap *bmp, int16_t x, int16_t y, uint8_t *cl)
 {
-   if (perform_svga_conversion(OVERRIDE_SCALE))
-      gr_clut_scale_ubitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h), cl);
-   else
-      gr_clut_ubitmap(bmp, x, y, cl);
+    if (perform_svga_conversion(OVERRIDE_SCALE))
+        gr_clut_scale_ubitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h), cl);
+    else
+        gr_clut_ubitmap(bmp, x, y, cl);
 }
 
 // Registration!
@@ -483,71 +483,71 @@ void ss_clut_ubitmap(grs_bitmap *bmp, int16_t x, int16_t y, uint8_t *cl)
 // already filters out calls with use_mode of 0.
 void gr2ss_register_init(int8_t ctype, int16_t init_x, int16_t init_y)
 {
-   convert_x[ctype][0] = fix_make(init_x,0);
-   convert_y[ctype][0] = fix_make(init_y,0);
+    convert_x[ctype][0] = fix_make(init_x,0);
+    convert_y[ctype][0] = fix_make(init_y,0);
 }
 
 #define WACKY_FIX_COMPENSATION
 void gr2ss_register_mode(int8_t conv_mode, int16_t nx, int16_t ny)
 {
-   int8_t m;
-   mode_count[conv_mode]++;
-   m = mode_count[conv_mode];
-   convert_x[conv_mode][m] = fix_div(fix_make(nx,0),convert_x[conv_mode][0]);
-   convert_y[conv_mode][m] = fix_div(fix_make(ny,0),convert_y[conv_mode][0]);
-   inv_convert_x[conv_mode][m] = fix_div(convert_x[conv_mode][0],fix_make(nx,0));
-   inv_convert_y[conv_mode][m] = fix_div(convert_y[conv_mode][0],fix_make(ny,0));
+    int8_t m;
+    mode_count[conv_mode]++;
+    m = mode_count[conv_mode];
+    convert_x[conv_mode][m] = fix_div(fix_make(nx,0),convert_x[conv_mode][0]);
+    convert_y[conv_mode][m] = fix_div(fix_make(ny,0),convert_y[conv_mode][0]);
+    inv_convert_x[conv_mode][m] = fix_div(convert_x[conv_mode][0],fix_make(nx,0));
+    inv_convert_y[conv_mode][m] = fix_div(convert_y[conv_mode][0],fix_make(ny,0));
 
 #ifdef WACKY_FIX_COMPENSATION
-   // wacky fix point compensation!
-   if (convert_x[conv_mode][m] & 0xF)
-      convert_x[conv_mode][m]++;
-   if (convert_y[conv_mode][m] & 0xF)
-      convert_y[conv_mode][m]++;
-   if (inv_convert_x[conv_mode][m] & 0xF)
-      inv_convert_x[conv_mode][m]++;
-   if (inv_convert_y[conv_mode][m] & 0xF)
-      inv_convert_y[conv_mode][m]++;
+    // wacky fix point compensation!
+    if (convert_x[conv_mode][m] & 0xF)
+        convert_x[conv_mode][m]++;
+    if (convert_y[conv_mode][m] & 0xF)
+        convert_y[conv_mode][m]++;
+    if (inv_convert_x[conv_mode][m] & 0xF)
+        inv_convert_x[conv_mode][m]++;
+    if (inv_convert_y[conv_mode][m] & 0xF)
+        inv_convert_y[conv_mode][m]++;
 #endif
 }
 
 void ss_recompute_zoom(frc *which_frc, int16_t oldm)
 {
-   fr_mod_cams(which_frc,FR_NOCAM,
-      fix_div(convert_x[convert_type][convert_use_mode],convert_x[convert_type][oldm]));
+    fr_mod_cams(which_frc,FR_NOCAM,
+        fix_div(convert_x[convert_type][convert_use_mode],convert_x[convert_type][oldm]));
 }
 
 void ss_point_convert(int16_t *px, int16_t *py, bool down)
 {
 #ifdef SVGA_SUPPORT
-   if (convert_use_mode != 0)
-   {
-      int16_t ox, oy;
-      ox = *px;
-      oy = *py;
-      if (down)
-      {
-         *px = INV_SCONV_X(*px);
-         *py = INV_SCONV_Y(*py);
-      }
-      else
-      {
-         *px = SCONV_X(*px);
-         *py = SCONV_Y(*py);
-      }
-//      Warning(("%d >> %d %d --> %d %d\n",down,ox,oy,*px,*py));
-   }
+    if (convert_use_mode != 0)
+    {
+        int16_t ox, oy;
+        ox = *px;
+        oy = *py;
+        if (down)
+        {
+            *px = INV_SCONV_X(*px);
+            *py = INV_SCONV_Y(*py);
+        }
+        else
+        {
+            *px = SCONV_X(*px);
+            *py = SCONV_Y(*py);
+        }
+//        Warning(("%d >> %d %d --> %d %d\n",down,ox,oy,*px,*py));
+    }
 #endif
 }
 
 int16_t ss_curr_mode_width(void)
 {
-   return(SCONV_X(convert_x[convert_type][0]));
+    return(SCONV_X(convert_x[convert_type][0]));
 }
 
 int16_t ss_curr_mode_height(void)
 {
-   return(SCONV_Y(convert_y[convert_type][0]));
+    return(SCONV_Y(convert_y[convert_type][0]));
 }
 
 // Basically, if you are in the secret hack mode 5
@@ -555,16 +555,16 @@ int16_t ss_curr_mode_height(void)
 // otherwise it behaves like SCONV_{X,Y}
 int16_t MODE_SCONV_X(int16_t cval, int16_t m)
 {
-   if ((!m) || (convert_use_mode != 5))
-      return(SCONV_X(cval));
-   return(fast_fix_mul_int(fix_make(cval,0), convert_x[convert_type][m]));
+    if ((!m) || (convert_use_mode != 5))
+        return(SCONV_X(cval));
+    return(fast_fix_mul_int(fix_make(cval,0), convert_x[convert_type][m]));
 }
 
 int16_t MODE_SCONV_Y(int16_t cval, int16_t m)
 {
-   if ((!m) || (convert_use_mode != 5))
-      return(SCONV_Y(cval));
-   return(fast_fix_mul_int(fix_make(cval,0), convert_y[convert_type][m]));
+    if ((!m) || (convert_use_mode != 5))
+        return(SCONV_Y(cval));
+    return(fast_fix_mul_int(fix_make(cval,0), convert_y[convert_type][m]));
 }
 
 // This allows us to override the real mode with some
@@ -572,102 +572,102 @@ int16_t MODE_SCONV_Y(int16_t cval, int16_t m)
 int16_t hack_mode_on;
 void ss_set_hack_mode(int16_t new_m, int16_t *tval)
 {
-   if ((convert_use_mode != 5) && (!hack_mode_on))
-      return;
-   if (new_m)
-   {
-      *tval = convert_use_mode;
-      convert_use_mode = new_m;
-      hack_mode_on++;
-   }
-   else
-   {
-      convert_use_mode = *tval;
-      hack_mode_on--;
-   }
+    if ((convert_use_mode != 5) && (!hack_mode_on))
+        return;
+    if (new_m)
+    {
+        *tval = convert_use_mode;
+        convert_use_mode = new_m;
+        hack_mode_on++;
+    }
+    else
+    {
+        convert_use_mode = *tval;
+        hack_mode_on--;
+    }
 }
 
 #endif
 
 void ss_mouse_convert(int16_t *px, int16_t *py, bool down)
 {
-   if (convert_use_mode != 0)
-   {
+    if (convert_use_mode != 0)
+    {
 #ifdef STEREO_SUPPORT
-      if (convert_use_mode == 5)
-      {
-         switch (i6d_device)
-         {
-            case I6D_CTM:
-               return;
-               break;
-            case I6D_VFX1:
-               if (down)
-                  *py = fix_int(fix_mul_div(fix_make(*py,0),fix_make(200,0),fix_make(480,0)));
-               else
-                  *py = fix_int(fix_mul_div(fix_make(*py,0),fix_make(480,0),fix_make(200,0)));
-               return;
-         }
-      }
+        if (convert_use_mode == 5)
+        {
+            switch (i6d_device)
+            {
+                case I6D_CTM:
+                    return;
+                    break;
+                case I6D_VFX1:
+                    if (down)
+                        *py = fix_int(fix_mul_div(fix_make(*py,0),fix_make(200,0),fix_make(480,0)));
+                    else
+                        *py = fix_int(fix_mul_div(fix_make(*py,0),fix_make(480,0),fix_make(200,0)));
+                    return;
+            }
+        }
 #endif
-      if (down)
-      {
-         *px = INV_SCONV_X(*px);
-         *py = INV_SCONV_Y(*py);
-      }
-      else
-      {
-         *px = SCONV_X(*px);
-         *py = SCONV_Y(*py);
-      }
-   }
+        if (down)
+        {
+            *px = INV_SCONV_X(*px);
+            *py = INV_SCONV_Y(*py);
+        }
+        else
+        {
+            *px = SCONV_X(*px);
+            *py = SCONV_Y(*py);
+        }
+    }
 }
 
 void ss_mouse_convert_round(int16_t *px, int16_t *py, bool down)
 {
-   int16_t ox,oy;
+    int16_t ox,oy;
 
-   if (convert_use_mode != 0)
-   {
+    if (convert_use_mode != 0)
+    {
 #ifdef STEREO_SUPPORT
-      if (convert_use_mode == 5)
-      {
-         ss_mouse_convert(px,py,down);
-         return;
-      }
+        if (convert_use_mode == 5)
+        {
+            ss_mouse_convert(px,py,down);
+            return;
+        }
 #endif
-      ox = *px;
-      oy = *py;
-      if (down)
-      {
-         *px = fix_int(INV_FIXCONV_X(fix_make(*px,0x8000)));
-         *py = fix_int(INV_FIXCONV_Y(fix_make(*py,0x8000)));
-      }
-      else
-      {
-         *px = fix_int(FIXCONV_X(fix_make(*px,0x8000)));
-         *py = fix_int(FIXCONV_Y(fix_make(*py,0x8000)));
-      }
-   }
+        ox = *px;
+        oy = *py;
+        if (down)
+        {
+            *px = fix_int(INV_FIXCONV_X(fix_make(*px,0x8000)));
+            *py = fix_int(INV_FIXCONV_Y(fix_make(*py,0x8000)));
+        }
+        else
+        {
+            *px = fix_int(FIXCONV_X(fix_make(*px,0x8000)));
+            *py = fix_int(FIXCONV_Y(fix_make(*py,0x8000)));
+        }
+    }
 }
 
 void mouse_unconstrain(void)
 {
 /*  for now
 #ifdef SVGA_SUPPORT
-   if (convert_use_mode == 5)
-   {
-      switch (i6d_device)
-      {
-         case I6D_CTM:
-            mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
-            break;
-         case I6D_VFX1:
-            mouse_constrain_xy(0,0,i6d_ss->scr_w >> 1, i6d_ss->scr_h);
-            break;
-      }
-   }
-   else
+    if (convert_use_mode == 5)
+    {
+        switch (i6d_device)
+        {
+            case I6D_CTM:
+                mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
+                break;
+            case I6D_VFX1:
+                mouse_constrain_xy(0,0,i6d_ss->scr_w >> 1, i6d_ss->scr_h);
+                break;
+        }
+    }
+    else
 #endif  */
-      mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
+        mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
 }

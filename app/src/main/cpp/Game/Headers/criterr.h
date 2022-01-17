@@ -28,18 +28,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Defines
-#define CRITERR_CLASSES	16
-#define CRITERR_CODES		0x10000
+#define CRITERR_CLASSES    16
+#define CRITERR_CODES        0x10000
 
-#define CRITERR_CFG     		0x1000  // config errors
-#define CRITERR_RES     		0x2000  // Resource errors
-#define CRITERR_MEM     	0x3000  // Out of memory
-#define CRITERR_FILE    		0x4000   // Misc file error
-#define CRITERR_EXEC    	0x5000   // execution error
-#define CRITERR_MISC    	0xF000  // miscellaneous/glitches
-#define CRITERR_TEST    	0x0000  // Test code
+#define CRITERR_CFG              0x1000  // config errors
+#define CRITERR_RES              0x2000  // Resource errors
+#define CRITERR_MEM          0x3000  // Out of memory
+#define CRITERR_FILE             0x4000    // Misc file error
+#define CRITERR_EXEC         0x5000    // execution error
+#define CRITERR_MISC         0xF000  // miscellaneous/glitches
+#define CRITERR_TEST         0x0000  // Test code
 
-#define NO_CRITICAL_ERROR	0x0000
+#define NO_CRITICAL_ERROR    0x0000
 
 // Prototypes
 void criterr_init(void);

@@ -61,37 +61,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 typedef struct {
-   struct _llist *pnext;		// ptr to next node or NULL if at tail
-   struct _llist *pprev;		// ptr to prev node or NULL if at head
-   int8_t *label;
-   hotkey_callback f;
-   void *user_data;
-   int16_t keycode;
-   uint32_t context;
-   TNG *submenu;
+    struct _llist *pnext;        // ptr to next node or NULL if at tail
+    struct _llist *pprev;        // ptr to prev node or NULL if at head
+    int8_t *label;
+    hotkey_callback f;
+    void *user_data;
+    int16_t keycode;
+    uint32_t context;
+    TNG *submenu;
 } MenuElement;
 
 typedef struct {
-   TNG *tng_data;
-   void *ui_struct;
-   LGPoint coord;
-   LGPoint size;
-   llist_head element_header;
-   int32_t slot_height;
-   int32_t num_lines;
-   bool popped_up;
-   MenuElement *current_selection;
-   void (*popup_func)(TNG *ptng);
-   void (*popdown_func)(TNG *ptng);
+    TNG *tng_data;
+    void *ui_struct;
+    LGPoint coord;
+    LGPoint size;
+    llist_head element_header;
+    int32_t slot_height;
+    int32_t num_lines;
+    bool popped_up;
+    MenuElement *current_selection;
+    void (*popup_func)(TNG *ptng);
+    void (*popdown_func)(TNG *ptng);
 }  TNG_menu;
 
-#define TNG_MENU_SPACING   2
+#define TNG_MENU_SPACING    2
 
 // Prototypes
 // Initializes the TNG
 
 errtype tng_menu_init(void *ui_data, TNG *ptng, TNGStyle *sty, LGPoint coord, int32_t width,
-   void (*upfunc)(TNG *ptng), void (*downfunc)(TNG *ptng), void *ui_struct);
+    void (*upfunc)(TNG *ptng), void (*downfunc)(TNG *ptng), void *ui_struct);
 
 // Deallocate all memory used by the TNG
 errtype tng_menu_destroy(TNG *ptng);
@@ -116,7 +116,7 @@ bool tng_menu_mousebutt(TNG *ptng, uint8_t type, LGPoint loc);
 bool tng_menu_signal(TNG *ptng, uint16_t signal);
 
 errtype tng_menu_add_line(TNG *ptng, int8_t *label, hotkey_callback f, int16_t keycode, uint32_t context,
-   void *user_data, int8_t *help_text);
+    void *user_data, int8_t *help_text);
 
 errtype tng_menu_add_submenu(TNG *ptng, int8_t *label, TNG *submenu);
 

@@ -29,76 +29,76 @@ errtype array_grow(Array *a, int32_t size);
 //------------------------------------------------------
 //  For Mac version:  Use NewPtr and DisposePtr.
 
-#define FREELIST_EMPTY   -1
+#define FREELIST_EMPTY    -1
 #define FREELIST_NOTFREE -2
 
 errtype array_init(Array* initme, int32_t elemsize, int32_t vecsize)
 {
-   if (elemsize == 0) return ERR_RANGE;
-   initme->elemsize = elemsize;
-   initme->vecsize = vecsize;
-   initme->fullness = 0;
-   initme->freehead = FREELIST_EMPTY;
-   initme->freevec = (int32_t*)NewPtr(vecsize*sizeof(int32_t));
-   if (initme->freevec == NULL) return ERR_NOMEM;
-   initme->vec = (int8_t*) NewPtr(elemsize*vecsize);
-   if (initme->vec == NULL) return ERR_NOMEM;
-   return OK;
+    if (elemsize == 0) return ERR_RANGE;
+    initme->elemsize = elemsize;
+    initme->vecsize = vecsize;
+    initme->fullness = 0;
+    initme->freehead = FREELIST_EMPTY;
+    initme->freevec = (int32_t*)NewPtr(vecsize*sizeof(int32_t));
+    if (initme->freevec == NULL) return ERR_NOMEM;
+    initme->vec = (int8_t*) NewPtr(elemsize*vecsize);
+    if (initme->vec == NULL) return ERR_NOMEM;
+    return OK;
 }
 
 errtype array_grow(Array *a, int32_t size)
 {
-   int8_t* tmpvec;
-   int32_t* tmplist;
-   if (size <= a->vecsize) return OK;
-   tmpvec = (int8_t *)NewPtr(a->elemsize*size);
-   if (tmpvec == NULL) return ERR_NOMEM;
-   memcpy(tmpvec,a->vec,a->vecsize*a->elemsize);
-   tmplist = (int32_t *)NewPtr(size*sizeof(int32_t));
-   if (tmplist == NULL) return ERR_NOMEM;
-   memcpy(tmplist,a->vec,a->vecsize*sizeof(int32_t));
-   DisposePtr((Ptr)a->vec);
-   DisposePtr((Ptr)a->freevec);
-   a->vecsize = size;
-   a->vec = tmpvec;
-   a->freevec = tmplist;
-   return OK;
+    int8_t* tmpvec;
+    int32_t* tmplist;
+    if (size <= a->vecsize) return OK;
+    tmpvec = (int8_t *)NewPtr(a->elemsize*size);
+    if (tmpvec == NULL) return ERR_NOMEM;
+    memcpy(tmpvec,a->vec,a->vecsize*a->elemsize);
+    tmplist = (int32_t *)NewPtr(size*sizeof(int32_t));
+    if (tmplist == NULL) return ERR_NOMEM;
+    memcpy(tmplist,a->vec,a->vecsize*sizeof(int32_t));
+    DisposePtr((Ptr)a->vec);
+    DisposePtr((Ptr)a->freevec);
+    a->vecsize = size;
+    a->vec = tmpvec;
+    a->freevec = tmplist;
+    return OK;
 }
 
 errtype array_newelem(Array* a, int32_t* index)
 {
-   if (a->freehead != FREELIST_EMPTY)
-   {
-      *index = a->freehead;
-      a->freehead = a->freevec[*index];
-      a->freevec[*index] = FREELIST_NOTFREE;
-      return OK;
-   }
-   if (a->fullness >= a->vecsize)
-   {
-      errtype err = array_grow(a,a->vecsize*2);
-      if (err != OK) return err;
-   }
-   *index = a->fullness++;
-   a->freevec[*index] = FREELIST_NOTFREE;
-   return OK;
+    if (a->freehead != FREELIST_EMPTY)
+    {
+        *index = a->freehead;
+        a->freehead = a->freevec[*index];
+        a->freevec[*index] = FREELIST_NOTFREE;
+        return OK;
+    }
+    if (a->fullness >= a->vecsize)
+    {
+        errtype err = array_grow(a,a->vecsize*2);
+        if (err != OK) return err;
+    }
+    *index = a->fullness++;
+    a->freevec[*index] = FREELIST_NOTFREE;
+    return OK;
 }
 
 
 errtype array_dropelem(Array* a, int32_t index)
 {
-   if (index >= a->fullness || a->freevec[index] != FREELIST_NOTFREE) return OK; // already freed.
-   a->freevec[index] = a->freehead;
-   a->freehead = index;
-   return OK;
+    if (index >= a->fullness || a->freevec[index] != FREELIST_NOTFREE) return OK; // already freed.
+    a->freevec[index] = a->freehead;
+    a->freehead = index;
+    return OK;
 }
 
 errtype array_destroy(Array* a)
 {
-   a->elemsize = 0;
-   a->vecsize = 0;
-   a->freehead = FREELIST_EMPTY;
-   DisposePtr((Ptr)a->freevec);
-   DisposePtr((Ptr)a->vec);
-   return OK;
+    a->elemsize = 0;
+    a->vecsize = 0;
+    a->freehead = FREELIST_EMPTY;
+    DisposePtr((Ptr)a->freevec);
+    DisposePtr((Ptr)a->vec);
+    return OK;
 }

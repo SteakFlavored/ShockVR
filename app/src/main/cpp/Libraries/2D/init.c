@@ -42,24 +42,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int32_t grd_active = 0;
 
 /* start up 2d system.  try to detect what kind of video hardware is
-   present, call device-dependent initialization, and save state.
-   returns same as gr_detect() 0 if all is well, or error code. */
+    present, call device-dependent initialization, and save state.
+    returns same as gr_detect() 0 if all is well, or error code. */
 int32_t gri_init(void)
 {
-   int32_t err;
-   MemStack *tmp;
+    int32_t err;
+    MemStack *tmp;
 
-   if (grd_active != 0)
-      return 0;
-   tmp=temp_mem_get_stack();
-   if (tmp==NULL)
-      if (err=temp_mem_init(NULL))
-         return err;
-   if ((err=gr_detect (&grd_info)) != 0)
-		return err;
-   gr_push_video_state (1);
-   grd_active = 1;
-   init_inverse_table();
+    if (grd_active != 0)
+        return 0;
+    tmp=temp_mem_get_stack();
+    if (tmp==NULL)
+        if (err=temp_mem_init(NULL))
+            return err;
+    if ((err=gr_detect (&grd_info)) != 0)
+        return err;
+    gr_push_video_state (1);
+    grd_active = 1;
+    init_inverse_table();
 
-   return 0;
+    return 0;
 }

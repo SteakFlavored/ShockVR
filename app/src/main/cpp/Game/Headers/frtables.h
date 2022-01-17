@@ -44,15 +44,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // layout of points
 //
-//     4 D     E     F 8
-//     3   g       h   7
-//       b           d
+//      4 D      E      F 8
+//      3    g         h    7
+//         b              d
 //
-//     2               6
+//      2                    6
 //
-//       a           c
-//     1   e       f   5
-//     0 9     A     B C
+//         a              c
+//      1    e         f    5
+//      0 9      A      B C
 //
 // a-h are really 16-23 for octagonal setups
 // each point has 2bits of zmod and then the code as above
@@ -61,15 +61,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // pack to uint8_t, uint8_t, int
 typedef struct {
-   int16_t base, modcnt;
-   fix   arg;
+    int16_t base, modcnt;
+    fix    arg;
 } pt_mods;
 
 //-- constants
 #define FRPTSUNIQUE 24
-#define FRPTSOFFS   8
-#define FRPTSZSHF   6
-#define FRPTSZMOD   (2<<FRPTSZSHF)
+#define FRPTSOFFS    8
+#define FRPTSZSHF    6
+#define FRPTSZMOD    (2<<FRPTSZSHF)
 #define FRPTSZPICK  (1<<FRPTSZSHF)
 #define FRPTSZMASK  (3<<FRPTSZSHF)
 #define FRPTSPTOFF  ((1<<FRPTSZSHF)-1)
@@ -84,21 +84,21 @@ typedef struct {
 #define FRPTSZCEIL_DN (1)
 #define FRPTSZFLR_DN  (0)
 
-#define FRMODNONE   0
+#define FRMODNONE    0
 #define FRMODYAXIS  1
 #define FRMODXAXIS  2
 
 // 0x2000*8/(2+sqrt(2))
 //  =side of a regular octagon whose bounding box is a square of size fix1.0
-#define FROCTNUM    19195
-#define FROCTFIX    fix_make(0,19195)
+#define FROCTNUM     19195
+#define FROCTFIX     fix_make(0,19195)
 
 //-- externs
 #ifndef __FRTABLES_SRC
-extern fix      pt_offs[FRPTSOFFS];
+extern fix        pt_offs[FRPTSOFFS];
 extern pt_mods  pt_deref[FRPTSUNIQUE];
-extern uint16_t   pt_uv[FRPTSUNIQUE][4][2];
-extern uint8_t    pt_from_faceoff[4][FRPTSOFFS];
+extern uint16_t    pt_uv[FRPTSUNIQUE][4][2];
+extern uint8_t     pt_from_faceoff[4][FRPTSOFFS];
 #endif
 
 //======== WallstoPts
@@ -122,10 +122,10 @@ extern uint8_t    pt_from_faceoff[4][FRPTSOFFS];
 
 typedef
  struct {
-//   union {
-	   uint8_t ul, ur, lr, ll;
-//      uint8_t ptlst[4];
-//   };
+//    union {
+        uint8_t ul, ur, lr, ll;
+//        uint8_t ptlst[4];
+//    };
 } WallsToPts;
 
 #define FRWALLPTSCNT 56
@@ -144,18 +144,18 @@ extern WallsToPts wall_pts[FRWALLPTSCNT];
 // for each tile type in tilename, we need a list of what walls it contains
 // this is done as a bitfield of N|E|S|W|Internal, where internal is a 4bit count
 // the second byte is the base into the wall_pts array for this tile, where from
-//   that value up to that value + internal count are the internal walls
+//    that value up to that value + internal count are the internal walls
 
 typedef struct {
-   uint8_t wallbits;
-   uint8_t wallbase;
+    uint8_t wallbits;
+    uint8_t wallbase;
 } TilesToWalls;
 
 #define FRWALLNORTH (1<<7)
 #define FRWALLEAST  (1<<6)
 #define FRWALLSOUTH (1<<5)
 #define FRWALLWEST  (1<<4)
-#define FRWALLINT   (0xf)
+#define FRWALLINT    (0xf)
 
 #define FRTILEWALLCNT FRTILETYPES
 
@@ -176,15 +176,15 @@ extern TilesToWalls tile_walls[FRTILEWALLCNT];
 //  holding either a 4 element floor or 1 or 2 3 element floors
 
 typedef struct {
-   uint8_t flags;
-   uint8_t ptsper;
-   uint8_t data[6];
+    uint8_t flags;
+    uint8_t ptsper;
+    uint8_t data[6];
 } TilesToFloors;
 
 #define FRFLRFLG_2ELEM 0x40
 #define FRFLRSHF_2ELEM 6
 #define FRFLRFLG_USEPR 0x20
-#define FRFLRFLG_DBL   0x10
+#define FRFLRFLG_DBL    0x10
 #define FRFLRFLG_NOTOP 0x08
 #define FRFLRFLG_PMSK  0x07  // not currently used, but could pack ptsper into struct
 
@@ -201,14 +201,14 @@ extern TilesToFloors tile_floors[FRTILEFLOORCNT];
 #endif
 
 //======== Normals
-#define FRWNORM_MAX    8
-#define FRWNORM_MASK   0xf
-#define FRWNORM_SHFT   4
+#define FRWNORM_MAX     8
+#define FRWNORM_MASK    0xf
+#define FRWNORM_SHFT    4
 
-#define FRFNORM_SLPN   0
-#define FRFNORM_SLPE   1
-#define FRFNORM_SLPS   2
-#define FRFNORM_SLPW   3
+#define FRFNORM_SLPN    0
+#define FRFNORM_SLPE    1
+#define FRFNORM_SLPS    2
+#define FRFNORM_SLPW    3
 #define FRFNORM_VZERO  4
 #define FRFNORM_VFULL  5
 #define FRFNORM_VZ_MIR 6
@@ -238,12 +238,12 @@ extern fix fr_norm_elements[FRWNORM_MAX+1];
 #define FACE_CNT 4
 
 #define FRFACEOBSTRUCTCNT FRTILETYPES
-#define FOBASECODES       64
+#define FOBASECODES         64
 
 #ifndef __FRTABLES_SRC
 extern uint8_t face_obstruct[FRFACEOBSTRUCTCNT][FACE_CNT];
-extern fix   fo_unpack[FOBASECODES][2];
-extern fix   fo_anti_unpack[FOBASECODES][2];
+extern fix    fo_unpack[FOBASECODES][2];
+extern fix    fo_anti_unpack[FOBASECODES][2];
 #endif
 
 //======== Merger
@@ -261,7 +261,7 @@ extern uint8_t mmask_facelet[5][2][2];
 // there is a 16 bit pointer in each map square to a tile
 //  if it is NULL, there are no external walls
 //  otherwise, the low 4 bits are length, the top 12 an offset into the
-//   tilelet list array, where # 16bit facelet id's live
+//    tilelet list array, where # 16bit facelet id's live
 
 typedef uint16_t TileLet;
 
@@ -279,9 +279,9 @@ typedef uint16_t TileLet;
 // followed by a 12 bit value, either data or ptr based on type
 
 // types are:
-//   simple - 5 bit top 5 bit bottom
-//   middle - ptr to 4 5 bit fields + 4 bit width codes (3 bytes)
-//   full   - ptr to 4 8 bit heights + 2 4 bit width codes (5 bytes)
+//    simple - 5 bit top 5 bit bottom
+//    middle - ptr to 4 5 bit fields + 4 bit width codes (3 bytes)
+//    full    - ptr to 4 8 bit heights + 2 4 bit width codes (5 bytes)
 
 typedef uint16_t FaceLet;
 

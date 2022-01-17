@@ -47,18 +47,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void flat8_urect(int16_t left, int16_t top, int16_t right, int16_t bot)
 {
-	uint8_t 	*p;
-	int32_t 		w, h;
-	int32_t 		grow = grd_bm.row;
-	int32_t 		fcolor = grd_gc.fcolor;
+    uint8_t     *p;
+    int32_t         w, h;
+    int32_t         grow = grd_bm.row;
+    int32_t         fcolor = grd_gc.fcolor;
 
 
-	p = grd_bm.bits + top*grow + left;
-	w = right-left;
-	h = bot-top;
+    p = grd_bm.bits + top*grow + left;
+    w = right-left;
+    h = bot-top;
 
-	while (h-- > 0) {
-	  memset(p, fcolor, w);
-	  p += grow;
-	}
+    while (h-- > 0) {
+      memset(p, fcolor, w);
+      p += grow;
+    }
 }

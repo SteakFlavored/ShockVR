@@ -108,15 +108,15 @@ uint8_t pt_from_faceoff[4][FRPTSOFFS]=
 
 //======== WallstoPts
 // convience macros for building the pt_wall table
-#define zBo   FRPTSZBASE
-#define zBU   FRPTSZBASEU
-#define zTo   FRPTSZCEIL
-#define zTD   FRPTSZCEILD
+#define zBo    FRPTSZBASE
+#define zBU    FRPTSZBASEU
+#define zTo    FRPTSZCEIL
+#define zTD    FRPTSZCEILD
 // actual wall list builders
 #define wall_pt(z1,z2,z3,z4,h1,h2,h3,h4) {z1|h1,z2|h2,z3|h3,z4|h4}
-#define norm_wall(lft,rgt)    wall_pt(zTo,zTo,zBo,zBo,lft,rgt,rgt,lft)
+#define norm_wall(lft,rgt)     wall_pt(zTo,zTo,zBo,zBo,lft,rgt,rgt,lft)
 #define oct_wall(tl,tr,br,bl) wall_pt(zTo,zTo,zTD,zTD,tl,tr,br,bl),wall_pt(zTD,zTD,zBU,zBU,bl,br,br,bl),wall_pt(zBU,zBU,zBo,zBo,bl,br,tr,tl)
-#define parm_walls(lft,rgt)   wall_pt(zBU,zBU,zBo,zBo,lft,rgt,rgt,lft),wall_pt(zTo,zTo,zTD,zTD,lft,rgt,rgt,lft)
+#define parm_walls(lft,rgt)    wall_pt(zBU,zBU,zBo,zBo,lft,rgt,rgt,lft),wall_pt(zTo,zTo,zTD,zTD,lft,rgt,rgt,lft)
 
 WallsToPts wall_pts[FRWALLPTSCNT]=
 {
@@ -148,10 +148,10 @@ WallsToPts wall_pts[FRWALLPTSCNT]=
 
 //======== TilestoWalls
 // shorthands for tile tables
-#define wN     FRWALLNORTH
-#define wE     FRWALLEAST
-#define wS     FRWALLSOUTH
-#define wW     FRWALLWEST
+#define wN      FRWALLNORTH
+#define wE      FRWALLEAST
+#define wS      FRWALLSOUTH
+#define wW      FRWALLWEST
 #define wI(c)  (c)
 
 #define tTw(ext,intcnt,intbase) {ext|wI(intcnt),intbase}
@@ -189,20 +189,20 @@ TilesToWalls tile_walls[FRTILEWALLCNT]=
 
 //======== TilesToFloors
 
-#define zNo   (0)
-#define zPa   (FRFLRDATA_ZMOD)
+#define zNo    (0)
+#define zPa    (FRFLRDATA_ZMOD)
 
 #define flg2  (FRFLRFLG_2ELEM)
 #define flgP  (FRFLRFLG_USEPR)
 #define flgNT (FRFLRFLG_NOTOP)
 
-#define fF3(p1,p2,p3)          {0,3,0x##p1##,0x##p2##,0x##p3##,0,0,0}
-#define fF4(p1,p2,p3,p4)       {0,4,0x##p1##,0x##p2##,0x##p3##,0x##p4##,0,0}
-#define fT4(p1,p2,p3,p4)       {flgNT,4,0x##p1##,0x##p2##,0x##p3##,0x##p4##,0,0}
+#define fF3(p1,p2,p3)             {0,3,0x##p1##,0x##p2##,0x##p3##,0,0,0}
+#define fF4(p1,p2,p3,p4)         {0,4,0x##p1##,0x##p2##,0x##p3##,0x##p4##,0,0}
+#define fT4(p1,p2,p3,p4)         {flgNT,4,0x##p1##,0x##p2##,0x##p3##,0x##p4##,0,0}
 
 #define fS3cc(pl,p2,p3,p4,p5)  {flg2|flgP,3,zPa|(0x##p2##),zPa|(0x##p3##),0x##pl##,zPa|(0x##p4##),zPa|(0x##p5##),0x##pl##}
 #define fS3cv(ph,p2,p3,p4,p5)  {flg2|flgP,3,0x##p2##,0x##p3##,zPa|(0x##ph##),0x##p4##,0x##p5##,zPa|(0x##ph##)}
-#define fS4(p1,p2,p3,p4)       {flgP,4,zPa|(0x##p1##),zPa|(0x##p2##),0x##p3##,0x##p4##,0,0}
+#define fS4(p1,p2,p3,p4)         {flgP,4,zPa|(0x##p1##),zPa|(0x##p2##),0x##p3##,0x##p4##,0,0}
 #define fSspl(pla,pha,pm1,pm2) {flg2|flgP,3,0x##pla##,0x##pm1##,0x##pm2##,zPa|(0x##pha##),zPa|(0x##pm2##),zPa|(0x##pm1##)}
 
 TilesToFloors tile_floors[FRTILEFLOORCNT]=
@@ -238,18 +238,18 @@ TilesToFloors tile_floors[FRTILEFLOORCNT]=
 
 //======== Normals
 
-//#define _fp1   fix_make(1,0)
+//#define _fp1    fix_make(1,0)
 //#define _fpdg  fix_make(0,46340)
 //#define _fphx  fix_make(0,29308)
 //#define _fphy  fix_make(0,58616)
 
-#define ff1   0 // fix_make(1,0)
-#define fhy   1 // fix_make(0,58616)
-#define fdg   2 // fix_make(0,46340)
-#define fhx   3 // fix_make(0,29308)
+#define ff1    0 // fix_make(1,0)
+#define fhy    1 // fix_make(0,58616)
+#define fdg    2 // fix_make(0,46340)
+#define fhx    3 // fix_make(0,29308)
 
-#define snp   4
-#define sng   0
+#define snp    4
+#define sng    0
 
 #define pff1  (ff1|snp)
 #define nff1  (ff1|sng)
@@ -265,22 +265,22 @@ TilesToFloors tile_floors[FRTILEFLOORCNT]=
 #define ym 0x2000
 #define xm 0x1000
 
-#define hZ    (0x2<<12)
-#define hY    (0x1<<12)
-#define hYZ   (0x3<<12)
-#define hX    (0x4<<12)
-#define hXZ   (0x6<<12)
-#define hXY   (0x5<<12)
+#define hZ     (0x2<<12)
+#define hY     (0x1<<12)
+#define hYZ    (0x3<<12)
+#define hX     (0x4<<12)
+#define hXZ    (0x6<<12)
+#define hXY    (0x5<<12)
 #define hXYZ  (0x7<<12)
 
-#define mk_mnorm(m,xn,yn,zn)            (m|(xn<<8)|(yn<<4)|zn)
-#define mk_hnorm(h,xn,yn,zn)            (h|(xn<<8)|(yn<<4)|zn)
-#define mk_norm(xn,yn,zn)            ((xn<<8)|(yn<<4)|zn)
+#define mk_mnorm(m,xn,yn,zn)                (m|(xn<<8)|(yn<<4)|zn)
+#define mk_hnorm(h,xn,yn,zn)                (h|(xn<<8)|(yn<<4)|zn)
+#define mk_norm(xn,yn,zn)                ((xn<<8)|(yn<<4)|zn)
 
 fix fr_norm_elements[9]=
 {
-   -fix_make(1,0),-fix_make(0,58616),-fix_make(0,46340),-fix_make(0,29308),
-    fix_make(1,0), fix_make(0,58616), fix_make(0,46340), fix_make(0,29308), fix_make(0,0)
+    -fix_make(1,0),-fix_make(0,58616),-fix_make(0,46340),-fix_make(0,29308),
+     fix_make(1,0), fix_make(0,58616), fix_make(0,46340), fix_make(0,29308), fix_make(0,0)
 };
 
 uint16_t fr_wnorm_list[FRWALLPTSCNT]=
@@ -312,16 +312,16 @@ uint16_t fr_wnorm_list[FRWALLPTSCNT]=
 };
 
 // direction the vector heads, ie the low side
-#define slpN      FRFNORM_SLPN
-#define slpE      FRFNORM_SLPE
-#define slpS      FRFNORM_SLPS
-#define slpW      FRFNORM_SLPW
-#define vzero     FRFNORM_VZERO
-#define vfull     FRFNORM_VFULL
-#define sl2N      (0<<4)
-#define sl2E      (1<<4)
-#define sl2S      (2<<4)
-#define sl2W      (3<<4)
+#define slpN        FRFNORM_SLPN
+#define slpE        FRFNORM_SLPE
+#define slpS        FRFNORM_SLPS
+#define slpW        FRFNORM_SLPW
+#define vzero      FRFNORM_VZERO
+#define vfull      FRFNORM_VFULL
+#define sl2N        (0<<4)
+#define sl2E        (1<<4)
+#define sl2S        (2<<4)
+#define sl2W        (3<<4)
 #define vrealfull ((vfull<<4)|vfull)
 
 uint8_t fr_fnorm_list[FRTILEFLOORCNT]=
@@ -355,21 +355,21 @@ uint8_t fr_fnorm_list[FRTILEFLOORCNT]=
 
 //======== Obstruct
 
-#define ZP    (1)
-#define lS    (7)
-#define rS    (6)
+#define ZP     (1)
+#define lS     (7)
+#define rS     (6)
 #define foNul (0xff)  // secret no freespace, ie. cant get through
 #define foClr (0x06)  // pt0 to 6, ie. fully empty
 #define foLft (0x03)
 #define foRgt (0x1E)
 
-#define fo(l,r)                      ((l<<FO_L_SHFT)|r)
+#define fo(l,r)                             ((l<<FO_L_SHFT)|r)
 #define fo4(l1,r1,l2,r2,l3,r3,l4,r4) {fo(l1,r1),fo(l2,r2),fo(l3,r3),fo(l4,r4)}
-#define zclr(p1,p2)                  (p1<<lS|p2<<rS|foClr)
+#define zclr(p1,p2)                        (p1<<lS|p2<<rS|foClr)
 #define foF(p1,p2,p3,p4,p5,p6,p7,p8) {zclr(p1,p2),zclr(p3,p4),zclr(p5,p6),zclr(p7,p8)}
-#define fofo(f1,f2,f3,f4)            {f1,f2,f3,f4}
-#define foC()                        {foClr,foClr,foClr,foClr}
-#define foN()                        {foNul,foNul,foNul,foNul}
+#define fofo(f1,f2,f3,f4)                {f1,f2,f3,f4}
+#define foC()                                {foClr,foClr,foClr,foClr}
+#define foN()                                {foNul,foNul,foNul,foNul}
 
 uint8_t face_obstruct[FRFACEOBSTRUCTCNT][FACE_CNT]=
 {
@@ -459,7 +459,7 @@ uint8_t merge_masks[5][2][2]=
  {mm(gtF|nFlp,nFlt),mm(gtC|nFlp,nFlt)},  // MAP_MIRROR
  {mm(gtF|nFlp,nFlt),mm(gtC|nFlp,iFlt)},  // MAP_CFLAT
  {mm(gtF|nFlp,iFlt),mm(gtC|dFlp,nFlt)},  // MAP_FFLAT
- {mm(gtF|nFlp,nFlt),mm(gtC|nFlp,nFlt)}   // secret no parameter
+ {mm(gtF|nFlp,nFlt),mm(gtC|nFlp,nFlt)}    // secret no parameter
 };
 
 #define nfFlp (0x00)
@@ -475,7 +475,7 @@ uint8_t mmask_facelet[5][2][2]=
  {mf(nfFlp,nfFlt),mf(nfFlp,nfFlt)},  // MAP_MIRROR
  {mf(nfFlp,nfFlt),mf(nfFlp,ifFlt)},  // MAP_CFLAT
  {mf(nfFlp,ifFlt),mf(dfFlp,nfFlt)},  // MAP_FFLAT
- {mf(nfFlp,nfFlt),mf(nfFlp,nfFlt)}   // secret no parameter
+ {mf(nfFlp,nfFlt),mf(nfFlp,nfFlt)}    // secret no parameter
 };
 
 // filled in functionally
@@ -485,22 +485,22 @@ uint8_t face_baseobstruct[FRFACEOBSTRUCTCNT][FACE_CNT];
 
 int32_t  fr_tables_build(void)
 {
-   int32_t l,r,i,j;
-   for (l=0; l<7; l++)
-      for (r=0; r<7; r++)
-      {
-         fo_unpack[(l<<FO_L_SHFT)|r][0]=pt_offs[l];
-         fo_unpack[(l<<FO_L_SHFT)|r][1]=pt_offs[r];
-         fo_anti_unpack[(l<<FO_L_SHFT)|r][0]=fix_make(1,0)-pt_offs[l];
-         fo_anti_unpack[(l<<FO_L_SHFT)|r][1]=fix_make(1,0)-pt_offs[r];
-      }
-   for (i=0; i<FRFACEOBSTRUCTCNT; i++)
-      for (j=0; j<FACE_CNT; j++)
-      {
-         if ((j==1)||(j==2))
-	         face_baseobstruct[i][j]=(face_obstruct[i][j]^0x3F)-0x9;  /* xors to get 7complement, then sub 0b01001 to get 6comp */
-         else
-	         face_baseobstruct[i][j]=face_obstruct[i][j];
-      }
-   _fr_ret;
+    int32_t l,r,i,j;
+    for (l=0; l<7; l++)
+        for (r=0; r<7; r++)
+        {
+            fo_unpack[(l<<FO_L_SHFT)|r][0]=pt_offs[l];
+            fo_unpack[(l<<FO_L_SHFT)|r][1]=pt_offs[r];
+            fo_anti_unpack[(l<<FO_L_SHFT)|r][0]=fix_make(1,0)-pt_offs[l];
+            fo_anti_unpack[(l<<FO_L_SHFT)|r][1]=fix_make(1,0)-pt_offs[r];
+        }
+    for (i=0; i<FRFACEOBSTRUCTCNT; i++)
+        for (j=0; j<FACE_CNT; j++)
+        {
+            if ((j==1)||(j==2))
+                face_baseobstruct[i][j]=(face_obstruct[i][j]^0x3F)-0x9;  /* xors to get 7complement, then sub 0b01001 to get 6comp */
+            else
+                face_baseobstruct[i][j]=face_obstruct[i][j];
+        }
+    _fr_ret;
 }

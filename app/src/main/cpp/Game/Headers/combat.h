@@ -31,26 +31,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Includes
 #include "objects.h"
 
-#define RAYCAST_ATTACK_SIZE         (fix_make(0,0x0400))
-#define NO_RAYCAST_KICKBACK_SPEED   (fix_make(0, 0x0100))
+#define RAYCAST_ATTACK_SIZE            (fix_make(0,0x0400))
+#define NO_RAYCAST_KICKBACK_SPEED    (fix_make(0, 0x0100))
 
 // all temporary stuff
 typedef struct {
-   fix   x;
-   fix   y;
-   fix   z;
+    fix    x;
+    fix    y;
+    fix    z;
 } Combat_Pt;
 
 typedef struct {
-   fix            dx;
-   fix            dy;
-   fix            dz;
-   Combat_Pt      origin;
-   fix            mass;
-   fix            size;
-   fix            speed;
-   fix            range;
-   physics_handle exclusion;
+    fix                dx;
+    fix                dy;
+    fix                dz;
+    Combat_Pt        origin;
+    fix                mass;
+    fix                size;
+    fix                speed;
+    fix                range;
+    physics_handle exclusion;
 } Combat_Ray;
 
 // ******* RAYCAST FUNCTIONS *************
@@ -59,20 +59,20 @@ typedef struct {
 
 // does a ray cast from object src to the ObjLoc dest
 ObjID ray_cast_attack(ObjID src, ObjLoc dest,
-         fix bullet_mass, fix bullet_size, fix bullet_speed, fix bullet_range);
+            fix bullet_mass, fix bullet_size, fix bullet_speed, fix bullet_range);
 
 // does a ray cast between point src to point dest
 ObjID ray_cast_points(ObjID exclusion, Combat_Pt src, Combat_Pt dest,
-         fix bullet_mass, fix bullet_size, fix bullet_speed, fix bullet_range);
+            fix bullet_mass, fix bullet_size, fix bullet_speed, fix bullet_range);
 
 // does a ray cast from point src in the direction of vector
 // returns hit location at src
 ObjID ray_cast_vector(ObjID exclusion, Combat_Pt *src, Combat_Pt vector,
-         fix bullet_mass, fix bullet_size, fix bullet_speed, fix bullet_range);
+            fix bullet_mass, fix bullet_size, fix bullet_speed, fix bullet_range);
 
 // does a ray cast from object src to object dest
 ObjID ray_cast_objects(ObjID src, ObjID dest,
-         fix bullet_mass, fix bullet_size, fix bullet_speed, fix bullet_range);
+            fix bullet_mass, fix bullet_size, fix bullet_speed, fix bullet_range);
 
 // given the point on the 3d view window, returns the vector in that direction to
 // be used for ray_tracing

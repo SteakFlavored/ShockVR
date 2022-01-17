@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * routine takes grs_font* arguement, #define in str.h for compatibility
  *
  * Revision 1.3  1993/10/19  02:57:50  kaboom
- * Replaced #include   new headers.
+ * Replaced #include    new headers.
  *
  * Revision 1.2  1993/10/08  01:15:02  kaboom
  * Changed quotes in #include liness to angle brackets for Watcom problem.
@@ -50,16 +50,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void gr_font_char_size (grs_font *f, int8_t c, int16_t *w, int16_t *h)
 {
-   int16_t *off_tab;            /* character offset table */
-   int16_t offset;              /* offset of current character */
+    int16_t *off_tab;                /* character offset table */
+    int16_t offset;                  /* offset of current character */
 
-   if ((uint8_t)c < f->min || (uint8_t)c > f->max) return;
-   off_tab = f->off_tab;
-   offset = off_tab[(uint8_t)c - f->min];
-   if ((uint8_t)c < f->min || (uint8_t)c > f->max)
-      *w = 0;
-   else
-      *w = off_tab[(uint8_t)c - f->min+1]-offset;
-   *h = f->h;
+    if ((uint8_t)c < f->min || (uint8_t)c > f->max) return;
+    off_tab = f->off_tab;
+    offset = off_tab[(uint8_t)c - f->min];
+    if ((uint8_t)c < f->min || (uint8_t)c > f->max)
+        *w = 0;
+    else
+        *w = off_tab[(uint8_t)c - f->min+1]-offset;
+    *h = f->h;
 }
 

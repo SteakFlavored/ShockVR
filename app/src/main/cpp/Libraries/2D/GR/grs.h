@@ -108,132 +108,132 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* system information structure. */
 typedef struct {
-   uint8_t id_maj;     /* major id---type of graphics system */
-   uint8_t id_min;     /* minor id---vendor */
-   int16_t memory;     /* memory in kilobytes */
-   int16_t modes[16];  /* array of modes, ends with -1 */
+    uint8_t id_maj;      /* major id---type of graphics system */
+    uint8_t id_min;      /* minor id---vendor */
+    int16_t memory;      /* memory in kilobytes */
+    int16_t modes[16];  /* array of modes, ends with -1 */
 } grs_sys_info;
 
 /* mode information descriptor structure. */
 typedef struct {
-   int16_t w;          /* screen width */
-   int16_t h;          /* screen height */
-   uint8_t b;          /* number of bits per pixel */
+    int16_t w;             /* screen width */
+    int16_t h;             /* screen height */
+    uint8_t b;             /* number of bits per pixel */
 } grs_mode_info;
 
 /* amazing rgb type. */
 typedef uint32_t grs_rgb;
 
 /* structure for bitmaps to be drawn from and to.  if a bitmap is contained
-   within a larger bitmap, the row field tells how wide the containing bitmap
-   is. */
+    within a larger bitmap, the row field tells how wide the containing bitmap
+    is. */
 typedef struct {
-   uint8_t *bits;      /* ptr to data */
-   uint8_t type;       /* type of data in bitmap, 1-bit, 8-bit, etc */
-   uint8_t align;      /* where data really starts */
-   uint16_t flags;     /* whether compressed, transparent, etc */
-   int16_t w;          /* width in pixels */
-   int16_t h;          /* height */
-   uint16_t row;       /* bytes in row of containing bitmap */
-   uint8_t wlog;       /* log2 of w */
-   uint8_t hlog;       /* log2 of h */
+    uint8_t *bits;        /* ptr to data */
+    uint8_t type;         /* type of data in bitmap, 1-bit, 8-bit, etc */
+    uint8_t align;        /* where data really starts */
+    uint16_t flags;      /* whether compressed, transparent, etc */
+    int16_t w;             /* width in pixels */
+    int16_t h;             /* height */
+    uint16_t row;         /* bytes in row of containing bitmap */
+    uint8_t wlog;         /* log2 of w */
+    uint8_t hlog;         /* log2 of h */
 } grs_bitmap;
 
 /* stencil element for non-rectangular clipping. */
 typedef struct _sten {
-   int16_t l;          /* left edge of stencil */
-   int16_t r;          /* right */
-   struct _sten *n;  /* pointer to next span in this scanline */
+    int16_t l;             /* left edge of stencil */
+    int16_t r;             /* right */
+    struct _sten *n;  /* pointer to next span in this scanline */
 } grs_sten_elem;
 
 /* stencil header for non-rectangular clipping. */
 typedef struct {
-   grs_sten_elem *elem;    /* pointer to first stencil element */
-   int32_t flags;             /* specific stencil data. */
+    grs_sten_elem *elem;     /* pointer to first stencil element */
+    int32_t flags;                 /* specific stencil data. */
 } grs_stencil;
 
 /* structure for clipping regions.  a clipping region can either be a simple
-   rectangle (given by left,top,right,bot) or a grs_stencil, pointed to by
-   sten. */
+    rectangle (given by left,top,right,bot) or a grs_stencil, pointed to by
+    sten. */
 typedef union {
-   struct {
-      grs_stencil *sten;  /* pointer to stencil for nonrect clip region */
-      fix left;            /* current clipping rectangle */
-      fix top;             /* fixed-point coordinates */
-      fix right;
-      fix bot;
-   } f;
-   struct {
-      grs_stencil *sten;  /* pointer to stencil for nonrect clip region */
-      int16_t left;          /* current clipping rectangle */
-      int16_t pad0;
-      int16_t top;           /* integral coordinates */
-      int16_t pad1;
-      int16_t right;
-      int16_t pad2;
-      int16_t bot;
-      int16_t pad3;
-   } i;
+    struct {
+        grs_stencil *sten;  /* pointer to stencil for nonrect clip region */
+        fix left;                /* current clipping rectangle */
+        fix top;                 /* fixed-point coordinates */
+        fix right;
+        fix bot;
+    } f;
+    struct {
+        grs_stencil *sten;  /* pointer to stencil for nonrect clip region */
+        int16_t left;             /* current clipping rectangle */
+        int16_t pad0;
+        int16_t top;              /* integral coordinates */
+        int16_t pad1;
+        int16_t right;
+        int16_t pad2;
+        int16_t bot;
+        int16_t pad3;
+    } i;
 } grs_clip;
 
 typedef struct {
-	uint16_t id;
-	int8_t dummy1[34];
-	int16_t min;
-	int16_t max;
-	int8_t dummy2[32];
-	int32_t cotptr;
-	int32_t buf;
-	int16_t w;
-	int16_t h;
-	int16_t off_tab[1];
+    uint16_t id;
+    int8_t dummy1[34];
+    int16_t min;
+    int16_t max;
+    int8_t dummy2[32];
+    int32_t cotptr;
+    int32_t buf;
+    int16_t w;
+    int16_t h;
+    int16_t off_tab[1];
 } grs_font;
 
 /* structure for drawing context.  the context contains data about which
-   color, font attributes, filling attributes, and an embedded clipping
-   region structure. */
+    color, font attributes, filling attributes, and an embedded clipping
+    region structure. */
 typedef struct {
-   int32_t fcolor;      /* current drawing color */
-   int32_t bcolor;      /* background color */
-   grs_font *font;   /* font id */
-   int32_t text_attr;   /* attributes for text */
-   int32_t fill_type;   /* how to fill primitives */
-   int32_t fill_parm;   /* parameter for fill */
-   grs_clip clip;    /* clipping region */
+    int32_t fcolor;        /* current drawing color */
+    int32_t bcolor;        /* background color */
+    grs_font *font;    /* font id */
+    int32_t text_attr;    /* attributes for text */
+    int32_t fill_type;    /* how to fill primitives */
+    int32_t fill_parm;    /* parameter for fill */
+    grs_clip clip;     /* clipping region */
 } grs_context;
 
-/* a canvas is a bitmap   drawing context. */
+/* a canvas is a bitmap    drawing context. */
 typedef struct {
-   grs_bitmap  bm;   /* bitmap to draw into/read out of */
-   grs_context gc;   /* graphic context */
-   uint8_t **ytab;     /* pointer to an optional y table */
+    grs_bitmap  bm;    /* bitmap to draw into/read out of */
+    grs_context gc;    /* graphic context */
+    uint8_t **ytab;      /* pointer to an optional y table */
 } grs_canvas;
 
 /* a screen is a descriptor for a visible region of video memory. */
 typedef struct {
-   grs_bitmap bm;    /* where we actually draw */
-   grs_canvas *c;    /* pointer to 2 system canvases */
-   uint8_t *pal;
-   grs_rgb *bpal;
-   uint8_t *ipal;
-   uint8_t *ltab;
-   uint8_t ***transtab;/* table of colors under translucency */
-   uint8_t *clut;      /* default color lookup table */
-   int16_t x;          /* upper left coordinates of visible */
-   int16_t y;          /* region of virtual buffer */
+    grs_bitmap bm;     /* where we actually draw */
+    grs_canvas *c;     /* pointer to 2 system canvases */
+    uint8_t *pal;
+    grs_rgb *bpal;
+    uint8_t *ipal;
+    uint8_t *ltab;
+    uint8_t ***transtab;/* table of colors under translucency */
+    uint8_t *clut;        /* default color lookup table */
+    int16_t x;             /* upper left coordinates of visible */
+    int16_t y;             /* region of virtual buffer */
 } grs_screen;
 
 /* driver capability/info structure. */
 typedef struct {
-   fix aspect;       /* fixed point aspect ratio w/h */
-   int16_t w;          /* screen width */
-   int16_t h;          /* screen height */
-   uint8_t *vbase;     /* base video address */
+    fix aspect;         /* fixed point aspect ratio w/h */
+    int16_t w;             /* screen width */
+    int16_t h;             /* screen height */
+    uint8_t *vbase;      /* base video address */
 } grs_drvcap;
 
 /* 3d point structure for perspective mapper. */
 typedef struct {
-   fix x,y,z;    /* 3's */
+    fix x,y,z;     /* 3's */
 } grs_point3d;
 
 #endif /* !__GRS_H */

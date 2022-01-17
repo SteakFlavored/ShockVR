@@ -25,10 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // structures
 typedef struct {
-   grs_canvas *draw_canvas;
-   bool       double_buffer;
-   int32_t        xtop, ytop;
-   fix        viewer_zoom;
+    grs_canvas *draw_canvas;
+    bool         double_buffer;
+    int32_t          xtop, ytop;
+    fix          viewer_zoom;
 } fauxrend_context;
 
 // fauxrend.c
@@ -71,58 +71,58 @@ extern int8_t eye_slew;
 #endif
 
 // axis setup for the zany extra math-o-tron 3d
-//#define AXIS_ORDER   X_AXIS,Z_AXIS,Y_AXIS
+//#define AXIS_ORDER    X_AXIS,Z_AXIS,Y_AXIS
 //#define ANGLE_ORDER  ORDER_ZXY
 
-//#define AXIS_ORDER   X_AXIS,-Y_AXIS,Z_AXIS
-//#define AXIS_ORDER   X_AXIS,Y_AXIS,Z_AXIS
+//#define AXIS_ORDER    X_AXIS,-Y_AXIS,Z_AXIS
+//#define AXIS_ORDER    X_AXIS,Y_AXIS,Z_AXIS
 
-#define AXIS_ORDER   AXIS_RIGHT,AXIS_DOWN,AXIS_IN
+#define AXIS_ORDER    AXIS_RIGHT,AXIS_DOWN,AXIS_IN
 
 #define ANGLE_ORDER  ORDER_YXZ
-#define pitch        tx
-#define bank         tz
-#define head         ty
-#define xaxis        x
-#define yaxis        y
-#define zaxis        z
+#define pitch          tx
+#define bank            tz
+#define head            ty
+#define xaxis          x
+#define yaxis          y
+#define zaxis          z
 
 // conversions
 #define build_fix_angle(ang) ((65536*(ang))/360)
 
 // defaults
-#define DEFAULT_FOV     80
-#define DEFAULT_AXIS    'X'
-#define DEFAULT_PT_CNT  80     // sure, why not
+#define DEFAULT_FOV      80
+#define DEFAULT_AXIS     'X'
+#define DEFAULT_PT_CNT  80      // sure, why not
 
 
 // masks for quadrant/octant free facing check
-#define FMK_NW         (1<<0)
-#define FMK_EW         (1<<1)
-#define FMK_SW         (1<<2)
-#define FMK_WW         (1<<3)
-#define FMK_D1         (1<<4)
-#define FMK_D3         (1<<5)
-#define FMK_D5         (1<<6)
-#define FMK_D7         (1<<7)
+#define FMK_NW            (1<<0)
+#define FMK_EW            (1<<1)
+#define FMK_SW            (1<<2)
+#define FMK_WW            (1<<3)
+#define FMK_D1            (1<<4)
+#define FMK_D3            (1<<5)
+#define FMK_D5            (1<<6)
+#define FMK_D7            (1<<7)
 
-#define MK_O_N         (0)
-#define MK_O_E         (1)
-#define MK_O_S         (2)
-#define MK_O_W         (3)
+#define MK_O_N            (0)
+#define MK_O_E            (1)
+#define MK_O_S            (2)
+#define MK_O_W            (3)
 
-#define HG_NW          (1<<1)
-#define HG_NE          (1<<2)
-#define HG_SE          (1<<3)
-#define HG_SW          (1<<0)
+#define HG_NW             (1<<1)
+#define HG_NE             (1<<2)
+#define HG_SE             (1<<3)
+#define HG_SW             (1<<0)
 
 /* note: 9 is unused
  *
- *     1 B 3
- *   0       2
- *   8   D   A    not detected yet
- *   4       6
- *     5 C 7
+ *      1 B 3
+ *    0         2
+ *    8    D    A     not detected yet
+ *    4         6
+ *      5 C 7
  */
 
 #define QUAD_N_BASE 0
@@ -133,11 +133,11 @@ extern int8_t eye_slew;
 #define QUAD_CENTER 0xB
 
 #define FACE_FLOOR  0
-#define FACE_CIEL   1
+#define FACE_CIEL    1
 #define FACE_WALLS  2
 
-#define FLOOR_COL   32
-#define CIEL_COL    44
-#define WALL_COL    56
+#define FLOOR_COL    32
+#define CIEL_COL     44
+#define WALL_COL     56
 
 #endif

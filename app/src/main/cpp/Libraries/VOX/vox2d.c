@@ -63,162 +63,162 @@ extern int32_t vxd_maxd;
 #endif
 
 void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz,
-			  int32_t near_ver,vxs_vox *vx,int32_t dotw,int32_t doth,bool clip);
+              int32_t near_ver,vxs_vox *vx,int32_t dotw,int32_t doth,bool clip);
 
 // We calculate fdxdu (where uv goes across bitmap)
 // and xy goes across screen
 // x,y seem to be nearest vertex coordinates
 // dz is the amount
 void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz,
-			  int32_t near_ver,vxs_vox *vx,int32_t dotw,int32_t doth,bool clip)
+              int32_t near_ver,vxs_vox *vx,int32_t dotw,int32_t doth,bool clip)
 {
-   int32_t du,dv,initu,endu,initv,endv;
-   int32_t i,j;
-   int32_t c;
-   int32_t crow,hrow;
-   int32_t dcrow,dhrow;
-   uint8_t *crow2,*hrow2;
-   int32_t z;
-   int32_t far_ver;
-   grs_bitmap *col;
-   grs_bitmap *ht;
-   int32_t (* rect) (int16_t x1,int16_t y1,int16_t x2,int16_t y2);
-   fix xp,yp;
-   fix oldcurx;
-   fix oldcury;
-   fix curx,cury;
-   #ifdef DBG_ON
-   int16_t xl,yt,xr,yb;
-   #endif
+    int32_t du,dv,initu,endu,initv,endv;
+    int32_t i,j;
+    int32_t c;
+    int32_t crow,hrow;
+    int32_t dcrow,dhrow;
+    uint8_t *crow2,*hrow2;
+    int32_t z;
+    int32_t far_ver;
+    grs_bitmap *col;
+    grs_bitmap *ht;
+    int32_t (* rect) (int16_t x1,int16_t y1,int16_t x2,int16_t y2);
+    fix xp,yp;
+    fix oldcurx;
+    fix oldcury;
+    fix curx,cury;
+    #ifdef DBG_ON
+    int16_t xl,yt,xr,yb;
+    #endif
 
-   col = vx->col;
-   ht = vx->ht;
+    col = vx->col;
+    ht = vx->ht;
 
-   if (clip)
-      rect = gr_rect;
-   else
-      rect = (int32_t (*)(int16_t, int16_t, int16_t, int16_t)) gr_urect;
+    if (clip)
+        rect = gr_rect;
+    else
+        rect = (int32_t (*)(int16_t, int16_t, int16_t, int16_t)) gr_urect;
 
-   far_ver = (near_ver+2)%4;
+    far_ver = (near_ver+2)%4;
 
-   //How to scan given near_ver, and this should be actually computed some day
-   if (near_ver == 0 || near_ver == 3) {
-      initu = col->w -1;
-      du = -1;
-      endu = -1;
-   }
-   else {
-      initu = 0;
-      du = 1;
-      endu = col->w;
-   }
-   if (near_ver < 2) {
-      initv = col->h-1;
-      dv = -1;
-      endv = -1;
-   }
-   else {
-      initv = 0;
-      dv = 1;
-      endv = col->h;
-   }
-
-   oldcurx = curx = x0 + dxdu*initu + dxdv*initv;
-   oldcury = cury = y0 + dydu*initu + dydv*initv;
-
-   dxdu *= du;
-   dydu *= du;
-   dxdv *= dv;
-   dydv *= dv;
-
-   // fill tables with values so we don't have to multiply in the inner loop
-   xp = 0;
-   yp = 0;
-
-   #ifdef DBG_ON
-   if (vx->d > vxd_maxd) {
-      mprintf("voxel object depth z=%d\n",vx->d);
-      mprintf("greater than max = %d\n",vxd_maxd);
-      mprintf("voxel at %ld\n",vx);
-      mprintf("color map at %ld htmap at %ld\n",col,ht);
-      return;
+    //How to scan given near_ver, and this should be actually computed some day
+    if (near_ver == 0 || near_ver == 3) {
+        initu = col->w -1;
+        du = -1;
+        endu = -1;
     }
-   #endif
+    else {
+        initu = 0;
+        du = 1;
+        endu = col->w;
+    }
+    if (near_ver < 2) {
+        initv = col->h-1;
+        dv = -1;
+        endv = -1;
+    }
+    else {
+        initv = 0;
+        dv = 1;
+        endv = col->h;
+    }
 
-   for (i=0;i<vx->d;++i) {
-      zdxdz[i] = xp;
-      zdydz[i] = yp;
-      xp += dxdz;
-      yp += dydz;
-   }
+    oldcurx = curx = x0 + dxdu*initu + dxdv*initv;
+    oldcury = cury = y0 + dydu*initu + dydv*initv;
 
-   dcrow = dv*col->row;
-   dhrow = dv*ht->row;
+    dxdu *= du;
+    dydu *= du;
+    dxdv *= dv;
+    dydv *= dv;
 
-   crow = initv*col->row;
-   hrow = initv*ht->row;
+    // fill tables with values so we don't have to multiply in the inner loop
+    xp = 0;
+    yp = 0;
 
-   for(j=initv;j!=endv;j+=dv) {
-      crow2 = col->bits + crow + initu;
-      hrow2 = ht->bits + hrow + initu;
+    #ifdef DBG_ON
+    if (vx->d > vxd_maxd) {
+        mprintf("voxel object depth z=%d\n",vx->d);
+        mprintf("greater than max = %d\n",vxd_maxd);
+        mprintf("voxel at %ld\n",vx);
+        mprintf("color map at %ld htmap at %ld\n",col,ht);
+        return;
+     }
+    #endif
 
-      for(i=initu;i!=endu;i+=du) {
-         c = *crow2;
-         if (c != 0) {
-            z = *hrow2;
+    for (i=0;i<vx->d;++i) {
+        zdxdz[i] = xp;
+        zdydz[i] = yp;
+        xp += dxdz;
+        yp += dydz;
+    }
 
-            #ifdef DBG_ON
-            if ((z>=vxd_maxd) || (z<0) ) {
-               mprintf("voxel object depth (%d,%d)=%d\n",i,j,(int8_t)z);
-               mprintf("out of bounds [0,%d]\n",vxd_maxd);
-               mprintf("color map at %ld  htmap at %ld\n\n",col,ht);
-               return;
+    dcrow = dv*col->row;
+    dhrow = dv*ht->row;
+
+    crow = initv*col->row;
+    hrow = initv*ht->row;
+
+    for(j=initv;j!=endv;j+=dv) {
+        crow2 = col->bits + crow + initu;
+        hrow2 = ht->bits + hrow + initu;
+
+        for(i=initu;i!=endu;i+=du) {
+            c = *crow2;
+            if (c != 0) {
+                z = *hrow2;
+
+                #ifdef DBG_ON
+                if ((z>=vxd_maxd) || (z<0) ) {
+                    mprintf("voxel object depth (%d,%d)=%d\n",i,j,(int8_t)z);
+                    mprintf("out of bounds [0,%d]\n",vxd_maxd);
+                    mprintf("color map at %ld  htmap at %ld\n\n",col,ht);
+                    return;
+                }
+                #endif
+
+                xp = (curx + zdxdz[z])>>16;
+                yp = (cury + zdydz[z])>>16;
+
+                #ifdef DBG_ON
+                if (!clip) {
+                    xl = xp;
+                    xr = xp+dotw;
+                    yt = yp;
+                    yb = yp+doth;
+                    if (gr_clip_rect(&xl,&yt,&xr,&yb) != 0) {
+                        mprintf("vox: Thair's a rectungle oot uf elaignment, lahd.\n");
+                        mprintf("vox: best tell Jaeeemz, thut ruscal!\n");
+                        exit(1);
+                        return;
+                    }
+                }
+                #endif
+
+                // call the box routine only if its bigger than a point
+                // until gr_point supports fill modes, do boxes always.
+                if (doth>1) {
+                    gr_set_fcolor(c);
+                    rect(xp,yp,xp+dotw,yp+doth);
+                } else {
+                    gr_set_fcolor(c);
+                    if (clip) gr_point(xp,yp);
+                    else gr_upoint(xp,yp);
+                    //*(grd_bm.bits + yp*grd_bm.row + xp) = c;
+                }
+
             }
-            #endif
+            curx += dxdu;
+            cury += dydu;
 
-            xp = (curx + zdxdz[z])>>16;
-            yp = (cury + zdydz[z])>>16;
+            crow2 += du;
+            hrow2 += du;
+        }
+        curx = (oldcurx += dxdv);
+        cury = (oldcury += dydv);
 
-            #ifdef DBG_ON
-            if (!clip) {
-               xl = xp;
-               xr = xp+dotw;
-               yt = yp;
-               yb = yp+doth;
-               if (gr_clip_rect(&xl,&yt,&xr,&yb) != 0) {
-                  mprintf("vox: Thair's a rectungle oot uf elaignment, lahd.\n");
-                  mprintf("vox: best tell Jaeeemz, thut ruscal!\n");
-                  exit(1);
-                  return;
-               }
-            }
-            #endif
-
-            // call the box routine only if its bigger than a point
-            // until gr_point supports fill modes, do boxes always.
-            if (doth>1) {
-               gr_set_fcolor(c);
-               rect(xp,yp,xp+dotw,yp+doth);
-            } else {
-               gr_set_fcolor(c);
-               if (clip) gr_point(xp,yp);
-               else gr_upoint(xp,yp);
-               //*(grd_bm.bits + yp*grd_bm.row + xp) = c;
-            }
-
-         }
-         curx += dxdu;
-         cury += dydu;
-
-         crow2 += du;
-         hrow2 += du;
-      }
-      curx = (oldcurx += dxdv);
-      cury = (oldcury += dydv);
-
-      crow += dcrow;
-      hrow += dhrow;
-   }
+        crow += dcrow;
+        hrow += dhrow;
+    }
 }
 
 

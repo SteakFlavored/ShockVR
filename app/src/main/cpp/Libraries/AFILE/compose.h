@@ -16,14 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		COMPOSEW.H		WIDE8 Compose buffering
-//		Rex E. Bradford (REX)
+//        COMPOSEW.H        WIDE8 Compose buffering
+//        Rex E. Bradford (REX)
 //
-//		These routines implement a buffer for composing images.  You should
-//		use one of the following types when defining such a compose buffer:
+//        These routines implement a buffer for composing images.  You should
+//        use one of the following types when defining such a compose buffer:
 //
-//		BMT_FLAT8:	Compose 8-bit images, don't need difference info
-//		BMT_FLAT24:	Compose 24-bit images, don't need difference info
+//        BMT_FLAT8:    Compose 8-bit images, don't need difference info
+//        BMT_FLAT24:    Compose 24-bit images, don't need difference info
 
 /*
 * $Header: r:/prj/lib/src/afile/RCS/compose.h 1.1 1994/07/22 13:21:13 rex Exp $
@@ -43,28 +43,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <rsd24.h>
 //#endif
 
-//	Prototypes
+//    Prototypes
 
 void ComposeInit(grs_bitmap *pcompose, int32_t bmtype, int32_t w, int32_t h);
 void ComposeAdd(grs_bitmap *pcompose, grs_bitmap *pbm);
 int32_t ComposeDiff(grs_bitmap *pcompose, grs_bitmap *pbmNew,
-	grs_bitmap *pbmDiff);
+    grs_bitmap *pbmDiff);
 int32_t ComposeConvert(grs_bitmap *pcompose, grs_bitmap *pbm);
 void ComposeFree(grs_bitmap *pcompose);
 
-//	Specific compose routines (type is compose buffer type, not bm!)
+//    Specific compose routines (type is compose buffer type, not bm!)
 
 void ComposeFlat8Add(grs_bitmap *pcompose, grs_bitmap *pbm);
 //void ComposeFlat24Add(grs_bitmap *pcompose, grs_bitmap *pbm);
 
-//	Specific diff routines (type is compose buffer type, not bm!)
+//    Specific diff routines (type is compose buffer type, not bm!)
 
 int32_t ComposeFlat8Diff(grs_bitmap *pcompose, grs_bitmap *pbmNew,
-	grs_bitmap *pbmDiff);
+    grs_bitmap *pbmDiff);
 //int32_t ComposeFlat24Diff(grs_bitmap *pcompose, grs_bitmap *pbmNew,
-//	grs_bitmap *pbmDiff);
+//    grs_bitmap *pbmDiff);
 
-//	Specific convert routines (type is compose buffer type, not bm!)
+//    Specific convert routines (type is compose buffer type, not bm!)
 
 int32_t ComposeFlat8Convert(grs_bitmap *pcompose, grs_bitmap *pbm);
 //int32_t ComposeFlat24Convert(grs_bitmap *pcompose, grs_bitmap *pbm);

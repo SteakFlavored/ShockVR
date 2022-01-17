@@ -37,9 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Includes
 
-#define SHIELD_VMAIL    0
-#define GROVE_VMAIL     1
-#define BRIDGE_VMAIL    2
+#define SHIELD_VMAIL     0
+#define GROVE_VMAIL      1
+#define BRIDGE_VMAIL     2
 
 #define VINTRO_X  (SCREEN_VIEW_X+32)
 #define VINTRO_Y  (SCREEN_VIEW_Y+6)

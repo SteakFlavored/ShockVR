@@ -53,75 +53,75 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* unclipped flat8 bitmap capture.  reads data from the current canvas at
-   (x,y) into the bitmap described by bm.  the destination bitmap is always
-   completely filled. */
+    (x,y) into the bitmap described by bm.  the destination bitmap is always
+    completely filled. */
 void gen_get_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   uint8_t *dst  = bm->bits;
-   int16_t right = x+bm->w;
-   int16_t bot   = y+bm->h;
-   int16_t cur_x;
+    uint8_t *dst  = bm->bits;
+    int16_t right = x+bm->w;
+    int16_t bot    = y+bm->h;
+    int16_t cur_x;
 
-   gr_push_state();
-   if (bm->flags & BMF_TRANS) {
-      for ( ; y<bot; y++, dst+=bm->row-bm->w) {
-         for (cur_x=x ; cur_x<right; cur_x++, dst++)
-            if (gr_get_upixel (cur_x, y))
-               *dst = gr_get_upixel (cur_x, y);
-      }
-   } else {
-      for ( ; y<bot; y++, dst+=bm->row-bm->w) {
-         for (cur_x=x ; cur_x<right; cur_x++, dst++)
-            *dst = gr_get_upixel (cur_x, y);
-      }
-   }
-   gr_pop_state();
+    gr_push_state();
+    if (bm->flags & BMF_TRANS) {
+        for ( ; y<bot; y++, dst+=bm->row-bm->w) {
+            for (cur_x=x ; cur_x<right; cur_x++, dst++)
+                if (gr_get_upixel (cur_x, y))
+                    *dst = gr_get_upixel (cur_x, y);
+        }
+    } else {
+        for ( ; y<bot; y++, dst+=bm->row-bm->w) {
+            for (cur_x=x ; cur_x<right; cur_x++, dst++)
+                *dst = gr_get_upixel (cur_x, y);
+        }
+    }
+    gr_pop_state();
 }
 
 /* clipped flat8 bitmap capture.  reads from the current canvas at (x,y)
-   into bm, clipping against the canvas.  any section of the destination
-   bitmap that was clipped is not written to. */
+    into bm, clipping against the canvas.  any section of the destination
+    bitmap that was clipped is not written to. */
 int32_t gen_get_flat8_bitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   int16_t w,h;
-   uint8_t *p;
-   int32_t extra;
-   int32_t code = CLIP_NONE;
+    int16_t w,h;
+    uint8_t *p;
+    int32_t extra;
+    int32_t code = CLIP_NONE;
 
-   /* save stuff that clipping changes. */
-   w = bm->w; h = bm->h; p = bm->bits;
+    /* save stuff that clipping changes. */
+    w = bm->w; h = bm->h; p = bm->bits;
 
-   /* check for trivial reject. */
-   if (x+bm->w<grd_clip.left || x>=grd_clip.right ||
-       y+bm->h<grd_clip.top  || y>=grd_clip.bot)
-      return CLIP_ALL;
+    /* check for trivial reject. */
+    if (x+bm->w<grd_clip.left || x>=grd_clip.right ||
+         y+bm->h<grd_clip.top  || y>=grd_clip.bot)
+        return CLIP_ALL;
 
-   /* clip & draw that sucker. */
-   if (x < grd_clip.left) {            /* off left edge */
-      extra = grd_clip.left - x;
-      bm->w -= extra;
-      bm->bits += extra;
-      x = grd_clip.left;
-      code |= CLIP_LEFT;
-   }
-   if (x+bm->w > grd_clip.right) {     /* off right edge */
-      bm->w -= x+bm->w-grd_clip.right;
-      code |= CLIP_RIGHT;
-   }
-   if (y < grd_clip.top) {             /* off top */
-      extra = grd_clip.top - y;
-      bm->h -= extra;
-      bm->bits += bm->row*extra;
-      y = grd_clip.top;
-      code |= CLIP_TOP;
-   }
-   if (y+bm->h > grd_clip.bot) {      /* off bottom */
-      bm->h -= y+bm->h-grd_clip.bot;
-      code |= CLIP_BOT;
-   }
-   gr_get_ubitmap (bm, x, y);
+    /* clip & draw that sucker. */
+    if (x < grd_clip.left) {                /* off left edge */
+        extra = grd_clip.left - x;
+        bm->w -= extra;
+        bm->bits += extra;
+        x = grd_clip.left;
+        code |= CLIP_LEFT;
+    }
+    if (x+bm->w > grd_clip.right) {      /* off right edge */
+        bm->w -= x+bm->w-grd_clip.right;
+        code |= CLIP_RIGHT;
+    }
+    if (y < grd_clip.top) {                 /* off top */
+        extra = grd_clip.top - y;
+        bm->h -= extra;
+        bm->bits += bm->row*extra;
+        y = grd_clip.top;
+        code |= CLIP_TOP;
+    }
+    if (y+bm->h > grd_clip.bot) {        /* off bottom */
+        bm->h -= y+bm->h-grd_clip.bot;
+        code |= CLIP_BOT;
+    }
+    gr_get_ubitmap (bm, x, y);
 
-   /* restore bitmap to normal. */
-   bm->w = w; bm->h = h; bm->bits = p;
-   return code;
+    /* restore bitmap to normal. */
+    bm->w = w; bm->h = h; bm->bits = p;
+    return code;
 }

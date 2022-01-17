@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lintyp.h"
 
 /* these tables are used in the 2d, but are not visible, except though the
-    vector (see lintyp.h)
+     vector (see lintyp.h)
 */
 
 extern grt_uline_fill_table *grd_uline_fill_table;

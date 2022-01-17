@@ -55,14 +55,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Defines
-#define SETUP_ANIM_UPDATE        LL_CHG_BASE<<0
+#define SETUP_ANIM_UPDATE          LL_CHG_BASE<<0
 
 // loop id's
-#define SETUP_ANIM         0
-#define SETUP_JOURNEY      1
-#define SETUP_DIFFICULTY   2
-#define SETUP_CREDITS      3
-#define SETUP_CONTINUE     4
+#define SETUP_ANIM            0
+#define SETUP_JOURNEY        1
+#define SETUP_DIFFICULTY    2
+#define SETUP_CREDITS        3
+#define SETUP_CONTINUE      4
 
 // Prototypes
 void setup_loop(void);

@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
 #ifndef __MFDART_H
 #define __MFDART_H
 
-#define RES_mfdArtOverlays 0x25		// (37)
-#define RES_mfdSpecial 0x26		// (38)
+#define RES_mfdArtOverlays 0x25        // (37)
+#define RES_mfdSpecial 0x26        // (38)
 #define REF_IMG_LitLamp0 0x260000
 #define REF_IMG_LitLamp1 0x260001
 #define REF_IMG_LitLamp2 0x260002
@@ -86,7 +86,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_IMG_MFDButtonBack 0x260045
 #define REF_IMG_On 0x260046
 #define REF_IMG_Off 0x260047
-#define RES_GamesBitmaps 0x27		// (39)
+#define RES_GamesBitmaps 0x27        // (39)
 #define REF_IMG_LittleGuy 0x270000
 #define REF_IMG_DepthCharge 0x270001
 #define REF_IMG_Destroyer 0x270002
@@ -102,22 +102,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REF_IMG_wing_bad2 0x270022
 #define REF_IMG_wing_bad3 0x270028
 #define REF_IMG_wing_ship 0x27002e
-#define RES_EmailMugShots 0x28		// (40)
+#define RES_EmailMugShots 0x28        // (40)
 #define REF_IMG_EmailMugShotBase 0x280000
-#define RES_mfdClass_1 0x29		// (41)
-#define RES_mfdClass_2 0x2a		// (42)
-#define RES_mfdClass_3 0x2b		// (43)
-#define RES_mfdClass_4 0x2c		// (44)
-#define RES_mfdClass_5 0x2d		// (45)
-#define RES_mfdClass_6 0x2e		// (46)
-#define RES_mfdClass_7 0x2f		// (47)
-#define RES_mfdClass_8 0x30		// (48)
-#define RES_mfdClass_9 0x31		// (49)
-#define RES_mfdClass_10 0x32		// (50)
-#define RES_mfdClass_11 0x33		// (51)
-#define RES_mfdClass_12 0x34		// (52)
-#define RES_mfdClass_13 0x35		// (53)
-#define RES_mfdClass_14 0x36		// (54)
-#define RES_mfdClass_15 0x37		// (55)
+#define RES_mfdClass_1 0x29        // (41)
+#define RES_mfdClass_2 0x2a        // (42)
+#define RES_mfdClass_3 0x2b        // (43)
+#define RES_mfdClass_4 0x2c        // (44)
+#define RES_mfdClass_5 0x2d        // (45)
+#define RES_mfdClass_6 0x2e        // (46)
+#define RES_mfdClass_7 0x2f        // (47)
+#define RES_mfdClass_8 0x30        // (48)
+#define RES_mfdClass_9 0x31        // (49)
+#define RES_mfdClass_10 0x32        // (50)
+#define RES_mfdClass_11 0x33        // (51)
+#define RES_mfdClass_12 0x34        // (52)
+#define RES_mfdClass_13 0x35        // (53)
+#define RES_mfdClass_14 0x36        // (54)
+#define RES_mfdClass_15 0x37        // (55)
 
 #endif

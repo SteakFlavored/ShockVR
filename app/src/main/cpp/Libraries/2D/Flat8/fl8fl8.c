@@ -58,300 +58,300 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if (defined(powerc) || defined(__powerc))
 void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-	uint8_t 	*m_src;
-	uint8_t 	*m_dst;
-	int32_t 		w = bm->w;
-	int32_t 		h = bm->h;
-	int32_t 		i;
-	int32_t			brow,grow;
+    uint8_t     *m_src;
+    uint8_t     *m_dst;
+    int32_t         w = bm->w;
+    int32_t         h = bm->h;
+    int32_t         i;
+    int32_t            brow,grow;
 
 
-	brow = bm->row;
-	grow = grd_bm.row;
+    brow = bm->row;
+    grow = grd_bm.row;
 
-	m_src = bm->bits;
-	m_dst = grd_bm.bits + grow*y + x;
+    m_src = bm->bits;
+    m_dst = grd_bm.bits + grow*y + x;
 
-	if (bm->flags & BMF_TRANS)
-		while (h--) {
-		 for (i=0; i<w; i++)
-		    if (m_src[i]!=0) m_dst[i]=m_src[i];
-		 m_src += brow;
-		 m_dst += grow;
-		}
-	else
-		while (h--) {
-		 memmove (m_dst, m_src, w);
+    if (bm->flags & BMF_TRANS)
+        while (h--) {
+         for (i=0; i<w; i++)
+             if (m_src[i]!=0) m_dst[i]=m_src[i];
+         m_src += brow;
+         m_dst += grow;
+        }
+    else
+        while (h--) {
+         memmove (m_dst, m_src, w);
 
-		 m_src += brow;
-		 m_dst += grow;
-		}
+         m_src += brow;
+         m_dst += grow;
+        }
 }
 
 #else
 // 68k version
 asm void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
  {
- 	move.l	4(sp),a0				// get bm
- 	move.w	8(sp),d1				// get x
- 	move.w	10(sp),d2				// get y
+     move.l    4(sp),a0                // get bm
+     move.w    8(sp),d1                // get x
+     move.w    10(sp),d2                // get y
 
- 	movem.l	d3-d7/a2,-(sp)
+     movem.l    d3-d7/a2,-(sp)
 
- 	move.l	(a0),a1					// src
- 	move.w	12(a0),d3				// src rowbytes
- 	move.w	8(a0),d5				// width
- 	move.w	10(a0),d6				// height
+     move.l    (a0),a1                    // src
+     move.w    12(a0),d3                // src rowbytes
+     move.w    8(a0),d5                // width
+     move.w    10(a0),d6                // height
 
- 	move.l	a0,d7
- 	move.l	grd_canvas,a0
- 	move.l	(a0),a2					// dest
- 	move.w	12(a0),d4				// dest rowbytes
+     move.l    a0,d7
+     move.l    grd_canvas,a0
+     move.l    (a0),a2                    // dest
+     move.w    12(a0),d4                // dest rowbytes
 
- 	add.w		d1,a2						// dest + x
- 	mulu.w	d4,d2
- 	add.l		d2,a2						// dest + x + grow*y
+     add.w        d1,a2                        // dest + x
+     mulu.w    d4,d2
+     add.l        d2,a2                        // dest + x + grow*y
 
- 	move.l	d7,a0
- 	move.w	6(a0),d0				// get flags
- 	andi.w	#BMF_TRANS,d0		// trans?
- 	bne 		@Transparent
+     move.l    d7,a0
+     move.w    6(a0),d0                // get flags
+     andi.w    #BMF_TRANS,d0        // trans?
+     bne         @Transparent
 
 @Solid:
-	sub.w		d5,d3
-	sub.w		d5,d4						// rowbytes - width
-	subq.w	#1,d6						// for dbra
+    sub.w        d5,d3
+    sub.w        d5,d4                        // rowbytes - width
+    subq.w    #1,d6                        // for dbra
 
-	// make sure address is aligned
-	move.l	a2,d1
- 	andi.w	#1,d1
- 	beq.s		@aligned
- 	subq.w	#1,d5
+    // make sure address is aligned
+    move.l    a2,d1
+     andi.w    #1,d1
+     beq.s        @aligned
+     subq.w    #1,d5
 @aligned:
-	lea			@SCopyLoop+320,a0
-	move.l	d5,d7
-	andi.l	#0x0003,d5			// catch any remaining bytes (less than 4) in d5
-	move.l	d5,d0
-	asr.w		#1,d7
-	andi.w	#0xfffE,d7			// clear low bit (4 bytes per move, 2 bytes per move instruction)
-	sub.w		d7,a0						// address to jump to
+    lea            @SCopyLoop+320,a0
+    move.l    d5,d7
+    andi.l    #0x0003,d5            // catch any remaining bytes (less than 4) in d5
+    move.l    d5,d0
+    asr.w        #1,d7
+    andi.w    #0xfffE,d7            // clear low bit (4 bytes per move, 2 bytes per move instruction)
+    sub.w        d7,a0                        // address to jump to
 
 @SLoop:
-	tst.w		d1
-	beq.s		@alignOK
-	move.b	(a1)+,(a2)+			// move a byte to align it
+    tst.w        d1
+    beq.s        @alignOK
+    move.b    (a1)+,(a2)+            // move a byte to align it
 @alignOK:
-	jmp			(a0)
+    jmp            (a0)
 
 @SCopyLoop:
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		// 40
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+        // 40
 
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		// 80
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+        // 80
 
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		// 120
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+        // 120
 
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+
-	move.l	(a1)+,(a2)+		// 160
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+
+    move.l    (a1)+,(a2)+        // 160
 
-	bra.s		@SInLoop
+    bra.s        @SInLoop
 @SLLoop:
-	move.b	(a1)+,(a2)+
+    move.b    (a1)+,(a2)+
 @SInLoop:
-	dbra		d5,@SLLoop
+    dbra        d5,@SLLoop
 
-	add.w		d3,a1				// add rowbytes
-	add.w		d4,a2
-	move.w	d0,d5				// get left over
-	dbra		d6,@SLoop
+    add.w        d3,a1                // add rowbytes
+    add.w        d4,a2
+    move.w    d0,d5                // get left over
+    dbra        d6,@SLoop
 
- 	movem.l	(sp)+,d3-d7/a2
- 	rts
+     movem.l    (sp)+,d3-d7/a2
+     rts
 
 @Transparent:
-	sub.w		d5,d3
-	sub.w		d5,d4						// rowbytes - width
-	subq.w	#1,d6						// for dbra
-	subq.w	#1,d5
-	move.w	d5,d7
+    sub.w        d5,d3
+    sub.w        d5,d4                        // rowbytes - width
+    subq.w    #1,d6                        // for dbra
+    subq.w    #1,d5
+    move.w    d5,d7
 
 @TLoop:
-	move.b	(a1)+,d0
-	beq.s		@skip
+    move.b    (a1)+,d0
+    beq.s        @skip
 @TCopy:
-	move.b	d0,(a2)+
-	dbra		d5,@TLoop
-	bra.s		@out
+    move.b    d0,(a2)+
+    dbra        d5,@TLoop
+    bra.s        @out
 
 @TSkipLoop:
-	move.b	(a1)+,d0
-	bne.s		@TCopy
+    move.b    (a1)+,d0
+    bne.s        @TCopy
 
 @skip:
-	addq.w	#1,a2
-	dbra		d5,@TSkipLoop
+    addq.w    #1,a2
+    dbra        d5,@TSkipLoop
 
 @out:
-	add.w		d3,a1				// add rowbytes
-	add.w		d4,a2
-	move.w	d7,d5				// get count again
-	dbra		d6,@TLoop
+    add.w        d3,a1                // add rowbytes
+    add.w        d4,a2
+    move.w    d7,d5                // get count again
+    dbra        d6,@TLoop
 
- 	movem.l	(sp)+,d3-d7/a2
- 	rts
+     movem.l    (sp)+,d3-d7/a2
+     rts
  }
 #endif

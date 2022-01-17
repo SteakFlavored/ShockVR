@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		Memall.H		Memory allocator
-//		Rex E. Bradford (REX)
+//        Memall.H        Memory allocator
+//        Rex E. Bradford (REX)
 /*
 * $Header: n:/project/lib/src/lg/rcs/memall.h 1.12 1993/12/20 13:40:05 ept Exp $
 * $Log: memall.h $
@@ -78,15 +78,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg_types.h"
 
 /*
-//	Setting, pushing, & popping allocator sets
+//    Setting, pushing, & popping allocator sets
 
 void MemSetAllocator(void *(*fm)(size_t size),
-	void *(*fr)(void *p, size_t size), void (*ff)(void *p));
+    void *(*fr)(void *p, size_t size), void (*ff)(void *p));
 int32_t MemPushAllocator(void *(*fm)(size_t size),
-	void *(*fr)(void *p, size_t size), void (*ff)());
+    void *(*fr)(void *p, size_t size), void (*ff)());
 int32_t MemPopAllocator(void);
 
-//	Allocating, reallocating, & freeing memory
+//    Allocating, reallocating, & freeing memory
 
 extern void *(*f_malloc)(size_t size);
 extern void *(*f_realloc)(void *p, size_t size);
@@ -115,40 +115,40 @@ void *CallocNorm(size_t size);
 
 #endif
 
-#ifdef _H2INC					//if translating, include assembly macros
-#include "memmacro.h"		//this will translate to 'include memmacro.inc'
+#ifdef _H2INC                    //if translating, include assembly macros
+#include "memmacro.h"        //this will translate to 'include memmacro.inc'
 #endif
 
-//	Memory checking
+//    Memory checking
 
 void MemCheckOn(bool hard);
 void MemCheckOff(void);
 
-//	Heap management (memgrow.c)
+//    Heap management (memgrow.c)
 
 int32_t MemGrowHeap(int32_t wantK);
 void MemLockHeap();
 void MemUnlockHeap();
 
-//	Calling previous (underlying) allocators (only from top level!)
+//    Calling previous (underlying) allocators (only from top level!)
 
 #define MallocPrev(size) (memIndexAllocStack >= 0 ? (*memAllocStack[memIndexAllocStack-1].func_malloc)(size) : NULL)
 #define ReallocPrev(p,size) (memIndexAllocStack >= 0 ? (*memAllocStack[memIndexAllocStack-1].func_realloc)(p,size) : NULL)
 #define FreePrev(p) (if (memIndexAllocStack >= 0) (*memAllocStack[memIndexAllocStack-1].func_free)(p))
 
-//	Allocating conventional memory
-//	Caveat: since Malloc() can grab conventional memory, necessary
-//	conventional memory blocks should be grabbed early in program.
+//    Allocating conventional memory
+//    Caveat: since Malloc() can grab conventional memory, necessary
+//    conventional memory blocks should be grabbed early in program.
 
 typedef struct {
-	uint16_t realSeg;		// real mode segment to conventional mem block
-	uint16_t protSel;		// protected mode selector for conv mem block
-	void far *protPtr;	// protected mode ptr to mem block
+    uint16_t realSeg;        // real mode segment to conventional mem block
+    uint16_t protSel;        // protected mode selector for conv mem block
+    void far *protPtr;    // protected mode ptr to mem block
 } ConvMemBlock;
 
-void far *MallocConvMemBlock(uint16_t size, ConvMemBlock *pcmb);		// alloc
+void far *MallocConvMemBlock(uint16_t size, ConvMemBlock *pcmb);        // alloc
 void far *ReallocConvMemBlock(ConvMemBlock *pcmb, uint16_t newsize); // resize
-int32_t FreeConvMemBlock(ConvMemBlock *pcmb);		// free low memory block
+int32_t FreeConvMemBlock(ConvMemBlock *pcmb);        // free low memory block
 */
 
 //////////////////////////////
@@ -167,9 +167,9 @@ int32_t FreeConvMemBlock(ConvMemBlock *pcmb);		// free low memory block
 
 typedef struct
 {
-   void *baseptr; // pointer to bottom of stack
-   int32_t  sz;      // size of stack in bytes
-   void *topptr;  // pointer to current top of stack (next free byte)
+    void *baseptr; // pointer to bottom of stack
+    int32_t  sz;        // size of stack in bytes
+    void *topptr;  // pointer to current top of stack (next free byte)
 }
 MemStack;
 

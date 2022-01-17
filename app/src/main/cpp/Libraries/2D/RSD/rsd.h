@@ -35,73 +35,73 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#define RSD_RUN    0
-#define RSD_SKIP   1
-#define RSD_DUMP   2
+#define RSD_RUN     0
+#define RSD_SKIP    1
+#define RSD_DUMP    2
 
 /* this is a pretty specific-use macro for getting the next rsd token from an
-   rsd input buffer.  the source buffer has to be named rsd_src, the token's
-   code goes in rsd_code, and the count for the operation goes in rsd_count.
-   after a call of this macro, rsd_src is advanced to the actual data for the
-   code (pixel data for dump, run value for run) if there is any, or to the
-   beginning of the next token (for skip). */
-#define RSD_GET_TOKEN()                               \
-{                                                     \
-   if (*rsd_src == 0)               /* run */         \
-   {                                                  \
-      rsd_code = RSD_RUN;                             \
-      rsd_count = rsd_src[1];                         \
-      rsd_src += 2;                                   \
-/*      mprintf ("run %d ",count);  */                    \
-   }                                                  \
-   else if (*rsd_src < 0x80)        /* dump */        \
-   {                                                  \
-      rsd_code = RSD_DUMP;                            \
-      rsd_count = *rsd_src;                           \
-      rsd_src++;                                      \
-/*      mprintf ("dump %d ",count);  */                   \
-   }                                                  \
-   else if (*rsd_src != 0x80)       /* skip */        \
-   {                                                  \
-      rsd_code = RSD_SKIP;                            \
-      rsd_count = *rsd_src & 0x7f;                    \
-      rsd_src++;                                      \
-/*      mprintf ("skip %d ",count);  */                   \
-   }                                                  \
-   else                             /* long op */     \
-   {                                                  \
-      uint16_t *rsd_usrc = (uint16_t *)++rsd_src;         \
-                                                      \
-      if (*rsd_usrc >= 0x8000)                        \
-      {                                               \
-         if (*rsd_usrc >= 0xc000)   /* long run */    \
-         {                                            \
-            rsd_code = RSD_RUN;                       \
-            rsd_count = *rsd_usrc & 0x3fff;           \
-            rsd_src += 2;                             \
-/*            mprintf ("run %d ",count);   */             \
-         }                                            \
-         else                       /* long dump */   \
-         {                                            \
-            rsd_code = RSD_DUMP;                      \
-            rsd_count = *rsd_usrc & 0x7fff;           \
-            rsd_src += 2;                             \
-/*            mprintf ("dump %d ",count);  */             \
-         }                                            \
-      }                                               \
-      else if (*rsd_usrc != 0)      /* long skip */   \
-      {                                               \
-         rsd_code = RSD_SKIP;                         \
-         rsd_count = *rsd_usrc;                       \
-         rsd_src += 2;                                \
-/*         mprintf ("skip %d ",count);     */             \
-      }                                               \
-      else {                                           \
+    rsd input buffer.  the source buffer has to be named rsd_src, the token's
+    code goes in rsd_code, and the count for the operation goes in rsd_count.
+    after a call of this macro, rsd_src is advanced to the actual data for the
+    code (pixel data for dump, run value for run) if there is any, or to the
+    beginning of the next token (for skip). */
+#define RSD_GET_TOKEN()                                         \
+{                                                                      \
+    if (*rsd_src == 0)                    /* run */            \
+    {                                                                  \
+        rsd_code = RSD_RUN;                                      \
+        rsd_count = rsd_src[1];                                 \
+        rsd_src += 2;                                              \
+/*        mprintf ("run %d ",count);  */                          \
+    }                                                                  \
+    else if (*rsd_src < 0x80)          /* dump */          \
+    {                                                                  \
+        rsd_code = RSD_DUMP;                                     \
+        rsd_count = *rsd_src;                                    \
+        rsd_src++;                                                  \
+/*        mprintf ("dump %d ",count);  */                         \
+    }                                                                  \
+    else if (*rsd_src != 0x80)         /* skip */          \
+    {                                                                  \
+        rsd_code = RSD_SKIP;                                     \
+        rsd_count = *rsd_src & 0x7f;                          \
+        rsd_src++;                                                  \
+/*        mprintf ("skip %d ",count);  */                         \
+    }                                                                  \
+    else                                      /* long op */      \
+    {                                                                  \
+        uint16_t *rsd_usrc = (uint16_t *)++rsd_src;            \
+                                                                        \
+        if (*rsd_usrc >= 0x8000)                                \
+        {                                                              \
+            if (*rsd_usrc >= 0xc000)    /* long run */     \
+            {                                                          \
+                rsd_code = RSD_RUN;                              \
+                rsd_count = *rsd_usrc & 0x3fff;              \
+                rsd_src += 2;                                      \
+/*                mprintf ("run %d ",count);    */                 \
+            }                                                          \
+            else                              /* long dump */    \
+            {                                                          \
+                rsd_code = RSD_DUMP;                             \
+                rsd_count = *rsd_usrc & 0x7fff;              \
+                rsd_src += 2;                                      \
+/*                mprintf ("dump %d ",count);  */                 \
+            }                                                          \
+        }                                                              \
+        else if (*rsd_usrc != 0)        /* long skip */    \
+        {                                                              \
+            rsd_code = RSD_SKIP;                                 \
+            rsd_count = *rsd_usrc;                              \
+            rsd_src += 2;                                          \
+/*            mprintf ("skip %d ",count);      */                 \
+        }                                                              \
+        else {                                                         \
 /* subsequent uses of RSD_GET_TOKEN should also return to rsd_done.*/ \
-         rsd_code = RSD_SKIP;                         \
-         rsd_src-- ;                                  \
-         goto rsd_done;                               \
-      }                                               \
-   }                                                  \
+            rsd_code = RSD_SKIP;                                 \
+            rsd_src-- ;                                             \
+            goto rsd_done;                                         \
+        }                                                              \
+    }                                                                  \
 }
 

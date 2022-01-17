@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		Mouse.H		Mouse library header file
-//		MAHK Leblanc 2/19/93
+//        Mouse.H        Mouse library header file
+//        MAHK Leblanc 2/19/93
 /*
  * $Source: n:/project/lib/src/input/RCS/mouse.h $
  * $Revision: 1.11 $
@@ -63,22 +63,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _mouse_event
 {
-   int16_t x;    				// position
-   int16_t y;
-   uint8_t type; 				// Event mask, bits defined below
-   uint32_t timestamp;
-   uint8_t buttons;
-   uint8_t modifiers;			// Added for Mac version
-   int8_t pad[5];  			// pad to sixteen bytes
+    int16_t x;                     // position
+    int16_t y;
+    uint8_t type;                 // Event mask, bits defined below
+    uint32_t timestamp;
+    uint8_t buttons;
+    uint8_t modifiers;            // Added for Mac version
+    int8_t pad[5];              // pad to sixteen bytes
 } mouse_event;
 
-#define MOUSE_MOTION    1	// Event mask bits
-#define MOUSE_LDOWN     2
-#define MOUSE_LUP       4
-#define MOUSE_RDOWN     8
-#define MOUSE_RUP      16
-#define MOUSE_CDOWN    32
-#define MOUSE_CUP      64
+#define MOUSE_MOTION     1    // Event mask bits
+#define MOUSE_LDOWN      2
+#define MOUSE_LUP         4
+#define MOUSE_RDOWN      8
+#define MOUSE_RUP        16
+#define MOUSE_CDOWN     32
+#define MOUSE_CUP        64
 
 
 // Mask of events that are allowed into the queue.

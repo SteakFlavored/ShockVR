@@ -53,18 +53,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef int16_t errtype;
 
-#define OK              					((errtype)0)       // Normal execution
-#define ERR_NODEV       			((errtype)1)       // No such device
-#define ERR_DUNDERFLOW  	((errtype)2)       // Data underflow (stack, queue, etc)
-#define ERR_DOVERFLOW   		((errtype)3)       // Data overflow  (stack, queue, etc)
-#define ERR_RANGE       			((errtype)4)       // Arg out of range
-#define ERR_NULL        			((errtype)5)       // Unexpected NULL pointer
-#define ERR_NOEFFECT    		((errtype)6)       // Operation had no effect
-#define ERR_NOMEM       		((errtype)7)       // Not enough memory
-#define ERR_FOPEN       			((errtype)8)       // Error opening file
-#define ERR_FCLOSE      			((errtype)9)       // Error closing file
-#define ERR_FREAD       			((errtype)10)      // Error reading file
-#define ERR_FWRITE      			((errtype)11)      // Error writing file
+#define OK                                      ((errtype)0)         // Normal execution
+#define ERR_NODEV                     ((errtype)1)         // No such device
+#define ERR_DUNDERFLOW      ((errtype)2)         // Data underflow (stack, queue, etc)
+#define ERR_DOVERFLOW            ((errtype)3)         // Data overflow  (stack, queue, etc)
+#define ERR_RANGE                     ((errtype)4)         // Arg out of range
+#define ERR_NULL                      ((errtype)5)         // Unexpected NULL pointer
+#define ERR_NOEFFECT             ((errtype)6)         // Operation had no effect
+#define ERR_NOMEM                 ((errtype)7)         // Not enough memory
+#define ERR_FOPEN                     ((errtype)8)         // Error opening file
+#define ERR_FCLOSE                    ((errtype)9)         // Error closing file
+#define ERR_FREAD                     ((errtype)10)        // Error reading file
+#define ERR_FWRITE                    ((errtype)11)        // Error writing file
 // more here
 
 #endif // __ERROR_H

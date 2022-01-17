@@ -51,6 +51,6 @@ extern void mfd_bark_expose(MFD* mfd, uint8_t control);
 extern void long_bark(ObjID speaker_id, uint8_t mug_id, int32_t string_id, uint8_t color);
 
 typedef struct {
-   uint16_t timestamp;
-   uint16_t type;
+    uint16_t timestamp;
+    uint16_t type;
 } BarkSchedEvent;

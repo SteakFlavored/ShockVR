@@ -42,15 +42,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tabdat.h"
 
 #define gr_upoly \
-   ((void (*)(int32_t c,int32_t n,grs_vertex **vpl)) \
-   grd_canvas_table[FIX_UPOLY])
+    ((void (*)(int32_t c,int32_t n,grs_vertex **vpl)) \
+    grd_canvas_table[FIX_UPOLY])
 #define gr_poly \
-   ((int32_t  (*)(int32_t c,int32_t n,grs_vertex **vpl)) \
-   grd_canvas_table[FIX_POLY])
+    ((int32_t  (*)(int32_t c,int32_t n,grs_vertex **vpl)) \
+    grd_canvas_table[FIX_POLY])
 #define gr_tluc8_upoly \
-   ((void (*)(int32_t c,int32_t n,grs_vertex **vpl)) \
-   grd_canvas_table[FIX_TLUC8_UPOLY])
+    ((void (*)(int32_t c,int32_t n,grs_vertex **vpl)) \
+    grd_canvas_table[FIX_TLUC8_UPOLY])
 #define gr_tluc8_poly \
-   ((int32_t  (*)(int32_t c,int32_t n,grs_vertex **vpl)) \
-   grd_canvas_table[FIX_TLUC8_POLY])
+    ((int32_t  (*)(int32_t c,int32_t n,grs_vertex **vpl)) \
+    grd_canvas_table[FIX_TLUC8_POLY])
 #endif /* !__GRPLY_H */

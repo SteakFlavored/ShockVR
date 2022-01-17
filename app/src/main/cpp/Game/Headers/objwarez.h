@@ -32,45 +32,45 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Instance Stuff
 typedef struct {
-//   COMMON_OBJSPEC_FIELDS;
-   union {
-		ObjID id;
-		ObjSpecID headused;
-	};
-	union {
-		ObjSpecID next;
-		ObjSpecID headfree;
-	};
-	ObjSpecID prev;
+//    COMMON_OBJSPEC_FIELDS;
+    union {
+        ObjID id;
+        ObjSpecID headused;
+    };
+    union {
+        ObjSpecID next;
+        ObjSpecID headfree;
+    };
+    ObjSpecID prev;
 } ObjDrug;
 
 typedef struct {
-//   COMMON_OBJSPEC_FIELDS;
-   union {
-		ObjID id;
-		ObjSpecID headused;
-	};
-	union {
-		ObjSpecID next;
-		ObjSpecID headfree;
-	};
-	ObjSpecID prev;
-	uint8_t version;
+//    COMMON_OBJSPEC_FIELDS;
+    union {
+        ObjID id;
+        ObjSpecID headused;
+    };
+    union {
+        ObjSpecID next;
+        ObjSpecID headfree;
+    };
+    ObjSpecID prev;
+    uint8_t version;
 } ObjHardware;
 
 typedef struct {
-//   COMMON_OBJSPEC_FIELDS;
-   union {
-		ObjID id;
-		ObjSpecID headused;
-	};
-	union {
-		ObjSpecID next;
-		ObjSpecID headfree;
-	};
-	ObjSpecID prev;
-	uint8_t version;
-	int16_t data_munge;
+//    COMMON_OBJSPEC_FIELDS;
+    union {
+        ObjID id;
+        ObjSpecID headused;
+    };
+    union {
+        ObjSpecID next;
+        ObjSpecID headfree;
+    };
+    ObjSpecID prev;
+    uint8_t version;
+    int16_t data_munge;
 } ObjSoftware;
 
 #define SOFTWARE_SECURITY(specid) ((objSoftwares[(specid)].data_munge & 0xF000) >> 12)
@@ -80,118 +80,118 @@ typedef struct {
 // Class Typedefs
 
 typedef struct DrugProp {
-   uint8_t intensity;
-   uint8_t delay;
-   uint8_t duration;
-   int32_t   effect;
-   int32_t   side_effect;      // should we do a big case statement - therefore this is not needed
-   int32_t   after_effect;
-   int16_t flags;            // cyberspace?
+    uint8_t intensity;
+    uint8_t delay;
+    uint8_t duration;
+    int32_t    effect;
+    int32_t    side_effect;        // should we do a big case statement - therefore this is not needed
+    int32_t    after_effect;
+    int16_t flags;                // cyberspace?
 } DrugProp;
 
 typedef struct HardwareProp {
-   int16_t flags;               // activated, damaged??
+    int16_t flags;                    // activated, damaged??
 } HardwareProp;
 
 typedef struct SoftwareProp {
-   int16_t flags;               // none right now.
+    int16_t flags;                    // none right now.
 } SoftwareProp;
 
 // Subclass Typedefs
 typedef struct StatsDrugProp {
-   int16_t effectiveness;
-   uint8_t sound_effect_num;  // or whatever
-   int32_t   duration;
+    int16_t effectiveness;
+    uint8_t sound_effect_num;  // or whatever
+    int32_t    duration;
 } StatsDrugProp;
 
 typedef struct GoggleHardwareProp {
-   uint8_t dummy;
+    uint8_t dummy;
 } GoggleHardwareProp;
 
 typedef struct HardwareHardwareProp {
-   int16_t target_flag;
+    int16_t target_flag;
 } HardwareHardwareProp;
 
 typedef struct OffenseSoftwareProp {
-   uint8_t damage;
+    uint8_t damage;
 } OffenseSoftwareProp;
 
 typedef struct DefenseSoftwareProp {
-   uint8_t dummy;
+    uint8_t dummy;
 } DefenseSoftwareProp;
 
 typedef struct OneshotSoftwareProp {
-   uint8_t dummy;
+    uint8_t dummy;
 } OneshotSoftwareProp;
 
 typedef struct MiscSoftwareProp {
-   uint8_t dummy;
+    uint8_t dummy;
 } MiscSoftwareProp;
 
 typedef struct DataSoftwareProp {
-   uint8_t dummy;
+    uint8_t dummy;
 } DataSoftwareProp;
 
 // Drug
-#define NUM_STATS_DRUG	        7
+#define NUM_STATS_DRUG              7
 
 // Hardware
-#define NUM_GOGGLE_HARDWARE	5
-#define NUM_HARDWARE_HARDWARE	10
+#define NUM_GOGGLE_HARDWARE    5
+#define NUM_HARDWARE_HARDWARE    10
 
 // Software
-#define NUM_OFFENSE_SOFTWARE	7
-#define NUM_DEFENSE_SOFTWARE	3
-#define NUM_ONESHOT_SOFTWARE	4
-#define NUM_MISC_SOFTWARE	   5
-#define NUM_DATA_SOFTWARE     3
+#define NUM_OFFENSE_SOFTWARE    7
+#define NUM_DEFENSE_SOFTWARE    3
+#define NUM_ONESHOT_SOFTWARE    4
+#define NUM_MISC_SOFTWARE        5
+#define NUM_DATA_SOFTWARE      3
 
 // Class count
-#define NUM_DRUG	(NUM_STATS_DRUG)
-#define NUM_HARDWARE	(NUM_GOGGLE_HARDWARE + NUM_HARDWARE_HARDWARE)
-#define NUM_SOFTWARE	(NUM_OFFENSE_SOFTWARE + NUM_DEFENSE_SOFTWARE + NUM_ONESHOT_SOFTWARE + NUM_MISC_SOFTWARE + NUM_DATA_SOFTWARE)
+#define NUM_DRUG    (NUM_STATS_DRUG)
+#define NUM_HARDWARE    (NUM_GOGGLE_HARDWARE + NUM_HARDWARE_HARDWARE)
+#define NUM_SOFTWARE    (NUM_OFFENSE_SOFTWARE + NUM_DEFENSE_SOFTWARE + NUM_ONESHOT_SOFTWARE + NUM_MISC_SOFTWARE + NUM_DATA_SOFTWARE)
 
 // Enumeration of subclasses
 //
 
 // Drug
-#define DRUG_SUBCLASS_STATS	         0
+#define DRUG_SUBCLASS_STATS                0
 
 // Hardware
-#define HARDWARE_SUBCLASS_GOGGLE	      0
-#define HARDWARE_SUBCLASS_HARDWARE	   1
+#define HARDWARE_SUBCLASS_GOGGLE            0
+#define HARDWARE_SUBCLASS_HARDWARE        1
 
 // Software
-#define SOFTWARE_SUBCLASS_OFFENSE	   0
-#define SOFTWARE_SUBCLASS_DEFENSE	   1
-#define SOFTWARE_SUBCLASS_ONESHOT	   2
-#define SOFTWARE_SUBCLASS_MISC         3
-#define SOFTWARE_SUBCLASS_DATA         4
+#define SOFTWARE_SUBCLASS_OFFENSE        0
+#define SOFTWARE_SUBCLASS_DEFENSE        1
+#define SOFTWARE_SUBCLASS_ONESHOT        2
+#define SOFTWARE_SUBCLASS_MISC            3
+#define SOFTWARE_SUBCLASS_DATA            4
 
 #ifdef __OBJSIM_SRC
-DrugProp	DrugProps[NUM_DRUG];
-StatsDrugProp	StatsDrugProps[NUM_STATS_DRUG];
-HardwareProp	HardwareProps[NUM_HARDWARE];
-GoggleHardwareProp	GoggleHardwareProps[NUM_GOGGLE_HARDWARE];
-HardwareHardwareProp	HardwareHardwareProps[NUM_HARDWARE_HARDWARE];
-SoftwareProp	SoftwareProps[NUM_SOFTWARE];
-OffenseSoftwareProp	OffenseSoftwareProps[NUM_OFFENSE_SOFTWARE];
-DefenseSoftwareProp	DefenseSoftwareProps[NUM_DEFENSE_SOFTWARE];
-OneshotSoftwareProp	OneshotSoftwareProps[NUM_ONESHOT_SOFTWARE];
-MiscSoftwareProp	MiscSoftwareProps[NUM_MISC_SOFTWARE];
-DataSoftwareProp	DataSoftwareProps[NUM_DATA_SOFTWARE];
+DrugProp    DrugProps[NUM_DRUG];
+StatsDrugProp    StatsDrugProps[NUM_STATS_DRUG];
+HardwareProp    HardwareProps[NUM_HARDWARE];
+GoggleHardwareProp    GoggleHardwareProps[NUM_GOGGLE_HARDWARE];
+HardwareHardwareProp    HardwareHardwareProps[NUM_HARDWARE_HARDWARE];
+SoftwareProp    SoftwareProps[NUM_SOFTWARE];
+OffenseSoftwareProp    OffenseSoftwareProps[NUM_OFFENSE_SOFTWARE];
+DefenseSoftwareProp    DefenseSoftwareProps[NUM_DEFENSE_SOFTWARE];
+OneshotSoftwareProp    OneshotSoftwareProps[NUM_ONESHOT_SOFTWARE];
+MiscSoftwareProp    MiscSoftwareProps[NUM_MISC_SOFTWARE];
+DataSoftwareProp    DataSoftwareProps[NUM_DATA_SOFTWARE];
 #else
-extern DrugProp	DrugProps[NUM_DRUG];
-extern StatsDrugProp	StatsDrugProps[NUM_STATS_DRUG];
-extern HardwareProp	HardwareProps[NUM_HARDWARE];
-extern GoggleHardwareProp	GoggleHardwareProps[NUM_GOGGLE_HARDWARE];
-extern HardwareHardwareProp	HardwareHardwareProps[NUM_HARDWARE_HARDWARE];
-extern SoftwareProp	SoftwareProps[NUM_SOFTWARE];
-extern OffenseSoftwareProp	OffenseSoftwareProps[NUM_OFFENSE_SOFTWARE];
-extern DefenseSoftwareProp	DefenseSoftwareProps[NUM_DEFENSE_SOFTWARE];
-extern OneshotSoftwareProp	OneshotSoftwareProps[NUM_ONESHOT_SOFTWARE];
-extern MiscSoftwareProp	MiscSoftwareProps[NUM_MISC_SOFTWARE];
-extern DataSoftwareProp	DataSoftwareProps[NUM_DATA_SOFTWARE];
+extern DrugProp    DrugProps[NUM_DRUG];
+extern StatsDrugProp    StatsDrugProps[NUM_STATS_DRUG];
+extern HardwareProp    HardwareProps[NUM_HARDWARE];
+extern GoggleHardwareProp    GoggleHardwareProps[NUM_GOGGLE_HARDWARE];
+extern HardwareHardwareProp    HardwareHardwareProps[NUM_HARDWARE_HARDWARE];
+extern SoftwareProp    SoftwareProps[NUM_SOFTWARE];
+extern OffenseSoftwareProp    OffenseSoftwareProps[NUM_OFFENSE_SOFTWARE];
+extern DefenseSoftwareProp    DefenseSoftwareProps[NUM_DEFENSE_SOFTWARE];
+extern OneshotSoftwareProp    OneshotSoftwareProps[NUM_ONESHOT_SOFTWARE];
+extern MiscSoftwareProp    MiscSoftwareProps[NUM_MISC_SOFTWARE];
+extern DataSoftwareProp    DataSoftwareProps[NUM_DATA_SOFTWARE];
 #endif
 
 #ifdef __OBJSIM_SRC

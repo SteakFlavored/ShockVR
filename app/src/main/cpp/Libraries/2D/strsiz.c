@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * added grs_font *  as first argument, #define for compatibility in str.h
  *
  * Revision 1.3  1993/10/19  09:57:59  kaboom
- * Replaced #include   new headers.
+ * Replaced #include    new headers.
  *
  * Revision 1.2  1993/10/08  01:16:28  kaboom
  * Changed quotes in #include lines to angle brackets for Watcom.
@@ -48,31 +48,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "str.h"
 
 /* calculate the width and height of a string in the specified font, and
-   return in the given pointers. */
+    return in the given pointers. */
 
 void gr_font_string_size (grs_font *f, int8_t *s, int16_t *w, int16_t *h)
 {
-   int16_t *offset_tab;         /* table of character offsets */
-   int16_t offset;              /* offset of current character */
-   int16_t w_lin=0;             /* current line's width so far */
-   int16_t w_str=0;             /* width of widest line */
-   int16_t h_str;               /* height of string */
-   uint8_t c;                   /* current character */
+    int16_t *offset_tab;            /* table of character offsets */
+    int16_t offset;                  /* offset of current character */
+    int16_t w_lin=0;                 /* current line's width so far */
+    int16_t w_str=0;                 /* width of widest line */
+    int16_t h_str;                    /* height of string */
+    uint8_t c;                         /* current character */
 
-   offset_tab = f->off_tab;
-   h_str = f->h;
-   while ((c = (uint8_t) (*s++)) != '\0') {
-      if (c == CHAR_SOFTSP)
-         continue;
-      if (c=='\n' || c==CHAR_SOFTCR) {
-         if (w_lin>w_str) w_str=w_lin;
-         w_lin = 0;
-         h_str += f->h;
-         continue;
-      }
-      offset = offset_tab[c-f->min];
-      w_lin += offset_tab[c-f->min+1]-offset;
-   }
-   *w = (w_lin>w_str) ? w_lin : w_str;
-   *h = h_str;
+    offset_tab = f->off_tab;
+    h_str = f->h;
+    while ((c = (uint8_t) (*s++)) != '\0') {
+        if (c == CHAR_SOFTSP)
+            continue;
+        if (c=='\n' || c==CHAR_SOFTCR) {
+            if (w_lin>w_str) w_str=w_lin;
+            w_lin = 0;
+            h_str += f->h;
+            continue;
+        }
+        offset = offset_tab[c-f->min];
+        w_lin += offset_tab[c-f->min+1]-offset;
+    }
+    *w = (w_lin>w_str) ? w_lin : w_str;
+    *h = h_str;
 }

@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		Llist.H		Double-linked list header file
-//		Rex E. Bradford (REX)
+//        Llist.H        Double-linked list header file
+//        Rex E. Bradford (REX)
 /*
 * $Header: n:/project/lib/src/dstruct/RCS/llist.h 1.5 1993/04/19 11:36:13 rex Exp $
 * $Log: llist.h $
@@ -53,165 +53,165 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lg_types.h"
 
-//	--------------------------------------------------------------
-//		LOW-LEVEL LINKED LIST
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
+//        LOW-LEVEL LINKED LIST
+//    --------------------------------------------------------------
 
-//	List node (data must follow)
+//    List node (data must follow)
 
 typedef struct _llist {
-	struct _llist *pnext;		// ptr to next node or NULL if at tail
-	struct _llist *pprev;		// ptr to prev node or NULL if at head
-										// real data follows, here
+    struct _llist *pnext;        // ptr to next node or NULL if at tail
+    struct _llist *pprev;        // ptr to prev node or NULL if at head
+                                        // real data follows, here
 } llist;
 
-//	Queue node (sorted list, 1st item is short priority)
+//    Queue node (sorted list, 1st item is short priority)
 
 typedef struct _queue {
-	struct _queue *pnext;		// ptr to next node or NULL if at tail
-	struct _queue *pprev;		// ptr to prev node or NULL if at head
-	int16_t priority;				// higher numbers go to head of list
-										// real data follows, here
+    struct _queue *pnext;        // ptr to next node or NULL if at tail
+    struct _queue *pprev;        // ptr to prev node or NULL if at head
+    int16_t priority;                // higher numbers go to head of list
+                                        // real data follows, here
 } queue;
 
-//	List header
+//    List header
 
 typedef struct _llist_head {
-	llist head;						// head list item (not really in list)
-	llist tail;						// tail list item (not really in list)
+    llist head;                        // head list item (not really in list)
+    llist tail;                        // tail list item (not really in list)
 } llist_head;
 
-//	Initialize a list header (must be done before use)
+//    Initialize a list header (must be done before use)
 
 #define llist_init(plh) { \
-	(plh)->head.pnext = llist_end(plh); \
-	(plh)->tail.pprev = llist_beg(plh); \
-	}
+    (plh)->head.pnext = llist_end(plh); \
+    (plh)->tail.pprev = llist_beg(plh); \
+    }
 
-//	Add a new list node to head of list
+//    Add a new list node to head of list
 
 #define llist_add_head(plh,pll) { \
-	(pll)->pnext = llist_head(plh); \
-	(pll)->pprev = llist_beg(plh); \
-	((plh)->head.pnext)->pprev = (llist *) pll; \
-	(plh)->head.pnext = (llist *) pll; \
-	}
+    (pll)->pnext = llist_head(plh); \
+    (pll)->pprev = llist_beg(plh); \
+    ((plh)->head.pnext)->pprev = (llist *) pll; \
+    (plh)->head.pnext = (llist *) pll; \
+    }
 
-//	Add a new list node to tail of list
+//    Add a new list node to tail of list
 
 #define llist_add_tail(plh,pll) { \
-	(pll)->pnext = llist_end(plh); \
-	(pll)->pprev = llist_tail(plh); \
-	((plh)->tail.pprev)->pnext = (llist *) pll; \
-	(plh)->tail.pprev = (llist *) pll; \
-	}
+    (pll)->pnext = llist_end(plh); \
+    (pll)->pprev = llist_tail(plh); \
+    ((plh)->tail.pprev)->pnext = (llist *) pll; \
+    (plh)->tail.pprev = (llist *) pll; \
+    }
 
-//	Insert before specified node
+//    Insert before specified node
 
 #define llist_insert_before(pll,pnode) { \
-	(pll)->pprev = (queue *) (pnode)->pprev; \
-	(pll)->pnext = (queue *) pnode; \
-	(pnode)->pprev->pnext = (queue *) pll; \
-	(pnode)->pprev = (queue *) pll; \
-	}
+    (pll)->pprev = (queue *) (pnode)->pprev; \
+    (pll)->pnext = (queue *) pnode; \
+    (pnode)->pprev->pnext = (queue *) pll; \
+    (pnode)->pprev = (queue *) pll; \
+    }
 
-//	Insert after specified node
+//    Insert after specified node
 
 #define llist_insert_after(pll,pnode) { \
-	(pll)->pprev = (queue *) pnode; \
-	(pll)->pnext = (queue *)(pnode)->pnext; \
-	(pnode)->pnext->pprev = (queue *) pll; \
-	(pnode)->pnext = (queue *) pll; \
-	}
+    (pll)->pprev = (queue *) pnode; \
+    (pll)->pnext = (queue *)(pnode)->pnext; \
+    (pnode)->pnext->pprev = (queue *) pll; \
+    (pnode)->pnext = (queue *) pll; \
+    }
 
-//	Add in priority order
+//    Add in priority order
 
 void llist_insert_queue(llist_head *plh, queue *plq);
 
-//	Move to new spot in queue (after inserting new priority)
+//    Move to new spot in queue (after inserting new priority)
 
 bool llist_move_queue(llist_head *plh, queue *plq);
 
-//	Remove node
+//    Remove node
 
 #define llist_remove(pll) { \
-	((pll)->pprev)->pnext = (pll)->pnext; \
-	((pll)->pnext)->pprev = (pll)->pprev; \
-	}
+    ((pll)->pprev)->pnext = (pll)->pnext; \
+    ((pll)->pnext)->pprev = (pll)->pprev; \
+    }
 
-//	Get ptr to head or tail list nodes
+//    Get ptr to head or tail list nodes
 
 #define llist_head(plh) (llist*)((plh)->head.pnext)
 #define llist_tail(plh) (llist*)((plh)->tail.pprev)
 
-//	Determine if list empty
+//    Determine if list empty
 
 #define llist_empty(plh) (llist_head(plh)==llist_end(plh))
 
-//	Get # nodes in list
+//    Get # nodes in list
 
 int32_t llist_num_nodes(llist_head *plh);
 
-//	Get next & prev nodes from a node
+//    Get next & prev nodes from a node
 
-#define llist_next(pll) (llist*)((pll)->pnext)			// get ptr to next node
-#define llist_prev(pll) (llist*)((pll)->pprev)		// get ptr to prev node
+#define llist_next(pll) (llist*)((pll)->pnext)            // get ptr to next node
+#define llist_prev(pll) (llist*)((pll)->pprev)        // get ptr to prev node
 
-//	Get beginning and end items (used to check when traversing)
+//    Get beginning and end items (used to check when traversing)
 
 #define llist_beg(plh) (llist*)(&((plh)->head))
 #define llist_end(plh) (llist*)(&((plh)->tail))
 
-//	Iterate across all items from head to tail
+//    Iterate across all items from head to tail
 
 #define forallinlist(listtype,plh,pll) for (pll = \
-	(listtype *) llist_head(plh); pll != llist_end(plh); pll = llist_next(pll))
+    (listtype *) llist_head(plh); pll != llist_end(plh); pll = llist_next(pll))
 
-//	Iterate across all items from tail to head
+//    Iterate across all items from tail to head
 
 #define forallinlistrev(listtype,plh,pll) for (pll = \
-	(listtype *) llist_tail(plh); pll != llist_beg(plh); pll = llist_prev(pll))
+    (listtype *) llist_tail(plh); pll != llist_beg(plh); pll = llist_prev(pll))
 
-//	--------------------------------------------------------------
-//		HIGH-LEVEL LINKED LIST OF FIXED SIZE ITEMS (MANAGES STORAGE)
-//	--------------------------------------------------------------
+//    --------------------------------------------------------------
+//        HIGH-LEVEL LINKED LIST OF FIXED SIZE ITEMS (MANAGES STORAGE)
+//    --------------------------------------------------------------
 
-//	List header
+//    List header
 
 typedef struct {
-	llist head;							// head list item (not really in list)
-	llist tail;							// tail list item (not really in list)
-//	struct _llist_head;				// llist header (head, tail, numnodes)
-	llist *pfree;						// ptr to next free element or NULL if no more
-	llist *pNodeStore;				// ptr to first node store block, they're linked
-											// (node store is list ptrs followed by data block)
-	uint16_t nodeSize;					// size of each node
-	int16_t numNodesPerBlock;	// # nodes in list storage (including free ones)
+    llist head;                            // head list item (not really in list)
+    llist tail;                            // tail list item (not really in list)
+//    struct _llist_head;                // llist header (head, tail, numnodes)
+    llist *pfree;                        // ptr to next free element or NULL if no more
+    llist *pNodeStore;                // ptr to first node store block, they're linked
+                                            // (node store is list ptrs followed by data block)
+    uint16_t nodeSize;                    // size of each node
+    int16_t numNodesPerBlock;    // # nodes in list storage (including free ones)
 } LlistHead;
 
-//	Forgive the void pointers, C-- sucks
+//    Forgive the void pointers, C-- sucks
 
 void LlistInit(LlistHead *plh, uint16_t nodeSize, int16_t numNodesPerBlock);
-void *LlistAddHead(LlistHead *plh);						// add 1st free to head, return ptr
-void *LlistAddTail(LlistHead *plh);						// add 1st free to tail, return ptr
-void *LlistAddQueue(LlistHead *plh, int16_t prior);	// add in priority order
-bool LlistMoveQueue(LlistHead *plh, void *pnode, int16_t newprior);	// move pri
-void LlistFree(LlistHead *plh, void *pnode);			// free node
-void LlistFreeAll(LlistHead *plh);						// free all nodes
-void LlistDestroy(LlistHead *plh);						// destroy list, reclaim storage
+void *LlistAddHead(LlistHead *plh);                        // add 1st free to head, return ptr
+void *LlistAddTail(LlistHead *plh);                        // add 1st free to tail, return ptr
+void *LlistAddQueue(LlistHead *plh, int16_t prior);    // add in priority order
+bool LlistMoveQueue(LlistHead *plh, void *pnode, int16_t newprior);    // move pri
+void LlistFree(LlistHead *plh, void *pnode);            // free node
+void LlistFreeAll(LlistHead *plh);                        // free all nodes
+void LlistDestroy(LlistHead *plh);                        // destroy list, reclaim storage
 
-#define LlistHead(plh) (llist_head(plh))				// get ptr to head
-#define LlistTail(plh) (llist_tail(plh))				// get ptr to tail
-#define LlistFirstFree(plh) ((plh)->pfree)			// get ptr to first free
+#define LlistHead(plh) (llist_head(plh))                // get ptr to head
+#define LlistTail(plh) (llist_tail(plh))                // get ptr to tail
+#define LlistFirstFree(plh) ((plh)->pfree)            // get ptr to first free
 
-#define LlistEmpty(plh) (llist_empty(plh))		// determine if list empty
-#define LlistNumNodes(plh) (llist_num_nodes((llist_head *) plh))	// # active
+#define LlistEmpty(plh) (llist_empty(plh))        // determine if list empty
+#define LlistNumNodes(plh) (llist_num_nodes((llist_head *) plh))    // # active
 
-#define LlistNext(pll) (llist_next(pll))				// get ptr to next node
-#define LlistPrev(pll) (llist_prev(pll))				// get ptr to prev node
+#define LlistNext(pll) (llist_next(pll))                // get ptr to next node
+#define LlistPrev(pll) (llist_prev(pll))                // get ptr to prev node
 
-#define LlistBeg(plh) (llist_beg(plh))				// beginning of list
-#define LlistEnd(plh) (llist_end(plh))				// end of list
+#define LlistBeg(plh) (llist_beg(plh))                // beginning of list
+#define LlistEnd(plh) (llist_end(plh))                // end of list
 
 #define FORALLINLIST(listtype,plh,pll) forallinlist(listtype,plh,pll)
 #define FORALLINLISTREV(listtype,plh,pll) forallinlistrev(listtype,plh,pll)

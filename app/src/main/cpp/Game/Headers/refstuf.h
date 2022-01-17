@@ -18,13 +18,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "objects.h"
 
-#define CitrefsClearDealt()       do {memset (refdealt, 0, NUM_REF_OBJECTS/8);}           while (0)
-#define CitrefSetDealt(orefid)    do {refdealt[(orefid)>>3] |= 1 << ((orefid)&0x7);}      while (0)
-#define CitrefClearDealt(orefid)  do {refdealt[(orefid)>>3] &= ~(1 << ((orefid)&0x7));}   while (0)
+#define CitrefsClearDealt()         do {memset (refdealt, 0, NUM_REF_OBJECTS/8);}              while (0)
+#define CitrefSetDealt(orefid)     do {refdealt[(orefid)>>3] |= 1 << ((orefid)&0x7);}        while (0)
+#define CitrefClearDealt(orefid)  do {refdealt[(orefid)>>3] &= ~(1 << ((orefid)&0x7));}    while (0)
 #define CitrefCheckDealt(orefid)  (refdealt[(orefid)>>3] & (1 << ((orefid)&0x7)))
 
-#define CitrefsClearHomeSq()      do {memset (homesquare, 0, NUM_REF_OBJECTS/8);}         while (0)
-#define CitrefSetHomeSq(orefid)   do {homesquare[(orefid)>>3] |= 1 << ((orefid)&0x7);}    while (0)
+#define CitrefsClearHomeSq()        do {memset (homesquare, 0, NUM_REF_OBJECTS/8);}            while (0)
+#define CitrefSetHomeSq(orefid)    do {homesquare[(orefid)>>3] |= 1 << ((orefid)&0x7);}     while (0)
 #define CitrefClearHomeSq(orefid) do {homesquare[(orefid)>>3] &= ~(1 << ((orefid)&0x7));} while (0)
 #define CitrefCheckHomeSq(orefid) (homesquare[(orefid)>>3] & (1 << ((orefid) & 0x7)))
 

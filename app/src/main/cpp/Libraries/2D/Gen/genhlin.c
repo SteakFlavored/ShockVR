@@ -57,40 +57,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "linfcn.h"
 
 /* draw a clipped horizontal line with integral coordinates.  returns a clip
-   code. */
+    code. */
 
 int32_t gen_hline (int16_t x0, int16_t y0, int16_t x1)
 {
-   int32_t r;
+    int32_t r;
 
-   r = grd_hline_clip_fill (x0, y0, x1, gr_get_fcolor(), gr_get_fill_parm());
+    r = grd_hline_clip_fill (x0, y0, x1, gr_get_fcolor(), gr_get_fill_parm());
 
-   return r;
+    return r;
 }
 
 int32_t gri_hline_clip_fill (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
 {
-   int32_t r = CLIP_NONE;
-   int16_t t;
+    int32_t r = CLIP_NONE;
+    int16_t t;
 
-   if (x0 > x1) {
-      t = x0; x0 = x1; x1 = t;
-   }
-   if (y0<grd_clip.top || y0>=grd_clip.bot ||
-       x1<grd_clip.left || x0>=grd_clip.right)
-      return CLIP_ALL;			/* forget about return values */
+    if (x0 > x1) {
+        t = x0; x0 = x1; x1 = t;
+    }
+    if (y0<grd_clip.top || y0>=grd_clip.bot ||
+         x1<grd_clip.left || x0>=grd_clip.right)
+        return CLIP_ALL;            /* forget about return values */
 
-   if (x0 < grd_clip.left) {
-      r |= CLIP_LEFT;
-      x0 = grd_clip.left;
-   }
-   if (x1 >= grd_clip.right) {
-      r |= CLIP_RIGHT;
-      x1 = grd_clip.right-1;
-   }
+    if (x0 < grd_clip.left) {
+        r |= CLIP_LEFT;
+        x0 = grd_clip.left;
+    }
+    if (x1 >= grd_clip.right) {
+        r |= CLIP_RIGHT;
+        x1 = grd_clip.right-1;
+    }
 
-   if (r != CLIP_ALL)
-     grd_uhline_fill (x0, y0, x1, c, parm);
+    if (r != CLIP_ALL)
+      grd_uhline_fill (x0, y0, x1, c, parm);
 
-   return r;
+    return r;
 }

@@ -43,12 +43,12 @@ void set_dumb_terrain_normal(int32_t which, fix norm[3]);
  */
 
 typedef struct {
-   uint8_t cnt, prim, lprim, pad;
-   fix   nrm[3], tval, bval, batt;
+    uint8_t cnt, prim, lprim, pad;
+    fix    nrm[3], tval, bval, batt;
 } tf_norm_cmp;
 
 typedef struct {
-   tf_norm_cmp ia, ua;
+    tf_norm_cmp ia, ua;
 } tf_norm_set;
 
 // static data used by the facelet system
@@ -57,12 +57,12 @@ static tf_norm_set facets[3];
 // really, have to say this is a pretty simple one, really
 void facelet_clear(void)
 {
-   memset(&facets[0], 0, sizeof(facets));	//   _memset32l(&facets[0],0,sizeof(facets)/sizeof(int32_t));
+    memset(&facets[0], 0, sizeof(facets));    //    _memset32l(&facets[0],0,sizeof(facets)/sizeof(int32_t));
 }
 
 // facelet_add adds to the current facelet arrays
 // it adds attenuation*compression*normal to the normal total, modifies cnts, if
-//   1st unattenuated normal in a set or attenuated adds to total value and all
+//    1st unattenuated normal in a set or attenuated adds to total value and all
 
 // which is the facelet set we are adding to
 // norm is the normal, unattenuated
@@ -70,44 +70,44 @@ void facelet_clear(void)
 // value is the actual compression data
 void facelet_add(int32_t which, fix norm[3], fix atten, fix comp, int32_t prim)
 {
-   tf_norm_set *cur_face;
-   tf_norm_cmp *cur_cmp;
+    tf_norm_set *cur_face;
+    tf_norm_cmp *cur_cmp;
 
-   cur_face=&facets[which];
-   if (atten==fix_1)
-   {
-      cur_cmp=&cur_face->ua;
-      if (cur_cmp->cnt++==0)
-         cur_cmp->tval+=atten;
-   }
-   else
-   {
-      cur_cmp=&cur_face->ia;
-      cur_cmp->tval+=atten;
-      cur_cmp->cnt++;
-      comp=fix_mul(comp,atten);
-      if (cur_cmp->bval<comp)
-      {
-         cur_cmp->bval=comp;
-         cur_cmp->batt=atten;
-      }
-//      cur_cmp->tmag+=comp;
-   }
-   if (cur_cmp->cnt==1)
-      cur_cmp->prim=prim;
+    cur_face=&facets[which];
+    if (atten==fix_1)
+    {
+        cur_cmp=&cur_face->ua;
+        if (cur_cmp->cnt++==0)
+            cur_cmp->tval+=atten;
+    }
+    else
+    {
+        cur_cmp=&cur_face->ia;
+        cur_cmp->tval+=atten;
+        cur_cmp->cnt++;
+        comp=fix_mul(comp,atten);
+        if (cur_cmp->bval<comp)
+        {
+            cur_cmp->bval=comp;
+            cur_cmp->batt=atten;
+        }
+//        cur_cmp->tmag+=comp;
+    }
+    if (cur_cmp->cnt==1)
+        cur_cmp->prim=prim;
 
-   if (prim!=FCE_NO_PRIM)
-   {
-      cur_cmp->nrm[prim]+=fix_mul(comp,norm[prim]);
-      if (cur_cmp->prim!=prim)
-         cur_cmp->prim=FCE_NO_PRIM;
-   }
-   else
-   {
-      cur_cmp->nrm[0]+=fix_mul(comp,norm[0]);
-      cur_cmp->nrm[1]+=fix_mul(comp,norm[1]);
-      cur_cmp->nrm[2]+=fix_mul(comp,norm[2]);
-   }
+    if (prim!=FCE_NO_PRIM)
+    {
+        cur_cmp->nrm[prim]+=fix_mul(comp,norm[prim]);
+        if (cur_cmp->prim!=prim)
+            cur_cmp->prim=FCE_NO_PRIM;
+    }
+    else
+    {
+        cur_cmp->nrm[0]+=fix_mul(comp,norm[0]);
+        cur_cmp->nrm[1]+=fix_mul(comp,norm[1]);
+        cur_cmp->nrm[2]+=fix_mul(comp,norm[2]);
+    }
 }
 
 // for now, though wow, is this goofed out
@@ -118,17 +118,17 @@ extern TerrainData terrain_info;
 // we build it ourselves, for maximal pain
 void set_real_terrain_normal(int32_t which, fix mag, fix norm[3])
 {
-   fix *targ_vec=&terrain_info.cx+(which*3);
-   *targ_vec++=fix_mul(norm[0],mag);
-   *targ_vec++=fix_mul(norm[1],mag);
-   *targ_vec  =fix_mul(norm[2],mag);
+    fix *targ_vec=&terrain_info.cx+(which*3);
+    *targ_vec++=fix_mul(norm[0],mag);
+    *targ_vec++=fix_mul(norm[1],mag);
+    *targ_vec  =fix_mul(norm[2],mag);
 }
 #else
 void set_dumb_terrain_normal(int32_t which, fix norm[3])
 {  // we aint proud
-   g3s_vector *targ_vec= (g3s_vector *) (&terrain_info.cx+(which*3));
+    g3s_vector *targ_vec= (g3s_vector *) (&terrain_info.cx+(which*3));
 
-   *targ_vec = *(g3s_vector *)norm;		//   _memcpy12(targ_vec,norm);
+    *targ_vec = *(g3s_vector *)norm;        //    _memcpy12(targ_vec,norm);
 }
 #endif
 
@@ -136,79 +136,79 @@ void set_dumb_terrain_normal(int32_t which, fix norm[3])
 
 void facelet_send(void)
 {
-   int32_t i;
-   tf_norm_set *cur_face;
-   tf_norm_cmp *cur_cmp;
-   fix mag, *nrm;
+    int32_t i;
+    tf_norm_set *cur_face;
+    tf_norm_cmp *cur_cmp;
+    fix mag, *nrm;
 
-   cur_face=&facets[0];
-   for (i=0; i<3; i++,cur_face++)
-   {
-      if ((cur_face->ia.cnt|cur_face->ua.cnt)==0)
-      {
-         memset(&terrain_info.cx+(i*3),0,3*4);		//     _memset32l(&terrain_info.cx+(i*3),0,3);
-         continue;                 // nope not nothing here...
-      }
-      nrm=cur_face->ua.nrm;
-      cur_cmp=&cur_face->ia;
-      if (cur_face->ua.cnt)
-      {
-         fix *cvec, recip, lmag;
-	      mag=fix_1+cur_cmp->batt;
-	      if (cur_cmp->cnt>1)
-	      {
-	         if (cur_cmp->prim!=FCE_NO_PRIM)  // well, we want bval*unitvec, here we are
+    cur_face=&facets[0];
+    for (i=0; i<3; i++,cur_face++)
+    {
+        if ((cur_face->ia.cnt|cur_face->ua.cnt)==0)
+        {
+            memset(&terrain_info.cx+(i*3),0,3*4);        //      _memset32l(&terrain_info.cx+(i*3),0,3);
+            continue;                      // nope not nothing here...
+        }
+        nrm=cur_face->ua.nrm;
+        cur_cmp=&cur_face->ia;
+        if (cur_face->ua.cnt)
+        {
+            fix *cvec, recip, lmag;
+            mag=fix_1+cur_cmp->batt;
+            if (cur_cmp->cnt>1)
             {
-               if (sgn(nrm[cur_cmp->prim]))
-		            nrm[cur_cmp->prim]-=cur_cmp->bval;
-               else  // there has to be a smarter thing to do here....
-		            nrm[cur_cmp->prim]+=cur_cmp->bval;
+                if (cur_cmp->prim!=FCE_NO_PRIM)  // well, we want bval*unitvec, here we are
+                {
+                    if (sgn(nrm[cur_cmp->prim]))
+                        nrm[cur_cmp->prim]-=cur_cmp->bval;
+                    else  // there has to be a smarter thing to do here....
+                        nrm[cur_cmp->prim]+=cur_cmp->bval;
+                }
+                else                                        // grind through reality, ick
+                {
+                    lmag=g3_vec_mag((g3s_vector *)&cur_cmp->nrm);
+                    cvec=&cur_cmp->nrm[0];
+                    recip=fix_div(cur_cmp->bval,lmag);    // look, make unitvector*bval all in one happy step
+                    nrm[0]+=fix_mul(*cvec,recip); cvec++;
+                    nrm[1]+=fix_mul(*cvec,recip); cvec++;
+                    nrm[2]+=fix_mul(*cvec,recip);
+                }
             }
-	         else                              // grind through reality, ick
-	         {
-	   	      lmag=g3_vec_mag((g3s_vector *)&cur_cmp->nrm);
-	            cvec=&cur_cmp->nrm[0];
-	            recip=fix_div(cur_cmp->bval,lmag);   // look, make unitvector*bval all in one happy step
-		         nrm[0]+=fix_mul(*cvec,recip); cvec++;
-		         nrm[1]+=fix_mul(*cvec,recip); cvec++;
-		         nrm[2]+=fix_mul(*cvec,recip);
-	         }
+            else
+            {
+                nrm[0]+=cur_cmp->nrm[0];
+                nrm[1]+=cur_cmp->nrm[1];
+                nrm[2]+=cur_cmp->nrm[2];
+            }
+            cvec=nrm;
+            recip=fix_div(fix_1,mag);
+            *cvec=fix_mul(*cvec,recip); cvec++;
+            *cvec=fix_mul(*cvec,recip); cvec++;
+            *cvec=fix_mul(*cvec,recip);
          }
-         else
-         {
-	         nrm[0]+=cur_cmp->nrm[0];
-	         nrm[1]+=cur_cmp->nrm[1];
-	         nrm[2]+=cur_cmp->nrm[2];
-         }
-         cvec=nrm;
-         recip=fix_div(fix_1,mag);
-         *cvec=fix_mul(*cvec,recip); cvec++;
-         *cvec=fix_mul(*cvec,recip); cvec++;
-         *cvec=fix_mul(*cvec,recip);
- 	   }
-      else
-      {
-         fix *cvec=&cur_cmp->nrm[0], lmag, recip; // hack_fac=fix_div(cur_cmp->bval,cur_cmp->tmag);
+        else
+        {
+            fix *cvec=&cur_cmp->nrm[0], lmag, recip; // hack_fac=fix_div(cur_cmp->bval,cur_cmp->tmag);
 
-	      nrm=cur_cmp->nrm;
-         if (cur_cmp->cnt>1)
-         {
-  	         if (cur_cmp->prim!=FCE_NO_PRIM)  // well, we want bval*unitvec, here we are
-               if (sgn(nrm[cur_cmp->prim]))
-		            nrm[cur_cmp->prim]=-cur_cmp->bval;
-               else  // there has to be a smarter thing to do here....
-		            nrm[cur_cmp->prim]= cur_cmp->bval;
-	         else                              // grind through reality, ick
-	         {
-	   	      lmag=g3_vec_mag((g3s_vector *)&cur_cmp->nrm);
-	            cvec=nrm;
-	            recip=fix_div(cur_cmp->bval,lmag);   // look, make unitvector*bval all in one happy step
-		         nrm[0]+=fix_mul(*cvec,recip); cvec++;
-		         nrm[1]+=fix_mul(*cvec,recip); cvec++;
-		         nrm[2]+=fix_mul(*cvec,recip);
-	         }
-         }
-      }  // now send the whole thing
-      set_dumb_terrain_normal(i,nrm);
-   }
+            nrm=cur_cmp->nrm;
+            if (cur_cmp->cnt>1)
+            {
+                  if (cur_cmp->prim!=FCE_NO_PRIM)  // well, we want bval*unitvec, here we are
+                    if (sgn(nrm[cur_cmp->prim]))
+                        nrm[cur_cmp->prim]=-cur_cmp->bval;
+                    else  // there has to be a smarter thing to do here....
+                        nrm[cur_cmp->prim]= cur_cmp->bval;
+                else                                        // grind through reality, ick
+                {
+                    lmag=g3_vec_mag((g3s_vector *)&cur_cmp->nrm);
+                    cvec=nrm;
+                    recip=fix_div(cur_cmp->bval,lmag);    // look, make unitvector*bval all in one happy step
+                    nrm[0]+=fix_mul(*cvec,recip); cvec++;
+                    nrm[1]+=fix_mul(*cvec,recip); cvec++;
+                    nrm[2]+=fix_mul(*cvec,recip);
+                }
+            }
+        }  // now send the whole thing
+        set_dumb_terrain_normal(i,nrm);
+    }
 }

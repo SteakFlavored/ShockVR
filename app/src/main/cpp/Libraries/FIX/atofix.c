@@ -37,70 +37,70 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 static void fixgetab(int8_t *p, int16_t fracshift, int16_t *a, int16_t *b, int16_t *sign);
 
-//	----------------------------------------------------------
-//		CONVERSION ROUTINES
-//	----------------------------------------------------------
+//    ----------------------------------------------------------
+//        CONVERSION ROUTINES
+//    ----------------------------------------------------------
 //
-//	atofix() converts an ascii string into a fixed-point number
+//    atofix() converts an ascii string into a fixed-point number
 
 fix atofix(int8_t *p)
 {
-	int16_t a, b, sign;
+    int16_t a, b, sign;
 
-	fixgetab(p, 16, &a, &b, &sign);
-	return(sign*fix_make(a,b));
+    fixgetab(p, 16, &a, &b, &sign);
+    return(sign*fix_make(a,b));
 }
 
-//	----------------------------------------------------------
+//    ----------------------------------------------------------
 //
-//	atofix24() converts an ascii string into a fix24
+//    atofix24() converts an ascii string into a fix24
 /*
 fix24 atofix24(int8_t *p)
 {
-	int32_t a,b,sign;
+    int32_t a,b,sign;
 
-	fixgetab(p,8,&a,&b,&sign);
-	return(sign*fix24_make(a,b));
+    fixgetab(p,8,&a,&b,&sign);
+    return(sign*fix24_make(a,b));
 }
 */
 
-//	-----------------------------------------------------------
-//		INTERNAL ROUTINES
-//	-----------------------------------------------------------
+//    -----------------------------------------------------------
+//        INTERNAL ROUTINES
+//    -----------------------------------------------------------
 //
-//	fixgetab() gets integer and fractional part from ascii buffer
+//    fixgetab() gets integer and fractional part from ascii buffer
 
 static void fixgetab(int8_t *p, int16_t fracshift, int16_t *a, int16_t *b, int16_t *sign)
 {
-	int16_t divis;
+    int16_t divis;
 
-//	sign is +1 or -1
+//    sign is +1 or -1
 
-	*sign = 1;
-	if (*p == '-')
-	{
-		*sign = -1;
-		++p;
-	}
+    *sign = 1;
+    if (*p == '-')
+    {
+        *sign = -1;
+        ++p;
+    }
 
-//	Get integer portion
+//    Get integer portion
 
-	*a = *b = 0;
-	while ((*p >= '0') && (*p <= '9'))
-		*a = (*a * 10) + (*p++ - '0');
+    *a = *b = 0;
+    while ((*p >= '0') && (*p <= '9'))
+        *a = (*a * 10) + (*p++ - '0');
 
-//	If period, get fractional portion
+//    If period, get fractional portion
 
-	if (*p == '.')
-	{
-		++p;
-		divis = 10;
-		while ((*p >= '0') && (*p <= '9'))
-		{
-			*b += ((*p++ - '0') << fracshift) / divis;
-			divis *= 10;
-			if (divis > 655360)
-				break;
-		}
-	}
+    if (*p == '.')
+    {
+        ++p;
+        divis = 10;
+        while ((*p >= '0') && (*p <= '9'))
+        {
+            *b += ((*p++ - '0') << fracshift) / divis;
+            divis *= 10;
+            if (divis > 655360)
+                break;
+        }
+    }
 }

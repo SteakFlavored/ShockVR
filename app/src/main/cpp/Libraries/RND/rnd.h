@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		Rnd.H		Random stream header file (see rnd.c for more info)
-//		Rex E. Bradford (REX)
+//        Rnd.H        Random stream header file (see rnd.c for more info)
+//        Rex E. Bradford (REX)
 /*
 * $Header: n:/project/lib/src/rnd/RCS/rnd.h 1.2 1993/04/06 10:33:57 rex Exp $
 * $Log: rnd.h $
@@ -35,25 +35,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg_types.h"
 #include "fix.h"
 
-//	A random stream
+//    A random stream
 
 typedef struct RndStream_ {
-	uint32_t curr;
-	uint32_t (*f_Next)(struct RndStream_ *prs);
-	void (*f_Seed)(struct RndStream_ *prs, uint32_t seed);
+    uint32_t curr;
+    uint32_t (*f_Next)(struct RndStream_ *prs);
+    void (*f_Seed)(struct RndStream_ *prs, uint32_t seed);
 } RndStream;
 
-//	To use a random stream, instantiate one (usually statically),
-//	seed it, and then make calls to get rnums, like so:
+//    To use a random stream, instantiate one (usually statically),
+//    seed it, and then make calls to get rnums, like so:
 //
-//		static RNDSTREAM_STD(rs);			// declare a stream
-//		RndSeed(&rs,22);						// or maybe 23
-//		rval = Rnd(&rs);						// get any old rnum
-//		rval = RndRange(&rs,1,6);			// throw dice
-//		rfix = RndFix(&rs);					// maybe you'd like 0 to .9999
-//		rfix = RndRangeFix(&rs,fl,fh);	// or fixed point in a range
+//        static RNDSTREAM_STD(rs);            // declare a stream
+//        RndSeed(&rs,22);                        // or maybe 23
+//        rval = Rnd(&rs);                        // get any old rnum
+//        rval = RndRange(&rs,1,6);            // throw dice
+//        rfix = RndFix(&rs);                    // maybe you'd like 0 to .9999
+//        rfix = RndRangeFix(&rs,fl,fh);    // or fixed point in a range
 
-//	Here are the random stream type declaration macros
+//    Here are the random stream type declaration macros
 
 #define RNDSTREAM_LC16(name) RndStream name = {0,RndLc16,RndLc16Seed}
 #define RNDSTREAM_GAUSS16(name) RndStream name = {0,RndGauss16,RndGauss16Seed}
@@ -61,27 +61,27 @@ typedef struct RndStream_ {
 
 #define RNDSTREAM_STD(name) RNDSTREAM_LC16(name)
 
-//	Seed a random stream
+//    Seed a random stream
 
 #define RndSeed(prs,seed) ((prs)->f_Seed(prs,seed))
 
-//	Get next random #
+//    Get next random #
 
 #define Rnd(prs) ((prs)->f_Next(prs))
 
-//	Get next random # and scale into fixed range 0.0 to .9999
+//    Get next random # and scale into fixed range 0.0 to .9999
 
 #define RndFix(prs) (fix_make(0,Rnd(prs)>>16))
 
-//	Get next random # and scale into low->high range (high value included)
+//    Get next random # and scale into low->high range (high value included)
 
 int32_t RndRange(RndStream *prs, int32_t low, int32_t high);
 
-//	Get next random # and scale into low->high range
+//    Get next random # and scale into low->high range
 
 fix RndRangeFix(RndStream *prs, fix low, fix high);
 
-//	Prototypes for current set of random stream classes
+//    Prototypes for current set of random stream classes
 
 uint32_t RndLc16(RndStream *prs);
 void RndLc16Seed(RndStream *prs, uint32_t seed);

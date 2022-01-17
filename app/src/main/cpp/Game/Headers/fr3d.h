@@ -26,20 +26,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  setup and stuff for point counts, initialization, and so on
  */
 
-//#define FR_PT_CNT    1024
-#define FR_PT_CNT    256
-#define FR_DEF_FOV   80
+//#define FR_PT_CNT     1024
+#define FR_PT_CNT     256
+#define FR_DEF_FOV    80
 #define FR_DEF_AXIS  'X'
 
-#define AXIS_ORDER   AXIS_RIGHT,AXIS_DOWN,AXIS_IN
+#define AXIS_ORDER    AXIS_RIGHT,AXIS_DOWN,AXIS_IN
 
 #define ANGLE_ORDER  ORDER_YXZ
-#define pitch        tx
-#define bank         tz
-#define head         ty
-#define xaxis        gX
-#define yaxis        gY
-#define zaxis        gZ
+#define pitch          tx
+#define bank            tz
+#define head            ty
+#define xaxis          gX
+#define yaxis          gY
+#define zaxis          gZ
 
 // conversions
 //  does anyone ever call this... oh yea, for matts stuff...

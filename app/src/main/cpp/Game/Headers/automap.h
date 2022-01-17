@@ -60,23 +60,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 typedef struct _AutoText{
-   int8_t *letters;
-   Point coordinate;
-   int32_t color;
-   struct _AutoText *next_entry;
+    int8_t *letters;
+    Point coordinate;
+    int32_t color;
+    struct _AutoText *next_entry;
 } AutoText;
 
-#define AUTOMAP_TERRAIN       0x0001
-#define AUTOMAP_ELEVATION     0x0002
-#define AUTOMAP_SECURITY      0x0004
-#define AUTOMAP_CRITTERS      0x0008
-#define AUTOMAP_INFORMATION   0x0010
-#define AUTOMAP_ALIGNMENT     0x0020
+#define AUTOMAP_TERRAIN         0x0001
+#define AUTOMAP_ELEVATION      0x0002
+#define AUTOMAP_SECURITY        0x0004
+#define AUTOMAP_CRITTERS        0x0008
+#define AUTOMAP_INFORMATION    0x0010
+#define AUTOMAP_ALIGNMENT      0x0020
 
-#define AUTOMAP_ZOOMIN_X      16
-#define AUTOMAP_ZOOMIN_Y      16
-#define AUTOMAP_ZOOMOUT_X     32
-#define AUTOMAP_ZOOMOUT_Y     32
+#define AUTOMAP_ZOOMIN_X        16
+#define AUTOMAP_ZOOMIN_Y        16
+#define AUTOMAP_ZOOMOUT_X      32
+#define AUTOMAP_ZOOMOUT_Y      32
 
 // Prototypes
 

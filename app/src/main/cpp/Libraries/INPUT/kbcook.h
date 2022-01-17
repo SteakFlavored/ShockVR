@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "kb.h"
 
 /*
-#define KB_CNV_SHIFT   1
+#define KB_CNV_SHIFT    1
 #define KB_CNV_NOSHIFT 0
 #define KB_CNV_TBLSIZE 0xE0
 
@@ -48,29 +48,29 @@ extern uint16_t kb_cnv_table[KB_CNV_TBLSIZE][2];
 #endif
 */
 
-#define CNV_CTRL     (1<<(1+8)) // KB_FLAG_CTRL can be set
-#define CNV_ALT      (1<<(2+8)) // KB_FLAG_SHIFT can be set
+#define CNV_CTRL      (1<<(1+8)) // KB_FLAG_CTRL can be set
+#define CNV_ALT        (1<<(2+8)) // KB_FLAG_SHIFT can be set
 #define CNV_SPECIAL  (1<<(3+8)) // KB_FLAG_SPECIAL is set
-#define CNV_SHIFT    (1<<(4+8)) // KB_FLAG_SHIFT can be set
-#define CNV_2ND      (1<<(5+8)) // KB_FLAG_2ND is set
-#define CNV_NUM      (1<<(6+8)) // affected by numlock
-#define CNV_CAPS     (1<<(7+8)) // affected by capslock
+#define CNV_SHIFT     (1<<(4+8)) // KB_FLAG_SHIFT can be set
+#define CNV_2ND        (1<<(5+8)) // KB_FLAG_2ND is set
+#define CNV_NUM        (1<<(6+8)) // affected by numlock
+#define CNV_CAPS      (1<<(7+8)) // affected by capslock
 
 #define CNV_CAPS_SHF (7+8)
 
-#define KB_FLAG_DOWN    (1<<(0+8))
-#define KB_FLAG_CTRL    CNV_CTRL
-#define KB_FLAG_ALT     CNV_ALT
+#define KB_FLAG_DOWN     (1<<(0+8))
+#define KB_FLAG_CTRL     CNV_CTRL
+#define KB_FLAG_ALT      CNV_ALT
 #define KB_FLAG_SPECIAL CNV_SPECIAL
-#define KB_FLAG_SHIFT   CNV_SHIFT
-#define KB_FLAG_2ND     CNV_2ND
+#define KB_FLAG_SHIFT    CNV_SHIFT
+#define KB_FLAG_2ND      CNV_2ND
 
-#define KB_DOWN_SHF     8
-#define KB_CTRL_SHF     9
-#define KB_ALT_SHF     10
+#define KB_DOWN_SHF      8
+#define KB_CTRL_SHF      9
+#define KB_ALT_SHF      10
 #define KB_SPECIAL_SHF 11
-#define KB_SHIFT_SHF   12
-#define KB_2ND_SHF     13
+#define KB_SHIFT_SHF    12
+#define KB_2ND_SHF      13
 
 #define KBC_EXTENDED 0x80
 

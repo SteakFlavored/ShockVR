@@ -16,12 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*	This file created by RESTOOL */
+/*    This file created by RESTOOL */
 
 #ifndef __CACHETEX_H
 #define __CACHETEX_H
 
-#define RES_customTextureMaps 0x4b		// (75)
-#define RES_smallTextureMaps 0x141		// (321)
+#define RES_customTextureMaps 0x4b        // (75)
+#define RES_smallTextureMaps 0x141        // (321)
 
 #endif

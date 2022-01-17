@@ -76,21 +76,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg.h"
 
 /* This particular mess implements the fix_uline for each of the
-   five fill types.  The main driver (essentially the code in the
-   the 'original' fl8lin.c) is now a code fragment in fl8lin.h
+    five fill types.  The main driver (essentially the code in the
+    the 'original' fl8lin.c) is now a code fragment in fl8lin.h
 
-   For each function, four macros are (re)defined - flat8_pixel_fill_xf
-   and flat8_pixel_fill_xi - which set the pixel value in the case of
-   x fix-point and x known to be integer, and flat8_pixel_fill_row, which
-   allows us to retain the speed hack for a (nearly) horizontal line.  For
-   fill types which are indep of the pixel value (norm, solid, clut), the
-   color is set only once in flat8_pixel_fill_init.
+    For each function, four macros are (re)defined - flat8_pixel_fill_xf
+    and flat8_pixel_fill_xi - which set the pixel value in the case of
+    x fix-point and x known to be integer, and flat8_pixel_fill_row, which
+    allows us to retain the speed hack for a (nearly) horizontal line.  For
+    fill types which are indep of the pixel value (norm, solid, clut), the
+    color is set only once in flat8_pixel_fill_init.
 
-   Note that each macro is referenced 7 times (the line drawer has
-   lots of dx <=> dy type cases).  This makes blend come out huge.
+    Note that each macro is referenced 7 times (the line drawer has
+    lots of dx <=> dy type cases).  This makes blend come out huge.
 
-   None of these macros take arguments, instead they rely on secret
-   gnosis of the variable names in fl8lin.h
+    None of these macros take arguments, instead they rely on secret
+    gnosis of the variable names in fl8lin.h
 */
 
 
@@ -102,13 +102,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #undef  flat8_pixel_fill_xf
 #define flat8_pixel_fill_xf \
 do { \
-   p[fix_fint(x0)] = c; \
+    p[fix_fint(x0)] = c; \
 } while (0)
 
 #undef  flat8_pixel_fill_xi
 #define flat8_pixel_fill_xi \
 do { \
-   p[x0] = c; \
+    p[x0] = c; \
 } while (0)
 
 #undef flat8_pixel_fill_row
@@ -119,8 +119,8 @@ while(0)
 #undef flat8_pixel_fill_init
 #define flat8_pixel_fill_init \
 do { \
-   if (gr_get_fill_type() ==  FILL_SOLID) \
-     c = (uint8_t)parm; \
+    if (gr_get_fill_type() ==  FILL_SOLID) \
+      c = (uint8_t)parm; \
 } while (0)
 
 /* norm */
@@ -136,7 +136,7 @@ void  gri_flat8_uline_ns (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v
 #undef flat8_pixel_fill_init
 #define flat8_pixel_fill_init \
 do { \
-   c = (int32_t) (((uint8_t*)parm)[c]); \
+    c = (int32_t) (((uint8_t*)parm)[c]); \
 } while (0)
 
 void  gri_flat8_uline_clut (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
@@ -149,22 +149,22 @@ void  gri_flat8_uline_clut (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex 
 #undef  flat8_pixel_fill_xf
 #define flat8_pixel_fill_xf \
 do { \
-   p[fix_fint(x0)] = c ^ p[fix_fint(x0)]; \
+    p[fix_fint(x0)] = c ^ p[fix_fint(x0)]; \
 } while (0)
 
 #undef  flat8_pixel_fill_xi
 #define flat8_pixel_fill_xi \
 do { \
-   p[x0] = c ^ p[x0]; \
+    p[x0] = c ^ p[x0]; \
 } while (0)
 
 #undef flat8_pixel_fill_row
 #define flat8_pixel_fill_row \
 do { \
-   while (x0 < x1) { \
-     flat8_pixel_fill_xi; \
-     x0++; \
-   } \
+    while (x0 < x1) { \
+      flat8_pixel_fill_xi; \
+      x0++; \
+    } \
 } while (0)
 
 void  gri_flat8_uline_xor (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
@@ -184,62 +184,62 @@ void  gri_flat8_uline_xor (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *
 
 #undef  flat8_pixel_fill_xf
 #define flat8_pixel_fill_xf \
-   do { \
-      uint8_t *k; \
-      grs_rgb prev; \
-      grs_rgb lg_new; \
-      fix r1, g1, b1; \
+    do { \
+        uint8_t *k; \
+        grs_rgb prev; \
+        grs_rgb lg_new; \
+        fix r1, g1, b1; \
 \
-      prev = grd_bpal [p[fix_fint(x0)]]; \
-      lg_new = grd_bpal [c]; \
+        prev = grd_bpal [p[fix_fint(x0)]]; \
+        lg_new = grd_bpal [c]; \
 \
-      r1 = fix_mul(rtof(lg_new),(fix) parm) + fix_mul(rtof(prev),FIX_UNIT-(fix) parm); \
-      g1 = fix_mul(gtof(lg_new),(fix) parm) + fix_mul(gtof(prev),FIX_UNIT-(fix) parm); \
-      b1 = fix_mul(btof(lg_new),(fix) parm) + fix_mul(btof(prev),FIX_UNIT-(fix) parm); \
-      \
-      k = grd_ipal; \
-      k += (r1>>17)&0x1f; \
-      k += (g1>>12)&0x3e0; \
-      k += (b1>>7)&0x7c00; \
-      p[fix_fint(x0)] = *k; \
-    } while (0)
+        r1 = fix_mul(rtof(lg_new),(fix) parm) + fix_mul(rtof(prev),FIX_UNIT-(fix) parm); \
+        g1 = fix_mul(gtof(lg_new),(fix) parm) + fix_mul(gtof(prev),FIX_UNIT-(fix) parm); \
+        b1 = fix_mul(btof(lg_new),(fix) parm) + fix_mul(btof(prev),FIX_UNIT-(fix) parm); \
+        \
+        k = grd_ipal; \
+        k += (r1>>17)&0x1f; \
+        k += (g1>>12)&0x3e0; \
+        k += (b1>>7)&0x7c00; \
+        p[fix_fint(x0)] = *k; \
+     } while (0)
 
 #undef  flat8_pixel_fill_xi
 #define flat8_pixel_fill_xi \
-   do { \
-      uint8_t *k; \
-      grs_rgb prev; \
-      grs_rgb lg_new; \
-      fix r1, g1, b1; \
+    do { \
+        uint8_t *k; \
+        grs_rgb prev; \
+        grs_rgb lg_new; \
+        fix r1, g1, b1; \
 \
-      prev = grd_bpal [p[x0]]; \
-      lg_new = grd_bpal [c]; \
+        prev = grd_bpal [p[x0]]; \
+        lg_new = grd_bpal [c]; \
 \
-      r1 = fix_mul(rtof(lg_new),(fix) parm) + fix_mul(rtof(prev),FIX_UNIT- (fix) parm); \
-      g1 = fix_mul(gtof(lg_new),(fix) parm) + fix_mul(gtof(prev),FIX_UNIT- (fix) parm); \
-      b1 = fix_mul(btof(lg_new),(fix) parm) + fix_mul(btof(prev),FIX_UNIT- (fix) parm); \
-      \
-      k = grd_ipal; \
-      k += (r1>>17)&0x1f; \
-      k += (g1>>12)&0x3e0; \
-      k += (b1>>7)&0x7c00; \
-      p[x0] = *k; \
-    } while (0)
+        r1 = fix_mul(rtof(lg_new),(fix) parm) + fix_mul(rtof(prev),FIX_UNIT- (fix) parm); \
+        g1 = fix_mul(gtof(lg_new),(fix) parm) + fix_mul(gtof(prev),FIX_UNIT- (fix) parm); \
+        b1 = fix_mul(btof(lg_new),(fix) parm) + fix_mul(btof(prev),FIX_UNIT- (fix) parm); \
+        \
+        k = grd_ipal; \
+        k += (r1>>17)&0x1f; \
+        k += (g1>>12)&0x3e0; \
+        k += (b1>>7)&0x7c00; \
+        p[x0] = *k; \
+     } while (0)
 
 
 #undef flat8_pixel_fill_row
 #define flat8_pixel_fill_row \
 do { \
-   while (x0 < x1) { \
-     flat8_pixel_fill_xi; \
-     x0++; \
-   } \
+    while (x0 < x1) { \
+      flat8_pixel_fill_xi; \
+      x0++; \
+    } \
 } while (0)
 
 #undef flat8_pixel_fill_init
 #define flat8_pixel_fill_init \
 do { \
-   ; \
+    ; \
 } while (0)
 
 void  gri_flat8_uline_blend (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)

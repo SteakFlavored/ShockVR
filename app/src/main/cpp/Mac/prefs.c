@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //====================================================================================
 //
-//		System Shock - ©1994-1995 Looking Glass Technologies, Inc.
+//        System Shock - ©1994-1995 Looking Glass Technologies, Inc.
 //
-//		Prefs.c	-	Handles saving and loading preferences.
+//        Prefs.c    -    Handles saving and loading preferences.
 //
 //====================================================================================
 
@@ -41,150 +41,150 @@ void SetShockGlobals(void);
 //--------------------
 //  Globals
 //--------------------
-ShockPrefs		gShockPrefs;
+ShockPrefs        gShockPrefs;
 
 //--------------------
 //  Externs
 //--------------------
-extern int8_t		which_lang;
-extern bool 		sfx_on;
-extern int32_t 			_fr_global_detail;
-extern bool	DoubleSize;
-extern bool	SkipLines;
+extern int8_t        which_lang;
+extern bool         sfx_on;
+extern int32_t             _fr_global_detail;
+extern bool    DoubleSize;
+extern bool    SkipLines;
 
 
 //--------------------------------------------------------------------
-//	  Initialize the preferences to their default settings.
+//      Initialize the preferences to their default settings.
 //--------------------------------------------------------------------
 void SetDefaultPrefs(void)
 {
-	gShockPrefs.prefVer = 0;
-	gShockPrefs.prefPlayIntro = 1;				// First time through, play the intro
+    gShockPrefs.prefVer = 0;
+    gShockPrefs.prefPlayIntro = 1;                // First time through, play the intro
 
-	gShockPrefs.goMsgLength = 0;					// Normal
-	gShockPrefs.goPopupLabels = true;
-	gShockPrefs.goOnScreenHelp = true;
-	gShockPrefs.goLanguage = 0;					// English
+    gShockPrefs.goMsgLength = 0;                    // Normal
+    gShockPrefs.goPopupLabels = true;
+    gShockPrefs.goOnScreenHelp = true;
+    gShockPrefs.goLanguage = 0;                    // English
 
-	gShockPrefs.soBackMusic = true;
-	gShockPrefs.soSoundFX = true;
-	gShockPrefs.soMusicVolume = 33;			//  Figure out when sound is put in.
+    gShockPrefs.soBackMusic = true;
+    gShockPrefs.soSoundFX = true;
+    gShockPrefs.soMusicVolume = 33;            //  Figure out when sound is put in.
 
-	gShockPrefs.doResolution = 0;					// High-res.
-	gShockPrefs.doDetail = 2;						// High detail.
-	gShockPrefs.doGamma = 29;						// Default gamma (29 out of 100).
-	gShockPrefs.doUseQD = false;
+    gShockPrefs.doResolution = 0;                    // High-res.
+    gShockPrefs.doDetail = 2;                        // High detail.
+    gShockPrefs.doGamma = 29;                        // Default gamma (29 out of 100).
+    gShockPrefs.doUseQD = false;
 
-	SetShockGlobals();
+    SetShockGlobals();
 }
 
 //--------------------------------------------------------------------
-//	  Locate the preferences file and load them to set our global pref settings.
+//      Locate the preferences file and load them to set our global pref settings.
 //--------------------------------------------------------------------
 OSErr LoadPrefs(ResType resID)
 {
-	OSErr					err;
-	Handle					prefHdl;
-	int16_t						prefVRef;
-	int32_t						prefParID;
-	int16_t						fRef;
-	HParamBlockRec		info;
+    OSErr                    err;
+    Handle                    prefHdl;
+    int16_t                        prefVRef;
+    int32_t                        prefParID;
+    int16_t                        fRef;
+    HParamBlockRec        info;
 
-	err = GetPrefsDir(&prefVRef, &prefParID);
-	if (err == noErr)
-	{
-		fRef = HOpenResFile(prefVRef, prefParID, kPrefsFileName, fsRdPerm);		// Open the prefs file.
-		if (fRef == -1)																						// If not there, then create it
-		{																											// with default values.
-			HCreateResFile(prefVRef, prefParID, kPrefsFileName);
-			err = ResError();
-			if (err == noErr)
-			{
-				info.ioParam.ioCompletion = 0L;
-				info.ioParam.ioVRefNum = prefVRef;
-				info.ioParam.ioNamePtr = kPrefsFileName;
-				info.fileParam.ioDirID = prefParID;
-				info.fileParam.ioFDirIndex = -1;
-				err = PBHGetFInfo(&info, false);
-				if (err == noErr)
-				{
-					info.fileParam.ioDirID = prefParID;
-					info.fileParam.ioFDirIndex = -1;
-					info.fileParam.ioFlFndrInfo.fdCreator = kAppFileType;
-					info.fileParam.ioFlFndrInfo.fdType = kPrefsFileType;
-					PBHSetFInfoSync(&info);
-				}
-				SavePrefs(resID);
-			}
-		}
-		else																				// Else set the global preferences struct
-		{																					// from the prefs resource.
-			prefHdl = GetResource(resID, 128);
-			if (prefHdl)
-			{
-				BlockMove(*prefHdl, &gShockPrefs, sizeof(ShockPrefs));
-				ReleaseResource(prefHdl);
-				SetShockGlobals();
-			}
-			CloseResFile(fRef);
-		}
-	}
-	return(err);
+    err = GetPrefsDir(&prefVRef, &prefParID);
+    if (err == noErr)
+    {
+        fRef = HOpenResFile(prefVRef, prefParID, kPrefsFileName, fsRdPerm);        // Open the prefs file.
+        if (fRef == -1)                                                                                        // If not there, then create it
+        {                                                                                                            // with default values.
+            HCreateResFile(prefVRef, prefParID, kPrefsFileName);
+            err = ResError();
+            if (err == noErr)
+            {
+                info.ioParam.ioCompletion = 0L;
+                info.ioParam.ioVRefNum = prefVRef;
+                info.ioParam.ioNamePtr = kPrefsFileName;
+                info.fileParam.ioDirID = prefParID;
+                info.fileParam.ioFDirIndex = -1;
+                err = PBHGetFInfo(&info, false);
+                if (err == noErr)
+                {
+                    info.fileParam.ioDirID = prefParID;
+                    info.fileParam.ioFDirIndex = -1;
+                    info.fileParam.ioFlFndrInfo.fdCreator = kAppFileType;
+                    info.fileParam.ioFlFndrInfo.fdType = kPrefsFileType;
+                    PBHSetFInfoSync(&info);
+                }
+                SavePrefs(resID);
+            }
+        }
+        else                                                                                // Else set the global preferences struct
+        {                                                                                    // from the prefs resource.
+            prefHdl = GetResource(resID, 128);
+            if (prefHdl)
+            {
+                BlockMove(*prefHdl, &gShockPrefs, sizeof(ShockPrefs));
+                ReleaseResource(prefHdl);
+                SetShockGlobals();
+            }
+            CloseResFile(fRef);
+        }
+    }
+    return(err);
 }
 
 //--------------------------------------------------------------------
-//	  Save global settings in the preferences file.
+//      Save global settings in the preferences file.
 //--------------------------------------------------------------------
 OSErr SavePrefs(ResType resID)
 {
-	OSErr		err;
-	Handle		prefHdl;
-	int16_t			prefVRef;
-	int32_t			prefParID;
-	int16_t			fRef;
+    OSErr        err;
+    Handle        prefHdl;
+    int16_t            prefVRef;
+    int32_t            prefParID;
+    int16_t            fRef;
 
-	err = GetPrefsDir(&prefVRef, &prefParID);
-	if (err == noErr)
-	{
-		fRef = HOpenResFile(prefVRef, prefParID, kPrefsFileName, fsRdWrPerm);
-		if (fRef != -1)
-		{
-			prefHdl = GetResource(resID, 128);										// Get the prefs resource
-			if (!prefHdl)																		// If there is no resource in the file, then
-			{																						// add one.
-				prefHdl = NewHandle(sizeof(ShockPrefs));
-				if (prefHdl)
-					AddResource(prefHdl, resID, 128, "\p");
-			}
+    err = GetPrefsDir(&prefVRef, &prefParID);
+    if (err == noErr)
+    {
+        fRef = HOpenResFile(prefVRef, prefParID, kPrefsFileName, fsRdWrPerm);
+        if (fRef != -1)
+        {
+            prefHdl = GetResource(resID, 128);                                        // Get the prefs resource
+            if (!prefHdl)                                                                        // If there is no resource in the file, then
+            {                                                                                        // add one.
+                prefHdl = NewHandle(sizeof(ShockPrefs));
+                if (prefHdl)
+                    AddResource(prefHdl, resID, 128, "\p");
+            }
 
-			BlockMove(&gShockPrefs, *prefHdl, sizeof(ShockPrefs));		// Set prefs handle from our global.
+            BlockMove(&gShockPrefs, *prefHdl, sizeof(ShockPrefs));        // Set prefs handle from our global.
 
-			ChangedResource(prefHdl);													// Write out the changed resource.
-			WriteResource(prefHdl);
-			ReleaseResource(prefHdl);
-			UpdateResFile(fRef);
-			CloseResFile(fRef);
-		}
-	}
-	return (err);
+            ChangedResource(prefHdl);                                                    // Write out the changed resource.
+            WriteResource(prefHdl);
+            ReleaseResource(prefHdl);
+            UpdateResFile(fRef);
+            CloseResFile(fRef);
+        }
+    }
+    return (err);
 }
 
 //--------------------------------------------------------------------
-//	  Get a reference to the Preferences folder.
+//      Get a reference to the Preferences folder.
 //--------------------------------------------------------------------
 OSErr GetPrefsDir(int16_t *vRef, int32_t *parID)
 {
-	OSErr	err;
-	int32_t		fm;
+    OSErr    err;
+    int32_t        fm;
 
-	err = Gestalt(gestaltFindFolderAttr, &fm);
-	err |= (fm & (1 << gestaltFindFolderPresent)) == 0;
+    err = Gestalt(gestaltFindFolderAttr, &fm);
+    err |= (fm & (1 << gestaltFindFolderPresent)) == 0;
 
-	if (err == noErr)												// If folder mgr present, then find
-	{																		// the 'Preferences' folder
-		err = FindFolder(kOnSystemDisk, kPreferencesFolderType, kCreateFolder, vRef, parID);
-	}
-	return (err);
+    if (err == noErr)                                                // If folder mgr present, then find
+    {                                                                        // the 'Preferences' folder
+        err = FindFolder(kOnSystemDisk, kPreferencesFolderType, kCreateFolder, vRef, parID);
+    }
+    return (err);
 }
 
 //--------------------------------------------------------------------
@@ -192,13 +192,13 @@ OSErr GetPrefsDir(int16_t *vRef, int32_t *parID)
 //--------------------------------------------------------------------
 void SetShockGlobals(void)
 {
-	popup_cursors = gShockPrefs.goPopupLabels;
-	olh_active = gShockPrefs.goOnScreenHelp;
-	which_lang = 0;													// always English
+    popup_cursors = gShockPrefs.goPopupLabels;
+    olh_active = gShockPrefs.goOnScreenHelp;
+    which_lang = 0;                                                    // always English
 
-	sfx_on = gShockPrefs.soSoundFX;
+    sfx_on = gShockPrefs.soSoundFX;
 
-	DoubleSize = (gShockPrefs.doResolution == 1);		// Set this True for low-res.
-	SkipLines = gShockPrefs.doUseQD;
-	_fr_global_detail = gShockPrefs.doDetail;
+    DoubleSize = (gShockPrefs.doResolution == 1);        // Set this True for low-res.
+    SkipLines = gShockPrefs.doUseQD;
+    _fr_global_detail = gShockPrefs.doDetail;
 }

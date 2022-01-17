@@ -46,29 +46,29 @@ static int8_t fr_str[15];
 #if 0 // KLC
 int8_t *fr_get_frame_rate(void)
 {
-   fr_str[0]='\0';
-   if (_frp.time.last_frame_cnt>0)
-   {
-      if (_frp.time.last_chk_time!=0)
-      {
-         int32_t num=(*tmd_ticks-_frp.time.last_chk_time);
-         int8_t mod;
+    fr_str[0]='\0';
+    if (_frp.time.last_frame_cnt>0)
+    {
+        if (_frp.time.last_chk_time!=0)
+        {
+            int32_t num=(*tmd_ticks-_frp.time.last_chk_time);
+            int8_t mod;
 
-         if (_frp.time.last_frame_cnt>1)
-            num/=_frp.time.last_frame_cnt;
-         num=28000/num;
-         itoa(num,fr_str,10);
-         mod=strlen(fr_str);
-         fr_str[mod+1]=fr_str[mod];
-         fr_str[mod]=fr_str[mod-1];
-         fr_str[mod-1]=fr_str[mod-2];
-         fr_str[mod-2]='.';
-         _frp.time.last_frame_len=num/100;
-      }
-      _frp.time.last_frame_cnt=0;
-   }
-   _frp.time.last_chk_time=*tmd_ticks;
-   return fr_str;
+            if (_frp.time.last_frame_cnt>1)
+                num/=_frp.time.last_frame_cnt;
+            num=28000/num;
+            itoa(num,fr_str,10);
+            mod=strlen(fr_str);
+            fr_str[mod+1]=fr_str[mod];
+            fr_str[mod]=fr_str[mod-1];
+            fr_str[mod-1]=fr_str[mod-2];
+            fr_str[mod-2]='.';
+            _frp.time.last_frame_len=num/100;
+        }
+        _frp.time.last_frame_cnt=0;
+    }
+    _frp.time.last_chk_time=*tmd_ticks;
+    return fr_str;
 }
 #endif // KLC
 
@@ -81,68 +81,68 @@ int8_t *fr_get_frame_rate(void)
  */
 uint8_t check_around(uint8_t *base, int32_t x, int32_t y)
 {
-	uint8_t curval;
-	int32_t extloop, inloop, clen;
-	int32_t dvec[2]={0,1};
+    uint8_t curval;
+    int32_t extloop, inloop, clen;
+    int32_t dvec[2]={0,1};
 
-	for (clen=1; clen<SEARCH_DIAM; clen++) /* for each radius */
-		for (extloop=0; extloop<2; extloop++) /* two of each */
-		{
-			for (inloop=0; inloop<clen; inloop++)
-			{
-				x+=dvec[0]; y+=dvec[1];
-				if (((x>=0)&&(x<_fr->draw_canvas.bm.w))&&((y>=0)&&(y<_fr->draw_canvas.bm.h)))
-				{
-					curval=*(base+(y*_fr->draw_canvas.bm.row)+x);
-					if ((curval>=FR_CUR_OBJ_BASE)&&(curval<fr_cur_obj_col))
-						return curval;
-				}
-			}
-			if (dvec[0]!=0) { dvec[1]= -dvec[0]; dvec[0]=0; }
-			else 				 { dvec[0]= dvec[1] ; dvec[1]=0; }
-		}
-	return 0;
+    for (clen=1; clen<SEARCH_DIAM; clen++) /* for each radius */
+        for (extloop=0; extloop<2; extloop++) /* two of each */
+        {
+            for (inloop=0; inloop<clen; inloop++)
+            {
+                x+=dvec[0]; y+=dvec[1];
+                if (((x>=0)&&(x<_fr->draw_canvas.bm.w))&&((y>=0)&&(y<_fr->draw_canvas.bm.h)))
+                {
+                    curval=*(base+(y*_fr->draw_canvas.bm.row)+x);
+                    if ((curval>=FR_CUR_OBJ_BASE)&&(curval<fr_cur_obj_col))
+                        return curval;
+                }
+            }
+            if (dvec[0]!=0) { dvec[1]= -dvec[0]; dvec[0]=0; }
+            else                  { dvec[0]= dvec[1] ; dvec[1]=0; }
+        }
+    return 0;
 }
 
 // is transp is set, then the get at is done with transparency on, being able to look through gratings, etc.
 // if it is false, then transparency is not used
 uint16_t fr_get_real(fauxrend_context *cur_fr, int32_t x, int32_t y)
 {
-   int32_t col, tmpcol;
-   if ((_fr_glob_flags|_fr->flags)&(FR_NORENDR_MASK|FR_SOLIDFR_MASK))  /* dont really render, call a game thing */
-      return 0;
-   col=(int32_t)(*((cur_fr->draw_canvas.bm.bits)+(y*cur_fr->draw_canvas.bm.row)+(x)));
+    int32_t col, tmpcol;
+    if ((_fr_glob_flags|_fr->flags)&(FR_NORENDR_MASK|FR_SOLIDFR_MASK))  /* dont really render, call a game thing */
+        return 0;
+    col=(int32_t)(*((cur_fr->draw_canvas.bm.bits)+(y*cur_fr->draw_canvas.bm.row)+(x)));
 // mprintf("Color %d, obj %d, max c %d at %d %d\n",col,(col>=FR_CUR_OBJ_BASE)?fr_col_to_obj[col-FR_CUR_OBJ_BASE]:0,fr_cur_obj_col,x,y);
-   if ((col>=FR_CUR_OBJ_BASE)&&(col<fr_cur_obj_col))         // if we are actually exactly over an object
-      return (uint16_t)fr_col_to_obj[col-FR_CUR_OBJ_BASE];     //  actual obj_id
-   if (tmpcol=check_around(cur_fr->draw_canvas.bm.bits,x,y)) // if we found an object nearby (what to do about transparent doors)
-      return (uint16_t)fr_col_to_obj[tmpcol-FR_CUR_OBJ_BASE];  //  actual obj_id
-   else                                                      // its a wall folks, just a wall
-	   return ((uint16_t)0)-((uint16_t)col);                      //  return a tmap as - (tmapid+1), or nothing as 0
+    if ((col>=FR_CUR_OBJ_BASE)&&(col<fr_cur_obj_col))            // if we are actually exactly over an object
+        return (uint16_t)fr_col_to_obj[col-FR_CUR_OBJ_BASE];      //  actual obj_id
+    if (tmpcol=check_around(cur_fr->draw_canvas.bm.bits,x,y)) // if we found an object nearby (what to do about transparent doors)
+        return (uint16_t)fr_col_to_obj[tmpcol-FR_CUR_OBJ_BASE];  //  actual obj_id
+    else                                                                        // its a wall folks, just a wall
+        return ((uint16_t)0)-((uint16_t)col);                             //  return a tmap as - (tmapid+1), or nothing as 0
 }
 
-int32_t         fr_cspace_idx(void)              {gr_set_fill_parm(1); return 1;}
+int32_t            fr_cspace_idx(void)                  {gr_set_fill_parm(1); return 1;}
 
 uint16_t fr_get_at(frc *fr, int32_t x, int32_t y, bool transp)
 {
-   int32_t (*fr_ptr_idx)(void)=fr_get_idx, of=_fr_glob_flags;
+    int32_t (*fr_ptr_idx)(void)=fr_get_idx, of=_fr_glob_flags;
 
-   _fr_top(fr);
-   _fr_glob_flags|=FR_PICKUPM_MASK;
-   if (!transp) _fr_glob_flags|=FR_NOTRANS_MASK;
-   fr_cur_obj_col=FR_CUR_OBJ_BASE;
-   if (_frp.faces.cyber)
-	   fr_get_idx=fr_cspace_idx;
-   else
-	   fr_get_idx=fr_pickup_idx;
-   fr_rend(fr);
-   fr_get_idx=fr_ptr_idx;
-   _fr_glob_flags=of;
-   return fr_get_real(_fr,x,y);
+    _fr_top(fr);
+    _fr_glob_flags|=FR_PICKUPM_MASK;
+    if (!transp) _fr_glob_flags|=FR_NOTRANS_MASK;
+    fr_cur_obj_col=FR_CUR_OBJ_BASE;
+    if (_frp.faces.cyber)
+        fr_get_idx=fr_cspace_idx;
+    else
+        fr_get_idx=fr_pickup_idx;
+    fr_rend(fr);
+    fr_get_idx=fr_ptr_idx;
+    _fr_glob_flags=of;
+    return fr_get_real(_fr,x,y);
 }
 
 uint16_t fr_get_again(frc *fr, int32_t x, int32_t y)
 {
-   _fr_top(fr);
-   return fr_get_real(_fr,x,y);
+    _fr_top(fr);
+    return fr_get_real(_fr,x,y);
 }

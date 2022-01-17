@@ -57,30 +57,30 @@ int32_t gr_int_line (int16_t x0, int16_t y0, int16_t x1, int16_t y1);
 
 int32_t gr_int_line (int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
-   int32_t r;
-   grs_vertex v0, v1;
+    int32_t r;
+    grs_vertex v0, v1;
 
-   v0.x = x0;  v0.y = y0;      /* we don't need no stinking type checking */
-   v1.x = x1;  v1.y = y1;
+    v0.x = x0;  v0.y = y0;        /* we don't need no stinking type checking */
+    v1.x = x1;  v1.y = y1;
 
-   r = grd_iline_clip_fill (gr_get_fcolor(), gr_get_fill_parm(), &v0, &v1);
+    r = grd_iline_clip_fill (gr_get_fcolor(), gr_get_fill_parm(), &v0, &v1);
 
-   return r;
+    return r;
 }
 
 int32_t gri_iline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   int32_t r;
-   grs_vertex u0, u1;
+    int32_t r;
+    grs_vertex u0, u1;
 
-   u0.x = fix_make(v0->x, 32768); u0.y = fix_make(v0->y, 32768);
-   u1.x = fix_make(v1->x, 32768); u1.y = fix_make(v1->y, 32768);
+    u0.x = fix_make(v0->x, 32768); u0.y = fix_make(v0->y, 32768);
+    u1.x = fix_make(v1->x, 32768); u1.y = fix_make(v1->y, 32768);
 
-   r = gri_line_clip (&u0, &u1);
+    r = gri_line_clip (&u0, &u1);
 
-   if (r != CLIP_ALL)
-      grd_uline_fill (c, parm, &u0, &u1);
+    if (r != CLIP_ALL)
+        grd_uline_fill (c, parm, &u0, &u1);
 
-   return r;
+    return r;
 }
 

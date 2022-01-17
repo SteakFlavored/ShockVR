@@ -31,12 +31,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objprop.h"
 #include "objapp.h"
 
-#define NUM_OBJECT_BIT_LEN    ((NUM_OBJECT+7)>>3)
+#define NUM_OBJECT_BIT_LEN     ((NUM_OBJECT+7)>>3)
 
-#define ObjLoadMeSetAll()       do {memset (loadme, 0xFF, NUM_OBJECT_BIT_LEN);}           while (0)
-#define ObjLoadMeClearAll()       do {memset (loadme, 0, NUM_OBJECT_BIT_LEN);}           while (0)
-#define ObjLoadMeSet(opnum)    do {loadme[(opnum)>>3] |= 1 << ((opnum)&0x7);}      while (0)
-#define ObjLoadMeClear(opnum)  do {loadme[(opnum)>>3] &= ~(1 << ((opnum)&0x7));}   while (0)
+#define ObjLoadMeSetAll()         do {memset (loadme, 0xFF, NUM_OBJECT_BIT_LEN);}              while (0)
+#define ObjLoadMeClearAll()         do {memset (loadme, 0, NUM_OBJECT_BIT_LEN);}              while (0)
+#define ObjLoadMeSet(opnum)     do {loadme[(opnum)>>3] |= 1 << ((opnum)&0x7);}        while (0)
+#define ObjLoadMeClear(opnum)  do {loadme[(opnum)>>3] &= ~(1 << ((opnum)&0x7));}    while (0)
 #define ObjLoadMeCheck(opnum)  (loadme[(opnum)>>3] & (1 << ((opnum)&0x7)))
 
 #define EXTRA_FRAMES 500

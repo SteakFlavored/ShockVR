@@ -69,28 +69,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define HOTKEY_HELP  1
 
-#define HKSORT_NONE     0
+#define HKSORT_NONE      0
 #define HKSORT_KEYCODE  1
-#define HKSORT_ASCII    2
+#define HKSORT_ASCII     2
 
 typedef bool (*hotkey_callback)(int16_t keycode, uint32_t context, void* state);
 
 typedef struct _hotkey_entry
 {
-   uint16_t key;
-   Array keychain;
-   int32_t first;
+    uint16_t key;
+    Array keychain;
+    int32_t first;
 } hotkey_entry;
 
 typedef struct _hotkey_link
 {
-   uint32_t context;
+    uint32_t context;
 #ifdef HOTKEY_HELP
-   hotkey_callback func;
+    hotkey_callback func;
 #endif
-   void* state;
-   int8_t *help_text;
-   int32_t next;
+    void* state;
+    int8_t *help_text;
+    int32_t next;
 } hotkey_link;
 
 #ifdef __HOTKEY_SRC

@@ -65,12 +65,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Defines
 
 #define DRUG_STAMINUP 0
-#define DRUG_SIGHT    1
-#define DRUG_LSD      2
-#define DRUG_MEDIC    3
-#define DRUG_REFLEX   4
-#define DRUG_GENIUS   5
-#define DRUG_DETOX    6
+#define DRUG_SIGHT     1
+#define DRUG_LSD        2
+#define DRUG_MEDIC     3
+#define DRUG_REFLEX    4
+#define DRUG_GENIUS    5
+#define DRUG_DETOX     6
 
 // Includes
 

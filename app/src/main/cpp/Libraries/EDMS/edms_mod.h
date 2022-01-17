@@ -16,43 +16,43 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//	Here is an include file for EDMS internal functions.  It contains all that
-//	Stuff that a growing model might need.  Also, it's a good idea, dammit!
-//	=======================================================================
+//    Here is an include file for EDMS internal functions.  It contains all that
+//    Stuff that a growing model might need.  Also, it's a good idea, dammit!
+//    =======================================================================
 
 
 
 
-//	A girl's gotta have some standards.
-//	===================================
+//    A girl's gotta have some standards.
+//    ===================================
 #define EDMS_DIV_ZERO_TOLERANCE .0005
 
 
 
-//	State and args...
-//	=================
-extern EDMS_Argblock_Pointer	A;
-extern Q								S[MAX_OBJ][7][4],
-										I[MAX_OBJ][DOF_MAX];
+//    State and args...
+//    =================
+extern EDMS_Argblock_Pointer    A;
+extern Q                                S[MAX_OBJ][7][4],
+                                        I[MAX_OBJ][DOF_MAX];
 
 
-//	Functions...
-//	============
-extern void	( *idof_functions[MAX_OBJ] )( int32_t ),
-				( *equation_of_motion[MAX_OBJ][7] )( int32_t );
+//    Functions...
+//    ============
+extern void    ( *idof_functions[MAX_OBJ] )( int32_t ),
+                ( *equation_of_motion[MAX_OBJ][7] )( int32_t );
 
 
 
-//	Callbacks...
-//	------------
-extern void	( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int32_t badness, int32_t DATA1, int32_t DATA2, fix location[3] ),
-				( *EDMS_wall_contact )( physics_handle caller );
+//    Callbacks...
+//    ------------
+extern void    ( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int32_t badness, int32_t DATA1, int32_t DATA2, fix location[3] ),
+                ( *EDMS_wall_contact )( physics_handle caller );
 
 
-//	Collision systems...
-//	--------------------
-extern int32_t	are_you_there( int32_t );			//May not be needed by most models,
-//extern int32_t	check_for_hit( int32_t );			//due to use of Intrsect.cc
+//    Collision systems...
+//    --------------------
+extern int32_t    are_you_there( int32_t );            //May not be needed by most models,
+//extern int32_t    check_for_hit( int32_t );            //due to use of Intrsect.cc
 
 
 

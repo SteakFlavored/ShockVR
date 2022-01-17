@@ -43,12 +43,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tabdat.h"
 
 #define gr_set_upixel24 \
-   ((void (*)(int32_t color,int16_t x,int16_t y))grd_pixel_table[SET_UPIXEL24])
+    ((void (*)(int32_t color,int16_t x,int16_t y))grd_pixel_table[SET_UPIXEL24])
 #define gr_set_pixel24 \
-   ((int32_t (*)(int32_t color,int16_t x,int16_t y))grd_pixel_table[SET_PIXEL24])
+    ((int32_t (*)(int32_t color,int16_t x,int16_t y))grd_pixel_table[SET_PIXEL24])
 #define gr_get_upixel24 \
-   ((int32_t (*)(int16_t x,int16_t y))grd_pixel_table[GET_UPIXEL24])
+    ((int32_t (*)(int16_t x,int16_t y))grd_pixel_table[GET_UPIXEL24])
 #define gr_get_pixel24 \
-   ((int32_t (*)(int16_t x,int16_t y))grd_pixel_table[GET_PIXEL24])
+    ((int32_t (*)(int16_t x,int16_t y))grd_pixel_table[GET_PIXEL24])
 #endif /* !__GRP24_H */
 

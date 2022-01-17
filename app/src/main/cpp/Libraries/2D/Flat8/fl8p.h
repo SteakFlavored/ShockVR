@@ -104,33 +104,33 @@ extern asm fix fix_mul_16_32_20 (fix a, fix b);
 #if 0 // see note above
 fix fix_mul_div_8_16_3_16 (fix m0, fix m1, fix d);
 #pragma aux fix_mul_div_8_16_3_16 =\
-   "imul    edx"     \
-   "idiv    ebx"     \
-   "shl     eax,5"   \
-   "shr     edx,27"  \
-   "or      eax,edx" \
-   parm [eax] [edx] [ebx]  \
-   modify [eax edx];
+    "imul     edx"      \
+    "idiv     ebx"      \
+    "shl      eax,5"    \
+    "shr      edx,27"  \
+    "or        eax,edx" \
+    parm [eax] [edx] [ebx]  \
+    modify [eax edx];
 
 // i = 32+16-16-3 = 29
 fix fix_div_16_16_3 (fix a, fix b);
 #pragma aux fix_div_16_16_3 = \
-   "mov     edx,eax"    \
-   "sar     edx,3"      \
-   "shl     eax,29"     \
-   "idiv    ebx"        \
-   parm     [eax] [ebx] \
-   modify   [eax edx];
+    "mov      edx,eax"     \
+    "sar      edx,3"        \
+    "shl      eax,29"      \
+    "idiv     ebx"          \
+    parm      [eax] [ebx] \
+    modify    [eax edx];
 
 // i = 32+16-8-16 = 24
 fix fix_div_16_8_16 (fix a, fix b);
 #pragma aux fix_div_16_8_16 = \
-   "mov     edx,eax"    \
-   "sar     edx,8"      \
-   "shl     eax,24"     \
-   "idiv    ebx"        \
-   parm     [eax] [ebx] \
-   modify   [eax edx];
+    "mov      edx,eax"     \
+    "sar      edx,8"        \
+    "shl      eax,24"      \
+    "idiv     ebx"          \
+    parm      [eax] [ebx] \
+    modify    [eax edx];
 
 // i = 32+3-8-3 = 24
 #define fix_div_3_8_3 fix_div_16_8_16
@@ -140,12 +140,12 @@ fix fix_div_16_8_16 (fix a, fix b);
 // i = 32+16-32-3 = 13
 fix fix_div_16_3_32 (fix a, fix b);
 #pragma aux fix_div_16_3_32 = \
-   "mov     edx,eax"    \
-   "sar     edx,19"      \
-   "shl     eax,13"     \
-   "idiv    ebx"        \
-   parm     [eax] [ebx] \
-   modify   [eax edx];
+    "mov      edx,eax"     \
+    "sar      edx,19"        \
+    "shl      eax,13"      \
+    "idiv     ebx"          \
+    parm      [eax] [ebx] \
+    modify    [eax edx];
 
 // i = 32+16-3-16 = 29
 #define fix_div_16_3_16 fix_div_16_16_3
@@ -157,23 +157,23 @@ fix fix_div_16_3_32 (fix a, fix b);
 
 // i = 32+16-8-16 = 24
 fix fix_mul_8_16_16 (fix a, fix b);
-#pragma aux fix_mul_8_16_16 =   \
-   "imul    edx"              \
-   "shr     eax,24"           \
-   "shl     edx,8"            \
-   "or      eax,edx"          \
-   parm [eax] [edx]           \
-   modify [eax edx];
+#pragma aux fix_mul_8_16_16 =    \
+    "imul     edx"                  \
+    "shr      eax,24"              \
+    "shl      edx,8"                \
+    "or        eax,edx"             \
+    parm [eax] [edx]              \
+    modify [eax edx];
 
 // i = 32+3-3-3 = 29
 fix fix_mul_3_3_3 (fix a, fix b);
-#pragma aux fix_mul_3_3_3 =   \
-   "imul    edx"              \
-   "shr     eax,29"           \
-   "shl     edx,3"            \
-   "or      eax,edx"          \
-   parm [eax] [edx]           \
-   modify [eax edx];
+#pragma aux fix_mul_3_3_3 =    \
+    "imul     edx"                  \
+    "shr      eax,29"              \
+    "shl      edx,3"                \
+    "or        eax,edx"             \
+    parm [eax] [edx]              \
+    modify [eax edx];
 
 // i = 32+16-3-16 = 29
 #define fix_mul_3_16_16 fix_mul_3_3_3
@@ -184,31 +184,31 @@ fix fix_mul_3_3_3 (fix a, fix b);
 // i = 32+16-32-3 = 13
 fix fix_mul_3_32_16 (fix a, fix b);
 #pragma aux fix_mul_3_32_16 = \
-   "imul    edx"              \
-   "shr     eax,13"           \
-   "shl     edx,19"           \
-   "or      eax,edx"          \
-   parm [eax] [edx]           \
-   modify [eax edx];
+    "imul     edx"                  \
+    "shr      eax,13"              \
+    "shl      edx,19"              \
+    "or        eax,edx"             \
+    parm [eax] [edx]              \
+    modify [eax edx];
 
 // i = 32+20-16-3 = 33(!)
 fix fix_mul_3_16_20 (fix a, fix b);
 #pragma aux fix_mul_3_16_20 = \
-   "imul    edx"              \
-   "sar     edx,1"            \
-   "mov     eax,edx"          \
-   parm [eax] [edx]           \
-   modify [eax edx];
+    "imul     edx"                  \
+    "sar      edx,1"                \
+    "mov      eax,edx"             \
+    parm [eax] [edx]              \
+    modify [eax edx];
 
 // i = 32+20-16-32 = 4
 fix fix_mul_16_32_20 (fix a, fix b);
 #pragma aux fix_mul_16_32_20 = \
-   "imul    edx"              \
-   "shr     eax,4"            \
-   "shl     edx,28"           \
-   "or      eax,edx"          \
-   parm [eax] [edx]           \
-   modify [eax edx];
+    "imul     edx"                  \
+    "shr      eax,4"                \
+    "shl      edx,28"              \
+    "or        eax,edx"             \
+    parm [eax] [edx]              \
+    modify [eax edx];
 #endif
 
 #define fix_sal(a,b) ((a)<<(b))

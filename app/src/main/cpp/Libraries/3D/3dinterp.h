@@ -33,14 +33,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // actual inline code
-extern uint8_t	_vcolor_tab[];
+extern uint8_t    _vcolor_tab[];
 #define g3_set_vcolor(vcolor_id, color_val) _vcolor_tab[vcolor_id] = (color_val);
 
 /*void g3_set_vcolor(int32_t vcolor_id, int32_t color_val);
 #pragma aux g3_set_vcolor = \
-   "add eax, OFFSET vcolor_tab" \
-   "mov [eax], bl" \
-   parm [eax] [ebx] modify exact [eax]*/
+    "add eax, OFFSET vcolor_tab" \
+    "mov [eax], bl" \
+    parm [eax] [ebx] modify exact [eax]*/
 
 extern g3s_point *_vpoint_tab[];
 #define g3_set_vpoint(vpoint_id, point_ptr) _vpoint_tab[vpoint_id] = (g3s_point *) (point_ptr);
@@ -48,21 +48,21 @@ extern g3s_point *_vpoint_tab[];
 /*
 void g3_set_vpoint(int32_t vpoint_id, void *point_ptr);
 #pragma aux g3_set_vpoint = \
-   "mov vpoint_tab[eax*4], ebx" \
-   parm [eax] [ebx] modify exact [eax]*/
+    "mov vpoint_tab[eax*4], ebx" \
+    parm [eax] [ebx] modify exact [eax]*/
 
 extern grs_bitmap *_vtext_tab[];
 #define g3_set_vtext(vtext_id, text_ptr) _vtext_tab[vtext_id] = (grs_bitmap *) (text_ptr);
 /*
 void g3_set_vtext(int32_t vtext_id, void *text_ptr);
 #pragma aux g3_set_vtext = \
-   "mov vtext_tab[eax*4], ebx" \
-   parm [eax] [ebx] modify exact [eax]*/
+    "mov vtext_tab[eax*4], ebx" \
+    parm [eax] [ebx] modify exact [eax]*/
 
 
 // flags for polygon draw type
 extern uint8_t itrp_gour_flg, itrp_wire_flag, itrp_check_flg;
 
-#define g3_set_gour_flag(x)   itrp_gour_flag  = x
-#define g3_set_wire_flag(x)   itrp_wire_flag  = x
+#define g3_set_gour_flag(x)    itrp_gour_flag  = x
+#define g3_set_wire_flag(x)    itrp_wire_flag  = x
 #define g3_set_check_flag(x)  itrp_check_flag = x

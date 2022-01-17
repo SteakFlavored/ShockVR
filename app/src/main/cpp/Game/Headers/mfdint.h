@@ -81,9 +81,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Button colors
-#define MFD_BTTN_EMPTY   0xcb
+#define MFD_BTTN_EMPTY    0xcb
 #define MFD_BTTN_ACTIVE  0xa2
-#define MFD_BTTN_FLASH   0x35
+#define MFD_BTTN_FLASH    0x35
 #define MFD_BTTN_SELECT  0x77
 #define MFD_BTTN_UNAVAIL 0xdd
 
@@ -100,8 +100,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MFD_ART_STATN 6
 #define MFD_ART_LVL(x) (MFD_ART_STATN+1+(x))
 
-#define mfd_fdata                player_struct.mfd_func_data
-#define MFD_FONT                 RES_tinyTechFont
+#define mfd_fdata                     player_struct.mfd_func_data
+#define MFD_FONT                      RES_tinyTechFont
 
 
 extern ObjID panel_ref_unexpose(int32_t mfd_id, int32_t func);
@@ -121,10 +121,10 @@ typedef bool (*MFD_SimpHandler) (struct _MFD* mfd, uiEvent* ev);
 
 typedef struct _mfd_handler
 {
-   LGRect r; // Sub-rect of MFD I'm handling, in relative coordinates.
-   MFD_handlerProc  proc;  // Proc we call when we get in this
-                           // rect
-   void* data;  // proc-specific state.
+    LGRect r; // Sub-rect of MFD I'm handling, in relative coordinates.
+    MFD_handlerProc  proc;  // Proc we call when we get in this
+                                    // rect
+    void* data;  // proc-specific state.
 } MFDhandler;
 
 
@@ -132,32 +132,32 @@ typedef struct _mfd_handler
 // MFD.  But: a button also keeps track of which is selected, but this
 // is done through the code and not through the structure.
 
-typedef struct {                             // Button panel structure
-   LGRect       rect;
-   LGRegion     reg;
-   LGRegion     reg2;
+typedef struct {                                      // Button panel structure
+    LGRect         rect;
+    LGRegion      reg;
+    LGRegion      reg2;
 } MFD_bPanel;
 
 typedef struct _MFD {
-  uint8_t       id;
-  MFD_bPanel  bttn;                          // The button panel
-  LGRect        rect;
-  LGRegion      reg;
-  LGRegion      reg2;
+  uint8_t         id;
+  MFD_bPanel  bttn;                                  // The button panel
+  LGRect          rect;
+  LGRegion        reg;
+  LGRegion        reg2;
 } MFD;
 
 
 typedef struct _mfd_func {
-//   uint8_t      id;
-   void       (*expose)(MFD *mfd, uint8_t control);
-   MFD_SimpHandler simp; // Retained for compatibility.
-   errtype    (*init)(struct _mfd_func*);
-   uint8_t      priority;  // one is highest, zero is infinitely low
-   // The following stuff is most likely to want to be zero.  so nyah
-   uint8_t      flags;                         // Static func-specific info
-   int32_t       last;                          // Timestamp for incremental
-   int32_t        handler_count;
-   MFDhandler handlers[NUM_MFD_HANDLERS];
+//    uint8_t        id;
+    void         (*expose)(MFD *mfd, uint8_t control);
+    MFD_SimpHandler simp; // Retained for compatibility.
+    errtype     (*init)(struct _mfd_func*);
+    uint8_t        priority;  // one is highest, zero is infinitely low
+    // The following stuff is most likely to want to be zero.  so nyah
+    uint8_t        flags;                                 // Static func-specific info
+    int32_t         last;                                  // Timestamp for incremental
+    int32_t          handler_count;
+    MFDhandler handlers[NUM_MFD_HANDLERS];
 } MFD_Func;
 
 
@@ -193,8 +193,8 @@ extern MFD_Func mfd_funcs[MFD_NUM_FUNCS];
 extern bool mfd_string_wrap;
 extern uint8_t mfd_string_shadow;
 
-#define MFD_SHADOW_NEVER      0
-#define MFD_SHADOW_ALWAYS     1
+#define MFD_SHADOW_NEVER        0
+#define MFD_SHADOW_ALWAYS      1
 #define MFD_SHADOW_FULLSCREEN 2
 
 
@@ -216,6 +216,6 @@ extern bool Flash;
 // ------
 
 #define macro_region_create(parent,child,rect) \
-   region_create(parent,child,rect,0,0,REG_USER_CONTROLLED,NULL,NULL,NULL,NULL)
+    region_create(parent,child,rect,0,0,REG_USER_CONTROLLED,NULL,NULL,NULL,NULL)
 
 #endif // __MFDINT_H

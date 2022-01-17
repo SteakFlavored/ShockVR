@@ -124,14 +124,14 @@ typedef enum { SMALL, DEFAULT, BIG } bigness;
 
 int32_t lg_sprintf(int8_t *buf, const int8_t *format, ...)
 {
-   int32_t chars;
-   va_list arglist;
+    int32_t chars;
+    va_list arglist;
 
-   va_start(arglist, format);
-   chars=lg_vsprintf(buf, format, arglist);
-   va_end(arglist);
+    va_start(arglist, format);
+    chars=lg_vsprintf(buf, format, arglist);
+    va_end(arglist);
 
-   return(chars);
+    return(chars);
 }
 
 
@@ -141,272 +141,272 @@ int32_t lg_sprintf(int8_t *buf, const int8_t *format, ...)
 
 int32_t lg_vsprintf(int8_t *buf, const int8_t *format, va_list arglist)
 {
-   fix arg_fix;
-   fix24 arg_fix24;
-   bool arg_bool;
-   int8_t *arg_str;
-   uint32_t arg_uint;
-   int32_t arg_int;
-   int8_t fix_frac_buf[5];
+    fix arg_fix;
+    fix24 arg_fix24;
+    bool arg_bool;
+    int8_t *arg_str;
+    uint32_t arg_uint;
+    int32_t arg_int;
+    int8_t fix_frac_buf[5];
 
-   bool ladjust, altform, pspec, this_is_len;
-   bigness big;
-   int8_t pad_char;
-   int8_t src_char;
-   int32_t dest_ind, src_ind, len, int_part, frac_part, mult;
-   int32_t fwid, precis, newchars, fshift, shift_ind, prefix;
-   lgsStage stage;
+    bool ladjust, altform, pspec, this_is_len;
+    bigness big;
+    int8_t pad_char;
+    int8_t src_char;
+    int32_t dest_ind, src_ind, len, int_part, frac_part, mult;
+    int32_t fwid, precis, newchars, fshift, shift_ind, prefix;
+    lgsStage stage;
 
-   if (buf==NULL) return 0;
+    if (buf==NULL) return 0;
 
-   dest_ind=src_ind=0;
-   stage=STAGE_TEXT;
-   big=DEFAULT;
+    dest_ind=src_ind=0;
+    stage=STAGE_TEXT;
+    big=DEFAULT;
 
-   while( src_char=format[src_ind++] ) {
-      this_is_len=false;
-      if( stage!=STAGE_TEXT ) {
-         switch( src_char ) {
-            case '.':
-               if(stage<STAGE_PRECISION) stage=STAGE_PRECISION;
-               break;
-            case '-':
-               if(stage==STAGE_FLAGS)
-                  ladjust=true;
-               break;
-            case '#':
-               if(stage==STAGE_FLAGS)
-                  altform=true;
-               break;
-            case '0':
-               if(stage==STAGE_FLAGS) {
-                  pad_char='0';
-                  break;
-               }
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-               if(stage<STAGE_FWID) stage=STAGE_FWID;
-               if(stage==STAGE_FWID)
-                  fwid=fwid*10+(src_char-'0');
-               else {
-                  pspec=true;
-                  precis=precis*10+(src_char-'0');
-               }
-               break;
-            case '%': // actual percent character
-               buf[dest_ind++]='%';
-               stage=STAGE_TEXT;
-               break;
-            case 'h':
-               this_is_len=true;
-               big=SMALL;
-               break;
-            case 'L':
-            case 'l':
-               this_is_len=true;
-               big=BIG; // of course, currently this is ingored.
-               break;
-            case 'n':
-               newchars=fwid=0;
-               *(va_arg(arglist,int32_t*))=dest_ind;
-               break;
-            case 'i':
-            case 'd': // int
-               arg_int=va_arg(arglist,int);
+    while( src_char=format[src_ind++] ) {
+        this_is_len=false;
+        if( stage!=STAGE_TEXT ) {
+            switch( src_char ) {
+                case '.':
+                    if(stage<STAGE_PRECISION) stage=STAGE_PRECISION;
+                    break;
+                case '-':
+                    if(stage==STAGE_FLAGS)
+                        ladjust=true;
+                    break;
+                case '#':
+                    if(stage==STAGE_FLAGS)
+                        altform=true;
+                    break;
+                case '0':
+                    if(stage==STAGE_FLAGS) {
+                        pad_char='0';
+                        break;
+                    }
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if(stage<STAGE_FWID) stage=STAGE_FWID;
+                    if(stage==STAGE_FWID)
+                        fwid=fwid*10+(src_char-'0');
+                    else {
+                        pspec=true;
+                        precis=precis*10+(src_char-'0');
+                    }
+                    break;
+                case '%': // actual percent character
+                    buf[dest_ind++]='%';
+                    stage=STAGE_TEXT;
+                    break;
+                case 'h':
+                    this_is_len=true;
+                    big=SMALL;
+                    break;
+                case 'L':
+                case 'l':
+                    this_is_len=true;
+                    big=BIG; // of course, currently this is ingored.
+                    break;
+                case 'n':
+                    newchars=fwid=0;
+                    *(va_arg(arglist,int32_t*))=dest_ind;
+                    break;
+                case 'i':
+                case 'd': // int
+                    arg_int=va_arg(arglist,int);
 #ifdef LGSPF_SMALLINT_OPT
-               if(arg_int>=0 && arg_int<100) {
-                  *((uint16_t*)buf)=((uint16_t*)digiarray)[arg_int];
-                  newchars=(arg_int<10)?1:2;
-               }
-               else
+                    if(arg_int>=0 && arg_int<100) {
+                        *((uint16_t*)buf)=((uint16_t*)digiarray)[arg_int];
+                        newchars=(arg_int<10)?1:2;
+                    }
+                    else
 #endif
-                    {
-                  newchars=int_to_str(buf+dest_ind,arg_int);
-               }
-               break;
-            case 'u': // uint32_t
-               arg_uint=va_arg(arglist,uint);
-               if(big==SMALL)
-                  arg_uint &= USHRT_MAX;
+                          {
+                        newchars=int_to_str(buf+dest_ind,arg_int);
+                    }
+                    break;
+                case 'u': // uint32_t
+                    arg_uint=va_arg(arglist,uint);
+                    if(big==SMALL)
+                        arg_uint &= USHRT_MAX;
 #ifdef LGSPF_SMALLINT_OPT
-               if(arg_uint<100) {
-                  *((uint16_t*)buf)=((uint16_t*)digiarray)[arg_uint];
-                  newchars=(arg_uint<10)?1:2;
-               }
-               else
+                    if(arg_uint<100) {
+                        *((uint16_t*)buf)=((uint16_t*)digiarray)[arg_uint];
+                        newchars=(arg_uint<10)?1:2;
+                    }
+                    else
 #endif
-                    {
-                  newchars=uint_to_str(buf+dest_ind,arg_uint,10,0);
-               }
-               break;
-            case 'B': // binary
-               arg_uint=va_arg(arglist,uint);
-               buf[dest_ind]='0';
-               buf[dest_ind+1]='b';
-               newchars=2+uint_to_str(buf+dest_ind+2,arg_uint,2,0);
-               break;
-            case 'p':
-               src_char='X';
-            case 'x':
-            case 'X':
-               arg_uint=va_arg(arglist,uint);
-               if(big==SMALL)
-                  arg_uint &= USHRT_MAX;
-               if(altform && arg_uint!=0) {
-                  buf[dest_ind]='0';
-                  buf[dest_ind+1]=src_char;
-                  newchars=2+uint_to_str(buf+dest_ind+2,arg_uint,16,src_char-'X'+'A');
-               }
-               else
-                  newchars=uint_to_str(buf+dest_ind,arg_uint,16,src_char-'X'+'A');
-               break;
-            case 'o': // unsigned, octal
-               arg_uint=va_arg(arglist,uint);
-               if(big==SMALL)
-                  arg_uint &= USHRT_MAX;
-               if(altform) {
-                  buf[dest_ind]='0';
-                  newchars=1+uint_to_str(buf+dest_ind+1,arg_uint,8,0);
-               }
-               else
-                  newchars=uint_to_str(buf+dest_ind,va_arg(arglist,uint),8,0);
-               break;
-            case 'c': // char
-               buf[dest_ind]=(uint8_t)va_arg(arglist,int);
-               newchars=1;
-               break;
-            case 'b': // bool
-               arg_bool=!!va_arg(arglist,bool);
-               if(altform) {
-                  buf[dest_ind]=boolstring[arg_bool][0];
-                  newchars=1;
-               }
-               else {
-                  strcpy(buf+dest_ind,boolstring[arg_bool]);
-                  // yeah, this relies on the strings being of lengths
-                  // 5 and 4 respectively.  So sue me.
-                  newchars=5-arg_bool;
-               }
-               break;
-            case 'S': // string number
-               if(sprintf_str_func) {
-                  arg_str=sprintf_str_func(va_arg(arglist,uint32_t));
-                  goto string_copy;
-               }
-               else {
-                  buf[dest_ind]=0;
-                  return -1;
-               }
-               break;
-            case 's': // string
-               arg_str=va_arg(arglist,int8_t*);
+                          {
+                        newchars=uint_to_str(buf+dest_ind,arg_uint,10,0);
+                    }
+                    break;
+                case 'B': // binary
+                    arg_uint=va_arg(arglist,uint);
+                    buf[dest_ind]='0';
+                    buf[dest_ind+1]='b';
+                    newchars=2+uint_to_str(buf+dest_ind+2,arg_uint,2,0);
+                    break;
+                case 'p':
+                    src_char='X';
+                case 'x':
+                case 'X':
+                    arg_uint=va_arg(arglist,uint);
+                    if(big==SMALL)
+                        arg_uint &= USHRT_MAX;
+                    if(altform && arg_uint!=0) {
+                        buf[dest_ind]='0';
+                        buf[dest_ind+1]=src_char;
+                        newchars=2+uint_to_str(buf+dest_ind+2,arg_uint,16,src_char-'X'+'A');
+                    }
+                    else
+                        newchars=uint_to_str(buf+dest_ind,arg_uint,16,src_char-'X'+'A');
+                    break;
+                case 'o': // unsigned, octal
+                    arg_uint=va_arg(arglist,uint);
+                    if(big==SMALL)
+                        arg_uint &= USHRT_MAX;
+                    if(altform) {
+                        buf[dest_ind]='0';
+                        newchars=1+uint_to_str(buf+dest_ind+1,arg_uint,8,0);
+                    }
+                    else
+                        newchars=uint_to_str(buf+dest_ind,va_arg(arglist,uint),8,0);
+                    break;
+                case 'c': // char
+                    buf[dest_ind]=(uint8_t)va_arg(arglist,int);
+                    newchars=1;
+                    break;
+                case 'b': // bool
+                    arg_bool=!!va_arg(arglist,bool);
+                    if(altform) {
+                        buf[dest_ind]=boolstring[arg_bool][0];
+                        newchars=1;
+                    }
+                    else {
+                        strcpy(buf+dest_ind,boolstring[arg_bool]);
+                        // yeah, this relies on the strings being of lengths
+                        // 5 and 4 respectively.  So sue me.
+                        newchars=5-arg_bool;
+                    }
+                    break;
+                case 'S': // string number
+                    if(sprintf_str_func) {
+                        arg_str=sprintf_str_func(va_arg(arglist,uint32_t));
+                        goto string_copy;
+                    }
+                    else {
+                        buf[dest_ind]=0;
+                        return -1;
+                    }
+                    break;
+                case 's': // string
+                    arg_str=va_arg(arglist,int8_t*);
 string_copy:
-               if(arg_str) {
-                  if(pspec)
-                     strncpy(buf+dest_ind,arg_str,precis);
-                  else
-                     strcpy(buf+dest_ind,arg_str);
-                  newchars=strlen(arg_str);
-                  if(pspec && precis<newchars) newchars=precis;
-               }
-               break;
-            case 'F':
-            case 'f': // fix
-               if(!pspec || (precis>MAX_FIX_PRECIS)) precis=MAX_FIX_PRECIS;
-               mult=pten[precis];
-               if(src_char=='f') {
-                  arg_fix=va_arg(arglist,fix);
-                  int_part=fix_int(arg_fix);
-                  frac_part=fix_int(fix_round(fix_frac(arg_fix)*mult));
-               }
-               else {
-                  arg_fix24=va_arg(arglist,fix24);
-                  int_part=fix24_int(arg_fix24);
-                  frac_part=fix24_int(fix24_round(fix24_frac(arg_fix24)*mult));
-               }
-               if(frac_part>=mult) {
-                  frac_part=0;
-                  int_part++;
-               }
-               if((int_part<0)&&(frac_part!=0)) {
-                  int_part=int_part+1;
-                  frac_part=mult-frac_part;
-                  if(int_part==0)
-                     buf[dest_ind++]='-';
-               }
-               newchars=int_to_str(buf+dest_ind,int_part);
-               if(precis!=0) {
-                  buf[dest_ind+newchars]='.';
-                  len=int_to_str(fix_frac_buf,frac_part);
-                  memset(buf+dest_ind+newchars+1,'0',precis);
-                  strcpy(buf+dest_ind+newchars+precis+1-len,fix_frac_buf);
-                  newchars+=precis+1;
-               }
-               else if(altform) {
-                  buf[dest_ind+newchars]='.';
-                  newchars++;
-               }
-               break;
+                    if(arg_str) {
+                        if(pspec)
+                            strncpy(buf+dest_ind,arg_str,precis);
+                        else
+                            strcpy(buf+dest_ind,arg_str);
+                        newchars=strlen(arg_str);
+                        if(pspec && precis<newchars) newchars=precis;
+                    }
+                    break;
+                case 'F':
+                case 'f': // fix
+                    if(!pspec || (precis>MAX_FIX_PRECIS)) precis=MAX_FIX_PRECIS;
+                    mult=pten[precis];
+                    if(src_char=='f') {
+                        arg_fix=va_arg(arglist,fix);
+                        int_part=fix_int(arg_fix);
+                        frac_part=fix_int(fix_round(fix_frac(arg_fix)*mult));
+                    }
+                    else {
+                        arg_fix24=va_arg(arglist,fix24);
+                        int_part=fix24_int(arg_fix24);
+                        frac_part=fix24_int(fix24_round(fix24_frac(arg_fix24)*mult));
+                    }
+                    if(frac_part>=mult) {
+                        frac_part=0;
+                        int_part++;
+                    }
+                    if((int_part<0)&&(frac_part!=0)) {
+                        int_part=int_part+1;
+                        frac_part=mult-frac_part;
+                        if(int_part==0)
+                            buf[dest_ind++]='-';
+                    }
+                    newchars=int_to_str(buf+dest_ind,int_part);
+                    if(precis!=0) {
+                        buf[dest_ind+newchars]='.';
+                        len=int_to_str(fix_frac_buf,frac_part);
+                        memset(buf+dest_ind+newchars+1,'0',precis);
+                        strcpy(buf+dest_ind+newchars+precis+1-len,fix_frac_buf);
+                        newchars+=precis+1;
+                    }
+                    else if(altform) {
+                        buf[dest_ind+newchars]='.';
+                        newchars++;
+                    }
+                    break;
+                }
+
+            if(isalpha(src_char) && !this_is_len) {
+                stage=STAGE_TEXT;
+                if(newchars<fwid) {
+                    fshift=fwid-newchars;
+                    if(ladjust) {
+                        memset(buf+dest_ind+newchars,' ',fshift);
+                    }
+                    else {
+                        // non-numeric fields are never 0-padded
+                        if(src_char=='s'||src_char=='S'||
+                            src_char=='c'||src_char=='b')
+                                pad_char=' ';
+
+                        // set length of prefix not to be right-shifted
+                        prefix=0;
+                        if(pad_char=='0') {
+                            if(buf[dest_ind]=='-')
+                                prefix=1;
+                            else if(altform) {
+                                if(src_char=='o')
+                                    prefix=1;
+                                else if(src_char=='x'||src_char=='X')
+                                    prefix=2;
+                            }
+                        }
+
+                        for(shift_ind=dest_ind+fwid-1;shift_ind>=dest_ind+fshift+prefix;shift_ind--)
+                            buf[shift_ind]=buf[shift_ind-fshift];
+                        memset(buf+dest_ind+prefix,pad_char,fshift);
+                    }
+                    dest_ind+=fwid;
+                }
+                else
+                    dest_ind+=newchars;
             }
-
-         if(isalpha(src_char) && !this_is_len) {
-            stage=STAGE_TEXT;
-            if(newchars<fwid) {
-               fshift=fwid-newchars;
-               if(ladjust) {
-                  memset(buf+dest_ind+newchars,' ',fshift);
-               }
-               else {
-                  // non-numeric fields are never 0-padded
-                  if(src_char=='s'||src_char=='S'||
-                     src_char=='c'||src_char=='b')
-                        pad_char=' ';
-
-                  // set length of prefix not to be right-shifted
-                  prefix=0;
-                  if(pad_char=='0') {
-                     if(buf[dest_ind]=='-')
-                        prefix=1;
-                     else if(altform) {
-                        if(src_char=='o')
-                           prefix=1;
-                        else if(src_char=='x'||src_char=='X')
-                           prefix=2;
-                     }
-                  }
-
-                  for(shift_ind=dest_ind+fwid-1;shift_ind>=dest_ind+fshift+prefix;shift_ind--)
-                     buf[shift_ind]=buf[shift_ind-fshift];
-                  memset(buf+dest_ind+prefix,pad_char,fshift);
-               }
-               dest_ind+=fwid;
+        }
+        else {
+            if( src_char=='%' ) {
+                stage=STAGE_FLAGS;
+                pad_char=' ';
+                fwid=precis=0;
+                ladjust=altform=pspec=false;
             }
             else
-               dest_ind+=newchars;
-         }
-      }
-      else {
-         if( src_char=='%' ) {
-            stage=STAGE_FLAGS;
-            pad_char=' ';
-            fwid=precis=0;
-            ladjust=altform=pspec=false;
-         }
-         else
-            buf[dest_ind++]=src_char;
-      }
-   }
+                buf[dest_ind++]=src_char;
+        }
+    }
 
-   buf[dest_ind]='\0';
+    buf[dest_ind]='\0';
 
-   return(dest_ind);
+    return(dest_ind);
 }
 
 // Install a string system function for use with the %S conversion
@@ -416,7 +416,7 @@ string_copy:
 // string it returns.
 void lg_sprintf_install_stringfunc(int8_t *(*func)(uint32_t strnum))
 {
-   sprintf_str_func=func;
+    sprintf_str_func=func;
 }
 
 
@@ -436,88 +436,88 @@ void lg_sprintf_install_stringfunc(int8_t *(*func)(uint32_t strnum))
 
 static int32_t int_to_str(int8_t *buf, int32_t val)
 {
-   int32_t len;
+    int32_t len;
 
-   if(val<0) {
-      buf[0]='-';
-      // special case for INT_MIN, since -INT_MIN may not be a
-      // valid integer
-      if(val==INT_MIN) {
-         // Don't rely on sign of remainders of negative dividends.
-         // In a perfect world, compiler would fold the consants and
-         // include only the appropriate block of code.
-         if((-5)%2<=0) {
-            len=int_to_str(buf+1,-(INT_MIN/10));
-            buf[1+len]='0'-(INT_MIN%10);
-         }
-         else {
-            len=int_to_str(buf+1,-(INT_MIN/10)-1);
-            buf[1+len]='0'+10-(INT_MIN%10);
-         }
-         buf[2+len]='\0';
-         return(2+len);
-      }
-      return(1+int_to_str(buf+1,-val));
-   }
+    if(val<0) {
+        buf[0]='-';
+        // special case for INT_MIN, since -INT_MIN may not be a
+        // valid integer
+        if(val==INT_MIN) {
+            // Don't rely on sign of remainders of negative dividends.
+            // In a perfect world, compiler would fold the consants and
+            // include only the appropriate block of code.
+            if((-5)%2<=0) {
+                len=int_to_str(buf+1,-(INT_MIN/10));
+                buf[1+len]='0'-(INT_MIN%10);
+            }
+            else {
+                len=int_to_str(buf+1,-(INT_MIN/10)-1);
+                buf[1+len]='0'+10-(INT_MIN%10);
+            }
+            buf[2+len]='\0';
+            return(2+len);
+        }
+        return(1+int_to_str(buf+1,-val));
+    }
 
-   return(uint_to_str(buf,(uint)val,10,0));
+    return(uint_to_str(buf,(uint)val,10,0));
 }
 
 static int32_t uint_to_str(int8_t *buf, uint32_t val, int32_t base, int8_t alph)
 {
-   int32_t ind, rev;
-   int8_t tmp;
+    int32_t ind, rev;
+    int8_t tmp;
 
-   // alph is the first letter of the alphabet: 'a' for lowercace
-   // and 'A' for upper.  Subtract 10 to find value to add to
-   // hex digits.
-   alph-=10;
+    // alph is the first letter of the alphabet: 'a' for lowercace
+    // and 'A' for upper.  Subtract 10 to find value to add to
+    // hex digits.
+    alph-=10;
 
-   if(val==0) {
-      buf[0]='0';
-      buf[1]='\0';
-      return(1);
-   }
+    if(val==0) {
+        buf[0]='0';
+        buf[1]='\0';
+        return(1);
+    }
 
-   ind=0;
-   // convert in reverse order of digits, checking for base 8 & 16
-   // to avoid division.
-   switch(base) {
-      case 8:
-         while(val>0) {
-            tmp=val&0x7;
-            tmp=tmp+'0';
-            buf[ind++]=tmp;
-            val=val>>3;
-         }
-         break;
-      case 16:
-         while(val>0) {
-            tmp=val&0xF;
-            tmp=tmp+(tmp<10?'0':alph);
-            buf[ind++]=tmp;
-            val=val>>4;
-         }
-         break;
-      default:
-         while(val>0) {
-            tmp=val%base;
-            tmp=tmp+(tmp<10?'0':alph);
-            buf[ind++]=tmp;
-            val=val/base;
-         }
-         break;
-   }
+    ind=0;
+    // convert in reverse order of digits, checking for base 8 & 16
+    // to avoid division.
+    switch(base) {
+        case 8:
+            while(val>0) {
+                tmp=val&0x7;
+                tmp=tmp+'0';
+                buf[ind++]=tmp;
+                val=val>>3;
+            }
+            break;
+        case 16:
+            while(val>0) {
+                tmp=val&0xF;
+                tmp=tmp+(tmp<10?'0':alph);
+                buf[ind++]=tmp;
+                val=val>>4;
+            }
+            break;
+        default:
+            while(val>0) {
+                tmp=val%base;
+                tmp=tmp+(tmp<10?'0':alph);
+                buf[ind++]=tmp;
+                val=val/base;
+            }
+            break;
+    }
 
-   // reverse string in place.
-   for(rev=0;rev<(ind>>1);rev++) {
-      tmp=buf[rev];
-      buf[rev]=buf[ind-rev-1];
-      buf[ind-rev-1]=tmp;
-   }
+    // reverse string in place.
+    for(rev=0;rev<(ind>>1);rev++) {
+        tmp=buf[rev];
+        buf[rev]=buf[ind-rev-1];
+        buf[ind-rev-1]=tmp;
+    }
 
-   buf[ind]='\0';
+    buf[ind]='\0';
 
-   return ind;
+    return ind;
 }
 

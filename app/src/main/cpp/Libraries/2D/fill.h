@@ -56,11 +56,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __FILL_H
 /* span fill types. */
 enum {
-   FILL_NORM,
-   FILL_CLUT,
-   FILL_XOR,
-   FILL_BLEND,
-   FILL_SOLID,
-   GRD_FILL_TYPES
+    FILL_NORM,
+    FILL_CLUT,
+    FILL_XOR,
+    FILL_BLEND,
+    FILL_SOLID,
+    GRD_FILL_TYPES
 };
 #endif /* !__FILL_H */

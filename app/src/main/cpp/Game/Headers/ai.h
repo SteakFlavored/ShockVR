@@ -32,27 +32,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objects.h"
 
 // Defines
-#define NUM_AI_MOODS       5
-#define AI_MOOD_FRIENDLY   0
-#define AI_MOOD_NEUTRAL    1
-#define AI_MOOD_HOSTILE    2
+#define NUM_AI_MOODS         5
+#define AI_MOOD_FRIENDLY    0
+#define AI_MOOD_NEUTRAL     1
+#define AI_MOOD_HOSTILE     2
 #define AI_MOOD_ISOLATION  3
 #define AI_MOOD_ATTACKING  4
 
-#define NUM_AI_ORDERS      6
-#define AI_ORDERS_GUARD    0     // hang out until player comes around
-#define AI_ORDERS_ROAM     1     // wander about
-#define AI_ORDERS_SLEEP    2     // do nothing ever until awakened
-#define AI_ORDERS_PATROL   3     // back n forth between 2 points
-#define AI_ORDERS_HIGHWAY  4     // follow invisible highway
-#define AI_ORDERS_NOMOVE   5     // like guard, but will never move
+#define NUM_AI_ORDERS        6
+#define AI_ORDERS_GUARD     0      // hang out until player comes around
+#define AI_ORDERS_ROAM      1      // wander about
+#define AI_ORDERS_SLEEP     2      // do nothing ever until awakened
+#define AI_ORDERS_PATROL    3      // back n forth between 2 points
+#define AI_ORDERS_HIGHWAY  4      // follow invisible highway
+#define AI_ORDERS_NOMOVE    5      // like guard, but will never move
 
-#define AI_FLAG_NONE       0x00
-#define AI_FLAG_FLYING     0x01  // we can fly
-#define AI_FLAG_NOALERT    0x02  // don't speed up reaction when in combat
-#define AI_FLAG_SMALL      0x04  // for musicai
+#define AI_FLAG_NONE         0x00
+#define AI_FLAG_FLYING      0x01  // we can fly
+#define AI_FLAG_NOALERT     0x02  // don't speed up reaction when in combat
+#define AI_FLAG_SMALL        0x04  // for musicai
 
-#define SPREAD_DIST        2
+#define SPREAD_DIST          2
 
 #define SLOW_PROJECTILE_DURATION 1000
 #define SLOW_PROJECTILE_GRAVITY  fix_make(0,0x0C00)

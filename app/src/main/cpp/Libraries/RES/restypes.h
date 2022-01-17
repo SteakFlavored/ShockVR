@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//		Restypes.H		Resource types
-//		Rex E. Bradford (REX)
+//        Restypes.H        Resource types
+//        Rex E. Bradford (REX)
 
 /*
 * $Header: r:/prj/lib/src/res/rcs/restypes.h 1.11 1994/09/01 12:00:22 rex Exp $
@@ -65,36 +65,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define NUM_RESTYPENAMES 64
 
-//	Resource types 0-47 are reserved for system-wide use
+//    Resource types 0-47 are reserved for system-wide use
 
-#define RTYPE_UNKNOWN	0		// unknown resource type, or mix in compound
-#define RTYPE_STRING		1		// string (usually in compound table)
-#define RTYPE_IMAGE		2		// bitmapped image (usually in compound table)
-#define RTYPE_FONT		3		// bitmapped font (usually non-compound)
-#define RTYPE_ANIM		4		// animation script (usually in compound table)
-#define RTYPE_PALL		5		// color pallette (usually non-compound)
-#define RTYPE_SHADTAB		6		// shading table (usually non-compound)
-#define RTYPE_VOC			7		// sound .voc file (usually non-compound)
-#define RTYPE_SHAPE		8		// shape (usually compound)
-#define RTYPE_PICT			9		// picture (usually compound)
-#define RTYPE_B2EXTERN	10		// BABL2 extern records (always compound)
-#define RTYPE_B2RELOC		11		// BABL2 relocation records (always non-compound)
-#define RTYPE_B2CODE		12		// BABL2 object code (always compound)
-#define RTYPE_B2HEADER	13		// BABL2 linked resource header
-#define RTYPE_B2RESRVD	14		// BABL2 reserved
-#define RTYPE_OBJ3D		15		// 3d object (always compound)
-#define RTYPE_STENCIL		16		// stencil, with offsets (usually non-compound)
-#define RTYPE_MOVIE		17		// movie (lg .mov format)
-#define RTYPE_RECT		18		// list of bounding rects for images (usually in compound table)
+#define RTYPE_UNKNOWN    0        // unknown resource type, or mix in compound
+#define RTYPE_STRING        1        // string (usually in compound table)
+#define RTYPE_IMAGE        2        // bitmapped image (usually in compound table)
+#define RTYPE_FONT        3        // bitmapped font (usually non-compound)
+#define RTYPE_ANIM        4        // animation script (usually in compound table)
+#define RTYPE_PALL        5        // color pallette (usually non-compound)
+#define RTYPE_SHADTAB        6        // shading table (usually non-compound)
+#define RTYPE_VOC            7        // sound .voc file (usually non-compound)
+#define RTYPE_SHAPE        8        // shape (usually compound)
+#define RTYPE_PICT            9        // picture (usually compound)
+#define RTYPE_B2EXTERN    10        // BABL2 extern records (always compound)
+#define RTYPE_B2RELOC        11        // BABL2 relocation records (always non-compound)
+#define RTYPE_B2CODE        12        // BABL2 object code (always compound)
+#define RTYPE_B2HEADER    13        // BABL2 linked resource header
+#define RTYPE_B2RESRVD    14        // BABL2 reserved
+#define RTYPE_OBJ3D        15        // 3d object (always compound)
+#define RTYPE_STENCIL        16        // stencil, with offsets (usually non-compound)
+#define RTYPE_MOVIE        17        // movie (lg .mov format)
+#define RTYPE_RECT        18        // list of bounding rects for images (usually in compound table)
 
-//	Resource types 48-63 are application-specific
+//    Resource types 48-63 are application-specific
 
-#define RTYPE_APP			48		// 16 application-specific resource types
+#define RTYPE_APP            48        // 16 application-specific resource types
 
-//	Type names can be found thru this array (array kept in res.c)
+//    Type names can be found thru this array (array kept in res.c)
 
 extern int8_t *resTypeNames[NUM_RESTYPENAMES];
-extern ResType resMacTypes[NUM_RESTYPENAMES];		// Table of Mac resID's - KC
+extern ResType resMacTypes[NUM_RESTYPENAMES];        // Table of Mac resID's - KC
 
 #endif
 

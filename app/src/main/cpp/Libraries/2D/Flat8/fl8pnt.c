@@ -46,21 +46,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void flat8_upoint(int16_t x, int16_t y)
 {
-   uint8_t *p;
+    uint8_t *p;
 
-   p = grd_bm.bits + y*grd_bm.row + x;
-   *p = grd_gc.fcolor;
+    p = grd_bm.bits + y*grd_bm.row + x;
+    *p = grd_gc.fcolor;
 }
 
 int32_t flat8_point(int16_t x, int16_t y)
 {
-   uint8_t *p;
+    uint8_t *p;
 
-   if (x<grd_clip.left || x>=grd_clip.right ||
-       y<grd_clip.top  || y>=grd_clip.bot)
-      return CLIP_ALL;
+    if (x<grd_clip.left || x>=grd_clip.right ||
+         y<grd_clip.top  || y>=grd_clip.bot)
+        return CLIP_ALL;
 
-   p = grd_bm.bits + grd_bm.row*y + x;
-   *p = grd_gc.fcolor;
-   return CLIP_NONE;
+    p = grd_bm.bits + grd_bm.row*y + x;
+    *p = grd_gc.fcolor;
+    return CLIP_NONE;
 }
