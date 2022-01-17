@@ -15,8 +15,8 @@ android {
 
         externalNativeBuild {
             cmake {
-                cFlags '-std=c11'
-                cppFlags '-std=c++17'
+                cFlags '-std=c11 -Wall -Werror'
+                cppFlags '-std=c++17 -Wall -Werror'
             }
 
             ndk {
