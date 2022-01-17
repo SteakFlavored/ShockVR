@@ -48,6 +48,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Initial revision
  */
 
+#include <stdint.h>
+
 #ifndef __ERROR_H
 #define __ERROR_H
 
