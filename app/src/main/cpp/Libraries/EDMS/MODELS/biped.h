@@ -18,6 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //	This seems silly now, but later it will all make sense, sensei...
 //	=================================================================
-int	make_biped( Q init_state[6][3], Q params[10], Q skeleton_pointer[] );
-void	make_biped_skeleton( int object );
-//void	biped_set_control( int biped, Q X, Q Y, Q Z );
+int32_t	make_biped( Q init_state[6][3], Q params[10], Q skeleton_pointer[] );
+void	make_biped_skeleton( int32_t object );
+//void	biped_set_control( int32_t biped, Q X, Q Y, Q Z );

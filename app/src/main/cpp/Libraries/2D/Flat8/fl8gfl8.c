@@ -42,14 +42,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "flat8.h"
 #include "lg.h"
 
-void flat8_get_flat8_ubitmap (grs_bitmap *bm, short x, short y)
+void flat8_get_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-	uchar *src;
-	uchar *dst;
-	short h = bm->h;
-	short w = bm->w;
-	ushort brow = bm->row;
-	ushort grow = grd_bm.row;
+	uint8_t *src;
+	uint8_t *dst;
+	int16_t h = bm->h;
+	int16_t w = bm->w;
+	uint16_t brow = bm->row;
+	uint16_t grow = grd_bm.row;
 
 	src = grd_bm.bits + grow*y + x;
 	dst = bm->bits;

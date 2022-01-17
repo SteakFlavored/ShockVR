@@ -80,5 +80,5 @@ enum {
 };
 
 extern grs_mode_info grd_mode_info[];
-extern int gr_set_mode (int mode, int clear);
+extern int32_t gr_set_mode (int32_t mode, int32_t clear);
 #endif /* !__MODE_H */

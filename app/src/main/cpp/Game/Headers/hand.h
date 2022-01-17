@@ -44,9 +44,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Includes
 #include "objwpn.h"
 
-extern ubyte weapon_to_handart[NUM_GUN];
+extern uint8_t weapon_to_handart[NUM_GUN];
 
-Ref get_handart(int *x_offset, int *y_offset, short mouse_x, short mouse_y);
+Ref get_handart(int32_t *x_offset, int32_t *y_offset, int16_t mouse_x, int16_t mouse_y);
 void notify_draw_handart(void);
 
 #endif // __HAND_H

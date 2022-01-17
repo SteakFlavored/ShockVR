@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# 
-#  void BlitLargeAlign(uchar *draw_buffer, int dstRowBytes, void *dstPtr, long w, long h, long modulus)
+#
+#  void BlitLargeAlign(uint8_t *draw_buffer, int32_t dstRowBytes, void *dstPtr, int32_t w, int32_t h, int32_t modulus)
 #                      r3                  r4               r5            r6       r7       r8
-# 
+#
 	csect	.BlitLargeAlign[PR]
-	
+
 	export	.BlitLargeAlign
-	
+
 fpTemp:		EQU	fp0
 rSrcPtr:		EQU	r3
 rDblDStrd:	EQU	r4
@@ -50,7 +50,7 @@ rDst2Ptr:	EQU	r31
 	add      rDblDStrd,r4,r4		# rDblDStrd = 2 * r4
 
 BlitLargeAlignY:						# y count is in rHeight
-	lwzu     r10,4(rSrcPtr)			# load a long into r10
+	lwzu     r10,4(rSrcPtr)			# load a int32_t into r10
 	mr       r0,r10  					# put a copy in r0
 	mr       r11,r10
 	inslwi   r0,r10,16,8
@@ -63,7 +63,7 @@ BlitLargeAlignY:						# y count is in rHeight
 	lfd      fpTemp,0(rLDblPtr)
 
 BlitLargeAlignX:
-	lwzu     r10,4(rSrcPtr)			# load a long into r10
+	lwzu     r10,4(rSrcPtr)			# load a int32_t into r10
 	stfdu    fpTemp,8(rDst1Ptr)
 	mr       r0,r10  					# put a copy in r0
 	mr       r11,r10
@@ -81,7 +81,7 @@ BlitLargeAlignX:
 	addic.   rHeight,rHeight,-1	# decrement the counter
 	add      rSrcPtr,rSrcPtr,rSStrd
 											# src += sstride
-	add      rDst1Ptr,rDst1Ptr,rDblDStrd		
+	add      rDst1Ptr,rDst1Ptr,rDblDStrd
 											# dst1 += dstride
 	stfdu    fpTemp,8(rDst2Ptr)
 	add      rDst2Ptr,rDst2Ptr,rDblDStrd
@@ -94,16 +94,16 @@ BlitLargeAlignX:
 
 
 
-# 
-#  void BlitLargeAlignSkip(uchar *draw_buffer, int dstRowBytes, void *dstPtr, long w, long h, long modulus)
+#
+#  void BlitLargeAlignSkip(uint8_t *draw_buffer, int32_t dstRowBytes, void *dstPtr, int32_t w, int32_t h, int32_t modulus)
 #                      r3                  r4               r5            r6       r7       r8
-# 
+#
 # only does even lines
 #
 	csect	.BlitLargeAlignSkip[PR]
-	
+
 	export	.BlitLargeAlignSkip
-	
+
 .BlitLargeAlignSkip:
 #	stw		r31,-4(SP)				# store non-volatile reg in red zone
 	addi	 	rDst1Ptr,rDst1Ptr,-8	# subtract 8 from dst
@@ -121,7 +121,7 @@ BlitLargeAlignX:
 	add      rDblDStrd,r4,r4		# rDblDStrd = 2 * r4
 
 BlitLargeAlignSkipY:					# y count is in rHeight
-	lwzu     r10,4(rSrcPtr)			# load a long into r10
+	lwzu     r10,4(rSrcPtr)			# load a int32_t into r10
 	mr       r0,r10  					# put a copy in r0
 	mr       r11,r10
 	inslwi   r0,r10,16,8
@@ -134,7 +134,7 @@ BlitLargeAlignSkipY:					# y count is in rHeight
 	lfd      fpTemp,0(rLDblPtr)
 
 BlitLargeAlignSkipX:
-	lwzu     r10,4(rSrcPtr)			# load a long into r10
+	lwzu     r10,4(rSrcPtr)			# load a int32_t into r10
 	stfdu    fpTemp,8(rDst1Ptr)
 	mr       r0,r10  					# put a copy in r0
 	mr       r11,r10
@@ -152,7 +152,7 @@ BlitLargeAlignSkipX:
 	addic.   rHeight,rHeight,-1	# decrement the counter
 	add      rSrcPtr,rSrcPtr,rSStrd
 											# src += sstride
-	add      rDst1Ptr,rDst1Ptr,rDblDStrd		
+	add      rDst1Ptr,rDst1Ptr,rDblDStrd
 											# dst1 += dstride
 #	stfdu    fpTemp,8(rDst2Ptr)
 #	add      rDst2Ptr,rDst2Ptr,rDblDStrd

@@ -60,20 +60,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GL_CHG_3       (ML_CHG_BASE<<2)
 #define GL_CHG_LOOP    (ML_CHG_BASE<<3)
 
-void mainloop(int argc, char *argv[]);
-void loopmode_switch(short *cmode);
+void mainloop(int32_t argc, int8_t *argv[]);
+void loopmode_switch(int16_t *cmode);
 errtype static_change_copy();
-void loopmode_exit(short loopmode);
+void loopmode_exit(int16_t loopmode);
 
 #ifdef __MAINLOOP_SRC
 frc *_current_fr_context;
-short _current_loop  = SETUP_LOOP;          /* which loop we currently are */
-short _current_3d_flag = DEMOVIEW_UPDATE;
+int16_t _current_loop  = SETUP_LOOP;          /* which loop we currently are */
+int16_t _current_3d_flag = DEMOVIEW_UPDATE;
 LGRegion *_current_view = NULL;
-uint  _change_flag   = 0;          /* change flags for loop */
-uint  _static_change = 0;          /* current static changes */
-short _new_mode      = 0;          /* mode to change to, if any */
-short _last_mode     = 0;          /* last mode, if you want to change back to it */
+uint32_t  _change_flag   = 0;          /* change flags for loop */
+uint32_t  _static_change = 0;          /* current static changes */
+int16_t _new_mode      = 0;          /* mode to change to, if any */
+int16_t _last_mode     = 0;          /* last mode, if you want to change back to it */
 bool time_passes = TRUE;
 bool saves_allowed = FALSE;
 bool physics_running = TRUE;
@@ -86,16 +86,16 @@ bool pal_fx_on = TRUE;
 
 #else     // NOT _MAINLOOP_SRC
 
-extern short _current_loop;   	  /* which loop we currently are */
-extern short _current_3d_flag;
+extern int16_t _current_loop;   	  /* which loop we currently are */
+extern int16_t _current_3d_flag;
 extern frc *_current_fr_context;
 #ifdef GADGET
 extern Gadget *_current_root;
 #endif
-extern uint  _change_flag;         /* change flags for loop */
-extern uint  _static_change;       /* current static changes */
-extern short _new_mode;            /* mode to change to, if any */
-extern short _last_mode;           /* last mode we were in, to switch back to */
+extern uint32_t  _change_flag;         /* change flags for loop */
+extern uint32_t  _static_change;       /* current static changes */
+extern int16_t _new_mode;            /* mode to change to, if any */
+extern int16_t _last_mode;           /* last mode we were in, to switch back to */
 extern bool player_invulnerable;
 extern bool player_immortal;
 extern bool physics_running;

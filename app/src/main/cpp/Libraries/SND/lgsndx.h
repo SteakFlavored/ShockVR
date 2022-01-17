@@ -38,26 +38,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct
 {
    SndChannelPtr	sndChan;	// Ptr to Mac sound channel.
-   uchar			pan;
-   uchar			pri;
-   ushort			vol;
-   uchar			flags;
-   int			snd_ref;
-   int			loops;
+   uint8_t			pan;
+   uint8_t			pri;
+   uint16_t			vol;
+   uint8_t			flags;
+   int32_t			snd_ref;
+   int32_t			loops;
    Handle			sample;		// Handle to Mac 'snd ' resource.
    void			*data;
-   int			len;
+   int32_t			len;
 } snd_digi_parms;
 
 typedef struct
 {
-   uchar	pan;
-   uchar	vol;
-   uchar	pri;
-   uchar	flags;
-   int	snd_ref;
+   uint8_t	pan;
+   uint8_t	vol;
+   uint8_t	pri;
+   uint8_t	flags;
+   int32_t	snd_ref;
    void	*data;
-   int	seq_num;
+   int32_t	seq_num;
    void	*internal_form;
 } snd_midi_parms;
 
@@ -68,16 +68,16 @@ typedef struct
 //--------------------------
 //extern LG_SND_DRIVER *snd_digi;
 //extern LG_SND_DRIVER *snd_midi;
-extern uchar	snd_digi_vol;
-extern uchar          snd_midi_vol;
+extern uint8_t	snd_digi_vol;
+extern uint8_t          snd_midi_vol;
 //extern void cdecl   (*snd_update)(snd_digi_parms *dprm);
 extern void (*snd_finish)(snd_digi_parms *dprm);
 //extern void cdecl   (*snd_nblock)(snd_digi_parms *dprm);
-extern void (*seq_finish)(long seq_ind);
-//extern void cdecl   (*seq_miditrig)(snd_midi_parms *mprm, int trig_value);
-extern int		snd_error;
-//extern int            snd_genmidi_or_not;
-//extern uchar          snd_stereo_reverse;
+extern void (*seq_finish)(int32_t seq_ind);
+//extern void cdecl   (*seq_miditrig)(snd_midi_parms *mprm, int32_t trig_value);
+extern int32_t		snd_error;
+//extern int32_t            snd_genmidi_or_not;
+//extern uint8_t          snd_stereo_reverse;
 
 //--------------------------
 //	Defines
@@ -91,30 +91,30 @@ extern int		snd_error;
 //	Prototypes
 //--------------------------
 void  snd_startup(void);
-void  snd_setup(void *d_path, char *prefix);
+void  snd_setup(void *d_path, int8_t *prefix);
 void  snd_shutdown(void);
-int   snd_set_midi_sequences(int chan_cnt);
-int   snd_start_digital(void);
-int   snd_stop_digital(void);
-int   snd_set_digital_channels(int chan_cnt);
-int   snd_start_midi(void);
-int   snd_stop_midi(void);
+int32_t   snd_set_midi_sequences(int32_t chan_cnt);
+int32_t   snd_start_digital(void);
+int32_t   snd_stop_digital(void);
+int32_t   snd_set_digital_channels(int32_t chan_cnt);
+int32_t   snd_start_midi(void);
+int32_t   snd_stop_midi(void);
 
-int   snd_sample_play(int snd_ref, int len, uchar *smp, snd_digi_parms *dprm);
-void  snd_end_sample(int hnd_id);
-snd_digi_parms *snd_sample_parms(int hnd_id);
-//void *snd_get_sample(int hnd_id);
+int32_t   snd_sample_play(int32_t snd_ref, int32_t len, uint8_t *smp, snd_digi_parms *dprm);
+void  snd_end_sample(int32_t hnd_id);
+snd_digi_parms *snd_sample_parms(int32_t hnd_id);
+//void *snd_get_sample(int32_t hnd_id);
 void  snd_kill_all_samples(void);
 void  snd_sample_reload_parms(snd_digi_parms *sdp);
 
-int snd_find_free_sequence(void);
-//int   snd_sequence_play(int snd_ref, uchar *seq_dat, int seq_num, snd_midi_parms *mparm);
-//snd_midi_parms *snd_sequence_parms(int hnd_id);
-TunePlayer snd_get_sequence(int seq_id);
-void  snd_end_sequence(int seq_id);
+int32_t snd_find_free_sequence(void);
+//int   snd_sequence_play(int32_t snd_ref, uint8_t *seq_dat, int32_t seq_num, snd_midi_parms *mparm);
+//snd_midi_parms *snd_sequence_parms(int32_t hnd_id);
+TunePlayer snd_get_sequence(int32_t seq_id);
+void  snd_end_sequence(int32_t seq_id);
 void  snd_kill_all_sequences(void);
 
-//char *snd_load_raw(char *fname, int *ldat);
+//char *snd_load_raw(int8_t *fname, int32_t *ldat);
 // Mac only routines.
 OSErr snd_load_theme(FSSpec *specPtr, TunePlayer thePlayer);
 void snd_release_current_theme(void);

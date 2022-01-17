@@ -46,7 +46,7 @@ void gad_menu_up(TNG *ptng)
    ms = (menu_struct *)TNG_MN(ptng)->ui_struct;
 
    // Fill in the gadget data info
-   gd->name = (char *)NewPtr((strlen(ms->name) + 1) * sizeof(char));
+   gd->name = (int8_t *)NewPtr((strlen(ms->name) + 1) * sizeof(int8_t));
    strcpy(gd->name, ms->name);
    gd->g = retgad;
 
@@ -105,7 +105,7 @@ void gad_menu_down(TNG *ptng)
    TNG_MN(ptng)->popped_up = FALSE;
 }
 
-Gadget *gad_menu_create(Gadget *parent, LGPoint *coord, int z, TNGStyle *sty, int width, char *name)
+Gadget *gad_menu_create(Gadget *parent, LGPoint *coord, int32_t z, TNGStyle *sty, int32_t width, int8_t *name)
 {
    Gadget *retgad;
    TNG *mn_tng;
@@ -126,7 +126,7 @@ Gadget *gad_menu_create(Gadget *parent, LGPoint *coord, int z, TNGStyle *sty, in
    retgad->destroy_func = NULL;
 
    ms->z = z;
-   ms->name = (char *)NewPtr((1 + strlen(name)) * sizeof(char));
+   ms->name = (int8_t *)NewPtr((1 + strlen(name)) * sizeof(int8_t));
    strcpy(ms->name, name);
 
    tng_menu_init(retgad, retgad->tng_data, sty, *coord, width, &gad_menu_up, &gad_menu_down, ms);
@@ -134,12 +134,12 @@ Gadget *gad_menu_create(Gadget *parent, LGPoint *coord, int z, TNGStyle *sty, in
    return (retgad);
 }
 
-errtype gad_menu_add_line(Gadget *menu, char *label, hotkey_callback f, short keycode, ulong context, void *user_data, char *help_text)
+errtype gad_menu_add_line(Gadget *menu, int8_t *label, hotkey_callback f, int16_t keycode, uint32_t context, void *user_data, int8_t *help_text)
 {
    return(tng_menu_add_line(menu->tng_data, label, f, keycode, context, user_data, help_text));
 }
 
-errtype gad_menu_add_submenu(Gadget *menu, char *label, Gadget *sub_menu)
+errtype gad_menu_add_submenu(Gadget *menu, int8_t *label, Gadget *sub_menu)
 {
    return(tng_menu_add_submenu(menu->tng_data, label, sub_menu->tng_data));
 }

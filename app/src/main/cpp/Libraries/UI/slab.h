@@ -67,7 +67,7 @@ typedef struct _ui_slab
    struct _focus_chain
    {
       Array chain;
-      int curfocus;
+      int32_t curfocus;
    } fchain;  // focus chain
    cursor_stack cstack;
 } uiSlab;

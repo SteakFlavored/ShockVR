@@ -32,9 +32,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "2dDiv.h"
 
 // prototypes
-int gri_trans_solid_lin_umap_loop(grs_tmap_loop_info *tli);
-int gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli);
-int gri_solid_wall_umap_loop(grs_tmap_loop_info *tli);
+int32_t gri_trans_solid_lin_umap_loop(grs_tmap_loop_info *tli);
+int32_t gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli);
+int32_t gri_solid_wall_umap_loop(grs_tmap_loop_info *tli);
 void gri_trans_solid_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm);
 void gri_trans_solid_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm);
 
@@ -42,53 +42,53 @@ void gri_trans_solid_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm);
 #if !(defined(powerc) || defined(__powerc))
 
 // Linear Mapper stuff
-asm int Handle_Solid_Lin_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row);
+asm int32_t Handle_Solid_Lin_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row);
 asm void solid_lin_trans(void);
 asm void solid_lin_trans_log2(void);
 
 // Floor Mapper stuff
-asm int Handle_Solid_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row);
+asm int32_t Handle_Solid_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row);
 asm void solid_floor_trans_log2(void);
 
 // Wall Mapper stuff
-asm int Handle_Solid_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row);
+asm int32_t Handle_Solid_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row);
 asm void solid_wall_trans_log2(void);
 
 // Perspective Mapper stuff
-asm void opaque_solid_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_y_fix, int *y_cint);
-asm void opaque_solid_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_x_fix, int *x_cint);
-asm void solid_trans_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_y_fix, int *y_cint);
-asm void solid_trans_per_vscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_y_fix, int *y_cint);
+asm void opaque_solid_per_hscan_68K_Loop(int32_t dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_y_fix, int32_t *y_cint);
+asm void opaque_solid_per_vscan_68K_Loop(int32_t dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_x_fix, int32_t *x_cint);
+asm void solid_trans_per_hscan_68K_Loop(int32_t dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_y_fix, int32_t *y_cint);
+asm void solid_trans_per_vscan_68K_Loop(int32_t dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_y_fix, int32_t *y_cint);
 #endif
 
 
 // globals used by 68K routines
-ulong	s_wlog_68K;
-ulong	s_mask_68K;
-long	*s_vtab_68K;
-int 	s_l_u_mask,s_l_v_mask,s_l_v_shift;
-uchar *s_bm_bits;
+uint32_t	s_wlog_68K;
+uint32_t	s_mask_68K;
+int32_t	*s_vtab_68K;
+int32_t 	s_l_u_mask,s_l_v_mask,s_l_v_shift;
+uint8_t *s_bm_bits;
 fix 	s_l_scan_slope;
-int		s_gr_row;
-uchar	solid_color_68K;
+int32_t		s_gr_row;
+uint8_t	solid_color_68K;
 
-int gri_trans_solid_lin_umap_loop(grs_tmap_loop_info *tli) {
+int32_t gri_trans_solid_lin_umap_loop(grs_tmap_loop_info *tli) {
 	fix u,v,du,dv,dx,d;
 
 	// locals used to store copies of tli-> stuff, so its in registers on the PPC
-	int 	x;
-	uchar	solid_color;
-	int		t_xl,t_xr;
-	uchar *p_dest;
-	long	*t_vtab;
-	uchar *t_bits;
-	uchar *t_clut;
-	uchar	t_wlog;
-	ulong	t_mask;
-	long	gr_row;
-	uchar *start_pdest;
+	int32_t 	x;
+	uint8_t	solid_color;
+	int32_t		t_xl,t_xr;
+	uint8_t *p_dest;
+	int32_t	*t_vtab;
+	uint8_t *t_bits;
+	uint8_t *t_clut;
+	uint8_t	t_wlog;
+	uint32_t	t_mask;
+	int32_t	gr_row;
+	uint8_t *start_pdest;
 
-	solid_color_68K = solid_color = (uchar) tli->clut;
+	solid_color_68K = solid_color = (uint8_t) tli->clut;
 	u=tli->left.u;
 	du=tli->right.u-u;
 	v=tli->left.v;
@@ -161,8 +161,8 @@ int gri_trans_solid_lin_umap_loop(grs_tmap_loop_info *tli) {
 
 // Main 68K handler loop
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Solid_Lin_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
-																	grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row)
+asm int32_t Handle_Solid_Lin_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
+																	grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row)
  {
   movem.l	d0-d7/a0-a6,-(sp)
 
@@ -318,7 +318,7 @@ asm int Handle_Solid_Lin_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
 asm void solid_lin_trans(void)
  {
 /*  for (x=t_xl; x<t_xr; x++) {
-     int k=t_vtab[fix_fint(v)]+fix_fint(u);
+     int32_t k=t_vtab[fix_fint(v)]+fix_fint(u);
      if (temp_pix=t_bits[k]) *p_dest = temp_pix;		// gr_fill_upixel(t_bits[k],x,y);
      p_dest++; u+=du; v+=dv;
   }*/
@@ -363,7 +363,7 @@ asm void solid_lin_trans_log2(void)
  {
 /*
   for (x=t_xl; x<t_xr; x++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      if (temp_pix=t_bits[k]) *p_dest = temp_pix;		// gr_fill_upixel(t_bits[k],x,y);
      p_dest++; u+=du; v+=dv;
   }*/
@@ -421,20 +421,20 @@ void gri_trans_solid_lin_umap_init(grs_tmap_loop_info *tli) {
 }
 
 
-int gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli) {
+int32_t gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli) {
    fix u,v,du,dv,dx,d;
-	 uchar	solid_color;
-	 int		x;
+	 uint8_t	solid_color;
+	 int32_t		x;
 	// locals used to store copies of tli-> stuff, so its in registers on the PPC
-	int		t_xl,t_xr,t_y,gr_row;
-	long	*t_vtab;
-	uchar *t_bits;
-	uchar *p_dest;
-	uchar temp_pix;
-	uchar	t_wlog;
-	ulong	t_mask;
+	int32_t		t_xl,t_xr,t_y,gr_row;
+	int32_t	*t_vtab;
+	uint8_t *t_bits;
+	uint8_t *p_dest;
+	uint8_t temp_pix;
+	uint8_t	t_wlog;
+	uint32_t	t_mask;
 
-	solid_color_68K = solid_color = (uchar) tli->clut;
+	solid_color_68K = solid_color = (uint8_t) tli->clut;
 	u=fix_div(tli->left.u,tli->w);
 	du=fix_div(tli->right.u,tli->w)-u;
 	v=fix_div(tli->left.v,tli->w);
@@ -466,7 +466,7 @@ int gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli) {
 				  {
             for (x=t_xl; x<t_xr; x++)
              {
-               int k=t_vtab[fix_fint(v)]+fix_fint(u);
+               int32_t k=t_vtab[fix_fint(v)]+fix_fint(u);
 	           	 if (t_bits[k]) *p_dest = solid_color;		// gr_fill_upixel(t_bits[k],x,t_y);
                p_dest++; u+=du; v+=dv;
              }
@@ -475,7 +475,7 @@ int gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli) {
 				  {
             for (x=t_xl; x<t_xr; x++)
              {
-               int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+               int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
 	           	 if (t_bits[k]) *p_dest = solid_color;		// gr_fill_upixel(t_bits[k],x,t_y);
                p_dest++; u+=du; v+=dv;
              }
@@ -501,8 +501,8 @@ int gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli) {
 }
 
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Solid_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
-																		grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row)
+asm int32_t Handle_Solid_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
+																		grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row)
  {
   movem.l	d0-d7/a0-a6,-(sp)
 
@@ -657,7 +657,7 @@ asm void solid_floor_trans_log2(void)
  {
 /*
   for (x=t_xl; x<t_xr; x++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      if (temp_pix=t_bits[k]) *p_dest = temp_pix;		// gr_fill_upixel(t_bits[k],x,y);
      p_dest++; u+=du; v+=dv;
   }*/
@@ -715,22 +715,22 @@ void gri_trans_solid_floor_umap_init(grs_tmap_loop_info *tli) {
 }
 
 
-int gri_solid_wall_umap_loop(grs_tmap_loop_info *tli) {
+int32_t gri_solid_wall_umap_loop(grs_tmap_loop_info *tli) {
    fix u,v,du,dv,dy,d;
-	 uchar	solid_color;
+	 uint8_t	solid_color;
 
 	 // locals used to store copies of tli-> stuff, so its in registers on the PPC
-	 int		t_yl,t_yr;
-	 long		*t_vtab;
-	 uchar 	*t_bits;
-	 uchar 	*p_dest;
-	 uchar *t_clut;
-	 uchar	t_wlog;
-	 ulong	t_mask;
-	 long		gr_row;
-	 int		y;
+	 int32_t		t_yl,t_yr;
+	 int32_t		*t_vtab;
+	 uint8_t 	*t_bits;
+	 uint8_t 	*p_dest;
+	 uint8_t *t_clut;
+	 uint8_t	t_wlog;
+	 uint32_t	t_mask;
+	 int32_t		gr_row;
+	 int32_t		y;
 
-	 solid_color_68K = solid_color = (uchar) tli->clut;
+	 solid_color_68K = solid_color = (uint8_t) tli->clut;
    u=fix_div(tli->left.u,tli->w);
    du=fix_div(tli->right.u,tli->w)-u;
    v=fix_div(tli->left.v,tli->w);
@@ -762,7 +762,7 @@ int gri_solid_wall_umap_loop(grs_tmap_loop_info *tli) {
          if (tli->bm.hlog==GRL_TRANS)
           {
             for (y=t_yl; y<t_yr; y++) {
-               int k=t_vtab[fix_fint(v)]+fix_fint(u);
+               int32_t k=t_vtab[fix_fint(v)]+fix_fint(u);
                if (t_bits[k])
                  *p_dest = solid_color;			// gr_fill_upixel(t_bits[k],t_x,y);
                p_dest += gr_row; u+=du; v+=dv;
@@ -771,7 +771,7 @@ int gri_solid_wall_umap_loop(grs_tmap_loop_info *tli) {
 				 else
 				  {
             for (y=t_yl; y<t_yr; y++) {
-               int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+               int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
                if (t_bits[k])
                  *p_dest = solid_color;		// gr_fill_upixel(t_bits[k],t_x,y);
                p_dest += gr_row; u+=du; v+=dv;
@@ -803,8 +803,8 @@ int gri_solid_wall_umap_loop(grs_tmap_loop_info *tli) {
 
 // Main 68K handler loop
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Solid_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
-														 			 grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row)
+asm int32_t Handle_Solid_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
+														 			 grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row)
  {
   movem.l	d0-d7/a0-a6,-(sp)
 
@@ -944,7 +944,7 @@ asm int Handle_Solid_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
 asm void solid_wall_trans_log2(void)
  {
 /*  for (y=t_yl; y<t_yr; y++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      if (temp_pix = t_bits[k])
        *p_dest = temp_pix;		// gr_fill_upixel(t_bits[k],t_x,y);
      p_dest += gr_row; u+=du; v+=dv;*/
@@ -1001,17 +1001,17 @@ void gri_trans_solid_wall_umap_init(grs_tmap_loop_info *tli) {
 
 
 void gri_trans_solid_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-   int y_cint;
-   uchar *p;
-	 uchar	solid_color;
+   int32_t y_cint;
+   uint8_t *p;
+	 uint8_t	solid_color;
 
 	 // locals used to speed PPC code
 	 fix	l_u,l_v,l_du,l_dv,l_y_fix,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
-	 int	l_x,l_xl,l_xr,l_xr0,l_u_mask,l_v_mask,l_v_shift;
-	 int	gr_row,temp_y;
-	 uchar *bm_bits;
+	 int32_t	l_x,l_xl,l_xr,l_xr0,l_u_mask,l_v_mask,l_v_shift;
+	 int32_t	gr_row,temp_y;
+	 uint8_t *bm_bits;
 
-	 solid_color_68K = solid_color = (uchar) pi->clut;
+	 solid_color_68K = solid_color = (uint8_t) pi->clut;
 	 gr_row = grd_bm.row;
 	 bm_bits = bm->bits;
 	 l_dyr = pi->dyr;
@@ -1049,7 +1049,7 @@ void gri_trans_solid_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
       fix test=l_x*l_dyl-y_cint*l_dxl+pi->cl;
       for (;l_x<l_xl;l_x++) {
          if (test<=0) {
-            int k=(l_u>>16)&l_u_mask;
+            int32_t k=(l_u>>16)&l_u_mask;
             k+=(l_v>>l_v_shift)&l_v_mask;
             if (bm_bits[k]) *p=solid_color;		// gr_fill_upixel(bm_bits[k],l_x,y_cint);
          }
@@ -1071,7 +1071,7 @@ void gri_trans_solid_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 
 #if (defined(powerc) || defined(__powerc))
    for (;l_x<l_xr0;l_x++) {
-      int k=(l_u>>16)&l_u_mask;
+      int32_t k=(l_u>>16)&l_u_mask;
       k+=(l_v>>l_v_shift)&l_v_mask;
       if (bm_bits[k]) *p=solid_color;		// gr_fill_upixel(bm_bits[k],l_x,y_cint);
       temp_y = y_cint;
@@ -1105,7 +1105,7 @@ void gri_trans_solid_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
    		p=grd_bm.bits+l_x+y_cint*grd_bm.row;
       for (;l_x<l_xr;l_x++) {
          if (test>=0) {
-            int k=(l_u>>16)&l_u_mask;
+            int32_t k=(l_u>>16)&l_u_mask;
             k+=(l_v>>l_v_shift)&l_v_mask;
             if (bm_bits[k]) *p=solid_color;		// gr_fill_upixel(bm_bits[k],l_x,y_cint);
          }
@@ -1134,10 +1134,10 @@ void gri_trans_solid_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 }
 
 #if !(defined(powerc) || defined(__powerc))
-asm void solid_trans_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_y_fix, int *y_cint)
+asm void solid_trans_per_hscan_68K_Loop(int32_t dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_y_fix, int32_t *y_cint)
  {
 /*   for (;l_x<l_xr0;l_x++) {
-      int k=(l_u>>16)&l_u_mask;
+      int32_t k=(l_u>>16)&l_u_mask;
       k+=(l_v>>l_v_shift)&l_v_mask;
       if (temp_pix=bm_bits[k]) *p=temp_pix;		// gr_fill_upixel(bm_bits[k],l_x,y_cint);
       temp_y = y_cint;
@@ -1238,17 +1238,17 @@ asm void solid_trans_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fi
 #endif
 
 void gri_trans_solid_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-   int x_cint;
-	 uchar	solid_color;
+   int32_t x_cint;
+	 uint8_t	solid_color;
 
 	 // locals used to speed PPC code
 	 fix	l_dxr,l_x_fix,l_u,l_v,l_du,l_dv,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
-	 int	l_yl,l_yr0,l_yr,l_y,l_u_mask,l_v_mask,l_v_shift;
-	 int	gr_row,temp_x;
-	 uchar *bm_bits;
-	 uchar *p;
+	 int32_t	l_yl,l_yr0,l_yr,l_y,l_u_mask,l_v_mask,l_v_shift;
+	 int32_t	gr_row,temp_x;
+	 uint8_t *bm_bits;
+	 uint8_t *p;
 
-	 solid_color_68K = solid_color = (uchar) pi->clut;
+	 solid_color_68K = solid_color = (uint8_t) pi->clut;
 	 gr_row = grd_bm.row;
 	 bm_bits = bm->bits;
    l_dxr = pi->dxr;
@@ -1286,7 +1286,7 @@ void gri_trans_solid_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
       fix test=l_y*l_dxl-x_cint*l_dyl+pi->cl;
       for (;l_y<l_yl;l_y++) {
          if (test<=0) {
-            int k=(l_u>>16)&l_u_mask;
+            int32_t k=(l_u>>16)&l_u_mask;
             k+=(l_v>>l_v_shift)&l_v_mask;
             if (bm_bits[k]) *p=solid_color;		// gr_fill_upixel(bm_bits[k],x_cint,l_y);
          }
@@ -1308,7 +1308,7 @@ void gri_trans_solid_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 
 #if (defined(powerc) || defined(__powerc))
    for (;l_y<l_yr0;l_y++) {
-      int k=(l_u>>16)&l_u_mask;
+      int32_t k=(l_u>>16)&l_u_mask;
       k+=(l_v>>l_v_shift)&l_v_mask;
       if (bm_bits[k]) *p=solid_color;		// gr_fill_upixel(bm_bits[k],x_cint,l_y);
 
@@ -1340,7 +1340,7 @@ void gri_trans_solid_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
    		p=grd_bm.bits+x_cint+l_y*gr_row;
       for (;l_y<l_yr;l_y++) {
          if (test>=0) {
-            int k=(l_u>>16)&l_u_mask;
+            int32_t k=(l_u>>16)&l_u_mask;
             k+=(l_v>>l_v_shift)&l_v_mask;
             if (bm_bits[k]) *p=solid_color;		// gr_fill_upixel(bm_bits[k],x_cint,l_y);
          }
@@ -1370,10 +1370,10 @@ void gri_trans_solid_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 }
 
 #if !(defined(powerc) || defined(__powerc))
-asm void solid_trans_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_x_fix, int *x_cint)
+asm void solid_trans_per_vscan_68K_Loop(int32_t dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_x_fix, int32_t *x_cint)
  {
 /*    for (;l_y<l_yr0;l_y++) {
-      int k=(l_u>>16)&l_u_mask;
+      int32_t k=(l_u>>16)&l_u_mask;
       k+=(l_v>>l_v_shift)&l_v_mask;
       *p=bm_bits[k];		// gr_fill_upixel(bm_bits[k],x_cint,l_y);
 
@@ -1453,8 +1453,8 @@ asm void solid_trans_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fi
 #endif
 
 
-extern void gri_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps);
-extern void gri_per_umap_vscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps);
+extern void gri_per_umap_hscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps);
+extern void gri_per_umap_vscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps);
 
 void gri_trans_solid_per_umap_hscan_init(grs_bitmap *bm, grs_per_setup *ps) {
    ps->shell_func=(void (*)()) gri_per_umap_hscan;

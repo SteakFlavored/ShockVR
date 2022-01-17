@@ -38,9 +38,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	A random stream
 
 typedef struct RndStream_ {
-	ulong curr;
-	ulong (*f_Next)(struct RndStream_ *prs);
-	void (*f_Seed)(struct RndStream_ *prs, ulong seed);
+	uint32_t curr;
+	uint32_t (*f_Next)(struct RndStream_ *prs);
+	void (*f_Seed)(struct RndStream_ *prs, uint32_t seed);
 } RndStream;
 
 //	To use a random stream, instantiate one (usually statically),
@@ -75,7 +75,7 @@ typedef struct RndStream_ {
 
 //	Get next random # and scale into low->high range (high value included)
 
-long RndRange(RndStream *prs, long low, long high);
+int32_t RndRange(RndStream *prs, int32_t low, int32_t high);
 
 //	Get next random # and scale into low->high range
 
@@ -83,13 +83,13 @@ fix RndRangeFix(RndStream *prs, fix low, fix high);
 
 //	Prototypes for current set of random stream classes
 
-ulong RndLc16(RndStream *prs);
-void RndLc16Seed(RndStream *prs, ulong seed);
+uint32_t RndLc16(RndStream *prs);
+void RndLc16Seed(RndStream *prs, uint32_t seed);
 
-ulong RndGauss16(RndStream *prs);
-void RndGauss16Seed(RndStream *prs, ulong seed);
+uint32_t RndGauss16(RndStream *prs);
+void RndGauss16Seed(RndStream *prs, uint32_t seed);
 
-ulong RndGauss16Fast(RndStream *prs);
-void RndGauss16FastSeed(RndStream *prs, ulong seed);
+uint32_t RndGauss16Fast(RndStream *prs);
+void RndGauss16FastSeed(RndStream *prs, uint32_t seed);
 
 #endif

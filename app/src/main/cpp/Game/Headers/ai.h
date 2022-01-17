@@ -67,18 +67,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 errtype ai_run(void);
 
 // What do do when we are hit
-errtype ai_critter_hit(ObjSpecID osid, short damage, bool tranq, bool stun);
+errtype ai_critter_hit(ObjSpecID osid, int16_t damage, bool tranq, bool stun);
 
 // When we pretend that we're dead (pretend we're dead)
 errtype ai_critter_die(ObjSpecID osid);
 errtype ai_critter_really_dead(ObjSpecID osid);
 
 // actually do attack
-errtype ai_attack_player(ObjSpecID osid, char a);
+errtype ai_attack_player(ObjSpecID osid, int8_t a);
 
 // Change a critter's posture, and do appropriate
 // things to other anim variables
-errtype set_posture(ObjSpecID osid, ubyte new_pos);
+errtype set_posture(ObjSpecID osid, uint8_t new_pos);
 
 // Looting.
 errtype do_regular_loot(ObjSpecID source_critter, ObjID corpse);

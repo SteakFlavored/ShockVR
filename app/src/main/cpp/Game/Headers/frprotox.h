@@ -76,45 +76,45 @@ void fr_shutdown(void);
 void fr_closedown(void);
 
 // view control/setup
-frc    *fr_place_view (frc *view, void *cam, void *canvas, int pflags, char axis, int fov, int xc, int yc, int wid, int hgt);
+frc    *fr_place_view (frc *view, void *cam, void *canvas, int32_t pflags, int8_t axis, int32_t fov, int32_t xc, int32_t yc, int32_t wid, int32_t hgt);
 void    fr_use_global_detail (frc *view);
-int     fr_view_resize(frc *view, int wid, int hgt);
-int     fr_view_full(frc *view, int wid, int hgt);
-int     fr_mod_size (frc *view, int xc, int yc, int wid, int hgt);
-int     fr_mod_cams (frc *view, void *cam, int mod_fac);
-int     fr_context_mod_flag (frc *view, int pflags_on, int pflags_off);   // remember to set flags_off for things you turn on
-int     fr_global_mod_flag  (int flags_on, int flags_off);
+int32_t     fr_view_resize(frc *view, int32_t wid, int32_t hgt);
+int32_t     fr_view_full(frc *view, int32_t wid, int32_t hgt);
+int32_t     fr_mod_size (frc *view, int32_t xc, int32_t yc, int32_t wid, int32_t hgt);
+int32_t     fr_mod_cams (frc *view, void *cam, int32_t mod_fac);
+int32_t     fr_context_mod_flag (frc *view, int32_t pflags_on, int32_t pflags_off);   // remember to set flags_off for things you turn on
+int32_t     fr_global_mod_flag  (int32_t flags_on, int32_t flags_off);
 void   *fr_get_canvas (frc *view);                                // really returns a grs_canvas, but no want 2d.h
-int     fr_set_view (frc *view);
-int     fr_free_view (frc *view);
-void    fr_set_cluts(uchar *base, uchar *bwclut, uchar *greenclut, uchar *amberclut);
-int    fr_set_callbacks(frc *view,
-								int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
-                     				void (*horizon)(void *dstbm, int flg),
-                     				void (*render)(void *dstbm, int flg));
-int    fr_set_global_callbacks( int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
-                     							void (*horizon)(void *dstbm, int flg),
-              								void (*render)(void *dstbm, int flg) );
+int32_t     fr_set_view (frc *view);
+int32_t     fr_free_view (frc *view);
+void    fr_set_cluts(uint8_t *base, uint8_t *bwclut, uint8_t *greenclut, uint8_t *amberclut);
+int32_t    fr_set_callbacks(frc *view,
+								int32_t (*draw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg),
+                     				void (*horizon)(void *dstbm, int32_t flg),
+                     				void (*render)(void *dstbm, int32_t flg));
+int32_t    fr_set_global_callbacks( int32_t (*draw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg),
+                     							void (*horizon)(void *dstbm, int32_t flg),
+              								void (*render)(void *dstbm, int32_t flg) );
 
 //======== From frcompil.c
-void    fr_compile_rect(fmp *fm, int llx, int lly, int ulx, int uly, bool seen_bits);
+void    fr_compile_rect(fmp *fm, int32_t llx, int32_t lly, int32_t ulx, int32_t uly, bool seen_bits);
 void    fr_compile_restart(fmp *fm);
 
 //======== From frmain.c
-int     fr_rend(frc *view);
-ushort  fr_get_at(frc *view, int x, int y,bool transp);
+int32_t     fr_rend(frc *view);
+uint16_t  fr_get_at(frc *view, int32_t x, int32_t y,bool transp);
 
 //======== From frutil.c
-char   *fr_get_frame_rate(void);
+int8_t   *fr_get_frame_rate(void);
 
 
 //======== Externals to provide, initialized to dumb things
 #ifndef __FRSETUP_SRC
-extern int   _fr_default_detail;
-extern int   _fr_global_detail;
+extern int32_t   _fr_default_detail;
+extern int32_t   _fr_global_detail;
 extern void   (*fr_mouse_hide)(void), (*fr_mouse_show)(void);
-extern int   (*fr_get_idx)(void);
-extern bool  (*fr_obj_block)(void *mptr, uchar *_sclip, int *loc);
+extern int32_t   (*fr_get_idx)(void);
+extern bool  (*fr_obj_block)(void *mptr, uint8_t *_sclip, int32_t *loc);
 extern void  (*fr_clip_start)(bool headnorth);
 extern void  (*fr_rend_start)(void);
 #ifdef __2D_H
@@ -124,8 +124,8 @@ extern grs_bitmap *(*fr_get_tmap)(void);
 
 // default versions of above, defined in frsetup and set there
 void fr_default_mouse(void);
-int   fr_default_idx(void), fr_pickup_idx(void);
-bool  fr_default_block(void *mptr, uchar *_sclip, int *loc);
+int32_t   fr_default_idx(void), fr_pickup_idx(void);
+bool  fr_default_block(void *mptr, uint8_t *_sclip, int32_t *loc);
 void  fr_default_clip_start(bool headnorth);
 void  fr_default_rend_start(void);
 #ifdef __2D_H

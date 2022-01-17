@@ -63,11 +63,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct {
    struct _llist *pnext;		// ptr to next node or NULL if at tail
    struct _llist *pprev;		// ptr to prev node or NULL if at head
-   char *label;
+   int8_t *label;
    hotkey_callback f;
    void *user_data;
-   short keycode;
-   ulong context;
+   int16_t keycode;
+   uint32_t context;
    TNG *submenu;
 } MenuElement;
 
@@ -77,8 +77,8 @@ typedef struct {
    LGPoint coord;
    LGPoint size;
    llist_head element_header;
-   int slot_height;
-   int num_lines;
+   int32_t slot_height;
+   int32_t num_lines;
    bool popped_up;
    MenuElement *current_selection;
    void (*popup_func)(TNG *ptng);
@@ -90,7 +90,7 @@ typedef struct {
 // Prototypes
 // Initializes the TNG
 
-errtype tng_menu_init(void *ui_data, TNG *ptng, TNGStyle *sty, LGPoint coord, int width,
+errtype tng_menu_init(void *ui_data, TNG *ptng, TNGStyle *sty, LGPoint coord, int32_t width,
    void (*upfunc)(TNG *ptng), void (*downfunc)(TNG *ptng), void *ui_struct);
 
 // Deallocate all memory used by the TNG
@@ -98,29 +98,29 @@ errtype tng_menu_destroy(TNG *ptng);
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_menu_2d_draw(TNG *ptng, ushort partmask, LGPoint loc);
+errtype tng_menu_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc);
 
 // Fill in ppt with the size of the TNG
 errtype tng_menu_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG
-int tng_menu_getvalue(TNG *ptng);
+int32_t tng_menu_getvalue(TNG *ptng);
 
 // React appropriately for receiving the specified cooked key
-bool tng_menu_keycooked(TNG *ptng, ushort key);
+bool tng_menu_keycooked(TNG *ptng, uint16_t key);
 
 // React appropriately for receiving the specified mouse button event
-bool tng_menu_mousebutt(TNG *ptng, uchar type, LGPoint loc);
+bool tng_menu_mousebutt(TNG *ptng, uint8_t type, LGPoint loc);
 
 // Handle incoming signals
-bool tng_menu_signal(TNG *ptng, ushort signal);
+bool tng_menu_signal(TNG *ptng, uint16_t signal);
 
-errtype tng_menu_add_line(TNG *ptng, char *label, hotkey_callback f, short keycode, ulong context,
-   void *user_data, char *help_text);
+errtype tng_menu_add_line(TNG *ptng, int8_t *label, hotkey_callback f, int16_t keycode, uint32_t context,
+   void *user_data, int8_t *help_text);
 
-errtype tng_menu_add_submenu(TNG *ptng, char *label, TNG *submenu);
+errtype tng_menu_add_submenu(TNG *ptng, int8_t *label, TNG *submenu);
 
-MenuElement *tng_menu_add_basic(TNG *ptng, char *label);
+MenuElement *tng_menu_add_basic(TNG *ptng, int8_t *label);
 
 errtype tng_menu_selection(TNG *ptng);
 

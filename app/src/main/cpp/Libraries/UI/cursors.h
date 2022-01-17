@@ -71,7 +71,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Defines
 
 
-typedef void (*CursorDrawFunc)(int cmd, LGRegion* r, struct _cursor* c, LGPoint pos);
+typedef void (*CursorDrawFunc)(int32_t cmd, LGRegion* r, struct _cursor* c, LGPoint pos);
 //  A cursor drawfunc executes the command specified by cmd to draw and undraw cursor
 //  c at point pos.  R is the region in which c was found.
 
@@ -85,14 +85,14 @@ typedef struct _cursor
   CursorDrawFunc func;
   void* state;
   LGPoint hotspot;
-  short w,h;
+  int16_t w,h;
 } LGCursor;
 
 // Every region has a cursor stack.
 typedef struct _cursorstack
 {
-   int size;
-   int fullness;
+   int32_t size;
+   int32_t fullness;
    LGCursor** stack;
 } cursor_stack;
 
@@ -174,7 +174,7 @@ extern errtype uiUpdateScreenSize(LGPoint size);
 
 // Globals
 
-extern int CursorMoveTolerance;
+extern int32_t CursorMoveTolerance;
 // Number of pixels of movement the interrupt handler will "tolerate" before
 // redrawing the cursor.
 

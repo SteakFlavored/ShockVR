@@ -41,28 +41,28 @@ void gri_trans_clut_per_umap_vscan_init(grs_bitmap *bm, grs_per_setup *ps);
 
 // 68K stuff
 #if !(defined(powerc) || defined(__powerc))
-asm void trans_clut_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_y_fix, int *y_cint);
-asm void trans_clut_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_x_fix, int *x_cint);
+asm void trans_clut_per_hscan_68K_Loop(int32_t dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_y_fix, int32_t *y_cint);
+asm void trans_clut_per_vscan_68K_Loop(int32_t dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_x_fix, int32_t *x_cint);
 
 // 68k globals
-int 	tc_l_u_mask,tc_l_v_mask,tc_l_v_shift;
-uchar *tc_bm_bits,*tc_clut;
+int32_t 	tc_l_u_mask,tc_l_v_mask,tc_l_v_shift;
+uint8_t *tc_bm_bits,*tc_clut;
 fix 	tc_l_scan_slope;
-int		tc_gr_row;
+int32_t		tc_gr_row;
 
 #endif
 
 
 void gri_trans_clut_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-   register int k,y_cint;
-   uchar *p;
+   register int32_t k,y_cint;
+   uint8_t *p;
 
 	 // ltc_als used to speed PPC code
 	 fix	l_u,l_v,l_du,l_dv,l_y_fix,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
-	 int	l_x,l_xl,l_xr,l_xr0,l_u_mask,l_v_mask,l_v_shift;
-	 int	gr_row,temp_y;
-	 uchar *bm_bits;
-	 uchar *t_clut,temp_pix;
+	 int32_t	l_x,l_xl,l_xr,l_xr0,l_u_mask,l_v_mask,l_v_shift;
+	 int32_t	gr_row,temp_y;
+	 uint8_t *bm_bits;
+	 uint8_t *t_clut,temp_pix;
 
    t_clut = pi->clut;
 	 gr_row = grd_bm.row;
@@ -192,7 +192,7 @@ void gri_trans_clut_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 }
 
 #if !(defined(powerc) || defined(__powerc))
-asm void trans_clut_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_y_fix, int *y_cint)
+asm void trans_clut_per_hscan_68K_Loop(int32_t dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_y_fix, int32_t *y_cint)
  {
 /*   for (;l_x<l_xr0;l_x++) {
       k=(l_u>>16)&l_u_mask;
@@ -298,15 +298,15 @@ asm void trans_clut_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix
 
 
 void gri_trans_clut_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-   register int k,x_cint;
+   register int32_t k,x_cint;
 
 	 // locals used to speed PPC code
 	 fix	l_dxr,l_x_fix,l_u,l_v,l_du,l_dv,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
-	 int	l_yl,l_yr0,l_yr,l_y,l_u_mask,l_v_mask,l_v_shift;
-	 int	gr_row,temp_x;
-	 uchar *bm_bits;
-	 uchar *p;
-	 uchar *t_clut,temp_pix;
+	 int32_t	l_yl,l_yr0,l_yr,l_y,l_u_mask,l_v_mask,l_v_shift;
+	 int32_t	gr_row,temp_x;
+	 uint8_t *bm_bits;
+	 uint8_t *p;
+	 uint8_t *t_clut,temp_pix;
 
    t_clut = pi->clut;
 	 gr_row = grd_bm.row;
@@ -440,7 +440,7 @@ void gri_trans_clut_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 }
 
 #if !(defined(powerc) || defined(__powerc))
-asm void trans_clut_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_x_fix, int *x_cint)
+asm void trans_clut_per_vscan_68K_Loop(int32_t dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_x_fix, int32_t *x_cint)
  {
 /*    for (;l_y<l_yr0;l_y++) {
       k=(l_u>>16)&l_u_mask;
@@ -524,8 +524,8 @@ asm void trans_clut_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fix
 #endif
 
 
-extern void gri_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps);
-extern void gri_per_umap_vscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps);
+extern void gri_per_umap_hscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps);
+extern void gri_per_umap_vscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps);
 
 void gri_trans_clut_per_umap_hscan_init(grs_bitmap *bm, grs_per_setup *ps) {
    ps->shell_func=(void (*)()) gri_per_umap_hscan;

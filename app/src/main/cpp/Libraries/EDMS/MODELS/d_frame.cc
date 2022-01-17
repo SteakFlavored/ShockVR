@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Here is the beginning of the EDMS dirac frame object.  Here it is the
 //	guise of the System shock cyberspace model, or is it???
@@ -43,7 +43,7 @@ extern Q	EDMS_CYBER_FLOW1X;
 extern Q	EDMS_CYBER_FLOW2X;
 extern Q	EDMS_CYBER_FLOW3X;
 
-extern int	EDMS_BCD;
+extern int32_t	EDMS_BCD;
 
 
 
@@ -52,13 +52,13 @@ extern int	EDMS_BCD;
 //	Here are the internal degrees of freedom.  First we get the aerodynamic forces
 //	from the (external) aero model, then the interactions and solid B/C here...
 //	===========================================================================
-void dirac_frame_idof( int object ) {
+void dirac_frame_idof( int32_t object ) {
 
 
 //      Here's the real work...
 //      -----------------------
-extern void dirac_mechanicals( int object, Q F[3], Q T[3] );
-extern void shall_we_dance( int object, Q& result0, Q& result1, Q& result2 );
+extern void dirac_mechanicals( int32_t object, Q F[3], Q T[3] );
+extern void shall_we_dance( int32_t object, Q& result0, Q& result1, Q& result2 );
 
 
 //      For alignment...
@@ -94,8 +94,8 @@ Q       gamma_dot = 2*( e2*ed1 - e1*ed2 + e0*ed3 - e3*ed0 );
 //	Zero the results...
 //	===================
 	F[0] =
-	F[1] = 
-	F[2] = 
+	F[1] =
+	F[2] =
 	T[0] =
 	T[1] =
 	T[2] = 0;
@@ -108,7 +108,7 @@ Q       gamma_dot = 2*( e2*ed1 - e1*ed2 + e0*ed3 - e3*ed0 );
 	F[1] += collide_y*I[object][23];
 	F[2] += collide_z*I[object][23];
 
-        
+
 
 
 //	CyberSpace BCD information...
@@ -117,14 +117,14 @@ Q       gamma_dot = 2*( e2*ed1 - e1*ed2 + e0*ed3 - e3*ed0 );
 
 	indoor_terrain( A[object][0][0],
                         A[object][1][0],
-                        A[object][2][0], 
+                        A[object][2][0],
 			I[object][26],
 			-1 );
 
          ss_edms_stupid_flag = TFD_FULL;
 
         if ( ss_edms_bcd_flags & SS_BCD_CURR_ON ) {
-  
+
                         F_T[0] = F_T[1] = F_T[2] = 0;
 
 Q                       current_strength = EDMS_CYBER_FLOW1X;
@@ -201,7 +201,7 @@ Q	T_gamma_temp = T[2]*I[object][22] - 5*gamma_dot;
 
 //      Control dirac_frame...
 //      ======================
-void    control_dirac_frame( int object, Q forward, Q pitch, Q yaw, Q roll ) {
+void    control_dirac_frame( int32_t object, Q forward, Q pitch, Q yaw, Q roll ) {
 
         I[object][0] = 3*forward;
         I[object][1] = pitch;
@@ -220,21 +220,21 @@ void    control_dirac_frame( int object, Q forward, Q pitch, Q yaw, Q roll ) {
 //	of angles to spinors and such.  Probably should have an external utility for
 //	resetting these...
 //	==================
-int make_Dirac_frame( Q init_state[6][3], Q params[10] ) {
+int32_t make_Dirac_frame( Q init_state[6][3], Q params[10] ) {
 
 
 //	Have some variables...
 //	======================
-int	object_number = -1,						//Three guesses...
+int32_t	object_number = -1,						//Three guesses...
 	error_code = -1;						//Guilty until...
 
 
 //	We need ignorable coordinates...
 //	================================
-extern void null_function( int );
+extern void null_function( int32_t );
 
 
-int     coord = 0,
+int32_t     coord = 0,
         deriv = 0;
 
 Q       sin_alpha = 0,
@@ -245,7 +245,7 @@ Q       sin_alpha = 0,
         cos_gamma = 0;
 
 
-//        mout << "Making dframe1\n";               
+//        mout << "Making dframe1\n";
 
 //	First find out which object we're going to be...
 //	================================================
@@ -262,7 +262,7 @@ Q       sin_alpha = 0,
 //		=====================================================================
 		for ( coord = 0; coord < 3; coord++ ) {
 		for ( deriv = 0; deriv < 2; deriv++ ) {
-		S[object_number][coord][deriv] = 
+		S[object_number][coord][deriv] =
 		A[object_number][coord][deriv] = init_state[coord][deriv];	//For collisions...
 		}}
 
@@ -274,16 +274,16 @@ Q       sin_alpha = 0,
 
 //		Zeros...
 //		--------
-                sincos( .5*init_state[3][0], &sin_alpha, &cos_alpha );                
-                sincos( .5*init_state[4][0], &sin_beta,  &cos_beta  );                
-                sincos( .5*init_state[5][0], &sin_gamma, &cos_gamma );                
-                
+                sincos( .5*init_state[3][0], &sin_alpha, &cos_alpha );
+                sincos( .5*init_state[4][0], &sin_beta,  &cos_beta  );
+                sincos( .5*init_state[5][0], &sin_gamma, &cos_gamma );
+
                 S[object_number][3][0] = A[object_number][3][0] =
 		                cos_gamma*cos_alpha*cos_beta + sin_gamma*sin_alpha*sin_beta;
-                        
+
                 S[object_number][4][0] = A[object_number][4][0] =
 		                cos_gamma*cos_alpha*sin_beta - sin_gamma*sin_alpha*cos_beta;
-                
+
                 S[object_number][5][0] = A[object_number][5][0] =
 		                cos_gamma*sin_alpha*cos_beta + sin_gamma*cos_alpha*sin_beta;
 
@@ -307,7 +307,7 @@ Q       sin_alpha = 0,
 		S[object_number][6][1] =  .5*( S[object_number][3][0]*init_state[5][1]
 					     + S[object_number][4][0]*init_state[3][1]
 					     - S[object_number][5][0]*init_state[4][1]  );
-		
+
 
         	//mout << "AA: " << S[object_number][3][1] << "\n";
         	//mout << "BB: " << S[object_number][4][1] << "\n";
@@ -315,11 +315,11 @@ Q       sin_alpha = 0,
 
 
 //        mout << "Making dframe2\n";
-//        for ( int ioi = 0; ioi < 7; ioi++ ) { mout << "S[" << object_number << "][" << ioi << "][0]: " << S[object_number][ioi][0] << "\n"; }
+//        for ( int32_t ioi = 0; ioi < 7; ioi++ ) { mout << "S[" << object_number << "][" << ioi << "][0]: " << S[object_number][ioi][0] << "\n"; }
 
 //		Put in the appropriate parameters...
 //		====================================
-		for ( int copy = 0; copy < 10; copy++ ) {
+		for ( int32_t copy = 0; copy < 10; copy++ ) {
 		I[object_number][copy + 20] = params[copy];
 		}
 		I[object_number][30] = D_FRAME;	    			//Hey, you are what you eat.
@@ -328,12 +328,12 @@ Q       sin_alpha = 0,
 //		=============================================================
 		idof_functions[object_number] = dirac_frame_idof;
 
-		equation_of_motion[object_number][0] =  
-		equation_of_motion[object_number][1] = 
-		equation_of_motion[object_number][2] = 
+		equation_of_motion[object_number][0] =
+		equation_of_motion[object_number][1] =
+		equation_of_motion[object_number][2] =
 		equation_of_motion[object_number][3] =          		//Nice symmetries, huh.
-		equation_of_motion[object_number][4] = 
-		equation_of_motion[object_number][5] = 
+		equation_of_motion[object_number][4] =
+		equation_of_motion[object_number][5] =
 		equation_of_motion[object_number][6] = null_function;
 
 
@@ -348,7 +348,7 @@ Q       sin_alpha = 0,
 		I[object_number][37] = -1;
 		I[object_number][38] = 0;					//No kill I...
 
-               
+
 //              Zero the controls...
 //              ====================
                 I[object_number][0] =
@@ -358,7 +358,7 @@ Q       sin_alpha = 0,
 
 
 //        mout << "Making dframe3\n";
-//        for (int tt = 20; tt < 31; tt++) mout << "I[" << tt << "]: " << I[object_number][tt] << "\n"; 
+//        for (int32_t tt = 20; tt < 31; tt++) mout << "I[" << tt << "]: " << I[object_number][tt] << "\n";
 
 
 //		Wake me up...
@@ -370,7 +370,7 @@ Q       sin_alpha = 0,
 //		Things seem okay...
 //		===================
 		error_code = object_number;
-	
+
 
 	}
 

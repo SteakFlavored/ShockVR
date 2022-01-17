@@ -66,19 +66,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------
 //  PROTOTYPES
 //------------
-int str_to_hex(char val);
-void text_button(char *text, int xc, int yc, int col, int shad, int w, int h);
-void simple_text_button(char *text, int xc, int yc, int col);
+int32_t str_to_hex(int8_t val);
+void text_button(int8_t *text, int32_t xc, int32_t yc, int32_t col, int32_t shad, int32_t w, int32_t h);
+void simple_text_button(int8_t *text, int32_t xc, int32_t yc, int32_t col);
 void Rect_gr_rect(LGRect *r);
 void Rect_gr_box(LGRect *r);
-char *itoa_2_10(char *s, int val);
-int hyphenated_wrap_text(char *ps, char* out, short width);
+int8_t *itoa_2_10(int8_t *s, int32_t val);
+int32_t hyphenated_wrap_text(int8_t *ps, int8_t* out, int16_t width);
 void zoom_rect(LGRect* start, LGRect* end);
 
 
-int str_to_hex(char val)
+int32_t str_to_hex(int8_t val)
 {
-   int retval = 0;
+   int32_t retval = 0;
    if ((val >= '0') && (val <= '9'))
       retval = val - '0';
    else if ((val >= 'A') && (val <= 'F'))
@@ -88,7 +88,7 @@ int str_to_hex(char val)
    return(retval);
 }
 
-void strtoupper(char *text)
+void strtoupper(int8_t *text)
 {
    for(;*text;text++) {
       if(islower(*text))
@@ -99,18 +99,18 @@ void strtoupper(char *text)
 #ifdef SVGA_SUPPORT
 bool shadow_scale = TRUE;
 #endif
-void draw_shadowed_string(char* s, short x, short y, uchar shadow)
+void draw_shadowed_string(int8_t* s, int16_t x, int16_t y, uint8_t shadow)
 {
    LGPoint npt;
-   ubyte color = gr_get_fcolor();
+   uint8_t color = gr_get_fcolor();
    npt.x = x;
    npt.y = y;
    if (shadow && FONT_IS_MONO(gr_get_font())) // draw a black box
    {
 #ifdef SVGA_SUPPORT
-      extern char convert_use_mode;
-      extern bool perform_svga_conversion(uchar mask);
-      extern void ss_scale_string(char *s, short x, short y);
+      extern int8_t convert_use_mode;
+      extern bool perform_svga_conversion(uint8_t mask);
+      extern void ss_scale_string(int8_t *s, int16_t x, int16_t y);
       if ((convert_use_mode > 0) && (perform_svga_conversion(OVERRIDE_FONT)))
       {
          if (shadow_scale)
@@ -152,28 +152,28 @@ void draw_shadowed_string(char* s, short x, short y, uchar shadow)
 }
 
 
-void draw_hires_resource_bm(Ref id, int x, int y)
+void draw_hires_resource_bm(Ref id, int32_t x, int32_t y)
 {
 	FrameDesc *f = (FrameDesc *)RefLock(id);
 	if (f == NULL)
 		critical_error(CRITERR_MEM|9);
-	f->bm.bits = (uchar *)(f+1);
+	f->bm.bits = (uint8_t *)(f+1);
 	gr_bitmap(&f->bm, x, y);
 	RefUnlock(id);
 }
 
-void draw_hires_halfsize_bm(Ref id, int x, int y)
+void draw_hires_halfsize_bm(Ref id, int32_t x, int32_t y)
 {
 	FrameDesc *f = (FrameDesc *)RefLock(id);
 	if (f == NULL)
 		critical_error(CRITERR_MEM|9);
-	f->bm.bits = (uchar *)(f+1);
+	f->bm.bits = (uint8_t *)(f+1);
 	gr_scale_bitmap(&f->bm, x, y, (f->bm.w >> 1), (f->bm.h >> 1));
 	RefUnlock(id);
 }
 
 
-errtype draw_raw_res_bm_extract(Ref id, int x, int y)
+errtype draw_raw_res_bm_extract(Ref id, int32_t x, int32_t y)
 {
    grs_bitmap bm;
    extract_temp_res_bitmap(&bm,id);
@@ -182,20 +182,20 @@ errtype draw_raw_res_bm_extract(Ref id, int x, int y)
 }
 
 
-errtype draw_raw_resource_bm(Ref id, int x, int y)
+errtype draw_raw_resource_bm(Ref id, int32_t x, int32_t y)
 {
    FrameDesc *f;
 
    f = (FrameDesc *)RefLock(id);
    if (f == NULL)
       critical_error(CRITERR_MEM|9);
-   f->bm.bits = (uchar *)(f+1);
+   f->bm.bits = (uint8_t *)(f+1);
    ss_bitmap(&f->bm, x, y);
    RefUnlock(id);
    return (OK);
 }
 
-errtype draw_res_bm_core(Ref id, int x, int y, bool scale)
+errtype draw_res_bm_core(Ref id, int32_t x, int32_t y, bool scale)
 {
    FrameDesc *f;
    LGRect mouse_rect;
@@ -209,7 +209,7 @@ errtype draw_res_bm_core(Ref id, int x, int y, bool scale)
    mouse_rect.lr.y = y + f->bm.h;
 
    // Set the palette right, if one is provided....
-   f->bm.bits = (uchar *)(f+1);
+   f->bm.bits = (uint8_t *)(f+1);
    if (is_onscreen()) uiHideMouse(&mouse_rect);
    if (scale)
       ss_bitmap(&f->bm, x, y);
@@ -220,19 +220,19 @@ errtype draw_res_bm_core(Ref id, int x, int y, bool scale)
    return (OK);
 }
 
-errtype draw_res_bm(Ref id, int x, int y)
+errtype draw_res_bm(Ref id, int32_t x, int32_t y)
 {
    return(draw_res_bm_core(id,x,y,TRUE));
 }
 
 // Note, does no mouse code!
-errtype draw_full_res_bm(Ref id, int x, int y, bool fade_in)
+errtype draw_full_res_bm(Ref id, int32_t x, int32_t y, bool fade_in)
 {
    FrameDesc *f;
-   short *temp_pall;
-   byte  pal_id;
-   extern void finish_pal_effect(byte id);
-   extern byte palfx_start_fade_up(uchar *new_pal);
+   int16_t *temp_pall;
+   int8_t  pal_id;
+   extern void finish_pal_effect(int8_t id);
+   extern int8_t palfx_start_fade_up(uint8_t *new_pal);
 
    f = (FrameDesc *)RefLock(id);
    if (f == NULL)
@@ -241,14 +241,14 @@ errtype draw_full_res_bm(Ref id, int x, int y, bool fade_in)
    // Set the palette right, if one is provided....
    if (f->pallOff)
    {
-      temp_pall = (short *) (((uchar *) ResGet(REFID(id))) + f->pallOff);
-      gr_set_pal(*temp_pall,*(temp_pall + 1),(uchar *)(temp_pall + 2));
+      temp_pall = (int16_t *) (((uint8_t *) ResGet(REFID(id))) + f->pallOff);
+      gr_set_pal(*temp_pall,*(temp_pall + 1),(uint8_t *)(temp_pall + 2));
    }
 
    if (fade_in)
-      pal_id=palfx_start_fade_up((uchar *) (temp_pall+2));
+      pal_id=palfx_start_fade_up((uint8_t *) (temp_pall+2));
 
-   f->bm.bits = (uchar *)(f+1);
+   f->bm.bits = (uint8_t *)(f+1);
    ss_scale_bitmap(&f->bm, x, y, 640, 400);		// KLC  ss_bitmap(&f->bm, x, y);
    RefUnlock(id);
    ResDrop(REFID(id));
@@ -257,10 +257,10 @@ errtype draw_full_res_bm(Ref id, int x, int y, bool fade_in)
    return (OK);
 }
 
-int res_bm_width(Ref id)
+int32_t res_bm_width(Ref id)
 {
    FrameDesc *f;
-   int n;
+   int32_t n;
 
    f = (FrameDesc *)RefLock(id);
    if (f == NULL)
@@ -270,10 +270,10 @@ int res_bm_width(Ref id)
    return (n);
 }
 
-int res_bm_height(Ref id)
+int32_t res_bm_height(Ref id)
 {
    FrameDesc *f;
-   int n;
+   int32_t n;
 
    f = (FrameDesc *)RefLock(id);
    if (f == NULL)
@@ -283,7 +283,7 @@ int res_bm_height(Ref id)
    return (n);
 }
 
-errtype res_draw_text_shadowed(Id id, char *text, int x, int y, bool shadow)
+errtype res_draw_text_shadowed(Id id, int8_t *text, int32_t x, int32_t y, bool shadow)
 {
    gr_set_font((grs_font *)ResLock(id));
    draw_shadowed_string(text, x, y, shadow);
@@ -292,7 +292,7 @@ errtype res_draw_text_shadowed(Id id, char *text, int x, int y, bool shadow)
 }
 
 
-errtype res_draw_string(Id font, int strid, int x, int y)
+errtype res_draw_string(Id font, int32_t strid, int32_t x, int32_t y)
 {
    return res_draw_text(font,get_temp_string(strid),x,y);
 }
@@ -302,10 +302,10 @@ errtype res_draw_string(Id font, int strid, int x, int y)
 // w.h. is rectangle wid+hgt, note <0 means that the x|yc is the upper left, not the center
 // shad is how much to shade down color (-1 is no shadow)
 // col is color of rectangle and text
-void text_button(char *text, int xc, int yc, int col, int shad, int w, int h)
+void text_button(int8_t *text, int32_t xc, int32_t yc, int32_t col, int32_t shad, int32_t w, int32_t h)
 {
-   int ux, uy;
-   short tw, th;
+   int32_t ux, uy;
+   int16_t tw, th;
 
    gr_string_size(text,&tw,&th);
 
@@ -328,9 +328,9 @@ void text_button(char *text, int xc, int yc, int col, int shad, int w, int h)
 
 // ok, the easy case...
 // centered at xc,yc, color base, auto-shadowed, size out setting
-void simple_text_button(char *text, int xc, int yc, int col)
+void simple_text_button(int8_t *text, int32_t xc, int32_t yc, int32_t col)
 {
-   short w,h;
+   int16_t w,h;
    gr_string_size(text,&w,&h);
    text_button(text,xc,yc,col,4,w+12,h+8);
 }
@@ -345,7 +345,7 @@ void Rect_gr_box(LGRect *r)
    ss_box(r->ul.x,r->ul.y,r->lr.x,r->lr.y);
 }
 
-char *itoa_2_10(char *s, int val)
+int8_t *itoa_2_10(int8_t *s, int32_t val)
 {
    s[0]='0'+(val/10);
    s[1]='0'+(val%10);
@@ -354,9 +354,9 @@ char *itoa_2_10(char *s, int val)
 }
 
 // max 99 hours...
-void second_format(int sec_remain, char *s)
+void second_format(int32_t sec_remain, int8_t *s)
 {
-   int c_l;
+   int32_t c_l;
    if (sec_remain >= 3600)
 	 { itoa_2_10(s,sec_remain/3600); sec_remain%=3600; c_l=3; s[2]=':'; }
    else c_l=0;
@@ -372,11 +372,11 @@ void second_format(int sec_remain, char *s)
 #define BIG_BUF
 
 #pragma disable_message(202)
-bool gifdump_func(short keycode, ulong context, void* data)
+bool gifdump_func(int16_t keycode, uint32_t context, void* data)
 {
-   unsigned char *temp_buf;
-   int giffp;
-   char harold[45];
+   uint8_t *temp_buf;
+   int32_t giffp;
+   int8_t harold[45];
 
    strcpy(harold,"SHOCK000.GIF");
    giffp = open_gen(harold, O_CREAT|O_BINARY|O_WRONLY|O_TRUNC,S_IWRITE);
@@ -413,16 +413,16 @@ void mouse_unconstrain(void)
 #endif
 
 
-errtype string_message_info(int strnum)
+errtype string_message_info(int32_t strnum)
 {
-   char buf[MESSAGE_BUFSZ];
+   int8_t buf[MESSAGE_BUFSZ];
    get_string(strnum,buf,MESSAGE_BUFSZ);
    return message_info(buf);
 }
 
 
-char last_message[128];
-ulong message_clear_time;
+int8_t last_message[128];
+uint32_t message_clear_time;
 
 #define MESSAGE_INTERVAL   1200
 #define CHAR_SOFTCR     0x01            // soft carriage return (wrapped text)
@@ -438,13 +438,13 @@ LGRect msg_rect[2]=
 bool message_resend = FALSE;
 extern bool game_paused;
 extern bool view360_message_obscured;
-void strip_newlines(char* buf);
+void strip_newlines(int8_t* buf);
 
 
 // Use the string wrapper's secret characters to delete newlines and double spaces.
-void strip_newlines(char* buf)
+void strip_newlines(int8_t* buf)
 {
-   char* s;
+   int8_t* s;
    for(s = buf; *s != '\0'; s++)
    {
       if (*s == '\n')
@@ -454,11 +454,11 @@ void strip_newlines(char* buf)
    }
 }
 
-errtype message_info(char *info_text)
+errtype message_info(int8_t *info_text)
 {
-   extern errtype inventory_draw_new_page(int pgnum);
-   int x,y;
-   char buf[MESSAGE_LEN];
+   extern errtype inventory_draw_new_page(int32_t pgnum);
+   int32_t x,y;
+   int8_t buf[MESSAGE_LEN];
 
    if (info_text != NULL)
    {
@@ -468,7 +468,7 @@ errtype message_info(char *info_text)
    else buf[0] = '\0';
    if (_current_loop <= FULLSCREEN_LOOP)
    {
-      short a,b,c,d;
+      int16_t a,b,c,d;
       LGRect *r=&msg_rect[(full_game_3d && !game_paused)?1:0];
 
 
@@ -543,7 +543,7 @@ errtype message_clear_check()
    if (*tmd_ticks < message_clear_time) return OK;
    if (message_resend)
    {
-      char buf[sizeof(last_message)];
+      int8_t buf[sizeof(last_message)];
       strcpy(buf,last_message);
       return message_info(buf);
    }
@@ -555,7 +555,7 @@ errtype message_clear_check()
    return(OK);
 }
 
-errtype message_box(char *box_text)
+errtype message_box(int8_t *box_text)
 {
    message_info(box_text);
    return(OK);
@@ -564,17 +564,17 @@ errtype message_box(char *box_text)
 #ifdef NOT_YET //¥¥¥ later, dude
 
 #pragma disable_message(202)
-bool confirm_box(char *confirm_text)
+bool confirm_box(int8_t *confirm_text)
 {
    return(TRUE);
 }
 #pragma enable_message(202)
 
-FILE *fopen_gen(char *fname,char *t)
+FILE *fopen_gen(int8_t *fname,int8_t *t)
 {
    Datapath gen_path;
    FILE *retval;
-   char temp[64];
+   int8_t temp[64];
 
    gen_path.numDatapaths = 0;
    gen_path.noCurrent = 1;
@@ -590,10 +590,10 @@ FILE *fopen_gen(char *fname,char *t)
    return retval;
 }
 
-int open_gen(char *fname,int access1, int access2)
+int32_t open_gen(int8_t *fname,int32_t access1, int32_t access2)
 {
    Datapath gen_path;
-   int retval;
+   int32_t retval;
 
    gen_path.numDatapaths = 0;
    gen_path.noCurrent = 1;
@@ -606,10 +606,10 @@ int open_gen(char *fname,int access1, int access2)
    return retval;
 }
 
-char *next_number_dpath_fname(Datapath *dpath, char *fname)
+int8_t *next_number_dpath_fname(Datapath *dpath, int8_t *fname)
 {
-   char *subname=strrchr(fname,'0');
-   int fhnd, numlen=1, i, num=0;
+   int8_t *subname=strrchr(fname,'0');
+   int32_t fhnd, numlen=1, i, num=0;
 
    if (subname != NULL)
    {
@@ -631,10 +631,10 @@ char *next_number_dpath_fname(Datapath *dpath, char *fname)
    return fname;
 }
 
-char *next_number_fname(char *fname)
+int8_t *next_number_fname(int8_t *fname)
 {
-   char *subname = strrchr(fname,'0');
-   int fhnd, numlen=1, i, num=0;
+   int8_t *subname = strrchr(fname,'0');
+   int32_t fhnd, numlen=1, i, num=0;
 
    while ((strlen(subname) != strlen(fname)) && (subname[0] == subname[-1]))
    {
@@ -678,20 +678,20 @@ errtype tight_loop(bool check_input)
 
 
 
-int wrap_text(char *ps, short width)
+int32_t wrap_text(int8_t *ps, int16_t width)
 {
    return gr_font_string_wrap(gr_get_font(),ps,width);
 }
 
 #define HYPHEN '-'
 
-int hyphenated_wrap_text(char *ps, char* out, short width)
+int32_t hyphenated_wrap_text(int8_t *ps, int8_t* out, int16_t width)
 {
-	char *psbase;
-	char *p;
-	char *pmark;
-	short numLines;
-	short currWidth;
+	int8_t *psbase;
+	int8_t *p;
+	int8_t *pmark;
+	int16_t numLines;
+	int16_t currWidth;
 
 //      Set up to do wrapping
 
@@ -778,9 +778,9 @@ int hyphenated_wrap_text(char *ps, char* out, short width)
 	return(numLines);
 }
 
-void unwrap_text(char *s)
+void unwrap_text(int8_t *s)
 {
-	int c;
+	int32_t c;
 
 	while ((c = *s) != 0)
 		{
@@ -794,7 +794,7 @@ void unwrap_text(char *s)
 // --------------------------------------------------------------------
 // WAIT CURSOR
 
-char wait_count = 0;
+int8_t wait_count = 0;
 
 errtype begin_wait()
 {
@@ -813,7 +813,7 @@ errtype begin_wait()
 #ifdef NOT_YET //¥¥¥
 errtype spoof_mouse_event(void)
 {
-   int i;
+   int32_t i;
    uiMouseEvent ev;
 
    uiMakeMotionEvent(&ev);
@@ -855,20 +855,20 @@ errtype end_wait()
 
 void zoom_rect(LGRect* start, LGRect* end)
 {
-   extern ulong last_real_time;
-   long fillt = gr_get_fill_type();
-   ulong start_time = *tmd_ticks;
-   ulong last_time  = *tmd_ticks;
-   int i;
+   extern uint32_t last_real_time;
+   int32_t fillt = gr_get_fill_type();
+   uint32_t start_time = *tmd_ticks;
+   uint32_t last_time  = *tmd_ticks;
+   int32_t i;
    uiHideMouse(NULL);
    gr_set_fill_type(FILL_XOR);
    gr_set_fcolor(WHITE);
    for (i = 0; i < NUM_BOXES; i++)
    {
-      short ulx = INTERP(start->ul.x,end->ul.x,i);
-      short uly = INTERP(start->ul.y,end->ul.y,i);
-      short lrx = INTERP(start->lr.x,end->lr.x,i);
-      short lry = INTERP(start->lr.y,end->lr.y,i);
+      int16_t ulx = INTERP(start->ul.x,end->ul.x,i);
+      int16_t uly = INTERP(start->ul.y,end->ul.y,i);
+      int16_t lrx = INTERP(start->lr.x,end->lr.x,i);
+      int16_t lry = INTERP(start->lr.y,end->lr.y,i);
       ss_box(ulx,uly,lrx,lry);
       ss_box(ulx-1,uly-1,lrx+1,lry+1);
       while(*tmd_ticks - last_time < TICKS_PER_BOX);
@@ -917,20 +917,20 @@ fixang point_in_view_arc(fix target_x, fix target_y, fix looker_x, fix looker_y,
 
 // convert occurances of the character "from" to the character "to"
 // in the string "s"
-void string_replace_char(char* s, char from, char to)
+void string_replace_char(int8_t* s, int8_t from, int8_t to)
 {
    for(;*s;s++) {
       if(*s==from) *s=to;
    };
 }
 
-void gamma_dealfunc(ushort gamma_qvar)
+void gamma_dealfunc(uint16_t gamma_qvar)
 {
 	fix gamma;
 
 	if (gamma_qvar > 99)
 		gamma_qvar = 99;
-	gamma_qvar = (ushort)(((int)gamma_qvar*FIX_UNIT)/100);
+	gamma_qvar = (uint16_t)(((int32_t)gamma_qvar*FIX_UNIT)/100);
 	gamma=FIX_UNIT-fix_make(0,gamma_qvar);
 	gamma=fix_mul(gamma,gamma)+(FIX_UNIT/2);
 //	gamma=QVAR_TO_GAMMA(gamma_qvar);

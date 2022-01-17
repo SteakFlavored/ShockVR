@@ -62,7 +62,7 @@ pt_mods pt_deref[FRPTSUNIQUE]=
 #define _uvd ((0x10000-FROCTNUM)>>8)
 #define _uve 0x0E0
 // points verse rotation vs unique
-ushort pt_uv[FRPTSUNIQUE][4][2]=
+uint16_t pt_uv[FRPTSUNIQUE][4][2]=
 {
  {{0,_uv1},{_uv1,_uv1},{_uv1,0},{0,0}},
  {{0,_uve},{_uve,_uv1},{_uv1,_uva},{_uva,0}},
@@ -94,7 +94,7 @@ fix pt_offs[FRPTSOFFS]=
  {fix_make(0,0),fix_make(0,0x2000),fix_make(0,FROCTNUM),fix_make(0,0x8000),
   fix_make(0,-FROCTNUM),fix_make(0,0xE000),fix_make(1,0),0xffffffff};
 
-uchar pt_from_faceoff[4][FRPTSOFFS]=
+uint8_t pt_from_faceoff[4][FRPTSOFFS]=
 {
  {0x4,0xD,0x16,0xE,0x17,0xF,0x8,0x4},
  {0x8,0x7,0x13,0x6,0x12,0x5,0xC,0x8},
@@ -283,7 +283,7 @@ fix fr_norm_elements[9]=
     fix_make(1,0), fix_make(0,58616), fix_make(0,46340), fix_make(0,29308), fix_make(0,0)
 };
 
-ushort fr_wnorm_list[FRWALLPTSCNT]=
+uint16_t fr_wnorm_list[FRWALLPTSCNT]=
 {
  // main diagonals
  mk_hnorm(hXY,pfdg,pfdg,npnp), mk_hnorm(hXY,pfdg,nfdg,npnp), mk_hnorm(hXY,nfdg,pfdg,npnp), mk_hnorm(hXY,nfdg,nfdg,npnp),
@@ -324,7 +324,7 @@ ushort fr_wnorm_list[FRWALLPTSCNT]=
 #define sl2W      (3<<4)
 #define vrealfull ((vfull<<4)|vfull)
 
-uchar fr_fnorm_list[FRTILEFLOORCNT]=
+uint8_t fr_fnorm_list[FRTILEFLOORCNT]=
 {
  // solid, open
  vfull, vfull,
@@ -371,7 +371,7 @@ uchar fr_fnorm_list[FRTILEFLOORCNT]=
 #define foC()                        {foClr,foClr,foClr,foClr}
 #define foN()                        {foNul,foNul,foNul,foNul}
 
-uchar face_obstruct[FRFACEOBSTRUCTCNT][FACE_CNT]=
+uint8_t face_obstruct[FRFACEOBSTRUCTCNT][FACE_CNT]=
 {
  // solid, open
  foN(), foC(),
@@ -448,12 +448,12 @@ uchar face_obstruct[FRFACEOBSTRUCTCNT][FACE_CNT]=
 #define nFlt (0x80)
 #define iFlt (0x00)
 
-#define mm(x,y) {x|0,(uchar)(y|(~nFlt))}
+#define mm(x,y) {x|0,(uint8_t)(y|(~nFlt))}
 
 // note we flip match, because in new data structure, we go down from ceiling always
 
 // mirror by flr/ciel by xor/and
-uchar merge_masks[5][2][2]=
+uint8_t merge_masks[5][2][2]=
 {
  {mm(gtF|nFlp,nFlt),mm(gtC|dFlp,nFlt)},  // MAP_MATCH
  {mm(gtF|nFlp,nFlt),mm(gtC|nFlp,nFlt)},  // MAP_MIRROR
@@ -467,9 +467,9 @@ uchar merge_masks[5][2][2]=
 #define nfFlt (0xC0)
 #define ifFlt (0x00)
 
-#define mf(x,y) {x|0,(uchar)(y|(~nfFlt))}
+#define mf(x,y) {x|0,(uint8_t)(y|(~nfFlt))}
 
-uchar mmask_facelet[5][2][2]=
+uint8_t mmask_facelet[5][2][2]=
 {
  {mf(nfFlp,nfFlt),mf(dfFlp,nfFlt)},  // MAP_MATCH
  {mf(nfFlp,nfFlt),mf(nfFlp,nfFlt)},  // MAP_MIRROR
@@ -481,11 +481,11 @@ uchar mmask_facelet[5][2][2]=
 // filled in functionally
 fix fo_unpack[FOBASECODES][2];
 fix fo_anti_unpack[FOBASECODES][2];
-uchar face_baseobstruct[FRFACEOBSTRUCTCNT][FACE_CNT];
+uint8_t face_baseobstruct[FRFACEOBSTRUCTCNT][FACE_CNT];
 
-int  fr_tables_build(void)
+int32_t  fr_tables_build(void)
 {
-   int l,r,i,j;
+   int32_t l,r,i,j;
    for (l=0; l<7; l++)
       for (r=0; r<7; r++)
       {

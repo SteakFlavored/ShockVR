@@ -68,7 +68,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------
 
 #ifdef LOST_TREASURES_OF_MFD_GAMES
-extern void fstack_init(uchar* fs, uint siz);
+extern void fstack_init(uint8_t* fs, uint32_t siz);
 #endif
 
 #define PUZZLE_DIFFICULTY (QUESTVAR_GET(PUZZLE_DIFF_QVAR))
@@ -77,10 +77,10 @@ extern void fstack_init(uchar* fs, uint siz);
 // but note it's not managed correctly across save/restore etc.
 //   Hey, this used to be 1024!
 #define HIDEOUS_GAME_STORAGE            2048
-unsigned char hideous_secret_game_storage[HIDEOUS_GAME_STORAGE + 4];
+uint8_t hideous_secret_game_storage[HIDEOUS_GAME_STORAGE + 4];
 
 // stuff to check magic cookie in secret game stuff
-#define COOKIE    (*((ulong *) hideous_secret_game_storage))
+#define COOKIE    (*((uint32_t *) hideous_secret_game_storage))
 
 #define COOK_VAL(a,b,c,d)  ((((a)*256+(b))*256+(c))*256+(d))
 #define GAME_COOK(d)       COOK_VAL('G','a','m',(d))
@@ -88,10 +88,10 @@ unsigned char hideous_secret_game_storage[HIDEOUS_GAME_STORAGE + 4];
 #define NUM_GAMES 8
 
 LGRect GamesMenu;
-static long score_time=0;
+static int32_t score_time=0;
 extern bool full_game_3d;
 
-static int games_time_diff;
+static int32_t games_time_diff;
 
 void Rect_gr_box(LGRect *r);
 void Rect_gr_rect(LGRect *r);
@@ -105,52 +105,52 @@ void Rect_gr_rect(LGRect *r);
 // starting fields of Robot Invasion, since they share
 // ball and player movement code
 typedef struct {
-   uchar game_mode;
-   char  ball_pos_x, ball_pos_y;
-   char  ball_dir_x, ball_dir_y;
-   char  p_pos, p_spd;
-   char  c_pos, c_spd;
-   uchar c_score;
-   uchar p_score;
-   uchar last_point;
-   uchar game_won;
+   uint8_t game_mode;
+   int8_t  ball_pos_x, ball_pos_y;
+   int8_t  ball_dir_x, ball_dir_y;
+   int8_t  p_pos, p_spd;
+   int8_t  c_pos, c_spd;
+   uint8_t c_score;
+   uint8_t p_score;
+   uint8_t last_point;
+   uint8_t game_won;
 } pong_state;
 
 typedef struct
 {
-   uchar game_mode;
-   ushort save_time;
+   uint8_t game_mode;
+   uint16_t save_time;
    // current QIX endpoints
-   char x[2],dx[2],y[2],dy[2];
-   uchar color;
+   int8_t x[2],dx[2],y[2],dy[2];
+   uint8_t color;
 } menu_state;
 
 typedef struct {
-   uchar  game_mode;     // current game mode
-   uchar  lane_cnt;      // current lane count
-   uchar  diff;          // 0-0xf chance of a new car per lane
-   char   player_lane;   // current player line
-   char   player_move;   // which way we are going
-   ushort lanes[8];      // two bits for each
-   uchar  game_state;    // have we lost
-   uint   frame_cnt;     // how many frames at this difficulty
-//   uchar  last_bs;       // last button state
+   uint8_t  game_mode;     // current game mode
+   uint8_t  lane_cnt;      // current lane count
+   uint8_t  diff;          // 0-0xf chance of a new car per lane
+   int8_t   player_lane;   // current player line
+   int8_t   player_move;   // which way we are going
+   uint16_t lanes[8];      // two bits for each
+   uint8_t  game_state;    // have we lost
+   uint32_t   frame_cnt;     // how many frames at this difficulty
+//   uint8_t  last_bs;       // last button state
 } road_state;
 
 typedef struct
 {
 	// shared state with Ping
-   uchar game_mode;
-   char  ball_pos_x, ball_pos_y;
-   char  ball_dir_x, ball_dir_y;
-   char  p_pos, p_spd;
+   uint8_t game_mode;
+   int8_t  ball_pos_x, ball_pos_y;
+   int8_t  ball_dir_x, ball_dir_y;
+   int8_t  p_pos, p_spd;
 
 	// brick state
-   ushort rows[3];	// BOTS_NUM_ROWS
-   short hpos;
-   char hspd;
-   char vpos;
-   char balls;
+   uint16_t rows[3];	// BOTS_NUM_ROWS
+   int16_t hpos;
+   int8_t hspd;
+   int8_t vpos;
+   int8_t balls;
 } bots_state;
 
 #define PONG_X_DIR_MAX 7
@@ -158,19 +158,19 @@ typedef struct
 #define GAME_DATA_SIZE 32
 #define GAME_DATA (&player_struct.mfd_access_puzzles[0])
 #define GAME_DATA_2 (&player_struct.mfd_func_data[MFD_GAMES_FUNC][0])
-#define GAME_MODE (*((uchar*)GAME_DATA))
+#define GAME_MODE (*((uint8_t*)GAME_DATA))
 
 #define GAME_MODE_MENU NUM_GAMES
 
 //------------
 // PROTOTYPES
 //------------
-void games_expose_pong(MFD *m,ubyte control);
-void games_expose_null(MFD *m,ubyte control);
-void games_expose_menu(MFD *m,ubyte control);
-static void games_expose_mcom(MFD *m,ubyte control);
-void games_expose_bots(MFD *m,ubyte control);
-void games_expose_road(MFD *m,ubyte control);
+void games_expose_pong(MFD *m,uint8_t control);
+void games_expose_null(MFD *m,uint8_t control);
+void games_expose_menu(MFD *m,uint8_t control);
+static void games_expose_mcom(MFD *m,uint8_t control);
+void games_expose_bots(MFD *m,uint8_t control);
+void games_expose_road(MFD *m,uint8_t control);
 
 void games_init_pong(void *game_state);
 static void games_init_mcom(void *game_state);
@@ -179,15 +179,15 @@ void games_init_null(void *game_state);
 void games_init_bots(void *game_state);
 
 #ifdef LOST_TREASURES_OF_MFD_GAMES
-void games_expose_15(MFD *m,ubyte control);
+void games_expose_15(MFD *m,uint8_t control);
 void games_init_15(void *game_state);
 bool games_handle_15(MFD *m, uiEvent *e);
 
-void games_expose_ttt(MFD *m,ubyte control);
+void games_expose_ttt(MFD *m,uint8_t control);
 void games_init_ttt(void* game_state);
 bool games_handle_ttt(MFD *m, uiEvent *e);
 
-void games_expose_wing(MFD *m,ubyte control);
+void games_expose_wing(MFD *m,uint8_t control);
 void games_init_wing(void *game_state);
 bool games_handle_wing(MFD *m, uiEvent *e);
 #else
@@ -214,12 +214,12 @@ void games_run_road(road_state *work_ps);
 void games_run_bots(bots_state *bs);
 
 static void mcom_start_level(void);
-int tictactoe_evaluator(void* pos);
+int32_t tictactoe_evaluator(void* pos);
 
 void mfd_games_turnon(bool, bool );
 void mfd_games_turnoff(bool, bool );
 
-void (*game_expose_funcs[])(MFD *m,ubyte control)=
+void (*game_expose_funcs[])(MFD *m,uint8_t control)=
 {
 games_expose_pong,
 games_expose_mcom,
@@ -271,7 +271,7 @@ errtype mfd_games_init(MFD_Func*)
 // mfd_games_handler()
 bool mfd_games_handler(MFD *m, uiEvent *e)
 {
-   int cur_mode = GAME_MODE;
+   int32_t cur_mode = GAME_MODE;
    bool retval = (*game_handler_funcs[cur_mode])(m,e);
    uiMouseEvent *mouse;
    LGRect r;
@@ -298,12 +298,12 @@ bool mfd_games_handler(MFD *m, uiEvent *e)
 // mfd_games_expose()
 //
 
-void mfd_games_expose(MFD *m, ubyte control)
+void mfd_games_expose(MFD *m, uint8_t control)
 {
-   int cur_mode;
+   int32_t cur_mode;
    grs_font* fon;
-   ulong dt=player_struct.deltat;
-   extern int mfd_slot_primary(int slot);
+   uint32_t dt=player_struct.deltat;
+   extern int32_t mfd_slot_primary(int32_t slot);
 
    if (control & MFD_EXPOSE) {
 
@@ -365,16 +365,16 @@ void mfd_games_expose(MFD *m, ubyte control)
 #define TIME_TIL_SCREEN_SAVE    (60*30) // 30 fps, 60 frames
 
 #define MAX_LINES       12
-int ss_head=0;
+int32_t ss_head=0;
 typedef struct
 {
-  char x1,y1,x2,y2,c;
+  int8_t x1,y1,x2,y2,c;
 } oldLines;
 oldLines *old_lines = (oldLines *)(hideous_secret_game_storage + 4);
 
 static void init_screen_save(menu_state *ms)
 {
-  int i;
+  int32_t i;
   for (i=0; i < MAX_LINES; ++i)
     old_lines[i].x1 = old_lines[i].y1 =
     old_lines[i].x2 = old_lines[i].y2 =
@@ -392,11 +392,11 @@ static void init_screen_save(menu_state *ms)
 
 #define draw_shadowed_text(s,x,y) draw_shadowed_string((s),(x),(y),full_game_3d)
 
-void games_expose_menu(MFD *, ubyte )
+void games_expose_menu(MFD *, uint8_t )
 {
-   char buf[80];
-   int i;
-   ubyte cur_games=player_struct.softs.misc[MISC_SOFTWARE_GAMES];
+   int8_t buf[80];
+   int32_t i;
+   uint8_t cur_games=player_struct.softs.misc[MISC_SOFTWARE_GAMES];
    menu_state *ms = ((menu_state *) GAME_DATA);
    if (!full_game_3d)
 //KLC - chg for new art   draw_res_bm(REF_IMG_bmBlankMFD, 0,0);
@@ -418,7 +418,7 @@ void games_expose_menu(MFD *, ubyte )
 	 draw_shadowed_text(STRING(GameName0+i),MENU_GAMELIST_X+((i%2)*((MFD_VIEW_WID-10)/2)),
 	   MENU_GAMELIST_Y+((i>>1)*MENU_GAMELIST_DY));
    } else {
-     int i;
+     int32_t i;
      if (ms->save_time == TIME_TIL_SCREEN_SAVE) {
        init_screen_save(ms);
        ++ms->save_time;
@@ -460,8 +460,8 @@ void games_expose_menu(MFD *, ubyte )
 bool games_handle_menu(MFD* m, uiEvent* ev)
 {
    uiMouseEvent *mouse;
-   int game;
-   int cur_games = player_struct.softs.misc[MISC_SOFTWARE_GAMES];
+   int32_t game;
+   int32_t cur_games = player_struct.softs.misc[MISC_SOFTWARE_GAMES];
 
    if (GAME_MODE == GAME_MODE_MENU)
      ((menu_state *) GAME_DATA)->save_time = 0;
@@ -492,9 +492,9 @@ void games_init_null(void*)
    return;
 }
 
-void games_expose_null(MFD *, ubyte )
+void games_expose_null(MFD *, uint8_t )
 {
-   int  cur_games=0xff;
+   int32_t  cur_games=0xff;
 
    if (!full_game_3d)
 //KLC - chg for new art   draw_res_bm(REF_IMG_bmBlankMFD, 0,0);
@@ -521,15 +521,15 @@ bool games_handle_null(MFD* , uiEvent* )
 #define PONG_BORDER     3
 #define PONG_SWEET_SPOT 2
 
-int get_new_x_dir(int paddle_loc, int ball_loc);
-int generic_ball_and_paddle(void *game_state);
+int32_t get_new_x_dir(int32_t paddle_loc, int32_t ball_loc);
+int32_t generic_ball_and_paddle(void *game_state);
 
 // -------------------
 // generic paddle-hits-ball code
 
-int get_new_x_dir(int paddle_loc,int ball_loc)
+int32_t get_new_x_dir(int32_t paddle_loc,int32_t ball_loc)
 {
-   int x_dir=((ball_loc-paddle_loc)/2);
+   int32_t x_dir=((ball_loc-paddle_loc)/2);
    if (x_dir<0)
       if (x_dir>=-PONG_SWEET_SPOT) x_dir=0;
       else if (x_dir<-PONG_X_DIR_MAX) x_dir=-PONG_X_DIR_MAX;
@@ -543,7 +543,7 @@ int get_new_x_dir(int paddle_loc,int ball_loc)
 
 // this function returns non-zero
 // if the ball went off the bottom past the paddle
-int generic_ball_and_paddle(void *game_state)
+int32_t generic_ball_and_paddle(void *game_state)
 {
   pong_state *work_ps = (pong_state *) game_state;
 
@@ -573,7 +573,7 @@ int generic_ball_and_paddle(void *game_state)
 	  if ((work_ps->ball_pos_x+PONG_BALL_XRAD>=work_ps->p_pos-PLY_PADDLE_XRAD)&&
 	      (work_ps->ball_pos_x-PONG_BALL_XRAD<=work_ps->p_pos+PLY_PADDLE_XRAD))
 	      {  // we got it, larry
-		int nxdir=get_new_x_dir(work_ps->p_pos,work_ps->ball_pos_x);
+		int32_t nxdir=get_new_x_dir(work_ps->p_pos,work_ps->ball_pos_x);
 		work_ps->ball_dir_y=-work_ps->ball_dir_y;       // hmm, does dirx work yet
 		work_ps->ball_dir_x=(nxdir-work_ps->ball_dir_x)>>1;      // average of reflection and new angle??? is this good?
 		  // minus looks good if it hits the edge of the paddle
@@ -598,10 +598,10 @@ void games_init_pong(void *game_state)
 
 void games_run_pong(pong_state *work_ps)
 {
-   int c_des_spd=0;    // desired speed for the computer player
+   int32_t c_des_spd=0;    // desired speed for the computer player
    if ((work_ps->ball_dir_x|work_ps->ball_dir_y)==0)
    {  // create new ball
-      int serve_speed = (work_ps->c_score+work_ps->p_score)/8+1;
+      int32_t serve_speed = (work_ps->c_score+work_ps->p_score)/8+1;
       work_ps->ball_pos_y=MFD_VIEW_HGT/2;
 //      work_ps->ball_dir_x=(rand()%3)-1;       // -1 -> 1 for x
       work_ps->ball_dir_x=0;
@@ -654,7 +654,7 @@ void games_run_pong(pong_state *work_ps)
 	      if ((work_ps->ball_pos_x+PONG_BALL_XRAD>=work_ps->c_pos-CMP_PADDLE_XRAD)&&
 		  (work_ps->ball_pos_x-PONG_BALL_XRAD<=work_ps->c_pos+CMP_PADDLE_XRAD))
 	      {  // we got it, larry
-	    int nxdir=get_new_x_dir(work_ps->c_pos,work_ps->ball_pos_x);
+	    int32_t nxdir=get_new_x_dir(work_ps->c_pos,work_ps->ball_pos_x);
 		 work_ps->ball_dir_y=-work_ps->ball_dir_y;       // hmm, does dirx work yet
 	    work_ps->ball_dir_x=(nxdir-work_ps->ball_dir_x)>>1;      // average of reflection and new angle??? is this good?
 	    work_ps->ball_dir_x += rand()%3 -1;
@@ -666,10 +666,10 @@ void games_run_pong(pong_state *work_ps)
 }
 
 #define PONG_CYCLE (CIT_CYCLE/30)
-void games_expose_pong(MFD *m, ubyte tac)
+void games_expose_pong(MFD *m, uint8_t tac)
 {
    pong_state *cur_ps=(pong_state *)GAME_DATA;
-   int game_use=NORMAL_DISPLAY;
+   int32_t game_use=NORMAL_DISPLAY;
 
    if (tac == 0 && score_time > 0)
       score_time = 0;
@@ -714,7 +714,7 @@ void games_expose_pong(MFD *m, ubyte tac)
 
    if (game_use!=NORMAL_DISPLAY)
    {
-      char tmp[2]="V";
+      int8_t tmp[2]="V";
       if (cur_ps->last_point)
 	 ss_string(STRING(YouHave),MFD_VIEW_MID-18,15);
       else
@@ -748,7 +748,7 @@ bool games_handle_pong(MFD* m, uiEvent* e)
    pong_state *cur_ps=(pong_state *)GAME_DATA;
    LGPoint pos = MakePoint(e->pos.x-m->rect.ul.x,
 			 e->pos.y-m->rect.ul.y);
-   ubyte spd = min(3,abs(pos.x - cur_ps->p_pos)/PLY_PADDLE_XRAD+1);
+   uint8_t spd = min(3,abs(pos.x - cur_ps->p_pos)/PLY_PADDLE_XRAD+1);
    if(pos.x+PONG_FUDGE<0 || pos.y+PONG_FUDGE<0 ||
       pos.x>=RECTWID(m->rect)+PONG_FUDGE || pos.y>=RECTHGT(m->rect)+PONG_FUDGE)
    {
@@ -811,7 +811,7 @@ bool games_handle_pong(MFD* m, uiEvent* e)
 #define DIM_CAR         (BLUE_8_BASE+5)
 
 #define CAR_IDX          3
-static uchar c_cols[][2]={{BRIGHT_LED,DIM_LED},{BRIGHT_PHOSPHOR,DIM_PHOSPHOR},{45,61},{BRIGHT_CAR,DIM_CAR}};
+static uint8_t c_cols[][2]={{BRIGHT_LED,DIM_LED},{BRIGHT_PHOSPHOR,DIM_PHOSPHOR},{45,61},{BRIGHT_CAR,DIM_CAR}};
 
 void games_init_road(void *)
 {
@@ -826,7 +826,7 @@ void games_init_road(void *)
 void games_run_road(road_state *)
 {
    road_state *cur_rs=(road_state *)GAME_DATA;
-   int i;
+   int32_t i;
 
    if (++cur_rs->frame_cnt==FRAMES_PER)    // end of level set
    {
@@ -862,7 +862,7 @@ void games_run_road(road_state *)
    else if (cur_rs->player_lane>=cur_rs->lane_cnt) cur_rs->player_lane=cur_rs->lane_cnt-1;
 
    if (car_hit()==HIT_SMART)
-      memset(cur_rs->lanes,0,8*sizeof(ushort));
+      memset(cur_rs->lanes,0,8*sizeof(uint16_t));
    else if (car_hit())     // else if (car_hit()==HIT_BAD)
    {
       play_digi_fx(SFX_DESTROY_CRATE,1);
@@ -871,7 +871,7 @@ void games_run_road(road_state *)
    }
 }
 
-static void road_vline(int x, int yt, int yb, int c1, int c2)
+static void road_vline(int32_t x, int32_t yt, int32_t yb, int32_t c1, int32_t c2)
 {
    gr_set_fcolor(c1);
    ss_vline(x,yt,yb);
@@ -882,10 +882,10 @@ static void road_vline(int x, int yt, int yb, int c1, int c2)
 
 #define ROAD_CYCLE (CIT_CYCLE/5)
 #define uiMakeaDerMotionEventenHausen uiMakeMotionEvent
-void games_expose_road(MFD *m, ubyte tac)
+void games_expose_road(MFD *m, uint8_t tac)
 {
    road_state *cur_rs=(road_state *)GAME_DATA;
-   int game_use=NORMAL_DISPLAY;
+   int32_t game_use=NORMAL_DISPLAY;
 
    if (tac == 0)
       score_time = 0;
@@ -912,11 +912,11 @@ void games_expose_road(MFD *m, ubyte tac)
 	  draw_hires_resource_bm(REF_IMG_bmBlankMFD, 0, 0);
 
    {  // draw the game here, eh?
-      int ledge, i, j;
+      int32_t ledge, i, j;
       ledge=(MFD_VIEW_WID>>1)-((LANE_WID>>1)*cur_rs->lane_cnt);
       for (i=0; i<cur_rs->lane_cnt; i++, ledge+=LANE_WID)
       {
-	 int msk=cur_rs->lanes[i];
+	 int32_t msk=cur_rs->lanes[i];
 	 road_vline(ledge,ROAD_TOP,ROAD_BOTTOM,c_cols[0][0],c_cols[0][1]);
 	 for (j=0; j<LANE_ROWS; j++, msk>>=2)
 	    if (msk&0x3)
@@ -948,7 +948,7 @@ bool games_handle_road(MFD *, uiEvent *e)
 	if (me->type == UI_EVENT_MOUSE)
 	{
 		road_state *cur_rs=(road_state *)GAME_DATA;
-		int bt=me->buttons;
+		int32_t bt=me->buttons;
 		if (bt != 0)
 			if (me->modifiers != 0)
 				bt++;
@@ -982,7 +982,7 @@ bool games_handle_road(MFD *, uiEvent *e)
 
 #define INVADER_TYPES 3
 
-static int invader[INVADER_TYPES] =
+static int32_t invader[INVADER_TYPES] =
 {
   REF_IMG_RAsec1bot,
   REF_IMG_RAhopper,
@@ -999,7 +999,7 @@ static void bots_reset_ball(bots_state *bs)
 
 static void bots_reset_level(bots_state *bs)
 {
-  int i;
+  int32_t i;
   for (i=0; i < BOTS_NUM_ROWS; ++i)
     bs->rows[i] = BOTS_MASK;
   bs->hpos = 0;
@@ -1024,7 +1024,7 @@ void games_init_bots(void *game_state)
 #define BOT_ON(x,y) ((x) >= 0 && (x) < BOTS_NUM_COLUMNS && (y) >= 0 && (y) < BOTS_NUM_ROWS && (bs->rows[y] & (1 << (x))))
 #define CLEAR_BOT(x,y)  (bs->rows[y] &= ~(1 << (x)))
 
-static int test_bot(bots_state *bs, int x, int y)
+static int32_t test_bot(bots_state *bs, int32_t x, int32_t y)
 {
   if (BOT_ON(x,y)) {
     CLEAR_BOT(x,y);
@@ -1038,7 +1038,7 @@ static int test_bot(bots_state *bs, int x, int y)
 
 void games_run_bots(bots_state *bs)
 {
-  int rev, guys, i;
+  int32_t rev, guys, i;
 
   bs->hpos += bs->hspd;
   // test if we've scrolled a bot off the left
@@ -1063,7 +1063,7 @@ void games_run_bots(bots_state *bs)
 
 #ifdef USE_BROKEN_CODE
   if (bs->hpos < HPOS_HACK) {
-    rev = ((unsigned) (-HPOS-HPOS_HACK))/BOT_WIDTH;
+    rev = ((uint32_t) (-HPOS-HPOS_HACK))/BOT_WIDTH;
     rev = (1 << rev) - 1;       // test bottommost bits
     if (guys & rev)
       bs->hpos += 2*(bs->hspd = -bs->hspd);
@@ -1118,10 +1118,10 @@ void games_run_bots(bots_state *bs)
   } else {
     // handle other bouncy conditions
     // switch from upward to downward
-    int bot_left = (bs->ball_pos_x -PONG_BALL_XRAD - HPOS) / BOT_WIDTH;
-    int bot_right = (bs->ball_pos_x-PONG_BALL_XRAD - HPOS) / BOT_WIDTH;
-    int bot_top = (bs->ball_pos_y -BOT_TOP - PONG_BALL_YRAD) / BOT_HEIGHT;
-    int bot_bot = (bs->ball_pos_y -BOT_TOP + PONG_BALL_YRAD) / BOT_HEIGHT;
+    int32_t bot_left = (bs->ball_pos_x -PONG_BALL_XRAD - HPOS) / BOT_WIDTH;
+    int32_t bot_right = (bs->ball_pos_x-PONG_BALL_XRAD - HPOS) / BOT_WIDTH;
+    int32_t bot_top = (bs->ball_pos_y -BOT_TOP - PONG_BALL_YRAD) / BOT_HEIGHT;
+    int32_t bot_bot = (bs->ball_pos_y -BOT_TOP + PONG_BALL_YRAD) / BOT_HEIGHT;
 
     if (bs->ball_dir_x == 0) bs->ball_dir_x = 1;
     rev = 0;
@@ -1151,13 +1151,13 @@ void games_run_bots(bots_state *bs)
   }
 }
 
-void games_expose_bots(MFD *m, uchar)
+void games_expose_bots(MFD *m, uint8_t)
 {
    bots_state *bs = (bots_state *) GAME_DATA;
    uiEvent fake_event;
-   int i,j;
+   int32_t i,j;
 #ifdef SVGA_SUPPORT
-   extern char convert_use_mode;
+   extern int8_t convert_use_mode;
 #endif
 
    for(; games_time_diff>=PONG_CYCLE; games_time_diff-=PONG_CYCLE) {
@@ -1213,20 +1213,20 @@ void games_expose_bots(MFD *m, uchar)
 
 typedef struct
 {
-  uchar game_mode, state;
+  uint8_t game_mode, state;
 
-  ushort enemies;
-  ulong score;
+  uint16_t enemies;
+  uint32_t score;
 
-  ushort level;        // 12
+  uint16_t level;        // 12
 
-  uchar guys;       // 10           // guys & gun placements
+  uint8_t guys;       // 10           // guys & gun placements
 
-  uchar lmissiles;
-  uchar rmissiles;   // 10
+  uint8_t lmissiles;
+  uint8_t rmissiles;   // 10
 
-  uchar quarter;
-  uchar bob;
+  uint8_t quarter;
+  uint8_t bob;
 } mcom_state;
 
 // this macro should return a long (well, a 32-bit int) _lvalue_
@@ -1236,7 +1236,7 @@ typedef struct
 
 #define HISCORE_QVAR 0x2D
 
-#define HISCORE         (*((ulong*)&player_struct.questvars[HISCORE_QVAR]))
+#define HISCORE         (*((uint32_t*)&player_struct.questvars[HISCORE_QVAR]))
 
 
 #define MAX_EXPLOSIONS  30
@@ -1268,7 +1268,7 @@ typedef struct
 
 #define DIEGO_SCORE                     5093
 
-static long shodan_score[7] =
+static int32_t shodan_score[7] =
 {
    1307496,
    1259431,
@@ -1284,9 +1284,9 @@ static long shodan_score[7] =
 
 typedef struct
 {
-  uchar x;
-  uchar y;
-  uchar frame;
+  uint8_t x;
+  uint8_t y;
+  uint8_t frame;
 } expStruct;
 expStruct *explode = (expStruct *)EXPLODE;
 
@@ -1294,12 +1294,12 @@ expStruct *explode = (expStruct *)EXPLODE;
 
 typedef struct
 {
-  uchar sx;
-  uchar sy;
-  int x;       // 1 bit sign, 8 bit integer, 8 bit fraction
-  int y;
-  int dx;
-  int dy;
+  uint8_t sx;
+  uint8_t sy;
+  int32_t x;       // 1 bit sign, 8 bit integer, 8 bit fraction
+  int32_t y;
+  int32_t dx;
+  int32_t dy;
 } attackStruct;
 attackStruct *attack = (attackStruct *)ATTACKER;
 
@@ -1307,24 +1307,24 @@ attackStruct *attack = (attackStruct *)ATTACKER;
 
 typedef struct
 {
-  uchar sx;
-  uchar sy;
-  uchar ex;
-  uchar ey;
-  uchar frame;
+  uint8_t sx;
+  uint8_t sy;
+  uint8_t ex;
+  uint8_t ey;
+  uint8_t frame;
 } shotsStruct;
 shotsStruct *shots = (shotsStruct *)MISSILE;
 
-static int num_attackers, num_missiles, num_explosions;
+static int32_t num_attackers, num_missiles, num_explosions;
 #define GROUND_TOP      (4)
 #define guy_TOP        (GROUND_TOP+3)
 
 #define TRAIL_LENGTH    10
 
-static unsigned char radius[] = { 1,2,3,4,5,5,6,6,7,7,7,
+static uint8_t radius[] = { 1,2,3,4,5,5,6,6,7,7,7,
 				  6,6,6,5,5,4,3,2,1 };
 
-static void make_mcom_explode(int x, int y)
+static void make_mcom_explode(int32_t x, int32_t y)
 {
   if (num_explosions < MAX_EXPLOSIONS) {
     explode[num_explosions].x = x;
@@ -1333,7 +1333,7 @@ static void make_mcom_explode(int x, int y)
   }
 }
 
-static void make_mcom_shot(int x, int y, int sx)
+static void make_mcom_shot(int32_t x, int32_t y, int32_t sx)
 {
   if (num_missiles < MAX_MISSILES) {
     shots[num_missiles].sx = sx;
@@ -1350,12 +1350,12 @@ static void make_mcom_shot(int x, int y, int sx)
   // an int, otherwise it's unsigned and hoses the dx calculation
 
   // compute current vertical speed based on level
-static int v_speed(void)
+static int32_t v_speed(void)
 {
     return 24 + ((mcom_state *) GAME_DATA)->level*4;
 }
 
-static void make_attacker(int sx, int sy, int dx)
+static void make_attacker(int32_t sx, int32_t sy, int32_t dx)
 {
   if (num_attackers < MAX_ATTACKERS && ((mcom_state *) GAME_DATA)->enemies) {
     attack[num_attackers].sx = sx;
@@ -1368,14 +1368,14 @@ static void make_attacker(int sx, int sy, int dx)
   }
 }
 
-static int guy_loc(int n)
+static int32_t guy_loc(int32_t n)
 {
   // 0 1 2 3 4 5 6 7 8 9
   // |     ^     ^     |
   // edge  silo  silo  edge
 
   // so first map guy number 0..5 into above numbering scheme
-  int k = (n/2)*3 + (n&1) + 1;
+  int32_t k = (n/2)*3 + (n&1) + 1;
 
   // then map 0 to 0 and 9 to MFD_VIEW_WID
   return MFD_VIEW_WID*k/9;
@@ -1398,11 +1398,11 @@ static void make_random_attacker(void)
 
 static void advance_mcom_state(void)
 {
-  int i,j;
+  int32_t i,j;
   bool silo=FALSE;
   mcom_state *ms = (mcom_state *) GAME_DATA;
-  uchar old_quarter=ms->quarter;
-  uchar old_bob=ms->bob;
+  uint8_t old_quarter=ms->quarter;
+  uint8_t old_bob=ms->bob;
 
     // this code used to be in the expose func, hopefully this doesn't
     // break it
@@ -1449,7 +1449,7 @@ static void advance_mcom_state(void)
   for (i=0; i < num_attackers; i) {
     // check if we've gotten blown up by an explosion
     for (j=0; j < num_explosions; ++j)
-      if (SQRD((int) explode[j].x - (int) attack[i].x/256) + SQRD((int) explode[j].y - (int) attack[i].y/256) <= SQRD(radius[explode[j].frame]))
+      if (SQRD((int32_t) explode[j].x - (int32_t) attack[i].x/256) + SQRD((int32_t) explode[j].y - (int32_t) attack[i].y/256) <= SQRD(radius[explode[j].frame]))
 	break;
     if (j < num_explosions) {
       ms->score += SCORE_PER_MISSILE_KILLED;
@@ -1506,7 +1506,7 @@ static void mcom_start_game(void)
 
 static void mcom_start_level(void)
 {
-  int i;
+  int32_t i;
   mcom_state *ms = (mcom_state *) GAME_DATA;
   ++ms->level;
   ms->enemies = 4*(ms->level)/3 + 15;
@@ -1531,12 +1531,12 @@ static bool games_handle_mcom(MFD *m, uiEvent* e)
 	else if (ms->state < MCOM_PLAY_GAME ||
 			  (ms->state == MCOM_PLAY_GAME && (ms->enemies || num_attackers)))
 	{
-		int	left = (mouse->action & MOUSE_LDOWN) && (mouse->modifiers == 0);
-		int	right = (mouse->action & MOUSE_LDOWN) && (mouse->modifiers != 0);
+		int32_t	left = (mouse->action & MOUSE_LDOWN) && (mouse->modifiers == 0);
+		int32_t	right = (mouse->action & MOUSE_LDOWN) && (mouse->modifiers != 0);
 // KLC - no need to worry about left/right hand mouse for Mac version.
 //		if (QUESTVAR_GET(MOUSEHAND_QVAR))
 //		{
-//			int temp = left;
+//			int32_t temp = left;
 //			left = right;
 //			right = temp;
 //		}
@@ -1550,12 +1550,12 @@ static bool games_handle_mcom(MFD *m, uiEvent* e)
 
 
 // coordinates of the missiles in the boats
-static signed char ox[10] = { -3,-1,1,3,-2,0,2,-1,1,0 };
-static signed char oy[10] = { 1,1,1,1,3,3,3,5,5,7 };
+static signed int8_t ox[10] = { -3,-1,1,3,-2,0,2,-1,1,0 };
+static signed int8_t oy[10] = { 1,1,1,1,3,3,3,5,5,7 };
 
-static void draw_silo(int x, int num)
+static void draw_silo(int32_t x, int32_t num)
 {
-  int i;
+  int32_t i;
     // bottom row of silo must have room for 4 missiles, so 9 pixels wide
 
   draw_res_bm(REF_IMG_Destroyer,x-4,GROUND_TOP-2);
@@ -1570,7 +1570,7 @@ static void draw_silo(int x, int num)
       ss_rect(x+ox[i],GROUND_TOP+oy[i],x+ox[i]+1,GROUND_TOP+oy[i]+1);
 }
 
-// static unsigned char guy_disp[] = { 2,6,3,2,5 };
+// static uint8_t guy_disp[] = { 2,6,3,2,5 };
 
 //#define gr_int_cline(x0,y0,c0,x1,y1,c1) \
 //        gr_fix_cline(fix_make(x0,0),fix_make(y0,0),c0,\
@@ -1583,11 +1583,11 @@ static void draw_silo(int x, int num)
 // update ten times per second.
 #define MCOM_CYCLE (CIT_CYCLE/35)
 
-static int hack[] = { 0, SCORE_PER_GUY_ALIVE,
+static int32_t hack[] = { 0, SCORE_PER_GUY_ALIVE,
 		      SCORE_PER_GUY_ALIVE, SCORE_PER_GUY_ALIVE*2 };
-static void games_expose_mcom(MFD *, ubyte )
+static void games_expose_mcom(MFD *, uint8_t )
 {
-  int i,k;
+  int32_t i,k;
   mcom_state *ms = (mcom_state *) GAME_DATA;
 
   if (!ms->state) { ms->state = MCOM_WAIT_NEW_GAME; ms->guys = ALL_guys; }
@@ -1603,7 +1603,7 @@ static void games_expose_mcom(MFD *, ubyte )
 
     // print current score behind floating guys
   {
-    char buffer[16];
+    int8_t buffer[16];
     sprintf(buffer,"%06d",ms->score);
     gr_set_fcolor(WHITE);
     ss_string(buffer, MFD_VIEW_WID-5*6+4, 0);
@@ -1630,9 +1630,9 @@ static void games_expose_mcom(MFD *, ubyte )
 
   gr_set_fcolor(AQUA_8_BASE+3);
   if (ms->state == MCOM_WAIT_NEW_GAME) {
-    int i;
+    int32_t i;
     for (i=0; i < 8; ++i) {
-      char buffer[16];
+      int8_t buffer[16];
       if (HISCORE > DIEGO_SCORE) {
 	strncpy(buffer, player_struct.name, 8);
 		// limited space in hiscore display, so strncpy
@@ -1654,14 +1654,14 @@ static void games_expose_mcom(MFD *, ubyte )
     }
     ss_string(STRING(ClickToPlay), MFD_VIEW_MID-25, MFD_VIEW_HGT-7);
   } else if (ms->state < MCOM_PLAY_GAME) {
-    char buffer[16];
+    int8_t buffer[16];
     sprintf(buffer, STRING(LevelNum), ms->level+1);
     ss_string(buffer, MFD_VIEW_MID-15, MFD_VIEW_HGT/2);
   } else if (ms->state == MCOM_PLAY_GAME) {
   } else {
 	// ideally this will countup how many you got
-    char buffer[32];
-    int z;
+    int8_t buffer[32];
+    int32_t z;
 
     z = ms->state - MCOM_REPORT_MISSILES;
     if (z > MISSILE_WAIT) z = MISSILE_WAIT;
@@ -1761,24 +1761,24 @@ static void games_expose_mcom(MFD *, ubyte )
 #define NUM_PUZZ15_STYLES 5
 
 typedef struct {
-   uchar game_mode;
-   uchar tilenum[MFD_PUZZLE_SQ];
-   uchar current_frame;
-   uchar anim_source;
-   uchar anim_dir;
-   uchar style;
-   uchar scramble;
-   uchar movedto;
-   uchar animframe;
+   uint8_t game_mode;
+   uint8_t tilenum[MFD_PUZZLE_SQ];
+   uint8_t current_frame;
+   uint8_t anim_source;
+   uint8_t anim_dir;
+   uint8_t style;
+   uint8_t scramble;
+   uint8_t movedto;
+   uint8_t animframe;
    bool  pause;
 } puzzle15_state;
 
 typedef struct {
-   uchar bcolor;
-   uchar fcolor;
+   uint8_t bcolor;
+   uint8_t fcolor;
    Ref back;
    bool numbers;
-   uchar tsize;
+   uint8_t tsize;
    bool animating;
 } puzz15_style;
 
@@ -1793,7 +1793,7 @@ static puzz15_style p15_styles[NUM_PUZZ15_STYLES] = {
 void games_init_15(void* game_state)
 {
    puzzle15_state* state=(puzzle15_state*)game_state;
-   int i;
+   int32_t i;
 
    for(i=0;i<MFD_PUZZLE_SQ;i++)
       state->tilenum[i]=i+1;
@@ -1807,7 +1807,7 @@ void games_init_15(void* game_state)
 static bool puzz15_won()
 {
    puzzle15_state *st=(puzzle15_state *)GAME_DATA;
-   int i;
+   int32_t i;
 
    for(i=0;i<MFD_PUZZLE_SQ-1;i++) {
       if(st->tilenum[i]!=(i+1))
@@ -1816,19 +1816,19 @@ static bool puzz15_won()
    return(TRUE);
 }
 
-static void puzz15_xy(int ind, int* x, int* y)
+static void puzz15_xy(int32_t ind, int32_t* x, int32_t* y)
 {
-   int r,c;
+   int32_t r,c;
    r=ind/MFD_PUZZLE_SIZE;
    c=ind%MFD_PUZZLE_SIZE;
    *x=PUZZ15_ULX+(c*PUZZ15_TILE_SIZE);
    *y=PUZZ15_ULY+(r*PUZZ15_TILE_SIZE);
 }
 
-static bool puzz15_move(int x, int y)
+static bool puzz15_move(int32_t x, int32_t y)
 {
    puzzle15_state *st=(puzzle15_state *)GAME_DATA;
-   int dir=-1, ind;
+   int32_t dir=-1, ind;
 
    ind=x+y*MFD_PUZZLE_SIZE;
 
@@ -1846,14 +1846,14 @@ static bool puzz15_move(int x, int y)
    return TRUE;
 }
 
-void games_expose_15(MFD *, ubyte control)
+void games_expose_15(MFD *, uint8_t control)
 {
-   int i,x,y,t,dx,dy,dt;
-   short sw,sh;
+   int32_t i,x,y,t,dx,dy,dt;
+   int16_t sw,sh;
    bool rex=FALSE;
    puzzle15_state* st=(puzzle15_state*)GAME_DATA;
-   char buf[3];
-   int cycle=PUZZ15_CYCLE, aframe;
+   int8_t buf[3];
+   int32_t cycle=PUZZ15_CYCLE, aframe;
    Ref back;
    bool full, solv, nums=p15_styles[st->style].numbers;
 
@@ -1930,7 +1930,7 @@ void games_expose_15(MFD *, ubyte control)
 	    ss_rect(x,y,x+PUZZ15_TILE_SIZE,y+PUZZ15_TILE_SIZE);
 	    // draw pretty bitmap
 	    if(back) {
-	       int bx,by,bw,bh;
+	       int32_t bx,by,bw,bh;
 	       ss_safe_set_cliprect(x,y,x+PUZZ15_TILE_SIZE,y+PUZZ15_TILE_SIZE);
 	       puzz15_xy((t==0?MFD_PUZZLE_SQ:t)-1,&bx,&by);
 	       bw=res_bm_width(back);
@@ -2019,14 +2019,14 @@ bool games_handle_15(MFD *m, uiEvent *e)
 //----------------------------
 
 typedef struct {
-   uchar owner[9];
+   uint8_t owner[9];
 } tictactoe;
 
 typedef struct {
-   uchar game_mode;
+   uint8_t game_mode;
    tictactoe board;
-   uchar whomoves;
-   uchar whoplayer;
+   uint8_t whomoves;
+   uint8_t whoplayer;
 } ttt_state;
 
 #define NOBODY 0
@@ -2048,14 +2048,14 @@ typedef struct {
 #define TTT_LRY (TTT_ULY+TTT_PUZ_HGT)
 
 static void tictactoe_drawwin(ttt_state* st);
-bool tictactoe_generator(void* pos, int index, bool minimizer_moves);
+bool tictactoe_generator(void* pos, int32_t index, bool minimizer_moves);
 
 // ----------------------
 // TIC-TAC-TOE:
 //   static evaluator, move generator
 // ----------------------
 
-static int winnerval(uchar owner)
+static int32_t winnerval(uint8_t owner)
 {
    if(owner==X) return INT_MAX;
    else if(owner==O) return INT_MIN;
@@ -2064,7 +2064,7 @@ static int winnerval(uchar owner)
 
 static bool tictactoe_over(tictactoe* st)
 {
-   int i,val;
+   int32_t i,val;
 
    val=tictactoe_evaluator(st);
    if(val==winnerval(X)||val==winnerval(O)) return TRUE;
@@ -2075,7 +2075,7 @@ static bool tictactoe_over(tictactoe* st)
    return TRUE;
 }
 
-static char corners_ttt[]={0,2,6,8};
+static int8_t corners_ttt[]={0,2,6,8};
 
 void games_init_ttt(void* game_state)
 {
@@ -2093,11 +2093,11 @@ void games_init_ttt(void* game_state)
    }
 }
 
-static char initmove_ttt[]={0,1,4};
+static int8_t initmove_ttt[]={0,1,4};
 
-static int ttt_fullness(tictactoe* st)
+static int32_t ttt_fullness(tictactoe* st)
 {
-   int i, ret=0;
+   int32_t i, ret=0;
 
    for(i=0;i<9;i++) {
       if(st->owner[i]!=NOBODY)
@@ -2106,9 +2106,9 @@ static int ttt_fullness(tictactoe* st)
    return ret;
 }
 
-static char move_to_index(char move,tictactoe* st)
+static int8_t move_to_index(int8_t move,tictactoe* st)
 {
-   int i;
+   int32_t i;
    bool empty;
 
    empty=(ttt_fullness(st)==0);
@@ -2124,21 +2124,21 @@ static char move_to_index(char move,tictactoe* st)
    return -1;
 }
 
-void games_expose_ttt(MFD *, ubyte control)
+void games_expose_ttt(MFD *, uint8_t control)
 {
    bool full;
-   int val;
-   static long timeformove=0, dt, timeout;
-   char whichmove;
+   int32_t val;
+   static int32_t timeformove=0, dt, timeout;
+   int8_t whichmove;
    ttt_state* st=(ttt_state*)GAME_DATA;
-   int loops=0;
+   int32_t loops=0;
 
    full=(control&MFD_EXPOSE_FULL);
 
    if(full) {
-      int x,y;
+      int32_t x,y;
       bool over;
-      uchar owner;
+      uint8_t owner;
       Ref bm;
 
       if (!full_game_3d)
@@ -2212,10 +2212,10 @@ void games_expose_ttt(MFD *, ubyte control)
       mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
 }
 
-int tictactoe_evaluator(void* pos)
+int32_t tictactoe_evaluator(void* pos)
 {
    tictactoe* t = (tictactoe *)pos;
-   uchar win;
+   uint8_t win;
 
    win=t->owner[0];
    if(win!=NOBODY) {
@@ -2253,10 +2253,10 @@ int tictactoe_evaluator(void* pos)
 // want to slow down the evaluator.
 void tictactoe_drawwin(ttt_state* st)
 {
-   uchar win, realwin;
-   int i;
+   uint8_t win, realwin;
+   int32_t i;
    LGPoint p1,p2;
-   char buf[80];
+   int8_t buf[80];
    tictactoe* t=&(st->board);
 
    p1.x=-1;
@@ -2297,14 +2297,14 @@ void tictactoe_drawwin(ttt_state* st)
 }
 
 
-bool tictactoe_generator(void* pos, int index, bool minimizer_moves)
+bool tictactoe_generator(void* pos, int32_t index, bool minimizer_moves)
 {
-   int i;
+   int32_t i;
    tictactoe* t = (tictactoe *)pos;
    bool empty=TRUE;
-   uchar mover=minimizer_moves?O:X;
+   uint8_t mover=minimizer_moves?O:X;
 
-   int realindex=index;
+   int32_t realindex=index;
 
    if(tictactoe_evaluator(pos)!=winnerval(NOBODY)) return FALSE;  // already have a winner => no children
 
@@ -2409,13 +2409,13 @@ bool games_handle_ttt(MFD *m, uiEvent *e)
 typedef struct {
     fix x,y,z;        // coordinates in 3space
     fix dx,dy,dz;     // velocity in 3space for objects
-    int type;         // what typa object is it
-    int damage;       // how much damage 'til it blows
+    int32_t type;         // what typa object is it
+    int32_t damage;       // how much damage 'til it blows
 } wing_obj;
 
 typedef struct {
     fix x,y,z;
-    int color;
+    int32_t color;
 } wing_star;
 
 #define MAX_WING_OBJECTS        ((HIDEOUS_GAME_STORAGE-512) / sizeof(wing_obj))
@@ -2435,22 +2435,22 @@ static enum WingmanMode
 
 #if 0
 
-static int WingmanMode wingman_mode = WINGMAN_FORMATION;
-static int num_wing_objects, wing_frame_count;
-static int wing_game_mode = WING_BRIEFING, wing_level;
-static int wing_message, wing_message_timer;
+static int32_t WingmanMode wingman_mode = WINGMAN_FORMATION;
+static int32_t num_wing_objects, wing_frame_count;
+static int32_t wing_game_mode = WING_BRIEFING, wing_level;
+static int32_t wing_message, wing_message_timer;
 
 #else
 
 struct wing_data {
-  uchar game_mode;
-  uchar wd_wingman_mode;
-  uchar wd_num_wing_objects;
-  uchar wd_wing_frame_count;
-  uchar wd_wing_game_mode;
-  uchar wd_wing_level;
-  uchar wd_wing_message;
-  uchar wd_wing_message_timer;
+  uint8_t game_mode;
+  uint8_t wd_wingman_mode;
+  uint8_t wd_num_wing_objects;
+  uint8_t wd_wing_frame_count;
+  uint8_t wd_wing_game_mode;
+  uint8_t wd_wing_level;
+  uint8_t wd_wing_message;
+  uint8_t wd_wing_message_timer;
 };
 
 #define WING_DATA       ((struct wing_data *) GAME_DATA)
@@ -2467,7 +2467,7 @@ struct wing_data {
 
 
 #ifdef PLAYTEST
-static int wing_cheat = 0;
+static int32_t wing_cheat = 0;
 #endif
 
 enum WingTypes
@@ -2494,9 +2494,9 @@ enum WingGameMode
 };
 
 
-static int create_wing_object(int type, int dam, fix x, fix y, fix z)
+static int32_t create_wing_object(int32_t type, int32_t dam, fix x, fix y, fix z)
 {
-  int i;
+  int32_t i;
   if (num_wing_objects < MAX_WING_OBJECTS) {
     i = num_wing_objects++;
     wing[i].type = type;
@@ -2512,7 +2512,7 @@ static int create_wing_object(int type, int dam, fix x, fix y, fix z)
 static void wing_delete_all_but(void)
 {
   // delete everything other than wingman
-  int i = 1;
+  int32_t i = 1;
   while (i < num_wing_objects)
     if (wing[i].type == WING_WINGMAN)
       ++i;
@@ -2533,7 +2533,7 @@ static fix wing_velocity[] = {
   fix_make(5,0)                 // BADGUY3
 };
 
-static int wing_damage_amount[] = {
+static int32_t wing_damage_amount[] = {
   20,
   1,
   20,   // countdown timer for explosion
@@ -2564,7 +2564,7 @@ static int wing_damage_amount[] = {
 // Wing text stuff.
 // We'll put 'em into cybstring when the whole thing is approved.
 //
-static char *wing_briefing[WING_NUM_MISSIONS+1] = {
+static int8_t *wing_briefing[WING_NUM_MISSIONS+1] = {
 // 1234567890123456789 1234567890123456789 1234567890123456789 12345678901234567890
   "A routine patrol for you, Captain Boopoototoka. Take Gypsy as wing.",
   "An X Industries base in this sector is under attack. You and Kludge help out.",
@@ -2581,7 +2581,7 @@ static char *wing_briefing[WING_NUM_MISSIONS+1] = {
   "Why don't you just finish off their navy by yourself, Bjorn?",
   "wiped out the TriLacky Cabal and won the war. Now we're all out of jobs."
 };
-static char *wing_debriefing[WING_NUM_MISSIONS] = {
+static int8_t *wing_debriefing[WING_NUM_MISSIONS] = {
   "Well done, Bjorn. I wonder what those pirates were doin' here.",
   "Well, we've stopped the pirates from sabotaging X. Good work.",
   "We've succeeded in jumping to Scary sector. Nothing to worry about here.",
@@ -2596,7 +2596,7 @@ static char *wing_debriefing[WING_NUM_MISSIONS] = {
   "Good show. Now we're approaching the Cabal's homeworld.",
   "Congratulations, Bjorn, err, Admiral Boopoototoka. You've single-handedly",
 };
-static char *wing_sighted[WING_NUM_MISSIONS] = {
+static int8_t *wing_sighted[WING_NUM_MISSIONS] = {
   "They're attacking us, sir.",
   "I have enemies on my scanner.",
   "Easy pickings.",
@@ -2611,7 +2611,7 @@ static char *wing_sighted[WING_NUM_MISSIONS] = {
   "There sure is a lot of 'em.'",
   ""
 };
-static char *wing_dies[WING_NUM_MISSIONS] = {
+static int8_t *wing_dies[WING_NUM_MISSIONS] = {
   "Ahhhhhhhhhhhhhhh!",
   "System integrity failure.",
   "Nice knowing you.",
@@ -2626,7 +2626,7 @@ static char *wing_dies[WING_NUM_MISSIONS] = {
   "Ahhhhhhhhhhhhhhh!",
   ""
 };
-static char *wing_attack[WING_NUM_MISSIONS] = {
+static int8_t *wing_attack[WING_NUM_MISSIONS] = {
   "Engaging enemy, sir.",
   "Enemy destruction commencing.",
   "What a way to meet people.",
@@ -2641,7 +2641,7 @@ static char *wing_attack[WING_NUM_MISSIONS] = {
   "Into the hairball!",
   ""
 };
-static char *wing_form[WING_NUM_MISSIONS] = {
+static int8_t *wing_form[WING_NUM_MISSIONS] = {
   "Forming on your wing.",
   "Undertaking requested maneuver.",
   "As you wish.",
@@ -2667,7 +2667,7 @@ static char *wing_form[WING_NUM_MISSIONS] = {
 #define W_BAD2  8
 #define W_BAD3  64
 
-uchar wing_level_data[] =
+uint8_t wing_level_data[] =
 {
     // ? sector
   W_BAD1, W_BAD1, 0, W_BAD1,
@@ -2691,7 +2691,7 @@ uchar wing_level_data[] =
   W_BAD1*4, W_BAD1*3+W_BAD2*2, W_BAD1*2+W_BAD2*3, W_BAD1*2+W_BAD2*2+W_BAD3*3
 };
 
-uchar wing_wingmen[WING_NUM_MISSIONS] =
+uint8_t wing_wingmen[WING_NUM_MISSIONS] =
 {
   1,1,1,       // ? Sector
   0,1,1,1,     // Scary sector
@@ -2724,7 +2724,7 @@ static fix wing_distance(fix a, fix b, fix c)
   return t;
 }
 
-static void wing_play_fx(int sound, int obj, int radius)
+static void wing_play_fx(int32_t sound, int32_t obj, int32_t radius)
 {
   if (sound == SFX_NONE) return;
   if (obj != 0) {
@@ -2734,7 +2734,7 @@ static void wing_play_fx(int sound, int obj, int radius)
   play_digi_fx(sound, 1);
 }
 
-static void wing_set_message(int mess)
+static void wing_set_message(int32_t mess)
 {
   wing_message = mess;
   wing_message_timer = ((mess == WING_SILENT) ? 0 : WING_MESSAGE_COUNT);
@@ -2743,7 +2743,7 @@ static void wing_set_message(int mess)
   }
 }
 
-static int wing_find_wingman(int i)
+static int32_t wing_find_wingman(int32_t i)
 {
   for (++i; i < num_wing_objects; ++i)
     if (wing[i].type == WING_WINGMAN)
@@ -2753,7 +2753,7 @@ static int wing_find_wingman(int i)
 
 static void wingman_order(void)
 {
-  int i = wing_find_wingman(0);
+  int32_t i = wing_find_wingman(0);
   if (!i)
     wing_set_message(WING_NO_WINGMAN);
   else if (wingman_mode == WINGMAN_FORMATION) {
@@ -2765,9 +2765,9 @@ static void wingman_order(void)
   }
 }
 
-static int wing_any_enemies(void)
+static int32_t wing_any_enemies(void)
 {
-  int i;
+  int32_t i;
   for (i=1; i < num_wing_objects; ++i)
     if (wing[i].type >= WING_BADGUY || wing[i].type == WING_BOOM)
       return 1;
@@ -2794,9 +2794,9 @@ static int wing_any_enemies(void)
 // More interesting movement
 #define random_vel_adjust()     (fix_make(0, (rand() % 512 - 256) << 6))
 
-static wing_obj *wing_find_nearest(wing_obj *w, int mask)
+static wing_obj *wing_find_nearest(wing_obj *w, int32_t mask)
 {
-  int i;
+  int32_t i;
   fix d,e;
   wing_obj *z = 0;
 
@@ -2894,9 +2894,9 @@ static fix wing_vel, wing_acc;
 static fixang wing_a, wing_b, wing_c;
 
 
-static void wing_fire_shot(wing_obj *w, int side)
+static void wing_fire_shot(wing_obj *w, int32_t side)
 {
-  int i;
+  int32_t i;
   fix x,y,z;
   // fire out the front of this ship at shot velocity
 
@@ -2928,12 +2928,12 @@ static void wing_fire_shot(wing_obj *w, int side)
 }
 
 
-static int wing_in_front_of(wing_obj *target, wing_obj *base)
+static int32_t wing_in_front_of(wing_obj *target, wing_obj *base)
 {
   // if target is in front of base, then line from base to target
   // is in same direction as velocity of base
 
-  int x,y,z;
+  int32_t x,y,z;
   x = fix_int(target->x - base->x);
   y = fix_int(target->y - base->y);
   z = fix_int(target->z - base->z);
@@ -2956,7 +2956,7 @@ static void wing_ai_fire(wing_obj *w, wing_obj *z)
 
 static void wing_do_ai(wing_obj *w)
 {
-  int mask;
+  int32_t mask;
   wing_obj *z;
 
   switch(w->type) {
@@ -3050,7 +3050,7 @@ static void wing_move_world(fixang a, fixang b, fixang c, fix v)
   // move the world because player rotated by a & b
   // and moved forward by velocity v
 
-  int i;
+  int32_t i;
   fix sina,cosa,sinb,cosb,sinc,cosc;
   fix_sincos(a, &sina, &cosa);
   fix_sincos(b, &sinb, &cosb);
@@ -3073,7 +3073,7 @@ static void wing_move_world(fixang a, fixang b, fixang c, fix v)
 
 static void wing_handle_collisions(void)
 {
-  int i,j;
+  int32_t i,j;
     // delete any objects which are dead
   i = 1;
   while (i < num_wing_objects)
@@ -3136,11 +3136,11 @@ static void wing_update_one_time_unit(void)
 #define WING_FACE_UP            4
 #define WING_FACE_DOWN          5
 
-static int wing_get_facing(int i)
+static int32_t wing_get_facing(int32_t i)
 {
-  int dx = abs(wing[i].dx);
-  int dy = abs(wing[i].dy);
-  int dz = abs(wing[i].dz);
+  int32_t dx = abs(wing[i].dx);
+  int32_t dy = abs(wing[i].dy);
+  int32_t dz = abs(wing[i].dz);
 
   if (dx > dy)
     if (dx > dz)
@@ -3154,14 +3154,14 @@ static int wing_get_facing(int i)
       return wing[i].dz > 0 ? WING_FACE_UP : WING_FACE_DOWN;
 }
 
-static void scale_res_bm(int ref, int x, int y, int w, int h)
+static void scale_res_bm(int32_t ref, int32_t x, int32_t y, int32_t w, int32_t h)
 {
   FrameDesc *f;
 
   f = (FrameDesc *)RefLock(ref);
   if (!f) return;
 
-  f->bm.bits = (uchar *)(f+1);
+  f->bm.bits = (uint8_t *)(f+1);
   ss_scale_bitmap(&f->bm, x, y, w, h);
 
   RefUnlock(ref);
@@ -3175,10 +3175,10 @@ static void scale_res_bm(int ref, int x, int y, int w, int h)
 // the cleverer flow-text-up-from-the-bottom-
 // so-that-it-always-fits routine
 
-static void wing_print_message(char *s, int y)
+static void wing_print_message(int8_t *s, int32_t y)
 {
-  char *t,*u,c;
-  int x;
+  int8_t *t,*u,c;
+  int32_t x;
 
   u = s + strlen(s) - 1;
   while (u - s + 1 > WING_NUMCHARS/2) {
@@ -3231,13 +3231,13 @@ static void wing_print_message(char *s, int y)
 
 #define WING_VIEW_ANGLE_SCALE_THING     fix_make(32,0)
 
-static int wing_radius[] = {
+static int32_t wing_radius[] = {
   1,2,3,4,5,6,7,8,9,10,11,12,15,18,21,25,28,26,22,16,1000
 };
 
 static void wing_render_world(void)
 {
-  int i,sx,sy,k,j;
+  int32_t i,sx,sy,k,j;
   fix sc,q;
   wing_obj temp;
 
@@ -3312,15 +3312,15 @@ static void wing_render_world(void)
   ss_set_pixel(GREEN_8_BASE+3, 10, MFD_VIEW_HGT-1-10);
 
   {
-    char buffer[16];
+    int8_t buffer[16];
     sprintf(buffer,"%03d",wing_vel*150/wing_velocity[0]);
     gr_set_fcolor(WHITE);
     ss_string(buffer, MFD_VIEW_WID-16, 0);
   }
 
   if (wing_message) {
-    char *s;
-    int z = wing_level/WING_PHASES;
+    int8_t *s;
+    int32_t z = wing_level/WING_PHASES;
     switch (wing_message) {
       case WING_SAYS_SIGHTED: s = STRING(WingSighted+z); break;
       case WING_SAYS_DIE: s = STRING(WingDies+z); break;
@@ -3337,9 +3337,9 @@ static void wing_render_world(void)
 }
 
 // this should actually take as a parameter
-static void wing_play_cutscene(char *s)
+static void wing_play_cutscene(int8_t *s)
 {
-  int anim;
+  int32_t anim;
   if (!full_game_3d)
 //KLC - chg for new art   draw_res_bm(REF_IMG_bmBlankMFD, 0,0);
 	  draw_hires_resource_bm(REF_IMG_bmBlankMFD, 0, 0);
@@ -3353,7 +3353,7 @@ static void wing_play_cutscene(char *s)
 
 static void wing_start_minor_level(void)
 {
-  int i,j, wingman=0, t, n;
+  int32_t i,j, wingman=0, t, n;
   wing_game_mode = WING_PLAY_GAME;
 
   // reset player speed
@@ -3410,7 +3410,7 @@ static void wing_start_minor_level(void)
 
 static void wing_start_major_level(void)
 {
-  int j;
+  int32_t j;
 
   // reset all objects so player has new damage amount
   // and so there's always a wingman if there should be
@@ -3432,7 +3432,7 @@ static void wing_start_major_level(void)
 
 static void wing_start_flyby(void)
 {
-  int i;
+  int32_t i;
 
   wing_play_fx(WING_SFX_AUTOPILOT, 0, 0);
   wing_delete_all_but();
@@ -3570,7 +3570,7 @@ bool games_handle_wing(MFD *m, uiEvent *e)
 
 void games_init_wing(void *)
 {
-  int i;
+  int32_t i;
   wing_level = QUESTVAR_GET(WING_QUEST_VAR);
   wing_game_mode = WING_BRIEFING;
 
@@ -3581,7 +3581,7 @@ void games_init_wing(void *)
   }
 }
 
-void games_expose_wing(MFD *, ubyte)
+void games_expose_wing(MFD *, uint8_t)
 {
   switch(wing_game_mode) {
     case WING_PLAY_GAME:
@@ -3617,10 +3617,10 @@ void games_expose_wing(MFD *, ubyte)
 
 /*
 // this is so lovely, it is a test function, joy
-bool mfd_games_hack_func(short keycode, ulong context, void* data)
+bool mfd_games_hack_func(int16_t keycode, uint32_t context, void* data)
 {
    mcom_state *cur_state=(mcom_state *)GAME_DATA;
-   int mfd = mfd_grab_func(MFD_GAMES_FUNC,MFD_INFO_SLOT);
+   int32_t mfd = mfd_grab_func(MFD_GAMES_FUNC,MFD_INFO_SLOT);
 
 	// give the tester all of the frigging games
    player_struct.softs.misc[MISC_SOFTWARE_GAMES] = 0xff;
@@ -3638,7 +3638,7 @@ void mfd_games_turnon(bool, bool real_start)
 {
    if (real_start)
    {
-      int mfd = mfd_grab_func(MFD_GAMES_FUNC,MFD_INFO_SLOT);
+      int32_t mfd = mfd_grab_func(MFD_GAMES_FUNC,MFD_INFO_SLOT);
       GAME_MODE = GAME_MODE_MENU;
       mfd_notify_func(MFD_GAMES_FUNC,MFD_INFO_SLOT,TRUE,MFD_ACTIVE,TRUE);
 	   mfd_change_slot(mfd,MFD_INFO_SLOT);

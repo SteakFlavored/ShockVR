@@ -40,15 +40,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "2dDiv.h"
 #include "fl8tmapdv.h"
 
-int gri_wall_umap_loop(grs_tmap_loop_info *tli);
-int gri_wall_umap_loop_1D(grs_tmap_loop_info *tli);
+int32_t gri_wall_umap_loop(grs_tmap_loop_info *tli);
+int32_t gri_wall_umap_loop_1D(grs_tmap_loop_info *tli);
 
 // 68K stuff
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
-														 grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row);
-asm int Handle_Wall_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
-														 	grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row);
+asm int32_t Handle_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
+														 grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row);
+asm int32_t Handle_Wall_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
+														 	grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row);
 
 // specific inner looops
 asm void wall_opaque_log2(void);
@@ -62,24 +62,24 @@ void (*wall_in_loop[8])(void) = {gr_not_imp, gr_not_imp, wall_opaque_log2, wall_
 #endif
 
 // globals used by 68K routines
-uchar *w_clut_68K;
-ulong	w_wlog_68K;
-ulong	w_mask_68K;
+uint8_t *w_clut_68K;
+uint32_t	w_wlog_68K;
+uint32_t	w_mask_68K;
 
-int gri_wall_umap_loop(grs_tmap_loop_info *tli) {
+int32_t gri_wall_umap_loop(grs_tmap_loop_info *tli) {
    fix u,v,du,dv,dy,d;
 
 	 // locals used to store copies of tli-> stuff, so its in registers on the PPC
-	 int		k,y;
-	 uchar	t_wlog;
-	 ulong	t_mask;
-	 long		*t_vtab;
-	 uchar 	*t_bits;
-	 uchar 	*p_dest;
+	 int32_t		k,y;
+	 uint8_t	t_wlog;
+	 uint32_t	t_mask;
+	 int32_t		*t_vtab;
+	 uint8_t 	*t_bits;
+	 uint8_t 	*p_dest;
 	 fix		inv_dy;
-	 uchar	temp_pix;
-	 uchar *t_clut;
-	 long		gr_row;
+	 uint8_t	temp_pix;
+	 uint8_t *t_clut;
+	 int32_t		gr_row;
 
 #if InvDiv
    inv_dy = fix_div(fix_make(1,0),tli->w);
@@ -237,8 +237,8 @@ int gri_wall_umap_loop(grs_tmap_loop_info *tli) {
 
 // Main 68K handler loop
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
-														 grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row)
+asm int32_t Handle_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
+														 grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row)
  {
   movem.l	d0-d7/a0-a6,-(sp)
 
@@ -386,7 +386,7 @@ asm int Handle_Wall_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
 asm void wall_opaque_log2(void)
  {
 /*  for (y=t_yl; y<t_yr; y++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      *p_dest = t_bits[k];	// gr_fill_upixel(t_bits[k],t_x,y);
      p_dest += gr_row; u+=du; v+=dv;*/
 
@@ -420,7 +420,7 @@ asm void wall_opaque_log2(void)
 asm void wall_opaque_clut_log2(void)
  {
 /*  for (y=t_yl; y<t_yr; y++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      *p_dest = t_clut[t_bits[k]];	// gr_fill_upixel(t_clut[t_bits[k]],t_x,y);
      p_dest += gr_row; u+=du; v+=dv;
   }*/
@@ -459,7 +459,7 @@ asm void wall_opaque_clut_log2(void)
 asm void wall_trans_log2(void)
  {
 /*  for (y=t_yl; y<t_yr; y++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      if (temp_pix = t_bits[k])
        *p_dest = temp_pix;		// gr_fill_upixel(t_bits[k],t_x,y);
      p_dest += gr_row; u+=du; v+=dv;*/
@@ -498,7 +498,7 @@ asm void wall_trans_log2(void)
 asm void wall_trans_clut_log2(void)
  {
 /*  for (y=t_yl; y<t_yr; y++) {
-       int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+       int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
        if (k=t_bits[k])
          *p_dest = t_clut[k];	// gr_fill_upixel(t_clut[k],t_x,y);
        p_dest += gr_row; u+=du; v+=dv;
@@ -595,20 +595,20 @@ void gri_opaque_clut_wall_umap_init(grs_tmap_loop_info *tli) {
 
 extern "C"
 {
-extern int HandleWallLoop1D_PPC(grs_tmap_loop_info *tli,
+extern int32_t HandleWallLoop1D_PPC(grs_tmap_loop_info *tli,
 																fix u, fix v, fix dv, fix dy,
-																uchar *t_clut, long *t_vtab, uchar *o_bits,
-																long gr_row, ulong t_mask, ulong t_wlog);
+																uint8_t *t_clut, int32_t *t_vtab, uint8_t *o_bits,
+																int32_t gr_row, uint32_t t_mask, uint32_t t_wlog);
 }
 /*
-int HandleWallLoop1D_C(grs_tmap_loop_info *tli,
+int32_t HandleWallLoop1D_C(grs_tmap_loop_info *tli,
 																fix u, fix v, fix dv, fix dy,
-																uchar *t_clut, long *t_vtab, uchar *o_bits,
-																long gr_row, ulong t_mask, ulong t_wlog)
+																uint8_t *t_clut, int32_t *t_vtab, uint8_t *o_bits,
+																int32_t gr_row, uint32_t t_mask, uint32_t t_wlog)
  {
- 	register int		k,y;
+ 	register int32_t		k,y;
  	register fix		inv_dy;
- 	register uchar  *grd_bits,*p_dest,*t_bits;
+ 	register uint8_t  *grd_bits,*p_dest,*t_bits;
  	register fix		ry,ly;
 
  	ry = tli->right.y;
@@ -669,20 +669,20 @@ int HandleWallLoop1D_C(grs_tmap_loop_info *tli,
 
 // ==================================================================
 // 1D versions
-int gri_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
+int32_t gri_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
    fix u,v,dv,dy,d;
 
 	 // locals used to store copies of tli-> stuff, so its in registers on the PPC
-	 int		k,y;
-	 uchar	t_wlog;
-	 ulong	t_mask;
-	 long		*t_vtab;
-	 uchar 	*t_bits,*o_bits;
-	 uchar 	*p_dest;
+	 int32_t		k,y;
+	 uint8_t	t_wlog;
+	 uint32_t	t_mask;
+	 int32_t		*t_vtab;
+	 uint8_t 	*t_bits,*o_bits;
+	 uint8_t 	*p_dest;
 	 fix		inv_dy;
-	 uchar	temp_pix;
-	 uchar *t_clut;
-	 long		gr_row;
+	 uint8_t	temp_pix;
+	 uint8_t *t_clut;
+	 int32_t		gr_row;
 
 #if InvDiv
    inv_dy = fix_div(fix_make(1,0),tli->w);
@@ -717,8 +717,8 @@ int gri_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
 
 // Main 68K handler loop
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Wall_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
-														 		grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row)
+asm int32_t Handle_Wall_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
+														 		grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row)
  {
   movem.l	d0-d7/a0-a6,-(sp)
 
@@ -793,7 +793,7 @@ asm int Handle_Wall_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
 
 // --------------------------------------------------------------------
 /*  for (y=t_yl; y<t_yr; y++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      *p_dest = t_clut[t_bits[k]];	// gr_fill_upixel(t_clut[t_bits[k]],t_x,y);
      p_dest += gr_row; u+=du; v+=dv;
   }*/

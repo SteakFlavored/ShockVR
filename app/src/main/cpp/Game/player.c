@@ -53,16 +53,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define CFG_FATIGUE_VAR "fatigue"
 
-extern int nth_after_triple(int trip, ubyte n);
+extern int32_t nth_after_triple(int32_t trip, uint8_t n);
 
 // couldnt we atob this and have a cfg file???
 // then we could read it in, turn them on, free the memory, and not have to recompile
 // for instance
-// void setup_qbits(char *fn)
+// void setup_qbits(int8_t *fn)
 // { FILE *fp=fopen(fn,"rb"); if (fp!=NULL) { while(!feof(fp)) { fread(&cow,1,2,fp); qbit[cow]=1; } close(fp); } }
 
 // yeah yeah, goddamn, gotta fix this.....someday....soon....i promise....really
-short turnon_questbits[] = { 0x1,0x2,0x3,0x10,0x12,0x15,0x16,0x17,0x18,0x19,0x1a,
+int16_t turnon_questbits[] = { 0x1,0x2,0x3,0x10,0x12,0x15,0x16,0x17,0x18,0x19,0x1a,
    0x20,0x21,0x24,0x25,
    0x4b,0x4c,0x4d,0x4e,0x4f,
    0x50,0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58,0x59,0x5a,0x5b,0x5c,0x5d,0x5e,0x5f,
@@ -77,13 +77,13 @@ short turnon_questbits[] = { 0x1,0x2,0x3,0x10,0x12,0x15,0x16,0x17,0x18,0x19,0x1a
 };
 
 #define NUM_INIT_QV  3
-ushort init_questvars[NUM_INIT_QV][2] = {
+uint16_t init_questvars[NUM_INIT_QV][2] = {
    {0x3, 2}, // engine state
    {0xC, 3}, // num groves
    {0x33, 256}, // joystick sensitivity
 };
 
-#define NUM_ON_QUESTBITS (sizeof(turnon_questbits)/sizeof(short))
+#define NUM_ON_QUESTBITS (sizeof(turnon_questbits)/sizeof(int16_t))
 
 
 // -------------------------------------------------------------
@@ -96,14 +96,14 @@ extern void player_reset_eye(void);
 
 errtype init_player(Player *pplr)
 {
-   int i,j;
-   char tmp[sizeof(pplr->name)];
-   long	tmpdiff;
-   extern int _fr_global_detail;
-   extern uchar which_lang;
+   int32_t i,j;
+   int8_t tmp[sizeof(pplr->name)];
+   int32_t	tmpdiff;
+   extern int32_t _fr_global_detail;
+   extern uint8_t which_lang;
 
    memcpy(tmp,pplr->name,sizeof(tmp));				// Save these so they won't be cleared.
-   tmpdiff = *(long *)pplr->difficulty;
+   tmpdiff = *(int32_t *)pplr->difficulty;
 
    // Zero out whole structure
    memset(pplr, 0, sizeof(Player));
@@ -228,7 +228,7 @@ void player_dead(void)
 {
    extern void mouse_unconstrain(void);
 
-//   ulong  dead_time = *tmd_ticks;
+//   uint32_t  dead_time = *tmd_ticks;
 //   extern void object_data_flush(void);
 
 //   palfx_fade_down();
@@ -237,7 +237,7 @@ void player_dead(void)
 
 #ifdef AUDIOLOGS
    {
-      extern char secret_pending_hack;
+      extern int8_t secret_pending_hack;
       secret_pending_hack = 0;
    }
 #endif
@@ -249,7 +249,7 @@ void player_dead(void)
 //   palfx_fade_up(FALSE);
 }
 
-errtype player_tele_to(int x, int y)
+errtype player_tele_to(int32_t x, int32_t y)
 {
    ObjLoc newloc;
    newloc = objs[PLAYER_OBJ].loc;
@@ -292,7 +292,7 @@ errtype player_shutdown(void)
    return OK;
 }
 
-ubyte set_player_energy_spend(ubyte new_val)
+uint8_t set_player_energy_spend(uint8_t new_val)
 {
    if (player_struct.energy_spend != new_val)
    {
@@ -306,9 +306,9 @@ ubyte set_player_energy_spend(ubyte new_val)
 // KLC - Probably a goofy way to do this, but what the hey!  This tells me if the player struct
 //            has the fullscreen ware on.
 //----------------------------------------------------------------
-Boolean IsFullscreenWareOn(void)
+bool IsFullscreenWareOn(void)
 {
-	ubyte		status = player_struct.hardwarez_status[CPTRIP(FULLSCR_HARD_TRIPLE)];
+	uint8_t		status = player_struct.hardwarez_status[CPTRIP(FULLSCR_HARD_TRIPLE)];
 
-	return ((Boolean)(status & WARE_ON));
+	return ((bool)(status & WARE_ON));
 }

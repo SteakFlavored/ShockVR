@@ -28,12 +28,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //
 #ifndef __FRPIPE_SRC
-extern uchar *x_span_lists;
-extern uchar *cone_span_list;
+extern uint8_t *x_span_lists;
+extern uint8_t *cone_span_list;
 #endif
 
-void cone_span_set(int y, int lx, int rx);
-void store_x_span (int y, int lx, int rx);
+void cone_span_set(int32_t y, int32_t lx, int32_t rx);
+void store_x_span (int32_t y, int32_t lx, int32_t rx);
 
 
 // maximum spans on a database scan line

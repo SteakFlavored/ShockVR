@@ -31,10 +31,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // this can easily overflow so chill
 fix fix_pow(fix x,fix y)
 {
-   int i;
+   int32_t i;
    fix ans;
    fix rh, rl;
-   ushort yh,yl;
+   uint16_t yh,yl;
 
    ans = FIX_UNIT;
    yh = fix_int(y);

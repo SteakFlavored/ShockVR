@@ -32,12 +32,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __MACDEV_H
 extern void (**mac_device_table[])();
 
-extern int mac_set_state(void *buf,int clear);
-extern int mac_get_state(void *buf,int flags);
+extern int32_t mac_set_state(void *buf,int32_t clear);
+extern int32_t mac_get_state(void *buf,int32_t flags);
 extern void mac_set_mode(void);
-extern void mac_set_pal (int start, int n, uchar *pal_data);
-extern void mac_get_pal (int start, int n, uchar *pal_data);
-extern void mac_set_focus(short x,short y);
+extern void mac_set_pal (int32_t start, int32_t n, uint8_t *pal_data);
+extern void mac_get_pal (int32_t start, int32_t n, uint8_t *pal_data);
+extern void mac_set_focus(int16_t x,int16_t y);
 extern void mac_get_focus(void);
 extern void mac_stat_htrace(void);
 extern void mac_stat_vtrace(void);

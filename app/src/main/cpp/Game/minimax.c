@@ -31,44 +31,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MAX_POSITION_SIZE 32
 
-static uchar* FauxStackBase;
-static uchar* FauxStackPointer;
-static uint FauxStackSize;
+static uint8_t* FauxStackBase;
+static uint8_t* FauxStackPointer;
+static uint32_t FauxStackSize;
 
-static uint PositionSize;
-static bool (*generate_position)(void* parent, int index, bool minimizer_moves);
-static int (*static_evaluator)(void* position);
+static uint32_t PositionSize;
+static bool (*generate_position)(void* parent, int32_t index, bool minimizer_moves);
+static int32_t (*static_evaluator)(void* position);
 static bool (*extend_horizon)(void* position);
 
 #define StackSpew(x)
 
-void fstack_push(void* data, uint siz);
-void fstack_pop(void* data, uint siz);
-void* fstack_create(uint siz);
-void fstack_flush(uint siz);
+void fstack_push(void* data, uint32_t siz);
+void fstack_pop(void* data, uint32_t siz);
+void* fstack_create(uint32_t siz);
+void fstack_flush(uint32_t siz);
 
 
-void fstack_init(uchar* fs, uint siz)
+void fstack_init(uint8_t* fs, uint32_t siz)
 {
    FauxStackSize=siz;
    FauxStackBase=FauxStackPointer=fs;
 }
 
-void fstack_push(void* data, uint siz)
+void fstack_push(void* data, uint32_t siz)
 {
    memcpy(FauxStackPointer,data,siz);
    FauxStackPointer+=siz;
    StackSpew(("pushing %d bytes, top %d\n",siz,FauxStackPointer-FauxStackBase));
 }
 
-void fstack_pop(void* data, uint siz)
+void fstack_pop(void* data, uint32_t siz)
 {
    FauxStackPointer-=siz;
    memcpy(data,FauxStackPointer,siz);
    StackSpew(("popping %d bytes, top %d\n",siz,FauxStackPointer-FauxStackBase));
 }
 
-void* fstack_create(uint siz)
+void* fstack_create(uint32_t siz)
 {
    void* retval;
    retval=FauxStackPointer;
@@ -77,7 +77,7 @@ void* fstack_create(uint siz)
    return((void*)retval);
 }
 
-void fstack_flush(uint siz)
+void fstack_flush(uint32_t siz)
 {
    FauxStackPointer-=siz;
    StackSpew(("flushing top %d bytes, top %d\n",siz,FauxStackPointer-FauxStackBase));
@@ -92,23 +92,23 @@ void fstack_flush(uint siz)
 // stack for recursion.
 //
 
-void minimax_get_result(int* val,char* which)
+void minimax_get_result(int32_t* val,int8_t* which)
 {
-   fstack_pop(val,sizeof(int));
-   fstack_pop(which,sizeof(char));
+   fstack_pop(val,sizeof(int32_t));
+   fstack_pop(which,sizeof(int8_t));
 }
 
 bool minimax_done(void)
 {
    // done if only value (an int) and move (a char) remain on stack
-   return(FauxStackPointer<=FauxStackBase+(sizeof(int)+sizeof(char)));
+   return(FauxStackPointer<=FauxStackBase+(sizeof(int32_t)+sizeof(int8_t)));
 }
 
-void minimax_setup(void* boardpos, uint pos_siz, char depth, bool minimize,
-   int (*evaluator)(void*), bool (*generate)(void*,int,bool),
+void minimax_setup(void* boardpos, uint32_t pos_siz, int8_t depth, bool minimize,
+   int32_t (*evaluator)(void*), bool (*generate)(void*,int32_t,bool),
    bool (*horizon)(void*))
 {
-   char next_child=0;
+   int8_t next_child=0;
 
    static_evaluator=evaluator;
    generate_position=generate;
@@ -119,21 +119,21 @@ void minimax_setup(void* boardpos, uint pos_siz, char depth, bool minimize,
    // used in minimax_step commented below, even the obvious ones.
    //
    FSTACK_PUSHVAR(next_child);      // next_child
-   fstack_create(sizeof(int));      // bestval
-   fstack_create(sizeof(char));     // which_child
+   fstack_create(sizeof(int32_t));      // bestval
+   fstack_create(sizeof(int8_t));     // which_child
    FSTACK_PUSHVAR(minimize);        // minimize
    FSTACK_PUSHVAR(depth);           // depth
    fstack_push(boardpos,pos_siz);   // boardpos
-   fstack_create(sizeof(char)+sizeof(int));    // return values
+   fstack_create(sizeof(int8_t)+sizeof(int32_t));    // return values
 }
 
 void minimax_step(void)
 {
-   uchar boardpos[MAX_POSITION_SIZE];
-   uchar copy[MAX_POSITION_SIZE];
-   int value, bestval;
-   char next_child, which_child;
-   uchar depth;
+   uint8_t boardpos[MAX_POSITION_SIZE];
+   uint8_t copy[MAX_POSITION_SIZE];
+   int32_t value, bestval;
+   int8_t next_child, which_child;
+   uint8_t depth;
    bool minimize;
 
    FSTACK_POPVAR(value);  // get value from previous recursive call

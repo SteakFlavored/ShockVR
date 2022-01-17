@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Here is the bridge routine for maintenance and upkeep of the FTL models...
 //	==========================================================================
@@ -74,7 +74,7 @@ physics_handle	EDMS_beam_weapon( fix X[3], fix D[3], fix kick, fix knock, fix si
 //	Return me, baby...
 //	------------------
 physics_handle	ph = -1;
-int	EXCLUDE = 0;
+int32_t	EXCLUDE = 0;
 
 Q      	DD[3];
 
@@ -83,7 +83,7 @@ Q	Kick,
 	Size,
 	Range;
 
-Q	*XX = (Q*)&X[0];	
+Q	*XX = (Q*)&X[0];
 
 	DD[0].fix_to( D[0] );
 	DD[1].fix_to( D[1] );

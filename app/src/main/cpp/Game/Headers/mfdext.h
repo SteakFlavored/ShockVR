@@ -110,21 +110,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Externs
 // -------
 
-extern void set_inventory_mfd(ubyte l_class, ubyte type,bool grab);
+extern void set_inventory_mfd(uint8_t l_class, uint8_t type,bool grab);
 extern void init_newmfd();
 extern void screen_init_mfd(bool fullscrn);
 extern void screen_init_mfd_draw();
 extern void keyboard_init_mfd();
 extern void mfd_update();
-extern void mfd_notify_func(ubyte func, ubyte slot, bool grab, MFD_Status stat, bool FullRedraw);
-extern void mfd_force_update_single(int which_mfd);
+extern void mfd_notify_func(uint8_t func, uint8_t slot, bool grab, MFD_Status stat, bool FullRedraw);
+extern void mfd_force_update_single(int32_t which_mfd);
 extern void mfd_force_update();
-extern int mfd_grab(void);
-extern int mfd_grab_func(int my_func, int my_slot);
-extern bool mfd_yield_func(int func, int* mfd_id);
-extern void mfd_change_slot(ubyte mfd_id, ubyte l_new);
-extern void save_mfd_slot(int mfd_id);
-extern void restore_mfd_slot(int mfd_id);
+extern int32_t mfd_grab(void);
+extern int32_t mfd_grab_func(int32_t my_func, int32_t my_slot);
+extern bool mfd_yield_func(int32_t func, int32_t* mfd_id);
+extern void mfd_change_slot(uint8_t mfd_id, uint8_t l_new);
+extern void save_mfd_slot(int32_t mfd_id);
+extern void restore_mfd_slot(int32_t mfd_id);
 
 #endif // __MFDEXT_H
 

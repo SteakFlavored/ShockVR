@@ -93,10 +93,10 @@ bool llist_move_queue(llist_head *plh, queue *plq)
 //
 //	Returns: # nodes in list
 
-int llist_num_nodes(llist_head *plh)
+int32_t llist_num_nodes(llist_head *plh)
 {
 	llist *pll;
-	int num;
+	int32_t num;
 
 	num = 0;
 	forallinlist(llist,plh,pll)

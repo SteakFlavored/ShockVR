@@ -41,20 +41,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fl8tmapdv.h"
 
 // prototypes
-int gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli);
+int32_t gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli);
 
 
-int gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
+int32_t gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
    fix u,v,du,dv,dx,d;
 
 	// locals used to store copies of tli-> stuff, so its in registers on the PPC
-	long	*t_vtab;
-	uchar *t_bits;
-	uchar *t_clut;
-	uchar temp_pix;
-	uchar	t_wlog;
-	ulong	t_mask;
-	int		k;
+	int32_t	*t_vtab;
+	uint8_t *t_bits;
+	uint8_t *t_clut;
+	uint8_t temp_pix;
+	uint8_t	t_wlog;
+	uint32_t	t_mask;
+	int32_t		k;
 
    u=tli->left.u;
    du=tli->right.u-u;
@@ -70,8 +70,8 @@ int gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
 
    do {
       if ((d = fix_ceil(tli->right.x)-fix_ceil(tli->left.x)) > 0) {
-         uchar *p=tli->d+fix_cint(tli->left.x);
-         uchar *p_final=tli->d+fix_cint(tli->right.x);
+         uint8_t *p=tli->d+fix_cint(tli->left.x);
+         uint8_t *p_final=tli->d+fix_cint(tli->right.x);
          d =fix_ceil(tli->left.x)-tli->left.x;
 
 #if InvDiv

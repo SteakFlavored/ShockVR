@@ -50,7 +50,7 @@ extern void (**grd_device_table_list[])();
 
 // ======================================================================
 // Mac version of gr_detect
-int gr_detect(grs_sys_info *info)
+int32_t gr_detect(grs_sys_info *info)
  {
 	/* default to 640x480x8 standard Mac res */
 	info->id_maj = 0;
@@ -72,20 +72,20 @@ int gr_detect(grs_sys_info *info)
 // PC version of gr_detect
 #if 0
 
-char *command[] = { "type","vendor","memory","modes" };
-char *card_type[] = { "vga","svga","tiga",NULL };
-char *vga_vendor[] = { "standard",NULL };
-char *svga_vendor[] = { "vesa","paradise","stealth","trident","tseng","video7",NULL };
-char *tiga_vendor[] = { "standard",NULL };
-char **card_vendor[] = { vga_vendor,svga_vendor,tiga_vendor,NULL };
+int8_t *command[] = { "type","vendor","memory","modes" };
+int8_t *card_type[] = { "vga","svga","tiga",NULL };
+int8_t *vga_vendor[] = { "standard",NULL };
+int8_t *svga_vendor[] = { "vesa","paradise","stealth","trident","tseng","video7",NULL };
+int8_t *tiga_vendor[] = { "standard",NULL };
+int8_t **card_vendor[] = { vga_vendor,svga_vendor,tiga_vendor,NULL };
 Datapath datapathCfg;
 
-int gr_detect(grs_sys_info *info)
+int32_t gr_detect(grs_sys_info *info)
 {
-   char token[80];
+   int8_t token[80];
    FILE *fp;
-   int i;
-   int err=0;
+   int32_t i;
+   int32_t err=0;
 
    DatapathAddEnv(&datapathCfg, "CFGDIR");
    DatapathAdd(&datapathCfg, "c:/bin");
@@ -102,7 +102,7 @@ int gr_detect(grs_sys_info *info)
          info->modes[4] = GRM_320x480x8;
       }
       else {
-         int mode_val, cmode, tog;
+         int32_t mode_val, cmode, tog;
          for (mode_val=GRM_320x200x8; mode_val<=GRM_320x480x8; mode_val++)
          {           // go add the 5 modes above if they are missing?
             cmode=0;
@@ -114,7 +114,7 @@ int gr_detect(grs_sys_info *info)
          for (mode_val=cmode-1; mode_val>=0; mode_val--)
             for (tog=0; tog<mode_val; tog++)
                if (info->modes[tog]>info->modes[tog+1]) {
-                  int tmp=info->modes[tog+1];
+                  int32_t tmp=info->modes[tog+1];
                   info->modes[tog+1]=info->modes[tog];
                   info->modes[tog]=tmp;
                }

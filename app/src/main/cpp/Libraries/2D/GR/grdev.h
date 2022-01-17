@@ -53,34 +53,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* here are the definitions for all the table driven function. */
 #define gr_init_device(info) \
    (grd_device_table[GRT_INIT_DEVICE] ?\
-      ((int (*)(grs_sys_info *_info))grd_device_table[GRT_INIT_DEVICE])(info) :\
+      ((int32_t (*)(grs_sys_info *_info))grd_device_table[GRT_INIT_DEVICE])(info) :\
       0)
 #define gr_close_device(info) \
    (grd_device_table[GRT_CLOSE_DEVICE] ?\
-      ((int (*)(grs_sys_info *_info))grd_device_table[GRT_CLOSE_DEVICE])(info) :\
+      ((int32_t (*)(grs_sys_info *_info))grd_device_table[GRT_CLOSE_DEVICE])(info) :\
       0)
 #define gr_set_screen_mode \
-   ((int (*)(int mode,int clear))grd_device_table[GRT_SET_MODE])
+   ((int32_t (*)(int32_t mode,int32_t clear))grd_device_table[GRT_SET_MODE])
 #define gr_get_screen_mode \
-   ((int (*)(void))grd_device_table[GRT_GET_MODE])
+   ((int32_t (*)(void))grd_device_table[GRT_GET_MODE])
 #define gr_set_state \
-   ((int (*)(void *buf,int clear))grd_device_table[GRT_SET_STATE])
+   ((int32_t (*)(void *buf,int32_t clear))grd_device_table[GRT_SET_STATE])
 #define gr_get_state \
-   ((int (*)(void *buf,int flags))grd_device_table[GRT_GET_STATE])
+   ((int32_t (*)(void *buf,int32_t flags))grd_device_table[GRT_GET_STATE])
 #define gr_stat_htrace \
-   ((int (*)(void))grd_device_table[GRT_STAT_HTRACE])
+   ((int32_t (*)(void))grd_device_table[GRT_STAT_HTRACE])
 #define gr_stat_vtrace \
-   ((int (*)(void))grd_device_table[GRT_STAT_VTRACE])
+   ((int32_t (*)(void))grd_device_table[GRT_STAT_VTRACE])
 #define gr_set_screen_pal \
-   ((void (*)(int start,int n,uchar *pal_data))grd_device_table[GRT_SET_PAL])
+   ((void (*)(int32_t start,int32_t n,uint8_t *pal_data))grd_device_table[GRT_SET_PAL])
 #define gr_get_screen_pal \
-   ((void (*)(int start,int n,uchar *pal_data))grd_device_table[GRT_GET_PAL])
+   ((void (*)(int32_t start,int32_t n,uint8_t *pal_data))grd_device_table[GRT_GET_PAL])
 #define gr_set_width \
-   ((void (*)(short w))grd_device_table[GRT_SET_WIDTH])
+   ((void (*)(int16_t w))grd_device_table[GRT_SET_WIDTH])
 #define gr_get_width \
-   ((short (*)(void))grd_device_table[GRT_GET_WIDTH])
+   ((int16_t (*)(void))grd_device_table[GRT_GET_WIDTH])
 #define gr_set_focus \
-   ((void (*)(short x,short y))grd_device_table[GRT_SET_FOCUS])
+   ((void (*)(int16_t x,int16_t y))grd_device_table[GRT_SET_FOCUS])
 #define gr_get_focus \
    ((void (*)())grd_device_table[GRT_GET_FOCUS])
 #endif /* !__GRDEV_H */

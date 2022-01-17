@@ -38,11 +38,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    value.
  */
 
-int gri_line_clip (grs_vertex *v0, grs_vertex *v1)
+int32_t gri_line_clip (grs_vertex *v0, grs_vertex *v1)
 {
-   int code0;                 /* clip code for (x0,y0) */
-   int code1;                 /* code for (x1,y1) */
-   int code;                  /* code for current point */
+   int32_t code0;                 /* clip code for (x0,y0) */
+   int32_t code1;                 /* code for (x1,y1) */
+   int32_t code;                  /* code for current point */
    fix dx;                    /* x distance */
    fix dy;                    /* y distance */
    fix *px;                   /* pointer to x current coordinate */

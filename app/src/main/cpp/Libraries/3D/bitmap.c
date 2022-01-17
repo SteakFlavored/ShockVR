@@ -78,17 +78,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "GlobalV.h"
 
 // need this from 2D lib
-extern int h_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+extern int32_t h_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
 
 fix 	_g3d_bitmap_x_scale = 0x010000;
 fix 	_g3d_bitmap_y_scale = 0x010000;
 fix 	_g3d_bitmap_x_iscale = 0x010000;
 fix 	_g3d_bitmap_y_iscale = 0x010000;
-long 	_g3d_bitmap_u_anchor = 0;
-long 	_g3d_bitmap_v_anchor = 0;
+int32_t 	_g3d_bitmap_u_anchor = 0;
+int32_t 	_g3d_bitmap_v_anchor = 0;
 fix 	_g3d_roll_matrix[6];
-uchar *_g3d_bitmap_clut;
-int 	_g3d_light_flag;
+uint8_t *_g3d_bitmap_clut;
+int32_t 	_g3d_light_flag;
 
 grs_vertex 		**_g3d_bitmap_poly;
 grs_vertex		vlist[16];
@@ -96,15 +96,15 @@ grs_vertex		*vpl[] = {&vlist[0], &vlist[1], &vlist[2], &vlist[3]};
 
 grs_tmap_info tmap_info;
 
-char 	_g3d_enable_blend = 0;
+int8_t 	_g3d_enable_blend = 0;
 
 // prototypes
 #if (defined(powerc) || defined(__powerc))
-char SubLongWithOverflow(long *result, long src, long dest);
-char AddLongWithOverflow(long *result, long src, long dest);
+int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
+int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
 #else
-asm char SubLongWithOverflow(long *result, long src, long dest);
-asm char AddLongWithOverflow(long *result, long src, long dest);
+asm int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
+asm int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
 #endif
 
 grs_vertex **do_bitmap(grs_bitmap *bm, g3s_phandle p);
@@ -129,7 +129,7 @@ grs_vertex **g3_full_light_bitmap(grs_bitmap *bm, grs_vertex **p)
  	return(do_bitmap(bm,(g3s_phandle) p));
  }
 
-grs_vertex **g3_full_light_anchor_bitmap(grs_bitmap *bm, grs_vertex **p, short u_anchor, short v_anchor)
+grs_vertex **g3_full_light_anchor_bitmap(grs_bitmap *bm, grs_vertex **p, int16_t u_anchor, int16_t v_anchor)
  {
  	_g3d_light_flag = 1;
  	_g3d_bitmap_u_anchor = u_anchor;
@@ -138,7 +138,7 @@ grs_vertex **g3_full_light_anchor_bitmap(grs_bitmap *bm, grs_vertex **p, short u
  	return(g3_bitmap_common(bm,(g3s_phandle) p));
  }
 
-grs_vertex **g3_light_anchor_bitmap(grs_bitmap *bm, g3s_phandle p, short u_anchor, short v_anchor)
+grs_vertex **g3_light_anchor_bitmap(grs_bitmap *bm, g3s_phandle p, int16_t u_anchor, int16_t v_anchor)
  {
  	_g3d_light_flag = 2;
  	_g3d_bitmap_u_anchor = u_anchor;
@@ -156,7 +156,7 @@ grs_vertex **g3_light_bitmap(grs_bitmap *bm, g3s_phandle p)
  	return(do_bitmap(bm,p));
  }
 
-grs_vertex **g3_anchor_bitmap(grs_bitmap *bm, g3s_phandle p, short u_anchor, short v_anchor)
+grs_vertex **g3_anchor_bitmap(grs_bitmap *bm, g3s_phandle p, int16_t u_anchor, int16_t v_anchor)
  {
  	_g3d_light_flag = 0;
  	_g3d_bitmap_u_anchor = u_anchor;
@@ -183,19 +183,19 @@ grs_vertex **do_bitmap(grs_bitmap *bm, g3s_phandle p)
 grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p)
  {
  	fix					tempF,tempF2;
- 	long				tempL,tempL2;
- 	short				tempS,tempS2;
+ 	int32_t				tempL,tempL2;
+ 	int16_t				tempS,tempS2;
   fix					sintemp,costemp;
 	grs_vertex	*tempG1,*tempG2;
 	fix					tempResult;
-	long				bm_w,bm_h;
+	int32_t				bm_w,bm_h;
 	fix			 	  dx,dy;
 
 // MLA- these were globals, I made them locals for PPC speed, they aren't referenced externally
-	long	rm0;
-	long	rm1;
-	long	rm2;
-	long	rm3;
+	int32_t	rm0;
+	int32_t	rm1;
+	int32_t	rm2;
+	int32_t	rm3;
 
 #ifdef stereo_on
 	if (_g3d_stereo & 1)
@@ -411,9 +411,9 @@ NoBlend:
 #if (defined(powerc) || defined(__powerc))
 // subtract two longs, put the result in result, and return true if overflow
 // result = src-dest;
-char SubLongWithOverflow(long *result, long src, long dest)
+int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest)
  {
- 	long	 tempres;
+ 	int32_t	 tempres;
 
  	*result = tempres = src - dest;
  	if ((dest>=0 && src<0 && tempres>=0) ||
@@ -425,9 +425,9 @@ char SubLongWithOverflow(long *result, long src, long dest)
 
 // add two longs, put the result in result, and return true if overflow
 // result = src+dest;
-char AddLongWithOverflow(long *result, long src, long dest)
+int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest)
  {
- 	long	 tempres;
+ 	int32_t	 tempres;
 
  	*result = tempres = src + dest;
  	if ((dest>=0 && src>=0 && tempres<0) ||
@@ -437,7 +437,7 @@ char AddLongWithOverflow(long *result, long src, long dest)
  		return false;
  }
 #else
-asm char SubLongWithOverflow(long *result, long src, long dest)
+asm int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest)
  {
  	move.l	8(a7),d0
  	sub.l		12(a7),d0
@@ -453,7 +453,7 @@ asm char SubLongWithOverflow(long *result, long src, long dest)
 	rts
  }
 
-asm char AddLongWithOverflow(long *result, long src, long dest)
+asm int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest)
  {
  	move.l	8(a7),d0
  	add.l		12(a7),d0

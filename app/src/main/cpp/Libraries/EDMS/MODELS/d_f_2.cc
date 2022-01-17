@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Mechanical model for frame...
 //	=============================
@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //      Auto-alignment...
 //      -----------------
 #include "ss_flet.h"
-extern int      EDMS_BCD;
+extern int32_t      EDMS_BCD;
 
 
 
@@ -45,7 +45,7 @@ extern int      EDMS_BCD;
 
 //	Print a 3D vector using mout...
 //	-------------------------------
-#define	PRINT3D( N )  mout << #N << ": " << N[0] << " : " << N[1] << " : " << N[2] << "\n"; 
+#define	PRINT3D( N )  mout << #N << ": " << N[0] << " : " << N[1] << " : " << N[2] << "\n";
 
 
 //	Utilities...
@@ -68,8 +68,8 @@ static Q	X[3],
 		D[3];
 
 
-int		counter,
-	        dummy1, 
+int32_t		counter,
+	        dummy1,
         	dummy2;
 
 
@@ -88,13 +88,13 @@ static Q	BC_test = 0;
 
 //	Go for it, just go for it!
 //	==========================
-void dirac_mechanicals( int object, Q F[3], Q T[3] ) {
+void dirac_mechanicals( int32_t object, Q F[3], Q T[3] ) {
 
-  
+
 void            mech_globalize( Q&, Q&, Q& ),
 		mech_localize( Q&, Q&, Q& );
 
-void		get_boundary_conditions( int object, Q raduis, Q position[3], Q derivitaves[3] );
+void		get_boundary_conditions( int32_t object, Q raduis, Q position[3], Q derivitaves[3] );
 
 
 Q               kappa,
@@ -142,7 +142,7 @@ Q       gamma_dot = 2*( e2*ed1 - e1*ed2 + e0*ed3 - e3*ed0 );
         sincos( 0 /*I[object][xxx]*/, &sin_wheel, &cos_wheel );
 
 
-int     count  =  0;
+int32_t     count  =  0;
 
 
 //	Check every @#!$ point...
@@ -161,7 +161,7 @@ int     count  =  0;
 //		X[2] = sc[2];
 //
 //		mech_globalize( X[0], X[1], X[2] );
-                                                                                                       
+
 		X[0] = A[object][0][0];
 		X[1] = A[object][1][0];
 		X[2] = A[object][2][0];
@@ -224,7 +224,7 @@ int     count  =  0;
 //                D[0] *= .5;
 //		Z[0] = 	FW[0] + D[0];			//Temp for torques...
 //		Z[1] = 	FW[1] + D[1];
-//		Z[2] = 	FW[2] + D[2];		
+//		Z[2] = 	FW[2] + D[2];
 
 		F[0] += FW[0];				//This is local...
 		F[1] += FW[1];
@@ -241,7 +241,7 @@ int     count  =  0;
 //              Auto alignment...
 //              -----------------
                 if ( !ss_edms_bcd_flags & SS_BCD_CURR_ON ) {
-//              if ( (EDMS_BCD < 10) || (EDMS_BCD > 27) ) { 
+//              if ( (EDMS_BCD < 10) || (EDMS_BCD > 27) ) {
 
                 if (FW[0] > 10) FW[0] = 10;
                 if (FW[1] > 10) FW[1] = 10;
@@ -256,7 +256,7 @@ int     count  =  0;
 
                 }
 
-          
+
 //	}
 
 
@@ -277,7 +277,7 @@ int     count  =  0;
 
 
 
-}	
+}
 
 
 
@@ -299,7 +299,7 @@ Q	x = X,
 	Y = x*( 2*( e1*e2 + e0*e3 ) )
 	  + y*( e0*e0 - e1*e1 + e2*e2 - e3*e3 )
 	  + z*( 2*( e2*e3 - e0*e1 ) );
-	  
+
 	Z = x*( 2*(-e0*e2 + e1*e3 ) )
 	  + y*( 2*( e2*e3 + e0*e1 ) )
 	  + z*( e0*e0 - e1*e1 - e2*e2 + e3*e3 );
@@ -326,7 +326,7 @@ Q	x = X,
 	Y = x*( 2*( e1*e2 - e0*e3 ) )
 	  + y*( e0*e0 - e1*e1 + e2*e2 - e3*e3 )
 	  + z*( 2*( e2*e3 + e0*e1 ) );
-	  
+
 	Z = x*( 2*( e0*e2 + e1*e3 ) )
 	  + y*( 2*( e2*e3 - e0*e1 ) )
 	  + z*( e0*e0 - e1*e1 - e2*e2 + e3*e3 );
@@ -339,7 +339,7 @@ Q	x = X,
 //      Get the Real story based on the novella (System shock version), returning
 //	the result in the B_C_return[3] and BC_test global variables...
 //      ==============================================================
-void    get_boundary_conditions( int object, Q radius, Q position[3], Q derivatives[3] ) {
+void    get_boundary_conditions( int32_t object, Q radius, Q position[3], Q derivatives[3] ) {
 
 
 //	Schmeck...
@@ -367,7 +367,7 @@ Q       vec0,
 //	-----------------
 	indoor_terrain( position[0],
                         position[1],
-                        position[2], 
+                        position[2],
 			radius,
 			on2ph[object] );
 
@@ -391,7 +391,7 @@ Q       vec0,
 		else BC_test = mul = 0;
 
 //                mout << BC_test << "\n";
-                
+
                 vv0 = mul*vec0;					        		//The primitive V_n...
 		vv1 = mul*vec1;
 		vv2 = mul*vec2;

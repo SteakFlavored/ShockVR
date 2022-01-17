@@ -21,14 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <_ui.h>
 
 // Initializes the TNG slider
-errtype tng_slider_init(void *ui_data, TNG *ptng, TNGStyle *sty, int alignment, int min, int max, int value, int increm, LGPoint size)
+errtype tng_slider_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max, int32_t value, int32_t increm, LGPoint size)
 {
    return(tng_slider_full_init(ui_data, ptng, sty, alignment, min, max, value, increm, size,
       NULL, NULL, NULL, NULL, NULL));
 }
 
 // Initializes the TNG slider
-errtype tng_slider_full_init(void *ui_data, TNG *ptng, TNGStyle *sty, int alignment, int min, int max, int value, int increm, LGPoint size,
+errtype tng_slider_full_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max, int32_t value, int32_t increm, LGPoint size,
    Ref left_id, Ref right_id, Ref up_id, Ref down_id, Ref slider_id)
 {
    TNG_slider *psltng;
@@ -70,14 +70,14 @@ errtype tng_slider_destroy(TNG *ptng)
 
 // Draw the specified parts (may be all) of the TNG slider at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_slider_2d_draw(TNG *ptng, ushort partmask, LGPoint loc)
+errtype tng_slider_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc)
 {
    LGPoint size;
    Ref decid, incid;
    LGPoint incsize, decsize,slidsize;
    LGPoint p1,p2,p3;
    TNG_slider *psltng;
-   int xc,yc;
+   int32_t xc,yc;
    float temp;
 
 //   Spew(DSRC_UI_Slider, ("TNG Slider 2d Draw at (%d, %d) -- partmask = %x\n  value = %d\n",loc.x,loc.y,partmask,
@@ -232,16 +232,16 @@ errtype tng_slider_size(TNG *ptng, LGPoint *ppt)
 }
 
 // Returns the current "value" of the TNG slider
-int tng_slider_getvalue(TNG *ptng)
+int32_t tng_slider_getvalue(TNG *ptng)
 {
    return(((TNG_slider *)(ptng->type_data))->value);
 }
 
 // React appropriately for receiving the specified cooked key
-bool tng_slider_keycooked(TNG *ptng, ushort key)
+bool tng_slider_keycooked(TNG *ptng, uint16_t key)
 {
    TNG_slider *psltng;
-   int code = key & 0xff;
+   int32_t code = key & 0xff;
    bool retval = FALSE;
 
    psltng = (TNG_slider *)ptng->type_data;
@@ -265,9 +265,9 @@ bool tng_slider_keycooked(TNG *ptng, ushort key)
 
 bool tng_slider_apply_click(TNG *ptng, LGPoint loc)
 {
-   int perc;
+   int32_t perc;
    TNG_slider *psltng;
-   int right_edge, left_edge, top_edge, bottom_edge;
+   int32_t right_edge, left_edge, top_edge, bottom_edge;
    bool inc_area, dec_area, retval = FALSE;
    float t1,t2;
 
@@ -291,7 +291,7 @@ bool tng_slider_apply_click(TNG *ptng, LGPoint loc)
          left_edge = resource_bm_width(psltng->left_id) + 2;
       else
          left_edge = ptng->style->frobsize.x + 2;
-      perc = (int)(100 * ((float)(loc.x - left_edge) / ((float)(right_edge - left_edge))));
+      perc = (int32_t)(100 * ((float)(loc.x - left_edge) / ((float)(right_edge - left_edge))));
       //Spew(DSRC_UI_Slider, ("loc=%d  left=%d  right=%d perc=%d\n",loc.x,left_edge,right_edge,perc));
       inc_area = loc.x > right_edge;
       dec_area = loc.x < left_edge;
@@ -308,7 +308,7 @@ bool tng_slider_apply_click(TNG *ptng, LGPoint loc)
          bottom_edge = psltng->size.y - ptng->style->frobsize.y - 2;
       t1 = (float)(loc.y - top_edge);
       t2 = (float)(bottom_edge - top_edge);
-      perc = (int)(100 *(1 - ((float)(loc.y - top_edge) / ((float)(bottom_edge - top_edge)))));
+      perc = (int32_t)(100 *(1 - ((float)(loc.y - top_edge) / ((float)(bottom_edge - top_edge)))));
       //Spew(DSRC_UI_Slider, ("Figuring out where I am... loc.y = %d top_edge = %d  bottom_edge = %d\n",
       //  loc.y, top_edge, bottom_edge));
       //Spew(DSRC_UI_Slider, ("perc = %d  t1 = %f  t2 = %f\n",perc,t1,t2));
@@ -331,7 +331,7 @@ bool tng_slider_apply_click(TNG *ptng, LGPoint loc)
 }
 
 // React appropriately for receiving the specified mouse button event
-bool tng_slider_mousebutt(TNG *ptng, uchar type, LGPoint loc)
+bool tng_slider_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
    TNG_slider *psltng;
    bool retval = FALSE;
@@ -358,7 +358,7 @@ bool tng_slider_mousebutt(TNG *ptng, uchar type, LGPoint loc)
 }
 
 // Handle incoming signals
-bool tng_slider_signal(TNG *ptng, ushort signal)
+bool tng_slider_signal(TNG *ptng, uint16_t signal)
 {
    bool retval = FALSE;
    //Spew(DSRC_UI_Slider, ("Slider Received signal: %x\n",signal));
@@ -390,15 +390,15 @@ bool tng_slider_decrem(TNG_slider *psltng)
    return(TRUE);
 }
 
-errtype tng_slider_set(TNG_slider *psltng, int perc)
+errtype tng_slider_set(TNG_slider *psltng, int32_t perc)
 {
-   int temp, temp1;
+   int32_t temp, temp1;
    float ftemp;
    //Spew(DSRC_UI_Slider, ("perc = %d\n",perc));
    ftemp = (float)perc / 100;
    temp1 = psltng->max - psltng->min;
-   temp = (int)((ftemp * temp1) + 0.5);
-//   temp = (int)(((perc / 100) * (psltng->max - psltng->min)) + 0.5);
+   temp = (int32_t)((ftemp * temp1) + 0.5);
+//   temp = (int32_t)(((perc / 100) * (psltng->max - psltng->min)) + 0.5);
    psltng->value = psltng->min + temp;
    psltng->tng_data->signal(psltng->tng_data, TNG_SIGNAL_CHANGED);
    return(OK);

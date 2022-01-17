@@ -17,15 +17,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 // fake zanyness for mono fonts in texttools
-int mono_c_wid(char c);
-int mono_s_wid(char *s);
-int mono_c_draw(char c, int xpos, int ypos);
-int mono_s_draw(char *s, int xpos, int ypos);
-int mono_s_clr(char *s, int x, int y);
-int mono_l_clr(int len, int x, int y);
-int mono_c_clr(char c, int x, int y);
-int mono_cursor(int x, int y);
-int anal_s_draw(char *s, int xpos, int ypos);
+int32_t mono_c_wid(int8_t c);
+int32_t mono_s_wid(int8_t *s);
+int32_t mono_c_draw(int8_t c, int32_t xpos, int32_t ypos);
+int32_t mono_s_draw(int8_t *s, int32_t xpos, int32_t ypos);
+int32_t mono_s_clr(int8_t *s, int32_t x, int32_t y);
+int32_t mono_l_clr(int32_t len, int32_t x, int32_t y);
+int32_t mono_c_clr(int8_t c, int32_t x, int32_t y);
+int32_t mono_cursor(int32_t x, int32_t y);
+int32_t anal_s_draw(int8_t *s, int32_t xpos, int32_t ypos);
 #ifdef nOAF
 TTFontInfo *build_mono_TTFI(TextToolFontInfo *mfont);
 #endif

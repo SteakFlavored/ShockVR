@@ -31,10 +31,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct
 {
 	Ptr		Address;
-	long		RowBytes;
+	int32_t		RowBytes;
 	GrafPtr	bits;
 	Rect		bounds;
-	Boolean	Color;
+	bool	Color;
 
 	BitMap	BWBits;			// B&W port & map
 	GrafPort BWPort;
@@ -51,7 +51,7 @@ typedef struct
 //--------------------
 extern PixMapHandle 		gScreenPixMap;
 extern CTabHandle			gMainColorHand;
-extern Boolean				gChangedColors;
+extern bool				gChangedColors;
 extern ShockBitmap		gMainOffScreen;
 
 
@@ -62,13 +62,13 @@ void SetupOffscreenBitmaps(void);
 void ResetCTSeed(void);
 void RememberSeed(void);
 void FixPalette(void);
-void NewShockBitmap(ShockBitmap *theMap, short width, short height, Boolean color);
+void NewShockBitmap(ShockBitmap *theMap, int16_t width, int16_t height, bool color);
 void FreeShockBitmap(ShockBitmap *theMap);
-Handle Build8PixMap(CGrafPtr theCGrafPtr,short width, short height);
-short CurScreenDepth(void);
+Handle Build8PixMap(CGrafPtr theCGrafPtr,int16_t width, int16_t height);
+int16_t CurScreenDepth(void);
 void CheckBitDepth(void);
 void CleanupPalette(void);
-void LoadPictShockBitmap(ShockBitmap *theMap, short PictID);
+void LoadPictShockBitmap(ShockBitmap *theMap, int16_t PictID);
 
 void SetupTitleScreen(void);
-int DoShockTitleButtons(Point mousePt);
+int32_t DoShockTitleButtons(Point mousePt);

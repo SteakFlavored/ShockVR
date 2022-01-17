@@ -87,11 +87,11 @@ old_Obj old_objs[NUM_OBJECTS];
 #ifdef THESE_WERENT_IN_STATIC_S_BUT_THEY_ARE_SO_THESE_ARENT_REALLY_HERE
 Obj    objs[NUM_OBJECTS];
 ObjRef objRefs[NUM_REF_OBJECTS];
-uchar objsDealt[NUM_OBJECTS/8];
+uint8_t objsDealt[NUM_OBJECTS/8];
 #endif
 
 ObjLocState objLocStates[MAX_OBJS_CHANGING];
-uchar numObjLocStates;
+uint8_t numObjLocStates;
 
 #ifdef HASH_OBJECTS
 
@@ -133,8 +133,8 @@ static bool ObjAndSpecFree (ObjID obj);
 //
 void ObjsInit (void)
 {
-	int i;
-	short c;
+	int32_t i;
+	int16_t c;
 	ObjSpecHeader *head;
 	ObjSpec *os;
 
@@ -224,7 +224,7 @@ bool ObjAndSpecGrab (ObjClass obclass, ObjID *id, ObjSpecID *specid)
 bool ObjPlace (ObjID id, ObjLoc *loc)
 {
 //DBG_Report ({
-//	char str[80];
+//	int8_t str[80];
 //	ObjLocSprint (str, *loc);
 //	SpewReport (("ObjPlace (%s)\n", str));
 //})
@@ -275,7 +275,7 @@ ObjRefID ObjRefMake (ObjID obj, ObjRefState refstate)
 	bool ok;
 
 //DBG_Report ({
-//	char str[80];
+//	int8_t str[80];
 //	ObjRefStateSprint (str, refstate);
 //	SpewReport (("ObjRefMake (obj %d %s)\n", obj, str));
 //})
@@ -298,7 +298,7 @@ ObjRefID ObjRefMake (ObjID obj, ObjRefState refstate)
 //DBG_Check({
 //	if (!ok)
 //	{
-//		char str[80];
+//		int8_t str[80];
 //		ObjRefStateSprint (str, refstate);
 //		Warning (("Could not add ObjRef %d to %s\n", ref, str));
 //		ObjRefFree (ref, TRUE);
@@ -369,15 +369,15 @@ bool ObjUpdateLocs (ObjLocState *olsp)
 	ObjRefState *newrefs;					// squares the object will soon be in
 	ObjRefState in[MAX_REFS_PER_OBJ];	// places moved into
 	ObjRefID out[MAX_REFS_PER_OBJ];		// old references of the object
-	int incount = 0;							// number of places moved into
-	int outcount = 0;							// number of places moved out of
-	int newcount;								// # of new square being moved into
+	int32_t incount = 0;							// number of places moved into
+	int32_t outcount = 0;							// number of places moved out of
+	int32_t newcount;								// # of new square being moved into
 	ObjRefState *stCur;						// current place being checked
-	int i;										// loopy loopy
+	int32_t i;										// loopy loopy
 
 //	SpewReport (("ObjUpdateLocs (obj %d)\n", olsp->obj));
 //   DBG_Report ({
-//		char str[80];
+//		int8_t str[80];
 //      newrefs = olsp->refs;
 //      while (!ObjRefStateBinCheckNull(newrefs->bin))
 //      {
@@ -634,7 +634,7 @@ bool ObjDeleteHashElem (ObjRefStateBin bin)
 	return FALSE;
 }
 
-static int hash_i;
+static int32_t hash_i;
 
 void ObjHashIteratorInit (void)
 {
@@ -650,19 +650,19 @@ bool ObjHashIterator (ObjRefID *ref)
 }
 
 #define MAX_CHAIN_LENGTH 10 				// let's hope it gets no higher
-int numlengths[MAX_CHAIN_LENGTH+1];
+int32_t numlengths[MAX_CHAIN_LENGTH+1];
 //////////////////////////////
 //
 //
 //
 ObjHashStats (void)
 {
-	int i;
+	int32_t i;
 
 	for (i = 0; i <= MAX_CHAIN_LENGTH; i++) numlengths[i] = 0;
 	for (i = OBJ_HASH_HEAD_ENTRIES_START; i < OBJ_HASH_ENTRIES; i++)
 	{
-		int j = i, length = 0;
+		int32_t j = i, length = 0;
 		if (objHashTable[i].ref != 0)
 		  { while (j != 0) length++, j = objHashTable[j].next; }
 		if (length > MAX_CHAIN_LENGTH) length = MAX_CHAIN_LENGTH;
@@ -695,11 +695,11 @@ ObjHashStats (void)
 //
 bool ObjSysOkay (void)
 {
-	char usedObj[NUM_OBJECTS];
-	char usedRef[NUM_REF_OBJECTS];
+	int8_t usedObj[NUM_OBJECTS];
+	int8_t usedRef[NUM_REF_OBJECTS];
 	ObjID cur;
 	ObjSpecHeader *head;
-	int i, j;
+	int32_t i, j;
 	ObjRefStateBin refbin;
 	ObjRefID ref;
 
@@ -948,7 +948,7 @@ bool ObjSysOkay (void)
 		ObjRefStateBin refbins[MAX_REFS_PER_OBJ];
 		ObjRefID firstref;
 		ObjRefID ref;
-		int i = 0;
+		int32_t i = 0;
 
 		if (!objs[cur].active) goto done_checking_obj;
 
@@ -982,7 +982,7 @@ done_checking_refs:
 
 		if (objs[cur].specID != OBJ_SPEC_NULL)
 		{
-			char *data;
+			int8_t *data;
 			ObjSpecHeader *head;
 
 			if (objs[cur].obclass < 0 || objs[cur].obclass >= NUM_CLASSES)
@@ -1164,7 +1164,7 @@ ObjID ObjRefFree (ObjRefID ref, bool cleanup)
 static
 ObjSpecID ObjSpecGrab (ObjClass obclass)
 {
-	char *data;
+	int8_t *data;
 	ObjSpecHeader *head;
 	ObjSpecID thisid;
 	ObjSpec *spec0, *thisspec;
@@ -1203,7 +1203,7 @@ ObjSpecID ObjSpecGrab (ObjClass obclass)
 #ifdef COMPRESS_OBJSPECS
 ObjSpecID HeaderObjSpecGrab (ObjClass obclass, ObjSpecHeader *head)
 {
-	char *data;
+	int8_t *data;
 	ObjSpecID thisid;
 	ObjSpec *spec0, *thisspec;
 
@@ -1246,7 +1246,7 @@ DBG_Check ({
 static
 bool ObjSpecFree (ObjClass obclass, ObjSpecID id)
 {
-	char *data;
+	int8_t *data;
 	ObjSpecHeader *head;
 	ObjSpec *spec0, *thisspec;
 
@@ -1284,7 +1284,7 @@ bool ObjSpecFree (ObjClass obclass, ObjSpecID id)
 #ifdef COMPRESS_OBJSPECS
 bool HeaderObjSpecFree (ObjClass obclass, ObjSpecID id, ObjSpecHeader *head)
 {
-	char *data;
+	int8_t *data;
 	ObjSpec *spec0, *thisspec;
 
 	SpewReport (("ObjSpecFree (obclass %d, specid %d)\n", obclass, id));
@@ -1323,9 +1323,9 @@ DBG_Check ({
 #ifdef COMPRESS_OBJSPECS
 bool HeaderObjSpecCopy (ObjClass cls, ObjSpecID old, ObjSpecID new, ObjSpecHeader *head)
 {
-	char *data;
+	int8_t *data;
 	ObjSpec *spec0;
-	int size;
+	int32_t size;
 
 	SpewReport (("ObjSpecCopy (obclass %d)\n", cls));
 
@@ -1510,7 +1510,7 @@ bool ObjRefAdd (ObjRefID ref, ObjRefState refstate)
 #endif
 
 //	DBG_Report ({
-//		char str[80];
+//		int8_t str[80];
 //		ObjRefStateSprint (str, refstate);
 //		SpewReport (("ObjRefAdd (ref %d, %s)\n", ref, str));
 //	})
@@ -1529,7 +1529,7 @@ bool ObjRefAdd (ObjRefID ref, ObjRefState refstate)
 #ifdef HASH_OBJECTS
    if ((hash_entry = ObjGetHashElem (refstate.bin, TRUE)) == 0)
 	{
-		char str[80];
+		int8_t str[80];
 		ObjRefStateBinSprint (str, refstate.bin);
 		Warning (("Could not create hash entry at %s in ObjRefAdd\n", str));
 		return FALSE;

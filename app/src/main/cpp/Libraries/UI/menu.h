@@ -59,15 +59,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 typedef struct {
-   char *name;
-   int z;
+   int8_t *name;
+   int32_t z;
 } menu_struct;
 
 // Prototypes
-Gadget *gad_menu_create(Gadget *parent, LGPoint *coord, int z, TNGStyle *sty, int width, char *name);
+Gadget *gad_menu_create(Gadget *parent, LGPoint *coord, int32_t z, TNGStyle *sty, int32_t width, int8_t *name);
 
-errtype gad_menu_add_line(Gadget *menu, char *label, hotkey_callback f, short keycode, ulong context, void *user_data, char *help_text);
-errtype gad_menu_add_submenu(Gadget *menu, char *label, Gadget *sub_menu);
+errtype gad_menu_add_line(Gadget *menu, int8_t *label, hotkey_callback f, int16_t keycode, uint32_t context, void *user_data, int8_t *help_text);
+errtype gad_menu_add_submenu(Gadget *menu, int8_t *label, Gadget *sub_menu);
 errtype gad_menu_popup(Gadget *menu);
 errtype gad_menu_popup_at_mouse(Gadget *menu);
 errtype gad_menu_popdown(Gadget *menu);

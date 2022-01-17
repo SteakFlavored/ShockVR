@@ -74,7 +74,7 @@ typedef enum {
  NUM_ACTIVES          = 10
 } Actives;
 
-#define PLAYER_VERSION_NUMBER    ((int)6)
+#define PLAYER_VERSION_NUMBER    ((int32_t)6)
 
 // Some questbitty stuff
 #define NUM_QUESTBITS         512
@@ -97,180 +97,180 @@ typedef enum {
 
 typedef struct _weapon_slot
 {
-   ubyte type;    // type of weapon in slot or EMPTY_WEAPON_SLOT
-   ubyte subtype; // subtype of weapon
+   uint8_t type;    // type of weapon in slot or EMPTY_WEAPON_SLOT
+   uint8_t subtype; // subtype of weapon
    union {
-      ubyte ammo;    // current number of rounds
-      ubyte heat;    // how hot am I?
+      uint8_t ammo;    // current number of rounds
+      uint8_t heat;    // how hot am I?
    };
    union {
-      ubyte ammo_type; // current ammo type.
-      ubyte setting;   // current charge setting.
+      uint8_t ammo_type; // current ammo type.
+      uint8_t setting;   // current charge setting.
    };
-   ubyte make_info; // manufacturer
+   uint8_t make_info; // manufacturer
 }  weapon_slot;
 
 typedef struct _softs
 {
-   ubyte combat[NUM_COMBAT_SOFTS];
-   ubyte defense[NUM_DEFENSE_SOFTS];
-   ubyte misc[NUM_MISC_SOFTS];
+   uint8_t combat[NUM_COMBAT_SOFTS];
+   uint8_t defense[NUM_DEFENSE_SOFTS];
+   uint8_t misc[NUM_MISC_SOFTS];
 }  softs_data;
 
 
 typedef struct _Player {
    // Static Game Data
-   char name[20];
-   char realspace_level;  // this is the last realspace level we were in
+   int8_t name[20];
+   int8_t realspace_level;  // this is the last realspace level we were in
 
    // Difficulty related stuff
-   byte difficulty[4];
-   ubyte level_diff_zorched[(NUM_LEVELS / 8) + 1];    // bitfield for levels -- 1 if difficulty dealt with yet, 0 else
+   int8_t difficulty[4];
+   uint8_t level_diff_zorched[(NUM_LEVELS / 8) + 1];    // bitfield for levels -- 1 if difficulty dealt with yet, 0 else
 
    // system stuff
-   ulong game_time;
-   ulong last_second_update; // when was last do_stuff_every_second
-   ulong last_drug_update;
-   ulong last_ware_update;
-   ulong last_anim_check;
-   int queue_time;
-   int deltat;
-   byte detail_level;
+   uint32_t game_time;
+   uint32_t last_second_update; // when was last do_stuff_every_second
+   uint32_t last_drug_update;
+   uint32_t last_ware_update;
+   uint32_t last_anim_check;
+   int32_t queue_time;
+   int32_t deltat;
+   int8_t detail_level;
 
    // World stuff
-   ubyte level;                     // current level
-   short initial_shodan_vals[NUM_LEVELS]; // initial shodan security levels
-   byte controls[DEGREES_OF_FREEDOM]; // physics controls
+   uint8_t level;                     // current level
+   int16_t initial_shodan_vals[NUM_LEVELS]; // initial shodan security levels
+   int8_t controls[DEGREES_OF_FREEDOM]; // physics controls
    ObjID rep;                       // The player's object-system object
    ObjLoc realspace_loc;            // This is where the player will come back out of cspace into
-   int version_num;
+   int32_t version_num;
    ObjID inventory[NUM_GENERAL_SLOTS];   // general inventory
 
    // Random physics state.
-   ubyte posture;                   // current posture (standing/stooped/prone)
+   uint8_t posture;                   // current posture (standing/stooped/prone)
    bool  foot_planted;              // Player's foot is planted
-   byte leanx, leany;               // leaning, -100-+100
+   int8_t leanx, leany;               // leaning, -100-+100
 
    // not used - eye postion - lower in struct!!!!
    fixang eye;                      // eye position
 
    // Gamesys stuff
-   ubyte hit_points;                // I bet we will want these.
-   ubyte cspace_hp;                 // after hit_points so we can array ref this stuff
-   ushort hit_points_regen;         // Rate at which hit points regenerate, per minute
-   ubyte hit_points_lost[NUM_DAMAGE_TYPES];  // Rate at which damage is taken, per minute
-   ushort bio_post_expose;          // expose damage from bio squares long past.
-   ushort rad_post_expose;          // expose damage from rad squares long past.
-   ubyte energy;                    // suit power charge
-   ubyte energy_spend;              // rate of energy burn
-   ubyte energy_regen;              // Rate at which suit recharges
+   uint8_t hit_points;                // I bet we will want these.
+   uint8_t cspace_hp;                 // after hit_points so we can array ref this stuff
+   uint16_t hit_points_regen;         // Rate at which hit points regenerate, per minute
+   uint8_t hit_points_lost[NUM_DAMAGE_TYPES];  // Rate at which damage is taken, per minute
+   uint16_t bio_post_expose;          // expose damage from bio squares long past.
+   uint16_t rad_post_expose;          // expose damage from rad squares long past.
+   uint8_t energy;                    // suit power charge
+   uint8_t energy_spend;              // rate of energy burn
+   uint8_t energy_regen;              // Rate at which suit recharges
    bool  energy_out;                // out of energy last check
-   short cspace_trips;
-   int   cspace_time_base;
-   ubyte questbits[NUM_QUESTBITS / 8];       // Mask of which "quests" you have completed
-   short questvars[NUM_QUESTVARS];
-   ulong hud_modes;                 // What hud functions are currently active?
+   int16_t cspace_trips;
+   int32_t   cspace_time_base;
+   uint8_t questbits[NUM_QUESTBITS / 8];       // Mask of which "quests" you have completed
+   int16_t questvars[NUM_QUESTVARS];
+   uint32_t hud_modes;                 // What hud functions are currently active?
    bool  experience;                // Are you experienced?
-   int   fatigue;                   // how fatigued are you
-   ushort   fatigue_spend;          // Current rate of fatigue expenditure in pts/sec
-   ushort   fatigue_regen;          // Current rate of fatigue regeneration
-   ushort   fatigue_regen_base;     // base fatigue regen rate
-   ushort   fatigue_regen_max;      // max fatigue regen rate
-   byte  accuracy;
-   ubyte  shield_absorb_rate;       // % of damage shields absorb
-   ubyte   shield_threshold;        // Level where shields turn off
-   ubyte light_value;               // current lamp setting
+   int32_t   fatigue;                   // how fatigued are you
+   uint16_t   fatigue_spend;          // Current rate of fatigue expenditure in pts/sec
+   uint16_t   fatigue_regen;          // Current rate of fatigue regeneration
+   uint16_t   fatigue_regen_base;     // base fatigue regen rate
+   uint16_t   fatigue_regen_max;      // max fatigue regen rate
+   int8_t  accuracy;
+   uint8_t  shield_absorb_rate;       // % of damage shields absorb
+   uint8_t   shield_threshold;        // Level where shields turn off
+   uint8_t light_value;               // current lamp setting
 
    // MFD State
-   ubyte      mfd_virtual_slots[NUM_MFDS][MFD_NUM_VIRTUAL_SLOTS]; // ptrs to mfd_slot id's
+   uint8_t      mfd_virtual_slots[NUM_MFDS][MFD_NUM_VIRTUAL_SLOTS]; // ptrs to mfd_slot id's
    MFD_Status mfd_slot_status[MFD_NUM_REAL_SLOTS];
-   ubyte      mfd_all_slots[MFD_NUM_REAL_SLOTS];          // ptrs to mfd_func id's
-   ubyte      mfd_func_status[MFD_NUM_FUNCS];             // ptrs to mfd_func flags
-   ubyte      mfd_func_data[MFD_NUM_FUNCS][8];
-   ubyte      mfd_current_slots[NUM_MFDS];                // ptrs to mfd's curr slots
-   ubyte      mfd_empty_funcs[NUM_MFDS];                  // ptrs to mfd's empty func
-   uchar      mfd_access_puzzles[64];							// this is 4 times as much as that hardcoded 8 up there
+   uint8_t      mfd_all_slots[MFD_NUM_REAL_SLOTS];          // ptrs to mfd_func id's
+   uint8_t      mfd_func_status[MFD_NUM_FUNCS];             // ptrs to mfd_func flags
+   uint8_t      mfd_func_data[MFD_NUM_FUNCS][8];
+   uint8_t      mfd_current_slots[NUM_MFDS];                // ptrs to mfd's curr slots
+   uint8_t      mfd_empty_funcs[NUM_MFDS];                  // ptrs to mfd's empty func
+   uint8_t      mfd_access_puzzles[64];							// this is 4 times as much as that hardcoded 8 up there
                                                          					 		// who knows how much we really need, hopefully in soon
                                                          					 		// KLC - changed to 64
-   char      mfd_save_slot[NUM_MFDS];
+   int8_t      mfd_save_slot[NUM_MFDS];
 
    // Inventory stuff, in general, a value of zero will indicate an empty slot
    // indices are drug/grenade/ware "types"
-   ubyte hardwarez[NUM_HARDWAREZ];  // Which warez do we have? (level of each type?)
+   uint8_t hardwarez[NUM_HARDWAREZ];  // Which warez do we have? (level of each type?)
    softs_data softs;
-   ubyte cartridges[NUM_AMMO_TYPES];// Cartridges for each ammo type.
-   ubyte partial_clip[NUM_AMMO_TYPES];
-   ubyte drugs[NUM_DRUGZ];          // Quantity of each drug
-   ubyte grenades[NUM_GRENADEZ];    // Quantity of each grenade.
+   uint8_t cartridges[NUM_AMMO_TYPES];// Cartridges for each ammo type.
+   uint8_t partial_clip[NUM_AMMO_TYPES];
+   uint8_t drugs[NUM_DRUGZ];          // Quantity of each drug
+   uint8_t grenades[NUM_GRENADEZ];    // Quantity of each grenade.
 
    bool email[NUM_EMAIL];  // Which email messages do you have.
-   ubyte logs[NUM_LOG_LEVELS]; // on which levels do we have logs.
+   uint8_t logs[NUM_LOG_LEVELS]; // on which levels do we have logs.
 
    // Weapons are arranged into "slots"
    weapon_slot weapons[NUM_WEAPON_SLOTS]; // Which weapons do you have?
 
    // Inventory status
-   ubyte hardwarez_status[NUM_HARDWAREZ];    // Status of active wares (on/off, activation time, recharge time?)
+   uint8_t hardwarez_status[NUM_HARDWAREZ];    // Status of active wares (on/off, activation time, recharge time?)
    struct _softs softs_status;
-   ubyte jumpjet_energy_fraction;  // fractional units of energy spent on jumpjets.
-   ubyte email_sender_counts[32];  // who has sent how many emails
-   byte drug_status[NUM_DRUGZ];     // Time left on active drugs, 0 if inactive
-   ubyte drug_intensity[NUM_DRUGZ];  // Intensity of active drugs, 0 if inactive
-   ushort grenades_time_setting[NUM_GRENADEZ];      // Time setting for each grenade
+   uint8_t jumpjet_energy_fraction;  // fractional units of energy spent on jumpjets.
+   uint8_t email_sender_counts[32];  // who has sent how many emails
+   int8_t drug_status[NUM_DRUGZ];     // Time left on active drugs, 0 if inactive
+   uint8_t drug_intensity[NUM_DRUGZ];  // Intensity of active drugs, 0 if inactive
+   uint16_t grenades_time_setting[NUM_GRENADEZ];      // Time setting for each grenade
 
    // PLOT STUFF
-   ushort time2dest;  // Time to destination (seconds)
-   ushort time2comp;  // time to completion of current program (seconds)
+   uint16_t time2dest;  // Time to destination (seconds)
+   uint16_t time2comp;  // time to completion of current program (seconds)
 
    // Combat shtuff <tm>
    ObjID  curr_target;                   // creature currently "targeted"
-   ulong      last_fire;                 // last gametime the weapon fired.
-   ushort     fire_rate;                 // game time required between weapon fires.
+   uint32_t      last_fire;                 // last gametime the weapon fired.
+   uint16_t     fire_rate;                 // game time required between weapon fires.
 
    // Selectied items
-   ubyte actives[NUM_ACTIVES];
+   uint8_t actives[NUM_ACTIVES];
 
    // Other transitory state
    ObjID save_obj_cursor;            // saving object cursor when you change to cyberspace
    ObjID panel_ref;                 // Last panel utilized.  stuffed here for reference
 
    // Stats...
-   int num_victories;
-   int time_in_cspace;
-   int rounds_fired;
-   int num_hits;
+   int32_t num_victories;
+   int32_t time_in_cspace;
+   int32_t rounds_fired;
+   int32_t num_hits;
 
    // Playtesting data
-   int num_deaths;
+   int32_t num_deaths;
 
    // from this point on - data is taking the time_to_level space
-   long  eye_pos;       // physics eye position
+   int32_t  eye_pos;       // physics eye position
 
    // let's hope State stays at 12 fixes
    fix   edms_state[12];
 
    // the player's actively selected inventory category.
-   ubyte current_active;
-   ubyte active_bio_tracks;
+   uint8_t current_active;
+   uint8_t active_bio_tracks;
 
-   short current_email;
+   int16_t current_email;
 
-   char version[6];
+   int8_t version[6];
    bool dead;
 
-   ushort lean_filter_state;
-   ushort FREE_BITS_HERE;
-   uchar mfd_save_vis;
+   uint16_t lean_filter_state;
+   uint16_t FREE_BITS_HERE;
+   uint8_t mfd_save_vis;
 
-   ulong auto_fire_click;
+   uint32_t auto_fire_click;
 
-   ulong posture_slam_state;
+   uint32_t posture_slam_state;
 
    bool terseness;
 
-   ulong last_bob;         // not last paul, but last bob
+   uint32_t last_bob;         // not last paul, but last bob
 
-   uchar pad[9];
+   uint8_t pad[9];
 } Player;
 
 #define PLAYER_OBJ   (player_struct.rep)
@@ -283,12 +283,12 @@ typedef struct _Player {
 
 // Prototypes
 errtype init_player(Player *pplr);
-errtype player_tele_to(int x, int y);
+errtype player_tele_to(int32_t x, int32_t y);
 errtype player_create_initial(void);
 errtype player_startup(void);
 errtype player_shutdown(void);
-ubyte set_player_energy_spend(ubyte new_val);
-Boolean IsFullscreenWareOn(void);
+uint8_t set_player_energy_spend(uint8_t new_val);
+bool IsFullscreenWareOn(void);
 
 // Globals
 #ifdef __PLAYER_SRC

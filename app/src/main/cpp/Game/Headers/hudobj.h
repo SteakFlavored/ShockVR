@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // INTERNALS
 // ---------
 
-extern ushort hudobj_classes[];
+extern uint16_t hudobj_classes[];
 
 #define HUDOBJ_INST_FLAG 0x01
 #define NUM_HUDOBJS 16
@@ -52,11 +52,11 @@ extern ushort hudobj_classes[];
 
 extern struct _hudobj_data
 {
-   short id;
-   short xl,yl,xh,yh;
+   int16_t id;
+   int16_t xl,yl,xh,yh;
 }  hudobj_vec[NUM_HUDOBJS];
 
-extern ubyte current_num_hudobjs;
+extern uint8_t current_num_hudobjs;
 
 
 // ------------
@@ -80,11 +80,11 @@ extern ubyte current_num_hudobjs;
 
 
 #define HUDOBJ_ALL_SUBCLASSES 0xFF
-void hudobj_set_subclass(ubyte l_class, ubyte subclass, bool val);
+void hudobj_set_subclass(uint8_t l_class, uint8_t subclass, bool val);
 // Sets the value of IS_HUDOBJ for all objects of a particular class & subclass.
 // if subclass is HUDOBJ_ALL_SUBCLASSES then all subclasses will be set accordingly.
 
-void hudobj_set_id(short id, bool val);
+void hudobj_set_id(int16_t id, bool val);
 // Sets the value of IS_HUDOBJ for the specified object.
 
 #define hudobj_rect_capable(triple) (ObjProps[OPTRIP(triple)].render_type == FAUBJ_BITMAP)

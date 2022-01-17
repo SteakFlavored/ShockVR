@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define poly_find_y_extrema(_y_min,_y_max,_p_left,_vpl,_n) \
 do {                                      \
    grs_vertex **pvp;                      \
-   int __y;                               \
+   int32_t __y;                               \
    _y_min = fix_cint(_vpl[0]->y);         \
    _y_max = fix_cint(_vpl[0]->y);         \
    _p_left = _vpl;                        \
@@ -55,7 +55,7 @@ do {                                      \
 #define poly_find_yw_extrema(_y_min,_y_max,_w_min,_w_max,_p_left,_vpl,_n) \
 do {                                      \
    grs_vertex **pvp;                      \
-   int y;                                 \
+   int32_t y;                                 \
    _p_left = _vpl;                        \
    _y_min = fix_cint(_vpl[0]->y);         \
    _y_max = fix_cint(_vpl[0]->y);         \
@@ -79,7 +79,7 @@ do {                                      \
 #define poly_find_x_extrema(_x_min,_x_max,_p_top,_vpl,_n) \
 do {                                      \
    grs_vertex **pvp;                      \
-   int __x;                               \
+   int32_t __x;                               \
    _x_min = fix_cint(_vpl[0]->x);         \
    _x_max = fix_cint(_vpl[0]->x);         \
    _p_top = _vpl;                        \
@@ -98,7 +98,7 @@ do {                                      \
 #define poly_find_xw_extrema(_x_min,_x_max,_w_min,_w_max,_p_top,_vpl,_n) \
 do {                                      \
    grs_vertex **pvp;                      \
-   int __x;                               \
+   int32_t __x;                               \
    _x_min = fix_cint(_vpl[0]->x);         \
    _x_max = fix_cint(_vpl[0]->x);         \
    _w_min = _vpl[0]->w;                   \
@@ -122,7 +122,7 @@ do {                                      \
 #define poly_find_x_extrema_retval(_x_min,_x_max,_p_top,_vpl,_n,_retval) \
 do {                                      \
    grs_vertex **pvp;                      \
-   int __x;                               \
+   int32_t __x;                               \
    _x_min = fix_cint(_vpl[0]->x);         \
    _x_max = fix_cint(_vpl[0]->x);         \
    _p_top = _vpl;                         \

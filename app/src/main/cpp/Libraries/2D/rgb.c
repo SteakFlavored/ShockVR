@@ -33,29 +33,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scrdat.h"
 
 // prototypes
-static int _redloop();
+static int32_t _redloop();
 
 /* Static Globals for his and her pleasure */
-static int bcenter, gcenter, rcenter;
-static long gdist, rdist, cdist;
-static long cbinc, cginc, crinc;
-static ulong *gdp, *rdp, *cdp;
-static uchar *grgbp, *rrgbp, *crgbp;
-static int gstride, rstride;
-static long x, xsqr, colormax;
-static int cindex;
+static int32_t bcenter, gcenter, rcenter;
+static int32_t gdist, rdist, cdist;
+static int32_t cbinc, cginc, crinc;
+static uint32_t *gdp, *rdp, *cdp;
+static uint8_t *grgbp, *rrgbp, *crgbp;
+static int32_t gstride, rstride;
+static int32_t x, xsqr, colormax;
+static int32_t cindex;
 
-static void inv_cmap_2(int colors, uchar *colormap[3],int bits,ulong *dist_buf, uchar *rgbmap);
-int redloop();
-static int _greenloop(int restart);
-static int _blueloop(int restart);
-static void _maxfill(ulong *buffer);
+static void inv_cmap_2(int32_t colors, uint8_t *colormap[3],int32_t bits,uint32_t *dist_buf, uint8_t *rgbmap);
+int32_t redloop();
+static int32_t _greenloop(int32_t restart);
+static int32_t _blueloop(int32_t restart);
+static void _maxfill(uint32_t *buffer);
 
 /* The routines in this file operate on grs_rgb color values.  The color
    values are encoded so that each r,g, and b has 8 bits of integer, 2
    bits of fraction, and one bit of padding. */
 /* split a grs_rgb into its component 8-bit r, g, and b values. */
-void gr_split_rgb (grs_rgb c, uchar *r, uchar *g, uchar *b)
+void gr_split_rgb (grs_rgb c, uint8_t *r, uint8_t *g, uint8_t *b)
 {
    *r = (c>>2)&0xff;
    *g = (c>>13)&0xff;
@@ -68,21 +68,21 @@ void gr_split_rgb (grs_rgb c, uchar *r, uchar *g, uchar *b)
 	if it can't allocate anything.  If ipal is currently non-null
 	it tries to delete it first, in the interests of robustness */
 
-int gr_alloc_ipal(void)
+int32_t gr_alloc_ipal(void)
 {
-	int err;
+	int32_t err;
 
 	if (grd_ipal != NULL) {
 		if ((err = gr_free_ipal())<0) return err;
 	}
 
-	if ((grd_ipal = (uchar *) NewPtr(32768))==NULL) return RGB_OUT_OF_MEMORY;		// was gr_malloc
+	if ((grd_ipal = (uint8_t *) NewPtr(32768))==NULL) return RGB_OUT_OF_MEMORY;		// was gr_malloc
 
 	if ((err = gr_init_ipal())<0) return err;
 	return RGB_OK;
 }
 
-int gr_free_ipal(void)
+int32_t gr_free_ipal(void)
 {
 	if (grd_ipal==NULL) return RGB_CANT_DEALLOCATE;
 	DisposePtr((Ptr) grd_ipal);	// was gr_free
@@ -93,16 +93,16 @@ int gr_free_ipal(void)
 /* Initializes the inverse palette to the current screen
    palette.  */
 
-int gr_init_ipal(void)
+int32_t gr_init_ipal(void)
 {
-	int 	i;
-  uchar r,g,b;
-	uchar *data,*colormap[3];
-	ulong *dist_buf;
+	int32_t 	i;
+  uint8_t r,g,b;
+	uint8_t *data,*colormap[3];
+	uint32_t *dist_buf;
 
 	if (grd_ipal == NULL) return RGB_IPAL_NOT_ALLOCATED;
 
-  if ((data = (uchar *) NewPtr(3*256)) == NULL) return RGB_OUT_OF_MEMORY;	// was gr_malloc
+  if ((data = (uint8_t *) NewPtr(3*256)) == NULL) return RGB_OUT_OF_MEMORY;	// was gr_malloc
 	/* needs to be split up into r,g,b planes */
 	colormap[0] = data;
 	colormap[1] = data + 256;
@@ -115,7 +115,7 @@ int gr_init_ipal(void)
    	colormap[0][i] = b;
    }
 
-	if ((dist_buf = (ulong *) NewPtr(sizeof(ulong) * 32768))==NULL) return RGB_OUT_OF_MEMORY;	// was gr_malloc
+	if ((dist_buf = (uint32_t *) NewPtr(sizeof(uint32_t) * 32768))==NULL) return RGB_OUT_OF_MEMORY;	// was gr_malloc
 
 	inv_cmap_2(256,colormap,5,dist_buf,grd_ipal);
 
@@ -126,9 +126,9 @@ int gr_init_ipal(void)
 }
 
 
-static void inv_cmap_2(int colors, uchar *colormap[3],int bits,ulong *dist_buf, uchar *rgbmap )
+static void inv_cmap_2(int32_t colors, uint8_t *colormap[3],int32_t bits,uint32_t *dist_buf, uint8_t *rgbmap )
 {
-	int nbits = 8 - bits;
+	int32_t nbits = 8 - bits;
 
 	colormax = 1 << bits;
 	x = 1 << nbits;
@@ -167,11 +167,11 @@ static void inv_cmap_2(int colors, uchar *colormap[3],int bits,ulong *dist_buf, 
 }
 
 /* redloop -- loop up and down from red center. */
-static int _redloop()
+static int32_t _redloop()
 {
-	int detect, r, first;
-	long txsqr = xsqr + xsqr;
-	static long rxx;
+	int32_t detect, r, first;
+	int32_t txsqr = xsqr + xsqr;
+	static int32_t rxx;
 
 	detect = 0;
 
@@ -204,16 +204,16 @@ static int _redloop()
 
 
 /* greenloop -- loop up and down from green center. */
-static int _greenloop(int restart)
+static int32_t _greenloop(int32_t restart)
 {
-	int detect, g, first;
-	long txsqr = xsqr + xsqr;
-	static int here, min, max;
-	static int prevmax, prevmin;
-	int thismax, thismin;
-	static long ginc, gxx, gcdist;
-	static ulong *gcdp;
-	static uchar *gcrgbp;
+	int32_t detect, g, first;
+	int32_t txsqr = xsqr + xsqr;
+	static int32_t here, min, max;
+	static int32_t prevmax, prevmin;
+	int32_t thismax, thismin;
+	static int32_t ginc, gxx, gcdist;
+	static uint32_t *gcdp;
+	static uint8_t *gcrgbp;
 
 	/* Red loop restarted, reset variables to "center" position */
 	if (restart) {
@@ -302,20 +302,20 @@ static int _greenloop(int restart)
 }
 
 /* blueloop -- loop up and down from blue center. */
-static int _blueloop(int restart)
+static int32_t _blueloop(int32_t restart)
 {
-	int detect;
+	int32_t detect;
 	/* These are all registers on a Sun 3. Your mileage may differ. */
-	ulong *dp;
-	uchar *rgbp;
-	long bdist, bxx;
-	int b, i=cindex;
-	long txsqr = xsqr + xsqr;
-	int lim; 	/* for min and max, avoid extra registers. */
-	static int here, min, max;
-	static int prevmin, prevmax;	/* For tracking min and max. */
-	int thismin, thismax;
-	static long binc;
+	uint32_t *dp;
+	uint8_t *rgbp;
+	int32_t bdist, bxx;
+	int32_t b, i=cindex;
+	int32_t txsqr = xsqr + xsqr;
+	int32_t lim; 	/* for min and max, avoid extra registers. */
+	static int32_t here, min, max;
+	static int32_t prevmin, prevmax;	/* For tracking min and max. */
+	int32_t thismin, thismax;
+	static int32_t binc;
 
 	if (restart) {
 		here = bcenter;
@@ -426,12 +426,12 @@ static int _blueloop(int restart)
 	return detect;
 }
 
-/* Fill a buffer with the largest unsigned long. */
-static void _maxfill(ulong *buffer)
+/* Fill a buffer with the largest uint32_t. */
+static void _maxfill(uint32_t *buffer)
 {
-	ulong maxv = (long)-1;
-	long i;
-	ulong *bp;
+	uint32_t maxv = (int32_t)-1;
+	int32_t i;
+	uint32_t *bp;
 
 	for(i=colormax * colormax * colormax, bp = buffer;
 			i > 0;

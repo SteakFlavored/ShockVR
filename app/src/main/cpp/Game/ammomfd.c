@@ -93,7 +93,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define AMMO_COUNT_X 73
 
 // color for weapon not owned, weapon owned, selected weapon.
-uchar ammo_line_colors[] = { GREEN_BASE+6, GREEN_BASE+2, GREEN_YELLOW_BASE+1 };
+uint8_t ammo_line_colors[] = { GREEN_BASE+6, GREEN_BASE+2, GREEN_YELLOW_BASE+1 };
 #define AMMO_TITLE_COLOR (RED_BASE+5)
 
 #define PLAYER_HASNT 0
@@ -103,8 +103,8 @@ uchar ammo_line_colors[] = { GREEN_BASE+6, GREEN_BASE+2, GREEN_YELLOW_BASE+1 };
 // ----------
 //  PROTOTYPES
 // ----------
-uchar player_has_weapon(int trip);
-void mfd_ammo_expose(ubyte control);
+uint8_t player_has_weapon(int32_t trip);
+void mfd_ammo_expose(uint8_t control);
 bool mfd_ammo_handler(MFD* m, uiEvent* ev);
 
 
@@ -112,9 +112,9 @@ bool mfd_ammo_handler(MFD* m, uiEvent* ev);
 // returns 1 if player does have one, but not selected
 // returns 2 if player has one selected.
 //
-uchar player_has_weapon(int trip)
+uint8_t player_has_weapon(int32_t trip)
 {
-   int num;
+   int32_t num;
    bool retval=PLAYER_HASNT;
    weapon_slot* wp=player_struct.weapons;
 
@@ -130,7 +130,7 @@ uchar player_has_weapon(int trip)
 }
 
 #define HARDWIRED_HEIGHT_CONSTANT   5
-void mfd_ammo_expose(ubyte control)
+void mfd_ammo_expose(uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (control & MFD_EXPOSE) // Time to draw stuff
@@ -143,11 +143,11 @@ void mfd_ammo_expose(ubyte control)
          gr_bitmap(&mfd_background, 0, 0);
 
       {
-         int num, guntrip, typemask, type, subc, ammonum, count;
-         short w,h,ypos=0,y_list;
-         uchar col,has;
+         int32_t num, guntrip, typemask, type, subc, ammonum, count;
+         int16_t w,h,ypos=0,y_list;
+         uint8_t col,has;
          bool gotammo;
-         char ammoline[30], weapline[30], minibuf[3]=" /", *title;
+         int8_t ammoline[30], weapline[30], minibuf[3]=" /", *title;
 
          if(full) {
             title=get_temp_string(REF_STR_AmmoMFDWeaps);
@@ -216,10 +216,10 @@ void mfd_ammo_expose(ubyte control)
 
 bool mfd_ammo_handler(MFD* m, uiEvent* ev)
 {
-   LGPoint pos;
-   short w,h,line;
-   int guntrip;
-   uchar has;
+   LGPoint32_t pos;
+   int16_t w,h,line;
+   int32_t guntrip;
+   uint8_t has;
 
    if(ev->type != UI_EVENT_MOUSE || !(ev->subtype & MOUSE_LDOWN)) return FALSE;
 

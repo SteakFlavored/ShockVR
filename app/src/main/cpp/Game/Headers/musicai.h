@@ -119,26 +119,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Initialize the AI portion of the MLIMBS system.
 errtype mlimbs_AI_init(void);
 void music_ai(void);
-errtype mai_monster_nearby(int monster_type);
+errtype mai_monster_nearby(int32_t monster_type);
 errtype mai_attack();
 errtype mai_intro();
 errtype mai_monster_defeated();
 errtype mai_player_death();
-errtype fade_into_location(int x, int y);
-errtype load_score_for_location(int x, int y);
-errtype load_score_from_cfg(char *filename);
-void    load_score_guts(char score_playing);
+errtype fade_into_location(int32_t x, int32_t y);
+errtype load_score_for_location(int32_t x, int32_t y);
+errtype load_score_from_cfg(int8_t *filename);
+void    load_score_guts(int8_t score_playing);
 errtype music_init();
 errtype digifx_init();
 errtype stop_digi_fx();
 void clear_digi_fx();
-int play_digi_fx_master(int sfx_code, int num_loops, ObjID id, ushort x, ushort y);
+int32_t play_digi_fx_master(int32_t sfx_code, int32_t num_loops, ObjID id, uint16_t x, uint16_t y);
 #define play_digi_fx(sfx_code, loops)                 play_digi_fx_master(sfx_code,loops,OBJ_NULL,0,0)
 #define play_digi_fx_obj(sfx_code, num_loops, id)     play_digi_fx_master(sfx_code,num_loops,id,0,0)
 #define play_digi_fx_loc(sfx_code, num_loops, x, y)   play_digi_fx_master(sfx_code,num_loops,OBJ_NULL,x,y)
-errtype play_sound_effect(char *filename);
-bool digi_fx_playing(int fx_id, int *handle_ptr);
-errtype output_text(char *);
+errtype play_sound_effect(int8_t *filename);
+bool digi_fx_playing(int32_t fx_id, int32_t *handle_ptr);
+errtype output_text(int8_t *);
 extern void mlimbs_do_ai(void);
 
 extern void digifx_EOS_callback(snd_digi_parms *sdp);
@@ -149,31 +149,31 @@ void grind_credits_music_ai(void);
 
 // Globals
 #ifdef __MUSICAI_SRC
-int mlimbs_peril, mlimbs_positive, mlimbs_motion, mlimbs_monster;
-ulong mlimbs_combat;
-int current_score, current_zone, current_mode, random_flag;
-int current_transition, last_score;
-int boring_count;
-int mlimbs_boredom;
-int *output_table;
+int32_t mlimbs_peril, mlimbs_positive, mlimbs_motion, mlimbs_monster;
+uint32_t mlimbs_combat;
+int32_t current_score, current_zone, current_mode, random_flag;
+int32_t current_transition, last_score;
+int32_t boring_count;
+int32_t mlimbs_boredom;
+int32_t *output_table;
 bool wait_flag;
-int next_mode, ai_cycle;
+int32_t next_mode, ai_cycle;
 bool music_card=FALSE, music_on=FALSE;
 //KLC no sfx_card, sfx_on moved to DIGIFX.C     bool sfx_card=FALSE, sfx_on=FALSE;
-int cur_digi_channels=4;
+int32_t cur_digi_channels=4;
 #else
-extern int mlimbs_peril, mlimbs_positive, mlimbs_motion, mlimbs_monster;
-extern ulong mlimbs_combat;
-extern int current_score, current_zone, current_mode, random_flag;
-extern int current_transition, last_score;
-extern int boring_count;
-extern int mlimbs_boredom;
-extern int *output_table;
+extern int32_t mlimbs_peril, mlimbs_positive, mlimbs_motion, mlimbs_monster;
+extern uint32_t mlimbs_combat;
+extern int32_t current_score, current_zone, current_mode, random_flag;
+extern int32_t current_transition, last_score;
+extern int32_t boring_count;
+extern int32_t mlimbs_boredom;
+extern int32_t *output_table;
 extern bool wait_flag;
-extern int next_mode, ai_cycle;
+extern int32_t next_mode, ai_cycle;
 extern bool music_card, music_on;
 extern bool /*sfx_card, */sfx_on;
-extern int cur_digi_channels;
+extern int32_t cur_digi_channels;
 #endif
 
 #endif // __MUSICAI_H

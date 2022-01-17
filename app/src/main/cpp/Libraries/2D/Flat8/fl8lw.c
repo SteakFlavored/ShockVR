@@ -39,16 +39,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "2dDiv.h"
 #include "fl8tmapdv.h"
 
-int gri_lit_wall_umap_loop(grs_tmap_loop_info *tli);
-int gri_lit_wall_umap_loop_1D(grs_tmap_loop_info *tli);
+int32_t gri_lit_wall_umap_loop(grs_tmap_loop_info *tli);
+int32_t gri_lit_wall_umap_loop_1D(grs_tmap_loop_info *tli);
 
 // 68K stuff
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Wall_Lit_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
-														 		 grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row,
+asm int32_t Handle_Wall_Lit_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
+														 		 grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row,
 														 		 fix i, fix di);
-asm int Handle_Wall_Lit_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
-														 		 		grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row,
+asm int32_t Handle_Wall_Lit_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
+														 		 		grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row,
 														 		 		fix i, fix di);
 
 // specific inner looops
@@ -58,23 +58,23 @@ asm void wall_lit_trans_log2(void);
 #endif
 
 // globals used by 68K routines
-ulong	w_l_wlog_68K;
-ulong	w_l_mask_68K;
-uchar	*w_l_ltab;
+uint32_t	w_l_wlog_68K;
+uint32_t	w_l_mask_68K;
+uint8_t	*w_l_ltab;
 
-int gri_lit_wall_umap_loop(grs_tmap_loop_info *tli) {
+int32_t gri_lit_wall_umap_loop(grs_tmap_loop_info *tli) {
    fix u,v,i,du,dv,di,dy,d;
 
 	 // locals used to store copies of tli-> stuff, so its in registers on the PPC
-	 int		k,y;
-	 ulong	t_mask;
-	 ulong	t_wlog;
-	 uchar 	*t_bits;
-	 uchar 	*p_dest;
-	 long		gr_row;
-   uchar *g_ltab;
+	 int32_t		k,y;
+	 uint32_t	t_mask;
+	 uint32_t	t_wlog;
+	 uint8_t 	*t_bits;
+	 uint8_t 	*p_dest;
+	 int32_t		gr_row;
+   uint8_t *g_ltab;
 	 fix		inv_dy;
-	 long		*t_vtab;
+	 int32_t		*t_vtab;
 
 #if InvDiv
    inv_dy = fix_div(fix_make(1,0),tli->w);
@@ -217,8 +217,8 @@ int gri_lit_wall_umap_loop(grs_tmap_loop_info *tli) {
 
 // Main 68K handler loop
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Wall_Lit_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
-														 		 grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row,
+asm int32_t Handle_Wall_Lit_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
+														 		 grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row,
 														 		 fix i, fix di)
  {
   movem.l	d0-d7/a0-a6,-(sp)
@@ -418,7 +418,7 @@ asm int Handle_Wall_Lit_68K_Loop(fix u, fix v, fix du, fix dv, fix dy,
 asm void wall_lit_opaque_log2(void)
  {
 /*  for (y=t_yl; y<t_yr; y++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      *p_dest = g_ltab[t_bits[k]+fix_light(i)]; // gr_fill_upixel(g_ltab[t_bits[k]+fix_light(i)],t_x,y);
      p_dest += gr_row;	u+=du; v+=dv; i+=di;
   }*/
@@ -465,7 +465,7 @@ asm void wall_lit_opaque_log2(void)
 asm void wall_lit_trans_log2(void)
  {
 /*  for (y=t_yl; y<t_yr; y++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      if (k=t_bits[k]) *p_dest = g_ltab[t_bits[k]+fix_light(i)];	// gr_fill_upixel(g_ltab[k+fix_light(i)],t_x,y);
      p_dest += gr_row;	u+=du; v+=dv; i+=di;
   }*/
@@ -543,22 +543,22 @@ void gri_opaque_lit_wall_umap_init(grs_tmap_loop_info *tli) {
 
 extern "C"
 {
-extern int HandleWallLitLoop1D_PPC(grs_tmap_loop_info *tli,
+extern int32_t HandleWallLitLoop1D_PPC(grs_tmap_loop_info *tli,
 																		fix u, fix v, fix i, fix dv, fix di, fix dy,
-																		uchar *g_ltab, long *t_vtab, uchar *o_bits,
-																		long gr_row, ulong t_mask, ulong t_wlog);
+																		uint8_t *g_ltab, int32_t *t_vtab, uint8_t *o_bits,
+																		int32_t gr_row, uint32_t t_mask, uint32_t t_wlog);
 }
 /*
-int HandleWallLitLoop1D_C(grs_tmap_loop_info *tli,
+int32_t HandleWallLitLoop1D_C(grs_tmap_loop_info *tli,
 													fix u, fix v, fix i, fix dv, fix di, fix dy,
-													uchar *g_ltab, uchar *o_bits,
-													long gr_row, ulong t_mask, ulong t_wlog)
+													uint8_t *g_ltab, uint8_t *o_bits,
+													int32_t gr_row, uint32_t t_mask, uint32_t t_wlog)
  {
  	 fix 		d, inv_dy;
  	 register fix lefty, righty;
-	 long	 	k,y;
-	 uchar 	*t_bits;
-	 uchar 	*p_dest;
+	 int32_t	 	k,y;
+	 uint8_t 	*t_bits;
+	 uint8_t 	*p_dest;
 
    lefty = tli->left.y;
    righty = tli->right.y;
@@ -633,16 +633,16 @@ int HandleWallLitLoop1D_C(grs_tmap_loop_info *tli,
 
 // ==================================================================================
 // Wall_1D versions of routines
-int gri_lit_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
+int32_t gri_lit_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
    fix u,v,i,dv,di,dy;
 
 	 // locals used to store copies of tli-> stuff, so its in registers on the PPC
-	 int		k,y;
-	 ulong	t_mask;
-	 ulong	t_wlog;
-	 long		gr_row;
-   uchar *g_ltab;
-	 uchar 	*o_bits;
+	 int32_t		k,y;
+	 uint32_t	t_mask;
+	 uint32_t	t_wlog;
+	 int32_t		gr_row;
+   uint8_t *g_ltab;
+	 uint8_t 	*o_bits;
 	 fix		inv_dy;
 
 #if InvDiv
@@ -682,8 +682,8 @@ int gri_lit_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
 
 // Main 68K handler loop
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Wall_Lit_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
-														 		 grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row,
+asm int32_t Handle_Wall_Lit_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
+														 		 grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row,
 														 		 fix i, fix di)
  {
   movem.l	d0-d7/a0-a6,-(sp)
@@ -784,7 +784,7 @@ asm int Handle_Wall_Lit_68K_Loop_1D(fix u, fix v, fix dv, fix dy,
 
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 /*  for (y=t_yl; y<t_yr; y++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      *p_dest = g_ltab[t_bits[k]+fix_light(i)]; // gr_fill_upixel(g_ltab[t_bits[k]+fix_light(i)],t_x,y);
      p_dest += gr_row;	u+=du; v+=dv; i+=di;
   }*/

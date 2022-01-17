@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objbit.h"
 #include "objprop.h"
 
-extern void tile_hit(int mx, int my);
+extern void tile_hit(int32_t mx, int32_t my);
 
 #define USE_OLD_PASSING
 //#define SAFETY_RETURN
@@ -49,7 +49,7 @@ extern void tile_hit(int mx, int my);
 #define STAIRS_ABOVE_DA_TOP
 
 // i love us
-uchar v_to_cur[]=
+uint8_t v_to_cur[]=
 {
    (SS_BCD_CURR_E|SS_BCD_CURR_LOW)>>SS_BCD_CURR_SHF,
    (SS_BCD_CURR_W|SS_BCD_CURR_LOW)>>SS_BCD_CURR_SHF,
@@ -72,15 +72,15 @@ uchar v_to_cur[]=
 };
 
 // Local Prototypes
-bool _tf_set_flet(int flags, fix att, fix dist, fix *norm);
+bool _tf_set_flet(int32_t flags, fix att, fix dist, fix *norm);
 bool _tf_internal_chk(void);
 fix _tf_border_check_2d(void);
 void _tf_norm_create(void);
 void _tf_get_crosses(void);
-fix tf_solve_2d_case(int flags);
-int _stair_check(fix walls[4][2], int flags);
-void terrfunc_one_map_square(int fmask);
-bool tf_direct(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph, int tf_type);
+fix tf_solve_2d_case(int32_t flags);
+int32_t _stair_check(fix walls[4][2], int32_t flags);
+void terrfunc_one_map_square(int32_t fmask);
+bool tf_direct(fix fix_x, fix fix_y, fix fix_z, fix rad, int32_t ph, int32_t tf_type);
 
 
 // old style physics...
@@ -88,24 +88,24 @@ extern TerrainData terrain_info;
 
 // passing globals
 ss_facelet_return ss_edms_facelets[SS_MAX_FACELETS];
-uchar             ss_edms_facelet_cnt;
-int               ss_edms_bcd_flags;
-int               ss_edms_bcd_param;
-uchar             ss_edms_stupid_flag=TFD_FULL;
+uint8_t             ss_edms_facelet_cnt;
+int32_t               ss_edms_bcd_flags;
+int32_t               ss_edms_bcd_param;
+uint8_t             ss_edms_stupid_flag=TFD_FULL;
 
 // globals...
 fix (*tf_vert_2d)[2];   // 2d vertices of the face, when reset
-char  tf_norm_hnts[4];  // normal hints for strange param stuff
+int8_t  tf_norm_hnts[4];  // normal hints for strange param stuff
 fix  *tf_pt;            // 3 elements: first 2 in plane, 3 is distance from plane
 fix   tf_loc_pt[3];     // localized relative to current map tile
 fix   tf_raw_pt[3];     // raw world location of object
-int   tf_ph;            // current physics handle
+int32_t   tf_ph;            // current physics handle
 fix   tf_rad;           // rad of current physics'ed object
 
 // locals
 static fix  tf_norm_2d[4][2];             // computed normals
-static char cross_face[4][2], cross_cnt;  // which face is being crossed, count
-static char tf_pcnt;                      // points for working face
+static int8_t cross_face[4][2], cross_cnt;  // which face is being crossed, count
+static int8_t tf_pcnt;                      // points for working face
 static fix  tf_cur_rad;                   // obj radius for this solve, changes if remetriced, say
 
 // sneaky sneaky, locals which arent, im such a bad person
@@ -136,7 +136,7 @@ static fix tfunc_minz, tfunc_maxz;
 #define DEFAULT_TALK        0
 #define TF_TALK_STATICS     0xffff
 
-int   tf_talk=DEFAULT_TALK, tf_tmp;
+int32_t   tf_talk=DEFAULT_TALK, tf_tmp;
 
 #define tf_talk_setup()     tf_talk=DEFAULT_TALK
 #define tf_turn_on(flg)     tf_tmp=tf_talk, tf_talk|=(flg)
@@ -157,7 +157,7 @@ int   tf_talk=DEFAULT_TALK, tf_tmp;
 #define terrfunc_it_calls_inc()
 
 // renderer stuff we call
-extern void fr_tfunc_grab_fast(int mask);
+extern void fr_tfunc_grab_fast(int32_t mask);
 
 
 #define _tf_list_flet()
@@ -165,10 +165,10 @@ extern void fr_tfunc_grab_fast(int mask);
 // here we need the tmap/size parser stuff to happen....
 
 // actually output a facelet
-bool _tf_set_flet(int flags, fix att, fix dist, fix *norm)
+bool _tf_set_flet(int32_t flags, fix att, fix dist, fix *norm)
 {
    fix full_norms[2]={fix_make(1,0),-fix_make(1,0)};
-   int pv;
+   int32_t pv;
    ss_facelet_return *cur_fc=&ss_edms_facelets[ss_edms_facelet_cnt++];
 
    tf_Spew(FletSet,("Set %d.. vals %x %x %x, norm %x %x %x\n",ss_edms_facelet_cnt-1,flags,att,dist,norm!=NULL?norm[0]:0xb,norm!=NULL?norm[1]:0xa,norm!=NULL?norm[2]:0xd));
@@ -201,7 +201,7 @@ bool _tf_set_flet(int flags, fix att, fix dist, fix *norm)
 #ifdef USE_OLD_PASSING
 i_hate_everyone:
 	{
-      int which, prim;
+      int32_t which, prim;
       which=((flags&SS_BCD_TYPE_MASK)==SS_BCD_TYPE_WALL)?2:(((flags&SS_BCD_TYPE_MASK)==SS_BCD_TYPE_CEIL)?0:1);
       prim=((flags&SS_BCD_AXIS_MASK)>>1)-1;
       if (prim==-1) prim=FCE_NO_PRIM;
@@ -243,7 +243,7 @@ bool _tf_internal_chk(void)
 fix _tf_border_check_2d(void)
 {
    fix _1d_pt[2],_1d_endpt[2];
-   int i;
+   int32_t i;
    for (i=0; i<tf_pcnt; i++)
    {
       if ((tf_norm_2d[i][0]!=0)&&(tf_norm_2d[i][1]!=0))
@@ -301,7 +301,7 @@ fix _tf_border_check_2d(void)
 
 void _tf_norm_create(void)
 {
-   int i;
+   int32_t i;
    for (i=0; i<tf_pcnt-1; i++)
     { set_norm(i,i+1); }
    set_norm(i,0);
@@ -318,7 +318,7 @@ void _tf_norm_create(void)
 
 void _tf_get_crosses(void)
 {
-   int i, cross_lr;
+   int32_t i, cross_lr;
 
    cross_cnt=0;
    cross_lr=tf_vert_2d[0][0]<tf_pt[0];
@@ -348,7 +348,7 @@ void _tf_get_crosses(void)
 // todo: finish/optimize box cases
 //       get min/max during norm or cross create, then triv check prior to border mess
 
-fix tf_solve_2d_case(int flags)
+fix tf_solve_2d_case(int32_t flags)
 {
    fix atv;
    tf_pcnt=(flags&TF_FLG_3PNT_MASK)?3:4;
@@ -425,11 +425,11 @@ parse_ichk:
 // 3 feet, or so
 #define STAIR_TOLERANCE   fix_make(0,0x6187)
 #define STAIR_MIN         fix_make(0,0x0508)
-int _stair_check(fix walls[4][2], int flags)
+int32_t _stair_check(fix walls[4][2], int32_t flags)
 {
    if (flags&TF_FLG_BOX_FULL)
    {
-      int ad;
+      int32_t ad;
       ad=walls[0][1]-walls[2][1];
       if (ad<STAIR_MIN)
          return flags;
@@ -495,7 +495,7 @@ int _stair_check(fix walls[4][2], int flags)
 }
 
 // note: if it turns out aligned > 2*multi, we should do set and reset in multi for rad, and no rad set here
-bool tf_solve_aligned_face(fix pt[3], fix walls[4][2], int flags, fix *norm)
+bool tf_solve_aligned_face(fix pt[3], fix walls[4][2], int32_t flags, fix *norm)
 {
    fix att;
    bool rv=FALSE;
@@ -523,7 +523,7 @@ bool tf_solve_aligned_face(fix pt[3], fix walls[4][2], int flags, fix *norm)
    return rv;
 }
 
-bool tf_solve_remetriced_face(fix pt[3], fix walls[4][2], int flags, fix norm[3], fix metric)
+bool tf_solve_remetriced_face(fix pt[3], fix walls[4][2], int32_t flags, fix norm[3], fix metric)
 {
    fix att;
    bool rv=FALSE;
@@ -556,7 +556,7 @@ bool tf_solve_remetriced_face(fix pt[3], fix walls[4][2], int flags, fix norm[3]
 bool tf_solve_cylinder(fix pt[3], fix irad, fix height)
 {
    bool rv=FALSE, slv=FALSE;
-   int flags;
+   int32_t flags;
    fix dist_sqrd, r_dist, rad=abs(irad), urad;
    // first check height
    if ((pt[2]<-tf_rad)||(pt[2]>height+tf_rad)) return rv; // nope, high or low
@@ -613,7 +613,7 @@ bool tf_solve_cylinder(fix pt[3], fix irad, fix height)
    return rv;
 }
 
-void terrfunc_one_map_square(int fmask)
+void terrfunc_one_map_square(int32_t fmask)
 {  // add appropriately set facelet_mask appropriately
    if (fix_from_map_height(MAP_HEIGHTS-1-me_height_ceil(tfunc_mptr) - me_param(tfunc_mptr)) < tfunc_maxz)
       fmask |= FACELET_MASK_C;
@@ -627,7 +627,7 @@ void terrfunc_one_map_square(int fmask)
 #define fcs(v1,v2)      (FACELET_MASK_##v1##|FACELET_MASK_##v2##)
 
 // probably could be just 5,5 by having it algorithimically flip the list if needed
-uchar tf_wall_check[5][2][5]=
+uint8_t tf_wall_check[5][2][5]=
 {
  {{fcs(Z,Z)},                                    {fcs(Z,Z)}                                     },
  {{fcs(Z,Z),fcs(S,Z)},                           {fcs(Z,N),fcs(Z,Z)}                            },
@@ -636,9 +636,9 @@ uchar tf_wall_check[5][2][5]=
  {{fcs(Z,Z),fcs(S,Z),fcs(S,N),fcs(Z,N),fcs(Z,Z)},{fcs(Z,Z),fcs(S,Z),fcs(S,N),fcs(Z,N),fcs(Z,Z)} }
 };
 
-bool tf_direct(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph, int tf_type)
+bool tf_direct(fix fix_x, fix fix_y, fix fix_z, fix rad, int32_t ph, int32_t tf_type)
 {
-   int fce_minc,xd,yd,xo,yo,centered; // fce_minc is map increment between lines, ?d LGRect size, xo clip offset
+   int32_t fce_minc,xd,yd,xo,yo,centered; // fce_minc is map increment between lines, ?d LGRect size, xo clip offset
    fix minx,miny,maxx,maxy,cenx,ceny; // for full radius of us, center for us, all really ints in the end
 
    tf_Spew(Calls,("indoor %d at %x %x %x r %x\n",ph,fix_x,fix_y,fix_z,rad));
@@ -649,7 +649,7 @@ bool tf_direct(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph, int tf_type)
    if (global_fullmap->cyber)
    {
       MapElem *mp;
-      int mb=-1,mt;
+      int32_t mb=-1,mt;
       mp=MAP_GET_XY(cenx,ceny);
       if ((mt=me_light_flr(mp))!=0)
          mb=mt-1;
@@ -694,8 +694,8 @@ bool tf_direct(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph, int tf_type)
    }
    else
    {
-      uchar *xmsk_base, *ymsk_base, *xmsk_now, *ymsk_now;
-      int xb;
+      uint8_t *xmsk_base, *ymsk_base, *xmsk_now, *ymsk_now;
+      int32_t xb;
 
       centered=(((xd&1)==0)&&((minx-xo+(xd>>1))==cenx))?0:1;
       xmsk_base=&tf_wall_check[xd-1][centered][xo];
@@ -739,7 +739,7 @@ bool tf_direct(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph, int tf_type)
    return ss_edms_facelet_cnt!=0;
 }
 
-void tf_global_bcd_add(int flg, int param)
+void tf_global_bcd_add(int32_t flg, int32_t param)
 {
    if (flg&TF_FLG_HPARAM)
    {
@@ -754,10 +754,10 @@ void tf_global_bcd_add(int flg, int param)
  */
 //extern "C"
 //{
-void Indoor_Terrain(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph);
+void Indoor_Terrain(fix fix_x, fix fix_y, fix fix_z, fix rad, int32_t ph);
 //}
 
-void Indoor_Terrain(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph)
+void Indoor_Terrain(fix fix_x, fix fix_y, fix fix_z, fix rad, int32_t ph)
 {
    tf_direct(fix_x, fix_y, fix_z, rad, ph, ss_edms_stupid_flag);
 }

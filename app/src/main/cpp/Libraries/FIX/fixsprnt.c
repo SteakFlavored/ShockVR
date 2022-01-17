@@ -37,9 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Prints out x nicely into str
 // and now returns the string too
 //
-char *fix_sprint (char *str, fix x)
+int8_t *fix_sprint (int8_t *str, fix x)
 {
-	ulong tmp;
+	uint32_t tmp;
 	bool neg = FALSE;
 
 	if (x < 0)
@@ -58,9 +58,9 @@ char *fix_sprint (char *str, fix x)
    return str;
 }
 
-char *fix24_sprint (char *str, fix24 x)
+int8_t *fix24_sprint (int8_t *str, fix24 x)
 {
-	ulong tmp;
+	uint32_t tmp;
 	bool neg = FALSE;
 
 	if (x < 0)
@@ -82,7 +82,7 @@ char *fix24_sprint (char *str, fix24 x)
 ///////////////////////////////////////////////
 // nicely prints the fix in a hex kinda way
 // it might be better to do %d.%4x but im not sure, so for now we will do this
-char *fix_sprint_hex (char *str, fix x)
+int8_t *fix_sprint_hex (int8_t *str, fix x)
 {
 	bool neg = FALSE;
 	if (x < 0) { x = -x; neg = TRUE; }
@@ -91,7 +91,7 @@ char *fix_sprint_hex (char *str, fix x)
    return str;
 }
 
-char *fix24_sprint_hex (char *str, fix24 x)
+int8_t *fix24_sprint_hex (int8_t *str, fix24 x)
 {
 	bool neg = FALSE;
 	if (x < 0) { x = -x; neg = TRUE;	}

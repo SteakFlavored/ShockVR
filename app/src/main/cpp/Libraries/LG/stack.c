@@ -52,12 +52,12 @@ void MemStackInit (MemStack *ms)
 //
 // Allocates size bytes of memory from the MemStack.
 //
-void *MemStackAlloc (MemStack *ms, long size)
+void *MemStackAlloc (MemStack *ms, int32_t size)
 {
-   char *newptr = (char *) ms->topptr + size;
-   char *oldptr = (char *) ms->topptr;
+   int8_t *newptr = (int8_t *) ms->topptr + size;
+   int8_t *oldptr = (int8_t *) ms->topptr;
 
-   if (newptr > (char *) ms->baseptr + ms->sz)
+   if (newptr > (int8_t *) ms->baseptr + ms->sz)
    {
       Warning (("MemStackAlloc: can't alloc\n"));
       return NULL;
@@ -72,16 +72,16 @@ void *MemStackAlloc (MemStack *ms, long size)
 // Change the size of the ptr.  Note that if this is not the last on
 // the stack bad things will occur!
 //
-void *MemStackRealloc (MemStack *ms, void *ptr, long newsize)
+void *MemStackRealloc (MemStack *ms, void *ptr, int32_t newsize)
 {
-   char *newptr = (char *)ptr + newsize;
+   int8_t *newptr = (int8_t *)ptr + newsize;
 
-   if (newptr > (char *)ms->baseptr + ms->sz)
+   if (newptr > (int8_t *)ms->baseptr + ms->sz)
    {
       Warning(("MemStackRealloc: can't realloc\n"));
       return NULL;
    }
-   ms->topptr = (char *)ptr + newsize;
+   ms->topptr = (int8_t *)ptr + newsize;
    return ptr;
 }
 

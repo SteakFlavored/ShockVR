@@ -78,7 +78,7 @@ do {                                                  \
 #include "tmapint.h"
 
 void gri_x_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,dy;
@@ -91,7 +91,7 @@ void gri_x_edge
 }
 
 void gri_ix_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,frac;
@@ -105,7 +105,7 @@ void gri_ix_edge
 }
 
 void gri_rgbx_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,frac;
@@ -122,7 +122,7 @@ void gri_rgbx_edge
 
 // MLA #pragma off (unreferenced)
 void gri_scale_edge /* for scaler; does both edges at once.*/
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    fix d,frac;
    grs_vertex *prev,*next;
@@ -143,7 +143,7 @@ void gri_scale_edge /* for scaler; does both edges at once.*/
 // MLA#pragma on (unreferenced)
 
 void gri_uvx_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,frac;
@@ -158,7 +158,7 @@ void gri_uvx_edge
 }
 
 void gri_uvix_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,frac;
@@ -174,7 +174,7 @@ void gri_uvix_edge
 }
 
 void gri_uvwx_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,frac;
@@ -191,7 +191,7 @@ void gri_uvwx_edge
 }
 
 void gri_uviwx_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,frac;
@@ -210,7 +210,7 @@ void gri_uviwx_edge
 }
 
 void gri_uvwy_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,frac;
@@ -227,7 +227,7 @@ void gri_uvwy_edge
 }
 
 void gri_uviwy_edge
-   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side)
+   (grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side)
 {
    grs_tmap_edge *edge;
    fix d,frac;

@@ -62,14 +62,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // x,y order - *count is the number of points in the polygon.
 // return TRUE if it's a valid polygon (not one or two points)
 
-bool find_view_area(fix *cone_list, fix fix_floor, fix fix_roof, int *count, fix radius);
+bool find_view_area(fix *cone_list, fix fix_floor, fix fix_roof, int32_t *count, fix radius);
 
 // run the cone clip and render it.
 void simple_cone_clip_pass(void);
 
 #ifndef __CONE_SRC
 extern fix   span_lines[8];
-extern byte  span_index[2];
+extern int8_t  span_index[2];
 extern fix   span_intersect[4];
 #endif
 

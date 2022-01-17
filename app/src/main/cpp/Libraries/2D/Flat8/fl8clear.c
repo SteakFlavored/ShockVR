@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+aint32_t with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 /*
@@ -44,16 +44,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* clear a flat8 canvas. */
 #if (defined(powerc) || defined(__powerc))
-void flat8_clear (long color)
+void flat8_clear (int32_t color)
 {
-   uchar 	*p;
-   int	 	h;
-	 int		w;
-	 int	  row;
-   ushort	short_val;
+   uint8_t 	*p;
+   int32_t	 	h;
+	 int32_t		w;
+	 int32_t	  row;
+   uint16_t	short_val;
 	 double	double_stack,doub_vl;
-	 uint 	firstbytes,middoubles,lastbytes,fb,md,lb;
-	 uchar 	*dst;
+	 uint32_t 	firstbytes,middoubles,lastbytes,fb,md,lb;
+	 uint8_t 	*dst;
    double *dst_doub;
    uint		temp;
 
@@ -65,14 +65,14 @@ void flat8_clear (long color)
 	 if (w>=16)	// only do doubles if at least two of them (16 bytes)
 	  {
 	 	 	// get a 64 bit version of color in doub_vl
-	 	 	short_val = (uchar) color | color<<8;
-	 	 	color = (int) short_val |  ((int) short_val)<<16;
-	 	 	* (int *) (&double_stack) = color;
-	 	 	* ((int *) (&double_stack)+1) = color;
+	 	 	short_val = (uint8_t) color | color<<8;
+	 	 	color = (int32_t) short_val |  ((int32_t) short_val)<<16;
+	 	 	* (int32_t *) (&double_stack) = color;
+	 	 	* ((int32_t *) (&double_stack)+1) = color;
 	 	 	doub_vl = double_stack;
 
 			lastbytes = w;
-		 	if (firstbytes = (int) p & 3) // check for boundary problems
+		 	if (firstbytes = (int32_t) p & 3) // check for boundary problems
 			 	lastbytes -= firstbytes;
 
 		 	middoubles = lastbytes>>3;
@@ -98,7 +98,7 @@ void flat8_clear (long color)
 
 		 	 	// now do doubles
 		 	 	while (middoubles--) *(dst_doub++) = doub_vl;
-		 	 	dst = (uchar *) dst_doub;
+		 	 	dst = (uint8_t *) dst_doub;
 		 	 }
 
 		 	// do remaining bytes
@@ -110,7 +110,7 @@ void flat8_clear (long color)
 }
 #else
 // 68k version
-asm void flat8_clear (long color)
+asm void flat8_clear (int32_t color)
 {
 	move.l	4(a7),d0		// get color
 	movem.l	d3-d6,-(sp)

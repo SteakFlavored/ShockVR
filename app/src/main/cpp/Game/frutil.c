@@ -38,21 +38,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frparams.h"
 #include "frflags.h"
 
-uchar  fr_cur_obj_col;
-ushort fr_col_to_obj[256];
+uint8_t  fr_cur_obj_col;
+uint16_t fr_col_to_obj[256];
 
-static char fr_str[15];
+static int8_t fr_str[15];
 
 #if 0 // KLC
-char *fr_get_frame_rate(void)
+int8_t *fr_get_frame_rate(void)
 {
    fr_str[0]='\0';
    if (_frp.time.last_frame_cnt>0)
    {
       if (_frp.time.last_chk_time!=0)
       {
-         long num=(*tmd_ticks-_frp.time.last_chk_time);
-         char mod;
+         int32_t num=(*tmd_ticks-_frp.time.last_chk_time);
+         int8_t mod;
 
          if (_frp.time.last_frame_cnt>1)
             num/=_frp.time.last_frame_cnt;
@@ -79,11 +79,11 @@ char *fr_get_frame_rate(void)
  * checks within search_rad of x,y in the array pointed at by base
  * looks for an object...
  */
-uchar check_around(uchar *base, int x, int y)
+uint8_t check_around(uint8_t *base, int32_t x, int32_t y)
 {
-	uchar curval;
-	int extloop, inloop, clen;
-	int dvec[2]={0,1};
+	uint8_t curval;
+	int32_t extloop, inloop, clen;
+	int32_t dvec[2]={0,1};
 
 	for (clen=1; clen<SEARCH_DIAM; clen++) /* for each radius */
 		for (extloop=0; extloop<2; extloop++) /* two of each */
@@ -106,26 +106,26 @@ uchar check_around(uchar *base, int x, int y)
 
 // is transp is set, then the get at is done with transparency on, being able to look through gratings, etc.
 // if it is false, then transparency is not used
-ushort fr_get_real(fauxrend_context *cur_fr, int x, int y)
+uint16_t fr_get_real(fauxrend_context *cur_fr, int32_t x, int32_t y)
 {
-   int col, tmpcol;
+   int32_t col, tmpcol;
    if ((_fr_glob_flags|_fr->flags)&(FR_NORENDR_MASK|FR_SOLIDFR_MASK))  /* dont really render, call a game thing */
       return 0;
-   col=(int)(*((cur_fr->draw_canvas.bm.bits)+(y*cur_fr->draw_canvas.bm.row)+(x)));
+   col=(int32_t)(*((cur_fr->draw_canvas.bm.bits)+(y*cur_fr->draw_canvas.bm.row)+(x)));
 // mprintf("Color %d, obj %d, max c %d at %d %d\n",col,(col>=FR_CUR_OBJ_BASE)?fr_col_to_obj[col-FR_CUR_OBJ_BASE]:0,fr_cur_obj_col,x,y);
    if ((col>=FR_CUR_OBJ_BASE)&&(col<fr_cur_obj_col))         // if we are actually exactly over an object
-      return (ushort)fr_col_to_obj[col-FR_CUR_OBJ_BASE];     //  actual obj_id
+      return (uint16_t)fr_col_to_obj[col-FR_CUR_OBJ_BASE];     //  actual obj_id
    if (tmpcol=check_around(cur_fr->draw_canvas.bm.bits,x,y)) // if we found an object nearby (what to do about transparent doors)
-      return (ushort)fr_col_to_obj[tmpcol-FR_CUR_OBJ_BASE];  //  actual obj_id
+      return (uint16_t)fr_col_to_obj[tmpcol-FR_CUR_OBJ_BASE];  //  actual obj_id
    else                                                      // its a wall folks, just a wall
-	   return ((ushort)0)-((ushort)col);                      //  return a tmap as - (tmapid+1), or nothing as 0
+	   return ((uint16_t)0)-((uint16_t)col);                      //  return a tmap as - (tmapid+1), or nothing as 0
 }
 
-int         fr_cspace_idx(void)              {gr_set_fill_parm(1); return 1;}
+int32_t         fr_cspace_idx(void)              {gr_set_fill_parm(1); return 1;}
 
-ushort fr_get_at(frc *fr, int x, int y, bool transp)
+uint16_t fr_get_at(frc *fr, int32_t x, int32_t y, bool transp)
 {
-   int (*fr_ptr_idx)(void)=fr_get_idx, of=_fr_glob_flags;
+   int32_t (*fr_ptr_idx)(void)=fr_get_idx, of=_fr_glob_flags;
 
    _fr_top(fr);
    _fr_glob_flags|=FR_PICKUPM_MASK;
@@ -141,7 +141,7 @@ ushort fr_get_at(frc *fr, int x, int y, bool transp)
    return fr_get_real(_fr,x,y);
 }
 
-ushort fr_get_again(frc *fr, int x, int y)
+uint16_t fr_get_again(frc *fr, int32_t x, int32_t y)
 {
    _fr_top(fr);
    return fr_get_real(_fr,x,y);

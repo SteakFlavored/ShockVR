@@ -38,5 +38,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 bool gr_free_blend(void);
 /* tab_cnt is how many blend steps, note cnt<=0 is equivalent to calling
    free blend */
-bool gr_init_blend(int log_blend_levels);
+bool gr_init_blend(int32_t log_blend_levels);
 #endif /* !__BLNFCN */

@@ -22,7 +22,7 @@ IFNDEF	types_inc
 types_inc	EQU		1
 
 ; Begin of file types.h
-; 
+;
 ;  * $Source: n:/project/lib/src/h/RCS/types.h $
 ;  * $Revision: 1.2 $
 ;  * $Author: kaboom $
@@ -33,32 +33,32 @@ types_inc	EQU		1
 ;  * $Log: types.h $
 ;  * Revision 1.2  1993/09/28  01:12:47  kaboom
 ;  * Converted #include "xxx" to #include <xxx> for watcom.
-;  * 
+;  *
 ;  * Revision 1.1  1993/03/19  18:19:27  matt
 ;  * Initial revision
-;  
+;
 ; don't redefine byte in assembly header
 ;  these are convenience typedefs so we don't always have to keep typing
-;    `unsigned.' 
-uchar		TYPEDEF		BYTE
+;    `unsigned.'
+uint8_t		TYPEDEF		BYTE
 
-ushort		TYPEDEF		WORD
+uint16_t		TYPEDEF		WORD
 
-uint		TYPEDEF		WORD
+uint32_t		TYPEDEF		WORD
 
-ulong		TYPEDEF		DWORD
+uint32_t		TYPEDEF		DWORD
 
 bool		TYPEDEF		BYTE
 
-ubyte		TYPEDEF		BYTE
+uint8_t		TYPEDEF		BYTE
 
 NULL		EQU		0t
-;  !NULL 
+;  !NULL
 TRUE		EQU		1t
-;  !TRUE 
+;  !TRUE
 FALSE		EQU		0t
-;  !FALSE 
-;  !__TYPES_H 
+;  !FALSE
+;  !__TYPES_H
 ; End of file types.h
 
 ENDIF

@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 #include "rsdunpck.h"
 
-void unpack_rsd8_ubitmap(grs_bitmap *bm, short x, short y)
+void unpack_rsd8_ubitmap(grs_bitmap *bm, int16_t x, int16_t y)
 {
    if (grd_unpack_buf!=NULL) {
       grs_bitmap tbm;
@@ -54,7 +54,7 @@ void unpack_rsd8_ubitmap(grs_bitmap *bm, short x, short y)
    }
 }
 
-int unpack_rsd8_bitmap(grs_bitmap *bm, short x, short y)
+int32_t unpack_rsd8_bitmap(grs_bitmap *bm, int16_t x, int16_t y)
 {
    if (grd_unpack_buf!=NULL) {
       grs_bitmap tbm;
@@ -64,7 +64,7 @@ int unpack_rsd8_bitmap(grs_bitmap *bm, short x, short y)
    return CLIP_ALL;
 }
 
-void unpack_rsd8_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h)
+void unpack_rsd8_scale_ubitmap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h)
 {
    if (grd_unpack_buf!=NULL) {
       grs_bitmap tbm;
@@ -73,7 +73,7 @@ void unpack_rsd8_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short 
    }
 }
 
-int unpack_rsd8_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h)
+int32_t unpack_rsd8_scale_bitmap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h)
 {
    if (grd_unpack_buf!=NULL) {
       grs_bitmap tbm;
@@ -83,7 +83,7 @@ int unpack_rsd8_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h)
    return CLIP_ALL;
 }
 
-void unpack_rsd8_clut_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl)
+void unpack_rsd8_clut_scale_ubitmap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl)
 {
    if (grd_unpack_buf!=NULL) {
       grs_bitmap tbm;
@@ -92,7 +92,7 @@ void unpack_rsd8_clut_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, s
    }
 }
 
-int unpack_rsd8_clut_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl)
+int32_t unpack_rsd8_clut_scale_bitmap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl)
 {
    if (grd_unpack_buf!=NULL) {
       grs_bitmap tbm;
@@ -102,7 +102,7 @@ int unpack_rsd8_clut_scale_bitmap(grs_bitmap *bm, short x, short y, short w, sho
    return CLIP_ALL;
 }
 
-void unpack_rsd8_clut_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl)
+void unpack_rsd8_clut_ubitmap(grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
    if (grd_unpack_buf!=NULL) {
       grs_bitmap tbm;
@@ -111,7 +111,7 @@ void unpack_rsd8_clut_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl)
    }
 }
 
-int unpack_rsd8_clut_bitmap(grs_bitmap *bm, short x, short y, uchar *cl)
+int32_t unpack_rsd8_clut_bitmap(grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
    if (grd_unpack_buf!=NULL) {
       grs_bitmap tbm;

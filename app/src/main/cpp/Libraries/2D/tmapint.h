@@ -51,7 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Changed grs_loop_info structure for use with new wacky edges.
  *
  * Revision 1.3  1994/01/18  13:11:26  kevin
- * Added optimized ulong_min,max pragmas.  Also sides for edge calculations.
+ * Added optimized uint32_t_min,max pragmas.  Also sides for edge calculations.
  *
  * Revision 1.2  1994/01/13  12:21:10  kevin
  * changed tmap_inner_loop prototype to take flags parameter.
@@ -105,19 +105,19 @@ typedef struct {
 } grs_tmap_edge;
 
 typedef struct {
-   int n;                     /* number of lines */
+   int32_t n;                     /* number of lines */
    union {                    /* destination pointer/scanline coord */
-      uchar *d;
-      int x,y;
+      uint8_t *d;
+      int32_t x,y;
    };
    union {
       grs_bitmap bm;
       struct {
-         uchar *s;                                        /* bitmap bits pointer */
-         uchar bm_type,bm_align;
-         short bm_flags,bm_w,bm_h,bm_row;                 /* bitmap width & height */
-         uchar wlog;
-         union {uchar hlog,loop;};
+         uint8_t *s;                                        /* bitmap bits pointer */
+         uint8_t bm_type,bm_align;
+         int16_t bm_flags,bm_w,bm_h,bm_row;                 /* bitmap width & height */
+         uint8_t wlog;
+         union {uint8_t hlog,loop;};
       };
    };
    fix w;
@@ -125,10 +125,10 @@ typedef struct {
    union {grs_tmap_edge left,top;};
    union {grs_tmap_edge right,bot;};
    fix dw;
-   ulong u_mask;
-   union {ulong v_mask,mask;};
-   uchar *clut;               /* color lookup table */
-   long *vtab;                /* for non power of 2 widths */
+   uint32_t u_mask;
+   union {uint32_t v_mask,mask;};
+   uint8_t *clut;               /* color lookup table */
+   int32_t *vtab;                /* for non power of 2 widths */
    void (*scanline_func)();   /* function for individual scanline */
    void (*loop_func)();       /* actually, chunk function */
    union {void (*left_edge_func)(), (*top_edge_func)();};
@@ -142,33 +142,10 @@ typedef struct {
 
 #define sgn(a) (((a)>0) ? 1 : ((a)<0) ? -1 : 0)
 
-#define ulong_min(x, y)	((((ulong) x) < ((ulong) y)) ? (x) : (y))
-#define ulong_max(x, y)	((((ulong) x) < ((ulong) y)) ? (y) : (x))
-
-/*ulong ulong_min (ulong a, ulong b);
-#pragma aux ulong_min =   \
-   "sub     edx,eax"    \
-   "sbb     ebx,ebx"    \
-   "and     ebx,edx"    \
-   "add     eax,ebx"    \
-   parm [eax] [edx]     \
-   modify [eax ebx edx];
-
-ulong ulong_max (ulong a, ulong b);
-#pragma aux ulong_max =   \
-   "sub     edx,eax"    \
-   "sbb     ebx,ebx"    \
-   "not     ebx"        \
-   "and     ebx,edx"    \
-   "add     eax,ebx"    \
-   parm [eax] [edx]     \
-   modify [eax ebx edx];
-*/
-
 #undef fix_ceil
 #define fix_ceil(a) ((fix)(((a)+0xffff)&0xffff0000))
 #undef fix_cint
-#define fix_cint(a) ((short)(((a)+0xffff)>>16))
+#define fix_cint(a) ((int16_t)(((a)+0xffff)>>16))
 
 #define fix_light(i) ((i>>8)&0xff00)
 

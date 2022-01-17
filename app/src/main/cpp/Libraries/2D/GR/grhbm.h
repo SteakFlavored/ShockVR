@@ -46,16 +46,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern void gr_hflip_in_place(grs_bitmap *bm);
 
 #define gr_hflip_ubitmap(bm,x,y) \
-   ((void (*)(grs_bitmap *_bm,short _x,short _y)) \
+   ((void (*)(grs_bitmap *_bm,int16_t _x,int16_t _y)) \
    grd_canvas_table[HFLIP_DEVICE_UBITMAP+2*((bm)->type)])(bm,x,y)
 #define gr_hflip_bitmap(bm,x,y) \
-   ((void (*)(grs_bitmap *_bm,short _x,short _y)) \
+   ((void (*)(grs_bitmap *_bm,int16_t _x,int16_t _y)) \
    grd_canvas_table[HFLIP_DEVICE_BITMAP+2*((bm)->type)])(bm,x,y)
 
 #define gr_hflip_flat8_ubitmap \
-   ((void (*)(grs_bitmap *bm,short x,short y)) \
+   ((void (*)(grs_bitmap *bm,int16_t x,int16_t y)) \
    grd_canvas_table[HFLIP_FLAT8_UBITMAP])
 #define gr_hflip_flat8_bitmap \
-   ((void (*)(grs_bitmap *bm,short x,short y)) \
+   ((void (*)(grs_bitmap *bm,int16_t x,int16_t y)) \
    grd_canvas_table[HFLIP_FLAT8_BITMAP])
 #endif /* !__GRHBM_H */

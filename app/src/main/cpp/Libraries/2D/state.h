@@ -51,8 +51,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GRD_STATE_DEF 0
 #define GRD_STATE_PAL 1
 
-int gr_push_video_state (int flags);
-void gr_pop_video_state (int clear);
+int32_t gr_push_video_state (int32_t flags);
+void gr_pop_video_state (int32_t clear);
 
 #endif
 

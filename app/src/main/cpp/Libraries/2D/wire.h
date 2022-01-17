@@ -41,8 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __WIRE_H
 #include "plytyp.h"
 
-extern void gr_wire_upoly(long c,int n,grs_vertex **vpl);
-extern void gr_wire_poly(long c,int n,grs_vertex **vpl);
-extern void gr_wire_ucpoly(int n,grs_vertex **vpl);
-extern void gr_wire_cpoly(int n,grs_vertex **vpl);
+extern void gr_wire_upoly(int32_t c,int32_t n,grs_vertex **vpl);
+extern void gr_wire_poly(int32_t c,int32_t n,grs_vertex **vpl);
+extern void gr_wire_ucpoly(int32_t n,grs_vertex **vpl);
+extern void gr_wire_cpoly(int32_t n,grs_vertex **vpl);
 #endif /* __WIRE_H */

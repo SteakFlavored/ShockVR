@@ -53,9 +53,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _sched_event
 {
-   ushort timestamp;
-   ushort type;
-   char data[SCHED_DATASIZ];
+   uint16_t timestamp;
+   uint16_t type;
+   int8_t data[SCHED_DATASIZ];
 } SchedEvent;
 
 typedef void (*SchedHandler)(Schedule* s, SchedEvent* ev);
@@ -67,7 +67,7 @@ typedef void (*SchedHandler)(Schedule* s, SchedEvent* ev);
 // When building an event for a schedule that uses
 // player_struct.game_time or .real_time, use these
 // macros to get scheduler stamps.
-#define TICKS2TSTAMP(t) ((ushort)(((t) >> 4) & 0xFFFF))
+#define TICKS2TSTAMP(t) ((uint16_t)(((t) >> 4) & 0xFFFF))
 #define TSTAMP2TICKS(t) ((t) << 4)
 
 #define NULL_SCHED_EVENT         0
@@ -84,14 +84,14 @@ typedef void (*SchedHandler)(Schedule* s, SchedEvent* ev);
 
 typedef struct _expose_data
 {
-   byte damage;
-   ubyte type;
-   ubyte tsecs;
-   ubyte count;
+   int8_t damage;
+   uint8_t type;
+   uint8_t tsecs;
+   uint8_t count;
 } SchedExposeData;
 
 // Prototypes
-errtype schedule_init(Schedule* s,int size, bool grow);
+errtype schedule_init(Schedule* s,int32_t size, bool grow);
 // Initialize a schedule.  If grow is true, the schedule
 // will realloc memory when it needs space for more events.
 // size is the number of events the shedule can hold.
@@ -102,7 +102,7 @@ errtype schedule_free(Schedule* s);
 errtype schedule_event(Schedule* s, SchedEvent* ev);
 // Add an event to the specified schedule.
 
-errtype schedule_run(Schedule* s, ushort time);
+errtype schedule_run(Schedule* s, uint16_t time);
 // Run the schedule to the specified time, dispatching all events
 // which are scheduled for earlier than time.
 

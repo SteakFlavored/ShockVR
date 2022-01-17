@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Creates a totally plain, boring TNG which is little more than
 // a region in gadget's clothing
-Gadget *gad_plain_create(Gadget *parent, LGRect *dim, int z, char *name);
+Gadget *gad_plain_create(Gadget *parent, LGRect *dim, int32_t z, int8_t *name);
 
 Gadget *gad_plain_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, LGPoint size);
 

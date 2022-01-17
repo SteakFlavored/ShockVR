@@ -34,21 +34,21 @@ typedef struct {
 
 /* Prototypes */
 
-LGRegion *trav_get_first(LGRegion *reg, int order);
-LGRegion *trav_get_next(LGRegion *curp, int order);
+LGRegion *trav_get_first(LGRegion *reg, int32_t order);
+LGRegion *trav_get_next(LGRegion *curp, int32_t order);
 errtype region_place(LGRegion *reg);
 errtype region_remove(LGRegion *reg, bool draw);
-void region_moverect(LGRegion *reg, int delta_x, int delta_y, int move_rel);
-void region_propagate_callback(LGRegion *reg,  ulong callback_code, LGRect *arg_rect);
+void region_moverect(LGRegion *reg, int32_t delta_x, int32_t delta_y, int32_t move_rel);
+void region_propagate_callback(LGRegion *reg,  uint32_t callback_code, LGRect *arg_rect);
 bool reg_exp_CB(LGRegion *reg, LGRect *rc, void *data);
 errtype region_expose_absolute(LGRegion *reg, LGRect *newr);
 errtype region_manage_place(LGRegion *reg);
 errtype region_manage_remove(LGRegion *reg);
-int region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv);
+int32_t region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv);
 errtype region_abs_rect(LGRegion *reg, LGRect *orig_rect, LGRect *conv);
-errtype region_set_moving(LGRegion *reg, int val);
-int region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv);
-int region_convert_toparent(LGRegion *from_reg, LGRect *orig, LGRect *conv);
+errtype region_set_moving(LGRegion *reg, int32_t val);
+int32_t region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv);
+int32_t region_convert_toparent(LGRegion *from_reg, LGRect *orig, LGRect *conv);
 bool is_child(LGRegion *poss_parent, LGRegion *child);
 bool region_obscured_callback(LGRegion *reg, LGRect *r, void *data);
 Region_Sequence_Element *get_rse_from_pool();
@@ -57,7 +57,7 @@ errtype region_add_sequence_expose(LGRegion *reg, LGRect exp_rect);
 
 /* Globals */
 
-int region_in_sequence = 0;
+int32_t region_in_sequence = 0;
 bool region_system_init = FALSE, region_found;
 slist_head sequence_header;
 LGRegion *obsc_region, *current_expose_region;
@@ -74,8 +74,8 @@ errtype region_init()
    return(OK);
 }
 
-errtype region_create(LGRegion *parent, LGRegion *ret, LGRect *r, int z, int event_order,
-   ulong status, RectCallback expose,
+errtype region_create(LGRegion *parent, LGRegion *ret, LGRect *r, int32_t z, int32_t event_order,
+   uint32_t status, RectCallback expose,
    RectCallback save_under, RectCallback replace, void *user_data)
 {
    LGRegion *curp, *lastp;
@@ -192,9 +192,9 @@ errtype region_destroy(LGRegion *reg, bool draw)
    return(OK);
 }
 
-errtype region_move(LGRegion *reg, int new_x, int new_y, int new_z)
+errtype region_move(LGRegion *reg, int32_t new_x, int32_t new_y, int32_t new_z)
 {
-   int delta_x, delta_y;
+   int32_t delta_x, delta_y;
    LGRegion *lastp, *curp;
 
    /* trigger the "picking up" callbacks */
@@ -265,9 +265,9 @@ errtype region_move(LGRegion *reg, int new_x, int new_y, int new_z)
    return(OK);
 }
 
-errtype region_resize(LGRegion *reg, int new_x_size, int new_y_size)
+errtype region_resize(LGRegion *reg, int32_t new_x_size, int32_t new_y_size)
 {
-   int delta_x, delta_y;
+   int32_t delta_x, delta_y;
 
    delta_x = new_x_size - RectWidth(reg->r);
    delta_y = new_y_size - RectHeight(reg->r);
@@ -279,11 +279,11 @@ errtype region_resize(LGRegion *reg, int new_x_size, int new_y_size)
    return(OK);
 }
 
-int region_traverse_point(LGRegion *reg, LGPoint target, TravRectCallback fn, int order, void *data)
+int32_t region_traverse_point(LGRegion *reg, LGPoint target, TravRectCallback fn, int32_t order, void *data)
 {
    LGRect inter, newtarget;
    LGRegion *curp;
-   int retval = 0, iflag = 0;
+   int32_t retval = 0, iflag = 0;
 
 //   Spew(DSRC_UI_Traversal, ("r_t_point -- target = (%d, %d) %s->r = (%d, %d) - (%d, %d)\n",
 //      target.x, target.y, GD_NAME(reg), RECT_PRINT_ARGS(reg->r)));
@@ -320,12 +320,12 @@ int region_traverse_point(LGRegion *reg, LGPoint target, TravRectCallback fn, in
    return (retval);
 }
 
-int region_traverse_rect(LGRegion *reg, LGRect *target, TravRectCallback fn, int order,
+int32_t region_traverse_rect(LGRegion *reg, LGRect *target, TravRectCallback fn, int32_t order,
    void *data)
 {
    LGRect inter, newtarget;
    LGRegion *curp;
-   int retval = 0, iflag = 0;
+   int32_t retval = 0, iflag = 0;
 
    // Spew(DSRC_UI_Traversal, ("r_t_r -- target = (%d, %d) - (%d, %d) %s->r = (%d, %d) - (%d, %d)\n",
    //  RECT_PRINT_ARGS(target), GD_NAME(reg), RECT_PRINT_ARGS(reg->r)));
@@ -366,10 +366,10 @@ int region_traverse_rect(LGRegion *reg, LGRect *target, TravRectCallback fn, int
    return (retval);
 }
 
-int region_traverse(LGRegion *reg, TravCallback fn, int order, void *data)
+int32_t region_traverse(LGRegion *reg, TravCallback fn, int32_t order, void *data)
 {
    LGRegion *curp;
-   int retval = 0;
+   int32_t retval = 0;
 
    // Spew(DSRC_UI_Traversal, ("r_traverse -- %s\n",GD_NAME(reg)));
    if ((reg->status_flags & INVISIBLE_FLAG) != 0)
@@ -403,7 +403,7 @@ int region_traverse(LGRegion *reg, TravCallback fn, int order, void *data)
    return (retval);
 }
 
-LGRegion *trav_get_first(LGRegion *reg, int order)
+LGRegion *trav_get_first(LGRegion *reg, int32_t order)
 {
    LGRegion *ptr, *retval;
 
@@ -422,7 +422,7 @@ LGRegion *trav_get_first(LGRegion *reg, int order)
    }
 }
 
-LGRegion *trav_get_next(LGRegion *curp, int order)
+LGRegion *trav_get_next(LGRegion *curp, int32_t order)
 {
    LGRegion *retval, *ptr;
 
@@ -529,7 +529,7 @@ errtype region_remove(LGRegion *reg, bool draw)
    return(OK);
 }
 
-void region_moverect(LGRegion *reg, int delta_x, int delta_y, int move_rel)
+void region_moverect(LGRegion *reg, int32_t delta_x, int32_t delta_y, int32_t move_rel)
 {
    LGRegion *curp;
 
@@ -566,7 +566,7 @@ void region_moverect(LGRegion *reg, int delta_x, int delta_y, int move_rel)
    //   RECT_PRINT_ARGS(reg->r)));
 }
 
-void region_propagate_callback(LGRegion *reg,  ulong callback_code, LGRect *arg_rect)
+void region_propagate_callback(LGRegion *reg,  uint32_t callback_code, LGRect *arg_rect)
 {
    LGRegion *curp;
    RectCallback fn;
@@ -665,7 +665,7 @@ errtype region_expose(LGRegion *reg, LGRect *exp_rect)
    return(region_expose_absolute(reg, &newr));
 }
 
-errtype region_set_moving(LGRegion *reg, int val)
+errtype region_set_moving(LGRegion *reg, int32_t val)
 {
    LGRegion *curp;
 
@@ -681,10 +681,10 @@ errtype region_set_moving(LGRegion *reg, int val)
 
 // Converts a rectangle from from_reg's frame of reference to that of one of it's children
 
-int region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv)
+int32_t region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv)
 {
    LGPoint delta_pt;
-   int retval = 1;
+   int32_t retval = 1;
 
    *conv = *orig;
 
@@ -697,10 +697,10 @@ int region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv)
 
 // Converts a rectangle from from_reg's frame of reference to that of it's parent
 
-int region_convert_toparent(LGRegion *from_reg, LGRect *orig, LGRect *conv)
+int32_t region_convert_toparent(LGRegion *from_reg, LGRect *orig, LGRect *conv)
 {
    LGPoint delta_pt;
-   int retval = 1;
+   int32_t retval = 1;
 
    *conv = *orig;
 
@@ -754,7 +754,7 @@ bool ignore_children;
 
 bool region_obscured_callback(LGRegion *reg, LGRect *r, void *data)
 {
-   int *ival;
+   int32_t *ival;
    LGRect ar1, ar2;
    if (!region_found)
    {
@@ -771,7 +771,7 @@ bool region_obscured_callback(LGRegion *reg, LGRect *r, void *data)
    }
    if (reg->moving)
       return(FALSE);
-   ival = (int *)data;
+   ival = (int32_t *)data;
    region_abs_rect(reg, r, &ar1);
    region_abs_rect(obsc_region, obsc_region->r, &ar2);
    // Spew(DSRC_UI_Utilities, ("Obscured callback on %s obsc_region->r = (%d,%d)(%d,%d) r = (%d,%d)(%d,%d)\n",GD_NAME(reg),
@@ -787,9 +787,9 @@ bool region_obscured_callback(LGRegion *reg, LGRect *r, void *data)
    return(FALSE);
 }
 
-int region_obscured(LGRegion *reg, LGRect *obs_rect)
+int32_t region_obscured(LGRegion *reg, LGRect *obs_rect)
 {
-   int retval = UNOBSCURED;
+   int32_t retval = UNOBSCURED;
    LGRect newr;
    LGRegion *rr;
 
@@ -802,9 +802,9 @@ int region_obscured(LGRegion *reg, LGRect *obs_rect)
    return(retval);
 }
 
-int foreign_region_obscured(LGRegion *reg, LGRect *obs_rect)
+int32_t foreign_region_obscured(LGRegion *reg, LGRect *obs_rect)
 {
-   int retval = UNOBSCURED;
+   int32_t retval = UNOBSCURED;
    LGRect newr;
    LGRegion *rr;
 
@@ -829,7 +829,7 @@ Region_Sequence_Element rse_pool[RSE_POOL_SIZE];
 
 Region_Sequence_Element *get_rse_from_pool()
 {
-   int i = 0;
+   int32_t i = 0;
    while ((i < RSE_POOL_SIZE) && (rse_pool[i].reg != NULL))
       i++;
    if (i < RSE_POOL_SIZE)
@@ -839,7 +839,7 @@ Region_Sequence_Element *get_rse_from_pool()
 
 errtype return_rse_to_pool(Region_Sequence_Element *rse)
 {
-   int i;
+   int32_t i;
    for (i=0; i < RSE_POOL_SIZE; i++)
    {
       if (&rse_pool[i] == rse)
@@ -853,7 +853,7 @@ errtype return_rse_to_pool(Region_Sequence_Element *rse)
 
 errtype init_rse_pool()
 {
-   int i;
+   int32_t i;
    for (i=0; i < RSE_POOL_SIZE; i++)
       rse_pool[i].reg = NULL;
    return(OK);

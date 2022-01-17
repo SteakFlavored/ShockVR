@@ -62,35 +62,35 @@ frc* view360_fullscreen_contexts[NUM_360_CONTEXTS];
 #define CONTEXT ((full_game_3d) ? view360_fullscreen_contexts : view360_contexts)
 bool view360_active_contexts[NUM_360_CONTEXTS]; // which contexts should actually draw
 #define ACTIVE view360_active_contexts
-uchar view360_context_views[NUM_360_CONTEXTS];  // which view is being shown by a given context
+uint8_t view360_context_views[NUM_360_CONTEXTS];  // which view is being shown by a given context
 #define VIEW view360_context_views
 
 bool view360_message_obscured = FALSE;
 bool view360_render_on        = FALSE;
-short view360_last_update = 0;
+int16_t view360_last_update = 0;
 bool view360_is_rendering = FALSE;
 
 // ---------
 // INTERNALS
 // ---------
-void view360_setup_mode(uchar mode);
+void view360_setup_mode(uint8_t mode);
 void view360_restore_inventory(void);
-int view360_fullscrn_draw_callback(void* , void* vbm, int x, int y, int flg);
+int32_t view360_fullscrn_draw_callback(void* , void* vbm, int32_t x, int32_t y, int32_t flg);
 bool inv_is_360_view(void);
 void view360_init(void);
 void view360_shutdown(void);
 void view360_update_screen_mode(void);
 void view360_render(void);
-void mfd_view360_expose(MFD* mfd, ubyte control);
+void mfd_view360_expose(MFD* mfd, uint8_t control);
 void view360_turnon(bool visible, bool real_start);
 void view360_turnoff(bool visible,bool real_stop);
 bool view360_check(void);
 
 
 // Set up/turn on all contexts & cameras for the specified mode.
-void view360_setup_mode(uchar mode)
+void view360_setup_mode(uint8_t mode)
 {
-   ubyte version = player_struct.hardwarez[CPTRIP(SENS_HARD_TRIPLE)];
+   uint8_t version = player_struct.hardwarez[CPTRIP(SENS_HARD_TRIPLE)];
    if (version > 2 && mode == MODE_360 || mode == MODE_270)
    {
       VIEW[LEFT_CONTEXT] =  CAMANG_LEFT;
@@ -111,7 +111,7 @@ void view360_setup_mode(uchar mode)
    }
    if (mode == MODE_REAR)
    {
-      int mfd;
+      int32_t mfd;
       for (mfd = 0; mfd < NUM_MFDS; mfd++)
       {
          if (mfd_get_func(mfd,player_struct.mfd_current_slots[mfd]) == MFD_3DVIEW_FUNC)
@@ -147,7 +147,7 @@ static bool rendered_inv_fullscrn = FALSE;
 
 extern void shock_hflip_in_place(grs_bitmap* bm);
 
-int view360_fullscrn_draw_callback(void*, void* vbm, int, int, int)
+int32_t view360_fullscrn_draw_callback(void*, void* vbm, int32_t, int32_t, int)
 {
 //KLC   shock_hflip_in_place((grs_bitmap *)vbm);
    return FALSE;
@@ -170,8 +170,8 @@ bool inv_is_360_view(void)
 void view360_init(void)
 {
    frc* c;
-   uchar *canv;
-   short x,y,w,h;
+   uint8_t *canv;
+   int16_t x,y,w,h;
 
    canv=_offscreen_mfd.bm.bits;
    x = MFD_VIEW_LFTX;
@@ -217,7 +217,7 @@ void view360_init(void)
 
 void view360_shutdown(void)
 {
-   int i;
+   int32_t i;
    for (i=LEFT_CONTEXT; i<=MID_CONTEXT; i++)
    {
       fr_free_view(view360_contexts[i]);
@@ -232,12 +232,12 @@ void view360_update_screen_mode()
 }
 
 
-char update_string[30] = "";
+int8_t update_string[30] = "";
 
 void view360_render(void)
 {
    bool on = FALSE;
-   int i;
+   int32_t i;
    if (inventory_page != INV_3DVIEW_PAGE && ACTIVE[MID_CONTEXT])
    {
       view360_restore_inventory();
@@ -245,14 +245,14 @@ void view360_render(void)
    view360_message_obscured = ACTIVE[MID_CONTEXT];
   if (ACTIVE[MID_CONTEXT] && player_struct.hardwarez[CPTRIP(SENS_HARD_TRIPLE)] == 1)
    {
-      short update = *tmd_ticks/CIT_CYCLE;
+      int16_t update = *tmd_ticks/CIT_CYCLE;
       if (dirty_inv_canvas && update == view360_last_update && (full_game_3d || !rendered_inv_fullscrn))
       {
-         short basex = INVENTORY_PANEL_X;
-         short basey = INVENTORY_PANEL_Y + INVENTORY_PANEL_HEIGHT;
+         int16_t basex = INVENTORY_PANEL_X;
+         int16_t basey = INVENTORY_PANEL_Y + INVENTORY_PANEL_HEIGHT;
          LGRect r;
-         char buf[sizeof(update_string)];
-         short w,h;
+         int8_t buf[sizeof(update_string)];
+         int16_t w,h;
          if (strlen(update_string) + 1 >= sizeof(update_string))
             return;
          if (update_string[0] == '\0')
@@ -323,7 +323,7 @@ void view360_render(void)
 // MFD FUNC FOR VIEWS
 // ------------------
 
-void mfd_view360_expose(MFD* mfd, ubyte control)
+void mfd_view360_expose(MFD* mfd, uint8_t control)
 {
    ACTIVE[mfd->id] = control;
 }
@@ -340,7 +340,7 @@ void mfd_view360_expose(MFD* mfd, ubyte control)
 
 void view360_turnon(bool visible, bool)
 {
-   int s = player_struct.hardwarez_status[HARDWARE_360];
+   int32_t s = player_struct.hardwarez_status[HARDWARE_360];
 
    if (visible)
    {
@@ -353,7 +353,7 @@ void view360_turnon(bool visible, bool)
 
 void view360_turnoff(bool visible,bool real_stop)
 {
-   int i;
+   int32_t i;
    // restore inventory
    if (visible)
    {
@@ -388,7 +388,7 @@ void view360_turnoff(bool visible,bool real_stop)
 
 bool view360_check()
 {
-   extern uchar hack_takeover;
+   extern uint8_t hack_takeover;
    if (hack_takeover)
      return(FALSE);
    return(TRUE);

@@ -73,9 +73,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* This routine draws clipped goroud-shaded lines as specified by
    intensities.  returns a clip value */
 
-int gen_fix_sline (fix x0, fix y0, fix i0, fix x1, fix y1, fix i1)
+int32_t gen_fix_sline (fix x0, fix y0, fix i0, fix x1, fix y1, fix i1)
 {
-   int r;
+   int32_t r;
    grs_vertex v0, v1;
 
    v0.x = x0; v0.y = y0; v0.i = i0;
@@ -87,9 +87,9 @@ int gen_fix_sline (fix x0, fix y0, fix i0, fix x1, fix y1, fix i1)
 }
 
 
-int gri_sline_clip_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+int32_t gri_sline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   int r;
+   int32_t r;
    grs_vertex u0, u1;
 
    /* save inputs (don't really need whole struct) */

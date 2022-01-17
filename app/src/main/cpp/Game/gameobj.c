@@ -83,40 +83,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_VCOLORS  NUM_SLOW_VCOLORS
 
 // should get this into headers
-extern grs_bitmap *get_text_bitmap_obj(ObjID cobjid, char dest_type, char *scale);
-extern Ref ref_from_critter_data(ObjID oid, int triple, ubyte posture, ubyte frame, ubyte view);
+extern grs_bitmap *get_text_bitmap_obj(ObjID cobjid, int8_t dest_type, int8_t *scale);
+extern Ref ref_from_critter_data(ObjID oid, int32_t triple, uint8_t posture, uint8_t frame, uint8_t view);
 
-extern int     fr_n_3d_models;
+extern int32_t     fr_n_3d_models;
 
 extern MapElem *_fdt_mptr;
 
-static int _o_rad;
+static int32_t _o_rad;
 static g3s_vector _fr_p;
 static Obj *_fr_cobj;
-static int _sq_lght;
+static int32_t _sq_lght;
 
-char curr_clut_table = 0;
+int8_t curr_clut_table = 0;
 
 #define height_step fix_make(0,0x010000>>SLOPE_SHIFT)
 
 // prototypes
-int munge_val(int val, int range, int delta);
-void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int x, int y, int z);
-void _fr_draw_poly_cube(int p_color, int x, int y, int z);
+int32_t munge_val(int32_t val, int32_t range, int32_t delta);
+void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int32_t x, int32_t y, int32_t z);
+void _fr_draw_poly_cube(int32_t p_color, int32_t x, int32_t y, int32_t z);
 void _fr_draw_polyobj(void *model_ptr, bool use_lighting);
-void gen_seed_vec(g3s_vector *gpt_vec, int seed, int scale, int deviant);
-void do_xplodamatron(int frame, int severity, int seed, int col1, int col2);
-void gen_tetra(g3s_phandle *xplo_pts, fix size, int deviant, int color);
+void gen_seed_vec(g3s_vector *gpt_vec, int32_t seed, int32_t scale, int32_t deviant);
+void do_xplodamatron(int32_t frame, int32_t severity, int32_t seed, int32_t col1, int32_t col2);
+void gen_tetra(g3s_phandle *xplo_pts, fix size, int32_t deviant, int32_t color);
 void draw_ice(void);
 void draw_ice_wall(void);
-void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, bool dblface, bool use_lighting);
-void _fr_draw_bitmap(grs_bitmap *draw_bm, int dist, int sc, int anch_x, int anch_y);
-short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type);
+void _fr_draw_tmtile(grs_bitmap *draw_bm, int32_t col_val, g3s_phandle *plst, bool dblface, bool use_lighting);
+void _fr_draw_bitmap(grs_bitmap *draw_bm, int32_t dist, int32_t sc, int32_t anch_x, int32_t anch_y);
+int16_t compute_3drep(Obj *cobj, ObjID cobjid, int32_t obj_type);
 
 
-int munge_val(int val, int range, int delta)
+int32_t munge_val(int32_t val, int32_t range, int32_t delta)
 {
-   int base=range-delta;
+   int32_t base=range-delta;
    if (val<=delta) base=0; else if (val>=range-delta) base=range-2*delta;
    val=(val+base+(rand()%(2*delta+1)))&0xff;
    return val;
@@ -143,11 +143,11 @@ int munge_val(int val, int range, int delta)
  cface[3]=cube_pt[d]; cface[3]->uv.u=0x100; cface[3]->uv.v=0x100
 
 //#pragma disable_message(202)
-void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int x, int y, int z)
+void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int32_t x, int32_t y, int32_t z)
 {
    g3s_phandle cube_pt[8], cface[4];
    g3s_vector  cube_vec;
-   int cur_ft;
+   int32_t cur_ft;
 
    g3_start_object_angles_xyz(&_fr_p,_fr_cobj->loc.p<<8,_fr_cobj->loc.h<<8,_fr_cobj->loc.b<<8,ANGLE_ORDER);
    cube_vec.gX=-x; cube_vec.gY=0; cube_vec.gZ=-y;
@@ -200,15 +200,15 @@ void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int x, int y, i
   else if (pc<-0x80) g3_check_and_draw_tluc_poly(-pc,fc,fpts); \
   else g3_check_and_draw_tluc_spoly(fc,fpts)
 
-uchar hakx,haky,hakz,haktype=0xFF;
+uint8_t hakx,haky,hakz,haktype=0xFF;
 
 // polygon/translucent cubes...
 // needs to learn to set i correctly
-void _fr_draw_poly_cube(int p_color, int x, int y, int z)
+void _fr_draw_poly_cube(int32_t p_color, int32_t x, int32_t y, int32_t z)
 {
    g3s_phandle cube_pt[8], cface[4];
    g3s_vector  cube_vec;
-//   int cur_ft;
+//   int32_t cur_ft;
 
    g3_start_object_angles_xyz(&_fr_p,_fr_cobj->loc.p<<8,_fr_cobj->loc.h<<8,_fr_cobj->loc.b<<8,ANGLE_ORDER);
    cube_vec.gX=-x; cube_vec.gY=0; cube_vec.gZ=-y;
@@ -248,8 +248,8 @@ void _fr_draw_poly_cube(int p_color, int x, int y, int z)
 // you stand surrounded by dreams brutally crushed
 void _fr_draw_polyobj(void *model_ptr, bool use_lighting)
 {
-   int pos_parm=abs(PARM_MAX-((*tmd_ticks)&PARM_MOD));         // this is dumb
-   int cur_ft;
+   int32_t pos_parm=abs(PARM_MAX-((*tmd_ticks)&PARM_MOD));         // this is dumb
+   int32_t cur_ft;
    // set up clut for lighting in square and all
    // should decode 0 and FACE_ somehow... ick
 #ifdef LIGHT_3D_OBJS
@@ -264,7 +264,7 @@ void _fr_draw_polyobj(void *model_ptr, bool use_lighting)
    }
 #endif
    g3_start_object_angles_xyz(&_fr_p,_fr_cobj->loc.p<<8,_fr_cobj->loc.h<<8,_fr_cobj->loc.b<<8,ANGLE_ORDER);
-   g3_interpret_object((ubyte *) model_ptr,((PARM_MAX+PARM_BASE)-pos_parm)<<PARM_SHF,PARM_BASE<<PARM_SHF);
+   g3_interpret_object((uint8_t *) model_ptr,((PARM_MAX+PARM_BASE)-pos_parm)<<PARM_SHF,PARM_BASE<<PARM_SHF);
    g3_end_object();
 #ifdef LIGHT_3D_OBJS
    if (use_lighting)
@@ -274,7 +274,7 @@ void _fr_draw_polyobj(void *model_ptr, bool use_lighting)
 //#pragma enable_message(202)
 
 //#pragma disable_message(202)
-void gen_seed_vec(g3s_vector *gpt_vec, int seed, int scale, int deviant)
+void gen_seed_vec(g3s_vector *gpt_vec, int32_t seed, int32_t scale, int32_t deviant)
 {
    deviant=(1<<deviant)-1;
    if (seed!=0)
@@ -291,11 +291,11 @@ void gen_seed_vec(g3s_vector *gpt_vec, int seed, int scale, int deviant)
    gpt_vec->gZ+=rand()&deviant;
 }
 
-void do_xplodamatron(int frame, int severity, int seed, int col1, int )
+void do_xplodamatron(int32_t frame, int32_t severity, int32_t seed, int32_t col1, int32_t )
 {
    g3s_phandle xplo_pts[3];
    g3s_vector  xplo_vec;
-   int seed_add=severity*4183;
+   int32_t seed_add=severity*4183;
 
    g3_start_object_angles_xyz(&_fr_p,_fr_cobj->loc.p<<8,_fr_cobj->loc.h<<8,_fr_cobj->loc.b<<8,ANGLE_ORDER);
    xplo_vec.gX=xplo_vec.gY=xplo_vec.gZ=0;
@@ -315,9 +315,9 @@ void do_xplodamatron(int frame, int severity, int seed, int col1, int )
 }
 
 // should be deviant some day
-void gen_tetra(g3s_phandle *xplo_pts, fix size, int , int color)
+void gen_tetra(g3s_phandle *xplo_pts, fix size, int32_t , int32_t color)
 {
-   int i;
+   int32_t i;
    g3s_vector  xplo_vec;
    fix annoying_val=fix_mul(size,fix_make(1,71*65536/100)); // 1/2 * 6/root3, in dougs head, = 1.71???
 
@@ -341,8 +341,8 @@ void gen_tetra(g3s_phandle *xplo_pts, fix size, int , int color)
 void draw_ice(void)
 {
    g3s_phandle xplo_pts[8];
-   int size, deviant=(obj_ICE_AGIT(_fr_cobj)>>6)+4;
-   int p, h, b;
+   int32_t size, deviant=(obj_ICE_AGIT(_fr_cobj)>>6)+4;
+   int32_t p, h, b;
 
    // this is a total hack, should be made real when hp scale is known
    size=(_fr_cobj->info.current_hp)*6;    // just scaled us up to try and work better
@@ -403,7 +403,7 @@ void draw_ice(void)
 //#pragma disable_message(202)
 void draw_ice_wall(void)
 {
-   int size_x=0x8000, size_y=0x8000;
+   int32_t size_x=0x8000, size_y=0x8000;
 
 
 
@@ -411,11 +411,11 @@ void draw_ice_wall(void)
 }
 //#pragma enable_message(202)
 
-void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, bool dblface, bool use_lighting)
+void _fr_draw_tmtile(grs_bitmap *draw_bm, int32_t col_val, g3s_phandle *plst, bool dblface, bool use_lighting)
 {
-   int t_off_l, t_off_r;
-//   int face_c, face_f, hgt_f, hgt_c;
-   int y1=((_fr_cobj->loc.y)&0xff)<<8, x1=((_fr_cobj->loc.x)&0xff)<<8;
+   int32_t t_off_l, t_off_r;
+//   int32_t face_c, face_f, hgt_f, hgt_c;
+   int32_t y1=((_fr_cobj->loc.y)&0xff)<<8, x1=((_fr_cobj->loc.x)&0xff)<<8;
 
    switch (((_fr_cobj->loc.h+0x20)&0xff)>>6)
    {
@@ -442,7 +442,7 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, bool d
    else
       if (col_val!=0xFF)
       {
-         int cur_ft = gr_get_fill_type();
+         int32_t cur_ft = gr_get_fill_type();
          gr_set_fill_type(FILL_CLUT);
          gr_set_fill_parm(_fr_clut_list[curr_clut_table]+(_sq_lght&0xf00));
          fpoly_rend(col_val,4,plst);
@@ -466,7 +466,7 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, bool d
       {
          if (col_val!=0xFF)
    	   {
-            int cur_ft = gr_get_fill_type();
+            int32_t cur_ft = gr_get_fill_type();
             gr_set_fill_type(FILL_CLUT);
             gr_set_fill_parm(_fr_clut_list[curr_clut_table]+(_sq_lght&0xf00));
             fpoly_rend(col_val,4,plst);
@@ -485,12 +485,12 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, bool d
 
 // note this always has show_obj's p for p and _fdt_dist for dist.. perhaps shouldnt pass them
 //#pragma disable_message(202)
-void _fr_draw_bitmap(grs_bitmap *draw_bm, int /*dist*/, int sc, int anch_x, int anch_y)
+void _fr_draw_bitmap(grs_bitmap *draw_bm, int32_t /*dist*/, int32_t sc, int32_t anch_x, int32_t anch_y)
 {
 #ifdef SMOOTH_BITMAPS
    grs_canvas tmp_can;
    grs_bitmap tmp_bm;
-   uchar *tmp_ptr;
+   uint8_t *tmp_ptr;
    bool do_qsc=(dist<fr_qscale_obj);
 #endif
    g3s_phandle anchor;
@@ -503,12 +503,12 @@ void _fr_draw_bitmap(grs_bitmap *draw_bm, int /*dist*/, int sc, int anch_x, int 
    _fdt_pbase=0;
    anchor->i=_sq_lght;  // _fr_do_light(anchor,FRPTSZFLR_DN);
 
-   if (sc) g3_set_bitmap_scale(fix_make(0,(int)(4096/3)),fix_make(0,(int)(4096/3)));
+   if (sc) g3_set_bitmap_scale(fix_make(0,(int32_t)(4096/3)),fix_make(0,(int32_t)(4096/3)));
    if ((anch_x<=0)&&(anch_y<=0))
 	   bitmap_verts=g3_light_bitmap(draw_bm,anchor);
    else
       bitmap_verts=g3_light_anchor_bitmap(draw_bm,anchor,anch_x,anch_y);
-   if (sc) g3_set_bitmap_scale(fix_make(0,(int)(2048/3)),fix_make(0,(int)(2048/3)));
+   if (sc) g3_set_bitmap_scale(fix_make(0,(int32_t)(2048/3)),fix_make(0,(int32_t)(2048/3)));
 
    if ((bitmap_verts!=NULL)&&IS_HUDOBJ(_fr_cobj-objs))
    {
@@ -517,7 +517,7 @@ void _fr_draw_bitmap(grs_bitmap *draw_bm, int /*dist*/, int sc, int anch_x, int 
 #else
       fix lx=fix_make(320,0),ly=fix_make(200,0),rx=fix_make(0,0),ry=fix_make(0,0);
 #endif
-      int i;
+      int32_t i;
       for (i=0; i<4; i++)
       {
          if (bitmap_verts[i]->x<lx) lx=bitmap_verts[i]->x;
@@ -542,13 +542,13 @@ void _fr_draw_bitmap(grs_bitmap *draw_bm, int /*dist*/, int sc, int anch_x, int 
 
 #define SECRET_FURNITURE_DEFAULT_O3DREP 0x80
 
-extern char extract_object_special_color(ObjID id);
+extern int8_t extract_object_special_color(ObjID id);
 
-short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type)
+int16_t compute_3drep(Obj *cobj, ObjID cobjid, int32_t obj_type)
 {
-   short o3drep = -1;
+   int16_t o3drep = -1;
    extern bool anim_data_from_id(ObjID, bool*, bool*);
-   extern bool obj_is_display(int triple);
+   extern bool obj_is_display(int32_t triple);
 
    // fix for screens with data2 of zero wanting to animate,
    // and other bigstuffs presumbably wanting to use it as a default.
@@ -557,7 +557,7 @@ short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type)
    if ((cobj->obclass == CLASS_BIGSTUFF) && (obj_is_display(ID2TRIP(cobjid))) &&
       ((objBigstuffs[cobj->specID].data2 != 0) || anim_data_from_id(cobjid,NULL,NULL)))
    {
-      int d2 = objBigstuffs[cobj->specID].data2;
+      int32_t d2 = objBigstuffs[cobj->specID].data2;
       if (d2 & INDIRECTED_STUFF_INDICATOR_MASK)
       {
          ObjID newid = d2 & INDIRECTED_STUFF_DATA_MASK;
@@ -600,8 +600,8 @@ short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type)
 #define TRANSLUCENT_INVISOS
 //#define TLUC_IN_2D
 
-extern void load_model_vtexts(char model_num);
-extern void free_model_vtexts(char model_num);
+extern void load_model_vtexts(int8_t model_num);
+extern void free_model_vtexts(int8_t model_num);
 
 // in effect.c also
 #define MAX_TELEPORT_FRAME    10
@@ -613,26 +613,26 @@ extern void free_model_vtexts(char model_num);
 
 void show_obj(ObjID cobjid)
 {
-   short objtrip;
-   short o3drep;
-   int model_num=0;
-   extern uchar cam_mode;
-   uchar *model_ptr;
+   int16_t objtrip;
+   int16_t o3drep;
+   int32_t model_num=0;
+   extern uint8_t cam_mode;
+   uint8_t *model_ptr;
    grs_bitmap *tpdata;
 #ifdef TRANSLUCENT_INVISOS
 #ifndef TLUC_IN_2D
    grs_bitmap tpdata_temp;
 #endif
 #endif
-   char scale = 0;
-   uchar type = 0xFF;
+   int8_t scale = 0;
+   uint8_t type = 0xFF;
    bool use_cache = FALSE;
    Ref ref = 0;
-   int obj_type, tluc_val=0xFF, index=0, loc_h;
+   int32_t obj_type, tluc_val=0xFF, index=0, loc_h;
    bool light_me = TRUE;
    extern cams objmode_cam;
    extern bool obj_too_smart(ObjID id);
-   extern void check_up(int num);
+   extern void check_up(int32_t num);
 
 //   check_up(0x220000|cobjid);
 //   mprintf("cobjid = %x\n",cobjid);
@@ -664,13 +664,13 @@ void show_obj(ObjID cobjid)
       if ((obj_type!=FAUBJ_CRIT) && (obj_type != FAUBJ_TEXTPOLY) && (obj_type != FAUBJ_VOX) && (obj_type != FAUBJ_SPECIAL))
       {
 	      // for now, really want a function call here
-//         uchar sftware_col[5]={0x3B,0x54,0x7D,0x62,0x27};
-         uchar sftware_col[5]={0x3B,0x4F,0x76,0x5A,0x23};
-         int col=0xC3, dm=0, move_me=1, ndm;
+//         uint8_t sftware_col[5]={0x3B,0x54,0x7D,0x62,0x27};
+         uint8_t sftware_col[5]={0x3B,0x4F,0x76,0x5A,0x23};
+         int32_t col=0xC3, dm=0, move_me=1, ndm;
          extern bool time_passes;
          fix fx,fy,fz;
-         int sc,v;
-//         static long ltime=0;
+         int32_t sc,v;
+//         static int32_t ltime=0;
 
          switch (_fr_cobj->obclass)
          {
@@ -747,7 +747,7 @@ void show_obj(ObjID cobjid)
 	       (((ObjProps[objtrip].flags & LIGHT_TYPE) == (3<<LIGHT_TYPE_SHF))&&((_fr_cobj->info.inst_flags&UNLIT_FLAG)==0)) )
 	   {
 	      MapElem *tmp;
-	      int _obj_do_light(int which, fix dist);
+	      int32_t _obj_do_light(int32_t which, fix dist);
 	      fix hack_dist_approx= fix_fast_pyth_dist(fix_fast_pyth_dist((_fr_p.gX-fr_camera_last[0]),(_fr_p.gZ-fr_camera_last[1])),(_fr_p.gY+fr_camera_last[2]));
 	      tmp=_fdt_mptr; _fdt_pbase=0;
 	      _fdt_mptr=MAP_MAP+((_fr_cobj->loc.x+0x80)>>8)+(((_fr_cobj->loc.y+0x80)>>2)&~0x3F);
@@ -774,11 +774,11 @@ void show_obj(ObjID cobjid)
 	      {
             extern bool map_notes_on;
             g3s_phandle note_pts[4];
-            int h=player_struct.game_time&0x3fff;
+            int32_t h=player_struct.game_time&0x3fff;
 
             if (((_fr_curflags&FR_HACKCAM_MASK)==0)&&(map_notes_on))
             {
-               int col=hud_colors[hud_color_bank][2];
+               int32_t col=hud_colors[hud_color_bank][2];
 	            _fr_p.gY-=0x4000;
 	            g3_start_object_angles_xyz(&_fr_p,0,h<<2,0,ANGLE_ORDER);
 	            gen_tetra(note_pts, 0x2000, 0, 0);
@@ -800,7 +800,7 @@ void show_obj(ObjID cobjid)
          break;
       case FORCE_BRIJ_TRIPLE:
       case FORCE_BRIJ2_TRIPLE:
-         tluc_val=-(int)((uchar)extract_object_special_color(cobjid));
+         tluc_val=-(int32_t)((uint8_t)extract_object_special_color(cobjid));
 //         mprintf("tluc %d\n",tluc_val);
       case BARRICADE_TRIPLE:
          // We want to hack tluc_val so that we draw a poly_cube and not a parm_cube
@@ -834,7 +834,7 @@ void show_obj(ObjID cobjid)
                // Note that we do all this here, instead of in draw_poly_cube, since
                // most poly cubes, namely cyberspace stuff, don't wanna be lit.
                // Maybe this is the wrong way to do it, tho' -- X
-               int cur_ft;
+               int32_t cur_ft;
                cur_ft = gr_get_fill_type();
                if (cur_ft != FILL_SOLID)
                {
@@ -861,12 +861,12 @@ void show_obj(ObjID cobjid)
    case FAUBJ_MULTIVIEW:
    case FAUBJ_CRIT:
       {
-	      int view;
+	      int32_t view;
 
-	      static uchar _qtab[4]={3,0,2,1};
-				int xd=_fr_cobj->loc.x-(coor(EYE_X)>>8);
-	      int yd=_fr_cobj->loc.y-(coor(EYE_Y)>>8);
-         int q, l;
+	      static uint8_t _qtab[4]={3,0,2,1};
+				int32_t xd=_fr_cobj->loc.x-(coor(EYE_X)>>8);
+	      int32_t yd=_fr_cobj->loc.y-(coor(EYE_Y)>>8);
+         int32_t q, l;
 
          q=_qtab[((xd>0)?2:0)+((yd>0)?1:0)];
 //   mprintf("Q %d.. v(%d,%d)",q,xd,yd);
@@ -883,7 +883,7 @@ void show_obj(ObjID cobjid)
 	      {
             LGRect anch;
 //            extern void ai_critter_seen(ObjID id);
-//            extern char curr_hack_cam;
+//            extern int8_t curr_hack_cam;
 //            if (curr_hack_cam)
 //              ai_critter_seen(cobjid);
             switch(ID2TRIP(cobjid))
@@ -893,8 +893,8 @@ void show_obj(ObjID cobjid)
                       (player_struct.level != DIEGO_DEATH_BATTLE_LEVEL))
                   {
                      grs_bitmap tele_bm;
-                     uchar line, *srcp, *dstp, *trgp;
-		               tpdata=get_critter_bitmap_fast(cobjid, ID2TRIP(cobjid),get_crit_posture(_fr_cobj->specID),0,(ubyte)view,&ref,&anch);
+                     uint8_t line, *srcp, *dstp, *trgp;
+		               tpdata=get_critter_bitmap_fast(cobjid, ID2TRIP(cobjid),get_crit_posture(_fr_cobj->specID),0,(uint8_t)view,&ref,&anch);
                      gr_rsd8_convert(tpdata, &tpdata_temp);
                      tpdata = &tpdata_temp;
                      memcpy(&tele_bm, tpdata, sizeof(grs_bitmap));
@@ -955,7 +955,7 @@ void show_obj(ObjID cobjid)
       break;
 
    case FAUBJ_TL_POLY:
-      tluc_val=-(int)((uchar)extract_object_special_color(cobjid));
+      tluc_val=-(int32_t)((uint8_t)extract_object_special_color(cobjid));
       tpdata=NULL;
    case FAUBJ_TEXBITMAP:
    case FAUBJ_TPOLY:
@@ -972,13 +972,13 @@ void show_obj(ObjID cobjid)
                {
                   case TMAP_TRIPLE:
                      {
-                        extern int all_textures;
+                        extern int32_t all_textures;
                         tpdata = get_texture_map(objBigstuffs[_fr_cobj->specID].data2, (all_textures) ? TEXTURE_128_INDEX : TEXTURE_64_INDEX);
                         scale = -1;
                      }
                      break;
                   default:
-         		      tpdata=bitmap_from_tpoly_data(o3drep, (ubyte *) &scale, &index, &type, &ref);
+         		      tpdata=bitmap_from_tpoly_data(o3drep, (uint8_t *) &scale, &index, &type, &ref);
                      if (ref != 0)
                         use_cache = TRUE;
                      break;
@@ -1064,7 +1064,7 @@ void show_obj(ObjID cobjid)
 
    default:
    case FAUBJ_TEXTPOLY:
-      tpdata=bitmap_from_tpoly_data(o3drep, (ubyte *) &scale, &index, &type, &ref);
+      tpdata=bitmap_from_tpoly_data(o3drep, (uint8_t *) &scale, &index, &type, &ref);
       g3_set_vtext(0,tpdata);
    case FAUBJ_ANIMPOLY:
       if ((_fr_cobj->obclass == CLASS_SMALLSTUFF) && (_fr_cobj->subclass == SMALLSTUFF_SUBCLASS_CYBER))
@@ -1072,7 +1072,7 @@ void show_obj(ObjID cobjid)
    case FAUBJ_FLATPOLY:
       if (global_fullmap->cyber)
       {
-         int foog;
+         int32_t foog;
          switch(_fr_cobj->obclass)
          {
             case CLASS_CRITTER:
@@ -1083,8 +1083,8 @@ void show_obj(ObjID cobjid)
                      if ((objCritters[_fr_cobj->specID].mood == AI_MOOD_HOSTILE)||
                          (objCritters[_fr_cobj->specID].mood == AI_MOOD_ATTACKING))
                      {
-                        uchar c = CyberCritterProps[SCNUM(cobjid)].alt_vcolors[foog], nc;
-                        int hp_state;
+                        uint8_t c = CyberCritterProps[SCNUM(cobjid)].alt_vcolors[foog], nc;
+                        int32_t hp_state;
                         hp_state=256*14-((256*14*_fr_cobj->info.current_hp/ObjProps[objtrip].hit_points)&(~0xff));
                         if (hp_state>0xf00) hp_state=0xf00; else if (hp_state<0) hp_state=0;
                         nc=*((_fr_clut_list[0]) + hp_state + c);
@@ -1119,11 +1119,11 @@ void show_obj(ObjID cobjid)
       if (!model_valid(model_num))
 	      model_num=0;
       load_model_vtexts(model_num);
-      model_ptr=(uchar *) get_model_data(model_num);
+      model_ptr=(uint8_t *) get_model_data(model_num);
       // go go go
       if (ID2TRIP(cobjid)==CAMERA_TRIPLE)
       {
-         int mval;
+         int32_t mval;
          loc_h=_fr_cobj->loc.h;
          switch (objBigstuffs[_fr_cobj->specID].data1)
          {

@@ -27,10 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------
 // Internal Prototypes
 // ---------------
-errtype update_shodometer(short new_val, bool game_stuff);
+errtype update_shodometer(int16_t new_val, bool game_stuff);
 
 
-short compute_shodometer_value(bool game_stuff)
+int16_t compute_shodometer_value(bool game_stuff)
 {
    ObjID oid;
 
@@ -49,7 +49,7 @@ short compute_shodometer_value(bool game_stuff)
 
 #define HUD_SHODOMETER_TICKS (CIT_CYCLE << 1)
 
-errtype update_shodometer(short new_val, bool game_stuff)
+errtype update_shodometer(int16_t new_val, bool game_stuff)
 {
    extern errtype do_shodan_triggers();
    QUESTVAR_SET(SHODAN_QV, new_val);
@@ -62,9 +62,9 @@ errtype update_shodometer(short new_val, bool game_stuff)
    return(OK);
 }
 
-short increment_shodan_value(ObjID oid, bool game_stuff)
+int16_t increment_shodan_value(ObjID oid, bool game_stuff)
 {
-   short curr_shodan_val = QUESTVAR_GET(SHODAN_QV);
+   int16_t curr_shodan_val = QUESTVAR_GET(SHODAN_QV);
 
    if (player_struct.level <= MAX_SHODOMETER_LEVEL)
    {
@@ -94,9 +94,9 @@ short increment_shodan_value(ObjID oid, bool game_stuff)
       return(0);
 }
 
-short decrement_shodan_value(ObjID oid, bool game_stuff)
+int16_t decrement_shodan_value(ObjID oid, bool game_stuff)
 {
-   short curr_shodan_val = QUESTVAR_GET(SHODAN_QV);
+   int16_t curr_shodan_val = QUESTVAR_GET(SHODAN_QV);
 
    if (player_struct.level <= MAX_SHODOMETER_LEVEL)
    {

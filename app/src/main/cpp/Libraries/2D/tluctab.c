@@ -95,15 +95,15 @@ it will look brown, which is probably what you want.
 /* Note: RGB values are 6-bit. */
 
 /* Fills table with groovy values, and incedentally returns it. */
-uchar *gr_init_translucency_table(uchar *p, fix opacity, fix purity, grs_rgb color)
+uint8_t *gr_init_translucency_table(uint8_t *p, fix opacity, fix purity, grs_rgb color)
 {
    grs_rgb background;
-   int i;
+   int32_t i;
    fix r, g, b;
    fix baser, baseg, baseb; /* surface component */
    fix filterr, filterg, filterb; /* translucent component before addition of background */
    fix filter, clarity;
-   long thingge;
+   int32_t thingge;
 
    baser = fix_mul(rtof(color), opacity);
    baseg = fix_mul(gtof(color), opacity);
@@ -124,15 +124,15 @@ uchar *gr_init_translucency_table(uchar *p, fix opacity, fix purity, grs_rgb col
    return p;
 }
 
-uchar *gr_init_lit_translucency_table(uchar *p, fix opacity, fix purity, grs_rgb color, grs_rgb light)
+uint8_t *gr_init_lit_translucency_table(uint8_t *p, fix opacity, fix purity, grs_rgb color, grs_rgb light)
 {
    grs_rgb background;
-   int i;
+   int32_t i;
    fix r, g, b;
    fix baser, baseg, baseb; /* surface component */
    fix filterr, filterg, filterb; /* translucent component before addition of background */
    fix filter, clarity;
-   long thingge;
+   int32_t thingge;
 
    filter = fix_mul(0x10000 - opacity, purity);
    clarity = 0x10000 - opacity - filter;
@@ -153,9 +153,9 @@ uchar *gr_init_lit_translucency_table(uchar *p, fix opacity, fix purity, grs_rgb
    return p;
 }
 
-uchar *gr_init_lit_translucency_tables(uchar *p, fix opacity, fix purity, grs_rgb color, int n)
+uint8_t *gr_init_lit_translucency_tables(uint8_t *p, fix opacity, fix purity, grs_rgb color, int32_t n)
 {
-   int k;
+   int32_t k;
    grs_rgb light;
    if (n == 0) return NULL;
    for (k=0; k<n; k++) {
@@ -165,12 +165,12 @@ uchar *gr_init_lit_translucency_tables(uchar *p, fix opacity, fix purity, grs_rg
    return p;
 }
 
-int gr_dump_tluc8_table(uchar *buf, int nlit)
+int32_t gr_dump_tluc8_table(uint8_t *buf, int32_t nlit)
 {
-   uchar *p;
-   int k, lsize = nlit*256;
+   uint8_t *p;
+   int32_t k, lsize = nlit*256;
    p = buf;
-   p += sizeof(int);
+   p += sizeof(int32_t);
    *(p++) = nlit;
    *(p++) = tluc8nstab;
    memcpy(p, tluc8stab, tluc8nstab*256);
@@ -183,16 +183,16 @@ int gr_dump_tluc8_table(uchar *buf, int nlit)
          p += lsize;
       }
    }
-   *(int *)buf = p-buf;
+   *(int32_t *)buf = p-buf;
    return p-buf;
 }
 
-void gr_read_tluc8_table(uchar *buf)
+void gr_read_tluc8_table(uint8_t *buf)
 {
-   uchar *p, *end;
-   int lsize, k;
-   end = buf + *(int *)buf;
-   p = buf + sizeof(int);
+   uint8_t *p, *end;
+   int32_t lsize, k;
+   end = buf + *(int32_t *)buf;
+   p = buf + sizeof(int32_t);
    lsize = *(p++) * 256;
    tluc8nstab = *(p++);
    tluc8stab=p;

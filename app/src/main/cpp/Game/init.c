@@ -122,7 +122,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TITLE_DISPLAY_TIME   (60*3)
 #define MIN_WAIT_TIME        (60)
 
-void DrawSplashScreen(short id, Boolean fadeIn);
+void DrawSplashScreen(int16_t id, bool fadeIn);
 void PreloadGameResources(void);
 errtype init_gamesys();
 errtype free_gamesys(void);
@@ -130,11 +130,11 @@ errtype init_load_resources();
 errtype init_3d_objects();
 errtype obj_3d_shutdown();
 void init_popups();
-bool pause_for_input(ulong wait_time);
+bool pause_for_input(uint32_t wait_time);
 Handle shock_alloc_ipal();		// KLC - Mac style
 
 extern void rendedit_process_tilemap(FullMap* fmap, LGRect* r, bool newMap);
-extern void mac_get_pal (int start, int n, uchar *pal_data);
+extern void mac_get_pal (int32_t start, int32_t n, uint8_t *pal_data);
 
 errtype init_pal_fx();
 /*¥¥¥
@@ -144,17 +144,17 @@ void byebyemessage(void);
 
 extern void load_weapons_data(void);
 extern errtype setup_init(void);
-extern bool toggle_heap_check(short keycode, ulong context, void *data);
+extern bool toggle_heap_check(int16_t keycode, uint32_t context, void *data);
 */
 
 extern errtype sanity_check_obj_props();
 errtype amap_init(void);
-//¥¥¥extern long old_ticks;
+//¥¥¥extern int32_t old_ticks;
 
 errtype object_data_load(void);
 /*¥¥
-int   global_timer_id;
-extern int mlimbs_peril;
+int32_t   global_timer_id;
+extern int32_t mlimbs_peril;
 */
 bool init_done = FALSE;
 bool clear_player_data = TRUE;
@@ -163,7 +163,7 @@ grs_screen  *cit_screen;
 /*
 extern void (*enter_modes[])(void);
 
-extern int KeyGetch(void);
+extern int32_t KeyGetch(void);
 extern void start_intro_sound(void);
 extern void start_setup_sound(void);
 extern void end_intro_sound(void);
@@ -174,7 +174,7 @@ extern void init_watchpoints(void);
 extern void status_vitals_start(void);
 extern void status_vitals_end(void);
 
-uchar real_archive_fn[64];
+uint8_t real_archive_fn[64];
 /*
 #define SPLASH_RES_FILE "\psplash.rsrc"
 #ifndef EDITOR
@@ -186,18 +186,18 @@ uchar real_archive_fn[64];
 MemStack temp_memstack;
 #define TEMP_STACK_SIZE (16 * 1024)
 
-bool pause_for_input(ulong wait_time)
+bool pause_for_input(uint32_t wait_time)
 {
-	Boolean	gotInput = FALSE;
-	while (!gotInput && ((ulong)TickCount() < wait_time))
+	bool	gotInput = FALSE;
+	while (!gotInput && ((uint32_t)TickCount() < wait_time))
 	{
-		long		theKeys[4];
+		int32_t		theKeys[4];
 #ifdef __MWERKS__
 		GetKeys((UInt32 *)theKeys);
 #else
 		GetKeys(theKeys);
 #endif
-		for (int i = 0; i < 4; i++)
+		for (int32_t i = 0; i < 4; i++)
 			if (theKeys[i] != 0)
 				gotInput = TRUE;
 
@@ -209,21 +209,21 @@ bool pause_for_input(ulong wait_time)
 	return(gotInput);
 }
 
-extern char which_lang;
-int mfdart_res_file;
+extern int8_t which_lang;
+int32_t mfdart_res_file;
 //#ifdef DEMO
-//uchar *mfdart_files[] = { "\pmfdart.rsrc", "\pmfdart.rsrc", "\pmfdart.rsrc" };
+//uint8_t *mfdart_files[] = { "\pmfdart.rsrc", "\pmfdart.rsrc", "\pmfdart.rsrc" };
 //#else
-//uchar *mfdart_files[] = { "\pmfdart.rsrc", "\pmfdfrn.rsrc", "\pmfdger.rsrc" };
+//uint8_t *mfdart_files[] = { "\pmfdart.rsrc", "\pmfdfrn.rsrc", "\pmfdger.rsrc" };
 //#endif
 
 /* MLA - don't need these
-extern void *CitMalloc(int n);
+extern void *CitMalloc(int32_t n);
 extern void CitFree(void *p);
 */
 
 #define PALETTE_SIZE 768
-uchar ppall[PALETTE_SIZE];
+uint8_t ppall[PALETTE_SIZE];
 
 //¥¥¥
 #define DO_FADES
@@ -235,26 +235,26 @@ uchar ppall[PALETTE_SIZE];
 void init_all(void)
 {
 /*
-   char buf[256];
-   char norun[1];
-   extern char savegame_dir[50];
+   int8_t buf[256];
+   int8_t norun[1];
+   extern int8_t savegame_dir[50];
    extern Datapath savegame_dpath; */
-	ulong		pause_time;
-	int		i;
+	uint32_t		pause_time;
+	int32_t		i;
 	bool		speed_splash = FALSE;
 /*
 
    bool        dofault = TRUE;
-	int dummy_count;
-   int   data[1];
-   int   cnt;
-   extern void init_config(int argc,char* argv[]);
+	int32_t dummy_count;
+   int32_t   data[1];
+   int32_t   cnt;
+   extern void init_config(int32_t argc,int8_t* argv[]);
    extern errtype terrain_palette_popup(void);
-   extern uchar cam_mode;
+   extern uint8_t cam_mode;
 */
    extern void view360_init(void);
-   extern uchar *restemp_buffer;
-   extern int restemp_buffer_size;
+   extern uint8_t *restemp_buffer;
+   extern int32_t restemp_buffer_size;
 
    start_mem = slorkatron_memory_check();
    if (start_mem < MINIMUM_GAME_THRESHOLD)
@@ -363,7 +363,7 @@ void init_all(void)
 #ifdef DO_FADES
 	if (pal_fx_on)
 	{
-		uchar 	savep[768];
+		uint8_t 	savep[768];
 
 		mac_get_pal(0, 256, savep);
 		gr_set_pal(0, 256, savep);
@@ -470,14 +470,14 @@ void init_all(void)
 //-----------------------------------------------------------
 //  Draw a splash screen in its associated color table.
 //-----------------------------------------------------------
-void DrawSplashScreen(short id, Boolean fadeIn)
+void DrawSplashScreen(int16_t id, bool fadeIn)
 {
-	byte  				pal_id;
-	uchar 			savep[768];
+	int8_t  				pal_id;
+	uint8_t 			savep[768];
 	grs_bitmap	bits;
 	CTabHandle		ctab;
-	extern void finish_pal_effect(byte id);
-	extern byte palfx_start_fade_up(uchar *new_pal);
+	extern void finish_pal_effect(int8_t id);
+	extern int8_t palfx_start_fade_up(uint8_t *new_pal);
 
 	// First, clear the screen and load in the color table for this picture.
 
@@ -503,7 +503,7 @@ void DrawSplashScreen(short id, Boolean fadeIn)
 		if (fadeIn)
 			pal_id = palfx_start_fade_up(savep);
 #endif
-		gr_init_bm(&bits, (uchar *)gMainOffScreen.Address, BMT_FLAT8, 0, 640, 480);
+		gr_init_bm(&bits, (uint8_t *)gMainOffScreen.Address, BMT_FLAT8, 0, 640, 480);
 		gr_bitmap(&bits, 0, 0);
 
 #ifdef DO_FADES
@@ -558,7 +558,7 @@ errtype object_data_load(void)
 	LGRect bounds;
 	extern cams objmode_cam;
 
-//	char buf[256];
+//	int8_t buf[256];
 //   MemStat  data;
 //	extern Datapath savegame_dpath;
 
@@ -640,7 +640,7 @@ errtype init_kb()
 errtype load_da_palette();
 errtype load_da_palette()
 {
-	int 		pal_file;
+	int32_t 		pal_file;
 	FSSpec	fSpec;
 
 	FSMakeFSSpec(gCDDataVref, gCDDataDirID, "\pgamepal.rsrc", &fSpec);
@@ -655,7 +655,7 @@ errtype load_da_palette()
 
 errtype init_pal_fx()
 {
-	int i;
+	int32_t i;
 	Handle	ipalHdl;
 
 	i=1;
@@ -705,8 +705,8 @@ errtype init_pal_fx()
 
 {
    extern bool _g3d_enable_blend;
-   uchar tmppal_lower[32*3];
-   extern uchar ppall[]; // pointer to main shadow palette
+   uint8_t tmppal_lower[32*3];
+   extern uint8_t ppall[]; // pointer to main shadow palette
 
    _g3d_enable_blend = (start_mem >= BLEND_THRESHOLD);
    if (_g3d_enable_blend)
@@ -739,7 +739,7 @@ Handle shock_alloc_ipal()
 		return(NULL);
 
 	HLockHi(temp);
-	grd_ipal = (uchar *) *temp;
+	grd_ipal = (uint8_t *) *temp;
 
 	return(temp);
 }

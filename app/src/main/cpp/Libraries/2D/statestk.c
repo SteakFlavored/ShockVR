@@ -46,31 +46,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "state.h"
 
 // globals
-long	grd_state_stack[512];
-char	*grd_state_stack_p = (char *) grd_state_stack;
+int32_t	grd_state_stack[512];
+int8_t	*grd_state_stack_p = (int8_t *) grd_state_stack;
 
-int gr_push_video_state (int flags)
+int32_t gr_push_video_state (int32_t flags)
  {
- 	long	bytes;
+ 	int32_t	bytes;
 
-	bytes = ((int (*)(void *buf,int flags)) grd_device_table[GRT_GET_STATE])((void *) grd_state_stack_p, flags);
+	bytes = ((int32_t (*)(void *buf,int32_t flags)) grd_device_table[GRT_GET_STATE])((void *) grd_state_stack_p, flags);
 	if (bytes<0) return(bytes);
 
 	grd_state_stack_p += bytes;
-	* (long *) grd_state_stack_p = bytes;
+	* (int32_t *) grd_state_stack_p = bytes;
 	grd_state_stack_p += 4L;
 
 	return(bytes);
  }
 
-void gr_pop_video_state (int clear)
+void gr_pop_video_state (int32_t clear)
  {
- 	long	bytes;
+ 	int32_t	bytes;
 
 	grd_state_stack_p -= 4L;
-	bytes = * (long *) grd_state_stack_p;
+	bytes = * (int32_t *) grd_state_stack_p;
 	grd_state_stack_p -= bytes;
 
-	((int (*)(void *buf,int clear))grd_device_table[GRT_SET_STATE])(grd_state_stack_p, clear);
+	((int32_t (*)(void *buf,int32_t clear))grd_device_table[GRT_SET_STATE])(grd_state_stack_p, clear);
  }
 

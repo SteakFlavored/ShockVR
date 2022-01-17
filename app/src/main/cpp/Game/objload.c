@@ -36,16 +36,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define OBJECT_ART_BASE    RES_bmObjectIcons
 
 errtype voxel_convert(grs_bitmap *bmp);
-void load_treasure_table(uchar *loadme, char cp);
-void compute_complex_loadage(uchar *loadme);
-grs_bitmap *get_objbitmap_from_pool(int i, bool t);
+void load_treasure_table(uint8_t *loadme, int8_t cp);
+void compute_complex_loadage(uint8_t *loadme);
+grs_bitmap *get_objbitmap_from_pool(int32_t i, bool t);
 
 
 // Transform the bitmap from a greyscale drawing to an actual 0-16 depth map
 // For now we simply do this by subtracting 208
 errtype voxel_convert(grs_bitmap *bmp)
 {
-   int x,y;
+   int32_t x,y;
    for (x=0; x < bmp->w; x++)
       for (y=0; y < bmp->h; y++)
          if (bmp->bits[(y * bmp->w) + x] != 0)
@@ -53,9 +53,9 @@ errtype voxel_convert(grs_bitmap *bmp)
    return(OK);
 }
 
-void load_treasure_table(uchar *loadme, char cp)
+void load_treasure_table(uint8_t *loadme, int8_t cp)
 {
-   int j,t0,t1;
+   int32_t j,t0,t1;
    for (j=0; j < NUM_TREASURE_SLOTS; j++)
    {
       t0 = treasure_table[cp][j][0];
@@ -70,9 +70,9 @@ void load_treasure_table(uchar *loadme, char cp)
 
 #define FIRST_CORPSE_TTYPE 11
 
-void compute_complex_loadage(uchar *loadme)
+void compute_complex_loadage(uint8_t *loadme)
 {
-   int i,tr,objtrip;
+   int32_t i,tr,objtrip;
    ObjID id;
    weapon_slot wpnslot;
 
@@ -149,7 +149,7 @@ void compute_complex_loadage(uchar *loadme)
 // of integration
 // t    is 0 for 2d bitmaps
 //         1 for 3d bitmaps
-grs_bitmap *get_objbitmap_from_pool(int i, bool t)
+grs_bitmap *get_objbitmap_from_pool(int32_t i, bool t)
 {
 //   Warning(("objbitmap_from_pool (%d, %d, %d vs %d)\n",i,t,(t*NUM_OBJECT) + i,OBJ_BITMAP_POOL_SIZE));
    if (((t * NUM_OBJECT) + i) > OBJ_BITMAP_POOL_SIZE)
@@ -163,7 +163,7 @@ grs_bitmap *get_objbitmap_from_pool(int i, bool t)
 // and punt all irrelevant art
 // NEEDED: empty bitmap support & defaulting?
 //         bitmap zero support
-ulong objart_loadsize = 0;
+uint32_t objart_loadsize = 0;
 
 #define APPROX_REF_TAB_SIZE 7000
 
@@ -171,19 +171,19 @@ static bool bitmap_zero_loaded = FALSE;
 
 errtype obj_load_art(bool flush_all)
 {
-   uchar loadme[NUM_OBJECT_BIT_LEN];
+   uint8_t loadme[NUM_OBJECT_BIT_LEN];
    LGRect dummy_anchor;
-   short objart_count = 0, count_3d = 0;
-   int objfnum;
+   int16_t objart_count = 0, count_3d = 0;
+   int32_t objfnum;
    RefTable *prt;
-   short i,f;
+   int16_t i,f;
    extern bool empty_bitmap(grs_bitmap *bmp);
    bool ref_buffer_used = TRUE;
 
    if (flush_all)
       ObjLoadMeClearAll();
    else
-      compute_complex_loadage((uchar *)loadme);
+      compute_complex_loadage((uint8_t *)loadme);
 
    // If low memory, see if what we are currently trying to do is any
    // different at all than current loadage.  If yes, flush all first.

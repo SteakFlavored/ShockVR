@@ -32,14 +32,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------
 //  Globals
 //------------------
-int 			pKbdStatusFlags;
-uchar		pKbdGetKeys[16];
+int32_t 			pKbdStatusFlags;
+uint8_t		pKbdGetKeys[16];
 
 
 //---------------------------------------------------------------
 //  Startup and keyboard handlers and initialize globals.   Shutdown follows.
 //---------------------------------------------------------------
-int kb_startup(void *)
+int32_t kb_startup(void *)
 {
 	pKbdStatusFlags = 0;
 
@@ -48,7 +48,7 @@ int kb_startup(void *)
 	return (0);
 }
 
-int kb_shutdown(void)
+int32_t kb_shutdown(void)
 {
 	return (0);
 }
@@ -56,12 +56,12 @@ int kb_shutdown(void)
 //---------------------------------------------------------------
 //  Get and set the global flags.
 //---------------------------------------------------------------
-int kb_get_flags()
+int32_t kb_get_flags()
 {
 	return (pKbdStatusFlags);
 }
 
-void kb_set_flags(int flags)
+void kb_set_flags(int32_t flags)
 {
 	pKbdStatusFlags = flags;
 }
@@ -71,7 +71,7 @@ void kb_set_flags(int flags)
 //---------------------------------------------------------------
 kbs_event kb_next(void)
 {
-	int				flags = kb_get_flags();
+	int32_t				flags = kb_get_flags();
 	bool				gotKey = FALSE;
 	EventRecord	theEvent;
 	kbs_event		retEvent = { 0xFF, 0x00 };
@@ -81,10 +81,10 @@ kbs_event kb_next(void)
 		gotKey = GetOSEvent(keyDownMask | autoKeyMask, &theEvent);		// Get a key
 		if (gotKey)
 		{
-			retEvent.code = (uchar)(theEvent.message >> 8);
+			retEvent.code = (uint8_t)(theEvent.message >> 8);
 			retEvent.state = KBS_DOWN;
-			retEvent.ascii = (uchar)(theEvent.message & charCodeMask);
-			retEvent.modifiers = (uchar)(theEvent.modifiers >> 8);
+			retEvent.ascii = (uint8_t)(theEvent.message & charCodeMask);
+			retEvent.modifiers = (uint8_t)(theEvent.modifiers >> 8);
 		}
 		else if ((flags & KBF_BLOCK) == 0)					// If there was no key and we're
 			return (retEvent);										// not blocking, then return.
@@ -97,7 +97,7 @@ kbs_event kb_next(void)
 //---------------------------------------------------------------
 kbs_event kb_look_next(void)
 {
-	int				flags = kb_get_flags();
+	int32_t				flags = kb_get_flags();
 	bool				gotKey = FALSE;
 	EventRecord	theEvent;
 	kbs_event		retEvent = { 0xFF, 0x00 };
@@ -107,10 +107,10 @@ kbs_event kb_look_next(void)
 		gotKey = OSEventAvail(keyDownMask | autoKeyMask, &theEvent);		// Get a key
 		if (gotKey)
 		{
-			retEvent.code = (uchar)(theEvent.message >> 8);
+			retEvent.code = (uint8_t)(theEvent.message >> 8);
 			retEvent.state = KBS_DOWN;
-			retEvent.ascii = (uchar)(theEvent.message & charCodeMask);
-			retEvent.modifiers = (uchar)(theEvent.modifiers >> 8);
+			retEvent.ascii = (uint8_t)(theEvent.message & charCodeMask);
+			retEvent.modifiers = (uint8_t)(theEvent.modifiers >> 8);
 		}
 		else if (flags & KBF_BLOCK == 0)					// If there was no key and we're
 			return (retEvent);										// not blocking, then return.
@@ -131,7 +131,7 @@ void kb_flush(void)
 //---------------------------------------------------------------
 //  Return the state of the indicated key (scan code).
 //---------------------------------------------------------------
-uchar kb_state(uchar code)
+uint8_t kb_state(uint8_t code)
 {
 	GetKeys((UInt32 *) pKbdGetKeys);
 	return ((pKbdGetKeys[code>>3] >> (code & 7)) & 1);

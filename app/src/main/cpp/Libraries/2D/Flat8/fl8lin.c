@@ -120,12 +120,12 @@ while(0)
 #define flat8_pixel_fill_init \
 do { \
    if (gr_get_fill_type() ==  FILL_SOLID) \
-     c = (uchar)parm; \
+     c = (uint8_t)parm; \
 } while (0)
 
 /* norm */
 
-void  gri_flat8_uline_ns (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+void  gri_flat8_uline_ns (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8lin.h"
 }
@@ -136,10 +136,10 @@ void  gri_flat8_uline_ns (long c, long parm, grs_vertex *v0, grs_vertex *v1)
 #undef flat8_pixel_fill_init
 #define flat8_pixel_fill_init \
 do { \
-   c = (long) (((uchar*)parm)[c]); \
+   c = (int32_t) (((uint8_t*)parm)[c]); \
 } while (0)
 
-void  gri_flat8_uline_clut (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+void  gri_flat8_uline_clut (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8lin.h"
 }
@@ -167,7 +167,7 @@ do { \
    } \
 } while (0)
 
-void  gri_flat8_uline_xor (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+void  gri_flat8_uline_xor (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8lin.h"
 }
@@ -185,7 +185,7 @@ void  gri_flat8_uline_xor (long c, long parm, grs_vertex *v0, grs_vertex *v1)
 #undef  flat8_pixel_fill_xf
 #define flat8_pixel_fill_xf \
    do { \
-      uchar *k; \
+      uint8_t *k; \
       grs_rgb prev; \
       grs_rgb lg_new; \
       fix r1, g1, b1; \
@@ -207,7 +207,7 @@ void  gri_flat8_uline_xor (long c, long parm, grs_vertex *v0, grs_vertex *v1)
 #undef  flat8_pixel_fill_xi
 #define flat8_pixel_fill_xi \
    do { \
-      uchar *k; \
+      uint8_t *k; \
       grs_rgb prev; \
       grs_rgb lg_new; \
       fix r1, g1, b1; \
@@ -242,7 +242,7 @@ do { \
    ; \
 } while (0)
 
-void  gri_flat8_uline_blend (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+void  gri_flat8_uline_blend (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8lin.h"
 }

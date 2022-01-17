@@ -74,12 +74,12 @@ olh_data olh_object = { OBJ_NULL, { 0, 0} };
 // INTERNALS
 // ---------
 
-char* get_olh_string(ObjID obj,char* buf);
-LGPoint draw_olh_string(char* s, short xl, short yl);
-void olh_do_panel_ref(short xl, short yl);
-void olh_do_callout(short xl, short yl);
+int8_t* get_olh_string(ObjID obj,int8_t* buf);
+LGPoint draw_olh_string(int8_t* s, int16_t xl, int16_t yl);
+void olh_do_panel_ref(int16_t xl, int16_t yl);
+void olh_do_callout(int16_t xl, int16_t yl);
 bool is_compound_use_obj(ObjID obj);
-void olh_do_cursor(short xl, short yl);
+void olh_do_cursor(int16_t xl, int16_t yl);
 
 
 #define IS_SCREEN(obj) (objs[obj].obclass == CLASS_BIGSTUFF                     	\
@@ -118,10 +118,10 @@ bool olh_candidate(ObjID obj)
    case CLASS_BIGSTUFF:
       if (IS_SCREEN(obj))
       {
-         extern char camera_map[NUM_HACK_CAMERAS];
+         extern int8_t camera_map[NUM_HACK_CAMERAS];
          extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
          ObjSpecID sid = objs[obj].specID;
-         short v = objBigstuffs[sid].data2 & 0x7F;
+         int16_t v = objBigstuffs[sid].data2 & 0x7F;
          if ((v >= FIRST_CAMERA_TMAP) && (v <= FIRST_CAMERA_TMAP + NUM_HACK_CAMERAS))
          {
             if (camera_map[NUM_HACK_CAMERAS] && hack_cam_objs[v - FIRST_CAMERA_TMAP])
@@ -163,7 +163,7 @@ bool olh_candidate(ObjID obj)
 
    if (check_dist)
    {
-      int mode = USE_MODE(obj);
+      int32_t mode = USE_MODE(obj);
       fix crit = (mode == PICKUP_USE_MODE) ? MAX_PICKUP_DIST : MAX_USE_DIST;
 
       if (check_object_dist(obj,PLAYER_OBJ,crit))
@@ -172,14 +172,14 @@ bool olh_candidate(ObjID obj)
    return retval;
 }
 
-short use_mode_idx[] = {
+int16_t use_mode_idx[] = {
                          REFINDEX(REF_STR_helpTake),
                          REFINDEX(REF_STR_helpUse),
                          -1,
                          -1,
                        };
 
-short weap_subclass_idx[] =
+int16_t weap_subclass_idx[] =
 {
    REFINDEX(REF_STR_helpAttackGun),
    REFINDEX(REF_STR_helpAttackAuto),
@@ -191,26 +191,26 @@ short weap_subclass_idx[] =
 
 
 
-extern bool is_container(ObjID id, int** d1, int ** d2);
+extern bool is_container(ObjID id, int32_t** d1, int32_t ** d2);
 
 
 // basically we chose a string id for a string
 // that has  %s, and lg_strintf the name into the
 // the string.
-char* get_olh_string(ObjID obj,char* buf)
+int8_t* get_olh_string(ObjID obj,int8_t* buf)
 {
 
-   int *d1,*d2;
-   int obclass = objs[obj].obclass;
+   int32_t *d1,*d2;
+   int32_t obclass = objs[obj].obclass;
    Ref r = 0;
-   short mode;
+   int16_t mode;
 
    switch (obclass)
    {
       case CLASS_CRITTER:
       {
-         int w = player_struct.actives[ACTIVE_WEAPON];
-         int type = player_struct.weapons[w].type;
+         int32_t w = player_struct.actives[ACTIVE_WEAPON];
+         int32_t type = player_struct.weapons[w].type;
          if (type == EMPTY_WEAPON_SLOT)
             return strcpy(buf,get_object_long_name(ID2TRIP(obj),NULL,0));
          r = MKREF(RES_olh_strings,weap_subclass_idx[type]);
@@ -245,7 +245,7 @@ char* get_olh_string(ObjID obj,char* buf)
 got_id:
    if (r != 0)
    {
-      char* s = (char *)RefLock(r);
+      int8_t* s = (int8_t *)RefLock(r);
       lg_sprintf(buf, s, get_object_long_name(ID2TRIP(obj),NULL,0));
       RefUnlock(r);
    }
@@ -260,7 +260,7 @@ got_id:
 // ---------
 // EXTERNALS
 // ---------
-extern Boolean	DoubleSize;
+extern bool	DoubleSize;
 
 //-----------------------------
 // olh_scan_objects()
@@ -278,7 +278,7 @@ extern void olh_scan_objs(void);
 
 void olh_scan_objects(void)
 {
-   static uint last_scan = 0;
+   static uint32_t last_scan = 0;
 
    if (*tmd_ticks >> SCAN_FREQ_SHF <= last_scan)
       return;
@@ -298,10 +298,10 @@ void olh_scan_objects(void)
 }
 
 
-LGPoint draw_olh_string(char* s, short xl, short yl)
+LGPoint draw_olh_string(int8_t* s, int16_t xl, int16_t yl)
 {
-   short w,h;
-   short x,y;
+   int16_t w,h;
+   int16_t x,y;
 
    string_replace_char(s,'\n',CHAR_SOFTSP);
    gr_set_font((grs_font*)ResGet(RES_tinyTechFont));
@@ -320,7 +320,7 @@ LGPoint draw_olh_string(char* s, short xl, short yl)
    return MakePoint(x-1, y+(h/2));
 }
 
-ushort fixture_panel_stringrefs [] =
+uint16_t fixture_panel_stringrefs [] =
 {
    REFINDEX(REF_STR_helpPanel),
    REFINDEX(REF_STR_helpPanel),
@@ -335,18 +335,18 @@ ushort fixture_panel_stringrefs [] =
    REFINDEX(REF_STR_helpPanel),
 };
 
-extern char *get_object_lookname(ObjID, char*, int);
+extern int8_t *get_object_lookname(ObjID, int8_t*, int);
 
-void olh_do_panel_ref(short xl, short yl)
+void olh_do_panel_ref(int16_t xl, int16_t yl)
 {
-   int *d1, *d2;
+   int32_t *d1, *d2;
    ObjID obj = player_struct.panel_ref;
-   char buf[80];
+   int8_t buf[80];
 
    buf[0] = '\0';
    if (is_container(obj,&d1,&d2) && (*d1 != 0 || *d2 != 0))
    {
-      char namebuf[80];
+      int8_t namebuf[80];
 
       get_object_lookname(obj,namebuf,sizeof(namebuf));
       lg_sprintf(buf,get_temp_string(REF_STR_helpGump),namebuf);
@@ -358,8 +358,8 @@ void olh_do_panel_ref(short xl, short yl)
          ref = REF_STR_helpSwitch;
       else if (objs[obj].subclass == FIXTURE_SUBCLASS_PANEL)
       {
-         extern bool comparator_check(int comparator, ObjID obj, uchar *special_code);
-         uchar special;
+         extern bool comparator_check(int32_t comparator, ObjID obj, uint8_t *special_code);
+         uint8_t special;
          ObjFixture* pfixt = &objFixtures[objs[obj].specID];
          bool rv = comparator_check(pfixt->comparator, obj, &special);
          if (special == 0)
@@ -372,9 +372,9 @@ void olh_do_panel_ref(short xl, short yl)
       draw_olh_string(buf,xl,yl);
 }
 
-void olh_do_callout(short xl, short yl)
+void olh_do_callout(int16_t xl, int16_t yl)
 {
-   int best_rect = -1;
+   int32_t best_rect = -1;
    ObjID obj = olh_object.obj;
 
    if (obj == OBJ_NULL)
@@ -382,7 +382,7 @@ void olh_do_callout(short xl, short yl)
 #ifdef SET_HUDOBJ
    if (hudobj_rect_capable(ID2TRIP(obj)))
    {
-      int j;
+      int32_t j;
       for (j = 0; j < current_num_hudobjs; j++)
       {
          struct _hudobj_data *dat = &hudobj_vec[j];
@@ -402,12 +402,12 @@ void olh_do_callout(short xl, short yl)
 #endif // SET_HUDOBJ
 //   if (obj != OBJ_NULL)
    {
-      char buf[80];
-      char* s = get_olh_string(obj,buf);
+      int8_t buf[80];
+      int8_t* s = get_olh_string(obj,buf);
       LGPoint spos = draw_olh_string(s,xl,yl);
       LGPoint pos = olh_object.loc;
-      pos.x = (int)(pos.x+1)*SCAN_RATIO;
-      pos.y = (int)(pos.y+1)*SCAN_RATIO;
+      pos.x = (int32_t)(pos.x+1)*SCAN_RATIO;
+      pos.y = (int32_t)(pos.y+1)*SCAN_RATIO;
       if (DoubleSize)
       {
       	pos.x *= 2;
@@ -446,19 +446,19 @@ bool is_compound_use_obj(ObjID obj)
    return FALSE;
 }
 
-void olh_do_cursor(short xl, short yl)
+void olh_do_cursor(int16_t xl, int16_t yl)
 {
    ObjID obj = object_on_cursor;
    // this should be a different string if the cursor is
    // a live grenade.
-   char buf[80];
+   int8_t buf[80];
    if (objs[obj].obclass == CLASS_GRENADE && objGrenades[objs[obj].specID].flags & GREN_ACTIVE_FLAG
       || (ObjProps[OPNUM(obj)].flags & USELESS_FLAG) != 0)
       get_string(REF_STR_helpGrenade,buf,sizeof(buf));
    else
    {
-      char stringbuf[80];
-      char namebuf[80];
+      int8_t stringbuf[80];
+      int8_t namebuf[80];
       Ref id = is_compound_use_obj(obj) ? REF_STR_helpCompound : REF_STR_helpCursor;
 
       get_string(id,stringbuf,sizeof(stringbuf));
@@ -472,7 +472,7 @@ void olh_do_cursor(short xl, short yl)
 // olh_do_hudobjs is called by the hud system to
 // draw olh hud.
 
-void olh_do_hudobjs(short xl,short yl)
+void olh_do_hudobjs(int16_t xl,int16_t yl)
 {
    extern bool saveload_static;
    if (global_fullmap->cyber || saveload_static)
@@ -481,7 +481,7 @@ void olh_do_hudobjs(short xl,short yl)
       olh_do_cursor(xl,yl);
    else if (player_struct.panel_ref != OBJ_NULL)
    {
-      int i;
+      int32_t i;
       for (i = 0; i < NUM_MFDS; i++)
          if (player_struct.mfd_current_slots[i] == MFD_INFO_SLOT)
          {
@@ -513,7 +513,7 @@ void olh_shutdown(void)
 }
 
 
-short _olh_overlay_keys[] =
+int16_t _olh_overlay_keys[] =
 {
    ' '|KB_FLAG_DOWN,
    '?'|KB_FLAG_DOWN,
@@ -524,7 +524,7 @@ short _olh_overlay_keys[] =
 void olh_overlay(void)
 {
    extern LGCursor globcursor;
-   extern char which_lang;
+   extern int8_t which_lang;
    bool done = FALSE;
 
    status_bio_end();
@@ -538,7 +538,7 @@ void olh_overlay(void)
 
    while (!done)
    {
-      ushort 				key;
+      uint16_t 				key;
       mouse_event		me;
 
       tight_loop(FALSE);
@@ -549,7 +549,7 @@ void olh_overlay(void)
       }
       if (kb_get_cooked(&key))
       {
-         int i;
+         int32_t i;
          for(i = 0; i < NUM_OVERLAY_KEYS; i++)
             if (_olh_overlay_keys[i] == key)
             {
@@ -566,7 +566,7 @@ void olh_overlay(void)
    status_bio_start();
 }
 
-bool toggle_olh_func(short , ulong , void* )
+bool toggle_olh_func(int16_t , uint32_t , void* )
 {
    if (!olh_active)
    {
@@ -585,7 +585,7 @@ bool toggle_olh_func(short , ulong , void* )
 }
 
 
-bool olh_overlay_func(short keycode, ulong context, void* )
+bool olh_overlay_func(int16_t keycode, uint32_t context, void* )
 {
    if (global_fullmap->cyber)
    {

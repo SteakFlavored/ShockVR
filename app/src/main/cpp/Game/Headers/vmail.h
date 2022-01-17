@@ -47,6 +47,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VINTRO_W  200
 #define VINTRO_H  100
 
-errtype play_vmail(byte vmail_no);
+errtype play_vmail(int8_t vmail_no);
 
 #endif // __VMAIL_H

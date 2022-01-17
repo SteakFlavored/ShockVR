@@ -48,12 +48,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------
 // DEFINES
 // -------
-bool status_track_free(int track);
-bool status_track_active(int track);
-void status_track_activate(int track, bool active);
+bool status_track_free(int32_t track);
+bool status_track_active(int32_t track);
+void status_track_activate(int32_t track, bool active);
 
 errtype mfd_biohelp_init(MFD_Func* f);
-void mfd_biohelp_expose(MFD* mfd, ubyte control);
+void mfd_biohelp_expose(MFD* mfd, uint8_t control);
 bool mfd_biohelp_button_handler(MFD* m, LGPoint bttn, uiEvent* ev, void* data);
 bool mfd_biohelp_handler(MFD* m, uiEvent* e);
 bool biohelp_region_mouse_handler(uiMouseEvent* ev, LGRegion* r, void* data);
@@ -100,7 +100,7 @@ errtype biohelp_create_mouse_region(LGRegion* root);
 #define BIOHELP_PAGE (player_struct.mfd_func_data[MFD_BIOHELP_FUNC][2])
 #define NUM_TRACKS   (player_struct.mfd_func_data[MFD_BIOHELP_FUNC][3])
 
-void mfd_biohelp_expose(MFD* mfd, ubyte control)
+void mfd_biohelp_expose(MFD* mfd, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
@@ -109,10 +109,10 @@ void mfd_biohelp_expose(MFD* mfd, ubyte control)
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
    {
-      int i;
-      int firsttrack = 0;
-      int track = 0;
-      ubyte bits = 0;
+      int32_t i;
+      int32_t firsttrack = 0;
+      int32_t track = 0;
+      uint8_t bits = 0;
       // clear update rects
       mfd_clear_rects();
       // set up canvas
@@ -143,7 +143,7 @@ void mfd_biohelp_expose(MFD* mfd, ubyte control)
       }
       if (i > NUM_BUTTONS)
       {
-         int id = REF_IMG_TinyArrowUp + BIOHELP_PAGE;
+         int32_t id = REF_IMG_TinyArrowUp + BIOHELP_PAGE;
          draw_raw_resource_bm(id,ARROW_X,ARROW_Y);
       }
       NUM_TRACKS = i;
@@ -151,8 +151,8 @@ void mfd_biohelp_expose(MFD* mfd, ubyte control)
       if (full)
          for (i = 0,track = firsttrack; i < NUM_BUTTONS && track < NUM_BIO_TRACKS; i++,track++)
          {
-            char buf[50];
-            short x,y;
+            int8_t buf[50];
+            int16_t x,y;
             while(status_track_free(track))
             {
                track++;
@@ -196,8 +196,8 @@ void mfd_biohelp_expose(MFD* mfd, ubyte control)
 
 bool mfd_biohelp_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 {
-   int track = -1;
-   int i = 0;
+   int32_t track = -1;
+   int32_t i = 0;
    if (!(ev->subtype & MOUSE_LDOWN))
       return FALSE;
    while (i <= bttn.y+NUM_BUTTONS*BIOHELP_PAGE)
@@ -244,7 +244,7 @@ bool biohelp_region_mouse_handler(uiMouseEvent* ev, LGRegion*, void*)
    {
       extern void mfd_zoom_rect(LGRect*,int);
       LGRect start = {{ -5, -5}, {5,5}};
-      int mfd = mfd_grab_func(MFD_BIOHELP_FUNC,MFD_INFO_SLOT);
+      int32_t mfd = mfd_grab_func(MFD_BIOHELP_FUNC,MFD_INFO_SLOT);
 	   RECT_MOVE(&start,ev->pos);
       mfd_zoom_rect(&start,mfd);
 
@@ -275,7 +275,7 @@ errtype biohelp_load_cursor()
 errtype biohelp_create_mouse_region(LGRegion* root)
 {
    errtype err;
-   int id;
+   int32_t id;
    LGRect r = { { STATUS_X, 0}, {STATUS_X+GAMESCR_BIO_WIDTH,GAMESCR_BIO_HEIGHT}};
    LGRegion* reg = (LGRegion*)NewPtr(sizeof(LGRegion));
 

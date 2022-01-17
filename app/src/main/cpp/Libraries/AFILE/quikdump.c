@@ -34,15 +34,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Prototypes
-void WriteChunk(ulong ctype, ulong length, long offset, char *indent);
-void MakeIndentString(char *str, int istack);
+void WriteChunk(uint32_t ctype, uint32_t length, int32_t offset, int8_t *indent);
+void MakeIndentString(int8_t *str, int32_t istack);
 
 bool QuikReadChunkHdr(FILE *fp, QT_ChunkHdr *phdr);
 QT_ChunkInfo *QuikFindChunkInfo(QT_ChunkHdr *phdr);
 void QuikSkipChunk(FILE *fp, QT_ChunkHdr *phdr);
 
-void PrintSTCO(uchar *data, char *indent);
-void PrintSTTS(uchar *data, char *indent);
+void PrintSTCO(uint8_t *data, int8_t *indent);
+void PrintSTTS(uint8_t *data, int8_t *indent);
 
 
 // Globals
@@ -86,18 +86,18 @@ TrackType currTrackType;
 //		MAIN PROGRAM
 //	--------------------------------------------------------------
 
-void main(int argc, char **argv)
+void main(int32_t argc, int8_t **argv)
 {
 	FILE *fp;
-	int iarg,istack;
+	int32_t iarg,istack;
 	bool badArgs,dumpChunks;
-	uchar *dbuff;
-	ulong dbuffLen;
+	uint8_t *dbuff;
+	uint32_t dbuffLen;
 	QT_ChunkHdr chunkHdr;
 	QT_ChunkInfo *pinfo;
-	char filename[128];
-	ulong offsetStack[64];
-	char indent[128];
+	int8_t filename[128];
+	uint32_t offsetStack[64];
+	int8_t indent[128];
 
 	dumpChunks = TRUE;
 	filename[0] = 0;
@@ -124,7 +124,7 @@ void main(int argc, char **argv)
 	if (dumpChunks)
 	{
 		dbuffLen = 64000;
-		dbuff = (uchar *)malloc(dbuffLen);
+		dbuff = (uint8_t *)malloc(dbuffLen);
 	}
 
 //	Dump chunks
@@ -148,7 +148,7 @@ void main(int argc, char **argv)
 				if (chunkHdr.length > dbuffLen)
 				{
 					dbuffLen = chunkHdr.length;
-					dbuff = (uchar *)realloc(dbuff, dbuffLen);
+					dbuff = (uint8_t *)realloc(dbuff, dbuffLen);
 				}
 				fread(dbuff, chunkHdr.length - sizeof(QT_ChunkHdr), 1, fp);
 				MakeIndentString(indent, istack + 1);
@@ -181,7 +181,7 @@ void main(int argc, char **argv)
 //		SUPPORT ROUTINES
 //	-------------------------------------------------------------
 
-void WriteChunk(ulong ctype, ulong length, long offset, char *indent)
+void WriteChunk(uint32_t ctype, uint32_t length, int32_t offset, int8_t *indent)
 {
 	printf("%s%c%c%c%c: {offset: $%x  size: $%x}\n", indent,
 		ctype >> 24, (ctype >> 16) & 0xFF, (ctype >> 8) & 0xFF, ctype & 0xFF,
@@ -190,9 +190,9 @@ void WriteChunk(ulong ctype, ulong length, long offset, char *indent)
 
 #define NUM_SPACES_PER_INDENT 3
 
-void MakeIndentString(char *str, int istack)
+void MakeIndentString(int8_t *str, int32_t istack)
 {
-	int i;
+	int32_t i;
 
 	for (i = 0; i < (istack * NUM_SPACES_PER_INDENT); i++)
 		str[i] = ' ';
@@ -272,10 +272,10 @@ void QuikSkipChunk(FILE *fp, QT_ChunkHdr *phdr)
 //
 //	PrintSTCO() prints the Chunk Offset Table.
 
-void PrintSTCO(uchar *data, char *indent)
+void PrintSTCO(uint8_t *data, int8_t *indent)
 {
 	QTS_STCO *p;
-	int i;
+	int32_t i;
 
 	p = (QTS_STCO *)data;
 
@@ -291,10 +291,10 @@ void PrintSTCO(uchar *data, char *indent)
 //
 //	PrintSTTS() prints the Sample to Time table.
 
-void PrintSTTS(uchar *data, char *indent)
+void PrintSTTS(uint8_t *data, int8_t *indent)
 {
 	QTS_STTS *p;
-	int i;
+	int32_t i;
 
 	p = (QTS_STTS *)data;
 

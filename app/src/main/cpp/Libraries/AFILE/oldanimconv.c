@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QuickTimeComponents.h>
 
 WindowPtr	gMainWindow;
-short		gResNum;
+int16_t		gResNum;
 
 void LoadShockPalette(void);
 void LoadAnimRes(void);
@@ -40,7 +40,7 @@ typedef struct {
       LGRect anchorArea;  // area to anchor sub-bitmap
       LGPoint anchorPt;   // point to anchor from
       } u;
-   long pallOff;        // offset to pallette
+   int32_t pallOff;        // offset to pallette
                         // bitmap's bits follow immediately
 } FrameDesc;
 
@@ -120,7 +120,7 @@ void main(void)
 	RefTable	*pRefTbl;
 	Ref			pRefId;
 	Ptr			p;
-	long			stupid;
+	int32_t			stupid;
 
 	OSErr			err, result;
 	Point			dlgPos = {150,120};
@@ -130,12 +130,12 @@ void main(void)
 	Rect			movieRect;
 	ImageDescriptionHandle	imageDescriptionH = 0L;		/* Contains info about the sample	*/
 	ImageSequence	seq;
-	short			resRefNum;
+	int16_t			resRefNum;
 	Movie			gMovie = 0;							/* Our movie, track and media */
 	Track			gTrack;
 	Media			gMedia;
-	long 			maxCompressedFrameSize;				/* Max size of compressed frame		*/
-	long				compressedFrameSize;					/* Size of current compressed frame */
+	int32_t 			maxCompressedFrameSize;				/* Max size of compressed frame		*/
+	int32_t				compressedFrameSize;					/* Size of current compressed frame */
 	Handle			compressedFrameBitsH = 0L;		/* Buffer for the compressed data	*/
 
 //	Init graphics system
@@ -150,13 +150,13 @@ void main(void)
 	gr_set_mode (GRM_640x480x8, TRUE);
 	screen = gr_alloc_screen (grd_cap->w, grd_cap->h);
 	gr_set_screen (screen);
-	gr_set_unpack_buf((uchar *)NewPtr(640 * 480));
+	gr_set_unpack_buf((uint8_t *)NewPtr(640 * 480));
 
 	LoadShockPalette();
 	LoadAnimRes();
 
 	// Setup unpacking bitmap.
-//	gr_init_bm (&unpackBM, (uchar *)malloc(640 * 480), BMT_FLAT8, BMT_TRANS, 640, 480);
+//	gr_init_bm (&unpackBM, (uint8_t *)malloc(640 * 480), BMT_FLAT8, BMT_TRANS, 640, 480);
 
 	//---------------------
 	// Setup Quicktime stuff.
@@ -248,27 +248,27 @@ void main(void)
 	//---------------------
 	p = NewPtrClear(320 * 200);
 
-//	for (short r = 2624; r <= 2635; r++)
+//	for (int16_t r = 2624; r <= 2635; r++)
 //	{
 		gr_clear(0xFF);
 //		Delay(20, &stupid);
 
 		// Load the initial image from the compound resource.
-		short r = 2633;
+		int16_t r = 2633;
 		pRefId = MKREF(r, 0);
 	 	pRefTbl = ResReadRefTable(REFID(pRefId));
 
-	 	for (short i = 0; i < pRefTbl->numRefs; i++)
+	 	for (int16_t i = 0; i < pRefTbl->numRefs; i++)
 	 	{
 	 		Handle	compHdl;
-	 		long		compSize;
-	 		short	notSyncFlag;
+	 		int32_t		compSize;
+	 		int16_t	notSyncFlag;
 
 			pRefId = MKREF(r, i);
 			RefExtract(pRefTbl, pRefId, p);
 
 			srcBM = (FrameDesc *)p;
-			srcBM->bm.bits = (uchar *)(srcBM+1);
+			srcBM->bm.bits = (uint8_t *)(srcBM+1);
 			gr_rsd8_convert((grs_bitmap *)srcBM, &unpackBM);
 			unpackBM.flags = BMF_TRANS;
 //		  	gr_bitmap (&unpackBM, 0, 0);
@@ -409,7 +409,7 @@ void LoadShockPalette(void)
 	StandardFileReply	reply;
 	SFTypeList			typeList;
 	Ptr					p = NULL;
-	short				resNum;
+	int16_t				resNum;
 
 	typeList[0] = 'Sres';
 	StandardGetFile(nil, 1, typeList, &reply);
@@ -426,7 +426,7 @@ void LoadShockPalette(void)
 
 	{
 		Id 		id = 702;
-		long		rfs;
+		int32_t		rfs;
 		ResLock(id);
 		rfs = ResSize(id);
 		p = NewPtrClear(rfs);
@@ -441,7 +441,7 @@ void LoadShockPalette(void)
 	}
 
 
- 	gr_set_pal(0, 256, (uchar *)p);
+ 	gr_set_pal(0, 256, (uint8_t *)p);
 	DisposePtr(p);
 
 	ResCloseFile(resNum);
@@ -455,7 +455,7 @@ void LoadAnimRes(void)
 	StandardFileReply	reply;
 	SFTypeList			typeList;
 	Ptr					p = NULL;
-	short				resNum;
+	int16_t				resNum;
 
 	typeList[0] = 'Sres';
 	StandardGetFile(nil, 1, typeList, &reply);

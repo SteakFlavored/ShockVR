@@ -69,7 +69,7 @@ extern void check_panel_ref(bool punt);
 typedef struct _fixture_data
 {
    ObjID last_obj;
-   uchar last_state;
+   uint8_t last_state;
 } fixture_data;
 
 #define MFD_FIXTURE_DATA(lr) ((fixture_data*)&mfd_fdata[MFD_FIXTURE_FUNC][lr*3])
@@ -78,7 +78,7 @@ typedef struct _fixture_data
 // ----------
 //  PROTOTYPES
 // ----------
-void mfd_fixture_expose(MFD* mfd, ubyte control);
+void mfd_fixture_expose(MFD* mfd, uint8_t control);
 bool mfd_fixture_handler(MFD* m, uiEvent* e);
 
 // ---------------
@@ -96,7 +96,7 @@ bool mfd_fixture_handler(MFD* m, uiEvent* e);
    being pulled off the screen to make room for a different func.
 */
 
-void mfd_fixture_expose(MFD* mfd, ubyte control)
+void mfd_fixture_expose(MFD* mfd, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
@@ -123,9 +123,9 @@ void mfd_fixture_expose(MFD* mfd, ubyte control)
       draw_res_bm(REF_IMG_MFDButtonBack,0,0);
       if (full || player_struct.panel_ref != fd->last_obj)
       {
-         short w,h;
+         int16_t w,h;
          bool wrap = mfd_string_wrap;
-         char buf[256];
+         int8_t buf[256];
          if (objs[player_struct.panel_ref].info.make_info != 0)
             get_string(REF_STR_Name0+objs[player_struct.panel_ref].info.make_info,buf,sizeof(buf));
          else get_object_long_name(ID2TRIP(player_struct.panel_ref),buf,sizeof(buf));
@@ -148,9 +148,9 @@ void mfd_fixture_expose(MFD* mfd, ubyte control)
       {
          // Hey, this is all button code that's going to have to be
          // yanked out and moved elsewhere
-         int ref = REF_IMG_On + ((FIXTURE_STATE == 0) ? 1 : 0);
-         short xoff = (BUTTON_STATE_W - res_bm_width(ref))/2;
-         short yoff = (BUTTON_STATE_H - res_bm_height(ref))/2;
+         int32_t ref = REF_IMG_On + ((FIXTURE_STATE == 0) ? 1 : 0);
+         int16_t xoff = (BUTTON_STATE_W - res_bm_width(ref))/2;
+         int16_t yoff = (BUTTON_STATE_H - res_bm_height(ref))/2;
 
          draw_res_bm(ref,BUTTON_STATE_X + xoff,BUTTON_STATE_Y + yoff);
          mfd_add_rect(BUTTON_STATE_X,BUTTON_STATE_Y,BUTTON_STATE_X+BUTTON_STATE_W,BUTTON_STATE_Y+BUTTON_STATE_H);

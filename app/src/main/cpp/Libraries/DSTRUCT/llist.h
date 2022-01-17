@@ -70,7 +70,7 @@ typedef struct _llist {
 typedef struct _queue {
 	struct _queue *pnext;		// ptr to next node or NULL if at tail
 	struct _queue *pprev;		// ptr to prev node or NULL if at head
-	short priority;				// higher numbers go to head of list
+	int16_t priority;				// higher numbers go to head of list
 										// real data follows, here
 } queue;
 
@@ -150,7 +150,7 @@ bool llist_move_queue(llist_head *plh, queue *plq);
 
 //	Get # nodes in list
 
-int llist_num_nodes(llist_head *plh);
+int32_t llist_num_nodes(llist_head *plh);
 
 //	Get next & prev nodes from a node
 
@@ -185,17 +185,17 @@ typedef struct {
 	llist *pfree;						// ptr to next free element or NULL if no more
 	llist *pNodeStore;				// ptr to first node store block, they're linked
 											// (node store is list ptrs followed by data block)
-	ushort nodeSize;					// size of each node
-	short numNodesPerBlock;	// # nodes in list storage (including free ones)
+	uint16_t nodeSize;					// size of each node
+	int16_t numNodesPerBlock;	// # nodes in list storage (including free ones)
 } LlistHead;
 
 //	Forgive the void pointers, C-- sucks
 
-void LlistInit(LlistHead *plh, ushort nodeSize, short numNodesPerBlock);
+void LlistInit(LlistHead *plh, uint16_t nodeSize, int16_t numNodesPerBlock);
 void *LlistAddHead(LlistHead *plh);						// add 1st free to head, return ptr
 void *LlistAddTail(LlistHead *plh);						// add 1st free to tail, return ptr
-void *LlistAddQueue(LlistHead *plh, short prior);	// add in priority order
-bool LlistMoveQueue(LlistHead *plh, void *pnode, short newprior);	// move pri
+void *LlistAddQueue(LlistHead *plh, int16_t prior);	// add in priority order
+bool LlistMoveQueue(LlistHead *plh, void *pnode, int16_t newprior);	// move pri
 void LlistFree(LlistHead *plh, void *pnode);			// free node
 void LlistFreeAll(LlistHead *plh);						// free all nodes
 void LlistDestroy(LlistHead *plh);						// destroy list, reclaim storage

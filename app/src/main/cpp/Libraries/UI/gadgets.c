@@ -55,7 +55,7 @@ bool initialize_2d = FALSE;
 //---------------------------------------------------------------
 // Internal Prototypes
 //---------------------------------------------------------------
-errtype draw_resource_bm(Ref id, int x, int y);
+errtype draw_resource_bm(Ref id, int32_t x, int32_t y);
 errtype gad_Mac_init(Gadget *g, LGPoint extent);
 bool gad_Mac_blank_expose(LGRegion *reg, LGRect *r);
 errtype gadget_initialize_system(void);
@@ -195,11 +195,11 @@ bool gad_Mac_blank_expose(LGRegion *reg, LGRect *r)
 }
 
 
-errtype draw_resource_bm(Ref id, int x, int y)
+errtype draw_resource_bm(Ref id, int32_t x, int32_t y)
 {
    FrameDesc *f;
-   int a1,a2,a3,a4;
-   short *ppall;
+   int32_t a1,a2,a3,a4;
+   int16_t *ppall;
 
    STORE_CLIP(a1,a2,a3,a4);
 //   Spew(DSRC_UI_Utilities, ("cliprect = (%d, %d)(%d, %d)\n",a1,a2,a3,a4));
@@ -210,21 +210,21 @@ errtype draw_resource_bm(Ref id, int x, int y)
    /*¥¥¥ Ignore for now
    if (f->pallOff)
    {
-      ppall = (short *) (((uchar *) RefGet(id)) + f->pallOff);
+      ppall = (int16_t *) (((uint8_t *) RefGet(id)) + f->pallOff);
       // Spew(DSRC_UI_Utilities, ("ppall = %d   *ppall + 1 = %d\n",*ppall, *(ppall + 1)));
-      gr_set_pal(*ppall,*(ppall + 1),(uchar *)(ppall + 2));
+      gr_set_pal(*ppall,*(ppall + 1),(uint8_t *)(ppall + 2));
    }
    */
-   f->bm.bits = (uchar *)(f+1);
+   f->bm.bits = (uint8_t *)(f+1);
    gr_bitmap(&f->bm, x, y);
    RefUnlock(id);
    return (OK);
 }
 
-int resource_bm_width(Ref id)
+int32_t resource_bm_width(Ref id)
 {
    FrameDesc *f;
-   int n;
+   int32_t n;
 
    f = (FrameDesc *)RefLock(id);
    n = f->bm.w;
@@ -233,10 +233,10 @@ int resource_bm_width(Ref id)
    return (n);
 }
 
-int resource_bm_height(Ref id)
+int32_t resource_bm_height(Ref id)
 {
    FrameDesc *f;
-   int n;
+   int32_t n;
 
    f = (FrameDesc *)RefLock(id);
    n = f->bm.h;
@@ -260,7 +260,7 @@ errtype gadget_initialize_system(void)
 
 // Initialize a gadget system for a particular display type.  Returns the gadget that is the "root" gadget
 // for that display.
-Gadget *gadget_init(int display_type, LGPoint extent)
+Gadget *gadget_init(int32_t display_type, LGPoint extent)
 {
    Gadget *retgad;
    GadgetData *gd;
@@ -292,7 +292,7 @@ Gadget *gadget_init(int display_type, LGPoint extent)
    // Fill out the user data structure
    gd = (GadgetData *)NewPtr(sizeof(GadgetData));
    gd->g = retgad;
-   gd->name  = (char *)NewPtr(8 * sizeof(char));
+   gd->name  = (int8_t *)NewPtr(8 * sizeof(int8_t));
 //   lg_sprintf(gd->name, "root%d\0", display_type);
    sprintf(gd->name, "root%d\0", display_type);
 
@@ -347,7 +347,7 @@ errtype gadget_display(Gadget *g, LGRect *r)
    return(gadget_display_part(g,r,TNG_ALLPARTS));
 }
 
-errtype gadget_display_part(Gadget *g, LGRect *r, ushort partmask)
+errtype gadget_display_part(Gadget *g, LGRect *r, uint16_t partmask)
 {
    g->draw_parts = partmask;
    if (r == NULL)
@@ -439,7 +439,7 @@ bool gadget_frob_canvas(LGRegion *reg, void *data)
    return(FALSE);
 }
 
-errtype gadget_move(Gadget *g, LGPoint coord, int z)
+errtype gadget_move(Gadget *g, LGPoint coord, int32_t z)
 {
    LGPoint delta;
 
@@ -460,7 +460,7 @@ errtype gadget_move(Gadget *g, LGPoint coord, int z)
    return (OK);
 }
 
-errtype gadget_resize(Gadget* g, int xsize, int ysize)
+errtype gadget_resize(Gadget* g, int32_t xsize, int32_t ysize)
 {
    if (g == NULL)
    {
@@ -477,12 +477,12 @@ errtype gadget_resize(Gadget* g, int xsize, int ysize)
 }
 
 
-errtype gad_callback_install(Gadget *g, ushort event_type, ushort condition, TNGCallback tngcb, void *user_data, int *id)
+errtype gad_callback_install(Gadget *g, uint16_t event_type, uint16_t condition, TNGCallback tngcb, void *user_data, int32_t *id)
 {
    return(tng_install_callback(g->tng_data, event_type, condition, tngcb, user_data, id));
 }
 
-errtype gad_callback_uninstall(Gadget *g, int id)
+errtype gad_callback_uninstall(Gadget *g, int32_t id)
 {
    return(tng_uninstall_callback(g->tng_data,id));
 }
@@ -500,9 +500,9 @@ bool gadget_tng_mono_expose(LGRegion *reg, LGRect *r)
 
 bool gadget_tng_vga_expose(LGRegion *reg, LGRect *r)
 {
-   ushort partmask;
+   uint16_t partmask;
    LGRect nrect;
-   int c1,c2,c3,c4;
+   int32_t c1,c2,c3,c4;
    LGPoint loc;
    Gadget *g;
 
@@ -529,9 +529,9 @@ bool gadget_tng_vga_expose(LGRegion *reg, LGRect *r)
 */
 bool gadget_tng_Mac_expose(LGRegion *reg, LGRect *r)
 {
-	ushort	partmask;
+	uint16_t	partmask;
 	LGRect	nrect;
-	int 		c1,c2,c3,c4;
+	int32_t 		c1,c2,c3,c4;
 	LGPoint	loc;
 	Gadget	*g;
 
@@ -594,7 +594,7 @@ bool gadget_tng_keyboard_handler(uiEvent *e, LGRegion *r, void *state)
    return(g->tng_data->keycooked(g->tng_data, cke->code));
 }
 
-errtype gadget_create_setup(Gadget **pg, Gadget *parent, GadgetClass cl, LGRect *dim, int z, char *name)
+errtype gadget_create_setup(Gadget **pg, Gadget *parent, GadgetClass cl, LGRect *dim, int32_t z, int8_t *name)
 {
    Gadget *retgad;
    GadgetData *gd;
@@ -639,7 +639,7 @@ errtype gadget_create_setup(Gadget **pg, Gadget *parent, GadgetClass cl, LGRect 
    retgad->destroy_func = NULL;
 
    // Fill in the gadget data info
-   gd->name = (char *)NewPtr((strlen(name) + 1) * sizeof(char));
+   gd->name = (int8_t *)NewPtr((strlen(name) + 1) * sizeof(int8_t));
    strcpy(gd->name, name);
    gd->g = retgad;
 
@@ -658,7 +658,7 @@ errtype gadget_create_setup(Gadget **pg, Gadget *parent, GadgetClass cl, LGRect 
    return(OK);
 }
 
-errtype gadget_change_flags(Gadget *g, ulong flags, bool on, bool children)
+errtype gadget_change_flags(Gadget *g, uint32_t flags, bool on, bool children)
 {
    LGRegion *cur_child;
    if (on)

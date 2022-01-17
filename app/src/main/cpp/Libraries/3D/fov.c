@@ -68,11 +68,11 @@ void g3_get_FOV(fixang *x,fixang *y)
 //takes bx=FOV angle, al=axis ('X' or 'Y'), ecx=window width, edx=window height
 //returns in eax. trashes all but ebp
 
-fix g3_get_zoom(char axis, fixang angle, int window_width, int window_height)
+fix g3_get_zoom(int8_t axis, fixang angle, int32_t window_width, int32_t window_height)
  {
  	fix 	sin_val, cos_val;
  	fix		unscalezoom,temp1;
- 	long	templong;
+ 	int32_t	templong;
 
 	fix_sincos(angle, &sin_val, &cos_val);		// call	fix_sincos	;angle in bx
 	temp1 = fix_div(f1_0 - cos_val,cos_val + f1_0);

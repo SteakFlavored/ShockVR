@@ -10,41 +10,41 @@
 ; $Log: fix_asm.asm $
 ; Revision 1.10  1994/08/18  18:10:09  jaemz
 ; Added sloppy table sqrt
-; 
+;
 ; Revision 1.9  1993/06/02  15:22:03  matt
 ; Changed assembly version of fix_sincos to work with new tables.
-; 
+;
 ; Revision 1.8  1993/04/09  15:38:25  matt
 ; Fixed bug in long_sqrt - didn't clear highword of result
-; 
+;
 ; Revision 1.7  1993/03/29  13:53:20  matt
 ; Changed fix_sincos (asm version) to not use bp (uses si instead)
-; 
+;
 ; Revision 1.6  1993/03/17  12:47:11  matt
 ; Added fix_sincos callable from assembly that returns in 2 regs.
-; 
+;
 ; Revision 1.5  1993/02/17  15:22:22  matt
 ; Added quad_sqrt routine
-; 
+;
 ; Revision 1.4  1993/02/15  12:15:13  dfan
 ; fix24 sqrt
-; 
+;
 ; Revision 1.3  1993/01/28  12:28:36  dfan
 ; square root function made faster
-; 
+;
 ; Revision 1.2  1993/01/27  16:46:56  dfan
 ; sqrt functions
-; 
+;
 ; Revision 1.1  1993/01/27  15:44:57  dfan
 ; Initial revision
-; 
+;
 ; Revision 1.3  1992/09/16  19:30:20  unknown
 ; This file is now obsolete for WATCOM C programs.  The fixed-point math
 ; routines are being inlined in fix.h.
-; 
+;
 ; Revision 1.2  1992/08/24  17:26:48  kaboom
 ; Added RCS keywords at top of file.
-; 
+;
 
 
 .386
@@ -90,7 +90,7 @@ cos_table equ (sin_table + 64*2)
 ;takes fixang in bx, returns sin in eax, cos in ebx
 ;this code based on the C&D routine sincos
 ;trashes ax,bx,cx,dx,si
-fix_sincos: 
+fix_sincos:
 	mov	cx,bx
 	xor	ch,ch	;cx=byte fraction
 
@@ -128,7 +128,7 @@ fix_sincos:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; ushort long_sqrt (long x)
+; uint16_t long_sqrt (int32_t x)
 ; eax = x
 ; x must be positive or we return 0
 ; returns the closest number to the answer
@@ -209,7 +209,7 @@ newton_loop2:
 	je	bx_is_close
 	mov	edx, edi
 	jmp	newton_loop2
-	
+
 ; now we must find which is closer to x, bx^2 or (bx+1)^2
 ; x = bx*(bx+1)+r = bx^2 + bx + r
 ;   which is closer to bx^2 than to bx^2 + 2bx + 1
@@ -304,7 +304,7 @@ fix24_sqrt_:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; long quad_sqrt (quad x)	- NOT C CALLABLE!!!!
+; int32_t quad_sqrt (quad x)	- NOT C CALLABLE!!!!
 ; edx:eax = x
 ; x must be positive or we return 0
 ; returns the closest number to the answer
@@ -396,7 +396,7 @@ q_newton_loop2:
 	cmp	ecx, ebx		       ; compare old bx with average
 	je	q_bx_is_close
 	jmp	q_newton_loop2
-	
+
 ; now we must find which is closer to x, bx^2 or (bx+1)^2
 ; x = bx*(bx+1)+r = bx^2 + bx + r
 ;   which is closer to bx^2 than to bx^2 + 2bx + 1

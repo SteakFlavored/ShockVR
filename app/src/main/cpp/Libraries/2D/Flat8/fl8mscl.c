@@ -28,16 +28,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 #include "flat8.h"
 
-void flat8_mono_scale_ubitmap (grs_bitmap *bm, short x, short y, short w, short h)
+void flat8_mono_scale_ubitmap (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h)
 {
    fix x_scale;                        /* x scale factor */
    fix y_scale;                        /* y scale factor */
    fix x_src;                          /* fractional x in source bitmap */
    fix y_src;                          /* y */
-   uchar *p_src;                       /* pointer into source bitmap */
-   uchar *p_dst;                       /* pointer into destination bitmap */
-   int index, bit;		       /* calculate indexes into char and bitmap */
-   int i;
+   uint8_t *p_src;                       /* pointer into source bitmap */
+   uint8_t *p_dst;                       /* pointer into destination bitmap */
+   int32_t index, bit;		       /* calculate indexes into char and bitmap */
+   int32_t i;
 
    /* if either width or height is to be 0, no problem. */
    if (w==0 || h==0)
@@ -91,18 +91,18 @@ void flat8_mono_scale_ubitmap (grs_bitmap *bm, short x, short y, short w, short 
  }
 
 
-int flat8_mono_scale_bitmap (grs_bitmap *bm, short x, short y, short w, short h)
+int32_t flat8_mono_scale_bitmap (grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h)
 {
    fix x_left;
    fix x_scale;                        /* x scale factor */
    fix y_scale;                        /* y scale factor */
    fix x_src;                          /* fractional x in source bitmap */
    fix y_src;                          /* y */
-   uchar *p_src;                       /* pointer into source bitmap */
-   uchar *p_dst;
-   int code;
-   int index=0, bit=0; 			/* char, bit in char in bitmask */
-   int i;
+   uint8_t *p_src;                       /* pointer into source bitmap */
+   uint8_t *p_dst;
+   int32_t code;
+   int32_t index=0, bit=0; 			/* char, bit in char in bitmask */
+   int32_t i;
 
    /* if either width or height is to be 0, no problem. */
    if (w==0 || h==0)

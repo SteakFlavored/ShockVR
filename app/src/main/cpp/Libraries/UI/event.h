@@ -29,9 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #define UIEVFRONT  LGPoint pos;        /* all ui events have a "screen" position */  \
-                   ulong type;         /* An event type, 32 possible.   */
+                   uint32_t type;         /* An event type, 32 possible.   */
 
-#define UIEVBACK(sz) char pad[UIEV_DATASIZE-(sz)]
+#define UIEVBACK(sz) int8_t pad[UIEV_DATASIZE-(sz)]
 
 // ---------------
 // INPUT EVENTS
@@ -41,8 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct _ui_event
 {
   UIEVFRONT
-  short subtype;                 /* type specific */
-  char data[UIEV_DATASIZE];      /* type specific */
+  int16_t subtype;                 /* type specific */
+  int8_t data[UIEV_DATASIZE];      /* type specific */
 } uiEvent;
 
 
@@ -67,10 +67,10 @@ typedef struct _ui_event
 typedef struct _ui_raw_key_event
 {
   UIEVFRONT
-  short  scancode;    // subtype
-  uchar  action;      // KBS_UP or _DOWN
-  ushort mods;		  // KLC - modifiers added for Mac version
-  UIEVBACK(sizeof(uchar) + sizeof(ushort));
+  int16_t  scancode;    // subtype
+  uint8_t  action;      // KBS_UP or _DOWN
+  uint16_t mods;		  // KLC - modifiers added for Mac version
+  UIEVBACK(sizeof(uint8_t) + sizeof(uint16_t));
 } uiRawKeyEvent;
 
 typedef uiRawKeyEvent uiPollKeyEvent;
@@ -79,7 +79,7 @@ typedef uiRawKeyEvent uiPollKeyEvent;
 typedef struct _ui_cooked_key_event
 {
   UIEVFRONT
-  short code;        /* cooked keycode, chock full o' stuff */
+  int16_t code;        /* cooked keycode, chock full o' stuff */
   UIEVBACK(0);
 } uiCookedKeyEvent;
 
@@ -87,28 +87,28 @@ typedef struct _ui_cooked_key_event
 typedef struct _ui_mouse_event
 {
   UIEVFRONT
-  short action;        /* mouse event type, as per mouse library */
-  ulong tstamp;
-  ubyte buttons;
-  uchar modifiers;
-  UIEVBACK(sizeof(ulong)+sizeof(ubyte)+sizeof(uchar));
+  int16_t action;        /* mouse event type, as per mouse library */
+  uint32_t tstamp;
+  uint8_t buttons;
+  uint8_t modifiers;
+  UIEVBACK(sizeof(uint32_t)+sizeof(uint8_t)+sizeof(uint8_t));
 } uiMouseEvent;
 
 // joystick events
 typedef struct _ui_joy_event
 {
   UIEVFRONT
-  short action;        /* joystick event subtype, as defined below */
-  uchar joynum;        /* joystick number */
+  int16_t action;        /* joystick event subtype, as defined below */
+  uint8_t joynum;        /* joystick number */
   LGPoint joypos;     /* joystick position */
-  UIEVBACK(sizeof(uchar)+sizeof(LGPoint));
+  UIEVBACK(sizeof(uint8_t)+sizeof(LGPoint));
 } uiJoyEvent;
 
 // user-defined events
 typedef struct _ui_user_defined_event
 {
   UIEVFRONT
-  short action;        /* event subtype, as defined by application */
+  int16_t action;        /* event subtype, as defined by application */
   UIEVBACK(0);
 } uiUserDefinedEvent;
 
@@ -160,17 +160,17 @@ typedef bool (*uiHandlerProc)(uiEvent* e, LGRegion* r, void* state);
 // offered those events specified by its typemask; it automatically rejects
 // any other events.
 
-errtype uiInstallRegionHandler(LGRegion* v, ulong evmask, uiHandlerProc proc, void* state, int* id);
+errtype uiInstallRegionHandler(LGRegion* v, uint32_t evmask, uiHandlerProc proc, void* state, int32_t* id);
 // installs an event handler at the front of r's handler chain.  The event handler
 // will call "proc" with the event, the region "v", and the value of "state"
 // whenever "v" receives any event whose type bit is set in evmask.
 // sets *id to an id for that event handler.
 
 
-errtype uiRemoveRegionHandler(LGRegion* v, int id);
+errtype uiRemoveRegionHandler(LGRegion* v, int32_t id);
 // Removes the event handler with the specified id from a region's handler chain
 
-errtype uiSetRegionHandlerMask(LGRegion* r, int id, int evmask);
+errtype uiSetRegionHandlerMask(LGRegion* r, int32_t id, int32_t evmask);
 // Changes the event mask for handler #id in region r.
 
 errtype uiShutdownRegionHandlers(LGRegion* r);
@@ -187,10 +187,10 @@ errtype uiShutdownRegionHandlers(LGRegion* r);
 
 // Se uiDefaultRegionOpacity  in the globals section
 
-errtype uiSetRegionOpacity(LGRegion* r, ulong opacity);
+errtype uiSetRegionOpacity(LGRegion* r, uint32_t opacity);
 // Sets the opacity of a region.
 
-ulong uiGetRegionOpacity(LGRegion* r);
+uint32_t uiGetRegionOpacity(LGRegion* r);
 // Gets the opacity mask of the region.
 
 
@@ -198,17 +198,17 @@ ulong uiGetRegionOpacity(LGRegion* r);
 // INPUT FOCUS
 // -----------
 
-errtype uiGrabFocus(LGRegion* r, ulong evmask);
+errtype uiGrabFocus(LGRegion* r, uint32_t evmask);
 // grabs input focus on the active slab for region r for events specified by evmask
 
-errtype uiReleaseFocus(LGRegion* r, ulong evmask);
+errtype uiReleaseFocus(LGRegion* r, uint32_t evmask);
 // If r has the current input focus in the active slab, then releases r's
 // focus on the events specified by  evmask, and restores the previous focus.  Else does nothing.
 
-errtype uiGrabSlabFocus(uiSlab* slab, LGRegion* r, ulong evmask);
+errtype uiGrabSlabFocus(uiSlab* slab, LGRegion* r, uint32_t evmask);
 // Grabs focus for region r on the specified slab.
 
-errtype uiReleaseSlabFocus(uiSlab* slab, LGRegion* r, ulong evmask);
+errtype uiReleaseSlabFocus(uiSlab* slab, LGRegion* r, uint32_t evmask);
 // If r has the current input focus in the specified slab, then releases r's
 // focus on the events specified by  evmask, and restores the previous focus.
 // Else does nothing.
@@ -243,7 +243,7 @@ errtype uiSetMouseMotionPolling(bool poll);
 errtype uiMakeMotionEvent(uiMouseEvent* ev);
 // Fills *ev with a mouse motion event reflecting the current mouse position.
 
-errtype uiSetKeyboardPolling(uchar* codes);
+errtype uiSetKeyboardPolling(uint8_t* codes);
 // Codes is a KBC_NONE terminated array of scancodes to be polled by the system.
 // if  a code is in the list, the specified key will generate one keyboard polling event
 // (type UI_EVENT_KBD_POLL) per call to uiPoll.  otherwise, no such event will be generated
@@ -274,10 +274,10 @@ void uiShutdown(void);
 //     GLOBALS
 // ----------------
 
-extern ushort uiDoubleClickTime;
+extern uint16_t uiDoubleClickTime;
 // The maximum time separation between individual clicks of a double click
 
-extern ushort uiDoubleClickDelay;
+extern uint16_t uiDoubleClickDelay;
 // The maximum allowed time between the first down and up event in a double click
 
 extern bool uiDoubleClicksOn[NUM_MOUSE_BTNS];
@@ -292,15 +292,15 @@ extern LGRegion* uiLastMouseRegion[NUM_MOUSE_BTNS];
 // Stores a pointer to the region that accepted the
 // last down event for each button.
 
-extern ushort uiDoubleClickTolerance;
+extern uint16_t uiDoubleClickTolerance;
 // How much mouse motion will we tolerate before discarding
 // a potiential double click.  Defaults to 5.
 
-extern ulong uiGlobalEventMask;
+extern uint32_t uiGlobalEventMask;
 // Global mask of what events are to be dispatched.
 // initially set to ALL_EVENTS
 
-extern ulong uiDefaultRegionOpacity;
+extern uint32_t uiDefaultRegionOpacity;
 // The initial value of the opacity of a region, used until
 // an opacity is set for the region.
 // Defaults to zero.

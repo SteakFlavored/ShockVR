@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <_ui.h>
 #include "dbg.h"
 
-Gadget *gad_pushbutton_create(Gadget *parent, LGRect *dim, int z, int type, void *disp_data, TNGStyle *sty, char *name)
+Gadget *gad_pushbutton_create(Gadget *parent, LGRect *dim, int32_t z, int32_t type, void *disp_data, TNGStyle *sty, int8_t *name)
 {
    Gadget *retgad;
    LGPoint size;
@@ -38,12 +38,12 @@ Gadget *gad_pushbutton_create(Gadget *parent, LGRect *dim, int z, int type, void
    return (retgad);
 }
 
-Gadget *gad_pushbutton_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int button_type,
+Gadget *gad_pushbutton_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t button_type,
    void *display_data, LGPoint size)
 {
    LGRect newrect;
    Gadget *rgad;
-   char new_name[128];
+   int8_t new_name[128];
 
    newrect.ul = loc;
    newrect.lr.x = newrect.ul.x + size.x;

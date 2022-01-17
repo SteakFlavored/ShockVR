@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 
 errtype exit_cyberspace_stuff();
-errtype enter_cyberspace_stuff(char dest_level);
+errtype enter_cyberspace_stuff(int8_t dest_level);
 errtype check_cspace_death();
 
 #define NUM_CS_EFFECTS 3
@@ -45,7 +45,7 @@ errtype check_cspace_death();
 #define CYBERHEAL_QUANTITY 70
 
 extern void (*cspace_effect_turnoff[])(bool, bool);
-extern ulong cspace_effect_times[NUM_CS_EFFECTS];
-extern ulong cspace_effect_durations[NUM_CS_EFFECTS];
+extern uint32_t cspace_effect_times[NUM_CS_EFFECTS];
+extern uint32_t cspace_effect_durations[NUM_CS_EFFECTS];
 extern ObjID cspace_decoy_obj;
 extern ObjLoc recall_objloc;

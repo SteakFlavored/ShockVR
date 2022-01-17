@@ -46,30 +46,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "flat8.h"
 
 /* set an unclipped pixel in bank-switched memory. */
-long flat8_get_upixel24 (short x, short y)
+int32_t flat8_get_upixel24 (int16_t x, int16_t y)
 {
-   uchar *p;
-   long *r;
-   int i;
+   uint8_t *p;
+   int32_t *r;
+   int32_t i;
 
    p = grd_canvas->bm.bits + grd_canvas->bm.row*y + x;
    i = *p;
-   r = (long *)(grd_pal+3*i);
+   r = (int32_t *)(grd_pal+3*i);
    return *r & 0x00ffffff;
 }
 
 /* set a clipped pixel in bank-switched memory.  return the clip code. */
-long flat8_get_pixel24 (short x, short y)
+int32_t flat8_get_pixel24 (int16_t x, int16_t y)
 {
-   uchar *p;
-   long *r;
-   int i;
+   uint8_t *p;
+   int32_t *r;
+   int32_t i;
 
    if (x<grd_clip.left || x>=grd_clip.right ||
        y<grd_clip.top  || y>=grd_clip.bot)
       return CLIP_ALL;
    p = grd_canvas->bm.bits + grd_canvas->bm.row*y + x;
    i = *p;
-   r = (long *)(grd_pal+3*i);
+   r = (int32_t *)(grd_pal+3*i);
    return *r & 0x00ffffff;
 }

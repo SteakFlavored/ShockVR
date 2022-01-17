@@ -46,37 +46,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //======== From frsetup.c
 // setup current view, send it out
-int     fr_prepare_view(frc *view);
-int     fr_start_view (void);
-int     fr_send_view (void);
+int32_t     fr_prepare_view(frc *view);
+int32_t     fr_start_view (void);
+int32_t     fr_send_view (void);
 
 #ifndef __FRSETUP_SRC
 #ifdef __FRTYPES_H
 extern fauxrend_context *_fr, *_sr;
 #endif // only know about context itself if you already include types
-extern uint _fr_curflags, _fr_glob_flags;
-extern uchar *_fr_clut_list[4];
+extern uint32_t _fr_curflags, _fr_glob_flags;
+extern uint8_t *_fr_clut_list[4];
 #endif // __FRSETUP_SRC
 
 //======== From frpipe.c
 // pipe setup and control
-int     fr_pipe_resize(int x, int y, int z, void *mptr);
-int     fr_pipe_start(int rad);
-int     fr_pipe_go(void);
-int     fr_pipe_end(void);
-int     fr_pipe_freemem(void);
+int32_t     fr_pipe_resize(int32_t x, int32_t y, int32_t z, void *mptr);
+int32_t     fr_pipe_start(int32_t rad);
+int32_t     fr_pipe_go(void);
+int32_t     fr_pipe_end(void);
+int32_t     fr_pipe_freemem(void);
 
 #ifndef __FRPIPE_SRC
-extern int fr_map_x,fr_map_y,fr_map_z;
-extern int _fr_x_cen, _fr_y_cen;
+extern int32_t fr_map_x,fr_map_y,fr_map_z;
+extern int32_t _fr_x_cen, _fr_y_cen;
 #endif // __FRPIPE_SRC
 
 //======== from frpts.c
-int     fr_pts_frame_start(void);
-int     fr_pts_resize(int x, int y);
-int     fr_pts_freemem(void);
-int     fr_pts_update(int y, int lx, int rx);
-int     fr_pts_setup(int pt_code);            // must call before update
+int32_t     fr_pts_frame_start(void);
+int32_t     fr_pts_resize(int32_t x, int32_t y);
+int32_t     fr_pts_freemem(void);
+int32_t     fr_pts_update(int32_t y, int32_t lx, int32_t rx);
+int32_t     fr_pts_setup(int32_t pt_code);            // must call before update
 
 #ifndef __FRPTS_SRC
 #ifdef __3D_H
@@ -87,16 +87,16 @@ extern g3s_phandle *_fr_ptbase, *_fr_ptnext;
 //======== From frclip.c
 // these all set and modify global clipping arrays
 // so, we cannot do these in parallel
-int     fr_clip_resize(int x,int y);
-int     fr_clip_frame_start(void);
-int     fr_clip_frame_end(void);
-int     fr_clip_cone(void);
-int     fr_clip_tile(void);
-int     fr_clip_freemem(void);
+int32_t     fr_clip_resize(int32_t x,int32_t y);
+int32_t     fr_clip_frame_start(void);
+int32_t     fr_clip_frame_end(void);
+int32_t     fr_clip_cone(void);
+int32_t     fr_clip_tile(void);
+int32_t     fr_clip_freemem(void);
 
 //======== From frtables.c
 // setup and integrity test various renderer data tables
-int     fr_tables_build(void);
+int32_t     fr_tables_build(void);
 
 //======== From frobj.c
 void    render_parse_obj(void);
@@ -105,8 +105,8 @@ void    facelet_parse_obj(void);
 //======== From frutil.c
 #define FR_CUR_OBJ_BASE 65
 #ifndef __FRUTIL_SRC
-extern uchar  fr_cur_obj_col;
-extern ushort fr_col_to_obj[256];
+extern uint8_t  fr_cur_obj_col;
+extern uint16_t fr_col_to_obj[256];
 #endif
 
 //======== From frterr.c
@@ -115,7 +115,7 @@ void    fr_terr_frame_start(void);
 void    fr_terr_frame_end(void);
 void   _fr_facelet_init(void);
 #ifdef __3D_H
-int    _fr_do_light(g3s_phandle work, int hgt_code);
+int32_t    _fr_do_light(g3s_phandle work, int32_t hgt_code);
 #endif
 
 #ifndef __FRTERR_SRC
@@ -126,9 +126,9 @@ extern sfix _fr_sfuv_list[];
 extern fix _fr_fhgt_step;
 extern fix _fr_fhgt_list[];
 extern fix slope_norm[][3];
-extern int wall_adds[], csp_trans_add[];
+extern int32_t wall_adds[], csp_trans_add[];
 // pipeline controller
-extern int _fdt_x, _fdt_y, _fdt_mask, _fdt_dist, _fdt_pbase;
+extern int32_t _fdt_x, _fdt_y, _fdt_mask, _fdt_dist, _fdt_pbase;
 #ifdef __MAP_H
 extern MapElem *_fdt_mptr;
 #endif

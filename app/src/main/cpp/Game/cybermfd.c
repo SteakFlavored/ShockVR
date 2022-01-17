@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ============================================================
 //                   THE CYBERSPACE MFD
 // ============================================================
-void mfd_cspace_expose(MFD* mfd, ubyte control);
+void mfd_cspace_expose(MFD* mfd, uint8_t control);
 
 
 // -------
@@ -65,7 +65,7 @@ void mfd_cspace_expose(MFD* mfd, ubyte control);
    being pulled off the screen to make room for a different func.
 */
 
-void mfd_cspace_expose(MFD* mfd, ubyte control)
+void mfd_cspace_expose(MFD* mfd, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff

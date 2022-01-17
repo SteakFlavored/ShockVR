@@ -64,8 +64,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grs.h"
 #include "pertol.h"
 
-ubyte flat8_per_ltol=5;   /* Linear tolerance     */
-ubyte flat8_per_wftol=5;  /* Wall/Floor tolerance */
+uint8_t flat8_per_ltol=5;   /* Linear tolerance     */
+uint8_t flat8_per_wftol=5;  /* Wall/Floor tolerance */
 
 /* Clut Lighting tolerance: higher=more clut lighting. */
 fix gr_clut_lit_tol=2*FIX_UNIT;
@@ -77,7 +77,7 @@ gr_per_detail_level gr_per_detail_list[GR_NUM_PER_DETAIL_LEVELS]=
    {5,5,0}
 };
 
-void gr_set_per_tol(ubyte ltol, ubyte wftol)
+void gr_set_per_tol(uint8_t ltol, uint8_t wftol)
 {
    flat8_per_ltol=(ltol&7);
    flat8_per_wftol=(wftol&7);
@@ -88,14 +88,14 @@ void gr_set_clut_lit_tol(fix cltol)
    gr_clut_lit_tol=cltol;
 }
 
-void gr_set_per_detail_level(int level)
+void gr_set_per_detail_level(int32_t level)
 {
    flat8_per_ltol=gr_per_detail_list[level].ltol;
    flat8_per_wftol=gr_per_detail_list[level].wftol;
    gr_clut_lit_tol=gr_per_detail_list[level].cltol;
 }
 
-void gr_set_per_detail_level_param(int ltol, int wftol, fix cltol, int level)
+void gr_set_per_detail_level_param(int32_t ltol, int32_t wftol, fix cltol, int32_t level)
 {
    gr_per_detail_list[level].ltol=ltol&7;
    gr_per_detail_list[level].wftol=wftol&7;

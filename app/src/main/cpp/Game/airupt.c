@@ -40,9 +40,9 @@ extern errtype musicai_shutdown();
 struct mlimbs_request_info default_request =
    { 0, 0, 4, 100, 0, 64, TRUE, 0, 0 };
 
-extern int ext_rp ;
-extern char mlimbs_machine;
-extern char cyber_play;
+extern int32_t ext_rp ;
+extern int8_t mlimbs_machine;
+extern int8_t cyber_play;
 
 #define NUM_SNDMIDIDEVICES		2
 #define NUM_SNDMIDICHANNELS	16
@@ -76,55 +76,55 @@ extern char cyber_play;
 
 #define PITCHBEND_CHUNK             15
 
-extern uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
-extern uchar transition_table[NUM_TRANSITIONS];
-extern uchar layering_table[NUM_LAYERS][MAX_KEYS];
-extern uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
+extern uint8_t track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
+extern uint8_t transition_table[NUM_TRANSITIONS];
+extern uint8_t layering_table[NUM_LAYERS][MAX_KEYS];
+extern uint8_t key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
 
-extern char peril_bars;
+extern int8_t peril_bars;
 
-extern int new_theme;
-extern int new_x,new_y;
-extern int old_bore;
-extern short mai_override ;
+extern int32_t new_theme;
+extern int32_t new_x,new_y;
+extern int32_t old_bore;
+extern int16_t mai_override ;
 
-extern int layer_danger ;
-extern int layer_success ;
-extern int layer_transition ;
-extern int transition_count ;
-extern char tmode_time ;
-extern int actual_score ;
-extern uchar decon_count ;
-extern uchar decon_time ;
+extern int32_t layer_danger ;
+extern int32_t layer_success ;
+extern int32_t layer_transition ;
+extern int32_t transition_count ;
+extern int8_t tmode_time ;
+extern int32_t actual_score ;
+extern uint8_t decon_count ;
+extern uint8_t decon_time ;
 extern bool in_deconst , old_deconst ;
 extern bool in_peril ;
 extern bool just_started ;
-extern int score_playing ;
-extern short curr_ramp_time, curr_ramp;
-extern char curr_prioritize, curr_crossfade;
+extern int32_t score_playing ;
+extern int16_t curr_ramp_time, curr_ramp;
+extern int8_t curr_prioritize, curr_crossfade;
 
-extern errtype mai_transition(int new_trans);
-extern errtype make_request(int chunk_num, int piece_ID);
-extern int digifx_volume_shift(short x, short y, short z, short phi, short theta, short basevol);
-extern int digifx_pan_shift(short x, short y, short z, short phi, short theta);
+extern errtype mai_transition(int32_t new_trans);
+extern errtype make_request(int32_t chunk_num, int32_t piece_ID);
+extern int32_t digifx_volume_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta, int16_t basevol);
+extern int32_t digifx_pan_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta);
 extern bool mai_semaphor;
 
-extern uchar park_random ;
-extern uchar park_playing ;
-extern uchar access_random ;
+extern uint8_t park_random ;
+extern uint8_t park_playing ;
+extern uint8_t access_random ;
 
-extern ulong last_damage_sum ;
-extern ulong last_vel_time ;
+extern uint32_t last_damage_sum ;
+extern uint32_t last_vel_time ;
 
 // Damage taken decay & quantity of decay
-extern int danger_hp_level ;
-extern int danger_damage_level ;
-extern int damage_decay_time ;
-extern int damage_decay_amount ;
-extern int mai_damage_sum ;
+extern int32_t danger_hp_level ;
+extern int32_t danger_damage_level ;
+extern int32_t damage_decay_time ;
+extern int32_t damage_decay_amount ;
+extern int32_t mai_damage_sum ;
 
 // How long an attack keeps us in combat music mode
-extern int mai_combat_length ;
+extern int32_t mai_combat_length ;
 
 extern bool bad_digifx;
 
@@ -152,7 +152,7 @@ void music_ai()
 
 void grind_credits_music_ai(void)
 {
-   int i;
+   int32_t i;
    if (mai_semaphor)
    {
       current_request[0] = default_request;
@@ -177,9 +177,9 @@ void grind_credits_music_ai(void)
 #define MAIN_THEME_WEIGHT 0
 void grind_music_ai(void)
 {
-   int i, open_track, r;
-   int current_key;
-   short play_me = -1, seq;
+   int32_t i, open_track, r;
+   int32_t current_key;
+   int16_t play_me = -1, seq;
 
    if (mlimbs_counter == 4)		//KLC - was 16
    {
@@ -276,8 +276,8 @@ void grind_music_ai(void)
    {
       if ((boring_count > 0) && (mlimbs_counter == 0))
       {
-         int rand_poss = 0;
-         int max_rand;
+         int32_t rand_poss = 0;
+         int32_t max_rand;
          if (mlimbs_boredom > 0)
             mlimbs_boredom = 0;
          else

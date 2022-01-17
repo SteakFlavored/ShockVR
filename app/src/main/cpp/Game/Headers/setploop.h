@@ -69,7 +69,7 @@ void setup_loop(void);
 void journey_credits_done(void);
 
 // Globals
-extern int setup_mode;
+extern int32_t setup_mode;
 
 #endif // __SETPLOOP_H
 

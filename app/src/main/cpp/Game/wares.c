@@ -60,9 +60,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //----------------
 //  Internal Prototypes
 //----------------
-bool is_passive_hardware(int n);
-bool is_oneshot_misc_software(int n);
-int energy_cost(int warenum);
+bool is_passive_hardware(int32_t n);
+bool is_oneshot_misc_software(int32_t n);
+int32_t energy_cost(int32_t warenum);
 void hardware_closedown(bool visible);
 void hardware_startup(bool visible);
 void hardware_power_outage(void);
@@ -80,9 +80,9 @@ extern WARE Defense_SoftWare[NUM_DEFENSE_SOFTS];
 extern WARE Misc_SoftWare[NUM_MISC_SOFTS];
 
 #define MAX_VERSIONS 5
-extern short energy_cost_vec[NUM_HARDWAREZ][MAX_VERSIONS];
+extern int16_t energy_cost_vec[NUM_HARDWAREZ][MAX_VERSIONS];
 
-long ware_base_triples[NUM_WARE_TYPES] =
+int32_t ware_base_triples[NUM_WARE_TYPES] =
 {
    MAKETRIP(CLASS_HARDWARE,0,0),
    MAKETRIP(CLASS_SOFTWARE,SOFTWARE_SUBCLASS_OFFENSE,0),
@@ -92,7 +92,7 @@ long ware_base_triples[NUM_WARE_TYPES] =
 
 
 // The existence of this array is a crime.  I should be shot.
-ubyte waretype2invtype[] =
+uint8_t waretype2invtype[] =
 {
    MFD_INV_HARDWARE,
    MFD_INV_SOFT_COMBAT,
@@ -111,7 +111,7 @@ ubyte waretype2invtype[] =
 // get_ware_triple() converts our stupid representation for
 // a ware triple into the standard one.
 
-int get_ware_triple(int waretype, int num)
+int32_t get_ware_triple(int32_t waretype, int32_t num)
 {
    return nth_after_triple(ware_base_triples[waretype],num);
 }
@@ -122,20 +122,20 @@ int get_ware_triple(int waretype, int num)
 // Returns the name of a ware to the inventory system.
 
 
-char* get_ware_name(int waretype, int num, char* buf, int sz)
+int8_t* get_ware_name(int32_t waretype, int32_t num, int8_t* buf, int32_t sz)
 {
    get_object_short_name(nth_after_triple(ware_base_triples[waretype],num), buf, sz);
    return buf;
 }
 
 
-bool is_passive_hardware(int n)
+bool is_passive_hardware(int32_t n)
 {
-   ushort cflags = (ObjProps[OPTRIP(MAKETRIP(CLASS_HARDWARE,0,0))+n].flags & CLASS_FLAGS) >> CLASS_FLAGS_SHF;
+   uint16_t cflags = (ObjProps[OPTRIP(MAKETRIP(CLASS_HARDWARE,0,0))+n].flags & CLASS_FLAGS) >> CLASS_FLAGS_SHF;
    return (cflags & PASSIVE_WARE_FLAG);
 }
 
-bool is_oneshot_misc_software(int n)
+bool is_oneshot_misc_software(int32_t n)
 {
    return ((n < NUM_ONESHOT_SOFTWARE));
 }
@@ -143,9 +143,9 @@ bool is_oneshot_misc_software(int n)
 // INTERNALS
 // =========
 
-int energy_cost(int warenum)
+int32_t energy_cost(int32_t warenum)
 {
-   uchar version = player_struct.hardwarez[warenum];
+   uint8_t version = player_struct.hardwarez[warenum];
    if (version == 0)
       return 0;
    if (warenum == CPTRIP(LANTERN_HARD_TRIPLE))
@@ -166,14 +166,14 @@ int energy_cost(int warenum)
 // Called from the UI/Inventory, this routine figures out what is being used
 // and what function to call.  Turns things on or off as appropriate.
 
-void use_ware(int waretype, int num)
+void use_ware(int32_t waretype, int32_t num)
 {
-   ubyte *player_wares, *player_status;
+   uint8_t *player_wares, *player_status;
    WARE  *wares;
-   int   n,ecost;
-   int ware_sfx = SFX_NONE,hnd;
-//   int   i;
-//   ubyte invtype;
+   int32_t   n,ecost;
+   int32_t ware_sfx = SFX_NONE,hnd;
+//   int32_t   i;
+//   uint8_t invtype;
    if ((!global_fullmap->cyber != (waretype == 0))   // boolean equality, yum.
       && !(waretype == WARE_SOFT_MISC && num == 4) // special games ware hack
       && !(waretype == WARE_HARD && num == HARDWARE_FULLSCREEN))
@@ -266,20 +266,20 @@ void use_ware(int waretype, int num)
    }
    if (ware_sfx!=SFX_NONE)
    {
-      extern char secret_global_pan;
-      int ci_idx=wares[num].sideicon;
+      extern int8_t secret_global_pan;
+      int32_t ci_idx=wares[num].sideicon;
       secret_global_pan=(ci_idx==SI_NONE)?SND_DEF_PAN:(ci_idx<5)?5:122;
       hnd = play_digi_fx(ware_sfx,1);
 	 secret_global_pan=SND_DEF_PAN;
    }
    if (waretype == WARE_HARD)
    {
-      short newe = player_struct.energy_spend;
+      int16_t newe = player_struct.energy_spend;
       if (WareActive(player_status[num]))
          newe = min(newe+ecost,MAX_ENERGY);
       else
          newe = max(newe-ecost,0);
-      set_player_energy_spend((ubyte)newe);
+      set_player_energy_spend((uint8_t)newe);
    }
    if (_current_loop <= FULLSCREEN_LOOP)
       chg_set_flg(INVENTORY_UPDATE);
@@ -291,7 +291,7 @@ void use_ware(int waretype, int num)
 // Hey, we're closing down a game. return to normalcy.
 void hardware_closedown(bool visible)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_HARDWAREZ; i++)
    {
 //      if (i != HARDWARE_FULLSCREEN)
@@ -303,7 +303,7 @@ void hardware_closedown(bool visible)
 
 void hardware_startup(bool visible)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_HARDWAREZ; i++)
    {
 //      if (i != HARDWARE_FULLSCREEN)
@@ -315,7 +315,7 @@ void hardware_startup(bool visible)
 
 void hardware_power_outage(void)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_HARDWAREZ; i++)
    {
       if (energy_cost(i) > 0 && WareActive(player_struct.hardwarez_status[i]))
@@ -332,8 +332,8 @@ void hardware_power_outage(void)
 // Sets a number of pointers to point at the appropriate ware structures
 // for a given type.
 
-void get_ware_pointers(int type, ubyte **player_wares, ubyte **player_status,
-                       WARE **wares, int *n)
+void get_ware_pointers(int32_t type, uint8_t **player_wares, uint8_t **player_status,
+                       WARE **wares, int32_t *n)
 {
    if (type == WARE_HARD)
       {
@@ -375,12 +375,12 @@ void get_ware_pointers(int type, ubyte **player_wares, ubyte **player_status,
 // of a ware in the player's inventory.  zero means
 // the player doesn't have it.
 
-int get_player_ware_version(int type, int n)
+int32_t get_player_ware_version(int32_t type, int32_t n)
 {
    WARE *Pwares;
-   ubyte *pver;
-   ubyte *pstat;
-   int   num;
+   uint8_t *pver;
+   uint8_t *pstat;
+   int32_t   num;
    get_ware_pointers(type,&pver,&pstat,&Pwares,&num);
    return pver[n];
 }
@@ -394,9 +394,9 @@ int get_player_ware_version(int type, int n)
 
 void wares_update()
 {
-   ubyte  *player_status, *player_wares;
+   uint8_t  *player_status, *player_wares;
    WARE   *wares;
-   int    i, j, n;
+   int32_t    i, j, n;
 
    if ((player_struct.game_time - player_struct.last_ware_update) >= WARE_UPDATE_FREQ) {
 
@@ -479,7 +479,7 @@ void bioware_effect(void);
 
 void bioware_turnon(bool visible, bool)
 {
-   int i;
+   int32_t i;
    if (visible)
    {
       mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, TRUE, MFD_FLASH, TRUE);
@@ -521,7 +521,7 @@ void bioware_effect(void)
 void infrared_turnon(bool visible, bool real_start);
 void infrared_turnoff(bool visible, bool real_start);
 
-extern char curr_clut_table;
+extern int8_t curr_clut_table;
 // ---------------------------------------------------------------------------
 // infrared_turnon()
 //
@@ -598,18 +598,18 @@ void targeting_turnoff(bool, bool)
 //  LANTERN WARE
 // ---------------
 void lamp_set_vals(void);
-void lamp_set_vals_with_offset(byte offset);
+void lamp_set_vals_with_offset(int8_t offset);
 void lamp_turnon(bool visible, bool real_start);
-void lamp_change_setting(byte offset);
+void lamp_change_setting(int8_t offset);
 void lamp_turnoff(bool visible, bool real_stop);
-bool lantern_change_setting_hkey(short keycode, ulong context, void* data);
+bool lantern_change_setting_hkey(int16_t keycode, uint32_t context, void* data);
 
 struct _lampspec
 {
-   int rad1;
-   int base1;
-   int rad2;
-   int base2;
+   int32_t rad1;
+   int32_t base1;
+   int32_t rad2;
+   int32_t base2;
    fix slope;
    fix yint;
 }
@@ -635,9 +635,9 @@ void lamp_set_vals(void)
 }
 
 #define OFF_SHF 3
-void lamp_set_vals_with_offset(byte offset)
+void lamp_set_vals_with_offset(int8_t offset)
 {
-   int n = IDX_OF_TYPE(WARE_HARD,LANTERN_HARD_TRIPLE), s;
+   int32_t n = IDX_OF_TYPE(WARE_HARD,LANTERN_HARD_TRIPLE), s;
    struct _lampspec *lspec;
 
    s = (muzzle_fire_light) ? LAMP_SETTING(player_struct.light_value) : LAMP_SETTING(player_struct.hardwarez_status[n]);
@@ -645,19 +645,19 @@ void lamp_set_vals_with_offset(byte offset)
 
    _frp.lighting.yint    = lspec->yint + (offset<<(16-OFF_SHF));
    _frp.lighting.slope   = lspec->slope;
-   _frp.lighting.rad[0]  = (uchar)lspec->rad1;
-   _frp.lighting.base[0] = (uchar) ((lspec->base1+(offset>>OFF_SHF) > 0) ? (lspec->base1+(offset>>OFF_SHF)) : 0);
+   _frp.lighting.rad[0]  = (uint8_t)lspec->rad1;
+   _frp.lighting.base[0] = (uint8_t) ((lspec->base1+(offset>>OFF_SHF) > 0) ? (lspec->base1+(offset>>OFF_SHF)) : 0);
    if (offset!=0)
    {
       fix slope_based_mod;
       slope_based_mod=fix_div((offset<<(16-OFF_SHF)),-lspec->slope);
-	   _frp.lighting.rad[1] = (uchar)(lspec->rad2+(slope_based_mod>>16));
+	   _frp.lighting.rad[1] = (uint8_t)(lspec->rad2+(slope_based_mod>>16));
 //      slope_based_mod=fix_mul((offset<<(16-OFF_SHF)),-lspec->slope);
       _frp.lighting.yint  += -lspec->slope;
       _frp.lighting.rad[0]++;
    }
-   else _frp.lighting.rad[1] = (uchar)lspec->rad2;
-   _frp.lighting.base[1] = (uchar)lspec->base2;
+   else _frp.lighting.rad[1] = (uint8_t)lspec->rad2;
+   _frp.lighting.base[1] = (uint8_t)lspec->base2;
 
    chg_set_flg(_current_3d_flag);
 //   Warning(("New parms %x %x, %x %x, line %x %x from %x %x\n",
@@ -676,7 +676,7 @@ void lamp_turnon(bool visible, bool)
    }
 }
 
-void lamp_change_setting(byte offset)
+void lamp_change_setting(int8_t offset)
 {
    lamp_set_vals_with_offset(offset);
    _frp_light_bits_set(LIGHT_BITS_CAM);
@@ -693,13 +693,13 @@ void lamp_turnoff(bool visible, bool real_stop)
    }
 }
 
-bool lantern_change_setting_hkey(short, ulong, void*)
+bool lantern_change_setting_hkey(int16_t, uint32_t, void*)
 {
-   int n=CPTRIP(LANTERN_HARD_TRIPLE);
-   int v=player_struct.hardwarez[n];
-   int s=player_struct.hardwarez_status[n];
+   int32_t n=CPTRIP(LANTERN_HARD_TRIPLE);
+   int32_t v=player_struct.hardwarez[n];
+   int32_t s=player_struct.hardwarez_status[n];
    bool on=s&WARE_ON;
-   void mfd_lantern_setting(int setting);
+   void mfd_lantern_setting(int32_t setting);
 
    s=LAMP_SETTING(s);
    if(s==0 && on) {
@@ -723,18 +723,18 @@ bool lantern_change_setting_hkey(short, ulong, void*)
 //--------------------------
 void shield_set_absorb(void);
 void shield_toggle(bool visible, bool real);
-bool shield_change_setting_hkey(short keycode, ulong context, void* data);
+bool shield_change_setting_hkey(int16_t keycode, uint32_t context, void* data);
 
 #define SHIELD_IDX (CPTRIP(SHIELD_HARD_TRIPLE))
 
-ubyte shield_absorb_rates[] = {20, 40, 75, 75};
-ubyte shield_thresholds[] = {0, 10, 15, 30};
+uint8_t shield_absorb_rates[] = {20, 40, 75, 75};
+uint8_t shield_thresholds[] = {0, 10, 15, 30};
 
 extern void set_shield_raisage(bool going_up);
 
 void shield_set_absorb(void)
 {
-   ubyte s = player_struct.hardwarez_status[SHIELD_IDX];
+   uint8_t s = player_struct.hardwarez_status[SHIELD_IDX];
    if (s & WARE_ON)
    {
       player_struct.shield_absorb_rate = shield_absorb_rates[LAMP_SETTING(s)];
@@ -749,7 +749,7 @@ void shield_set_absorb(void)
 
 void shield_toggle(bool, bool real)
 {
-   ubyte s = player_struct.hardwarez_status[SHIELD_IDX];
+   uint8_t s = player_struct.hardwarez_status[SHIELD_IDX];
    if (real)
    {
       if (s & WARE_ON)
@@ -767,13 +767,13 @@ void shield_toggle(bool, bool real)
    shield_set_absorb();
 }
 
-bool shield_change_setting_hkey(short, ulong, void*)
+bool shield_change_setting_hkey(int16_t, uint32_t, void*)
 {
-   int n=CPTRIP(SHIELD_HARD_TRIPLE);
-   int v=player_struct.hardwarez[n];
-   int s=player_struct.hardwarez_status[n];
+   int32_t n=CPTRIP(SHIELD_HARD_TRIPLE);
+   int32_t v=player_struct.hardwarez[n];
+   int32_t s=player_struct.hardwarez_status[n];
    bool on=s&WARE_ON;
-   void mfd_shield_setting(int setting);
+   void mfd_shield_setting(int32_t setting);
 
    // version 4 has only one setting.
    if(v==4) v=1;
@@ -825,13 +825,13 @@ void motionware_update(bool visible,  bool real, bool on);
 void motionware_turnon(bool visible, bool real);
 void motionware_turnoff(bool visible, bool real);
 
-ubyte motionware_mode = MOTION_INACTIVE;
+uint8_t motionware_mode = MOTION_INACTIVE;
 
 #define MOTION_SETTING LAMP_SETTING
 
 void motionware_update(bool visible,  bool, bool on)
 {
-   ubyte s = player_struct.hardwarez_status[CPTRIP(MOTION_HARD_TRIPLE)];
+   uint8_t s = player_struct.hardwarez_status[CPTRIP(MOTION_HARD_TRIPLE)];
    if (on)
       motionware_mode = MOTION_SETTING(s)+1;
    else
@@ -877,7 +877,7 @@ void motionware_turnoff(bool visible, bool real)
 // ---------------------
 void activate_jumpjets(fix* xcntl, fix* ycntl, fix* zcntl);
 
-static short jumpjet_controls[] = { -25, -50, -75};
+static int16_t jumpjet_controls[] = { -25, -50, -75};
 static fix   jumpjet_thrust_scales[] = { FIX_UNIT/64, FIX_UNIT/32, FIX_UNIT/16};
 
 bool jumpjets_active = FALSE;
@@ -885,12 +885,12 @@ bool jumpjets_active = FALSE;
 // modifies z control based on jumpject ware.
 void activate_jumpjets(fix* xcntl, fix* ycntl, fix* zcntl)
 {
-   int ecost;
-   short edrain;
+   int32_t ecost;
+   int16_t edrain;
 
-   ubyte n = CPTRIP(JET_HARD_TRIPLE);
-   ubyte v = player_struct.hardwarez[n];
-   ubyte s = player_struct.hardwarez_status[n];
+   uint8_t n = CPTRIP(JET_HARD_TRIPLE);
+   uint8_t v = player_struct.hardwarez[n];
+   uint8_t s = player_struct.hardwarez_status[n];
 
    jumpjets_active = FALSE;
    if ((s & WARE_ON) == 0 || player_struct.energy == 0)
@@ -912,7 +912,7 @@ void activate_jumpjets(fix* xcntl, fix* ycntl, fix* zcntl)
 //-----------------------
 void fullscreen_turnon(bool visible, bool real_start);
 void fullscreen_turnoff(bool visible, bool real_start);
-extern Boolean	DoubleSize;
+extern bool	DoubleSize;
 
 void fullscreen_turnon(bool visible, bool)
 {
@@ -957,7 +957,7 @@ void do_turbo_stuff(bool from_drug)
 
 void turbo_turnon(bool visible, bool real_start)
 {
-   ulong hammer_time = cspace_effect_durations[CS_TURBO_EFF];
+   uint32_t hammer_time = cspace_effect_durations[CS_TURBO_EFF];
    do_turbo_stuff(visible);
    if (real_start)
    {
@@ -1086,7 +1086,7 @@ WARE HardWare[NUM_HARDWAREZ] =
 // Except for jumpjets, these costs are in points per
 // minute of use.
 
-short energy_cost_vec[NUM_HARDWAREZ][MAX_VERSIONS] =
+int16_t energy_cost_vec[NUM_HARDWAREZ][MAX_VERSIONS] =
 {
 //"infrared"
    { 50, 50, 50, },

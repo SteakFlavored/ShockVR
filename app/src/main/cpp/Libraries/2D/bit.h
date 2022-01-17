@@ -34,6 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __BIT_H
 
 #include "LG.h"
-extern uchar bitmask[];
+extern uint8_t bitmask[];
 
 #endif /* __BIT_H */

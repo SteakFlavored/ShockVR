@@ -72,8 +72,8 @@ LGRect Inv_rect;
 #ifdef SVGA_SUPPORT
 extern grs_screen *svga_screen;
 extern frc *svga_render_context;
-extern short svga_mode_data[];
-extern short mode_id;
+extern int16_t svga_mode_data[];
+extern int16_t mode_id;
 #endif
 
 LGRect *inventory_rect = &Inv_rect, *status_rect, mess_rect;
@@ -86,7 +86,7 @@ errtype _screen_init_mouse(LGRegion* r, uiSlab* slab, bool do_init);
 errtype _screen_background(void);
 
 extern void mouse_unconstrain(void);
-byte pal_shf_id;
+int8_t pal_shf_id;
 LGCursor vmail_cursor;
 
 LGRect fscrn_rect={{0,0},{320,200}};
@@ -100,7 +100,7 @@ errtype load_misc_cursors(void);
 
 void generic_reg_init(bool create_it, LGRegion *reg, LGRect *rct, uiSlab *slb, void *key_h, void *maus_h)
 {
-   int callid;
+   int32_t callid;
    if (rct==NULL)
      rct=&fscrn_rect;
    if (create_it)
@@ -123,9 +123,9 @@ errtype screen_init(void)
    extern void init_posture_meters(LGRegion*,bool);
    extern errtype wrapper_create_mouse_region(LGRegion*);
    extern LGRegion *fullview_region;
-   int callid;
-   extern void (*ui_mouse_convert)(short *px, short *py,bool down);
-   extern void (*ui_mouse_convert_round)(short *px, short *py,bool down);
+   int32_t callid;
+   extern void (*ui_mouse_convert)(int16_t *px, int16_t *py,bool down);
+   extern void (*ui_mouse_convert_round)(int16_t *px, int16_t *py,bool down);
 
    // God this is stupid, maybe I'll get it right next project
    status_rect = &real_status_rect;
@@ -213,7 +213,7 @@ errtype screen_init(void)
    return(OK);
 }
 
-extern void game_redrop_rad(int rad_mod);
+extern void game_redrop_rad(int32_t rad_mod);
 
 void screen_start()
 {
@@ -256,9 +256,9 @@ void screen_exit()
 {
    extern wrapper_panel_close();
 #ifdef SVGA_SUPPORT
-   uchar cur_pal[768];
+   uint8_t cur_pal[768];
    extern grs_screen *cit_screen;
-   uchar *s_table;
+   uint8_t *s_table;
 #endif
 
    status_bio_end();

@@ -60,14 +60,14 @@ typedef struct {
 
 //	Methods
 
-int AqtmReadHeader(Afile *paf);
-long AqtmReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime);
-int AqtmReadReset(Afile *paf);
-int AqtmReadClose(Afile *paf);
-int AqtmWriteBegin(Afile *paf);
-int AqtmWriteFrame(Afile *paf, grs_bitmap *pbm, long bmlength, fix time);
-int AqtmWriteFramePal(Afile *paf, Apalette *ppal);
-int AqtmWriteClose(Afile *paf);
+int32_t AqtmReadHeader(Afile *paf);
+int32_t AqtmReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime);
+int32_t AqtmReadReset(Afile *paf);
+int32_t AqtmReadClose(Afile *paf);
+int32_t AqtmWriteBegin(Afile *paf);
+int32_t AqtmWriteFrame(Afile *paf, grs_bitmap *pbm, int32_t bmlength, fix time);
+int32_t AqtmWriteFramePal(Afile *paf, Apalette *ppal);
+int32_t AqtmWriteClose(Afile *paf);
 
 Amethods qtmMethods = {
 	AqtmReadHeader,
@@ -89,7 +89,7 @@ Amethods qtmMethods = {
 //
 //	AqtmReadHeader() reads in quiktime chunks & verifies.
 
-int AqtmReadHeader(Afile *paf)
+int32_t AqtmReadHeader(Afile *paf)
 {
 	printf("AqtmReadHeader not implemented yet!\n");
 /*
@@ -130,16 +130,16 @@ int AqtmReadHeader(Afile *paf)
 //
 //	AqtmReadFrame() reads the next frame.
 
-long AqtmReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
+int32_t AqtmReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
 {
 	printf("AqtmReadFrame not implemented yet!\n");
 /*
 	AqtmInfo *pqi;
 	QTM *pqtm;
 	void *p;
-	long length;
+	int32_t length;
 	fix time;
-	uchar bmtype;
+	uint8_t bmtype;
 
 	pqi = paf->pspec;
 	pqtm = &pqi->qtm;
@@ -160,7 +160,7 @@ long AqtmReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
 //
 //	AqtmReadReset() resets the movie for reading.
 
-int AqtmReadReset(Afile *paf)
+int32_t AqtmReadReset(Afile *paf)
 {
 	return(0);
 }
@@ -169,7 +169,7 @@ int AqtmReadReset(Afile *paf)
 //
 //	AqtmReadClose() does cleanup and closes file.
 
-int AqtmReadClose(Afile *paf)
+int32_t AqtmReadClose(Afile *paf)
 {
 	printf("AqtmReadClose not implemented yet!\n");
 /*
@@ -189,7 +189,7 @@ int AqtmReadClose(Afile *paf)
 //
 //	AqtmWriteBegin() starts up writer.
 
-int AqtmWriteBegin(Afile *paf)
+int32_t AqtmWriteBegin(Afile *paf)
 {
 	AqtmInfo *pqi;
 
@@ -215,7 +215,7 @@ int AqtmWriteBegin(Afile *paf)
 //
 //	AqtmWriteFrame() writes out next frame.
 
-int AqtmWriteFrame(Afile *paf, grs_bitmap *pbm, long bmlength, fix time)
+int32_t AqtmWriteFrame(Afile *paf, grs_bitmap *pbm, int32_t bmlength, fix time)
 {
 	AqtmInfo *pqi;
 
@@ -231,7 +231,7 @@ int AqtmWriteFrame(Afile *paf, grs_bitmap *pbm, long bmlength, fix time)
 //
 // AqtmWriteFramePal() handles palette changes for 16-bit movies.
 
-int AqtmWriteFramePal(Afile *paf, Apalette *ppal)
+int32_t AqtmWriteFramePal(Afile *paf, Apalette *ppal)
 {
 	AqtmInfo *pqi;
 	QTM *pqtm;
@@ -251,7 +251,7 @@ int AqtmWriteFramePal(Afile *paf, Apalette *ppal)
 //
 //	AqtmWriteClose() closes output movie
 
-int AqtmWriteClose(Afile *paf)
+int32_t AqtmWriteClose(Afile *paf)
 {
 	AqtmInfo *pqi;
 

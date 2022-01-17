@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Here is the EDMS Bipedally Locomated Object Model(tm), or BiLocoMo,
 //	for short.  The trick here is to combine as many dynamical degrees
@@ -49,9 +49,9 @@ extern Q	S[MAX_OBJ][6][4],
 
 //	Functions...
 //	============
-extern void	( *idof_functions[MAX_OBJ] )( int ),
-		( *equation_of_motion[MAX_OBJ][6] )( int ),
-		null_function( int dummy );
+extern void	( *idof_functions[MAX_OBJ] )( int32_t ),
+		( *equation_of_motion[MAX_OBJ][6] )( int32_t ),
+		null_function( int32_t dummy );
 
 extern Q	*utility_pointer[MAX_OBJ];
 
@@ -80,9 +80,9 @@ static Q	H_r[3] = {0,0,0},		H_l[3] = {0,0,0},
 		foot_hat_r[3] = {0,0,0},	foot_hat_l[3] = {0,0,0},
 		F_right[3] = {0,0,0},		F_left[3] = {0,0,0},
 		F_total[3] = {0,0,0},		Vl[3] = {0,0,0};
-			 
-			
-       	
+
+
+
 //	Scalar goodies...
 //	=================
 static Q	sin_alpha = 0,		cos_alpha = 0,
@@ -114,7 +114,7 @@ static Q	sin_alpha = 0,		cos_alpha = 0,
 		T_control_alpha = 0,	T_control_beta = 0,
 		alpha_dot = 0,		beta_dot = 0,
 		gamma_dot = 0;
-			
+
 
 //	We gotta save the updated positions, but AFTER calclation...
 //	============================================================
@@ -122,7 +122,7 @@ Q	save_r_w_r[MAX_OBJ][3],
 	save_r_w_l[MAX_OBJ][3],
 	save_chi[MAX_OBJ];
 
-		
+
 //	Constants...
 //	============
 static Q	pi = 3.1415,
@@ -134,7 +134,7 @@ static Q	pi = 3.1415,
 		four = 4.,
 		point_oo_one = .001,
 		point_oo_five = .005;
-       	
+
 //	Limiters...
 //	===========
 static Q	radius_max = .9;
@@ -142,7 +142,7 @@ static Q	radius_max = .9;
 
 //	Counters...
 //	===========
-int		not_yet1[MAX_OBJ],
+int32_t		not_yet1[MAX_OBJ],
 		not_yet2[MAX_OBJ],
 		not_yet3[MAX_OBJ];
 
@@ -152,14 +152,14 @@ int		not_yet1[MAX_OBJ],
 Q	ground_info = 0;
 
 
-//	Here goes...	
+//	Here goes...
 //	============
 
-	
-	
+
+
 //	Have some internal degrees of freedom...
 //	========================================
-void biped_idof( int object ) {
+void biped_idof( int32_t object ) {
 
 
 
@@ -172,8 +172,8 @@ terrain_ff      TFF;
 //		========
 void		globalize( Q &X, Q &Y, Q &Z ),
 		localize( Q &X, Q &Y, Q &Z ),
-		place_right_knee( int ),
-		place_left_knee( int );
+		place_right_knee( int32_t ),
+		place_left_knee( int32_t );
 
 
 //	Find feet...
@@ -192,16 +192,16 @@ void		globalize( Q &X, Q &Y, Q &Z ),
 
 //	Get local velocity information...
 //	---------------------------------
-	Vl[0] = A[object][0][1];	
-	Vl[1] = A[object][1][1];	
+	Vl[0] = A[object][0][1];
+	Vl[1] = A[object][1][1];
 	Vl[2] = A[object][2][1];
 	localize( Vl[0], Vl[1], Vl[2] );
-	
+
 //	Find geometry...
 //	----------------
 	H_r[2] = H_l[2] = 0;
-	H_r[0] = N_r[0] = I[object][23];				//hips and legs...	
-	H_l[0] = N_l[0] =-I[object][23];	
+	H_r[0] = N_r[0] = I[object][23];				//hips and legs...
+	H_l[0] = N_l[0] =-I[object][23];
 
 	N_r[2] = - I[object][0];// + I[object][10]*I[object][1];
 	N_l[2] = - I[object][0];// + I[object][10]*I[object][2];
@@ -258,12 +258,12 @@ void		globalize( Q &X, Q &Y, Q &Z ),
 			  + delta_r[2]*delta_r[2] );
 
 	mag_delta_l = sqrt( delta_l[0]*delta_l[0]
-			  + delta_l[1]*delta_l[1] 
+			  + delta_l[1]*delta_l[1]
 			  + delta_l[2]*delta_l[2] );
 
 //	mout << mag_delta_r << " : " << mag_delta_l << "\n";
 
-			  
+
 //	Now get derivatives (magnitude r ONLY here)...
 //	----------------------------------------------
 	dR_r[0] = A[object][0][1];					//STATE!!!
@@ -273,7 +273,7 @@ void		globalize( Q &X, Q &Y, Q &Z ),
 
 	dR_r[0] += N_r[2]*alpha_dot;
 	dR_r[1] +=-N_r[2]*beta_dot + N_r[0]*gamma_dot;
-	dR_r[2] +=-N_r[0]*alpha_dot; 
+	dR_r[2] +=-N_r[0]*alpha_dot;
 
 	mag_dR = sqrt( dR_r[0]*dR_r[0]					//We only care about walking...
 		     + dR_r[1]*dR_r[1] );
@@ -371,15 +371,15 @@ void		globalize( Q &X, Q &Y, Q &Z ),
 
 
 //	Pull a derivative before retransformation...
-//	--------------------------------------------	
+//	--------------------------------------------
 	dF_r[0] = -A[object][0][1] - XPA_0( foot_r, object );
 	dF_r[1] = -A[object][1][1] - XPA_1( foot_r, object );
 	dF_r[2] = -A[object][2][1] - XPA_2( foot_r, object );
-	
+
 	dF_l[0] = -A[object][0][1] - XPA_0( foot_l, object );
 	dF_l[1] = -A[object][1][1] - XPA_1( foot_l, object );
 	dF_l[2] = -A[object][2][1] - XPA_2( foot_l, object );
-	
+
 
 //	Need the new basis now...
 //	-------------------------
@@ -394,13 +394,13 @@ void		globalize( Q &X, Q &Y, Q &Z ),
 	foot_r[0] = H_r[0] - foot_r[0];		foot_l[0] = H_l[0] - foot_l[0];
 	foot_r[1] = H_r[1] - foot_r[1];		foot_l[1] = H_l[1] - foot_l[1];
 	foot_r[2] = H_r[2] - foot_r[2];		foot_l[2] = H_l[2] - foot_l[2];
-	
+
 	mag_foot_r = sqrt( foot_r[0]*foot_r[0]
-			 + foot_r[1]*foot_r[1] 
+			 + foot_r[1]*foot_r[1]
 			 + foot_r[2]*foot_r[2] );
 
 	mag_foot_l = sqrt( foot_l[0]*foot_l[0]
-			 + foot_l[1]*foot_l[1] 
+			 + foot_l[1]*foot_l[1]
 			 + foot_l[2]*foot_l[2] );
 
 
@@ -463,7 +463,7 @@ void		globalize( Q &X, Q &Y, Q &Z ),
 
 
 //	Begin, begin begin agin...
-//	--------------------------	
+//	--------------------------
 	not_yet3[object] = 0;
 	}
 
@@ -547,13 +547,13 @@ void		globalize( Q &X, Q &Y, Q &Z ),
 
 
 //	Here are the unfortunate results of friction...
-//	-----------------------------------------------		  
+//	-----------------------------------------------
 	T_control_beta = .002*( right_foot_mag*mag_foot_r*control_x_t
-		            + left_foot_mag*mag_foot_l*control_x_t );	  
-		  
+		            + left_foot_mag*mag_foot_l*control_x_t );
+
 	T_control_alpha = 0;//-.005*( right_foot_mag*mag_foot_r*control_y
-		           // + left_foot_mag*mag_foot_l*control_y_t );	  
-		  
+		           // + left_foot_mag*mag_foot_l*control_y_t );
+
 //	Here's the switch...
 //	--------------------
 	T_alpha_temp = I[object][13]*(T_alpha_t + T_control_alpha + T_right_beta + T_left_beta );
@@ -573,11 +573,11 @@ void		globalize( Q &X, Q &Y, Q &Z ),
 
 	T_alpha *= -1;
 	T_beta  *= -1;
-	T_gamma *= -1;	   
+	T_gamma *= -1;
 
 	T_alpha *= 0;
 	T_beta  *= 0;
-//	T_gamma *= 0;	   
+//	T_gamma *= 0;
 
 
 
@@ -643,7 +643,7 @@ Q	object8 = 2*I[object][21];				//Omega_magnitude...
 
 //	Biped (world) Z coordinate...
 //	=============================
-	S[object][2][2] = I[object][12]*F_total[2] - I[object][29];  
+	S[object][2][2] = I[object][12]*F_total[2] - I[object][29];
 
 
 //	Biped (world) alpha coordinate...
@@ -653,12 +653,12 @@ Q	object8 = 2*I[object][21];				//Omega_magnitude...
 
 //	Biped (world) beta coordinate...
 //	================================
-	S[object][4][2] = T_beta;  
+	S[object][4][2] = T_beta;
 
 
 //	Biped (world) gamma coordinate...
 //	=================================
-	S[object][5][2] = T_gamma;  
+	S[object][5][2] = T_gamma;
 
 
 //	Ho, ho ho ho ho ho.  Ho.
@@ -680,7 +680,7 @@ Q	object8 = 2*I[object][21];				//Omega_magnitude...
 
 //	Here we find some knee action...
 //	================================
-void	place_right_knee( int object ) {
+void	place_right_knee( int32_t object ) {
 
 Q	alpha,
 	beta,
@@ -700,7 +700,7 @@ Q	foot_length = .45*I[object][25];
 //	Let's get the correct foot_gamma...
 //	-----------------------------------
 	if ( fc_r == 0 ) I[object][16] = A[object][5][0]+.5*pi;
-//	I[object][16] = .5*pi;	
+//	I[object][16] = .5*pi;
 
 //	Now we manufacture the foot (simple for now)...
 //	-----------------------------------------------
@@ -720,7 +720,7 @@ Q	foot_length = .45*I[object][25];
 	beta = I[object][24] - I[object][25];
 
 //	Here's the knee perpendicular...
-//	--------------------------------	
+//	--------------------------------
 	h = -.5*sqrt( (alpha*alpha - mag_foot_r*mag_foot_r)
 	       *(mag_foot_r*mag_foot_r - beta*beta ) )/(mag_foot_r+.01);
 
@@ -757,8 +757,8 @@ Q	mu_condom = sqrt( abs(foot_length*foot_length - m*m) );
 	utility_pointer[object][14] = H_r[2] + knee[2];
 
 	utility_pointer[object][0] = utility_pointer[object][6] - utility_pointer[object][0];
-	utility_pointer[object][1] = utility_pointer[object][7] - utility_pointer[object][1]; 
-	utility_pointer[object][2] = utility_pointer[object][8] - utility_pointer[object][2]; 
+	utility_pointer[object][1] = utility_pointer[object][7] - utility_pointer[object][1];
+	utility_pointer[object][2] = utility_pointer[object][8] - utility_pointer[object][2];
 
 }
 
@@ -767,7 +767,7 @@ Q	mu_condom = sqrt( abs(foot_length*foot_length - m*m) );
 
 //	Now the left...
 //	===============
-void	place_left_knee( int object ) {
+void	place_left_knee( int32_t object ) {
 
 Q	alpha,
 	beta,
@@ -787,7 +787,7 @@ Q	foot_length = .45*I[object][25];
 //	Let's get the correct foot_gamma...
 //	-----------------------------------
 	if ( fc_l == 0 ) I[object][17] = A[object][5][0]+.5*pi;
-//	I[object][17] = .5*pi;	
+//	I[object][17] = .5*pi;
 
 //	Now we manufacture the foot (simple for now)...
 //	-----------------------------------------------
@@ -807,7 +807,7 @@ Q	foot_length = .45*I[object][25];
 	beta = I[object][24] - I[object][25];
 
 //	Here's the knee perpendicular...
-//	--------------------------------	
+//	--------------------------------
 	h = -.5*sqrt( (alpha*alpha - mag_foot_l*mag_foot_l)
 	           *(mag_foot_l*mag_foot_l - beta*beta ) )/(mag_foot_l+point_oo_one);
 
@@ -844,8 +844,8 @@ Q	mu_condom = sqrt( abs(foot_length*foot_length - m*m) );
 	utility_pointer[object][17] = H_l[2] + knee[2];
 
 	utility_pointer[object][3] = utility_pointer[object][9]  - utility_pointer[object][3];
-	utility_pointer[object][4] = utility_pointer[object][10] - utility_pointer[object][4]; 
-	utility_pointer[object][5] = utility_pointer[object][11] - utility_pointer[object][5]; 
+	utility_pointer[object][4] = utility_pointer[object][10] - utility_pointer[object][4];
+	utility_pointer[object][5] = utility_pointer[object][11] - utility_pointer[object][5];
 
 }
 
@@ -874,7 +874,7 @@ Q	x = X,
 
 		Y    =     x*( cos_alpha*sin_gamma )
 		     +  y*( cos_beta*cos_gamma + sin_alpha*sin_beta*sin_gamma )
-		     +  z*( cos_beta*sin_alpha*sin_gamma - cos_gamma*sin_beta );		
+		     +  z*( cos_beta*sin_alpha*sin_gamma - cos_gamma*sin_beta );
 
 		Z    = 	x*( -sin_alpha )
 		     +  y*( cos_alpha*sin_beta )
@@ -903,7 +903,7 @@ Q	x = X,
 
 		Y    =  x*( cos_gamma*sin_alpha*sin_beta - cos_beta*sin_gamma )
 		     +  y*( cos_beta*cos_gamma + sin_alpha*sin_beta*sin_gamma )
-		     +  z*( cos_alpha*sin_beta );		
+		     +  z*( cos_alpha*sin_beta );
 
 		Z    = 	x*( cos_beta*cos_gamma*sin_alpha + sin_beta*sin_gamma )
 		     +  y*( cos_beta*sin_alpha*sin_gamma - cos_gamma*sin_beta )

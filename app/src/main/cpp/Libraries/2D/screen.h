@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __SCREEN_H
 #define __SCREEN_H
-extern grs_screen *gr_alloc_screen (short w, short h);
+extern grs_screen *gr_alloc_screen (int16_t w, int16_t h);
 extern void gr_free_screen (grs_screen *s);
 extern void gr_set_screen (grs_screen *s);
 #endif /* !__SCREEN_H */

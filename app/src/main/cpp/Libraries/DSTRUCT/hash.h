@@ -48,28 +48,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Equivalence function, returns values are as per strcmp
 // i.e. 0 if data1 == data2, >0  if data1 > data2, <0 if data1 < data2.
-typedef int (*Equfunc)(void* data1,void* data2);
+typedef int32_t (*Equfunc)(void* data1,void* data2);
 
 // hashing function: data1 == data2 ==> hash(data1) == hash(data2)
-typedef int (*Hashfunc)(void* data);
+typedef int32_t (*Hashfunc)(void* data);
 
 
 
 typedef struct _hashtable
 {
-   int size;
-   int sizelog2;
-   int elemsize;
-   int fullness;
+   int32_t size;
+   int32_t sizelog2;
+   int32_t elemsize;
+   int32_t fullness;
    Equfunc efunc;
    Hashfunc hfunc;
-   char *statvec;
-   char *vec;
+   int8_t *statvec;
+   int8_t *vec;
 } Hashtable;
 
 
 
-errtype hash_init(Hashtable* h, int elemsize, int vecsize, Hashfunc hfunc, Equfunc efunc);
+errtype hash_init(Hashtable* h, int32_t elemsize, int32_t vecsize, Hashfunc hfunc, Equfunc efunc);
 // initialize a hashtable with the specified hashfunc and equfunc, using elemsize as
 // the size of an element, and using vecsize as the initial table size.
 
@@ -104,7 +104,7 @@ errtype hash_iter(Hashtable* h, HashIterFunc ifunc, void* data);
 errtype hash_copy(Hashtable* t, Hashtable* s);
 // Initializes t to be a copy of s
 
-errtype hash_step(Hashtable *h, void **result, int *index);
+errtype hash_step(Hashtable *h, void **result, int32_t *index);
 // Will step through a hashtable, returning the elements one at a time.
 
 errtype hash_destroy(Hashtable* h);

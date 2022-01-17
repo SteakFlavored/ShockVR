@@ -33,13 +33,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Internal Prototypes
 //--------------------
-int snd_find_free_handle(uchar smp_pri, bool check_only);
+int32_t snd_find_free_handle(uint8_t smp_pri, bool check_only);
 
 
 //--------------------------------------------------------------------------
 //  Get the parameters for a sound channel.
 //--------------------------------------------------------------------------
-snd_digi_parms *snd_sample_parms(int hnd_id)
+snd_digi_parms *snd_sample_parms(int32_t hnd_id)
 {
    return &_snd_smp_prm[hnd_id];
 }
@@ -47,7 +47,7 @@ snd_digi_parms *snd_sample_parms(int hnd_id)
 /*¥¥¥ Callback
 static void cdecl smp_EOS_callback(SAMPLE *S)
 {
-   int hnd_id;
+   int32_t hnd_id;
    snd_digi_parms *our_p;
    void cdecl (*smp_ecall)(snd_digi_parms *dprm);
 
@@ -70,7 +70,7 @@ static void cdecl smp_EOS_callback(SAMPLE *S)
 #ifdef USED
 static void cdecl smp_EOB_callback(SAMPLE *S)
 {
-   int hnd_id;
+   int32_t hnd_id;
    snd_digi_parms *our_p;
 
    if (snd_update!=NULL)
@@ -86,7 +86,7 @@ static void cdecl smp_EOB_callback(SAMPLE *S)
 //--------------------------------------------------------------------------
 //  Stop playing sound on a sound channel.
 //--------------------------------------------------------------------------
-void snd_end_sample(int hnd_id)
+void snd_end_sample(int32_t hnd_id)
 {
 	SndCommand	sc;
 
@@ -109,7 +109,7 @@ void snd_end_sample(int hnd_id)
 //--------------------------------------------------------------------------
 void snd_kill_all_samples(void)
 {
-	int 			i;
+	int32_t 			i;
 	SCStatus	stat;
 
 	for (i=0; i<_snd_smp_cnt; i++)
@@ -123,9 +123,9 @@ void snd_kill_all_samples(void)
 //--------------------------------------------------------------------------
 //  Call this to check for free sound handles, returns a handle id.
 //--------------------------------------------------------------------------
-int snd_find_free_handle(uchar smp_pri, bool check_only)
+int32_t snd_find_free_handle(uint8_t smp_pri, bool check_only)
 {
-	int 			i;
+	int32_t 			i;
 	SCStatus	stat;
 
 	// Return an available channel, if any.
@@ -139,7 +139,7 @@ int snd_find_free_handle(uchar smp_pri, bool check_only)
 	// If there are no available channels, return one with a lower priority.
 	for (i=0; i<_snd_smp_cnt; i++)
 	{
-		int lp = _snd_smp_prm[i].pri;
+		int32_t lp = _snd_smp_prm[i].pri;
 		if (lp < smp_pri)
 		{
 			if (!check_only)
@@ -160,7 +160,7 @@ void snd_sample_reload_parms(snd_digi_parms *sdp)
 {
 	SndChannelPtr	ourSC;
 	SndCommand		sc;
-	long					ls, rs;
+	int32_t					ls, rs;
 
 	ourSC = sdp->sndChan;
 
@@ -211,10 +211,10 @@ void snd_sample_reload_parms(snd_digi_parms *sdp)
  *    playback and add to asynch_update flag
  */
 //--------------------------------------------------------------------------
-int snd_sample_play(int snd_ref, int len, uchar *smp, snd_digi_parms *dprm)
+int32_t snd_sample_play(int32_t snd_ref, int32_t len, uint8_t *smp, snd_digi_parms *dprm)
 {
-	int 					hnd_id;
-	int					lpri = SND_DEF_PRI;
+	int32_t 					hnd_id;
+	int32_t					lpri = SND_DEF_PRI;
 	snd_digi_parms *hnd_parm;
 	SndChannelPtr	ourSC;
 	Handle				sndHdl;
@@ -273,7 +273,7 @@ int snd_sample_play(int snd_ref, int len, uchar *smp, snd_digi_parms *dprm)
 
 	sc.cmd = callBackCmd;
 	sc.param1 = 1;							// Sound complete
-	sc.param2 = (long)hnd_parm;		// Ptr to current sound parameters
+	sc.param2 = (int32_t)hnd_parm;		// Ptr to current sound parameters
 	SndDoCommand(ourSC, &sc, FALSE);
 
 	return hnd_id;

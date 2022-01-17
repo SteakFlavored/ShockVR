@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // fonts
 #include "fakefont.h"
 
-Gadget *gad_text_create(Gadget *parent, LGRect *dim, int z, ulong options, TNGStyle *sty, char *name)
+Gadget *gad_text_create(Gadget *parent, LGRect *dim, int32_t z, uint32_t options, TNGStyle *sty, int8_t *name)
 {
    Gadget *retgad;
    TNG *temp_tng;
@@ -59,11 +59,11 @@ Gadget *gad_text_create(Gadget *parent, LGRect *dim, int z, ulong options, TNGSt
    return (retgad);
 }
 
-Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, ulong options, LGPoint size)
+Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, uint32_t options, LGPoint size)
 {
    LGRect newrect;
    Gadget *rgad, *g;
-   char new_name[128];
+   int8_t new_name[128];
 
    g = (Gadget *)ui_data;
    newrect.ul = loc;

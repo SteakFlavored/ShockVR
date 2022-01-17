@@ -59,7 +59,7 @@ OSErr RequiredCheck(AppleEvent *theAppleEvent )
 //--------------------------------------------------------------------
 //  Handle the Open Application AppleEvent - do nothing for Shock.
 //--------------------------------------------------------------------
-pascal OSErr HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *, long  )
+pascal OSErr HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 {
 	OSErr		anErr;
 
@@ -70,17 +70,17 @@ pascal OSErr HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *, long  )
 //--------------------------------------------------------------------
 //  Handle the OpenDocument AppleEvent - extract the file specs and open document windows for them.
 //--------------------------------------------------------------------
-pascal OSErr HandleODOC(AppleEvent *theAppleEvent, AppleEvent *, long  )
+pascal OSErr HandleODOC(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 {
 	OSErr			anErr;
 	AEDescList		docList;
 	FSSpec			anFSS;
-	long				itemsInList;
+	int32_t				itemsInList;
 	AEKeyword		theKeyword;
 	DescType		typeCode;
 	Size				actualSize;
 	FInfo				theFInfo;
-	Boolean			isStationery;
+	bool			isStationery;
 
 	anErr = AEGetParamDesc(theAppleEvent, keyDirectObject, typeAEList, &docList);
 	if (anErr)return(anErr);
@@ -115,7 +115,7 @@ pascal OSErr HandleODOC(AppleEvent *theAppleEvent, AppleEvent *, long  )
 //--------------------------------------------------------------------
 //  Handle the Print Document AppleEvent - don't do nuthin.
 //--------------------------------------------------------------------
-pascal OSErr HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *, long  )
+pascal OSErr HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 {
 	OSErr	anErr;
 
@@ -126,7 +126,7 @@ pascal OSErr HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *, long  )
 //--------------------------------------------------------------------
 //  Handle the Quit AppleEvent - handle quitting.
 //--------------------------------------------------------------------
-pascal OSErr HandleQUIT(AppleEvent *theAppleEvent, AppleEvent *, long  )
+pascal OSErr HandleQUIT(AppleEvent *theAppleEvent, AppleEvent *, int32_t  )
 {
 	OSErr	anErr;
 

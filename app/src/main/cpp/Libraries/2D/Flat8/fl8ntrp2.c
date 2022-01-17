@@ -50,10 +50,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void flat8_interp2_ubitmap (grs_bitmap *bm)
 {
    grs_rgb a,b;
-   int i,j;
-   uchar *c;
-   uchar *src,*dst;
-   int dd,ds;
+   int32_t i,j;
+   uint8_t *c;
+   uint8_t *src,*dst;
+   int32_t dd,ds;
 
    /* Cycle through rows and do horizontal strips */
    dd = 2*grd_bm.row - grd_bm.w;

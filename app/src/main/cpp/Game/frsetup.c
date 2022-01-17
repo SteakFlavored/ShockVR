@@ -147,46 +147,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Internal Prototypes
 void fr_tfunc_grab_start(void);
 void fr_set_default_ptrs(void);
-void _fr_update_context(int det);
-void _fr_change_detail(int det);
+void _fr_update_context(int32_t det);
+void _fr_change_detail(int32_t det);
 
 // Globals
 void  (*fr_mouse_hide)(void), (*fr_mouse_show)(void);
-int   (*fr_get_idx)(void);
-bool  (*fr_obj_block)(void *vmptr, uchar *_sclip, int *loc);
+int32_t   (*fr_get_idx)(void);
+bool  (*fr_obj_block)(void *vmptr, uint8_t *_sclip, int32_t *loc);
 void  (*fr_clip_start)(bool headnorth);
 void  (*fr_rend_start)(void);
 grs_bitmap *(*fr_get_tmap)(void);
 
 // Set by machine type
 #if (defined(powerc) || defined(__powerc))
-Boolean DoubleSize = false;
-Boolean SkipLines = false;
+bool DoubleSize = false;
+bool SkipLines = false;
 #else
-Boolean DoubleSize = true;
-Boolean SkipLines = false;
+bool DoubleSize = true;
+bool SkipLines = false;
 #endif
 
-int   (*_fr_glob_draw_call)(void *dest_canvas, void *dest_bm, int x, int y, int flags)=NULL;
-void  (*_fr_glob_horizon_call)(void *dest_bm, int flags)=NULL;
-void  (*_fr_glob_render_call)(void *dest_bm, int flags)=NULL;
+int32_t   (*_fr_glob_draw_call)(void *dest_canvas, void *dest_bm, int32_t x, int32_t y, int32_t flags)=NULL;
+void  (*_fr_glob_horizon_call)(void *dest_bm, int32_t flags)=NULL;
+void  (*_fr_glob_render_call)(void *dest_bm, int32_t flags)=NULL;
 
 //#define DOUBLE_DEF_STUPID_BLEND
 #ifdef DOUBLE_DEF_STUPID_BLEND
-uchar det_sizing[4][2]={{0,0},{1,0},{0,0},{0,0}};     /* setup for detail modes */
+uint8_t det_sizing[4][2]={{0,0},{1,0},{0,0},{0,0}};     /* setup for detail modes */
 #else
-uchar det_sizing[4][2]={{0,0},{0,0},{0,0},{0,0}};     /* sizing for detail modes */
+uint8_t det_sizing[4][2]={{0,0},{0,0},{0,0},{0,0}};     /* sizing for detail modes */
 #endif
 
 /* KLC - no stereo in Mac version
 extern bool inp6d_headset;
 extern bool inp6d_stereo_active;
-extern int inp6d_stereo_div;
+extern int32_t inp6d_stereo_div;
 */
 fauxrend_context *_fr, *_sr;           /* current and default fauxrend contexts */
-uint _fr_glob_flags;                   /* global flag settings */
-uint _fr_curflags;                     /* settings for current rendering */
-uchar *_fr_clut_list[4];               /* various lighting fills */
+uint32_t _fr_glob_flags;                   /* global flag settings */
+uint32_t _fr_curflags;                     /* settings for current rendering */
+uint8_t *_fr_clut_list[4];               /* various lighting fills */
 // the default setup/configuration for fr parameters, modifiable
 
 fauxrend_parameters _frp=
@@ -197,9 +197,9 @@ fauxrend_parameters _frp=
  {1,2,0,3,0xff,{1,4,9},{1,4,9},18,0,0},		// MLA - 0xff is clear color, used to be 0
  {0,0,0,0}
 };
-int _fr_last_detail=-1;
-int _fr_default_detail=0;
-int _fr_global_detail=3;
+int32_t _fr_last_detail=-1;
+int32_t _fr_default_detail=0;
+int32_t _fr_global_detail=3;
 #define FR_USE_GLOBAL_DETAIL 4
 
 //======== global initialization
@@ -221,13 +221,13 @@ grs_bitmap tmap_bm[FAKE_TMAPS];  // this is dumb, yea yea
 
 void _fr_init_all_tmaps(void)
 {
-   uchar *dummy_tm;
-   int i, x, y;
+   uint8_t *dummy_tm;
+   int32_t i, x, y;
 
    for (i=0; i<FAKE_TMAPS; i++)
 	{
-      int v1=(rand()&0xff), v2=(rand()&0xff), v3=(rand()&0xff), v4=(rand()&0xff);
-      dummy_tm=(uchar *)NewPtr(16*16);
+      int32_t v1=(rand()&0xff), v2=(rand()&0xff), v3=(rand()&0xff), v4=(rand()&0xff);
+      dummy_tm=(uint8_t *)NewPtr(16*16);
       for (x=0; x<16; x++)
          for (y=0; y<16; y++)
             dummy_tm[(x*16)+y]=(((x>>1)+(y>>1))&1)?((2*abs(8-x))>y)?v1:v2:((2*abs(8-x))>y)?v3:v4;
@@ -242,7 +242,7 @@ void _fr_init_all_tmaps(void)
 
 void _fr_free_all_tmaps(void)
 {
-   int i;
+   int32_t i;
    for (i=0; i<FAKE_TMAPS; i++)
       DisposePtr((Ptr)tmap_bm[i].bits);
 }
@@ -251,16 +251,16 @@ void _fr_free_all_tmaps(void)
 #define _fr_free_all_tmaps()
 #endif
 
-extern int _game_fr_tmap;
+extern int32_t _game_fr_tmap;
 void        fr_default_mouse(void)           {}
-int         fr_default_idx(void)             {return (64+(((8*_fdt_y)+_fdt_x)&0x3f));}
-int         fr_pickup_idx(void)              {gr_set_fill_parm(_game_fr_tmap+1); return _game_fr_tmap+1;}
+int32_t         fr_default_idx(void)             {return (64+(((8*_fdt_y)+_fdt_x)&0x3f));}
+int32_t         fr_pickup_idx(void)              {gr_set_fill_parm(_game_fr_tmap+1); return _game_fr_tmap+1;}
 #ifndef NO_FAKE_TMAPS
 grs_bitmap *fr_default_tmap(void)            {return &tmap_bm[fr_default_idx()%FAKE_TMAPS];}
 #else
 grs_bitmap *fr_default_tmap(void)            {return NULL;}
 #endif
-bool        fr_default_block(void *, uchar *, int *) {return FALSE;}
+bool        fr_default_block(void *, uint8_t *, int32_t *) {return FALSE;}
 void        fr_default_clip_start(bool ) {}
 void        fr_default_rend_start(void)      {}
 
@@ -302,7 +302,7 @@ void fr_shutdown(void)
 }
 
 // you taught me everything about a poison apple
-void fr_set_cluts(uchar *base, uchar *bwclut, uchar *greenclut, uchar *amberclut)
+void fr_set_cluts(uint8_t *base, uint8_t *bwclut, uint8_t *greenclut, uint8_t *amberclut)
 {
    _fr_clut_list[0]=base; _fr_clut_list[1]=bwclut; _fr_clut_list[2]=greenclut; _fr_clut_list[3]=amberclut;
 }
@@ -315,7 +315,7 @@ g3s_vector viewer_position;
 g3s_angvec viewer_orientation;
 
 // set the default view for NULL argument passing to the system
-int fr_set_view(frc *view)
+int32_t fr_set_view(frc *view)
 {
    _chkNull(view);
    _sr=(fauxrend_context *)view;
@@ -323,7 +323,7 @@ int fr_set_view(frc *view)
 }
 
 // free the memory (frame buffers+structures) associated with view view
-int fr_free_view(frc *view)
+int32_t fr_free_view(frc *view)
 {
    _fr_top(view);
    if (_fr!=NULL)
@@ -340,7 +340,7 @@ int fr_free_view(frc *view)
    _fr_ret;
 }
 
-int fr_mod_cams(frc *fr, void *v_cam, int mod_fac)
+int32_t fr_mod_cams(frc *fr, void *v_cam, int32_t mod_fac)
 {
 	cams *cam=(cams *)v_cam;
 
@@ -348,9 +348,9 @@ int fr_mod_cams(frc *fr, void *v_cam, int mod_fac)
 	_fr->viewer_zoom = fix_mul(_fr->viewer_zoom,mod_fac);
 	if (_fr->viewer_zoom==0)
 		_fr->viewer_zoom=1;
-	if ((unsigned long) _fr->viewer_zoom > 0x7fffffff)
+	if ((uint32_t) _fr->viewer_zoom > 0x7fffffff)
 		_fr->viewer_zoom=0x7fffffff;
-	if ((long)cam != -1)
+	if ((int32_t)cam != -1)
 		if (cam == NULL)
 			_fr->camptr = fr_camera_getdef();
 		else
@@ -360,7 +360,7 @@ int fr_mod_cams(frc *fr, void *v_cam, int mod_fac)
 // we put
 // eachother
 // down
-int fr_context_mod_flag (frc *fr, int pflags_on, int pflags_off)       // change flags
+int32_t fr_context_mod_flag (frc *fr, int32_t pflags_on, int32_t pflags_off)       // change flags
 {
    _fr_top(fr);
    _fr->flags&=~pflags_off;
@@ -369,8 +369,8 @@ int fr_context_mod_flag (frc *fr, int pflags_on, int pflags_off)       // change
 }
 
 #if _fr_defdbg(ALTCAM)
-extern int _fr_altcamx, _fr_altcamy;
-int fr_mod_xtracam(frc *fr, void *v_xtra_cam)
+extern int32_t _fr_altcamx, _fr_altcamy;
+int32_t fr_mod_xtracam(frc *fr, void *v_xtra_cam)
 {
    cams *xtra_cam=(cams *)v_xtra_cam;
    _fr_top(fr);
@@ -380,7 +380,7 @@ int fr_mod_xtracam(frc *fr, void *v_xtra_cam)
 #endif
 
 // we never want the truth.... to be found
-int fr_global_mod_flag(int flags_on, int flags_off)
+int32_t fr_global_mod_flag(int32_t flags_on, int32_t flags_off)
 {
    _fr_glob_flags&=~flags_off;
    _fr_glob_flags|=flags_on;
@@ -390,9 +390,9 @@ int fr_global_mod_flag(int flags_on, int flags_off)
 // we are all bigots
 // so filled with hatred
 // we release our poisons
-int fr_mod_size (frc *view, int xc, int yc, int wid, int hgt)    // move us around
+int32_t fr_mod_size (frc *view, int32_t xc, int32_t yc, int32_t wid, int32_t hgt)    // move us around
 {
-   int detail;
+   int32_t detail;
    _fr_top(view);
    // should leard to deal with built zoom and such, so on
    detail=_fr->detail;
@@ -402,10 +402,10 @@ int fr_mod_size (frc *view, int xc, int yc, int wid, int hgt)    // move us arou
 }
 
 // like styrofoam
-int fr_set_callbacks(frc *view,
-								int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
-                     				void (*horizon)(void *dstbm, int flg),
-                     				void (*render)(void *dstbm, int flg))
+int32_t fr_set_callbacks(frc *view,
+								int32_t (*draw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg),
+                     				void (*horizon)(void *dstbm, int32_t flg),
+                     				void (*render)(void *dstbm, int32_t flg))
 {  // build local context setup for render
    _fr_top(view);
    _fr->draw_call = draw;
@@ -415,9 +415,9 @@ int fr_set_callbacks(frc *view,
 }
 
 // like styrofoam
-int fr_set_global_callbacks( int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
-                     							void (*horizon)(void *dstbm, int flg),
-              								void (*render)(void *dstbm, int flg) )
+int32_t fr_set_global_callbacks( int32_t (*draw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg),
+                     							void (*horizon)(void *dstbm, int32_t flg),
+              								void (*render)(void *dstbm, int32_t flg) )
 {  // build local context setup for render
    _fr_glob_draw_call = draw;
    _fr_glob_horizon_call = horizon;
@@ -429,7 +429,7 @@ int fr_set_global_callbacks( int (*draw)(void *dstc, void *dstbm, int x, int y, 
 //  The big dude that sets up a rendering context.  Changed in Mac version to use our already allocated main
 //  offscreen buffer.
 //---------------------------------------------------------------------------------
-frc *fr_place_view (frc *view, void *v_cam, void *cnvs, int pflags, char axis, int fov, int xc, int yc, int wid, int hgt)
+frc *fr_place_view (frc *view, void *v_cam, void *cnvs, int32_t pflags, int8_t axis, int32_t fov, int32_t xc, int32_t yc, int32_t wid, int32_t hgt)
 {
 	cams *cam=(cams *)v_cam;
 	fauxrend_context *fr;
@@ -451,18 +451,18 @@ frc *fr_place_view (frc *view, void *v_cam, void *cnvs, int pflags, char axis, i
 		{
 DebugStr("\pHey! I though we always supplied a canvas");
 /*
-			uchar *p;
-			int	rowbytes = (wid + 31) & 0xFFFFFFE0;
+			uint8_t *p;
+			int32_t	rowbytes = (wid + 31) & 0xFFFFFFE0;
 
 			// if the number of cache lines is even, then add a cache line width to improve
 			// even/odd line usage for vertical drawing.
 			if (!((rowbytes / 64) & 1))
 				rowbytes += 64;
-			p = (uchar *)NewPtr(rowbytes*hgt + 32);
+			p = (uint8_t *)NewPtr(rowbytes*hgt + 32);
 			if (p == NULL)
 				return NULL;
 			fr->realCanvasPtr = (Ptr)p;
-			gr_init_canvas(&fr->main_canvas, (uchar *)((ulong)(p+31) & 0xFFFFFFE0), BMT_FLAT8, wid, hgt);
+			gr_init_canvas(&fr->main_canvas, (uint8_t *)((uint32_t)(p+31) & 0xFFFFFFE0), BMT_FLAT8, wid, hgt);
 			fr->main_canvas.bm.row = rowbytes;
 */
 		}
@@ -470,7 +470,7 @@ DebugStr("\pHey! I though we always supplied a canvas");
 		{
 			// lets pretend we are getting a bitmap instead, eh?
 			//         fr->main_canvas=*((grs_canvas *)cnvs);
-			gr_init_canvas(&fr->main_canvas,(uchar *)cnvs,BMT_FLAT8,wid,hgt);
+			gr_init_canvas(&fr->main_canvas,(uint8_t *)cnvs,BMT_FLAT8,wid,hgt);
 			pflags|=FR_OWNBITS_MASK;
 		}
 	}
@@ -494,10 +494,10 @@ void fr_use_global_detail(frc *view)
    if (view!=NULL) ((fauxrend_context *)view)->detail=FR_USE_GLOBAL_DETAIL;
 }
 
-int fr_view_resize(frc *view, int wid, int hgt)
+int32_t fr_view_resize(frc *view, int32_t wid, int32_t hgt)
 {
-   int nw, nh, nxt, nyt;
-   int detail;
+   int32_t nw, nh, nxt, nyt;
+   int32_t detail;
    _fr_top(view);
    nw=_fr->xwid; nh=_fr->ywid; nxt=_fr->xtop; nyt=_fr->ytop;           /* get base new coors */
    if ((nw+nxt<=wid)&&(nh+nyt<=hgt))
@@ -513,9 +513,9 @@ int fr_view_resize(frc *view, int wid, int hgt)
    _fr_ret;
 }
 
-int fr_view_full(frc *view, int wid, int hgt)
+int32_t fr_view_full(frc *view, int32_t wid, int32_t hgt)
 {
-   int detail;
+   int32_t detail;
    _fr_top(view);
    detail=_fr->detail;
    fr_place_view(_fr,_fr->camptr,NULL,_fr->flags,_fr->axis,_fr->fov,0,0,wid,hgt);
@@ -535,7 +535,7 @@ void *fr_get_canvas(frc *view)
 // but whose got the real, anti-parent culture sound
 
 // run when context detail has changed.
-void _fr_update_context(int det)
+void _fr_update_context(int32_t det)
 {
    if (_fr->flags&FR_DOUBLEB_MASK)
 	   gr_init_canvas(&_fr->draw_canvas,_fr->main_canvas.bm.bits,BMT_FLAT8,_fr->xwid>>det_sizing[det][0],_fr->ywid>>det_sizing[det][1]);
@@ -550,10 +550,10 @@ extern void gr_set_lin_always();
 extern void gr_reset_per();
 #endif
 
-void _fr_change_detail(int det)
+void _fr_change_detail(int32_t det)
 {
    // note: pixel_ratio 5 data types before scrw, if order is preserved
-   int tmpz, fov;
+   int32_t tmpz, fov;
 #ifdef DOUBLE_DEF_STUPID_BLEND
    if ((det==1)&&(_fr_last_detail!=1))
     { /*_fr->viewer_zoom<<=1; */ *(fix *)((&scrw)-5)>>=1; }
@@ -587,9 +587,9 @@ void _fr_change_detail(int det)
  * masks in the global rendering context
  * deals with any change in detail settings
  */
-int fr_prepare_view(frc *view)
+int32_t fr_prepare_view(frc *view)
 {
-   int det;
+   int32_t det;
    _fr_top(view);
    _fr_curflags=_fr_glob_flags|_fr->flags;       // for now, simply merge
    if (_fr->detail==FR_USE_GLOBAL_DETAIL)
@@ -607,24 +607,24 @@ int fr_prepare_view(frc *view)
 extern fix EDMS_Dirac_basis[9];
 
 #ifdef STEREO_SUPPORT
-extern uchar hack_cameras_needed;
+extern uint8_t hack_cameras_needed;
 #endif
 
 /* sets the 3d system up based upon the prepared context */
 #define FIXANG_EPS (FIXANG_PI>>5)
 #define FIXANG_MASK (2*FIXANG_PI-1)
-extern int (*_fr_lit_floor_func)(int, g3s_phandle *, grs_bitmap *);
-extern int (*_fr_floor_func)(int, g3s_phandle *, grs_bitmap *);
-extern int (*_fr_lit_wall_func)(int, g3s_phandle *, grs_bitmap *);
-extern int (*_fr_wall_func)(int, g3s_phandle *, grs_bitmap *);
-extern int (*_fr_lit_per_func)(int, g3s_phandle *, grs_bitmap *);
-extern int (*_fr_per_func)(int, g3s_phandle *, grs_bitmap *);
-int fr_start_view(void)
+extern int32_t (*_fr_lit_floor_func)(int32_t, g3s_phandle *, grs_bitmap *);
+extern int32_t (*_fr_floor_func)(int32_t, g3s_phandle *, grs_bitmap *);
+extern int32_t (*_fr_lit_wall_func)(int32_t, g3s_phandle *, grs_bitmap *);
+extern int32_t (*_fr_wall_func)(int32_t, g3s_phandle *, grs_bitmap *);
+extern int32_t (*_fr_lit_per_func)(int32_t, g3s_phandle *, grs_bitmap *);
+extern int32_t (*_fr_per_func)(int32_t, g3s_phandle *, grs_bitmap *);
+int32_t fr_start_view(void)
 {
    g3s_matrix system_matrix;
-   int use_zoom;
-   uchar old_cam_type;
-   int detail;
+   int32_t use_zoom;
+   uint8_t old_cam_type;
+   int32_t detail;
 
    // check detail for canvas sizing
    gr_set_canvas(&_fr->draw_canvas);
@@ -691,7 +691,7 @@ int fr_start_view(void)
    if (((_fr_curflags&(FR_PICKUPM_MASK|FR_HACKCAM_MASK))==0)&&inp6d_stereo_active&&
         ((_fr_curflags&FR_CURVIEW_MASK)==FR_CURVIEW_STRT))
    {
-      extern uchar g3d_stereo;
+      extern uint8_t g3d_stereo;
       i6_video(I6VID_FRM_START,NULL);  // lets go
       i6_video(I6VID_FRM_INFIN,NULL);  // begin infinite region
       gr_set_canvas(i6d_ss->cf_infin);
@@ -712,7 +712,7 @@ int fr_start_view(void)
 /*KLC - stereo
    if (inp6d_headset)
    {
-      extern int inp6d_curr_fov;
+      extern int32_t inp6d_curr_fov;
 	   use_zoom=g3_get_zoom(FR_DEF_AXIS,build_fix_angle(inp6d_curr_fov),320,200);
       std_size=2;
    }
@@ -739,7 +739,7 @@ int fr_start_view(void)
    } else
       g3_set_view_angles(&viewer_position,&viewer_orientation,ANGLE_ORDER,use_zoom);
 
-   g3_set_bitmap_scale(fix_make(0,(int)(2048/3)),fix_make(0,(int)(2048/3)));
+   g3_set_bitmap_scale(fix_make(0,(int32_t)(2048/3)),fix_make(0,(int32_t)(2048/3)));
 //	g3_get_FOV(&x_fov,&y_fov);
    if (!_fr->flags&FR_DOUBLEB_MASK)
       (*fr_mouse_hide)();
@@ -766,7 +766,7 @@ g3s_vector zvec = {0,0,0};
 
 extern bool view360_is_rendering;
 
-int fr_send_view (void)
+int32_t fr_send_view (void)
 {
    bool 	snd_frm=TRUE;
    bool	ok_to_double;

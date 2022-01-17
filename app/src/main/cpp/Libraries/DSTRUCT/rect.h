@@ -52,8 +52,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	Here are the Point and LGRect structs
 
 typedef struct {
-	short x;
-	short y;
+	int16_t x;
+	int16_t y;
 } LGPoint;
 
 typedef struct {
@@ -63,7 +63,7 @@ typedef struct {
 
 //	Point macros
 
-#define PointsEqual(p1,p2) (*(long*)(&(p1)) == *(long*)(&(p2)))
+#define PointsEqual(p1,p2) (*(int32_t*)(&(p1)) == *(int32_t*)(&(p2)))
 #define PointSetNull(p) do {(p).x = -1; (p).y = -1;} while (0);
 #define PointCheckNull(p) ((p).x == -1 && (p).y == -1)
 
@@ -126,26 +126,26 @@ typedef struct {
 
 //	These are the functional versions of the above macros
 
-int RectTestSect(LGRect *pr1, LGRect *pr2);
+int32_t RectTestSect(LGRect *pr1, LGRect *pr2);
 void RectUnion(LGRect *pr1, LGRect *pr2, LGRect *prunion);
-int RectEncloses(LGRect *pr1, LGRect *pr2);
-int RectTestPt(LGRect *prect, LGPoint pt);
+int32_t RectEncloses(LGRect *pr1, LGRect *pr2);
+int32_t RectTestPt(LGRect *prect, LGPoint pt);
 void RectMove(LGRect *pr, LGPoint delta);
 void RectOffsettedRect(LGRect *pr, LGPoint delta, LGRect *proff);
 
 //	These functions have no macro counterparts
-int RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect);
-int RectClipCode(LGRect *prect, LGPoint pt);
+int32_t RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect);
+int32_t RectClipCode(LGRect *prect, LGPoint pt);
 
 // guess why this isnt a macro        // hah, you cant
-//Point MakePoint(short x, short y);  // Guess what this does.
-//#define MakePoint(x,y) (Point)(((ushort)y<<16)+((ushort)x))
+//Point MakePoint(int16_t x, int16_t y);  // Guess what this does.
+//#define MakePoint(x,y) (Point)(((uint16_t)y<<16)+((uint16_t)x))
 // oh, doug is mocked, you cant cast to a non-scaler type
-LGPoint MakePoint(short x, short y);
+LGPoint MakePoint(int16_t x, int16_t y);
 
 /*
 // take this, note ax and bx passed but use whole thing... oooooh
-Point MakePointInline(ushort x, ushort y);
+Point MakePointInline(uint16_t x, uint16_t y);
 #pragma aux MakePointInline = \
    "shl     ebx,10H"          \
    "and     eax,0000ffffH"    \
@@ -153,7 +153,7 @@ Point MakePointInline(ushort x, ushort y);
    parm [ax] [bx]             \
    modify [eax ebx];
 // and this
-#define MakePoint(x,y) MakePointInline((ushort)x,(ushort)y)
+#define MakePoint(x,y) MakePointInline((uint16_t)x,(uint16_t)y)
 // curse you
 // note i had to specify ax and bx even though i dont care what is really used
 // we would like to say [ax bx cx dx] and then have the code use arg1 and arg2

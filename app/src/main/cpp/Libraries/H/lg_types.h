@@ -38,23 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __TYPES_H
 #define __TYPES_H
 
-#ifndef _H2INC		//don't redefine byte in assembly header
-/* this is a signed byte */
-typedef int8_t byte;
-#endif /* !_H2INC */
-
-/* these are convenience typedefs so we don't always have to keep typing
-   `unsigned.' */
-typedef uint8_t uchar;
-typedef uint16_t ushort;
-typedef uint32_t uint;
-typedef uint32_t ulong;
-typedef uint8_t ubyte;
-
-#ifndef NULL
-#define NULL 0
-#endif /* !NULL */
-
 #ifndef TRUE
 #define TRUE 1
 #endif /* !TRUE */

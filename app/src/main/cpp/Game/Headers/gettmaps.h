@@ -28,6 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ok, those should be fixed
 
 #define BUILD_TEXTURE_BITMAPS
-extern grs_bitmap *get_texture_map(int idx, int sz);
+extern grs_bitmap *get_texture_map(int32_t idx, int32_t sz);
 #define SAFE_TEXTURE (get_texture_map(0,0))
 

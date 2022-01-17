@@ -56,15 +56,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    note: this can be improved a lot.  pointed should be coded for trivial
    accept/reject.  code can be saved in the enter/exit cases by noting
    the change in the in/out status. */
-int gr_clip_poly(int n, int l, grs_vertex **vpl, grs_vertex ***pcplist)
+int32_t gr_clip_poly(int32_t n, int32_t l, grs_vertex **vpl, grs_vertex ***pcplist)
 {
    fix **cplist;
    fix **tplist;
    fix *tlist;
-   int i;                  /* source vertex index */
-   int j;                  /* destination vertex index */
-   int k;
-   int new_v = 0;
+   int32_t i;                  /* source vertex index */
+   int32_t j;                  /* destination vertex index */
+   int32_t k;
+   int32_t new_v = 0;
    fix *v0, *v1;
    fix num, den;
 

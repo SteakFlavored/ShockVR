@@ -43,9 +43,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SC_VEC_COUNT  4
 
 #ifndef __FRCLIP_SRC
-extern ushort  sc_reg[NUM_SUBCLIP][SC_VEC_COUNT];
-extern ushort *cur_sc_ptr;
-extern uint    cur_sc_reg;
+extern uint16_t  sc_reg[NUM_SUBCLIP][SC_VEC_COUNT];
+extern uint16_t *cur_sc_ptr;
+extern uint32_t    cur_sc_reg;
 #endif
 
 #define SC_FACE_MASK 0x0003
@@ -65,8 +65,8 @@ extern uint    cur_sc_reg;
 #define sc_set_facev(sc,vn,f)   (sc_reg[sc][vn]=(sc_reg[sc][vn]&SC_INTR_MASK)|(f))
 #define sc_set_intrv(sc,vn,i)   (sc_reg[sc][vn]=(sc_reg[sc][vn]&SC_FACE_MASK)|(i&SC_INTR_MASK))
 // wacky read it as a long, vn is the base, ie. 0 or 2
-#define sc_set_novec(sc,vn)     ((*((long *)&sc_reg[sc][vn]))=SC_NILL_VECT)
-#define sc_chk_novec(sc,vn)     ((*((long *)&sc_reg[sc][vn]))==SC_NILL_VECT)
+#define sc_set_novec(sc,vn)     ((*((int32_t *)&sc_reg[sc][vn]))=SC_NILL_VECT)
+#define sc_chk_novec(sc,vn)     ((*((int32_t *)&sc_reg[sc][vn]))==SC_NILL_VECT)
 
 #define sc_reset()              { cur_sc_ptr=&sc_reg[FIRST_SC_REG][0]; cur_sc_reg=FIRST_SC_REG; }
 #define sc_nxtvec()             { cur_sc_ptr+=SC_VEC_COUNT; cur_sc_reg++; }

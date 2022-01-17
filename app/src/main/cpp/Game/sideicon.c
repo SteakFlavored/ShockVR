@@ -83,10 +83,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void side_icon_language_change(void);
 bool side_icon_mouse_callback(uiEvent *e, LGRegion *r, void *udata);
-void zoom_side_icon_to_mfd(int icon,int waretype, int wnum);
-void zoom_to_side_icon(LGPoint from, int icon);
-bool side_icon_hotkey_func(ushort keycode, ulong context, int i);
-void side_icon_draw_bm(LGRect *r, ubyte icon, ubyte art);
+void zoom_side_icon_to_mfd(int32_t icon,int32_t waretype, int32_t wnum);
+void zoom_to_side_icon(LGPoint from, int32_t icon);
+bool side_icon_hotkey_func(uint16_t keycode, uint32_t context, int32_t i);
+void side_icon_draw_bm(LGRect *r, uint8_t icon, uint8_t art);
 
 // ----------
 // Structures
@@ -96,15 +96,15 @@ void side_icon_draw_bm(LGRect *r, ubyte icon, ubyte art);
 typedef struct _side_icon {
    LGRect   r;
    bool flashstate;
-   ubyte flashcount;
-   ubyte state;
+   uint8_t flashcount;
+   uint8_t state;
 } SIDE_ICON;
 
 typedef struct _icon_data
 {
-   byte waretype;
-   long waretrip;
-   int flashfx;
+   int8_t waretype;
+   int32_t waretrip;
+   int32_t flashfx;
 } ICON_DATA;
 
 
@@ -124,12 +124,12 @@ grs_bitmap side_icon_background;
 #endif
 
 #ifdef PROGRAM_SIDEICON
-static char shiftnums[]=")!@#$%^&*(";
-static uchar programmed_sideicon=0;
+static int8_t shiftnums[]=")!@#$%^&*(";
+static uint8_t programmed_sideicon=0;
 #endif
 
 // this is in wares.c
-extern long ware_base_triples[NUM_WARE_TYPES];
+extern int32_t ware_base_triples[NUM_WARE_TYPES];
 
 #define IDX_OF_TYPE(type,trip) (OPTRIP(trip) - OPTRIP(ware_base_triples[type]))
 
@@ -151,8 +151,8 @@ static ICON_DATA icon_data[NUM_SIDE_ICONS] =
 
 grs_bitmap	icon_cursor_bm[2];
 LGCursor		icon_cursor[2];
-static char		*cursor_strings[NUM_SIDE_ICONS];
-static char		cursor_strbuf[128];
+static int8_t		*cursor_strings[NUM_SIDE_ICONS];
+static int8_t		cursor_strbuf[128];
 
 
 // ============
@@ -173,7 +173,7 @@ void side_icon_language_change(void)
 
 void init_all_side_icons()
 {
-	int i;
+	int32_t i;
 
 	// Now, figure out on-screen locations
 
@@ -199,7 +199,7 @@ void init_all_side_icons()
 void init_side_icon_popups(void)
 {
 	side_icon_language_change();
-	for (int i = 0; i < 2; i++)
+	for (int32_t i = 0; i < 2; i++)
 	{
 		LGPoint offset = {0, -1};
 		LGCursor* c = &icon_cursor[i];
@@ -213,12 +213,12 @@ void init_side_icon_popups(void)
 
 void init_side_icon_hotkeys(void)
 {
-   bool side_icon_hotkey_func(ushort key, ulong context, int i);
-   bool side_icon_progset_hotkey_func(ushort key, ulong context, int i);
-   bool lantern_change_setting_hkey(ushort key, ulong context, void* i);
-   bool shield_change_setting_hkey(ushort key, ulong context, void* i);
-   bool side_icon_prog_hotkey_func(ushort key, ulong context, void* notused);
-   int i;
+   bool side_icon_hotkey_func(uint16_t key, uint32_t context, int32_t i);
+   bool side_icon_progset_hotkey_func(uint16_t key, uint32_t context, int32_t i);
+   bool lantern_change_setting_hkey(uint16_t key, uint32_t context, void* i);
+   bool shield_change_setting_hkey(uint16_t key, uint32_t context, void* i);
+   bool side_icon_prog_hotkey_func(uint16_t key, uint32_t context, void* notused);
+   int32_t i;
 
    hotkey_add(KB_FLAG_ALT|KB_FLAG_DOWN|'4',DEMO_CONTEXT,lantern_change_setting_hkey, NULL);
    hotkey_add(KB_FLAG_ALT|KB_FLAG_DOWN|'5',DEMO_CONTEXT,shield_change_setting_hkey, NULL);
@@ -253,7 +253,7 @@ void init_side_icon_hotkeys(void)
 
 void screen_init_side_icons(LGRegion* root)
 {
-   int id;
+   int32_t id;
    LGRegion *left_region, *right_region;
    LGRect r;
    left_region = (LGRegion *)NewPtr(sizeof(LGRegion));
@@ -285,12 +285,12 @@ void screen_init_side_icons(LGRegion* root)
 // select_side_icon() selects a given side icon.
 
 
-void zoom_side_icon_to_mfd(int icon,int waretype, int wnum)
+void zoom_side_icon_to_mfd(int32_t icon,int32_t waretype, int32_t wnum)
 {
-   extern ubyte waretype2invtype[];
-   extern void mfd_zoom_rect(LGRect* start, int mfdnum);
+   extern uint8_t waretype2invtype[];
+   extern void mfd_zoom_rect(LGRect* start, int32_t mfdnum);
 
-   int mfd;
+   int32_t mfd;
 
    mfd = mfd_grab_func(MFD_EMPTY_FUNC,MFD_ITEM_SLOT);
    mfd_zoom_rect(&side_icons[icon].r,mfd);
@@ -305,21 +305,21 @@ void zoom_side_icon_to_mfd(int icon,int waretype, int wnum)
 
 extern LGCursor globcursor;
 
-int last_side_icon = -1;
+int32_t last_side_icon = -1;
 bool side_icon_mouse_callback(uiEvent *e, LGRegion *r, void *udata)
 {
    extern bool fullscrn_icons;
    bool retval = FALSE;
    uiMouseEvent *m;
-   int i, type, num;
+   int32_t i, type, num;
 
    if (!global_fullmap->cyber && !(full_game_3d && !fullscrn_icons))
    {
-      int ver;
+      int32_t ver;
       m = (uiMouseEvent *)e;
 
 
-      i = (int) udata + (e->pos.y - SIDE_ICONS_TOP_Y)/(SIDE_ICONS_HEIGHT + SIDE_ICONS_VSPACE);
+      i = (int32_t) udata + (e->pos.y - SIDE_ICONS_TOP_Y)/(SIDE_ICONS_HEIGHT + SIDE_ICONS_VSPACE);
       type = icon_data[i].waretype;
       num  = IDX_OF_TYPE(type,icon_data[i].waretrip);
       ver = get_player_ware_version(type,num);
@@ -334,7 +334,7 @@ bool side_icon_mouse_callback(uiEvent *e, LGRegion *r, void *udata)
       {
          if (last_side_icon != i)
          {
-            uchar side = i*2/NUM_SIDE_ICONS;
+            uint8_t side = i*2/NUM_SIDE_ICONS;
             LGCursor* c = &icon_cursor[side];
             grs_bitmap* bm = &icon_cursor_bm[side];
             LGPoint offset = {0, -1};
@@ -372,10 +372,10 @@ bool side_icon_mouse_callback(uiEvent *e, LGRegion *r, void *udata)
 }
 
 
-bool side_icon_hotkey_func(ushort, ulong, int i)
+bool side_icon_hotkey_func(uint16_t, uint32_t, int32_t i)
 {
-   int type = icon_data[i].waretype;
-   int num  = IDX_OF_TYPE(type,icon_data[i].waretrip);
+   int32_t type = icon_data[i].waretype;
+   int32_t num  = IDX_OF_TYPE(type,icon_data[i].waretrip);
    if ((!global_fullmap->cyber) || (i == 1))
    {
       if (type >= 0) use_ware(type, num);
@@ -384,10 +384,10 @@ bool side_icon_hotkey_func(ushort, ulong, int i)
 }
 
 #ifdef PROGRAM_SIDEICON
-bool side_icon_progset_hotkey_func(ushort keycode, ulong context, int i)
+bool side_icon_progset_hotkey_func(uint16_t keycode, uint32_t context, int32_t i)
 {
-   char mess[80];
-   int l;
+   int8_t mess[80];
+   int32_t l;
    programmed_sideicon=i;
    get_string(REF_STR_PresetSideicon,mess,80);
    l=strlen(mess);
@@ -396,7 +396,7 @@ bool side_icon_progset_hotkey_func(ushort keycode, ulong context, int i)
    return TRUE;
 }
 
-bool side_icon_prog_hotkey_func(ushort keycode, ulong context, void* notused)
+bool side_icon_prog_hotkey_func(uint16_t keycode, uint32_t context, void* notused)
 {
    return(side_icon_hotkey_func(keycode, context, programmed_sideicon));
 }
@@ -415,7 +415,7 @@ bool side_icon_prog_hotkey_func(ushort keycode, ulong context, void* notused)
 
 void side_icon_expose_all()
 {
-   ubyte i;
+   uint8_t i;
 
    for (i = 0; i < NUM_SIDE_ICONS; i++)
       side_icon_expose(i);
@@ -424,10 +424,10 @@ void side_icon_expose_all()
 }
 
 // ----------------------------------------------------
-// zoom_to_side_icon(Point from, int icon)
+// zoom_to_side_icon(Point from, int32_t icon)
 // zooms a LGRect to a side icon and then exposes it.
 
-void zoom_to_side_icon(LGPoint from, int icon)
+void zoom_to_side_icon(LGPoint from, int32_t icon)
 {
    extern void zoom_rect(LGRect* s,LGRect* f);
    LGRect start = { { -3, -3},{3,3}};
@@ -445,10 +445,10 @@ void zoom_to_side_icon(LGPoint from, int icon)
 //
 // Draws a side icon of the specified ware, version, and status.
 
-void side_icon_draw_bm(LGRect *r, ubyte icon, ubyte art)
+void side_icon_draw_bm(LGRect *r, uint8_t icon, uint8_t art)
 {
 #ifdef SVGA_SUPPORT
-   uchar old_over = gr2ss_override;
+   uint8_t old_over = gr2ss_override;
    gr2ss_override = OVERRIDE_ALL;
 #endif
    if (is_onscreen()) uiHideMouse(r);
@@ -471,11 +471,11 @@ void side_icon_draw_bm(LGRect *r, ubyte icon, ubyte art)
 // Draw a side icon appropriately, depending on the ware it points at,
 // and its state.
 
-void side_icon_expose(ubyte icon_num)
+void side_icon_expose(uint8_t icon_num)
 {
-   ubyte *player_wares, *player_status;
+   uint8_t *player_wares, *player_status;
    WARE  *wares;
-   int   type, num, n;
+   int32_t   type, num, n;
    LGRect  *r;
    extern bool fullscrn_icons;
 
@@ -555,7 +555,7 @@ errtype side_icon_load_bitmaps()
 {
 #ifdef PRELOAD_BITMAPS
    RefTable *side_icon_rft;
-   int i, j, index /*, file_handle */;
+   int32_t i, j, index /*, file_handle */;
 
 //  file_handle = ResOpenFile("sideart.res");
 //   if (file_handle < 0) critical_error(CRITERR_RES|6);
@@ -581,7 +581,7 @@ errtype side_icon_load_bitmaps()
 errtype side_icon_free_bitmaps()
 {
 #ifdef PRELOAD_BITMAPS
-   int i,j,index;
+   int32_t i,j,index;
    Free(side_icon_background.bits);
    for (i = 0; i < NUM_SIDE_ICONS; i++) {
 

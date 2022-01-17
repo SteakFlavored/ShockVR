@@ -30,11 +30,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* don't try to use this other than in fl8wclin.c */
 
-   int d,y,y_max,x,x_new;
+   int32_t d,y,y_max,x,x_new;
    fix x0,y0,r0,b0,g0;
    fix x1,y1,r1,b1,g1;
    fix dr,dg,db,x_fix,dx;
-   uchar *p;
+   uint8_t *p;
 
    if (v1->y>v0->y) {
       y=fix_cint(v0->y);

@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_MATERIALS   64
 
 #ifndef __INIT_SRC
-extern char num_materials;
+extern int8_t num_materials;
 #ifdef __2D_H
 extern grs_bitmap material_maps[MAX_MATERIALS];
 #endif
@@ -32,7 +32,7 @@ extern grs_bitmap material_maps[MAX_MATERIALS];
 // init.h
 extern void init_all(void);
 extern void free_all(void);
-extern uchar ppall[]; // pointer to main shadow palette
+extern uint8_t ppall[]; // pointer to main shadow palette
 
 void object_data_flush(void);
 errtype object_data_load(void);

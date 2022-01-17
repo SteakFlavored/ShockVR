@@ -58,7 +58,7 @@ typedef struct {
       LGRect anchorArea;  // area to anchor sub-bitmap
       LGPoint anchorPt;   // point to anchor from
       };
-   long pallOff;        // offset to pallette
+   int32_t pallOff;        // offset to pallette
                         // bitmap's bits follow immediately
 } FrameDesc;
 
@@ -69,7 +69,7 @@ typedef struct {
 
 #define gr_ubitmap_ref(ref,x,y)  do {     \
    FrameDesc *pfd = RefGet(ref);          \
-   pfd->bm.bits = (uchar *)(pfd + 1);     \
+   pfd->bm.bits = (uint8_t *)(pfd + 1);     \
    gr_ubitmap(&pfd->bm, x, y);            \
    } while (0)
 
@@ -77,7 +77,7 @@ typedef struct {
 
 #define gr_bitmap_ref(ref,x,y) do {       \
    FrameDesc *pfd = RefGet(ref);          \
-   pfd->bm.bits = (uchar *)(pfd + 1);     \
+   pfd->bm.bits = (uint8_t *)(pfd + 1);     \
    gr_bitmap(&pfd->bm, x, y);             \
    } while(0)
 
@@ -85,7 +85,7 @@ typedef struct {
 
 #define gr_scale_ubitmap_ref(ref,x,y,w,h) do {  \
    FrameDesc *pfd = RefGet(ref);                \
-   pfd->bm.bits = (uchar *)(pfd + 1);           \
+   pfd->bm.bits = (uint8_t *)(pfd + 1);           \
    gr_scale_ubitmap(&pfd->bm, x, y, w, h);      \
    } while(0)
 
@@ -93,7 +93,7 @@ typedef struct {
 
 #define gr_scale_bitmap_ref(ref,x,y,w,h) do {   \
    FrameDesc *pfd = RefGet(ref);                \
-   pfd->bm.bits = (uchar *)(pfd + 1);           \
+   pfd->bm.bits = (uint8_t *)(pfd + 1);           \
    gr_scale_bitmap(&pfd->bm, x, y, w, h);       \
    } while(0)
 
@@ -102,8 +102,8 @@ typedef struct {
 #define gr_set_pal_imgref(ref) do {             \
    FrameDesc *pfd = RefGet(ref);                \
    if (pfd->pallOff) {                          \
-      short *p = (short *)((uchar *) ResGet(REFID(ref)) + pfd->pallOff);   \
-      gr_set_pal(*p, *(p+1), (uchar *)(p+2));   \
+      int16_t *p = (int16_t *)((uint8_t *) ResGet(REFID(ref)) + pfd->pallOff);   \
+      gr_set_pal(*p, *(p+1), (uint8_t *)(p+2));   \
       }                                         \
    } while(0)
 
@@ -113,8 +113,8 @@ typedef struct {
 #define gr_cpy_pal_imgref(ref, palp) do {       \
    FrameDesc *pfd = RefGet(ref);                \
    if (pfd->pallOff) {                          \
-      short *p = (short *)((uchar *) ResGet(REFID(ref)) + pfd->pallOff);   \
-      memcpy((uchar *)(palp + (*p * 3)), (uchar *)(p+2), *(p+1) * 3 );         \
+      int16_t *p = (int16_t *)((uint8_t *) ResGet(REFID(ref)) + pfd->pallOff);   \
+      memcpy((uint8_t *)(palp + (*p * 3)), (uint8_t *)(p+2), *(p+1) * 3 );         \
       }                                         \
    } while(0)
 
@@ -122,16 +122,16 @@ typedef struct {
 // eventually we'll want one for a full 3d one
 
 typedef struct {
-   int nviews;    // number of views
+   int32_t nviews;    // number of views
    fix ppu;       // pixels per unit
    bool bisym;    // bilateral symmetry or not (means its a mirror)
-   int off[1];    // offsets, in reality there should be off[nview] of them
+   int32_t off[1];    // offsets, in reality there should be off[nview] of them
 } CylBMObj;       // cylindrical 3d bitmap object
 
 typedef struct {
    grs_bitmap bm;
-   byte  u1,v1;   // anchor point 1
-   byte  u2,v2;   // anchor point 2
+   int8_t  u1,v1;   // anchor point 1
+   int8_t  u2,v2;   // anchor point 2
    fix   vper1;   //  v1 / (v2-v1)
    fix   vper2;   // (h-v2) / (v2-v1)
    fix   uper;    // (w - u) / u

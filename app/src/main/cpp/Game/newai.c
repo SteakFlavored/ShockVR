@@ -81,27 +81,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define AI_ATTENTION_SPAN CIT_CYCLE * 10
 
 extern ObjLoc last_known_loc;
-ulong time_last_seen;
+uint32_t time_last_seen;
 bool priority_check;
 extern bool door_moving(ObjID id,bool dir);
-extern errtype set_posture_movesafe(ObjSpecID osid, ubyte new_pos);
+extern errtype set_posture_movesafe(ObjSpecID osid, uint8_t new_pos);
 
-short compute_base_visibility();
-errtype run_evil_otto(ObjID id, int dist);
+int16_t compute_base_visibility();
+errtype run_evil_otto(ObjID id, int32_t dist);
 errtype run_cspace_ice();
 errtype ai_spot_player(ObjID id, bool *raycast_success);
-bool do_physics_stupidity(ObjID id, int big_dist);
-void check_attitude_adjustment(ObjID id, ObjSpecID osid,int big_dist,bool raycast_success);
-void load_combat_art(int cp_num);
+bool do_physics_stupidity(ObjID id, int32_t big_dist);
+void check_attitude_adjustment(ObjID id, ObjSpecID osid,int32_t big_dist,bool raycast_success);
+void load_combat_art(int32_t cp_num);
 errtype run_combat_ai(ObjID id, bool raycast_success);
-errtype do_stealth_stuff(ObjID id, short base_vis, bool *raycast_success, fix dist);
+errtype do_stealth_stuff(ObjID id, int16_t base_vis, bool *raycast_success, fix dist);
 void set_des_heading(ObjID id, ObjSpecID osid, fix targ_x, fix targ_y, fixang *angdiff, fixang *target_ang);
 errtype follow_pathfinding(ObjID id, ObjSpecID osid);
 LGPoint ai_patrol_func(ObjID id, ObjSpecID osid);
 LGPoint ai_highway_func(ObjID id, ObjSpecID osid);
 LGPoint ai_roam_func(ObjID id, ObjSpecID osid);
 LGPoint ai_none_func(ObjID, ObjSpecID osid);
-errtype run_peaceful_ai(ObjID id, int big_dist);
+errtype run_peaceful_ai(ObjID id, int32_t big_dist);
 
 // Run all the ICEs, deal with their agitation, etc.  Boy, this could probably
 // be a lot smarter than iterating through all objects, like having the
@@ -112,14 +112,14 @@ errtype run_peaceful_ai(ObjID id, int big_dist);
 #define ICE_INTERVAL          (CIT_CYCLE >> 1)
 
 // chance vs 0xFF of firing on a given half-second
-uchar ice_fire_chances[] = { 0x40, 0x80, 0xD0, 0xF0 };
-ulong run_ice_time = 0;
+uint8_t ice_fire_chances[] = { 0x40, 0x80, 0xD0, 0xF0 };
+uint32_t run_ice_time = 0;
 
 errtype run_cspace_ice()
 {
    ObjID id;
-   int dx,dy,dist;
-   extern errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc, ObjLoc target_loc, uchar a, int duration);
+   int32_t dx,dy,dist;
+   extern errtype ai_fire_special(ObjID src, ObjID target, int32_t proj_triple, ObjLoc src_loc, ObjLoc target_loc, uint8_t a, int32_t duration);
 
    // Look for hostile ICEs, which closely resemble creatures
    // of course, only do so if we be in cspace
@@ -148,10 +148,10 @@ errtype run_cspace_ice()
 
 
 // Compute and return the player's basic visibility for this frame
-short compute_base_visibility()
+int16_t compute_base_visibility()
 {
    MapElem *pme;
-   short visibility;
+   int16_t visibility;
 
 	// Update detection variables
    if (!cspace_decoy_obj)
@@ -196,7 +196,7 @@ short compute_base_visibility()
 }
 
 // id is evil otto, deal accordingly (moving, hosing, etc.)
-errtype run_evil_otto(ObjID id, int dist)
+errtype run_evil_otto(ObjID id, int32_t dist)
 {
    // Are we close enough to totally hose the player?
    if (dist < SHODAN_AVATAR_HOSAGE_DISTANCE)
@@ -208,7 +208,7 @@ errtype run_evil_otto(ObjID id, int dist)
    else
    {
       fix xvec,yvec,fdist;
-      int dx,dy;
+      int32_t dx,dy;
       ObjLoc newloc = objs[id].loc;
       // Move the AVAMATAR OF SHODAN (Evil Otto) closer to the player
       // first, get a normalized vector
@@ -235,13 +235,13 @@ errtype run_evil_otto(ObjID id, int dist)
 // of said critter.
 // Returns whether or not we should continue to think
 // about this particular creature.
-short ignore_distance[] = {6, 10} ;
+int16_t ignore_distance[] = {6, 10} ;
 
-bool do_physics_stupidity(ObjID id, int big_dist)
+bool do_physics_stupidity(ObjID id, int32_t big_dist)
 {
    ObjSpecID osid = objs[id].specID;
-   int dist = big_dist >> 8;
-   int use_dist;
+   int32_t dist = big_dist >> 8;
+   int32_t use_dist;
    fix there_yet;
 
 #ifdef DISTANCE_AI_KILL
@@ -340,12 +340,12 @@ errtype ai_spot_player(ObjID id, bool *raycast_success)
 
 // Do appropriate stuff for critter object id to try and find the
 // player
-errtype do_stealth_stuff(ObjID id, short base_vis, bool *raycast_success, fix dist)
+errtype do_stealth_stuff(ObjID id, int16_t base_vis, bool *raycast_success, fix dist)
 {
-   short use_vis;
+   int16_t use_vis;
    State plr_state, our_state;
    fixang ang_diff, real_ang;
-   int r;
+   int32_t r;
    ObjSpecID osid = objs[id].specID;
    ObjCritter *pcrit = &objCritters[osid];
 
@@ -434,7 +434,7 @@ void set_des_heading(ObjID id, ObjSpecID osid, fix targ_x, fix targ_y, fixang *a
 // necessary when reaching old steps.
 #define MAX_PATH_TRIES  25
 
-char dir_table[3][3] =
+int8_t dir_table[3][3] =
 { { 2, 2, 2, },
   { 3, 0, 1, },
   { 0, 0, 0, },
@@ -443,7 +443,7 @@ char dir_table[3][3] =
 errtype follow_pathfinding(ObjID id, ObjSpecID osid)
 {
    LGPoint sq,csq;
-   char steps_left, path_id,newdir;
+   int8_t steps_left, path_id,newdir;
    ObjID open_me = OBJ_NULL;
 
    path_id = objCritters[osid].path_id;
@@ -496,7 +496,7 @@ errtype follow_pathfinding(ObjID id, ObjSpecID osid)
    else
    {
       // Keep on truckin' towards our old location
-//      char ft1[50],ft2[50],ft3[50];
+//      int8_t ft1[50],ft2[50],ft3[50];
       fixang angdiff, target_ang;
 
       if (objCritters[osid].path_tries++ > MAX_PATH_TRIES)
@@ -521,7 +521,7 @@ errtype follow_pathfinding(ObjID id, ObjSpecID osid)
       //         csq.x,csq.y,sq.x,sq.y));
             if ((open_me != OBJ_NULL) && (DOOR_CLOSED(open_me)) && !(door_moving(open_me,FALSE)))
             {
-               bool use_door(ObjID id, uchar in_inv, ObjID cursor_obj);
+               bool use_door(ObjID id, uint8_t in_inv, ObjID cursor_obj);
                use_door(open_me,0x2,OBJ_NULL);
             }
       }
@@ -550,7 +550,7 @@ errtype follow_pathfinding(ObjID id, ObjSpecID osid)
    return(OK);
 }
 
-char ai_ranges;
+int8_t ai_ranges;
 
 
 // Are we legal to attack right now?  If so, slam us into ATTACKING,
@@ -559,12 +559,12 @@ char ai_ranges;
 
 // Hey Rocky, watch me pull this constant out of my butt!
 #define SHORT_RANGE_Z   0xA0
-void check_attitude_adjustment(ObjID id, ObjSpecID osid,int big_dist,bool raycast_success)
+void check_attitude_adjustment(ObjID id, ObjSpecID osid,int32_t big_dist,bool raycast_success)
 {
-   char i;
-   short dist = big_dist >> 8;
-   int cp_num = CPNUM(id);
-   uchar care_mask = 0;
+   int8_t i;
+   int16_t dist = big_dist >> 8;
+   int32_t cp_num = CPNUM(id);
+   uint8_t care_mask = 0;
 
    ai_ranges = 0;
 
@@ -584,7 +584,7 @@ void check_attitude_adjustment(ObjID id, ObjSpecID osid,int big_dist,bool raycas
    // Check ranges
    for (i=0; i < 2; i++)
    {
-      short rng;
+      int16_t rng;
       rng = CritterProps[cp_num].attacks[i].att_range;
       if (dist <= rng)
       {
@@ -657,15 +657,15 @@ void check_attitude_adjustment(ObjID id, ObjSpecID osid,int big_dist,bool raycas
    }
 }
 
-void load_combat_art(int cp_num)
+void load_combat_art(int32_t cp_num)
 {
 	extern Id posture_bases[];
-   char p;
+   int8_t p;
    if (ResPtr(posture_bases[ATTACKING_CRITTER_POSTURE] + cp_num) == NULL)
    {
       // Suspend time during loading of combat art
-      ulong old_ticks = *tmd_ticks;
-      extern ulong last_real_time;
+      uint32_t old_ticks = *tmd_ticks;
+      extern uint32_t last_real_time;
       for (p = ATTACKING_CRITTER_POSTURE; p <= ATTACKING2_CRITTER_POSTURE; p++)
       {
          if (p != KNOCKBACK_CRITTER_POSTURE)
@@ -691,7 +691,7 @@ errtype run_combat_ai(ObjID id, bool raycast_success)
    ObjSpecID osid = objs[id].specID;
    ObjCritter *pcrit = &objCritters[osid];
    LGPoint dest,source;
-   int cp_num;
+   int32_t cp_num;
 
    // Sidestep stupidly
 //   pcrit->sidestep = fix_make(rand()%200 - 100, 0);
@@ -706,7 +706,7 @@ errtype run_combat_ai(ObjID id, bool raycast_success)
          {
             if (pcrit->attack_count < player_struct.game_time)
             {
-               char posture;
+               int8_t posture;
                extern bool music_on;
 
                load_combat_art(cp_num);
@@ -797,7 +797,7 @@ errtype run_combat_ai(ObjID id, bool raycast_success)
 
 LGPoint ai_patrol_func(ObjID, ObjSpecID osid)
 {
-   char temp_x, temp_y;
+   int8_t temp_x, temp_y;
    ObjCritter *pcrit = &objCritters[osid];
    LGPoint dest;
 
@@ -815,7 +815,7 @@ LGPoint ai_highway_func(ObjID, ObjSpecID osid)
 {
    LGPoint dest = {-1,-1};
    ObjID curr_id;
-   int param, interface_param;
+   int32_t param, interface_param;
 
    curr_id = objCritters[osid].loot2;
    if (objs[curr_id].obclass != CLASS_TRAP)
@@ -855,9 +855,9 @@ LGPoint ai_highway_func(ObjID, ObjSpecID osid)
 LGPoint ai_roam_func(ObjID id, ObjSpecID osid)
 {
    LGPoint dest,source;
-   char tries=0;
+   int8_t tries=0;
    bool okay;
-   short bd;
+   int16_t bd;
 
    source.x = OBJ_LOC_BIN_X(objs[id].loc);
    source.y = OBJ_LOC_BIN_Y(objs[id].loc);
@@ -899,7 +899,7 @@ LGPoint (*ai_order_funcs[])(ObjSpecID, ObjID) = { ai_none_func, ai_roam_func, ai
 #define CONFUSE_RAND_MASK  0xFFF
 #define CONFUSE_RAND_LEVEL 5
 
-errtype run_peaceful_ai(ObjID id, int big_dist)
+errtype run_peaceful_ai(ObjID id, int32_t big_dist)
 {
    ObjSpecID osid = objs[id].specID;
    LGPoint source,dest;
@@ -972,12 +972,12 @@ errtype ai_run()
 {
    ObjSpecID osid;
    ObjID id;
-   short visibility;
+   int16_t visibility;
    bool raycast_success;
-   int dist;
-   char mood;
+   int32_t dist;
+   int8_t mood;
 #ifdef PLAYTEST
-   short crit_count = 0;
+   int16_t crit_count = 0;
 #endif
    extern bool physics_running;
    extern ObjID shodan_avatar_id;

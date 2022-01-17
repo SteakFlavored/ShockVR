@@ -77,7 +77,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Gadget *qb, *parent_gadget;
 // Critter crit;
 // LGPoint origin;
-// int min, max;
+// int32_t min, max;
 //
 // qb = gad_qbox_start(parent_gadget, origin, NULL, "sample_qbox");
 // gad_qbox_add("Critter Name", QB_TEXT_SLOT, crit.name, QB_RD_ONLY);
@@ -112,19 +112,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Prototypes
 
 // Begin a quick box.  Until the qbox is ended, all subsequent qbox calls will use the "current" qbox.
-Gadget *gad_qbox_start(Gadget *parent, LGPoint coord, int z, TNGStyle *sty, ushort options, char *name, LGPoint ss);
+Gadget *gad_qbox_start(Gadget *parent, LGPoint coord, int32_t z, TNGStyle *sty, uint16_t options, int8_t *name, LGPoint ss);
 
-Gadget *gad_qbox_start_full(Gadget *parent, LGPoint coord, int z, TNGStyle *sty, ushort options, char *name, LGPoint ss, LGPoint spacing,
+Gadget *gad_qbox_start_full(Gadget *parent, LGPoint coord, int32_t z, TNGStyle *sty, uint16_t options, int8_t *name, LGPoint ss, LGPoint spacing,
    LGPoint border, Ref left_id, Ref right_id);
 
 // Add a line to a quickbox.  slot_type describes the type of slot, var is a pointer to the variable to be
 // displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o
 // combinations of options and types might not be implemented.
-errtype gad_qbox_add(char *label, int slot_type, void *var, ulong slot_options);
+errtype gad_qbox_add(int8_t *label, int32_t slot_type, void *var, uint32_t slot_options);
 
 // Just like gad_qbox_add but allows two parameters to be set for the slot.  Certain slot options require
 // this form of accessing.
-errtype gad_qbox_add_parm(char *label, int slot_type, void *var, ulong slot_options, void *parm1, void *parm2);
+errtype gad_qbox_add_parm(int8_t *label, int32_t slot_type, void *var, uint32_t slot_options, void *parm1, void *parm2);
 
 // This represents that the quickbox is done being created and is ready for display, input, etc.
 // if end_full is used, then the passed pointer is used as the application's pointer to the quickbox
@@ -132,7 +132,7 @@ errtype gad_qbox_end();
 errtype gad_qbox_end_full(Gadget **ptr);
 
 // Rename a slot
-errtype gad_qbox_rename_slot(Gadget *g, int slot_num, char *new_name);
+errtype gad_qbox_rename_slot(Gadget *g, int32_t slot_num, int8_t *new_name);
 
 // Globals
 

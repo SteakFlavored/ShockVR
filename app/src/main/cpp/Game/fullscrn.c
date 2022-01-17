@@ -79,12 +79,12 @@ extern bool inp6d_stereo;
 #ifdef SVGA_SUPPORT
 grs_screen *svga_screen=NULL;
 frc *svga_render_context=NULL;
-short svga_mode_data[] =
+int16_t svga_mode_data[] =
 { GRM_320x200x8, GRM_320x400x8, GRM_640x400x8, GRM_640x480x8, GRM_1024x768x8,
    GRM_320x200x8 };
-char mickey_stupid[][2]=
+int8_t mickey_stupid[][2]=
 { {16,8},{16,4},{3,1},{2,1},{3,1},{16,8} };
-short mode_id=3;  //KLC - start off in 640x480 in Mac version      old -  short mode_id=0;
+int16_t mode_id=3;  //KLC - start off in 640x480 in Mac version      old -  int16_t mode_id=0;
 #endif
 
 #ifdef GADGET
@@ -100,7 +100,7 @@ extern void mouse_unconstrain(void);
 extern void olh_svga_deal(void);
 extern void inv_change_fullscreen(bool on);
 extern void mfd_change_fullscreen(bool on);
-extern void game_redrop_rad(int rad_mod);
+extern void game_redrop_rad(int32_t rad_mod);
 void change_svga_cursors();
 void change_svga_screen_mode();
 
@@ -108,7 +108,7 @@ void change_svga_screen_mode();
 LGRegion fullroot_region_data, fullview_region_data;
 LGRegion *fullroot_region=&fullroot_region_data;  // DUH
 
-short base_mouse_xr,base_mouse_yr,base_mouse_thresh;
+int16_t base_mouse_xr,base_mouse_yr,base_mouse_thresh;
 
 errtype fullscreen_init(void)
 {
@@ -148,9 +148,9 @@ errtype fullscreen_init(void)
 // Draw all relevant overlays
 errtype fullscreen_overlay()
 {
-   extern char last_message[128];
-   extern void mfd_draw_button_panel(ubyte mfd_id);
-   extern void fullscreen_refresh_mfd(ubyte mfd_id);
+   extern int8_t last_message[128];
+   extern void mfd_draw_button_panel(uint8_t mfd_id);
+   extern void fullscreen_refresh_mfd(uint8_t mfd_id);
    extern void inv_update_fullscreen(bool full);
    extern bool game_paused;
 
@@ -193,11 +193,11 @@ void change_svga_cursors()
    extern errtype biohelp_load_cursor();
    extern errtype load_misc_cursors();
 
-   extern int last_side_icon;
-   extern int last_invent_cnum;
-   extern int last_mfd_cnum[NUM_MFDS];
-   extern short object_on_cursor;
-   short temp;
+   extern int32_t last_side_icon;
+   extern int32_t last_invent_cnum;
+   extern int32_t last_mfd_cnum[NUM_MFDS];
+   extern int16_t object_on_cursor;
+   int16_t temp;
 
    ss_set_hack_mode(2,&temp);
 
@@ -230,20 +230,20 @@ void change_svga_screen_mode()
 	extern void view360_update_screen_mode();
 	extern void amap_pixratio_set(fix ratio);
 	extern bool redraw_paused;
-	extern Boolean DoubleSize;
+	extern bool DoubleSize;
 
-	uchar cur_pal[768];
-	uchar *s_table;
-	short cur_w, cur_h, cur_m;
-	short mx,my;
+	uint8_t cur_pal[768];
+	uint8_t *s_table;
+	int16_t cur_w, cur_h, cur_m;
+	int16_t mx,my;
 	bool mode_change = FALSE;
-	short temp;
+	int16_t temp;
 
 	if (convert_use_mode != mode_id)
 		mode_change = TRUE;
 	if (mode_change)
 	{
-		int retval = -1;
+		int32_t retval = -1;
 
 		ui_mouse_get_xy(&mx,&my);
 //		gr_get_pal(0,256,&cur_pal[0]);
@@ -420,7 +420,7 @@ void fullscreen_start()
 #ifdef STEREO_SUPPORT
    if (inp6d_stereo)
    {
-//      uchar cur_pal[768];
+//      uint8_t cur_pal[768];
 //      gr_get_pal(0,256,&cur_pal[0]);
 //      uiHideMouse(NULL);
 //      gr_set_mode(i6d_ss->scr_mode,TRUE);
@@ -452,9 +452,9 @@ void fullscreen_exit()
 {
    extern wrapper_panel_close();
 #ifdef SVGA_SUPPORT
-   uchar cur_pal[768];
+   uint8_t cur_pal[768];
    extern grs_screen *cit_screen;
-   uchar *s_table;
+   uint8_t *s_table;
 #endif
 
 #ifdef STEREO_SUPPORT

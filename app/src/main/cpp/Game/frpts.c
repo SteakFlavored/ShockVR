@@ -59,27 +59,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MAP_RESIZING
 #define _fr_pt_wid   (fm_x_sz(moose)+1)   // note we secretly know this arg wont be used
 static g3s_phandle   pt_lsts[2][_fr_pt_wid];
-static ushort        pt_rowv[2][_fr_pt_wid];
+static uint16_t        pt_rowv[2][_fr_pt_wid];
 #else
 static g3s_phandle *pt_lsts[2];
-static ushort *pt_rowv[2];
-static int    _fr_pt_wid=0;
+static uint16_t *pt_rowv[2];
+static int32_t    _fr_pt_wid=0;
 #endif
 g3s_phandle *_fr_ptbase, *_fr_ptnext;  /* global place to get points from */
 
 // i drank so much tea, i wrote my letters in kanji
 // round and round the block i walked, pretending you were with me
-int fr_pts_frame_start(void)
+int32_t fr_pts_frame_start(void)
 {
-   memset(*(pt_rowv+0),0xffff,_fr_pt_wid*sizeof(ushort));
-   memset(*(pt_rowv+1),0xffff,_fr_pt_wid*sizeof(ushort));
+   memset(*(pt_rowv+0),0xffff,_fr_pt_wid*sizeof(uint16_t));
+   memset(*(pt_rowv+1),0xffff,_fr_pt_wid*sizeof(uint16_t));
    _fr_ret;
 }
 
-int fr_pts_freemem(void)
+int32_t fr_pts_freemem(void)
 {
 #ifdef MAP_RESIZING
-   int i;
+   int32_t i;
    if (_fr_pt_wid==0) _fr_ret_val(FR_NO_NEED);
    for (i=0; i<3; i++)
     { Free(*(pt_rowv+i)); Free(*(pt_lsts+i)); }
@@ -89,15 +89,15 @@ int fr_pts_freemem(void)
 }
 
 //#pragma disable_message(202)
-int fr_pts_resize(int , int )					// x, y
+int32_t fr_pts_resize(int32_t , int32_t )					// x, y
 {
 #ifdef MAP_RESIZING
-   int i;
+   int32_t i;
    fr_pts_freemem();
    _fr_pt_wid=x+1;
    for (i=0; i<3; i++)
    {
-      if (((*(pt_rowv+i))=Malloc(x*sizeof(ushort)))==NULL)      _fr_ret_val(FR_NOMEM);
+      if (((*(pt_rowv+i))=Malloc(x*sizeof(uint16_t)))==NULL)      _fr_ret_val(FR_NOMEM);
       if (((*(pt_lsts+i))=Malloc(x*sizeof(g3s_phandle)))==NULL) _fr_ret_val(FR_NOMEM);
    }
 #endif
@@ -106,11 +106,11 @@ int fr_pts_resize(int , int )					// x, y
 //#pragma enable_message(202)
 
 // something goofy used by renderer
-void dumb_hack_for_now(int x, int y);
-void dumb_hack_for_now(int x, int y)
+void dumb_hack_for_now(int32_t x, int32_t y);
+void dumb_hack_for_now(int32_t x, int32_t y)
 {
    bool tran_sv=FALSE, d=TRUE;
-   ushort *_cur_rowv, *_nxt_rowv;
+   uint16_t *_cur_rowv, *_nxt_rowv;
    g3s_phandle *_cur_pt, *_fr_curb, *_fr_curn;
    g3s_vector   _pt_vec;
 

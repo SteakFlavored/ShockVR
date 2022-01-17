@@ -42,11 +42,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 #include "clip.h"
 
-int gr_clip_flat24_bitmap (grs_bitmap *bm, short *x, short *y)
+int32_t gr_clip_flat24_bitmap (grs_bitmap *bm, int16_t *x, int16_t *y)
 {
-   int code = CLIP_NONE;
-   int extra;
-   int l, r, t, b;
+   int32_t code = CLIP_NONE;
+   int32_t extra;
+   int32_t l, r, t, b;
 
    l=*x; r=l+bm->w; t=*y; b=t+bm->h;
    if (l>grd_clip.right || r<grd_clip.left ||

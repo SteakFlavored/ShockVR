@@ -62,9 +62,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define AI_EDMS
 
-//errtype ai_fire_slow_projectile(ObjID src, int proj_triple, ObjLoc src_loc, ObjLoc target_loc, uchar a, int duration);
-//errtype ai_throw_grenade(ObjID src, int proj_triple, ObjLoc src_loc, ObjLoc target_loc);
-errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc, ObjLoc target_loc, uchar a, int duration);
+//errtype ai_fire_slow_projectile(ObjID src, int32_t proj_triple, ObjLoc src_loc, ObjLoc target_loc, uint8_t a, int32_t duration);
+//errtype ai_throw_grenade(ObjID src, int32_t proj_triple, ObjLoc src_loc, ObjLoc target_loc);
+errtype ai_fire_special(ObjID src, ObjID target, int32_t proj_triple, ObjLoc src_loc, ObjLoc target_loc, uint8_t a, int32_t duration);
 
 #define SLOW_PROJECTILE_DURATION 1000
 #define SLOW_PROJECTILE_GRAVITY  fix_make(0,0x0C00)
@@ -85,11 +85,11 @@ ObjLoc last_known_loc;
 // -----------
 //  PROTOTYPES
 // -----------
-errtype set_posture_safe(ObjSpecID osid, ubyte new_pos);
-errtype set_posture_movesafe(ObjSpecID osid, ubyte new_pos);
+errtype set_posture_safe(ObjSpecID osid, uint8_t new_pos);
+errtype set_posture_movesafe(ObjSpecID osid, uint8_t new_pos);
 errtype clear_critter_controls(ObjSpecID osid);
 errtype apply_EDMS_controls(ObjSpecID osid);
-errtype roll_on_dnd_treasure_tables(int *pcont, char treasure_type);
+errtype roll_on_dnd_treasure_tables(int32_t *pcont, int8_t treasure_type);
 
 
 #define AI_HEAD_HIT_CHANCE 0x40
@@ -97,7 +97,7 @@ void ai_find_player(ObjID id)
 {
    State st;
    extern void state_to_objloc(State *s, ObjLoc *l);
-   extern void get_phys_state(int ph, State *new_state, ObjID id);
+   extern void get_phys_state(int32_t ph, State *new_state, ObjID id);
 
    if (global_fullmap->cyber)
       last_known_loc = objs[PLAYER_OBJ].loc;
@@ -119,7 +119,7 @@ void ai_find_player(ObjID id)
    }
 }
 
-errtype set_posture(ObjSpecID osid, ubyte new_pos)
+errtype set_posture(ObjSpecID osid, uint8_t new_pos)
 {
    if (new_pos != get_crit_posture(osid))
    {
@@ -129,7 +129,7 @@ errtype set_posture(ObjSpecID osid, ubyte new_pos)
    return(OK);
 }
 
-errtype set_posture_safe(ObjSpecID osid, ubyte new_pos)
+errtype set_posture_safe(ObjSpecID osid, uint8_t new_pos)
 {
    if ((get_crit_posture(osid) == STANDING_CRITTER_POSTURE) ||
       (get_crit_posture(osid) == MOVING_CRITTER_POSTURE))
@@ -137,7 +137,7 @@ errtype set_posture_safe(ObjSpecID osid, ubyte new_pos)
    return(OK);
 }
 
-errtype set_posture_movesafe(ObjSpecID osid, ubyte new_pos)
+errtype set_posture_movesafe(ObjSpecID osid, uint8_t new_pos)
 {
    if ((get_crit_posture(osid) != STANDING_CRITTER_POSTURE) &&
       (get_crit_posture(osid) != MOVING_CRITTER_POSTURE))
@@ -223,19 +223,19 @@ errtype apply_EDMS_controls(ObjSpecID osid)
 
 void ai_critter_seen(void)
 {
-   extern int mai_combat_length;
+   extern int32_t mai_combat_length;
    mlimbs_combat = player_struct.game_time + mai_combat_length;
 }
 
 
-errtype ai_critter_hit(ObjSpecID osid, short damage, bool tranq, bool stun)
+errtype ai_critter_hit(ObjSpecID osid, int16_t damage, bool tranq, bool stun)
 {
-	char i,j;
-   short r;
-	char x1,x2,y1,y2;
+	int8_t i,j;
+   int16_t r;
+	int8_t x1,x2,y1,y2;
 	ObjRefID oref;
 	ObjID	oid;
-   char diff;
+   int8_t diff;
 
    // become unconfused & untranqed
    // woo hoo, watch me pull odds out of my butt
@@ -251,8 +251,8 @@ errtype ai_critter_hit(ObjSpecID osid, short damage, bool tranq, bool stun)
    {
       case ROBOBABE_TRIPLE:
          {
-            extern uchar *shodan_bitmask;
-            extern void shodan_phase_in(uchar *bitmask, short x, short y, short w, short h, short num, bool dir);
+            extern uint8_t *shodan_bitmask;
+            extern void shodan_phase_in(uint8_t *bitmask, int16_t x, int16_t y, int16_t w, int16_t h, int16_t num, bool dir);
             shodan_phase_in(shodan_bitmask, 0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT, damage << 4 , FALSE);
          }
          break;
@@ -350,7 +350,7 @@ errtype ai_autobomb_explode(ObjID id, ObjSpecID osid);
 errtype ai_critter_die(ObjSpecID osid)
 {
    extern ObjID damage_sound_id;
-   extern char damage_sound_fx;
+   extern int8_t damage_sound_fx;
    ObjID id = objCritters[osid].id;
 
    if (ID2TRIP(id) == AUTOBOMB_TRIPLE)
@@ -374,7 +374,7 @@ errtype ai_critter_die(ObjSpecID osid)
 
 #define FIRST_CORPSE_TTYPE 11
 
-int treasure_table[NUM_TREASURE_TYPES][NUM_TREASURE_SLOTS][NUM_TREASURE_ENTRIES] =
+int32_t treasure_table[NUM_TREASURE_TYPES][NUM_TREASURE_SLOTS][NUM_TREASURE_ENTRIES] =
 {
    // No Treasure
    {  { 100, NOTHING_TRIPLE},
@@ -498,12 +498,12 @@ int treasure_table[NUM_TREASURE_TYPES][NUM_TREASURE_SLOTS][NUM_TREASURE_ENTRIES]
       { 17, NOTHING_TRIPLE} },
 };
 
-errtype roll_on_dnd_treasure_tables(int *pcont, char treasure_type)
+errtype roll_on_dnd_treasure_tables(int32_t *pcont, int8_t treasure_type)
 {
-   char perc;
-   char count = 0;
+   int8_t perc;
+   int8_t count = 0;
    bool give, done = FALSE;
-   int chance, trip;
+   int32_t chance, trip;
 
    perc = rand()%100;
    while (!done && (count < NUM_TREASURE_SLOTS))
@@ -570,9 +570,9 @@ errtype do_regular_loot(ObjSpecID source_critter, ObjID corpse)
 errtype do_random_loot(ObjID corpse)
 {
    ObjSpecID osid = objs[corpse].specID;
-   int *pc1, *pc2;
-   uchar t_type;
-//   char buf[80];
+   int32_t *pc1, *pc2;
+   uint8_t t_type;
+//   int8_t buf[80];
 
    if (( ((ID2TRIP(corpse) >= MUT_CORPSE1_TRIPLE) && (ID2TRIP(corpse) <= OTH_CORPSE8_TRIPLE)) ||
          ((ID2TRIP(corpse) >= CORPSE1_TRIPLE) && (ID2TRIP(corpse) <= CORPSE8_TRIPLE)))
@@ -627,8 +627,8 @@ errtype do_random_loot(ObjID corpse)
 
 errtype ai_critter_really_dead(ObjSpecID osid)
 {
-   int corpse_trip;
-   char f;
+   int32_t corpse_trip;
+   int8_t f;
    extern errtype obj_floor_func(ObjID id);
 
    corpse_trip = CritterProps[CPNUM(objCritters[osid].id)].corpse;
@@ -711,13 +711,13 @@ errtype ai_autobomb_explode(ObjID id, ObjSpecID osid)
    return(OK);
 }
 
-errtype ai_attack_player(ObjSpecID osid, char a)
+errtype ai_attack_player(ObjSpecID osid, int8_t a)
 {
-   int wpnflags, wpnpower;
+   int32_t wpnflags, wpnpower;
    ObjID hit_obj = OBJ_NULL;
    ObjID id = objCritters[osid].id;
 	ObjLoc dest_loc;
-   int cp_num;
+   int32_t cp_num;
    fix attack_mass;           // cause of new ray casting prototype - minman
 
    if (pacifism_on)
@@ -749,7 +749,7 @@ errtype ai_attack_player(ObjSpecID osid, char a)
 	// then don't bother firing.
 	if (last_known_loc.x != 255)
 	{
-		short miss_amt = ((255 - CritterProps[cp_num].attacks[a].accuracy) - rand()%255);
+		int16_t miss_amt = ((255 - CritterProps[cp_num].attacks[a].accuracy) - rand()%255);
 
       // Play sound effect
       play_digi_fx_obj(CritterProps[cp_num].attack_sound,1,objCritters[osid].id);
@@ -810,9 +810,9 @@ errtype ai_attack_player(ObjSpecID osid, char a)
 #define SLOW_PROJ_RAY_MASS    (fix_make(0,0x1000))
 #define SLOW_PROJ_RAY_SIZE    (fix_make(0,0x1800))
 #define SLOW_PROJ_RAY_RANGE   (fix_make(20,0))
-extern void get_phys_state(int ph, State *new_state, ObjID id);
+extern void get_phys_state(int32_t ph, State *new_state, ObjID id);
 
-errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc, ObjLoc target_loc, uchar a, int duration)
+errtype ai_fire_special(ObjID src, ObjID target, int32_t proj_triple, ObjLoc src_loc, ObjLoc target_loc, uint8_t a, int32_t duration)
 {
    ObjID    proj_id;
    fix      xvel, yvel, zvel;
@@ -820,7 +820,7 @@ errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc
    fix      dist;
    fix      fire_speed;
    fixang   new_angle;
-   ubyte    head;
+   uint8_t    head;
    State    new_state;
    Robot          da_robot;
    extern void activate_grenade(ObjSpecID osid);
@@ -871,14 +871,14 @@ errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc
    {
       // let's get heading
       new_angle = fix_atan2(ydiff, xdiff);
-      head = (ubyte) obj_angle_from_fixang(new_angle); //(fix_div(new_angle, FIXANG_PI) >> 9);
+      head = (uint8_t) obj_angle_from_fixang(new_angle); //(fix_div(new_angle, FIXANG_PI) >> 9);
 
       // let's start the work for pitch
       new_angle = fix_atan2(zdiff, dist);
-//      pitch = (ubyte) (fix_div(new_angle, FIXANG_PI) >> 9);
+//      pitch = (uint8_t) (fix_div(new_angle, FIXANG_PI) >> 9);
 
       // shift coordinate frames for heading
-      src_loc.h = (ubyte) ((320L-head) % 256);
+      src_loc.h = (uint8_t) ((320L-head) % 256);
       src_loc.p = obj_angle_from_fixang(new_angle); // pitch;
       src_loc.b = 0;
    }
@@ -915,7 +915,7 @@ errtype ai_freeze_tag()
    return(OK);
 }
 
-errtype ai_time_passes(ulong *ticks_passed)
+errtype ai_time_passes(uint32_t *ticks_passed)
 {
    return(OK);
 }

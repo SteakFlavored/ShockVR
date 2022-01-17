@@ -65,15 +65,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // which is 2 by width text buttons for the user to click on.  When clicked,
 // the passed callback is called with the number of the button clicked
 // as an argument.
-bool wrapper_options_func(short keycode, ulong context, void* data);
+bool wrapper_options_func(int16_t keycode, uint32_t context, void* data);
 
 #define NUM_SAVE_SLOTS    8
 #define SAVE_COMMENT_LEN 32
 
 // Globals
 #ifndef __WRAPPER_SRC
-extern char save_game_name[];
-extern char comments[NUM_SAVE_SLOTS][SAVE_COMMENT_LEN];
+extern int8_t save_game_name[];
+extern int8_t comments[NUM_SAVE_SLOTS][SAVE_COMMENT_LEN];
 #endif
 #define Poke_SaveName(game_num) { save_game_name[6]='0'+(game_num>>3); save_game_name[7]='0'+(game_num&7); }
 

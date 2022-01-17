@@ -76,8 +76,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------
 
 typedef struct {
-   ubyte duration;                // Preset duration of given drug
-   ubyte flags;
+   uint8_t duration;                // Preset duration of given drug
+   uint8_t flags;
    void  (*use)();                // Function slots for take, effect, wear off
    void  (*effect)();
    void  (*wearoff)();
@@ -108,7 +108,7 @@ void drug_detox_effect();
 //
 // Maps drug types (indices in to player_struct.drugs) into objtriples
 
-int drug2triple(int type)
+int32_t drug2triple(int32_t type)
 {
    return MAKETRIP(CLASS_DRUG, DRUG_SUBCLASS_STATS, type);
 }
@@ -118,7 +118,7 @@ int drug2triple(int type)
 //
 // Maps triples onto drug types
 
-int triple2drug(int triple)
+int32_t triple2drug(int32_t triple)
 {
    return TRIP2TY(triple);
 }
@@ -129,9 +129,9 @@ int triple2drug(int triple)
 //
 // Returns the stringname of drug n
 
-char* get_drug_name(int n, char* buf)
+int8_t* get_drug_name(int32_t n, int8_t* buf)
 {
-   int triple;
+   int32_t triple;
 
    triple = drug2triple(n);
    get_object_short_name(triple,buf,50);
@@ -144,9 +144,9 @@ char* get_drug_name(int n, char* buf)
 //
 // Use an instance of drug n, install it as appropriate.
 
-void drug_use(int n)
+void drug_use(int32_t n)
 {
-   char buf[80];
+   int8_t buf[80];
    if (player_struct.drugs[n] == 0) return;
 
    play_digi_fx(SFX_PATCH_USE,1);
@@ -156,7 +156,7 @@ void drug_use(int n)
    player_struct.drugs[n]--;
 
    if (Drugs[n].flags & DRUG_LONGER_DOSE)
-      player_struct.drug_status[n] = min((short)player_struct.drug_status[n]+Drugs[n].duration,0x7F);
+      player_struct.drug_status[n] = min((int16_t)player_struct.drug_status[n]+Drugs[n].duration,0x7F);
    else
       player_struct.drug_status[n] =  Drugs[n].duration;
 
@@ -174,7 +174,7 @@ void drug_use(int n)
 //
 // Uninstall the effect of drug n as appropriate.
 
-void drug_wear_off(int n)
+void drug_wear_off(int32_t n)
 {
    player_struct.drug_intensity[n] = 0;
    player_struct.drug_status[n]    = 0; // in case not called from update loop
@@ -195,7 +195,7 @@ void drug_wear_off(int n)
 
 void drugs_update()
 {
-   int i, decay;
+   int32_t i, decay;
 
    // Only update drugs once every FREQ game ticks
    if ((player_struct.game_time - player_struct.last_drug_update) >= DRUG_UPDATE_FREQ) {
@@ -265,7 +265,7 @@ void drugs_init()
 
 void drug_startup(bool)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_DRUGZ; i++)
       if (Drugs[i].startup != NULL)
          Drugs[i].startup();
@@ -273,7 +273,7 @@ void drug_startup(bool)
 
 void drug_closedown(bool visible)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_DRUGZ; i++)
       if (Drugs[i].closedown != NULL)
          Drugs[i].closedown(visible);
@@ -340,18 +340,18 @@ void drug_lsd_closedown(bool visible);
 
 void drug_lsd_effect()
 {
-   int i;
-   uchar lsd_palette[768];
-   int lsd_first, lsd_last;
+   int32_t i;
+   uint8_t lsd_palette[768];
+   int32_t lsd_first, lsd_last;
 
    // Generate criteria for a random palette shift
    lsd_first = (rand() % 253) + 1;
    lsd_last = (rand() % 253) + 1;
    if (lsd_last < lsd_first) { i = lsd_first; lsd_first = lsd_last; lsd_last = i; }
    for (i = 0; i <= ((lsd_last - lsd_first) * 3); i++)
-      lsd_palette[i] = (uchar) (rand() % 256);
+      lsd_palette[i] = (uint8_t) (rand() % 256);
 
-   gr_set_pal((int)lsd_first,(int)(lsd_last-lsd_first+1),lsd_palette);
+   gr_set_pal((int32_t)lsd_first,(int32_t)(lsd_last-lsd_first+1),lsd_palette);
 
    return;
 }
@@ -443,7 +443,7 @@ void drug_sight_after_effect(void);
 void drug_sight_closedown(bool visible);
 
 
-extern void set_global_lighting(short);
+extern void set_global_lighting(int16_t);
 #define SIGHT_LIGHT_LEVEL (4 << 8)
 
 // ---------------------------------------------------------------------------
@@ -521,8 +521,8 @@ void drug_medic_wearoff();
 
 #define MEDIC_DECAY_RATE 8
 #define MEDIC_HEAL_STEPS 10
-//ushort medic_heal_rates[] = { 10,50,55,105,210} ;
-ushort medic_heal_rates[] = { 5,5,25,25,25,30,50,55,100,110};
+//uint16_t medic_heal_rates[] = { 10,50,55,105,210} ;
+uint16_t medic_heal_rates[] = { 5,5,25,25,25,30,50,55,100,110};
 #define MEDIC_HEAL_RATE 430
 
 
@@ -547,10 +547,10 @@ void drug_medic_use()
 
 void drug_medic_effect()
 {
-   ubyte n = INTENSITY(DRUG_MEDIC);
+   uint8_t n = INTENSITY(DRUG_MEDIC);
    if (n > 0)
    {
-      short delta;
+      int16_t delta;
       if (n > MEDIC_HEAL_STEPS)
       {
          delta = MEDIC_HEAL_RATE;
@@ -598,7 +598,7 @@ void drug_reflex_wearoff();
 
 void drug_reflex_use()
 {
-   extern char reflex_remainder;
+   extern int8_t reflex_remainder;
    reflex_remainder = 0;
    return;
 }
@@ -669,10 +669,10 @@ void drug_genius_wearoff()
 //                              DETOX
 // --------------------------------------------------------------------------
 void drug_detox_use();
-void wear_off_drug(int i);
+void wear_off_drug(int32_t i);
 void drug_detox_wearoff();
 
-uchar detox_drug_order[] =
+uint8_t detox_drug_order[] =
 {
    DRUG_LSD,
    DRUG_SIGHT,
@@ -702,9 +702,9 @@ void drug_detox_use()
 //
 // Continual effects of the detox drug.
 
-void wear_off_drug(int i)
+void wear_off_drug(int32_t i)
 {
-   int laststat = STATUS(i);
+   int32_t laststat = STATUS(i);
    STATUS(i) = 0;
    if (laststat > 0 && Drugs[i].wearoff != NULL)
       Drugs[i].wearoff();
@@ -714,12 +714,12 @@ void wear_off_drug(int i)
 
 void drug_detox_effect()
 {
-   int i,stack;
+   int32_t i,stack;
    for (stack = 0; stack < INTENSITY(DRUG_DETOX); stack+=2)
    {
       for (i = 0; i < NUM_DETOX_DRUGS; i++)
       {
-         int d = detox_drug_order[i];
+         int32_t d = detox_drug_order[i];
          if (STATUS(d) < 0)
          {
             wear_off_drug(d);
@@ -728,7 +728,7 @@ void drug_detox_effect()
       }
       for (i = 0; i < NUM_DETOX_DRUGS; i++)
       {
-         int d = detox_drug_order[i];
+         int32_t d = detox_drug_order[i];
          if (STATUS(d) > 0)
             {
                wear_off_drug(d);

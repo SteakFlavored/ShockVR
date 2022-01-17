@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // double a 64 bit long (two 32's), basically a shift left
-#define Double_64(a,b) if (((long) b) < 0) {b<<=1; a<<=1; a++;} else {b<<=1; a<<=1;}
+#define Double_64(a,b) if (((int32_t) b) < 0) {b<<=1; a<<=1; a++;} else {b<<=1; a<<=1;}
 
 // prototypes
 void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_vector *v2);
@@ -102,7 +102,7 @@ fix g3_vec_dotprod(g3s_vector *v0,g3s_vector *v1)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(v0->gZ, v1->gZ, &result2);
 	AsmWideAdd(&result, &result2);
-  return((result.hi<<16) | (((ulong) result.lo)>>16));
+  return((result.hi<<16) | (((uint32_t) result.lo)>>16));
  }
 
 
@@ -139,8 +139,8 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_ve
 	g3s_vector	temp_v0;
 	g3s_vector	temp_v1;
 	g3s_vector	temp_high;
-	long				temp_long;
- 	int					shiftcount;
+	int32_t				temp_long;
+ 	int32_t					shiftcount;
 
  	g3_vec_sub(&temp_v0,v1,v0);
  	g3_vec_sub(&temp_v1,v2,v1);
@@ -195,7 +195,7 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_ve
 
 // see how far to shift to fit in a longword
 	shiftcount = 0;
-	while (((unsigned long) temp_long) >= 0x0100)
+	while (((uint32_t) temp_long) >= 0x0100)
 	 {
 	 	shiftcount += 8;
 	 	temp_long >>= 8;

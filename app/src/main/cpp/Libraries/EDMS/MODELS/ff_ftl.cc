@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 // Exclusive, one time only Freefall appearance!!!
 
@@ -52,15 +52,15 @@ static Q D_old[3];                         // saved initial vector; this is a un
 // ----------
 static terrain_ff TFF;                    //3 guesses, first 2 don't count...
 
-physics_handle FF_object_check( unsigned int data_word, int hx, int hy,
-                                Q size, Q range, int exclude, int steps );
-physics_handle FF_object_check_new ( unsigned int data_word, int hx, int hy,
-                                     Q size, Q range, int exclude, int max_step );
+physics_handle FF_object_check( uint32_t data_word, int32_t hx, int32_t hy,
+                                Q size, Q range, int32_t exclude, int32_t steps );
+physics_handle FF_object_check_new ( uint32_t data_word, int32_t hx, int32_t hy,
+                                     Q size, Q range, int32_t exclude, int32_t max_step );
 
 typedef struct
 {
-   int hx, hy;                         // hash location
-   int bits;                           // what object bits were in that loc
+   int32_t hx, hy;                         // hash location
+   int32_t bits;                           // what object bits were in that loc
 } hash_info;
 
 Q sampling_period;
@@ -77,30 +77,30 @@ physics_handle EDMS_FF_cast_projectile_new
                Q mass,                 // for knockback
                Q size,                 // radius
                Q range,                // how far it can reach
-               int exclude,            // what object it cannot hit, typically the firer
-               int shooter,            // not used
-               long &g_info,           // information about ground hit
-               long &w_info,           // information about wall hit
+               int32_t exclude,            // what object it cannot hit, typically the firer
+               int32_t shooter,            // not used
+               int32_t &g_info,           // information about ground hit
+               int32_t &w_info,           // information about wall hit
                bool &hit )             // whether it hit something
 {
    sampling_period = size*2;           // diameter of projectile
                                        // this is four times what Seamus had it as originally
                                        // what's life without a little risk?
-   int stepper = 0,
+   int32_t stepper = 0,
        object_pointer = 0,          //For object checks...
        max_step = ( range / sampling_period ).to_int(),     //samples per meter...
        victim_on = 0,
        shooter_on = 0;
 
    hash_info must_check_objects[MAX_OBJ];
-   unsigned int test_data;                   // bitmask result of hash query
-   unsigned int last_test_data = 0;
+   uint32_t test_data;                   // bitmask result of hash query
+   uint32_t last_test_data = 0;
 
    physics_handle victim = -1;               //It is what is says it is...
-                  
+
    Q ground;                        //FF terrain issues...
 
-   int hx, hy;                         // hash location of X[]
+   int32_t hx, hy;                         // hash location of X[]
 
    // Looks at terrain...
    // ===================
@@ -214,7 +214,7 @@ physics_handle EDMS_FF_cast_projectile_new
             }
             last_test_data = test_data;
          }
-         
+
          // Move the check point...
          // =======================
          X[0] += D[0];
@@ -242,7 +242,7 @@ physics_handle EDMS_FF_cast_projectile_new
 
       // Now check for objects
 
-      int i;
+      int32_t i;
       for (i = 0; i < object_pointer; i++)
       {
          victim = FF_object_check_new (must_check_objects[i].bits, must_check_objects[i].hx, must_check_objects[i].hy,
@@ -307,7 +307,7 @@ physics_handle EDMS_FF_cast_projectile_new
       if ( stepper == max_step )
       {           //Check for rangeout...
          hit = FALSE;
-         g_info = 
+         g_info =
          w_info = 0;
       }
 
@@ -325,11 +325,11 @@ physics_handle EDMS_FF_cast_projectile_new
    return victim;
 }
 
-physics_handle FF_object_check_new ( unsigned int data_word, int hx, int hy, Q size, Q range, int exclude, int max_step )
+physics_handle FF_object_check_new ( uint32_t data_word, int32_t hx, int32_t hy, Q size, Q range, int32_t exclude, int32_t max_step )
 {
    // General purpose...
    // ==================
-   int object;
+   int32_t object;
    physics_handle victim = -1;
 
    // For the lines...
@@ -345,7 +345,7 @@ physics_handle FF_object_check_new ( unsigned int data_word, int hx, int hy, Q s
       kzdist = 0,
       kzdisto = 10000;
 
-   ulong bit = 0;                      // which object bit we're checking
+   uint32_t bit = 0;                      // which object bit we're checking
 
    while (data_word != 0)
    {
@@ -369,8 +369,8 @@ physics_handle FF_object_check_new ( unsigned int data_word, int hx, int hy, Q s
 
 #define SMALL_ENOUGH 16
 
-               int scale = 1;
-               int scale_shift = 0;
+               int32_t scale = 1;
+               int32_t scale_shift = 0;
                while (abs(dx) > scale * SMALL_ENOUGH) {scale <<= 1; scale_shift++;}
                while (abs(dy) > scale * SMALL_ENOUGH) {scale <<= 1; scale_shift++;}
                while (abs(dz) > scale * SMALL_ENOUGH) {scale <<= 1; scale_shift++;}
@@ -466,30 +466,30 @@ physics_handle EDMS_FF_cast_projectile( Q *X, // source
                Q mass,                 // for knockback
                Q size,                 // radius
                Q range,                // how far it can reach
-               int exclude,            // what object it cannot hit, typically the firer
-               int shooter,            // not used
-               long &g_info,           // information about ground hit
-               long &w_info,           // information about wall hit
+               int32_t exclude,            // what object it cannot hit, typically the firer
+               int32_t shooter,            // not used
+               int32_t &g_info,           // information about ground hit
+               int32_t &w_info,           // information about wall hit
                bool &hit )             // whether it hit something
 {
    sampling_period = size*2;           // diameter of projectile
                                        // this is four times what Seamus had it as originally
                                        // what's life without a little risk?
-   int stepper = 0,
+   int32_t stepper = 0,
        object_pointer = 0,          //For object checks...
        max_step = ( range / sampling_period ).to_int(),     //samples per meter...
        victim_on = 0,
        shooter_on = 0;
 
    hash_info must_check_objects[MAX_OBJ];
-   unsigned int test_data;                   // bitmask result of hash query
-   unsigned int last_test_data = 0;
+   uint32_t test_data;                   // bitmask result of hash query
+   uint32_t last_test_data = 0;
 
    physics_handle victim = -1;               //It is what is says it is...
-                  
+
    Q ground;                        //FF terrain issues...
 
-   int hx, hy;                         // hash location of X[]
+   int32_t hx, hy;                         // hash location of X[]
 
    // Looks at terrain...
    // ===================
@@ -594,7 +594,7 @@ physics_handle EDMS_FF_cast_projectile( Q *X, // source
             }
             last_test_data = test_data;
          }
-         
+
          // Move the check point...
          // =======================
          X[0] += D[0];
@@ -622,7 +622,7 @@ physics_handle EDMS_FF_cast_projectile( Q *X, // source
 
       // Now check for objects
 
-      int i;
+      int32_t i;
       for (i = 0; i < object_pointer; i++)
       {
          victim = FF_object_check (must_check_objects[i].bits, must_check_objects[i].hx, must_check_objects[i].hy,
@@ -688,14 +688,14 @@ physics_handle EDMS_FF_cast_projectile( Q *X, // source
          g_info = TFF.DATA1;  //Check for ground...
          w_info = 0;
          hit = TRUE;
-      }  
+      }
 
       // Did we range out?
       // -----------------
       if ( stepper == max_step )
       {           //Check for rangeout...
          hit = FALSE;
-         g_info = 
+         g_info =
          w_info = 0;
       }
 
@@ -720,11 +720,11 @@ physics_handle EDMS_FF_cast_projectile( Q *X, // source
 // Here, since we know the line segment we're interested in, we check to make sure that we
 // didn't hit any objects, and return the one we did...
 // ====================================================
-physics_handle FF_object_check( unsigned int data_word, int hx, int hy, Q size, Q range, int exclude, int stepper )
+physics_handle FF_object_check( uint32_t data_word, int32_t hx, int32_t hy, Q size, Q range, int32_t exclude, int32_t stepper )
 {
    // General purpose...
    // ==================
-   int object;
+   int32_t object;
    physics_handle victim = -1;
 
    // For the lines...
@@ -740,7 +740,7 @@ physics_handle FF_object_check( unsigned int data_word, int hx, int hy, Q size, 
       kzdist = 0,
       kzdisto = 10000;
 
-   ulong bit = 0;                      // which object bit we're checking
+   uint32_t bit = 0;                      // which object bit we're checking
 
    while (data_word != 0)
    {
@@ -764,8 +764,8 @@ physics_handle FF_object_check( unsigned int data_word, int hx, int hy, Q size, 
 
 #define SMALL_ENOUGH 16
 
-               int scale = 1;
-               int scale_shift = 0;
+               int32_t scale = 1;
+               int32_t scale_shift = 0;
                while (abs(dx) > scale * SMALL_ENOUGH) {scale <<= 1; scale_shift++;}
                while (abs(dy) > scale * SMALL_ENOUGH) {scale <<= 1; scale_shift++;}
                while (abs(dz) > scale * SMALL_ENOUGH) {scale <<= 1; scale_shift++;}

@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //---------
 // Prototypes
 //---------
-errtype array_grow(Array *a, int size);
+errtype array_grow(Array *a, int32_t size);
 
 
 //------------------------------------------------------
@@ -32,31 +32,31 @@ errtype array_grow(Array *a, int size);
 #define FREELIST_EMPTY   -1
 #define FREELIST_NOTFREE -2
 
-errtype array_init(Array* initme, int elemsize, int vecsize)
+errtype array_init(Array* initme, int32_t elemsize, int32_t vecsize)
 {
    if (elemsize == 0) return ERR_RANGE;
    initme->elemsize = elemsize;
    initme->vecsize = vecsize;
    initme->fullness = 0;
    initme->freehead = FREELIST_EMPTY;
-   initme->freevec = (int*)NewPtr(vecsize*sizeof(int));
+   initme->freevec = (int32_t*)NewPtr(vecsize*sizeof(int32_t));
    if (initme->freevec == NULL) return ERR_NOMEM;
-   initme->vec = (char*) NewPtr(elemsize*vecsize);
+   initme->vec = (int8_t*) NewPtr(elemsize*vecsize);
    if (initme->vec == NULL) return ERR_NOMEM;
    return OK;
 }
 
-errtype array_grow(Array *a, int size)
+errtype array_grow(Array *a, int32_t size)
 {
-   char* tmpvec;
-   int* tmplist;
+   int8_t* tmpvec;
+   int32_t* tmplist;
    if (size <= a->vecsize) return OK;
-   tmpvec = (char *)NewPtr(a->elemsize*size);
+   tmpvec = (int8_t *)NewPtr(a->elemsize*size);
    if (tmpvec == NULL) return ERR_NOMEM;
    memcpy(tmpvec,a->vec,a->vecsize*a->elemsize);
-   tmplist = (int *)NewPtr(size*sizeof(int));
+   tmplist = (int32_t *)NewPtr(size*sizeof(int32_t));
    if (tmplist == NULL) return ERR_NOMEM;
-   memcpy(tmplist,a->vec,a->vecsize*sizeof(int));
+   memcpy(tmplist,a->vec,a->vecsize*sizeof(int32_t));
    DisposePtr((Ptr)a->vec);
    DisposePtr((Ptr)a->freevec);
    a->vecsize = size;
@@ -65,7 +65,7 @@ errtype array_grow(Array *a, int size)
    return OK;
 }
 
-errtype array_newelem(Array* a, int* index)
+errtype array_newelem(Array* a, int32_t* index)
 {
    if (a->freehead != FREELIST_EMPTY)
    {
@@ -85,7 +85,7 @@ errtype array_newelem(Array* a, int* index)
 }
 
 
-errtype array_dropelem(Array* a, int index)
+errtype array_dropelem(Array* a, int32_t index)
 {
    if (index >= a->fullness || a->freevec[index] != FREELIST_NOTFREE) return OK; // already freed.
    a->freevec[index] = a->freehead;

@@ -71,7 +71,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * conversion from fixed-point radians to fixangs
  *
  * Revision 1.26  1993/06/27  02:30:47  dc
- * added char return to fix_sprint prototypes, added fix_sprint_hex prototypes
+ * added int8_t return to fix_sprint prototypes, added fix_sprint_hex prototypes
  *
  * Revision 1.25  1993/06/07  10:29:36  jak
  * Reversed #pragma and C decls for some functions
@@ -96,7 +96,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Added include of "types.h"
  *
  * Revision 1.18  1993/03/03  14:46:59  dfan
- * fix_from_float: short should have been ushort to prevent nasty sign-extend
+ * fix_from_float: int16_t should have been uint16_t to prevent nasty sign-extend
  *
  * Revision 1.17  1993/03/03  11:50:53  dfan
  * float conversion
@@ -163,7 +163,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg_types.h"
 
 // Globals
-extern int	gOVResult;
+extern int32_t	gOVResult;
 
 
 //////////////////////////////
@@ -172,7 +172,7 @@ extern int	gOVResult;
 //
 /*  ¥¥¥ Change this
 // Returns 0 if x < 0
-ushort long_sqrt (long x);
+uint16_t long_sqrt (int32_t x);
 #pragma aux long_sqrt parm [eax] value [ax] modify [eax ebx ecx edx esi edi]
 */
 
@@ -181,8 +181,8 @@ ushort long_sqrt (long x);
 // fix.c
 //
 
-long long_fast_pyth_dist (long a, long b);
-long long_safe_pyth_dist (long a, long b);
+int32_t long_fast_pyth_dist (int32_t a, int32_t b);
+int32_t long_safe_pyth_dist (int32_t a, int32_t b);
 
 
 //========================================
@@ -195,7 +195,7 @@ long long_safe_pyth_dist (long a, long b);
    bits of integer, and 16 bits of fraction.  thus, a rational number a is
    represented as a 32-bit number as a*2^16. */
 
-typedef long fix;
+typedef int32_t fix;
 typedef fix fix16;
 
 // define min and max
@@ -214,10 +214,10 @@ typedef fix fix16;
 #define FIXANG_PI 0x8000
 #define fix_2pi fix_make(6,18559) // that's 6 + 18559/65536 = 6.28319
 
-typedef ushort fixang;
+typedef uint16_t fixang;
 
 /* makes a fixed point number with integral part a and fractional part b. */
-#define fix_make(a,b) ((((long)(a))<<16)|(b))
+#define fix_make(a,b) ((((int32_t)(a))<<16)|(b))
 
 #define FIX_UNIT fix_make(1,0)
 
@@ -262,7 +262,7 @@ typedef ushort fixang;
 #define fixrad_to_fixang(fixradian) (fix_frac(fix_div((fixradian),fix_2pi)))
 #define fixang_to_fixrad(ang) fix_div(fix_mul(ang,fix_2pi),0x10000)
 #define degrees_to_fixang(d)    ((fixang)(((d)*FIXANG_PI)/180))
-#define fixang_to_degrees(ang)  (((long)(ang)*180)/FIXANG_PI)
+#define fixang_to_degrees(ang)  (((int32_t)(ang)*180)/FIXANG_PI)
 
 // turns a fixed point into a float.
 #define fix_float(n) ((float)(fix_int(n)) + (float)(fix_frac(n))/65536.0)
@@ -326,9 +326,9 @@ fix fix_safe_pyth_dist (fix a, fix b);
 fix fix_sqrt (fix x);
 
 #if defined(powerc) || defined(__powerc)
-long quad_sqrt(long hi, long lo);
+int32_t quad_sqrt(int32_t hi, int32_t lo);
 #else
-asm long quad_sqrt(long hi, long lo);
+asm int32_t quad_sqrt(int32_t hi, int32_t lo);
 #endif
 
 
@@ -376,11 +376,11 @@ fixang fix_atan2 (fix y, fix x);
 //========================================
 
 //	Converts string into fixed-point
-fix atofix(char *p);
+fix atofix(int8_t *p);
 
 // Puts a decimal representation of x into str
-char *fix_sprint (char *str, fix x);
-char *fix_sprint_hex (char *str, fix x);
+int8_t *fix_sprint (int8_t *str, fix x);
+int8_t *fix_sprint_hex (int8_t *str, fix x);
 
 /* fixpoint x ^ y */
 extern fix fix_pow (fix x, fix y);
@@ -399,16 +399,16 @@ fix fix_exp (fix x);
 //
 // fix24.c
 
-typedef long fix24;
+typedef int32_t fix24;
 
-#define fix24_make(a,b) ((((long)(a))<<8)|(b))
+#define fix24_make(a,b) ((((int32_t)(a))<<8)|(b))
 #define fix24_trunc(n) ((n)&0xffffff00)
 #define fix24_round(n) (((n)+128)&0xffffff00)
 #define fix24_int(n) ((n)>>8)
 #define fix24_rint(n) (((n)+128)>>8)
 #define fix24_frac(n) ((n)&0xff)
 #define fix24_float(n) ((float)(fix24_int(n)) + (float)(fix24_frac(n))/256.0)
-#define fix24_from_float(n) (fix24_make((short)(floor(n)), (ushort)((n-floor(n))*256.0)))
+#define fix24_from_float(n) (fix24_make((int16_t)(floor(n)), (uint16_t)((n-floor(n))*256.0)))
 
 #define fix24_from_fix16(n) ((n)>>8)
 #define fix16_from_fix24(n) ((n)<<8)
@@ -460,9 +460,9 @@ fix24 fix24_fastcos (fixang theta);
 fixang fix24_asin (fix24 x);
 fixang fix24_acos (fix24 x);
 fixang fix24_atan2 (fix24 y, fix24 x);
-fix24 atofix24(char *p);
-char *fix24_sprint (char *str, fix24 x);
-char *fix24_sprint_hex (char *str, fix24 x);
+fix24 atofix24(int8_t *p);
+int8_t *fix24_sprint (int8_t *str, fix24 x);
+int8_t *fix24_sprint_hex (int8_t *str, fix24 x);
 
 
 //============================================
@@ -472,8 +472,8 @@ char *fix24_sprint_hex (char *str, fix24 x);
 //============================================
 struct AWide
 {
-	long			hi;
-	unsigned long	lo;
+	int32_t			hi;
+	uint32_t	lo;
 };
 typedef struct AWide AWide;
 
@@ -486,22 +486,22 @@ extern fix fix_mul_3_16_20_asm (fix a, fix b);
 extern fix fix_mul_16_32_20_asm (fix a, fix b);
 extern AWide *AsmWideAdd(AWide *target, AWide *source);
 extern AWide *AsmWideSub(AWide *target, AWide *source);
-extern AWide *AsmWideMultiply(long multiplicand, long multiplier, AWide *target);
-extern long AsmWideDivide(long hi, long lo, long den);
+extern AWide *AsmWideMultiply(int32_t multiplicand, int32_t multiplier, AWide *target);
+extern int32_t AsmWideDivide(int32_t hi, int32_t lo, int32_t den);
 
 // since these aren't implemented yet in our PPC code yet, we just call the fixMath versions
 // extern AWide *AsmWideNegate(AWide *target);
-// extern AWide *AsmWideBitShift(AWide *src, long shift);
+// extern AWide *AsmWideBitShift(AWide *src, int32_t shift);
 #define AsmWideNegate(target) (AWide *) WideNegate((wide *) target)
 #define AsmWideBitShift(target,count) (AWide *) WideBitShift((wide *) target,count)
 }
 
 #else
 extern asm AWide *AsmWideAdd(AWide *target, AWide *source);
-extern asm AWide *AsmWideMultiply(long multiplicand, long multiplier, AWide *target);
-extern asm long AsmWideDivide(long hi, long lo, long divisor);
+extern asm AWide *AsmWideMultiply(int32_t multiplicand, int32_t multiplier, AWide *target);
+extern asm int32_t AsmWideDivide(int32_t hi, int32_t lo, int32_t divisor);
 extern asm AWide *AsmWideNegate(AWide *target);
-extern asm AWide *AsmWideBitShift(AWide *src, long shift);
+extern asm AWide *AsmWideBitShift(AWide *src, int32_t shift);
 #endif
 
 

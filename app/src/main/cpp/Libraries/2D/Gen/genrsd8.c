@@ -69,14 +69,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* draw an unclipped rsd bitmap. since rsd bitmaps have skips, the trans
    field of the flags byte is ignored. */
-void gri_gen_rsd8_ubitmap (grs_bitmap *bm, short x, short y)
+void gri_gen_rsd8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   short x_right,y_bot;       /* opposite edges of bitmap */
-   uchar *rsd_src;            /* rsd source buffer */
-   short rsd_code;            /* last rsd opcode */
-   short rsd_count;           /* count for last opcode */
-   short op_count;            /* operational count */
-   int i;
+   int16_t x_right,y_bot;       /* opposite edges of bitmap */
+   uint8_t *rsd_src;            /* rsd source buffer */
+   int16_t rsd_code;            /* last rsd opcode */
+   int16_t rsd_count;           /* count for last opcode */
+   int16_t op_count;            /* operational count */
+   int32_t i;
 
    rsd_src = bm->bits;
    rsd_count = 0;
@@ -139,19 +139,19 @@ rsd_done:
    return;
 }
 
-int gri_gen_rsd8_bitmap (grs_bitmap *bm, short x_left, short y_top)
+int32_t gri_gen_rsd8_bitmap (grs_bitmap *bm, int16_t x_left, int16_t y_top)
 {
-   short x,y;                 /* current destination position */
-   short x_right,y_bot;       /* opposite edges of bitmap */
-   short x_off,y_off;         /* x,y offset for clip */
-   ulong start_byte;          /* byte to start drawing */
-   ulong cur_byte;            /* current position within rsd */
-   uchar *rsd_src;            /* rsd source buffer */
-   short rsd_code;            /* last rsd opcode */
-   short rsd_count;           /* count for last opcode */
-   short op_count;            /* operational count */
-   int code;                  /* clip code to return */
-   int i;
+   int16_t x,y;                 /* current destination position */
+   int16_t x_right,y_bot;       /* opposite edges of bitmap */
+   int16_t x_off,y_off;         /* x,y offset for clip */
+   uint32_t start_byte;          /* byte to start drawing */
+   uint32_t cur_byte;            /* current position within rsd */
+   uint8_t *rsd_src;            /* rsd source buffer */
+   int16_t rsd_code;            /* last rsd opcode */
+   int16_t rsd_count;           /* count for last opcode */
+   int16_t op_count;            /* operational count */
+   int32_t code;                  /* clip code to return */
+   int32_t i;
 
    rsd_src = bm->bits;
    x = x_left; y = y_top;

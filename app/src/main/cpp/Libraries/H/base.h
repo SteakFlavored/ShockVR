@@ -54,8 +54,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <types.h>
 
 typedef struct {
-   short x;
-   short y;
+   int16_t x;
+   int16_t y;
 } Point;
 
 // macros to make comparing Points easier

@@ -107,7 +107,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* lines */
 
 #define gr_fix_line gen_fix_line
-extern int gen_fix_line (fix x0, fix y0, fix x1, fix y1);
+extern int32_t gen_fix_line (fix x0, fix y0, fix x1, fix y1);
 
 #define gr_fix_uline(x0,y0,x1,y1)\
 do {\
@@ -121,7 +121,7 @@ do {\
 /* rgb shaded lines */
 
 #define gr_fix_cline gen_fix_cline
-extern int gen_fix_cline (fix x0, fix y0, grs_rgb c0, fix x1, fix y1, grs_rgb c1);
+extern int32_t gen_fix_cline (fix x0, fix y0, grs_rgb c0, fix x1, fix y1, grs_rgb c1);
 
 #define gr_fix_ucline(x0,y0,c0,x1,y1,c1) \
 do { \
@@ -130,8 +130,8 @@ do { \
    gfuc_v0.x = (x0); gfuc_v0.y = (y0); \
    gfuc_v1.x = (x1); gfuc_v1.y = (y1); \
 \
-   gr_split_rgb ((c0), (uchar*) &(gfuc_v0.u), (uchar*)&(gfuc_v0.v), (uchar*)&(gfuc_v0.w)); \
-   gr_split_rgb ((c1), (uchar*)&(gfuc_v1.u), (uchar*)&(gfuc_v1.v), (uchar*)&(gfuc_v1.w)); \
+   gr_split_rgb ((c0), (uint8_t*) &(gfuc_v0.u), (uint8_t*)&(gfuc_v0.v), (uint8_t*)&(gfuc_v0.w)); \
+   gr_split_rgb ((c1), (uint8_t*)&(gfuc_v1.u), (uint8_t*)&(gfuc_v1.v), (uint8_t*)&(gfuc_v1.w)); \
 \
   grd_ucline_fill (gr_get_fcolor(), gr_get_fill_parm(), &gfuc_v0, &gfuc_v1); \
 } while(0)
@@ -140,7 +140,7 @@ do { \
 /* i shaded lines */
 
 #define gr_fix_sline gen_fix_sline
-extern int gen_fix_sline (fix x0, fix y0, fix i0, fix x1, fix y1, fix i1);
+extern int32_t gen_fix_sline (fix x0, fix y0, fix i0, fix x1, fix y1, fix i1);
 
 #define gr_fix_usline(x0,y0,i0,x1,y1,i1) \
 do { \
@@ -180,13 +180,13 @@ do { \
 /* these continue to do traditional lookup's */
 
 #define gr_vox_rect \
-   ((void (*)(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_bitmap *ht,int dotw,int doth)) \
+   ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht,int32_t dotw,int32_t doth)) \
    grd_canvas_table[VOX_RECT])
 #define gr_vox_poly \
-   ((void (*)(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_bitmap *ht)) \
+   ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht)) \
    grd_canvas_table[VOX_POLY])
 #define gr_vox_cpoly \
-   ((void (*)(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_bitmap *ht)) \
+   ((void (*)(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht)) \
    grd_canvas_table[VOX_CPOLY])
 #define gr_interp2_ubitmap \
    ((void (*)(grs_bitmap *bm)) grd_canvas_table[INTERP2_UBITMAP])
@@ -195,20 +195,20 @@ do { \
 
       /* These are horrific: something should be done. */
 #define gr_scale_ubitmap(bm,x,y,w,h)  \
-   ((void (*)(grs_bitmap *_bm,short _x,short _y,short _w,short _h)) \
+   ((void (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h)) \
    grd_canvas_table[SCALE_DEVICE_UBITMAP+2*((bm)->type)]) (bm,x,y,w,h)
 #define gr_scale_bitmap(bm,x,y,w,h)  \
-   ((int (*)(grs_bitmap *_bm,short _x,short _y,short _w,short _h)) \
+   ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h)) \
    grd_canvas_table[SCALE_DEVICE_BITMAP+2*((bm)->type)]) (bm,x,y,w,h)
 
 #define gr_clut_scale_ubitmap(bm,x,y,w,h,cl) \
-   ((int (*)(grs_bitmap *_bm,short _x,short _y,short _w,short _h,uchar *_cl)) \
+   ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h,uint8_t *_cl)) \
    grd_canvas_table[CLUT_SCALE_DEVICE_UBITMAP+2*((bm)->type)]) \
    (bm,x,y,w,h,cl)
 #define gr_clut_scale_bitmap(bm,x,y,w,h,cl) \
-   ((int (*)(grs_bitmap *_bm,short _x,short _y,short _w,short _h,uchar *_cl)) \
+   ((int32_t (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,int16_t _w,int16_t _h,uint8_t *_cl)) \
    grd_canvas_table[CLUT_SCALE_DEVICE_BITMAP+2*((bm)->type)]) \
    (bm,x,y,w,h,cl)
 #define gr_roll_ubitmap          grd_canvas_table[ROLL_UBITMAP])
-#define gr_roll_bitmap           ((int (*)())grd_canvas_table[ROLL_BITMAP])
+#define gr_roll_bitmap           ((int32_t (*)())grd_canvas_table[ROLL_BITMAP])
 #endif /* !__GRREND_H */

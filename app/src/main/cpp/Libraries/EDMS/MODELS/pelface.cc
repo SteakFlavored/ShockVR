@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Here is the bridge routine for maintenance and upkeep of the pelvis models...
 //	=============================================================================
@@ -58,7 +58,7 @@ fix	mass,
 	gravity,
 	height;
 
-int     cyber_space;
+int32_t     cyber_space;
 
 } Pelvis;
 
@@ -105,14 +105,14 @@ Q		mass,
 		gravity,
 		height;
 
-int		on = 0,
+int32_t		on = 0,
 		cyber_space = 0;
 
 physics_handle	ph = 0;
 
 	init_state[0][0].fix_to( s->X );		init_state[0][1].fix_to( s->X_dot );
-	init_state[1][0].fix_to( s->Y );		init_state[1][1].fix_to( s->Y_dot );    
-	init_state[2][0].fix_to( s->Z );		init_state[2][1].fix_to( s->Z_dot );    
+	init_state[1][0].fix_to( s->Y );		init_state[1][1].fix_to( s->Y_dot );
+	init_state[2][0].fix_to( s->Z );		init_state[2][1].fix_to( s->Z_dot );
 	init_state[3][0].fix_to( s-> alpha );		init_state[3][1].fix_to( s->alpha_dot );
 	init_state[4][0].fix_to( s-> beta );		init_state[4][1].fix_to( s->beta_dot );
 	init_state[5][0].fix_to( s-> gamma );		init_state[5][1].fix_to( s->gamma_dot );
@@ -172,7 +172,7 @@ physics_handle	ph = 0;
 
 //      This works just like the robot model...
 //      ---------------------------------------
-void EDMS_control_pelvis( physics_handle ph, fix F, fix T, fix S, fix L, fix J, int C ) {
+void EDMS_control_pelvis( physics_handle ph, fix F, fix T, fix S, fix L, fix J, int32_t C ) {
 
 Q	FF,			//Silly, no?
 	TT,
@@ -192,7 +192,7 @@ Q	FF,			//Silly, no?
 	LL.fix_to( L );
 	JJ.fix_to( J );
 
-        int on = physics_handle_to_object_number( ph );
+        int32_t on = physics_handle_to_object_number( ph );
 
         if( I[on][30] == PELVIS ) pelvis_set_control( on, FF, TT, SS, LL, JJ, C );
 
@@ -205,7 +205,7 @@ Q	FF,			//Silly, no?
 //      ----------------------------------------------------------
 void EDMS_get_pelvic_viewpoint( physics_handle ph, State *s ) {
 
-int     on = ph2on[ph];
+int32_t     on = ph2on[ph];
 
 Q       delta = 0;
 
@@ -223,9 +223,9 @@ Q       sin_alpha = 0,
 
 
 Q       final_x = 0,
-        final_y = 0;        
-        
-        
+        final_y = 0;
+
+
         sincos( -S[on][3][0], &sin_alpha, &cos_alpha );
         final_x = cos_alpha*offset_x + sin_alpha*offset_y;
         final_y =-sin_alpha*offset_x + cos_alpha*offset_y;
@@ -269,9 +269,9 @@ Q       final_x = 0,
 
         }
 
-        s->X = old_state[0].to_fix();    
-        s->Y = old_state[1].to_fix();    
-        s->Z = old_state[2].to_fix();    
+        s->X = old_state[0].to_fix();
+        s->Y = old_state[1].to_fix();
+        s->Z = old_state[2].to_fix();
 
         s->alpha = old_state[3].to_fix();
         s->beta  = old_state[4].to_fix();
@@ -285,7 +285,7 @@ Q       final_x = 0,
 
 
         }       //End of check for pelvis or not...
-           
+
 
 //#ifdef EDMS_SHIPPABLE
 //       else {  mout << "Pelvic Viewpoint: physics handle " << ph << ", object #" << on << " isn't a Pelvis model!\n";
@@ -295,7 +295,7 @@ Q       final_x = 0,
 
 
 
-}   
+}
 
 
 
@@ -311,7 +311,7 @@ Q	mass,
 	height,
 	gravity;
 
-int	cyber_space = 0;
+int32_t	cyber_space = 0;
 
 	mass.fix_to( p -> mass );
 	size.fix_to( p -> size );
@@ -321,7 +321,7 @@ int	cyber_space = 0;
 	height.fix_to( p -> height );
         if ( height > 3*size ) height = 3*size;
 
-	int on = physics_handle_to_object_number( ph );
+	int32_t on = physics_handle_to_object_number( ph );
 
 //	hardness = hardness*(mass*4/size);
 	hardness = hardness*(mass*HARD_FAC/size);
@@ -362,7 +362,7 @@ int	cyber_space = 0;
 //	======================
 void EDMS_get_pelvis_parameters( physics_handle ph, Pelvis *p )
 {
-	int on = physics_handle_to_object_number( ph );
+	int32_t on = physics_handle_to_object_number( ph );
 
 	p -> pep = (I[on][23] / I[on][26]).to_fix();
 	p -> size = I[on][22].to_fix();
@@ -383,13 +383,13 @@ void EDMS_get_pelvis_parameters( physics_handle ph, Pelvis *p )
 //	===============================================
 fix EDMS_get_pelvis_damage( physics_handle ph, fix delta_t ) {
 
-int	object;
+int32_t	object;
 Q	worker_bee_buzz_buzz = 0;
 
 	object = ph2on[ph];			//As stupid as it gets...
         worker_bee_buzz_buzz = I[object][14];
         I[object][14] = 0;
- 
+
 	return fix_mul( delta_t, I[object][14].to_fix() );
 
 }

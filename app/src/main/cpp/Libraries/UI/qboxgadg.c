@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 RectCallback disp_fn;
 GadgetData *qb_gd;
-int current_z;
+int32_t current_z;
 Gadget *current_box;
 LGRect box_dim;
 
@@ -49,11 +49,11 @@ LGPoint QboxDefaultSpacing = {2, 0};
 LGPoint QboxDefaultBorder = {1, 1};
 
 // Prototypes
-int gad_qb_destroy(Gadget *g, void *user_data);
+int32_t gad_qb_destroy(Gadget *g, void *user_data);
 bool gad_qbox_close_func(void *vg, void *ud);
 
 
-int gad_qb_destroy(Gadget *g, void *user_data)
+int32_t gad_qb_destroy(Gadget *g, void *user_data)
 {
 #ifndef NO_DUMMIES
    void *dummy;
@@ -66,7 +66,7 @@ int gad_qb_destroy(Gadget *g, void *user_data)
    return(0);
 }
 
-Gadget *gad_qbox_start_full(Gadget *parent, LGPoint coord, int z, TNGStyle *sty, ushort options, char *name, LGPoint ss, LGPoint spacing,
+Gadget *gad_qbox_start_full(Gadget *parent, LGPoint coord, int32_t z, TNGStyle *sty, uint16_t options, int8_t *name, LGPoint ss, LGPoint spacing,
    LGPoint border, Ref left_id, Ref right_id)
 {
    Gadget *retgad;
@@ -113,7 +113,7 @@ Gadget *gad_qbox_start_full(Gadget *parent, LGPoint coord, int z, TNGStyle *sty,
    retgad->destroy_func = &gad_qb_destroy;
 
    // Fill out gadget data
-   qb_gd->name = (char *)NewPtr((strlen(name) + 1) * sizeof(char));
+   qb_gd->name = (int8_t *)NewPtr((strlen(name) + 1) * sizeof(int8_t));
    strcpy(qb_gd->name, name);
    qb_gd->g = retgad;
 
@@ -121,7 +121,7 @@ Gadget *gad_qbox_start_full(Gadget *parent, LGPoint coord, int z, TNGStyle *sty,
 }
 
 // Begin a quick box.  Until the qbox is ended, all subsequent qbox calls will use the "current" qbox.
-Gadget *gad_qbox_start(Gadget *parent, LGPoint coord, int z, TNGStyle *sty, ushort options, char *name, LGPoint ss)
+Gadget *gad_qbox_start(Gadget *parent, LGPoint coord, int32_t z, TNGStyle *sty, uint16_t options, int8_t *name, LGPoint ss)
 {
    return(gad_qbox_start_full(parent, coord, z, sty, options, name, ss, QboxDefaultSpacing, QboxDefaultBorder,
       NULL, NULL));
@@ -130,14 +130,14 @@ Gadget *gad_qbox_start(Gadget *parent, LGPoint coord, int z, TNGStyle *sty, usho
 // Add a line to a quickbox.  slot_type describes the type of slot, var is a pointer to the variable to be
 // displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o
 // combinations of options and types might not be implemented.
-errtype gad_qbox_add(char *label, int slot_type, void *var, ulong slot_options)
+errtype gad_qbox_add(int8_t *label, int32_t slot_type, void *var, uint32_t slot_options)
 {
    return(tng_quickbox_add(label, slot_type, var, slot_options));
 }
 
 // Just like gad_qbox_add but allows two parameters to be set for the slot.  Certain slot options require
 // this form of accessing.
-errtype gad_qbox_add_parm(char *label, int slot_type, void *var, ulong slot_options, void *parm1, void *parm2)
+errtype gad_qbox_add_parm(int8_t *label, int32_t slot_type, void *var, uint32_t slot_options, void *parm1, void *parm2)
 {
    return(tng_quickbox_add_parm(label, slot_type, var, slot_options, parm1, parm2));
 }
@@ -196,7 +196,7 @@ errtype gad_qbox_end_full(Gadget **ptr)
    return(OK);
 }
 
-errtype gad_qbox_rename_slot(Gadget *g, int slot_num, char *new_name)
+errtype gad_qbox_rename_slot(Gadget *g, int32_t slot_num, int8_t *new_name)
 {
    return(tng_quickbox_rename_slot(g->tng_data, slot_num,new_name));
 }

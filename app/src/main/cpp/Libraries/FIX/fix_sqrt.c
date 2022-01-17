@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Table of square root guesses
 //--------------------
-ubyte  pGuessTable[256] =
+uint8_t  pGuessTable[256] =
 {
 	1,
 	1, 1,
@@ -58,9 +58,9 @@ ubyte  pGuessTable[256] =
 //  Includes
 //--------------------
 #if defined(powerc) || defined(__powerc)
-long long_sqrt(long num);
+int32_t long_sqrt(int32_t num);
 #else
-asm long long_sqrt(long num);
+asm int32_t long_sqrt(int32_t num);
 #endif
 
 //-----------------------------------------------------------------
@@ -79,11 +79,11 @@ fix fix_sqrt(fix num)
 //-----------------------------------------------------------------
 //  Calculate the square root of a wide (64-bit) number.
 //-----------------------------------------------------------------
-long quad_sqrt(long hi, long lo)
+int32_t quad_sqrt(int32_t hi, int32_t lo)
 {
-//	uchar	testb, trans;
-//	uchar	shift;
-//	long		divisor, temp, savediv, rem;
+//	uint8_t	testb, trans;
+//	uint8_t	shift;
+//	int32_t		divisor, temp, savediv, rem;
 
 	// Parameter checking
 
@@ -109,28 +109,28 @@ long quad_sqrt(long hi, long lo)
 	// Find the highest byte that is non-zero (look only in hiword, since we're assured at this point
 	// that it is non-zero), look up a good first guess for that byte, and shift it the appropriate amount.
 
-	testb = (uchar)(hi >> 24);
+	testb = (uint8_t)(hi >> 24);
 	if (testb != 0)
 	{
 		trans = pGuessTable[testb];
 		shift = 12 + 16;
 		goto q_found_byte;
 	}
-	testb = (uchar)(hi >> 16);
+	testb = (uint8_t)(hi >> 16);
 	if (testb != 0)
 	{
 		trans = pGuessTable[testb];
 		shift = 8 + 16;
 		goto q_found_byte;
 	}
-	testb = (uchar)(hi >> 8);
+	testb = (uint8_t)(hi >> 8);
 	if (testb != 0)
 	{
 		trans = pGuessTable[testb];
 		shift = 4 + 16;
 		goto q_found_byte;
 	}
-	testb = (uchar)hi;
+	testb = (uint8_t)hi;
 	if (testb != 0)
 	{
 		trans = pGuessTable[testb];
@@ -148,7 +148,7 @@ q_found_byte:
 	// three times without even thinking about it, and then start checking
 	// to see if our answer is correct.
 
-	for (int i = 0; i < 2; i++)
+	for (int32_t i = 0; i < 2; i++)
 	{
 		temp = AsmWideDivide(hi, lo, divisor);
 		divisor += temp;
@@ -191,16 +191,16 @@ q_found_byte:
 }
 
 //-----------------------------------------------------------------
-//  Calculate the square root of a long number.
+//  Calculate the square root of a int32_t number.
 //-----------------------------------------------------------------
-long long_sqrt(long num)
+int32_t long_sqrt(int32_t num)
 {
 	fix		savediv;
 	fix		temp;
-	uchar	testb, trans;
-	uchar	shift;
+	uint8_t	testb, trans;
+	uint8_t	shift;
 	fix		divisor;
-	short		i;
+	int16_t		i;
 
 	if (num == 0)								// A bit of error checking.
 		return (0);
@@ -210,28 +210,28 @@ long long_sqrt(long num)
 	// Find the highest byte that is non-zero, look up a good first guess for
 	// that byte, and shift it the appropriate amount.
 
-	testb = (uchar)(num >> 24);
+	testb = (uint8_t)(num >> 24);
 	if (testb != 0)
 	{
 		trans = pGuessTable[testb];
 		shift = 12;
 		goto found_byte;
 	}
-	testb = (uchar)(num >> 16);
+	testb = (uint8_t)(num >> 16);
 	if (testb != 0)
 	{
 		trans = pGuessTable[testb];
 		shift = 8;
 		goto found_byte;
 	}
-	testb = (uchar)(num >> 8);
+	testb = (uint8_t)(num >> 8);
 	if (testb != 0)
 	{
 		trans = pGuessTable[testb];
 		shift = 4;
 		goto found_byte;
 	}
-	testb = (uchar)num;
+	testb = (uint8_t)num;
 	if (testb != 0)
 	{
 		trans = pGuessTable[testb];
@@ -285,7 +285,7 @@ found_byte:
 
 #else
 // 68k versions of quad_sqrt & long_sqrt
-asm long quad_sqrt(long hi, long lo)
+asm int32_t quad_sqrt(int32_t hi, int32_t lo)
  {
  	move.l	4(sp),d1				// check hi
  	bne.s		must_use_quad
@@ -407,7 +407,7 @@ q_return_zero:
 	rts									// ret
  }
 
-asm long long_sqrt(long num)
+asm int32_t long_sqrt(int32_t num)
  {
  	move.l		4(sp),d0				// get num
  	movem.l		d3-d5,-(sp)		// save regs

@@ -68,23 +68,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct iaaiiaia{
    void (*f)();
    struct iaaiiaia *next;
-   uchar flags;
+   uint8_t flags;
 } grs_func_chain;
 
-extern short grd_pixel_index;
-extern short grd_canvas_index;
+extern int16_t grd_pixel_index;
+extern int16_t grd_canvas_index;
 
-extern uchar chn_flags;
+extern uint8_t chn_flags;
 #define CHN_ON 1
 #define CHN_GEN 2
 
-extern grs_func_chain *gr_chain_add_over(int n, void (*f)());
-extern grs_func_chain *gr_chain_add_before(int n, void (*f)(void));
-extern grs_func_chain *gr_chain_add_after(int n, void (*f)(void));
+extern grs_func_chain *gr_chain_add_over(int32_t n, void (*f)());
+extern grs_func_chain *gr_chain_add_before(int32_t n, void (*f)(void));
+extern grs_func_chain *gr_chain_add_after(int32_t n, void (*f)(void));
 extern void (*chain_rest())();
 
-extern void gr_unchain(int n);
-extern void gr_rechain(int n);
+extern void gr_unchain(int32_t n);
+extern void gr_rechain(int32_t n);
 extern void gr_unchain_all();
 extern void gr_rechain_all();
 

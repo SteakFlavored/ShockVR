@@ -82,9 +82,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void MemSetAllocator(void *(*fm)(size_t size),
 	void *(*fr)(void *p, size_t size), void (*ff)(void *p));
-int MemPushAllocator(void *(*fm)(size_t size),
+int32_t MemPushAllocator(void *(*fm)(size_t size),
 	void *(*fr)(void *p, size_t size), void (*ff)());
-int MemPopAllocator(void);
+int32_t MemPopAllocator(void);
 
 //	Allocating, reallocating, & freeing memory
 
@@ -94,10 +94,10 @@ extern void (*f_free)(void *p);
 
 #ifdef DBG_ON
 
-void *MallocSpew(size_t size, char *file, int line);
-void *ReallocSpew(void *p, size_t size, char *file, int line);
-void FreeSpew(void *p, char *file, int line);
-void *CallocSpew(size_t size, char *file, int line);
+void *MallocSpew(size_t size, int8_t *file, int32_t line);
+void *ReallocSpew(void *p, size_t size, int8_t *file, int32_t line);
+void FreeSpew(void *p, int8_t *file, int32_t line);
+void *CallocSpew(size_t size, int8_t *file, int32_t line);
 
 #define Malloc(size) MallocSpew(size,__FILE__,__LINE__)
 #define Realloc(p,size) ReallocSpew(p,size,__FILE__,__LINE__)
@@ -126,7 +126,7 @@ void MemCheckOff(void);
 
 //	Heap management (memgrow.c)
 
-int MemGrowHeap(int wantK);
+int32_t MemGrowHeap(int32_t wantK);
 void MemLockHeap();
 void MemUnlockHeap();
 
@@ -141,14 +141,14 @@ void MemUnlockHeap();
 //	conventional memory blocks should be grabbed early in program.
 
 typedef struct {
-	ushort realSeg;		// real mode segment to conventional mem block
-	ushort protSel;		// protected mode selector for conv mem block
+	uint16_t realSeg;		// real mode segment to conventional mem block
+	uint16_t protSel;		// protected mode selector for conv mem block
 	void far *protPtr;	// protected mode ptr to mem block
 } ConvMemBlock;
 
-void far *MallocConvMemBlock(ushort size, ConvMemBlock *pcmb);		// alloc
-void far *ReallocConvMemBlock(ConvMemBlock *pcmb, ushort newsize); // resize
-int FreeConvMemBlock(ConvMemBlock *pcmb);		// free low memory block
+void far *MallocConvMemBlock(uint16_t size, ConvMemBlock *pcmb);		// alloc
+void far *ReallocConvMemBlock(ConvMemBlock *pcmb, uint16_t newsize); // resize
+int32_t FreeConvMemBlock(ConvMemBlock *pcmb);		// free low memory block
 */
 
 //////////////////////////////
@@ -168,14 +168,14 @@ int FreeConvMemBlock(ConvMemBlock *pcmb);		// free low memory block
 typedef struct
 {
    void *baseptr; // pointer to bottom of stack
-   long  sz;      // size of stack in bytes
+   int32_t  sz;      // size of stack in bytes
    void *topptr;  // pointer to current top of stack (next free byte)
 }
 MemStack;
 
 void MemStackInit (MemStack *ms);
-void *MemStackAlloc (MemStack *ms, long size);
-void *MemStackRealloc (MemStack *ms, void *ptr, long newsize);
+void *MemStackAlloc (MemStack *ms, int32_t size);
+void *MemStackRealloc (MemStack *ms, void *ptr, int32_t newsize);
 bool MemStackFree (MemStack *ms, void *ptr);
 
 

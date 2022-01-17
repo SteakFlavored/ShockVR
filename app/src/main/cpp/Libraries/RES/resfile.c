@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /*
 //	Resource files start with this signature
 
-char resFileSignature[16] = {
+int8_t resFileSignature[16] = {
 	'L','G',' ','R','e','s',' ','F','i','l','e',' ','v','2',13,10};
 
 //	The active resource file info table
@@ -57,17 +57,17 @@ Datapath gDatapath;
 */
 //	Internal prototypes
 
-void AddResDesc(Handle resHdl, short resID, ResType macResType, short filenum, char cFlag);
+void AddResDesc(Handle resHdl, int16_t resID, ResType macResType, int16_t filenum, int8_t cFlag);
 /*
-int ResFindFreeFilenum();
-void ResReadDirEntries(int filenum, ResDirHeader *pDirHead);
-void ResProcDirEntry(ResDirEntry *pDirEntry, int filenum, long dataOffset);
+int32_t ResFindFreeFilenum();
+void ResReadDirEntries(int32_t filenum, ResDirHeader *pDirHead);
+void ResProcDirEntry(ResDirEntry *pDirEntry, int32_t filenum, int32_t dataOffset);
 void ResReadEditInfo(ResFile *prf);
-void ResReadDir(ResFile *prf, int filenum);
-void ResCreateEditInfo(ResFile *prf, int filenum);
+void ResReadDir(ResFile *prf, int32_t filenum);
+void ResCreateEditInfo(ResFile *prf, int32_t filenum);
 void ResCreateDir(ResFile *prf);
-void ResWriteDir(int filenum);
-void ResWriteHeader(int filenum);
+void ResWriteDir(int32_t filenum);
+void ResWriteHeader(int32_t filenum);
 */
 
 //	---------------------------------------------------------
@@ -76,7 +76,7 @@ void ResWriteHeader(int filenum);
 //
 //		path = name of directory to add
 /*
-void ResAddPath(char *path)
+void ResAddPath(int8_t *path)
 {
 	DatapathAdd(&gDatapath, path);
 
@@ -103,16 +103,16 @@ void ResAddPath(char *path)
 //  For Mac version:  Use the ResourceMgr routines to open and create Res files.
 //  Skip all the EditInfo and Dir stuff.
 
-short ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool /*auxinfo*/)
+int16_t ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool /*auxinfo*/)
 {
-	short  		filenum, fd;
+	int16_t  		filenum, fd;
 	FInfo			fi;
-	short			perm;
-	short			numTypes, numRes;
-	short			ti, ri;
+	int16_t			perm;
+	int16_t			numTypes, numRes;
+	int16_t			ti, ri;
 	ResType		aResType;
 	Handle		resHdl;
-	short			resID;
+	int16_t			resID;
 	Str255		resName;
 
 	//	If any mode but create, open along datapath.  If can't open,
@@ -191,12 +191,12 @@ short ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool /*auxinfo*/)
 //	---------------------------------------------------------
 //  Add a resource description
 //	---------------------------------------------------------
-void AddResDesc(Handle resHdl, short resID, ResType macResType, short filenum, char cFlag)
+void AddResDesc(Handle resHdl, int16_t resID, ResType macResType, int16_t filenum, int8_t cFlag)
 {
 	Id				id = resID;
 	ResDesc 	*prd;
-	uchar		ind;
-	uchar		flags = 0;
+	uint8_t		ind;
+	uint8_t		flags = 0;
 
 	ResExtendDesc(id);								// Grow table if need to
 
@@ -258,7 +258,7 @@ void AddResDesc(Handle resHdl, short resID, ResType macResType, short filenum, c
 //	---------------------------------------------------------
 //  For Mac version:  Real simple.  See notes in code.
 
-void ResCloseFile(short filenum)
+void ResCloseFile(int16_t filenum)
 {
 	Id 			id;
 	ResDesc	*prd;
@@ -323,10 +323,10 @@ void ResCloseFile(short filenum)
 //  For Mac version, this function builds a resource table for the file and writes
 //  it out as a 'hTbl' resource.
 //	---------------------------------------------------------
-void ResWriteDir(short filenum)
+void ResWriteDir(int16_t filenum)
 {
 	Id 					id;
-	short				numRes;
+	int16_t				numRes;
 	ResDesc			*prd;
 	Handle			tableHdl;
 	ResDirEntry	*rdePtr;
@@ -367,9 +367,9 @@ void ResWriteDir(short filenum)
 //
 //	ResFindFreeFilenum() finds free file number
 
-int ResFindFreeFilenum()
+int32_t ResFindFreeFilenum()
 {
-	int filenum;
+	int32_t filenum;
 
 	for (filenum = 0; filenum <= MAX_RESFILENUM; filenum++)
 		{
@@ -387,11 +387,11 @@ int ResFindFreeFilenum()
 //		filenum  = file number
 //		pDirHead = ptr to directory header
 
-void ResReadDirEntries(int filenum, ResDirHeader *pDirHead)
+void ResReadDirEntries(int32_t filenum, ResDirHeader *pDirHead)
 {
 #define NUM_DIRENTRY_BLOCK 64		// (12 bytes each)
-	int entry,fd;
-	long dataOffset;
+	int32_t entry,fd;
+	int32_t dataOffset;
 	ResDirEntry *pDirEntry;
 	ResDirEntry dirEntries[NUM_DIRENTRY_BLOCK];
 
@@ -436,10 +436,10 @@ void ResReadDirEntries(int filenum, ResDirHeader *pDirHead)
 //		filenum    = file number
 //		dataOffset = offset in file where data lives
 
-void ResProcDirEntry(ResDirEntry *pDirEntry, int filenum, long dataOffset)
+void ResProcDirEntry(ResDirEntry *pDirEntry, int32_t filenum, int32_t dataOffset)
 {
 	ResDesc *prd;
-	long currOffset;
+	int32_t currOffset;
 
 //	Grow table if need to
 
@@ -509,7 +509,7 @@ void ResReadEditInfo(ResFile *prf)
 //
 //	ResReadDir() reads directory for a file.
 
-void ResReadDir(ResFile *prf, int filenum)
+void ResReadDir(ResFile *prf, int32_t filenum)
 {
 	ResEditInfo *pedit;
 	ResFileHeader *phead;
@@ -561,7 +561,7 @@ void ResReadDir(ResFile *prf, int filenum)
 //
 //	ResCreateEditInfo() creates new empty edit info.
 
-void ResCreateEditInfo(ResFile *prf, int filenum)
+void ResCreateEditInfo(ResFile *prf, int32_t filenum)
 {
 	ResEditInfo *pedit = prf->pedit;
 
@@ -592,7 +592,7 @@ void ResCreateDir(ResFile *prf)
 //
 //	ResWriteDir() writes directory to resource file.
 
-void ResWriteDir(int filenum)
+void ResWriteDir(int32_t filenum)
 {
 	ResFile *prf;
 
@@ -613,7 +613,7 @@ void ResWriteDir(int filenum)
 //
 //	ResWriteHeader() writes header to resource file.
 
-void ResWriteHeader(int filenum)
+void ResWriteHeader(int32_t filenum)
 {
 	ResFile *prf;
 

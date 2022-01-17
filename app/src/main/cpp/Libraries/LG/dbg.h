@@ -114,13 +114,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /*
 #ifdef DBG_ON
 #define Warning(msg) DoWarningMsg msg
-void DoWarningMsg(char *msg);
+void DoWarningMsg(int8_t *msg);
 #else
 #define Warning(msg) do {} while (0)
 #endif
 */
 #define Warning(msg) DoWarningMsg msg
-void DoWarningMsg(char *msg);
+void DoWarningMsg(int8_t *msg);
 
 /*
 #include <stdio.h>
@@ -142,7 +142,7 @@ void DoWarningMsg(char *msg);
 #define DBG_SLOT_MASK 0x07FFFFFF
 
 #define DBGSRC(bank,bits) (((bank)<<NUM_DBG_SLOTS)|((bits)&DBG_SLOT_MASK))
-#define DBGBANK(src) ((ulong)(src)>>NUM_DBG_SLOTS)
+#define DBGBANK(src) ((uint32_t)(src)>>NUM_DBG_SLOTS)
 
 //	If DBG_ON is defined, debug system is defined, else macros
 //	are used to compile calls and macros out
@@ -160,11 +160,11 @@ void DoWarningMsg(char *msg);
 #define DG_NUM 4
 
 typedef struct {
-	ulong gate[DG_NUM];		// gates for: dbg, spew, warn, mono
-	uchar file_index[NUM_DBG_SLOTS];		// which log file for each slot
-	char bank_name[MAX_BANKNAMELEN+1];	// bank's name
-	char **ppBankSlotNames;	// ptr to bank slot names
-	char pad[8];				// padding
+	uint32_t gate[DG_NUM];		// gates for: dbg, spew, warn, mono
+	uint8_t file_index[NUM_DBG_SLOTS];		// which log file for each slot
+	int8_t bank_name[MAX_BANKNAMELEN+1];	// bank's name
+	int8_t **ppBankSlotNames;	// ptr to bank slot names
+	int8_t pad[8];				// padding
 } DbgBank;		// 64 bytes each
 
 #ifdef DBG_ON
@@ -185,10 +185,10 @@ extern DbgBank dbgBank[NUM_DBG_BANKS];		// 2K total bank storage
 //	This is used by human-operated config routines.
 
 #define DbgSetBankName(bank,name) strncpy(dbgBank[bank].bank_name,name,MAX_BANKNAMELEN);
-void DbgSetSlotNames(int bank, char **namelist);
-void DbgSetSlotName(int bank, int slot, char *name);
-int DbgFindBankName(char *name);
-int DbgFindSlotName(int bank, char *name);
+void DbgSetSlotNames(int32_t bank, int8_t **namelist);
+void DbgSetSlotName(int32_t bank, int32_t slot, int8_t *name);
+int32_t DbgFindBankName(int8_t *name);
+int32_t DbgFindSlotName(int32_t bank, int8_t *name);
 
 //	Debug info can be directed to one of several files.  This data structure
 //	keeps track of the debug files which are in use.  All logfiles must be
@@ -197,15 +197,15 @@ int DbgFindSlotName(int bank, char *name);
 #define MAX_DBG_LOGFILENAME 12
 
 typedef struct {
-	char name[MAX_DBG_LOGFILENAME+1];
+	int8_t name[MAX_DBG_LOGFILENAME+1];
 	FILE *fp;
-	short refCount;
+	int16_t refCount;
 } DbgLogFile;
 
 #define NUM_DBG_LOGFILES 16
 extern DbgLogFile dbgLogFile[NUM_DBG_LOGFILES];
-extern char dbgLogPath[128];
-extern int errErrCode;
+extern int8_t dbgLogPath[128];
+extern int32_t errErrCode;
 
 //	The DBG() macro is used to conditionally compile debugging code,
 //	based on DBG_ON, which we checked at the top of the file.
@@ -223,11 +223,11 @@ extern int errErrCode;
 
 //	The important macros:
 //
-//		Error(char *msg, ...)		  - Fatal error
-//		WarnUser(char *msg, ...)	  - Warn User
-//		Warning(char *msg, ...)		  - Warn developer
-//		Assert(expr, char *msg, ...) - Test expression, warn if false
-//		Spew(flags, char *msg, ...)  - Spew message
+//		Error(int8_t *msg, ...)		  - Fatal error
+//		WarnUser(int8_t *msg, ...)	  - Warn User
+//		Warning(int8_t *msg, ...)		  - Warn developer
+//		Assert(expr, int8_t *msg, ...) - Test expression, warn if false
+//		Spew(flags, int8_t *msg, ...)  - Spew message
 
 #define Error DbgReportError
 #define WarnUser DbgReportWarnUser
@@ -255,54 +255,54 @@ extern int errErrCode;
 extern "C" {
 #endif
 
-void DbgReportError(int errcode, char *msg, ...);
-void DbgReportWarnUser(char *msg, ...);
-void DbgReportWarning(char *msg, ...);
-bool DbgSpewTest(ulong src);
-void DbgDoSpew(char *msg, ...);
+void DbgReportError(int32_t errcode, int8_t *msg, ...);
+void DbgReportWarnUser(int8_t *msg, ...);
+void DbgReportWarning(int8_t *msg, ...);
+bool DbgSpewTest(uint32_t src);
+void DbgDoSpew(int8_t *msg, ...);
 
 //	Set debug config screen to use function for getting keys
 
-extern int (*f_getch)();
+extern int32_t (*f_getch)();
 #define DbgInstallGetch(f) (f_getch = (f))
 
 //	All logfiles are written to the same directory, which defaults to
 //	the current directory, but can be changed.
 
-void DbgSetLogPath(char *path);
+void DbgSetLogPath(int8_t *path);
 
 //	This routine sets the log file associated with a source.
 //	Opening, writing, and closing of the log file is automatic, as
 //	is sharing of files with the same name.
 
-bool DbgSetLogFile(ulong src, char *name);
+bool DbgSetLogFile(uint32_t src, int8_t *name);
 
 //	These are really internal things
 
-bool DbgOpenLogFile(int index);
+bool DbgOpenLogFile(int32_t index);
 void DbgCloseLogFiles();
-void DbgHandle(int reportType, ulong src, char *buff);
-extern char *dbgTags[];
+void DbgHandle(int32_t reportType, uint32_t src, int8_t *buff);
+extern int8_t *dbgTags[];
 
 //	Set a routine to be called to present reports.
 
 // C++ doesn't like the following:
 //
-// void DbgSetReportRoutine(void (*f_warn)(int reportType, char *msg));
+// void DbgSetReportRoutine(void (*f_warn)(int32_t reportType, int8_t *msg));
 //
 // so instead we break it up into two parts:
 //
 
-typedef void ReportRoutine(int reportType, char *msg);
+typedef void ReportRoutine(int32_t reportType, int8_t *msg);
 void DbgSetReportRoutine(ReportRoutine *);
 
 //	Allows user to configure debug system
 
 void DbgInit();							// auto-loads settings from "debug.dbg"
 void DbgMonoConfig();					// let operator config on mono screen
-bool DbgAddConfigPath(char *path);	// add path for finding config files
-int DbgLoadConfig(char *fname);		// load config file
-int DbgSaveConfig(char *fname);		// save config file
+bool DbgAddConfigPath(int8_t *path);	// add path for finding config files
+int32_t DbgLoadConfig(int8_t *fname);		// load config file
+int32_t DbgSaveConfig(int8_t *fname);		// save config file
 
 #ifdef __cplusplus
 }
@@ -334,15 +334,15 @@ int DbgSaveConfig(char *fname);		// save config file
 #define Assert(expr,msg)
 #define Assrt(expr)
 #define Spew(src,msg)
-void DbgReportError(int errcode, char *msg, ...);
-void DbgReportWarnUser(char *msg, ...);
+void DbgReportError(int32_t errcode, int8_t *msg, ...);
+void DbgReportWarnUser(int8_t *msg, ...);
 #define DbgInstallGetch(f)
 #define DbgSetLogPath(path)
 #define DbgSetLogFile(src, name) (0)
 #define DbgOpenLogFile(index) (0)
 #define DbgCloseLogFiles()
 //#define DbgHandle(reportType,src,buff)
-typedef void ReportRoutine(int reportType, char *msg);
+typedef void ReportRoutine(int32_t reportType, int8_t *msg);
 void DbgSetReportRoutine(ReportRoutine *);
 #define DbgInit()
 #define DbgMonoConfig()
@@ -359,10 +359,10 @@ void DbgSetReportRoutine(ReportRoutine *);
 
 //	These routines are in exit.c, and handle exit functions.
 
-void Exit(int errcode, char *msg);	// shut down with msg
+void Exit(int32_t errcode, int8_t *msg);	// shut down with msg
 #define AtExit(func) atexit(func);	// add func to atexit list
 void PrintExitMsg();						// prints exit message
 
 #define SetExitMsg(str) pExitMsg=str
-extern char *pExitMsg;
+extern int8_t *pExitMsg;
 */

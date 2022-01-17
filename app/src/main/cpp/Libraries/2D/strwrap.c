@@ -62,12 +62,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "chr.h"
 #include "ctxmac.h"
 
-static short *pCharPixOff;		// ptr to char offset table, with pfont->minch
+static int16_t *pCharPixOff;		// ptr to int8_t offset table, with pfont->minch
 					// already subtracted out!
 
-#define CHARALIGN(pfont,c) (pCharPixOff[(uchar)c] & 7)
-#define CHARPTR(pfont,c) (&pfont->bits[pCharPixOff[(uchar)c] >> 3])
-#define CHARWIDTH(pfont,c) (pCharPixOff[(uchar)c+1] - pCharPixOff[(uchar)c])
+#define CHARALIGN(pfont,c) (pCharPixOff[(uint8_t)c] & 7)
+#define CHARPTR(pfont,c) (&pfont->bits[pCharPixOff[(uint8_t)c] >> 3])
+#define CHARWIDTH(pfont,c) (pCharPixOff[(uint8_t)c+1] - pCharPixOff[(uint8_t)c])
 
 #define FONT_SETFONT(pfont) (pCharPixOff = &(pfont)->off_tab[0] - (pfont)->min)
 
@@ -85,12 +85,12 @@ static short *pCharPixOff;		// ptr to char offset table, with pfont->minch
 
 /* renamed to gr_font_string_wrap in library */
 
-int gr_font_string_wrap (grs_font *pfont, char *ps, short width)
+int32_t gr_font_string_wrap (grs_font *pfont, int8_t *ps, int16_t width)
 {
-	uchar *p;
-	char *pmark;
-	short numLines;
-	short currWidth;
+	uint8_t *p;
+	int8_t *pmark;
+	int16_t numLines;
+	int16_t currWidth;
 
 //	Set up to do wrapping
 
@@ -103,7 +103,7 @@ int gr_font_string_wrap (grs_font *pfont, char *ps, short width)
 		{
 		pmark = NULL;				// no SOFTCR insert point yet
 		currWidth = 0;				// and zero width so far
-		p = (uchar *) ps;
+		p = (uint8_t *) ps;
 
 //	Loop thru each word
 
@@ -123,7 +123,7 @@ int gr_font_string_wrap (grs_font *pfont, char *ps, short width)
 			if (currWidth > width)
 				{
 				if ((pmark == NULL) && (*p != 0) && (*p != '\n'))
-					pmark = (char *) p;
+					pmark = (int8_t *) p;
 				break;
 				}
 
@@ -136,7 +136,7 @@ int gr_font_string_wrap (grs_font *pfont, char *ps, short width)
 					pmark = NULL;
 					break;
 					}
-				pmark = (char *) p;									// else advance marker
+				pmark = (int8_t *) p;									// else advance marker
 				currWidth += CHARWIDTH(pfont, ' ');	// and account for space
 				p++;
 				}
@@ -157,7 +157,7 @@ int gr_font_string_wrap (grs_font *pfont, char *ps, short width)
 			{
 			if (*p)
 				++p;
-			ps = (char *) p;
+			ps = (int8_t *) p;
 			}
 
 //	Bump line counter in any case
@@ -180,9 +180,9 @@ int gr_font_string_wrap (grs_font *pfont, char *ps, short width)
 
 /* renamed to gr_font_string_unwrap in 2d library */
 
-void gr_font_string_unwrap (char *s)
+void gr_font_string_unwrap (int8_t *s)
 {
-	int c;
+	int32_t c;
 
 	while ((c = *s) != 0)
 		{

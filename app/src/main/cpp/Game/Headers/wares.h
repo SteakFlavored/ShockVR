@@ -96,8 +96,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------
 
 typedef struct {
-   ubyte flags;                   // Do we have a sideicon, etc.
-   ubyte sideicon;                // Which sideicon corresponds
+   uint8_t flags;                   // Do we have a sideicon, etc.
+   uint8_t sideicon;                // Which sideicon corresponds
    void  (*turnon)(bool visible, bool real_start);             // Function slots for turn on, etc.
    void  (*effect)();
    void  (*turnoff)(bool visible, bool real_stop);
@@ -106,35 +106,35 @@ typedef struct {
 
 typedef struct
 {
-   ushort   timestamp;
-   ushort   type;
-   byte     light_value;
-   ubyte    previous;         // was the light on before ??
-   ubyte    filler;
+   uint16_t   timestamp;
+   uint16_t   type;
+   int8_t     light_value;
+   uint8_t    previous;         // was the light on before ??
+   uint8_t    filler;
 } LightSchedEvent;
 
 // ----------
 // Prototypes
 // ----------
 
-void get_ware_pointers(int type, ubyte **player_wares, ubyte **player_status,
-                       WARE **wares, int *n);
+void get_ware_pointers(int32_t type, uint8_t **player_wares, uint8_t **player_status,
+                       WARE **wares, int32_t *n);
 // Sets several pointers as appropriate to a ware type: the approp. player_struct
 // arrays, the approp. global wares property array, and the number of different
 // wares for that type
 
-char* get_ware_name(int waretype, int num, char* buf, int bufsz);
+int8_t* get_ware_name(int32_t waretype, int32_t num, int8_t* buf, int32_t bufsz);
 // Fills the buffer with the SHORT name of the ware, specified by
 // one of the of the four ware types (hard,combat,def,misc),
 // and "subtype"
 
-int get_ware_triple(int waretype, int num);
+int32_t get_ware_triple(int32_t waretype, int32_t num);
 // converts a (waretype,num) pair into a triple.
 
-void use_ware(int waretype, int num);
+void use_ware(int32_t waretype, int32_t num);
 // Uses a ware from the player's inventory, same format
 
-int get_player_ware_version(int waretype, int num);
+int32_t get_player_ware_version(int32_t waretype, int32_t num);
 // get_player_ware_version returns the version number
 // of a ware in the player's inventory.  zero means
 // the player doesn't have it.
@@ -151,7 +151,7 @@ void wares_update();
 // -------
 
 // what mode are we using.
-extern ubyte motionware_mode;
+extern uint8_t motionware_mode;
 #define MOTION_INACTIVE 0
 #define MOTION_SKATES   1
 #define MOTION_BOOST    2

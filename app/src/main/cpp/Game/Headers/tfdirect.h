@@ -36,11 +36,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // globals
 extern fix (*tf_vert_2d)[2];  // 4 elements
-extern char  tf_norm_hnts[4]; // hint for each if used
+extern int8_t  tf_norm_hnts[4]; // hint for each if used
 extern fix  *tf_pt;           // 3 elements: first 2 in plane, 3 is distance from plane
 extern fix   tf_loc_pt[3];
 extern fix   tf_raw_pt[3];     // raw world location of object
-extern int   tf_ph;            // current physics handle
+extern int32_t   tf_ph;            // current physics handle
 extern fix   tf_rad;            // current physics handle
 
 // masks and hints
@@ -55,16 +55,16 @@ extern fix   tf_rad;            // current physics handle
 #define NO_NORM_HINT (127)
 
 // prototypes....
-bool tf_solve_aligned_face(fix pt[3], fix walls[4][2], int flags, fix *norm);
-bool tf_solve_remetriced_face(fix pt[3], fix walls[4][2], int flags, fix norm[3], fix metric);
+bool tf_solve_aligned_face(fix pt[3], fix walls[4][2], int32_t flags, fix *norm);
+bool tf_solve_remetriced_face(fix pt[3], fix walls[4][2], int32_t flags, fix norm[3], fix metric);
 bool tf_solve_cylinder(fix pt[3], fix rad, fix height);
-void tf_global_bcd_add(int flg, int param);
+void tf_global_bcd_add(int32_t flg, int32_t param);
 
 // for now, really this will go soon....
 // tfutil stupidity till physics really deals
 #define FCE_NO_PRIM  (113)
 void facelet_clear(void);
-void facelet_add(int which, fix norm[3], fix atten, fix comp, int prim);
+void facelet_add(int32_t which, fix norm[3], fix atten, fix comp, int32_t prim);
 void facelet_send(void);
 
 #endif

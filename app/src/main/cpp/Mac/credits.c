@@ -32,8 +32,8 @@ void ScrollCredits(void)
 	// prepare the draw rects
 
 	PicHandle pict = GetPicture(CreditsID);
-	short picWidth = (**pict).picFrame.right - (**pict).picFrame.left;
-	short picHeight = (**pict).picFrame.bottom - (**pict).picFrame.top;
+	int16_t picWidth = (**pict).picFrame.right - (**pict).picFrame.left;
+	int16_t picHeight = (**pict).picFrame.bottom - (**pict).picFrame.top;
 
 	Rect txtRect;							// This is the rect you want to draw everything into
 
@@ -72,7 +72,7 @@ void ScrollCredits(void)
 	// Draw the initial pict and wait for a few seconds.
 
 	DrawPicture(pict, &picFrame);
-	long	stupid;
+	int32_t	stupid;
 	Delay(120, &stupid);
 
 	do

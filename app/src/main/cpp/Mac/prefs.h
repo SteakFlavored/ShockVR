@@ -30,25 +30,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 typedef struct
 {
-	short		prefVer;				// Version - set to 0 for now.
-	short		prefPlayIntro;		// Play intro at startup if non-zero.
+	int16_t		prefVer;				// Version - set to 0 for now.
+	int16_t		prefPlayIntro;		// Play intro at startup if non-zero.
 
 	// Game Options
-	short		goMsgLength;			// 0 - normal, 1 - brief
-	Boolean	goPopupLabels;
-	Boolean	goOnScreenHelp;
-	short		goLanguage;			// 0 - English
+	int16_t		goMsgLength;			// 0 - normal, 1 - brief
+	bool	goPopupLabels;
+	bool	goOnScreenHelp;
+	int16_t		goLanguage;			// 0 - English
 
 	// Sound Options
-	Boolean	soBackMusic;
-	Boolean	soSoundFX;
-	short		soMusicVolume;
+	bool	soBackMusic;
+	bool	soSoundFX;
+	int16_t		soMusicVolume;
 
 	// Display Options
-	short		doResolution;			// 0 - High, 1 - Low
-	short		doDetail;				// 0 - Min, 1-Low, 2-High, 3-Max
-	short		doGamma;
-	Boolean	doUseQD;
+	int16_t		doResolution;			// 0 - High, 1 - Low
+	int16_t		doDetail;				// 0 - Min, 1-Low, 2-High, 3-Max
+	int16_t		doGamma;
+	bool	doUseQD;
 
 } ShockPrefs;
 
@@ -67,4 +67,4 @@ extern ShockPrefs		gShockPrefs;
 void SetDefaultPrefs(void);
 OSErr LoadPrefs(ResType resID);
 OSErr SavePrefs(ResType resID);
-OSErr GetPrefsDir(short *vRef, long *parID);
+OSErr GetPrefsDir(int16_t *vRef, int32_t *parID);

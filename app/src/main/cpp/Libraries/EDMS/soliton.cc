@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Header: n:/project/lib/src/edms/RCS/soliton.cc 1.6 1994/04/20 18:44:56 roadkill Exp $
@@ -65,7 +65,7 @@ extern void EDMS_kill_object( physics_handle ph );
 Q       snooz_threshold = 100;
 //}
 
-int     EDMS_integrating = 0;
+int32_t     EDMS_integrating = 0;
 
 EDMS_Argblock_Pointer A;            //non-vector type arguments for perturbation...
 
@@ -73,11 +73,11 @@ EDMS_Argblock_Pointer A;            //non-vector type arguments for perturbation
 Q	I[MAX_OBJ][DOF_MAX],          //Internal degrees of freedom...
 	k[4][MAX_OBJ][7];             	//expansion coefficients...
 
-void  ( *idof_functions[MAX_OBJ] )( int ),         //Pointers to the appropriate places...
-      ( *equation_of_motion[MAX_OBJ][7] )( int );  //The integer is the object number...
+void  ( *idof_functions[MAX_OBJ] )( int32_t ),         //Pointers to the appropriate places...
+      ( *equation_of_motion[MAX_OBJ][7] )( int32_t );  //The integer is the object number...
 
 
-Q     *utility_pointer[MAX_OBJ];       //Biped skeletons, Jello translucencies, etc...    
+Q     *utility_pointer[MAX_OBJ];       //Biped skeletons, Jello translucencies, etc...
 
 
 Q     hash_scale = 1.;        //The ratio betwixt coordinate and collision...
@@ -93,13 +93,13 @@ const Q	one_sixth = .1666666666667,      //Overboard?
 
 //      Sleeping...
 //      -----------
-int      no_no_not_me[MAX_OBJ];
-int      alarm_clock[MAX_OBJ];
-int      industrial_strength[MAX_OBJ];
+int32_t      no_no_not_me[MAX_OBJ];
+int32_t      alarm_clock[MAX_OBJ];
+int32_t      industrial_strength[MAX_OBJ];
 
 //      *******************HACK*HACK*HACK*HACK*****************************+
 //      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// uchar   EDMS_Seamus_is_an_asshole[12000];
+// uint8_t   EDMS_Seamus_is_an_asshole[12000];
 //      *******************HACK*HACK*HACK*HACK*****************************+
 //      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -109,7 +109,7 @@ void soliton( Q /*timestep*/ ) {}
 // Soliton_Lite (tm)...
 // ====================
 
-int    active_objects = 0;
+int32_t    active_objects = 0;
 
 // Are non-sleeping objects in the middle of doing their integrating thing,
 // and thus using A[][][] instead of S[][][]?
@@ -121,17 +121,17 @@ bool   A_is_active = FALSE;
 //	====================================================================================
 void soliton_lite( Q timestep )
 {
-   extern void     robot_idof( int ),
-                   pelvis_idof( int );
+   extern void     robot_idof( int32_t ),
+                   pelvis_idof( int32_t );
 
-register int   object = 0;
-register int   coord = 0;
+register int32_t   object = 0;
+register int32_t   coord = 0;
 register	Q	*S_Object;
 
    Q       frequency_check;
    Q       average_frequency;
-   int     ccount = 0;
-   int     count = 0;
+   int32_t     ccount = 0;
+   int32_t     count = 0;
 
    // Copy the state vector initially into the argument vector...
    // ===========================================================
@@ -140,7 +140,7 @@ register	Q	*S_Object;
       if (no_no_not_me[object] == 1)
       {
       	S_Object = (Q *) S[object];
-      	      	
+
          state_delete_object( object );
          for ( coord = 0; coord < 7 && S_Object[coord<<2] > END;  coord++ )
          {
@@ -188,18 +188,18 @@ register	Q	*S_Object;
                   frequency_check.val += fix_div(fix_mul( S_Object[(coord<<2)+1].val,S_Object[(coord<<2)+1].val),I[object][31].val);
                else
                   frequency_check.val += fix_make(1000,0);
-            }    
+            }
 
             // This is angular velocity I think - DS
             if ( (I[object][30] == ROBOT) && (coord == 3) )
                frequency_check += abs(50*S_Object[(coord<<2)+2]);
          }
-               
+
          // Are you in stiff and in need of invariant imbedding?
          // ----------------------------------------------------
          industrial_strength[object] = 0;          //Guilty until...
          if ( frequency_check > 15 )
-         { 
+         {
 //          mout << "-";
             industrial_strength[object] = 1;
          }
@@ -236,13 +236,13 @@ register	Q	*S_Object;
       {
       	S_Object = (Q *) S[object];
 
-         state_delete_object( object );              //Do collisions...      
+         state_delete_object( object );              //Do collisions...
          for ( coord = 0; coord < 7 && S_Object[(coord<<2)+0] > END;  coord++ )
          {
             A[object][coord][0].val += fix_mul(timestep.val,S_Object[(coord<<2)+1].val);
             A[object][coord][1].val += k[0][object][coord].val;
          }
-         write_object( object );                //Do collisions...      
+         write_object( object );                //Do collisions...
       }
    }
 
@@ -276,7 +276,7 @@ register	Q	*S_Object;
                                      + fix_mul(point_five.val,k[0][object][coord].val);
             }
             write_object( object );
-      
+
 //          mout << "II1\n";
 
             ( *idof_functions[object] )( object );
@@ -289,7 +289,7 @@ register	Q	*S_Object;
 
             // Second order...
             // ---------------
-            delete_object( object );      
+            delete_object( object );
             for ( coord = 0; coord < 7 && S_Object[(coord<<2)+0] > END;  coord++ )
             {
                A[object][coord][0].val = S_Object[(coord<<2)+0].val
@@ -335,14 +335,14 @@ register	Q	*S_Object;
          {
             // Regular strength...
             // ===================
-            ( *idof_functions[object] )( object );                    
+            ( *idof_functions[object] )( object );
 
             for ( coord = 0; coord < 7 && S_Object[(coord<<2)+0] > END;  coord++ )
             {
                k[1][object][coord].val = fix_mul(timestep.val,S_Object[(coord<<2)+2].val);
-            }       
+            }
          }       //End of else for regular guy...
-   
+
          // Does anybody need to wake up?
          // -----------------------------
          for (coord = 0; coord < MAX_OBJ && S[coord][0][0] > END; coord++ )
@@ -356,7 +356,7 @@ register	Q	*S_Object;
    }
 
 
-int     total = 0;
+int32_t     total = 0;
 
    // Hey! We're already able to assemble the solution!  Wasn't that better than soliton?
    // ===-----======-------------------------------------------------
@@ -376,7 +376,7 @@ int     total = 0;
             Q lagrange_multiplier = .5/timestep;
 		   Q l_m;
 		   Q lagrange;
-		   
+
             lagrange.val = (1 << 16) - (fix_mul(S_Object[(3<<2)+0].val,S_Object[(3<<2)+0].val)
 			                         + fix_mul(S_Object[(4<<2)+0].val,S_Object[(4<<2)+0].val)
 			                         +fix_mul(S_Object[(5<<2)+0].val,S_Object[(5<<2)+0].val)
@@ -400,12 +400,12 @@ int     total = 0;
 //             mout << "IS:";
 
                // Check for Dirac...
-               // ------------------                
+               // ------------------
                if ( I[object][30] == D_FRAME )
                {
 //                mout << "D";
 
-                  S_Object[(coord<<2)+0].val += fix_mul( timestep.val, (S_Object[(coord<<2)+1].val + anus[coord].val 
+                  S_Object[(coord<<2)+0].val += fix_mul( timestep.val, (S_Object[(coord<<2)+1].val + anus[coord].val
                                                      + fix_mul(one_sixth.val,(k[0][object][coord].val
                                                      + k[1][object][coord].val
                                                      + k[2][object][coord].val ))));
@@ -418,7 +418,7 @@ int     total = 0;
                                                      + fix_mul(one_sixth.val,( k[0][object][coord].val
                                                      + k[1][object][coord].val
                                                      + k[2][object][coord].val ))));
-               }                          
+               }
 
                S_Object[(coord<<2)+1].val += fix_mul(one_sixth.val , (k[0][object][coord].val
                                                    + fix_mul(two.val,(k[1][object][coord].val + k[2][object][coord].val)
@@ -476,26 +476,26 @@ void soliton_vector( Q timestep )
 
 // timestep = .03;
 
-	int     count = 0;
+	int32_t     count = 0;
 
-// for (int test = 0; test < 12000; test++) EDMS_Seamus_is_an_asshole[test] = 243643;
+// for (int32_t test = 0; test < 12000; test++) EDMS_Seamus_is_an_asshole[test] = 243643;
 
    // Stupid scaling for now, for FF prototype which is very SLOW!
    // -----------------------------------------------------------
    while ( timestep > min_scale_slice )
    {
       count++;
-      soliton_lite( min_scale_slice ); 
+      soliton_lite( min_scale_slice );
       timestep -= min_scale_slice;
    }
 
 
    // Now do the rest...
    // ==================
-   if ( timestep > .01 || count == 0) soliton_lite( timestep );  
+   if ( timestep > .01 || count == 0) soliton_lite( timestep );
 // else mout << "!EDMS: timestep is small, dt = " << timestep << "\n";
 
-// mout << count << "\n";      
+// mout << count << "\n";
 
    // Here i yam...
    // -------------
@@ -529,8 +529,8 @@ void soliton_vector_holistic( Q /*timestep*/ ) {}
 //	======================
 void EDMS_initialize( EDMS_data *D )
 {
-   extern unsigned int  data[ EDMS_DATA_SIZE ][ EDMS_DATA_SIZE ];
-   int         object = 0,
+   extern uint32_t  data[ EDMS_DATA_SIZE ][ EDMS_DATA_SIZE ];
+   int32_t         object = 0,
                coord = 0,
                deriv = 0;
    const Q        collision_size = EDMS_DATA_SIZE;
@@ -605,11 +605,11 @@ void EDMS_initialize( EDMS_data *D )
 
 //	Kill object number deadguy and perform garbage collection.
 //	==========================================================
-int EDMS_kill( int deadguy )
+int32_t EDMS_kill( int32_t deadguy )
 {
-   int   error_code = -1;
-   int   deriv = 0;
-   int	 object;
+   int32_t   error_code = -1;
+   int32_t   deriv = 0;
+   int32_t	 object;
 
    // First see if there is, in fact, an object there...
    // ==================================================
@@ -632,12 +632,12 @@ int EDMS_kill( int deadguy )
 
          idof_functions[object-1] = idof_functions[object];
 
-         for ( int coord = 0; coord < 7; coord++ )
+         for ( int32_t coord = 0; coord < 7; coord++ )
          {
             equation_of_motion[object-1][coord] = equation_of_motion[object][coord];
-            for ( int deriv = 0; deriv < 3; deriv++ )
+            for ( int32_t deriv = 0; deriv < 3; deriv++ )
             {
-               S[( object - 1 )][coord][deriv] = S[object][coord][deriv];   
+               S[( object - 1 )][coord][deriv] = S[object][coord][deriv];
                if (A_is_active)
                   A[( object - 1 )][coord][deriv] = A[object][coord][deriv];
             }
@@ -647,9 +647,9 @@ int EDMS_kill( int deadguy )
             k[2][( object - 1)][coord] = k[2][object][coord];
             k[3][( object - 1)][coord] = k[3][object][coord];
          }
-         
-         for ( int number = 0; number < DOF_MAX; number++ )
-         {                                                   //Copy the parameters... 
+
+         for ( int32_t number = 0; number < DOF_MAX; number++ )
+         {                                                   //Copy the parameters...
             I[( object - 1 )][number] = I[object][number];
          }
 
@@ -667,7 +667,7 @@ int EDMS_kill( int deadguy )
          no_no_not_me[(object-1)] = no_no_not_me[object];
          alarm_clock[(object-1)]  = alarm_clock[object];
          industrial_strength[(object-1)] = industrial_strength[object];
-   
+
          if (A_is_active && no_no_not_me[(object-1)] == 1)
             write_object( object - 1 );
       	else
@@ -683,16 +683,16 @@ int EDMS_kill( int deadguy )
    	else
          state_delete_object( object - 1 );			//For collisions...
 
-      for ( int coord = 0; coord < 7; coord++ )
+      for ( int32_t coord = 0; coord < 7; coord++ )
       {
-         for ( int deriv = 0; deriv < 3; deriv++ )
+         for ( int32_t deriv = 0; deriv < 3; deriv++ )
          {
             S[( object - 1 )][coord][deriv] = END;
          }
       }
 
-      for ( int number = 0; number < DOF_MAX; number++ )
-      {                                         //Kill the parameters... 
+      for ( int32_t number = 0; number < DOF_MAX; number++ )
+      {                                         //Kill the parameters...
          I[( object - 1 )][number] = END;
       }
 
@@ -726,20 +726,20 @@ int EDMS_kill( int deadguy )
 
 //	Collision wakeup...
 //	===================
-void  collision_wakeup( int object )
+void  collision_wakeup( int32_t object )
 {
    Q     idof_state[DOF_MAX],
          state[7][4],
          arg[7][4];
 
-   int      coord = 0,
+   int32_t      coord = 0,
             deriv = 0,
             new_object = 0;
 
    physics_handle ph;
 
    Q     *utility_save;
-   void     (*idof_function_save)( int );
+   void     (*idof_function_save)( int32_t );
 
    extern void     inventory_and_statistics();
 
@@ -831,5 +831,5 @@ void  collision_wakeup( int object )
 //	This guy is the thing that models without the full six degrees of freedom get as
 //	their ignorable coordinates.
 //	============================
-void null_function( int /*dummy*/ ) { }
+void null_function( int32_t /*dummy*/ ) { }
 #pragma require_prototypes on

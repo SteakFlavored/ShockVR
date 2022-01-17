@@ -39,7 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //  already exists in the kbs_event record.  So just format the results
 //  as expected.
 //----------------------------------------------------------------------------
-errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
+errtype kb_cook(kbs_event ev, uint16_t *cooked, bool *results)
 {
 	// On the Mac, since modifiers by themselves don't produce an event,
 	// you always have a "cooked" result.
@@ -47,7 +47,7 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
 	*results = TRUE;
 	*cooked = ev.ascii;
 
-	*cooked |= (short)ev.state << KB_DOWN_SHF; // Add in the key-down state.
+	*cooked |= (int16_t)ev.state << KB_DOWN_SHF; // Add in the key-down state.
 
 	if (ev.modifiers & 0x01)		// If command-key was down,
 		*cooked |= KB_FLAG_CTRL;	// simulate a control key
@@ -58,7 +58,7 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
 	if (ev.modifiers & 0x08)		// If option-key was down,
 	{								// simulate an alt key.
 		Handle	kHdl;
-		long	tk;
+		int32_t	tk;
 		UInt32	state = 0;
 
 		// Unfortunately, option-key changes the character that was
@@ -71,18 +71,18 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
 
 		// We've got the character, so or it into the "cooked" short.
 		*cooked &= 0xFF00;
-		*cooked |= (ushort)(tk & 0x00FF) | KB_FLAG_ALT;
+		*cooked |= (uint16_t)(tk & 0x00FF) | KB_FLAG_ALT;
 	}
 
 	return OK;
 /*
-   ushort flags = KB_CNV(ev.code,0);
+   uint16_t flags = KB_CNV(ev.code,0);
    bool shifted = 1 & ((kbd_modifier_state >> KBM_SHIFT_SHF)
       | (kbd_modifier_state >> (KBM_SHIFT_SHF+1)));
    bool capslock = 1 & (flags >> CNV_CAPS_SHF)
                      & (kbd_modifier_state >> KBM_CAPS_SHF);
-   ushort cnv = KB_CNV(ev.code,shifted ^ capslock);
-   int old_mods = kbd_modifier_state;
+   uint16_t cnv = KB_CNV(ev.code,shifted ^ capslock);
+   int32_t old_mods = kbd_modifier_state;
 
    *cooked = cnv & (CNV_SPECIAL|CNV_2ND|0xFF)  ;
    *results = FALSE;
@@ -134,7 +134,7 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
    if ((cnv & CNV_NUM) && !(kbd_modifier_state & KBM_NUM))
       *cooked = ev.code|KB_FLAG_SPECIAL;
 
-   *cooked |= (short)ev.state << KB_DOWN_SHF;
+   *cooked |= (int16_t)ev.state << KB_DOWN_SHF;
 
    *cooked |= (((kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF))
       | (kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF-1)))
@@ -151,7 +151,7 @@ errtype kb_cook(kbs_event ev, ushort *cooked, bool *results)
 */
 }
 
-bool kb_get_cooked(ushort *key)
+bool kb_get_cooked(uint16_t *key)
 {
    bool res = FALSE;
    kbs_event ev = kb_next();

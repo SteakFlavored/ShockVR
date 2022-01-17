@@ -29,8 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "palfx.h"
 
 
-byte pal_fade_id;
-byte cyc_id0, cyc_id1, cyc_id2, cyc_id3, cyc_id4, cyc_id5;
+int8_t pal_fade_id;
+int8_t cyc_id0, cyc_id1, cyc_id2, cyc_id3, cyc_id4, cyc_id5;
 
 #define FADE_DOWN_DELAY   3
 #define FADE_DOWN_STEPS   30
@@ -39,12 +39,12 @@ byte cyc_id0, cyc_id1, cyc_id2, cyc_id3, cyc_id4, cyc_id5;
 #define FADE_UP_STEPS   30
 
 // Internal Prototypes
-void finish_pal_effect(byte id);
-byte palfx_start_fade_up(uchar *new_pal);
+void finish_pal_effect(int8_t id);
+int8_t palfx_start_fade_up(uint8_t *new_pal);
 
 
 //-------------------------------------
-void finish_pal_effect(byte id)
+void finish_pal_effect(int8_t id)
 {
    while (palette_query_effect(id) == ACTIVE)
       palette_advance_effect(id, 1);
@@ -54,9 +54,9 @@ void finish_pal_effect(byte id)
 //-------------------------------------
 void palfx_fade_down()
 {
-   byte id;
-   static uchar blackp[768];
-   static uchar savep[768];
+   int8_t id;
+   static uint8_t blackp[768];
+   static uint8_t savep[768];
 
    memset(blackp, 0, sizeof(blackp));
    gr_get_pal(0, 256, savep);
@@ -74,10 +74,10 @@ void palfx_fade_down()
 
 
 //-------------------------------------
-byte palfx_start_fade_up(uchar *new_pal)
+int8_t palfx_start_fade_up(uint8_t *new_pal)
 {
-   static uchar blackp[768];
-   byte id;
+   static uint8_t blackp[768];
+   int8_t id;
 
    memset(blackp, 0, sizeof(blackp));
    id = palette_install_fade(REAL_TIME, 0, 255, FADE_UP_DELAY, FADE_UP_STEPS, blackp, new_pal);

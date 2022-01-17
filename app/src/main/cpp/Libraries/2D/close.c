@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* shut down 2d system.  call device-dependent shutdown routine and
    restore video state. */
-int gr_close(void)
+int32_t gr_close(void)
 {
    if (grd_active == 0)
       return 0;

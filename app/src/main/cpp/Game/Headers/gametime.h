@@ -71,7 +71,7 @@ void resume_game_time(void);
 
 
 // Globals
-extern int run_fatigue_rate;
+extern int32_t run_fatigue_rate;
 
 
 #endif // __GAMETIME_H

@@ -49,8 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct {
    TNG *tng_data;
    LGPoint size;
-   short last_key;
-   ulong options;
+   int16_t last_key;
+   uint32_t options;
    TextTool *tt;
    TNG *hscroll_tng, *vscroll_tng;
 } TNG_textgadget;
@@ -86,7 +86,7 @@ typedef struct {
 // Initializes the TNG
 // Note that both of these must be called!
 // _init is called before the UI deals appropriately, _init2 is called afterwards.
-errtype tng_textgadget_init(void *ui_data, TNG *ptng, TNGStyle *sty, ulong options, LGPoint size, LGPoint abs_loc);
+errtype tng_textgadget_init(void *ui_data, TNG *ptng, TNGStyle *sty, uint32_t options, LGPoint size, LGPoint abs_loc);
 errtype tng_textgadget_init2(TNG *ptng);
 
 // Deallocate all memory used by the TNG
@@ -94,26 +94,26 @@ errtype tng_textgadget_destroy(TNG *ptng);
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_textgadget_2d_draw(TNG *ptng, ushort partmask, LGPoint loc);
+errtype tng_textgadget_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc);
 
 // Fill in ppt with the size of the TNG
 errtype tng_textgadget_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG
-int tng_textgadget_getvalue(TNG *ptng);
+int32_t tng_textgadget_getvalue(TNG *ptng);
 
 // React appropriately for receiving the specified cooked key
-bool tng_textgadget_keycooked(TNG *ptng, ushort key);
+bool tng_textgadget_keycooked(TNG *ptng, uint16_t key);
 
 // React appropriately for receiving the specified mouse button event
-bool tng_textgadget_mousebutt(TNG *ptng, uchar type, LGPoint loc);
+bool tng_textgadget_mousebutt(TNG *ptng, uint8_t type, LGPoint loc);
 
 // Handle incoming signals
-bool tng_textgadget_signal(TNG *ptng, ushort signal);
+bool tng_textgadget_signal(TNG *ptng, uint16_t signal);
 
 errtype tng_textgadget_scroll(TNG *ptng);
 
-errtype tng_textgadget_addstring(TNG *ptng, char *s);
+errtype tng_textgadget_addstring(TNG *ptng, int8_t *s);
 
 // Macros
 #define TNG_TG(ptng) ((TNG_textgadget *)(ptng->type_data))

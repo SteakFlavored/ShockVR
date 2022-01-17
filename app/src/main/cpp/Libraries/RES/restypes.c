@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //	Resource type names
 
-char *resTypeNames[NUM_RESTYPENAMES] =
+int8_t *resTypeNames[NUM_RESTYPENAMES] =
 {
 	"UNKNOWN",		// RTYPE_UNKNOWN	(aka BIN)
 	"STRING",			// RTYPE_STRING

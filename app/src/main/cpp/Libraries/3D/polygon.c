@@ -30,9 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "GlobalV.h"
 
 // prototypes
-int check_and_draw_common(long c,int n_verts,g3s_phandle *p);
-int draw_poly_common(long c,int n_verts,g3s_phandle *p);
-int draw_line_common(g3s_phandle p0,g3s_phandle p1);
+int32_t check_and_draw_common(int32_t c,int32_t n_verts,g3s_phandle *p);
+int32_t draw_poly_common(int32_t c,int32_t n_verts,g3s_phandle *p);
+int32_t draw_line_common(g3s_phandle p0,g3s_phandle p1);
 
 #define GR_WIRE_POLY_LINE 	6
 #define GR_WIRE_POLY_SLINE  7
@@ -43,8 +43,8 @@ int draw_line_common(g3s_phandle p0,g3s_phandle p1);
 // array of 2d points
 grs_vertex	p_vlist[MAX_VERTS];
 grs_vertex	*p_vpl[MAX_VERTS];
-long				_n_verts;
-long				poly_color;
+int32_t				_n_verts;
+int32_t				poly_color;
 
 // arrays of point handles, used in clipping
 g3s_phandle		vbuf[MAX_VERTS];
@@ -54,22 +54,22 @@ g3s_phandle		_vbuf2[MAX_VERTS];
 g3s_vector		temp_vector;
 
 // used by line clipper
-/*long		temp_points[4];
-long		n_temp_used;*/
+/*int32_t		temp_points[4];
+int32_t		n_temp_used;*/
 
-long		draw_color;
-long		poly_index[] = {FIX_UPOLY,FIX_TLUC8_UPOLY,FIX_USPOLY,FIX_TLUC8_SPOLY,FIX_UCPOLY};
+int32_t		draw_color;
+int32_t		poly_index[] = {FIX_UPOLY,FIX_TLUC8_UPOLY,FIX_USPOLY,FIX_TLUC8_SPOLY,FIX_UCPOLY};
 
-char		gour_flag;		 // 0=normal,1=tluc_poly,2=spoly,3=tluc_spoly,4=cpoly
+int8_t		gour_flag;		 // 0=normal,1=tluc_poly,2=spoly,3=tluc_spoly,4=cpoly
 
 // check if a list of point (as in a polygon) are on screen. returns codes
 // takes esi=list of points, ecx=codes, returns bx=codes.
 // trashes ebx,ecx,edx,esi
-g3s_codes g3_check_codes(int n_verts, g3s_phandle *p)
+g3s_codes g3_check_codes(int32_t n_verts, g3s_phandle *p)
  {
- 	int						i;
+ 	int32_t						i;
  	g3s_codes			retcode;
- 	char					andcode,orcode;
+ 	int8_t					andcode,orcode;
 
  	andcode = 0xff;
  	orcode = 0;
@@ -106,37 +106,37 @@ bool g3_check_poly_facing(g3s_phandle p0,g3s_phandle p1,g3s_phandle p2)
  }
 
 // takes same input as draw_poly, but first checks if facing
-int g3_check_and_draw_cpoly(int n_verts,g3s_phandle *p)
+int32_t g3_check_and_draw_cpoly(int32_t n_verts,g3s_phandle *p)
  {
  	gour_flag = 4;
  	return(check_and_draw_common(0,n_verts,p));
  }
 
-int g3_check_and_draw_tluc_spoly(int n_verts,g3s_phandle *p)
+int32_t g3_check_and_draw_tluc_spoly(int32_t n_verts,g3s_phandle *p)
  {
  	gour_flag = 3;
  	return(check_and_draw_common(0,n_verts,p));
  }
 
-int g3_check_and_draw_spoly(int n_verts,g3s_phandle *p)
+int32_t g3_check_and_draw_spoly(int32_t n_verts,g3s_phandle *p)
  {
  	gour_flag = 2;
  	return(check_and_draw_common(0,n_verts,p));
  }
 
-int g3_check_and_draw_tluc_poly(long c,int n_verts,g3s_phandle *p)
+int32_t g3_check_and_draw_tluc_poly(int32_t c,int32_t n_verts,g3s_phandle *p)
  {
  	gour_flag = 1;
  	return(check_and_draw_common(c,n_verts,p));
  }
 
-int g3_check_and_draw_poly(long c,int n_verts,g3s_phandle *p)
+int32_t g3_check_and_draw_poly(int32_t c,int32_t n_verts,g3s_phandle *p)
  {
  	gour_flag = 0;
  	return(check_and_draw_common(c,n_verts,p));
  }
 
-int check_and_draw_common(long c,int n_verts,g3s_phandle *p)
+int32_t check_and_draw_common(int32_t c,int32_t n_verts,g3s_phandle *p)
  {
 #ifdef stereo_on
         test    _g3d_stereo,1
@@ -184,46 +184,46 @@ check_and_draw_common_raw:
 // takes ecx=# verts, esi=ptr to list of point handles
 // modify all but ebp
 
-int g3_draw_cpoly(int n_verts,g3s_phandle *p)        //RBG-space smooth poly
+int32_t g3_draw_cpoly(int32_t n_verts,g3s_phandle *p)        //RBG-space smooth poly
  {
  	gour_flag = 4;
  	return draw_poly_common(0,n_verts,p);
  }
 
-int g3_draw_tluc_spoly(int n_verts,g3s_phandle *p)   //smooth poly
+int32_t g3_draw_tluc_spoly(int32_t n_verts,g3s_phandle *p)   //smooth poly
  {
  	gour_flag = 3;
  	return draw_poly_common(0,n_verts,p);
  }
 
-int g3_draw_spoly(int n_verts,g3s_phandle *p)             //smooth poly
+int32_t g3_draw_spoly(int32_t n_verts,g3s_phandle *p)             //smooth poly
  {
  	gour_flag = 2;
  	return draw_poly_common(0,n_verts,p);
  }
 
-int g3_draw_tluc_poly(long c,int n_verts,g3s_phandle *p)
+int32_t g3_draw_tluc_poly(int32_t c,int32_t n_verts,g3s_phandle *p)
  {
  	gour_flag = 1;
  	return draw_poly_common(c,n_verts,p);
  }
 
-int g3_draw_poly(long c,int n_verts,g3s_phandle *p)
+int32_t g3_draw_poly(int32_t c,int32_t n_verts,g3s_phandle *p)
  {
  	gour_flag = 0;
  	return draw_poly_common(c,n_verts,p);
  }
 
 
-int draw_poly_common(long c,int n_verts,g3s_phandle *p)
+int32_t draw_poly_common(int32_t c,int32_t n_verts,g3s_phandle *p)
  {
- 	char					andcode,orcode;
+ 	int8_t					andcode,orcode;
 	g3s_phandle		*old_p;
-	int						i;
+	int32_t						i;
 	g3s_phandle		*src;
 	g3s_phandle		src_pt;
 	grs_vertex		*dest;
-	long 					rgb;
+	int32_t 					rgb;
 
 #ifdef stereo_on
         test    _g3d_stereo,1
@@ -325,7 +325,7 @@ draw_poly_common_raw:
 			for (i=0; i<n_verts; i++)
 			 {
 			 	src_pt = *(src++);
-			 	dest->i = (((ulong) src_pt->i) + gouraud_base) << 8;
+			 	dest->i = (((uint32_t) src_pt->i) + gouraud_base) << 8;
 
 			 	dest++;
 			 }
@@ -333,7 +333,7 @@ draw_poly_common_raw:
 	 }
 
 // draw it
-	((void (*)(long c,int n,grs_vertex **vpl)) grd_canvas_table[poly_index[gour_flag]])
+	((void (*)(int32_t c,int32_t n,grs_vertex **vpl)) grd_canvas_table[poly_index[gour_flag]])
 	 					(poly_color,n_verts, p_vpl);
 
  	return CLIP_NONE;
@@ -342,24 +342,24 @@ draw_poly_common_raw:
 
 // draw a point in 3-space. takes esi=point. returns al=drew.
 // trashes eax,edx,esi and if must project, ecx
-int g3_draw_point(g3s_phandle p)
+int32_t g3_draw_point(g3s_phandle p)
  {
- 	int	 sx,sy;
+ 	int32_t	 sx,sy;
 
  	if (p->codes) return CLIP_ALL;
 
  	if ((p->p3_flags & PF_PROJECTED) == 0)	 // check if projected
 		g3_project_point(p);
 
- 	sx = (p->sx + 0x08000) >> 16;	// round & get int part
- 	sy = (p->sy + 0x08000) >> 16;	// round & get int part
- 	return (((int (*)(short x,short y))grd_canvas_table[DRAW_POINT])(sx,sy));
+ 	sx = (p->sx + 0x08000) >> 16;	// round & get int32_t part
+ 	sy = (p->sy + 0x08000) >> 16;	// round & get int32_t part
+ 	return (((int32_t (*)(int16_t x,int16_t y))grd_canvas_table[DRAW_POINT])(sx,sy));
  }
 
 // draws a line in 3-space. takes esi,edi=points
 
 // fixed 7/24 dc to have a common and have draw_line set gour_flag, not ignore it
-int g3_draw_cline(g3s_phandle p0,g3s_phandle p1) // rgb-space gouraud line
+int32_t g3_draw_cline(g3s_phandle p0,g3s_phandle p1) // rgb-space gouraud line
  {
  	if (p0->rgb!=p1->rgb)
  	 {
@@ -375,23 +375,23 @@ int g3_draw_cline(g3s_phandle p0,g3s_phandle p1) // rgb-space gouraud line
  }
 
 
-int g3_draw_sline(g3s_phandle p0,g3s_phandle p1) // 2d-intensity gouraud line
+int32_t g3_draw_sline(g3s_phandle p0,g3s_phandle p1) // 2d-intensity gouraud line
  {
  	gour_flag = -1;
  	return(draw_line_common(p0,p1));
  }
 
-int g3_draw_line(g3s_phandle p0,g3s_phandle p1)
+int32_t g3_draw_line(g3s_phandle p0,g3s_phandle p1)
  {
  	draw_color = gr_get_fcolor();
  	gour_flag = 0;
  	return(draw_line_common(p0,p1));
  }
 
-int draw_line_common(g3s_phandle p0,g3s_phandle p1)
+int32_t draw_line_common(g3s_phandle p0,g3s_phandle p1)
  {
- 	byte				code0,code1;
-	int					result;
+ 	int8_t				code0,code1;
+	int32_t					result;
 	grs_vertex	v0,v1;
 
 	vbuf[0] = p0;
@@ -423,14 +423,14 @@ int draw_line_common(g3s_phandle p0,g3s_phandle p1)
 			v0.y = p0->sy;
 			v1.x = p1->sx;
 			v1.y = p1->sy;
-			((int (*)(long c, long parm, grs_vertex *v0, grs_vertex *v1))grd_line_clip_fill_vector[GR_WIRE_POLY_LINE])
+			((int32_t (*)(int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1))grd_line_clip_fill_vector[GR_WIRE_POLY_LINE])
 								(draw_color,gr_get_fill_parm(),&v0,&v1);
 
 			result = CLIP_NONE;
 	  }
 	 else if (gour_flag>0)	// cline
 	  {
-	  	uchar 	a,b,c;
+	  	uint8_t 	a,b,c;
 
 			v0.x = p0->sx;
 			v0.y = p0->sy;
@@ -441,7 +441,7 @@ int draw_line_common(g3s_phandle p0,g3s_phandle p1)
 			v1.y = p1->sy;
 			gr_split_rgb (p1->rgb, &a, &b, &c);
 			v1.u = a; v1.v = b; v1.w = c;
-			((int (*)(long c, long parm, grs_vertex *v0, grs_vertex *v1))grd_line_clip_fill_vector[GR_WIRE_POLY_CLINE])
+			((int32_t (*)(int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1))grd_line_clip_fill_vector[GR_WIRE_POLY_CLINE])
 								(gr_get_fcolor(),gr_get_fill_parm(),&v0,&v1);
 
 			result = CLIP_NONE;

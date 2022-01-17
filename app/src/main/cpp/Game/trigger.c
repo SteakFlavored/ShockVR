@@ -127,48 +127,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REACTOR_BOOM_QB 0x14
 errtype do_special_reactor_hack();
 
-errtype do_destroy(int victim_data);
+errtype do_destroy(int32_t victim_data);
 
 ObjID current_trap;
 bool _tr_use_message;
 #define trap_use_message (&_tr_use_message)
 
-short qdata_get(short qdata);
-errtype qdata_set(short qdata, short new_val);
-bool comparator_check(int comparator, ObjID obj, uchar *special_code);
-errtype set_trap_data(ObjID id, char num_param, int new_val);
-errtype do_timed_multi_stuff(int p);
+int16_t qdata_get(int16_t qdata);
+errtype qdata_set(int16_t qdata, int16_t new_val);
+bool comparator_check(int32_t comparator, ObjID obj, uint8_t *special_code);
+errtype set_trap_data(ObjID id, int8_t num_param, int32_t new_val);
+errtype do_timed_multi_stuff(int32_t p);
 
-errtype trap_null_func(int p1, int p2, int p3, int p4);
-errtype trap_transmogrify_func(int p1, int p2, int p3, int p4);
+errtype trap_null_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_transmogrify_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
 bool player_facing_square(LGPoint sq);
-errtype trap_monster_func(int p1, int p2, int p3, int p4);
-errtype do_ai_trap(ObjSpecID osid, int p1, int p3, int p4);
-errtype trap_ai_func(int p1, int p2, int p3, int p4);
-errtype trap_alternating_splitter_func(int p1, int p2, int p3, int p4);
-errtype trap_main_light_func(int p1, int p2, int p3, int p4);
-errtype trap_terrain_func(int p1, int p2, int p3, int p4);
-errtype trap_height_func(int p1, int p2, int p3, int p4);
-errtype real_instance_func(int p1, int p2, int p3, int p4);
-errtype trap_instance_func(int p1, int p2, int p3, int p4);
+errtype trap_monster_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype do_ai_trap(ObjSpecID osid, int32_t p1, int32_t p3, int32_t p4);
+errtype trap_ai_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_alternating_splitter_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_main_light_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_terrain_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_height_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype real_instance_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_instance_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
 void animate_callback_func(ObjID id, void *user_data);
-errtype real_animate_func(ObjID id, int p2, int p3, int p4);
-errtype trap_animate_func(int p1, int p2, int p3, int p4);
-void hack_shodan_conquer_func(char bonus_fun);
-void hack_armageddon_func(int otrip, int x0, int y0, int r);
-void hack_multi_trans(int trip, int newtype);
-void hack_change_comparator(int p2, int p3);
-void hack_taunt_diego(int p2, int p3);
-errtype trap_hack_func(int p1, int p2, int p3, int p4);
-errtype trap_multi_func(int p1, int p2, int p3, int p4);
-errtype trap_destroy_object_func(int p1, int p2, int p3, int p4);
-errtype trap_plot_clock_func(int p1, int p2, int p3, int p4);
-errtype trap_email_func(int mung, int time, int p3, int p4);
-errtype trap_texture_func(int p1, int p2, int p3, int p4);
-errtype trap_expose_func(int dmg, int dtype, int tsecs, int dummy);
-errtype trap_bark_func(int speaker, int strnum, int color, int hud_bark);
+errtype real_animate_func(ObjID id, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_animate_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+void hack_shodan_conquer_func(int8_t bonus_fun);
+void hack_armageddon_func(int32_t otrip, int32_t x0, int32_t y0, int32_t r);
+void hack_multi_trans(int32_t trip, int32_t newtype);
+void hack_change_comparator(int32_t p2, int32_t p3);
+void hack_taunt_diego(int32_t p2, int32_t p3);
+errtype trap_hack_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_multi_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_destroy_object_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_plot_clock_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_email_func(int32_t mung, int32_t time, int32_t p3, int32_t p4);
+errtype trap_texture_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_expose_func(int32_t dmg, int32_t dtype, int32_t tsecs, int32_t dummy);
+errtype trap_bark_func(int32_t speaker, int32_t strnum, int32_t color, int32_t hud_bark);
 
-errtype grind_trap(char type, int p1, int p2, int p3, int p4, ubyte *destroy_count_ptr, ObjID id);
+errtype grind_trap(int8_t type, int32_t p1, int32_t p2, int32_t p3, int32_t p4, uint8_t *destroy_count_ptr, ObjID id);
 errtype do_level_entry_triggers();
 errtype do_shodan_triggers();
 errtype do_ecology_triggers();
@@ -176,14 +176,14 @@ errtype do_ecology_triggers();
 #define SHODOMETER_QVAR_BASE  0x10
 
 
-short qdata_get(short qdata)
+int16_t qdata_get(int16_t qdata)
 {
-   short contents = qdata & 0xFFF;
+   int16_t contents = qdata & 0xFFF;
    if (qdata & 0x1000)
    {
       if ((contents >= FIRST_SHODAN_QV) && (contents <= FIRST_SHODAN_QV + MAX_SHODOMETER_LEVEL))
       {
-         short retval;
+         int16_t retval;
          if (QUESTVAR_GET(MISSION_DIFF_QVAR) <= 1)
             return(0);
          retval = QUESTVAR_GET(contents) * 255 / player_struct.initial_shodan_vals[contents - FIRST_SHODAN_QV];
@@ -200,7 +200,7 @@ short qdata_get(short qdata)
       return(contents);
 }
 
-errtype qdata_set(short qdata, short new_val)
+errtype qdata_set(int16_t qdata, int16_t new_val)
 {
    if (qdata & 0x1000)
       QUESTVAR_SET(qdata & 0xFFF, new_val);
@@ -225,14 +225,14 @@ errtype qdata_set(short qdata, short new_val)
 }
 
 
-bool comparator_check(int comparator, ObjID obj, uchar *special_code)
+bool comparator_check(int32_t comparator, ObjID obj, uint8_t *special_code)
 {
-   short cval, compval;
-   uchar fail_code;
-   short fail_amt =0;
+   int16_t cval, compval;
+   uint8_t fail_code;
+   int16_t fail_amt =0;
    bool truthval = FALSE;
    // shodo_qvar is the questvariable for the shodometer on the current levelle
-   char shodo_qvar = SHODOMETER_QVAR_BASE + player_struct.level;
+   int8_t shodo_qvar = SHODOMETER_QVAR_BASE + player_struct.level;
 
    *special_code = 0;
    fail_code = comparator >> 24;
@@ -262,7 +262,7 @@ bool comparator_check(int comparator, ObjID obj, uchar *special_code)
          *special_code = fail_amt;
       if ((*special_code != 0) && (fail_code == SPECIAL_SHODAN_FAIL_CODE))
       {
-         short shodan_amt;
+         int16_t shodan_amt;
          shodan_amt = min(NUM_SHODAN_MUGS-1, *special_code >> SHODAN_INTERVAL_SHIFT);
          long_bark(obj, FIRST_SHODAN_MUG + shodan_amt, SHODAN_FAILURE_STRING, 0x4c);
       }
@@ -279,7 +279,7 @@ bool comparator_check(int comparator, ObjID obj, uchar *special_code)
 }
 
 
-errtype set_trap_data(ObjID id, char num_param, int new_val)
+errtype set_trap_data(ObjID id, int8_t num_param, int32_t new_val)
 {
    uint* pbase=NULL;
    ObjSpecID osid=objs[id].specID;
@@ -329,17 +329,17 @@ errtype location_trigger_activate(ObjID id)
 }
 
 
-errtype trap_null_func(int, int, int, int)
+errtype trap_null_func(int32_t, int32_t, int32_t, int)
 {
    return(OK);
 }
 
 #define MAX_BRIDGE_FRAME   32
 
-errtype trap_transmogrify_func(int p1, int p2, int, int)
+errtype trap_transmogrify_func(int32_t p1, int32_t p2, int32_t, int)
 {
    extern void slam_posture_meter_state(void);
-   int source,dest,t1,t2;
+   int32_t source,dest,t1,t2;
 
    if (!objs[p1].active)
    {
@@ -417,7 +417,7 @@ errtype trap_transmogrify_func(int p1, int p2, int, int)
 // write something really quickly for alpha.
 
 // cast to signed-ness before taking abs
-#define fixang_abs(x) abs((short)(x))
+#define fixang_abs(x) abs((int16_t)(x))
 
 bool player_facing_square(LGPoint sq)
 {
@@ -446,16 +446,16 @@ bool player_facing_square(LGPoint sq)
 // p1 = triple
 // p2 = area of effect
 // p3 = quantity of object to create
-errtype trap_monster_func(int p1, int p2, int p3, int p4)
+errtype trap_monster_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    ObjID new_id, id1, id2;
    ObjSpecID osid;
    ObjRefID oref;
-   char minx,miny,sizex,sizey, quan, failures=0, num_gen = 0;
+   int8_t minx,miny,sizex,sizey, quan, failures=0, num_gen = 0;
    LGPoint sq;
    extern errtype obj_load_art(bool flush_all);
    bool okay = FALSE;
-   char monster_count;
+   int8_t monster_count;
    MapElem *pme;
 
    quan = qdata_get(p3);
@@ -484,7 +484,7 @@ errtype trap_monster_func(int p1, int p2, int p3, int p4)
       monster_count = 0;
       while (!okay && (monster_count < 100))
       {
-         int tiletype, room;
+         int32_t tiletype, room;
 
          okay = TRUE;
          sq.x = minx + rand()%(sizex+1);
@@ -521,7 +521,7 @@ errtype trap_monster_func(int p1, int p2, int p3, int p4)
          if(p4 & 0x8) okay=TRUE;
          if (okay)
          {
-            char d;
+            int8_t d;
             d = abs(PLAYER_BIN_X - sq.x) + abs(PLAYER_BIN_Y - sq.y);
 
             // This should be in order of harshness
@@ -573,7 +573,7 @@ errtype trap_monster_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype do_ai_trap(ObjSpecID osid, int p1, int p3, int p4)
+errtype do_ai_trap(ObjSpecID osid, int32_t p1, int32_t p3, int32_t p4)
 {
    ObjID oid;
    oid = objCritters[osid].id;
@@ -596,9 +596,9 @@ errtype do_ai_trap(ObjSpecID osid, int p1, int p3, int p4)
    return(OK);
 }
 
-errtype trap_ai_func(int p1, int p2, int p3, int p4)
+errtype trap_ai_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
-   int x1,x2,y1,y2,i,j;
+   int32_t x1,x2,y1,y2,i,j;
    ObjSpecID osid;
    ObjRefID oref;
    ObjID oid,o1,o2;
@@ -692,10 +692,10 @@ errtype trap_ai_func(int p1, int p2, int p3, int p4)
 
 #define TRAP_TIME_UNIT 10 // how many time-setting units in a second
 
-errtype trap_scheduler_func(int p1, int p2, int p3, int p4)
+errtype trap_scheduler_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    TrapSchedEvent new_event;
-   uint *p;
+   uint32_t *p;
 
    if ((p3 >= 0xFFFF) ||
        ((p3 > 0x1000) && (QUESTBIT_GET(p3 & 0xFFF))) ||
@@ -708,7 +708,7 @@ errtype trap_scheduler_func(int p1, int p2, int p3, int p4)
       }
       if ((p3 < 0x1000) && (p3 > 0))
          (*p)--;
-      new_event.timestamp = TICKS2TSTAMP(player_struct.game_time + (CIT_CYCLE * (ushort)qdata_get(p2))/TRAP_TIME_UNIT) + 1;
+      new_event.timestamp = TICKS2TSTAMP(player_struct.game_time + (CIT_CYCLE * (uint16_t)qdata_get(p2))/TRAP_TIME_UNIT) + 1;
       if (qdata_get(p4) != 0)
          new_event.timestamp += rand()%qdata_get(p4);
       new_event.type = TRAP_SCHED_EVENT;
@@ -719,11 +719,11 @@ errtype trap_scheduler_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype trap_alternating_splitter_func(int p1, int p2, int p3, int p4)
+errtype trap_alternating_splitter_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    bool found_new = FALSE;
-   char loop_count = 0;
-   int n = p4;
+   int8_t loop_count = 0;
+   int32_t n = p4;
    ObjID tr = current_trap;
 
    while (!found_new)
@@ -749,15 +749,15 @@ errtype trap_alternating_splitter_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype trap_lighting_func(bool floor, int p1, int p2, int p3, int p4);
+errtype trap_lighting_func(bool floor, int32_t p1, int32_t p2, int32_t p3, int32_t p4);
 
 // NUM_LIGHT_STEPS * LIGHT_TICKS should equal the total time of a transition, in this case .5 seconds
 #define NUM_LIGHT_STEPS    8
 #define LIGHT_TICKS        (CIT_CYCLE >> 4)
 
-errtype trap_main_light_func(int p1, int p2, int p3, int p4)
+errtype trap_main_light_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
-   uint *p;
+   uint32_t *p;
    if ((p3 & 0x10000) || (p3 & 0x20000))
       trap_lighting_func(FALSE,p1,p2,p3&0xffff,p4);
    if (!(p3 & 0x10000))
@@ -767,7 +767,7 @@ errtype trap_main_light_func(int p1, int p2, int p3, int p4)
    if (p2 & 0xFFFF)
    {
       TrapSchedEvent new_event;
-      int num_steps = (p2 & 0xFFF0000) >> 16;
+      int32_t num_steps = (p2 & 0xFFF0000) >> 16;
       switch (objs[current_trap].obclass)
       {
          case CLASS_TRAP:  p = &(objTraps[objs[current_trap].specID].p2); break;
@@ -797,20 +797,20 @@ errtype trap_main_light_func(int p1, int p2, int p3, int p4)
 #define LIGHT_NS_SMOOTH 2
 #define LIGHT_RADIAL    3
 
-errtype trap_lighting_func(bool floor, int p1, int p2, int p3, int p4)
+errtype trap_lighting_func(bool floor, int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
-   int i,j;
-   int targ1, targ2, setme,delta;
-   int otarg1,otarg2;
-   int x1,x2,y1,y2;
+   int32_t i,j;
+   int32_t targ1, targ2, setme,delta;
+   int32_t otarg1,otarg2;
+   int32_t x1,x2,y1,y2;
    fix rad_delt, rdx, rdy;
-   short num_steps = -1;
-   char trans_type;
+   int16_t num_steps = -1;
+   int8_t trans_type;
    ObjID o1,o2;
    MapElem *pme;
-   char v[4];
-   char light_state;
-   uint *p;
+   int8_t v[4];
+   int8_t light_state;
+   uint32_t *p;
 
    o1 = qdata_get(p1 & 0xFFFF);
    o2 = qdata_get(p1 >> 16);
@@ -1007,9 +1007,9 @@ errtype trap_lighting_func(bool floor, int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype trap_damage_func(int p1, int p2, int p3, int p4)
+errtype trap_damage_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
-   short dval;
+   int16_t dval;
 
    // Can't be inverted!
    dval = qdata_get(p1);
@@ -1020,7 +1020,7 @@ errtype trap_damage_func(int p1, int p2, int p3, int p4)
    if (!(p2 & 0x10000))
       damage_object(PLAYER_OBJ, dval, p2 >> 24, 0x01);
    else
-      player_struct.hit_points = min((short)player_struct.hit_points + dval, PLAYER_MAX_HP);
+      player_struct.hit_points = min((int16_t)player_struct.hit_points + dval, PLAYER_MAX_HP);
 
    dval = qdata_get(p3 & 0xFFFF);
    if (p3 < 0x10000)
@@ -1041,16 +1041,16 @@ errtype trap_damage_func(int p1, int p2, int p3, int p4)
 bool fake_endgame = FALSE;
 #define ENDGAME_TICKS   CIT_CYCLE * 2
 
-errtype trap_sfx_func(int p1, int p2, int p3, int p4)
+errtype trap_sfx_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
-   extern short fr_solidfr_time;
-   extern short fr_sfx_time;
-   extern short fr_surge_time;
-   extern char surg_fx_frame;
-   short scr_fx, sfx_time,sound_fx;
-   short wacky, wacky_sev;
-   extern short surge_duration;
-   extern ulong player_death_time;
+   extern int16_t fr_solidfr_time;
+   extern int16_t fr_sfx_time;
+   extern int16_t fr_surge_time;
+   extern int8_t surg_fx_frame;
+   int16_t scr_fx, sfx_time,sound_fx;
+   int16_t wacky, wacky_sev;
+   extern int16_t surge_duration;
+   extern uint32_t player_death_time;
 
    sound_fx = qdata_get(p1 & 0xFFFF);
    scr_fx = qdata_get(p3);
@@ -1085,7 +1085,7 @@ errtype trap_sfx_func(int p1, int p2, int p3, int p4)
       case 3:
          {
             extern void physics_zero_all_controls();
-            extern ulong secret_sfx_time;
+            extern uint32_t secret_sfx_time;
             physics_zero_all_controls();
             secret_render_fx=FAKEWIN_REND_SFX;
             secret_sfx_time = *tmd_ticks;
@@ -1103,7 +1103,7 @@ errtype trap_sfx_func(int p1, int p2, int p3, int p4)
       case 5:
          {
             // let's do some damage static!
-            extern void set_dmg_percentage(int which, ubyte percent);
+            extern void set_dmg_percentage(int32_t which, uint8_t percent);
             set_dmg_percentage(DMG_BLOOD, 100);    // 100 is the amount of static (100/255) is the percent of static
          }
          break;
@@ -1115,7 +1115,7 @@ errtype trap_sfx_func(int p1, int p2, int p3, int p4)
    case 3: fr_global_mod_flag(FR_SOLIDFR_STATIC, FR_SOLIDFR_MASK);                                 break;
    case 4:
       {
-         extern short vhold_shift;
+         extern int16_t vhold_shift;
          fr_global_mod_flag(FR_SFX_VHOLD, FR_SFX_MASK);
          vhold_shift = 0;
          break;
@@ -1132,7 +1132,7 @@ errtype trap_sfx_func(int p1, int p2, int p3, int p4)
 }
 
 
-errtype trap_create_obj_func(int p1, int p2, int p3, int p4)
+errtype trap_create_obj_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    ObjID new_id, oid;
    ObjLoc new_loc;
@@ -1182,10 +1182,10 @@ errtype trap_create_obj_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype trap_questbit_func(int p1, int p2, int p3, int p4)
+errtype trap_questbit_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
-   char message_buf[100];
-   short qarg, mod;
+   int8_t message_buf[100];
+   int16_t qarg, mod;
    qarg = p2 & 0xFFFF;
    mod = p2 >> 16;
 
@@ -1257,13 +1257,13 @@ errtype trap_questbit_func(int p1, int p2, int p3, int p4)
 
 extern bool alternate_death;
 
-extern Boolean	gPlayingGame;
-extern Boolean	gDeadPlayerQuit;
-extern Boolean	gGameCompletedQuit;
+extern bool	gPlayingGame;
+extern bool	gDeadPlayerQuit;
+extern bool	gGameCompletedQuit;
 
-errtype trap_cutscene_func(int p1, int p2, int, int)
+errtype trap_cutscene_func(int32_t p1, int32_t p2, int32_t, int)
 {
-	short		cs = qdata_get(p1);
+	int16_t		cs = qdata_get(p1);
 //	if (qdata_get(p1) == 0)							// KLC - if we are to play the endgame cutscene
 //	{
 		gGameCompletedQuit = TRUE;
@@ -1274,7 +1274,7 @@ errtype trap_cutscene_func(int p1, int p2, int, int)
 	return(OK);
 }
 
-errtype trap_terrain_func(int p1, int p2, int p3, int p4)
+errtype trap_terrain_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    MapElem *pme;
    bool reprocess = FALSE;
@@ -1304,16 +1304,16 @@ errtype trap_terrain_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype trap_height_func(int p1, int p2, int p3, int p4)
+errtype trap_height_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    MapElem *pme;
    HeightSchedEvent hse;
-   ushort use_val;
-   uchar x,y;
-   char steps;
-   char ht;
+   uint16_t use_val;
+   uint8_t x,y;
+   int8_t steps;
+   int8_t ht;
    bool did_sfx = FALSE;
-   extern bool register_h_event(uchar x, uchar y, bool floor, char* sem, char* key, bool no_sfx);
+   extern bool register_h_event(uint8_t x, uint8_t y, bool floor, int8_t* sem, int8_t* key, bool no_sfx);
 
    x = qdata_get(p1);
    y = qdata_get(p2);
@@ -1360,7 +1360,7 @@ errtype trap_height_func(int p1, int p2, int p3, int p4)
 }
 
 
-errtype real_instance_func(int p1, int p2, int p3, int p4)
+errtype real_instance_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    ObjSpecID osid;
    if (p1 == 0)
@@ -1396,7 +1396,7 @@ errtype real_instance_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype trap_instance_func(int p1, int p2, int p3, int p4)
+errtype trap_instance_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    real_instance_func(qdata_get(p1 & 0xFFFF),p2,p3,p4);
    real_instance_func(qdata_get(p1 >> 16), p2,p3,p4);
@@ -1405,9 +1405,9 @@ errtype trap_instance_func(int p1, int p2, int p3, int p4)
 
 void animate_callback_func(ObjID id, void *user_data)
 {
-   int p3;
+   int32_t p3;
 
-   p3 = (int)user_data;
+   p3 = (int32_t)user_data;
 
    if(BIT_SET(p3,17))
       do_multi_stuff(p3&0x7FFF);
@@ -1415,10 +1415,10 @@ void animate_callback_func(ObjID id, void *user_data)
       real_animate_func(id,0,p3,0);
 }
 
-errtype real_animate_func(ObjID id, int p2, int p3, int p4)
+errtype real_animate_func(ObjID id, int32_t p2, int32_t p3, int32_t p4)
 {
    errtype retval = OK;
-   int frames;
+   int32_t frames;
    bool reverse;
 
    if (id == 0)
@@ -1460,7 +1460,7 @@ errtype real_animate_func(ObjID id, int p2, int p3, int p4)
    return(retval);
 }
 
-errtype trap_animate_func(int p1, int p2, int p3, int p4)
+errtype trap_animate_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    real_animate_func(qdata_get(p1 & 0xFFFF),p2,p3,p4);
    real_animate_func(qdata_get(p1 >> 16),p2,p3,p4);
@@ -1469,16 +1469,16 @@ errtype trap_animate_func(int p1, int p2, int p3, int p4)
 
 // Note that this blows away the usual shodan time countdown,
 // so can only be used in endgame!
-uchar *shodan_bitmask = NULL;
+uint8_t *shodan_bitmask = NULL;
 grs_bitmap shodan_draw_fs;
 grs_bitmap shodan_draw_normal;
 
-void hack_shodan_conquer_func(char)
+void hack_shodan_conquer_func(int8_t)
 {
    extern void begin_shodan_conquer_fx(bool begin);
-   extern ulong time_until_shodan_avatar;
-   extern char thresh_fail;
-   extern bool shodan_phase_in(uchar *bitmask, short x, short y, short w, short h, short num, bool dir);
+   extern uint32_t time_until_shodan_avatar;
+   extern int8_t thresh_fail;
+   extern bool shodan_phase_in(uint8_t *bitmask, int16_t x, int16_t y, int16_t w, int16_t h, int16_t num, bool dir);
    shodan_bitmask = tmap_static_mem;
    memset(shodan_bitmask, 0, SHODAN_BITMASK_SIZE / 8);
    shodan_draw_fs.bits = tmap_static_mem + (SHODAN_BITMASK_SIZE / 8);
@@ -1491,10 +1491,10 @@ void hack_shodan_conquer_func(char)
    begin_shodan_conquer_fx(TRUE);
 }
 
-void hack_armageddon_func(int otrip, int x0, int y0, int r)
+void hack_armageddon_func(int32_t otrip, int32_t x0, int32_t y0, int32_t r)
 {
-   int ulx, uly, lrx, lry;
-   int i,j;
+   int32_t ulx, uly, lrx, lry;
+   int32_t i,j;
    ObjRefID oref;
    ObjID oid;
 
@@ -1521,10 +1521,10 @@ void hack_armageddon_func(int otrip, int x0, int y0, int r)
 }
 
 /*¥¥¥
-void hack_area_spew(int p2,int p3,int p4)
+void hack_area_spew(int32_t p2,int32_t p3,int32_t p4)
 {
-   int ulx,uly,lrx,lry;
-   int x,y;
+   int32_t ulx,uly,lrx,lry;
+   int32_t x,y;
    MapElem* pme;
    bool state;
    ObjID obj;
@@ -1554,7 +1554,7 @@ void hack_area_spew(int p2,int p3,int p4)
 }
 */
 
-void hack_multi_trans(int trip, int newtype)
+void hack_multi_trans(int32_t trip, int32_t newtype)
 {
    ObjSpecID osid;
    ObjID oid;
@@ -1573,7 +1573,7 @@ void hack_multi_trans(int trip, int newtype)
    }
 }
 
-void hack_change_comparator(int p2, int p3)
+void hack_change_comparator(int32_t p2, int32_t p3)
 {
    ObjSpecID osid;
 
@@ -1593,7 +1593,7 @@ void hack_change_comparator(int p2, int p3)
 // Wow.  Pretty non-general here.
 // Diego taunts the player.
 #define FIXANG_OCT (FIXANG_PI/4)
-void hack_taunt_diego(int p2, int p3)
+void hack_taunt_diego(int32_t p2, int32_t p3)
 {
    fixang plrh;
 
@@ -1641,12 +1641,12 @@ void hack_taunt_diego(int p2, int p3)
 
 #define MULTI_TRANSMOG_HACK 0x10
 
-errtype trap_hack_func(int p1, int p2, int p3, int p4)
+errtype trap_hack_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    bool door_moving(ObjID door, bool dir);
-   void plotware_showpage(uchar page);
+   void plotware_showpage(uint8_t page);
    void check_panel_ref(bool puntme);
-   void email_slam_hack(short which);
+   void email_slam_hack(int16_t which);
 
    // As we need hacks in the game, just add new
    // cases here to do your particular hack.
@@ -1657,11 +1657,11 @@ errtype trap_hack_func(int p1, int p2, int p3, int p4)
             Obj* repul=&objs[p2];
             ObjRefID oref;
             ObjID oid;
-            uint *upness=&(objTraps[repul->specID].p4);
-            int nu_tmap, old_tmap, nu_frame;
+            uint32_t *upness=&(objTraps[repul->specID].p4);
+            int32_t nu_tmap, old_tmap, nu_frame;
             MapElem* pme;
             ObjLoc where=repul->loc;
-            extern errtype obj_physics_refresh(short x, short y, bool use_floor);
+            extern errtype obj_physics_refresh(int16_t x, int16_t y, bool use_floor);
 
             switch(p4) {
                case 0:
@@ -1705,7 +1705,7 @@ errtype trap_hack_func(int p1, int p2, int p3, int p4)
          break;
       case REACTOR_DIGIT_HACK:
          if(objs[p2].obclass==CLASS_BIGSTUFF) {
-            uint combo;
+            uint32_t combo;
 
             combo=(QUESTVAR_GET(REACTOR_COMBO_QVAR)<<12)|
                (QUESTVAR_GET(REACTOR_COMBO_QVAR+1));
@@ -1750,8 +1750,8 @@ errtype trap_hack_func(int p1, int p2, int p3, int p4)
       case GAME_OVER_HACK:
       {
          extern void player_dead(void);
-         extern int curr_alog;
-         extern char secret_pending_hack;
+         extern int32_t curr_alog;
+         extern int8_t secret_pending_hack;
          if (curr_alog != -1)
             secret_pending_hack = 1;
          else
@@ -1763,7 +1763,7 @@ errtype trap_hack_func(int p1, int p2, int p3, int p4)
       }
       case TURN_OBJECT_HACK:
       {
-         short head,lo,hi,phb;
+         int16_t head,lo,hi,phb;
 
          phb=(p3>>24)&0xF;
          switch(phb) {
@@ -1863,14 +1863,14 @@ errtype do_multi_stuff(ObjID id)
 // number of multi delay units in a second
 #define MULTI_TIME_UNIT 10
 
-errtype do_timed_multi_stuff(int p)
+errtype do_timed_multi_stuff(int32_t p)
 {
    TrapSchedEvent new_event;
 
    if (p >> 16)
    {
       // Time delay
-      new_event.timestamp = TICKS2TSTAMP(player_struct.game_time + (ushort)(CIT_CYCLE * (p >> 16)) / MULTI_TIME_UNIT) + 1;
+      new_event.timestamp = TICKS2TSTAMP(player_struct.game_time + (uint16_t)(CIT_CYCLE * (p >> 16)) / MULTI_TIME_UNIT) + 1;
       new_event.type = TRAP_SCHED_EVENT;
       new_event.target_id = qdata_get(p & 0xFFFF);
       new_event.source_id = -1;
@@ -1884,7 +1884,7 @@ errtype do_timed_multi_stuff(int p)
    return(OK);
 }
 
-errtype trap_multi_func(int p1, int p2, int p3, int p4)
+errtype trap_multi_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    do_timed_multi_stuff(p1);
    do_timed_multi_stuff(p2);
@@ -1893,7 +1893,7 @@ errtype trap_multi_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype do_destroy(int victim_data)
+errtype do_destroy(int32_t victim_data)
 {
    ObjID victim;
 
@@ -1904,9 +1904,9 @@ errtype do_destroy(int victim_data)
    return(OK);
 }
 
-errtype trap_destroy_object_func(int p1, int p2, int p3, int p4)
+errtype trap_destroy_object_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
-   char message_buf[100];
+   int8_t message_buf[100];
 
    do_destroy(p1);
    do_destroy(p2);
@@ -1922,14 +1922,14 @@ errtype trap_destroy_object_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype trap_plot_clock_func(int, int, int, int)
+errtype trap_plot_clock_func(int32_t, int32_t, int32_t, int)
 {
    return(OK);
 }
 
-errtype trap_email_func(int mung, int time, int, int)
+errtype trap_email_func(int32_t mung, int32_t time, int32_t, int)
 {
-   void add_email_datamunge(short mung,bool select);
+   void add_email_datamunge(int16_t mung,bool select);
 
 #ifdef DOOM_EMULATION_MODE
    if (QUESTVAR_GET(MISSION_DIFF_QVAR) == 0)
@@ -1951,11 +1951,11 @@ errtype trap_email_func(int mung, int time, int, int)
    return(OK);
 }
 
-errtype trap_texture_func(int p1, int p2, int p3, int p4)
+errtype trap_texture_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
 {
    ObjID id1,id2;
-   short cx,cy,minx,maxx,miny,maxy;
-   int i, src[3], dest[3];
+   int16_t cx,cy,minx,maxx,miny,maxy;
+   int32_t i, src[3], dest[3];
    MapElem *pme;
 
    id2 = qdata_get(p1 >> 16);
@@ -2004,7 +2004,7 @@ errtype trap_texture_func(int p1, int p2, int p3, int p4)
    return(OK);
 }
 
-errtype trap_teleport_func(int targ_x, int targ_y, int targ_z, int targlevel)
+errtype trap_teleport_func(int32_t targ_x, int32_t targ_y, int32_t targ_z, int32_t targlevel)
 {
    ObjLoc newloc;
    errtype errcode = OK;
@@ -2052,10 +2052,10 @@ errtype trap_teleport_func(int targ_x, int targ_y, int targ_z, int targlevel)
 }
 
 
-errtype trap_expose_func(int dmg, int dtype, int tsecs, int)
+errtype trap_expose_func(int32_t dmg, int32_t dtype, int32_t tsecs, int)
 {
-   extern void expose_player(byte damage, ubyte type, ushort tsecs);
-   short damage = qdata_get(dmg & 0xFFFF);
+   extern void expose_player(int8_t damage, uint8_t type, uint16_t tsecs);
+   int16_t damage = qdata_get(dmg & 0xFFFF);
 
    if (dmg & 0x10000)
    {
@@ -2082,16 +2082,16 @@ errtype trap_expose_func(int dmg, int dtype, int tsecs, int)
       }
       damage = max(- damage,-128);
    }
-   expose_player((byte)damage,(ubyte)qdata_get(dtype),(ushort)qdata_get(tsecs));
+   expose_player((int8_t)damage,(uint8_t)qdata_get(dtype),(uint16_t)qdata_get(tsecs));
    return OK;
 }
 
-errtype trap_bark_func(int speaker, int strnum, int color, int hud_bark)
+errtype trap_bark_func(int32_t speaker, int32_t strnum, int32_t color, int32_t hud_bark)
 {
-   int string_id = REF_STR_TrapZeroMessage+qdata_get(strnum);
+   int32_t string_id = REF_STR_TrapZeroMessage+qdata_get(strnum);
    BarkSchedEvent new_event;
-   ushort special;
-   uint timeout=0, len;
+   uint16_t special;
+   uint32_t timeout=0, len;
 
    special=(speaker<0)?-speaker:0;
 
@@ -2104,19 +2104,19 @@ errtype trap_bark_func(int speaker, int strnum, int color, int hud_bark)
 #endif
    }
    else if(special) {
-      int mug;
+      int32_t mug;
 
       mug=(-special==SHODAN_BARK_CODE)?SHODAN_MUG:DIEGO_MUG;
-      long_bark(PLAYER_OBJ,mug,string_id,(ubyte)color);
+      long_bark(PLAYER_OBJ,mug,string_id,(uint8_t)color);
       timeout=SHODAN_BARK_TIMEOUT;
    }
    else if((ObjID)speaker==OBJ_NULL) {
-      long_bark(PLAYER_OBJ,0,string_id,(ubyte)color);
+      long_bark(PLAYER_OBJ,0,string_id,(uint8_t)color);
       timeout=NULL_BARK_TIMEOUT;
    }
    else {
-//      long_bark(speaker,0,string_id,(ubyte)color);
-      long_bark(PLAYER_OBJ,0,string_id,(ubyte)color);
+//      long_bark(speaker,0,string_id,(uint8_t)color);
+      long_bark(PLAYER_OBJ,0,string_id,(uint8_t)color);
       timeout=NULL_BARK_TIMEOUT;
    }
    if(timeout>0) {
@@ -2133,7 +2133,7 @@ errtype trap_bark_func(int speaker, int strnum, int color, int hud_bark)
 }
 
 
-errtype (*trap_functions[])(int, int, int, int) = {
+errtype (*trap_functions[])(int32_t, int32_t, int32_t, int) = {
    trap_null_func, trap_teleport_func, trap_damage_func, trap_create_obj_func,
    trap_questbit_func, trap_cutscene_func, trap_multi_func, trap_main_light_func,
    trap_sfx_func, trap_height_func, trap_terrain_func, trap_scheduler_func,
@@ -2142,9 +2142,9 @@ errtype (*trap_functions[])(int, int, int, int) = {
    trap_hack_func, trap_texture_func, trap_ai_func, trap_bark_func, trap_monster_func,
    trap_transmogrify_func } ;
 
-ubyte num_trap_types = (sizeof(trap_functions)/sizeof(trap_functions[0]));
+uint8_t num_trap_types = (sizeof(trap_functions)/sizeof(trap_functions[0]));
 
-errtype grind_trap(char type, int p1, int p2, int p3, int p4, ubyte *destroy_count_ptr, ObjID id)
+errtype grind_trap(int8_t type, int32_t p1, int32_t p2, int32_t p3, int32_t p4, uint8_t *destroy_count_ptr, ObjID id)
 {
    trap_functions[type](p1,p2,p3,p4);
    if (*destroy_count_ptr > 0)
@@ -2160,11 +2160,11 @@ errtype grind_trap(char type, int p1, int p2, int p3, int p4, ubyte *destroy_cou
 bool trap_activate(ObjID id, bool *use_message)
 {
    bool retval = FALSE;
-   ubyte traptype;
-   int comparator;
-   int p1,p2,p3,p4;
-   ubyte *destroy_count_ptr;
-   uchar special;
+   uint8_t traptype;
+   int32_t comparator;
+   int32_t p1,p2,p3,p4;
+   uint8_t *destroy_count_ptr;
+   uint8_t special;
 
    *trap_use_message = *use_message;
    current_trap = id;
@@ -2233,7 +2233,7 @@ out:
 errtype check_deathwatch_triggers(ObjID id, bool really_dead)
 {
    ObjSpecID osid, nextid;
-   int comp;
+   int32_t comp;
    bool dummy;
 
    if (id == NULL)
@@ -2264,12 +2264,12 @@ errtype check_deathwatch_triggers(ObjID id, bool really_dead)
 #define SQ(x) (x * x)
 #define in_bin_radius(x1,y1,x2,y2,r) (SQ(r) > SQ((x1 - x2)) + SQ((y1 - y2)))
 
-errtype check_entrance_triggers(uchar old_x, uchar old_y, uchar new_x, uchar new_y)
+errtype check_entrance_triggers(uint8_t old_x, uint8_t old_y, uint8_t new_x, uint8_t new_y)
 {
    ObjID id;
    ObjSpecID osid;
-   uchar trap_x, trap_y;
-   uchar rad;
+   uint8_t trap_x, trap_y;
+   uint8_t rad;
    bool invert, in_rad_before, in_rad_now;
 
    osid = objTraps[0].id;
@@ -2346,7 +2346,7 @@ errtype do_special_reactor_hack()
 errtype do_level_entry_triggers()
 {
    ObjSpecID osid;
-   uchar special;
+   uint8_t special;
 
    osid = objTraps[0].id;
    while (osid != OBJ_SPEC_NULL)
@@ -2370,7 +2370,7 @@ errtype do_level_entry_triggers()
 errtype do_shodan_triggers()
 {
    ObjSpecID osid;
-   uchar special;
+   uint8_t special;
 
    osid = objTraps[0].id;
    while (osid != OBJ_SPEC_NULL)
@@ -2392,8 +2392,8 @@ errtype do_ecology_triggers()
 {
    ObjSpecID osid,osid2;
    ObjClass cl;
-   char counter = 0,quan;
-   int trip;
+   int8_t counter = 0,quan;
+   int32_t trip;
    ObjSpec ospec;
    ObjID id;
    extern bool trigger_check;

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Many games require objects which travel faster than the renderer can possibly draw.  The
 //	stuff in this file handles these things in various ways.  For instance, a laser weapon
@@ -30,11 +30,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //	Here is the collision information...
 //	====================================
-extern unsigned	int	data[100][128];
+extern unsigned	int32_t	data[100][128];
 extern Q		I[MAX_OBJ][DOF_MAX],
 			S[MAX_OBJ][6][4];
 
-extern int		no_no_not_me[MAX_OBJ];
+extern int32_t		no_no_not_me[MAX_OBJ];
 
 extern Q		hash_scale;
 
@@ -47,16 +47,16 @@ static Q		initial_X[3] = {0,0,0},
 
 //	Here is the high velocity weapon primitive...
 //	=============================================
-physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q speed, Q mass, Q size, Q range, int exclude ) {
+physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q speed, Q mass, Q size, Q range, int32_t exclude ) {
 
-physics_handle	object_check( unsigned int data_word, Q size, int exclude );	//Checks for hits...
+physics_handle	object_check( uint32_t data_word, Q size, int32_t exclude );	//Checks for hits...
 
-int		stepper = 0,
+int32_t		stepper = 0,
 		object_pointer = 1,			//For object checks...
 		max_step = 30*( range.to_int() ),	//30 samples per meter...
 		victim_on = 0;
-unsigned int	must_check_objects[MAX_OBJ];
-unsigned int	test_data;
+uint32_t	must_check_objects[MAX_OBJ];
+uint32_t	test_data;
 
 physics_handle	victim = -1,				//It is what is says it is...
 		return_victim = -1;			//The number actually returned...
@@ -90,7 +90,7 @@ fix	checker = 0;
 //	Find impact point...
 //	====================
 	for ( stepper = 0; stepper < max_step && fix_abs( checker ) < fix_make(0,0x1000); stepper++ ) {
-	
+
 	checker = 0;
 
 	indoor_terrain( X[0],						//Get the info...
@@ -156,15 +156,15 @@ fix	checker = 0;
 
 		while (must_check_objects[object_pointer++] != 0 ) {
 
-                victim = object_check( must_check_objects[object_pointer], size, exclude ); 
+                victim = object_check( must_check_objects[object_pointer], size, exclude );
 
 
 //		Hurt me, oh, oh, baby...
-//		------------------------		
+//		------------------------
 		if ( victim > -1 ) {
 
 			return_victim = victim;		//return the right guy!
-			
+
 			victim_on = ph2on[victim];
 			iota_c = .5*I[victim_on][36]*mass*speed;
 
@@ -193,8 +193,8 @@ fix	checker = 0;
 //	===========================================
 	if ( stepper == max_step ) {
 
-		X[0] = 
-		X[1] = 
+		X[0] =
+		X[1] =
 		X[2] = END;
 
 		}
@@ -213,12 +213,12 @@ fix	checker = 0;
 //	Here, since we know the line segment we're interested in, we check to make sure that we
 //	didn't hit any objects, and return the one we did...
 //	====================================================
-physics_handle	object_check( unsigned int data_word, Q size, int exclude ) {
+physics_handle	object_check( uint32_t data_word, Q size, int32_t exclude ) {
 
 
 //		General purpose...
 //		==================
-int		object;
+int32_t		object;
 physics_handle	victim = -1;
 
 
@@ -252,7 +252,7 @@ Q	a = initial_X[0] - final_X[0],
 
 		bottom = a*a + b*b + c*c;
 
-		kill_zone = sqrt( (top_1 + top_2 + top_3) / bottom );		
+		kill_zone = sqrt( (top_1 + top_2 + top_3) / bottom );
 
 		if ( kill_zone < (I[object][31] + size) ) {
 

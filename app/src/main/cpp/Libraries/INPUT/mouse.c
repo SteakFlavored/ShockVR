@@ -53,14 +53,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _mouse_state
 {
-	short x,y;
-	short butts;
+	int16_t x,y;
+	int16_t butts;
 } mouse_state;
 
 typedef struct
 {
 	TMTask			task;					// The actual TimeManager task structure
-	long				appA5;				// We need this silly thing for 68K programs
+	int32_t				appA5;				// We need this silly thing for 68K programs
 }
 MouseTask, *MouseTaskPtr;
 
@@ -74,44 +74,44 @@ MouseTask, *MouseTaskPtr;
 
 //	These are global for fast access from interrupt routine & others
 
-short gMouseCritical;						// in critical region?
+int16_t gMouseCritical;						// in critical region?
 */
 #define NUM_MOUSEEVENTS 32
-short mouseQueueSize = NUM_MOUSEEVENTS;
-volatile short mouseQueueIn;	     	// back of event queue
-volatile short mouseQueueOut;      		// front of event queue
+int16_t mouseQueueSize = NUM_MOUSEEVENTS;
+volatile int16_t mouseQueueIn;	     	// back of event queue
+volatile int16_t mouseQueueOut;      		// front of event queue
 mouse_event mouseQueue[NUM_MOUSEEVENTS];	// array of events
 
-short mouseInstantX;						// instantaneous mouse xpos (int-based)
-short mouseInstantY;						// instantaneous mouse ypos (int-based)
-short mouseInstantButts;
+int16_t mouseInstantX;						// instantaneous mouse xpos (int-based)
+int16_t mouseInstantY;						// instantaneous mouse ypos (int-based)
+int16_t mouseInstantButts;
 /*
-short mouseButtMask;   					// amt to mask to get buttons.
-ubyte mouseXshift = 0;  					// Extra bits of mouse resolution
-ubyte mouseYshift = 1;
+int16_t mouseButtMask;   					// amt to mask to get buttons.
+uint8_t mouseXshift = 0;  					// Extra bits of mouse resolution
+uint8_t mouseYshift = 1;
 */
-ubyte mouseMask = 0xFF; 				// mask of events to put in the queue.
+uint8_t mouseMask = 0xFF; 				// mask of events to put in the queue.
 /*
 bool  mouseLefty = FALSE; 				// is the user left-handed?
 */
 #define NUM_MOUSE_CALLBACKS 16
 mouse_callfunc mouseCall[NUM_MOUSE_CALLBACKS];
 void* mouseCallData[NUM_MOUSE_CALLBACKS];
-short mouseCalls = 0;  					// current number of mouse calls.
-short mouseCallSize = sizeof(mouse_callfunc);
+int16_t mouseCalls = 0;  					// current number of mouse calls.
+int16_t mouseCallSize = sizeof(mouse_callfunc);
 /*
 bool mouse_installed = FALSE;					// was mouse found?
 
-ulong default_mouse_ticks = 0;
-ulong volatile *mouse_ticks = &default_mouse_ticks;  // Place to get mouse timestamps.
+uint32_t default_mouse_ticks = 0;
+uint32_t volatile *mouse_ticks = &default_mouse_ticks;  // Place to get mouse timestamps.
 
 // MOUSE VELOCITY STUFF
 
-int mouseVelX = 0, mouseVelY = 0;
-int mouseVelXmax = 0x7FFFFFFF;
-int mouseVelYmax = 0x7FFFFFFF;
-int mouseVelXmin = 0x80000000;
-int mouseVelYmin = 0x80000000;
+int32_t mouseVelX = 0, mouseVelY = 0;
+int32_t mouseVelXmax = 0x7FFFFFFF;
+int32_t mouseVelYmax = 0x7FFFFFFF;
+int32_t mouseVelXmin = 0x80000000;
+int32_t mouseVelYmin = 0x80000000;
 
 //	Macros & defines
 
@@ -125,13 +125,13 @@ int mouseVelYmin = 0x80000000;
 
 
 extern void MouseHandler(void);
-extern ulong mouseHandlerSize;
+extern uint32_t mouseHandlerSize;
 */
 TimerUPP		pMousePollPtr;
 MouseTask		pMousePollTask;
-extern short	gActiveLeft, gActiveTop;
-Boolean			gRBtnWasDown = TRUE;
-extern uchar	pKbdGetKeys[16];
+extern int16_t	gActiveLeft, gActiveTop;
+bool			gRBtnWasDown = TRUE;
+extern uint8_t	pKbdGetKeys[16];
 
 //----------------
 // Internal Prototypes
@@ -161,10 +161,10 @@ pascal void MousePollProc(void)
 {
 //#ifndef __powerc
 //	MouseTaskPtr		tmTaskPtr = GetMouseTask();				// get address of task record
-//	long					curA5 = SetA5(tmTaskPtr->appA5);		// save and set value of A5
+//	int32_t					curA5 = SetA5(tmTaskPtr->appA5);		// save and set value of A5
 //#endif
 	Point					mp;
-	short					i;
+	int16_t					i;
 	mouse_event		e;
 
 	mp = *(Point *)0x830;												// Get mouse location from low memory.
@@ -199,8 +199,8 @@ pascal void MousePollProc(void)
 
 		if (mouseMask & MOUSE_MOTION)							// Add a mouse-moved event
 		{																			// to the internal queue.
-			short newin = mouseQueueIn, newout = mouseQueueOut;
-			short in = newin;
+			int16_t newin = mouseQueueIn, newout = mouseQueueOut;
+			int16_t in = newin;
 			mouseQueue[newin] = e;
 			newin =  (newin + 1  < mouseQueueSize) ? newin + 1 : 0;
 			if (newin == mouseQueueOut)
@@ -262,7 +262,7 @@ errtype mouse_shutdown(void)
 //	---------------------------------------------------------
 //  For Mac version: ignore sizes (mouse is already set up).
 
-errtype mouse_init(short , short )
+errtype mouse_init(int16_t , int16_t )
 {
 	mouse_state mstate;
 /*
@@ -337,9 +337,9 @@ errtype mouse_init(short , short )
 /*
 // ---------------------------------------------------------
 // mouse_set_screensize() sets the screen size, scaling mouse sensitivity.
-errtype mouse_set_screensize(short x, short y)
+errtype mouse_set_screensize(int16_t x, int16_t y)
 {
-   short xrate = DEFAULT_XRATE,yrate = DEFAULT_YRATE,t = DEFAULT_ACCEL;
+   int16_t xrate = DEFAULT_XRATE,yrate = DEFAULT_YRATE,t = DEFAULT_ACCEL;
    if (x > LO_RES_SCREEN_WIDTH)
    {
       xrate = HIRES_XRATE;
@@ -366,17 +366,17 @@ errtype mouse_set_screensize(short x, short y)
 
 void _mouse_update_vel(void)
 {
-   static ulong last_ticks = 0;
+   static uint32_t last_ticks = 0;
 
-   ulong ticks = *mouse_ticks;
+   uint32_t ticks = *mouse_ticks;
 
    if (ticks != last_ticks && (mouseVelX != 0 || mouseVelY != 0))
    {
-      short newx = mouseInstantX;
-      short newy = mouseInstantY;
-      ulong dt = ticks - last_ticks;
-      short dx = (mouseVelX*dt) >> MOUSE_VEL_UNIT_SHF;
-      short dy = (mouseVelY*dt) >> MOUSE_VEL_UNIT_SHF;
+      int16_t newx = mouseInstantX;
+      int16_t newy = mouseInstantY;
+      uint32_t dt = ticks - last_ticks;
+      int16_t dx = (mouseVelX*dt) >> MOUSE_VEL_UNIT_SHF;
+      int16_t dy = (mouseVelY*dt) >> MOUSE_VEL_UNIT_SHF;
 
       mouse_put_xy(newx+dx,newy+dy);
    }
@@ -389,7 +389,7 @@ void _mouse_update_vel(void)
 //	---------------------------------------------------------
 //  For Mac version: Use GetMouse().
 
-errtype mouse_get_xy(short* x, short* y)
+errtype mouse_get_xy(int16_t* x, int16_t* y)
 {
 	Point		localPt;
 
@@ -410,13 +410,13 @@ errtype mouse_get_xy(short* x, short* y)
    return OK;
 }
 
-errtype mouse_put_xy(short x, short y)
+errtype mouse_put_xy(int16_t x, int16_t y)
 {
 	// thanks to Mark for the help! - phs, 8/1/95
 
 	Point *MTemp;
 	Point *RawMouse;
-	char *CrsrNew;
+	int8_t *CrsrNew;
 
 	Point pt;
 
@@ -427,7 +427,7 @@ errtype mouse_put_xy(short x, short y)
 
 	MTemp = (Point *) 0x0828;
 	RawMouse = (Point *) 0x082c;
-	CrsrNew = (char *) 0x08ce;
+	CrsrNew = (int8_t *) 0x08ce;
 
  	MTemp->v = pt.v;
  	MTemp->h = pt.h;
@@ -476,7 +476,7 @@ errtype mouse_put_xy(short x, short y)
 //	---------------------------------------------------------
 //  For Mac version: Basically just return true or false right now.
 
-errtype mouse_check_btn(short /*button*/, bool* res)
+errtype mouse_check_btn(int16_t /*button*/, bool* res)
 {
 	*res = Button();
 /*   if (!mouse_installed)
@@ -499,7 +499,7 @@ errtype mouse_check_btn(short /*button*/, bool* res)
 
 errtype mouse_look_next(mouse_event *res)
 {
-	short				eventMask;
+	int16_t				eventMask;
 	EventRecord	theEvent;
 
 	// First, check the Mac event queue for mouse down/up events.
@@ -530,7 +530,7 @@ errtype mouse_look_next(mouse_event *res)
 			else if (theEvent.what == mouseUp)
 				res->type = MOUSE_LUP;
 			res->buttons = 1;
-			res->modifiers = (uchar)(theEvent.modifiers >> 8);
+			res->modifiers = (uint8_t)(theEvent.modifiers >> 8);
 		}
 	}
 
@@ -572,10 +572,10 @@ errtype mouse_look_next(mouse_event *res)
 
 errtype mouse_next(mouse_event *res)
 {
-	short				eventMask;
+	int16_t				eventMask;
 	EventRecord	theEvent;
-	Boolean			nowDown;
-	uchar			rbType = 0;
+	bool			nowDown;
+	uint8_t			rbType = 0;
 
 	// First, check to see if we get a simulated right button event.  This occurs for the
 	// space, enter, and return keys.
@@ -620,7 +620,7 @@ errtype mouse_next(mouse_event *res)
 	{
 /*		if (theEvent.what == keyDown || theEvent.what == keyUp)					// If it's a key event
 		{
-			uchar	scanCode = (theEvent.message & keyCodeMask) >> 8;
+			uint8_t	scanCode = (theEvent.message & keyCodeMask) >> 8;
 			if (scanCode == 0x31 || scanCode == 0x4C || scanCode == 0x24)		// and it's a "right button" key
 			{
 				GlobalToLocal(&theEvent.where);				// Send off the appropriate MOUSE_Rxxx event.
@@ -632,7 +632,7 @@ errtype mouse_next(mouse_event *res)
 					res->type = MOUSE_RUP;
 				res->timestamp = theEvent.when;
 				res->buttons = 2;
-				res->modifiers = (uchar)(theEvent.modifiers >> 8);
+				res->modifiers = (uint8_t)(theEvent.modifiers >> 8);
   				return OK;
 			}
 			else
@@ -658,7 +658,7 @@ errtype mouse_next(mouse_event *res)
 			else if (theEvent.what == mouseUp)
 				res->type = MOUSE_LUP;
 			res->buttons = 1;
-			res->modifiers = (uchar)(theEvent.modifiers >> 8);
+			res->modifiers = (uint8_t)(theEvent.modifiers >> 8);
 		}
   		return OK;
 	}
@@ -723,9 +723,9 @@ errtype mouse_flush(void)
 
 errtype mouse_generate(mouse_event e)
 {
-   short newin = mouseQueueIn, newout = mouseQueueOut;
-   short in = newin;
-   int i;
+   int16_t newin = mouseQueueIn, newout = mouseQueueOut;
+   int16_t in = newin;
+   int32_t i;
    errtype result = OK;
    Spew(DSRC_MOUSE_Generate,("Entering mouse_generate()\n"));
    mouseQueue[newin] = e;
@@ -756,7 +756,7 @@ errtype mouse_generate(mouse_event e)
 // data = data to be given to the func when called
 // *id = set to a unique id of the callback.
 
-errtype mouse_set_callback(mouse_callfunc f, void* data, int* id)
+errtype mouse_set_callback(mouse_callfunc f, void* data, int32_t* id)
 {
 //   Spew(DSRC_MOUSE_SetCallback,("entering mouse_set_callback(%x,%x,%x)\n",f,data,id));
 	for(*id = 0; *id  < mouseCalls; ++*id)
@@ -779,7 +779,7 @@ errtype mouse_set_callback(mouse_callfunc f, void* data, int* id)
 // mouse_unset_callback() un-registers a callback function
 // id = unique id of function to unset
 
-errtype mouse_unset_callback(int id)
+errtype mouse_unset_callback(int32_t id)
 {
 //	Spew(DSRC_MOUSE_UnsetCallback,("entering mouse_unset_callback(%d)\n",id));
 	if (id >= mouseCalls || id < 0)
@@ -796,7 +796,7 @@ errtype mouse_unset_callback(int id)
 //
 // mouse_constrain_xy() defines min/max coords
 //  ¥¥¥ don't do anything for now.  Will need to implement some day.
-errtype mouse_constrain_xy(short xl, short yl, short xh, short yh)
+errtype mouse_constrain_xy(int16_t xl, int16_t yl, int16_t xh, int16_t yh)
 {
 /*
    union REGS regs;
@@ -823,7 +823,7 @@ errtype mouse_constrain_xy(short xl, short yl, short xh, short yh)
 //
 // mouse_set_rate() sets mouse rate, doubling threshhold
 
-errtype mouse_set_rate(short xr, short yr, short thold)
+errtype mouse_set_rate(int16_t xr, int16_t yr, int16_t thold)
 {
    union REGS regs;
    Spew(DSRC_MOUSE_SetRate,("mouse_set_rate(%d,%d,%d)\n",xr,yr,thold));
@@ -848,7 +848,7 @@ errtype mouse_set_rate(short xr, short yr, short thold)
 //
 // mouse_get_rate() gets current sensitivity values
 
-errtype mouse_get_rate(short* xr, short* yr, short* thold)
+errtype mouse_get_rate(int16_t* xr, int16_t* yr, int16_t* thold)
 {
    union REGS regs;
    regs.x.eax = 0x001B;
@@ -867,7 +867,7 @@ errtype mouse_get_rate(short* xr, short* yr, short* thold)
 // mouse_set_timestamp_register() tells the mouse library where to get
 // timestamps.
 
-errtype mouse_set_timestamp_register(ulong* tstamp)
+errtype mouse_set_timestamp_register(uint32_t* tstamp)
 {
    mouse_ticks = tstamp;
    return OK;
@@ -879,9 +879,9 @@ errtype mouse_set_timestamp_register(ulong* tstamp)
 //	--------------------------------------------------------
 // For Mac version:  Just return TickCount().
 
-ulong mouse_get_time(void)
+uint32_t mouse_get_time(void)
 {
-	return (ulong)TickCount();
+	return (uint32_t)TickCount();
 //   return *mouse_ticks;
 }
 
@@ -916,7 +916,7 @@ static void ReadMouseState(mouse_state *pMouseState)
 //
 // mouse_extremes() finds the min and max "virtual" coordinates of the mouse position
 
-errtype mouse_extremes( short *xmin, short *ymin, short *xmax, short *ymax )
+errtype mouse_extremes( int16_t *xmin, int16_t *ymin, int16_t *xmax, int16_t *ymax )
 {
    union REGS regs;
 
@@ -940,9 +940,9 @@ errtype mouse_extremes( short *xmin, short *ymin, short *xmax, short *ymax )
 
 #define SHIFTDIFF 1
 
-static short shifted_button_state(short bstate)
+static int16_t shifted_button_state(int16_t bstate)
 {
-   short tmp = (bstate & MOUSE_RBUTTON) >> SHIFTDIFF;
+   int16_t tmp = (bstate & MOUSE_RBUTTON) >> SHIFTDIFF;
    tmp |= (bstate & MOUSE_LBUTTON) << SHIFTDIFF;
    tmp |= bstate & MOUSE_CBUTTON;
    return tmp;
@@ -963,7 +963,7 @@ errtype mouse_set_lefty(bool lefty)
 //
 // mouse_set_velocity_range() sets the range of valid mouse pointer velocities.
 
-errtype mouse_set_velocity_range(int xl, int yl, int xh, int yh)
+errtype mouse_set_velocity_range(int32_t xl, int32_t yl, int32_t xh, int32_t yh)
 {
    mouseVelXmin = xl;
    mouseVelYmin = yl;
@@ -972,7 +972,7 @@ errtype mouse_set_velocity_range(int xl, int yl, int xh, int yh)
    return OK;
 }
 
-errtype mouse_set_velocity(int x, int y)
+errtype mouse_set_velocity(int32_t x, int32_t y)
 {
    mouseVelX = max(mouseVelXmin,min(x,mouseVelXmax));
    mouseVelY = max(mouseVelYmin,min(y,mouseVelYmax));
@@ -981,12 +981,12 @@ errtype mouse_set_velocity(int x, int y)
    return OK;
 }
 
-errtype mouse_add_velocity(int x, int y)
+errtype mouse_add_velocity(int32_t x, int32_t y)
 {
    return mouse_set_velocity(mouseVelX + x, mouseVelY + y);
 }
 
-errtype mouse_get_velocity(int* x, int* y)
+errtype mouse_get_velocity(int32_t* x, int32_t* y)
 {
    *x = mouseVelX;
    *y = mouseVelY;

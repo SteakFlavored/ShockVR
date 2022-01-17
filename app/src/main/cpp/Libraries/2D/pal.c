@@ -64,25 +64,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* this needs to go into the fix library */
 
 
-static uchar tmp_pal [3*256];  /* bogus -- need to use the tmp buffer */
+static uint8_t tmp_pal [3*256];  /* bogus -- need to use the tmp buffer */
 
-void gr_set_gamma_pal (int start, int n, fix gamma)
+void gr_set_gamma_pal (int32_t start, int32_t n, fix gamma)
 {
-  int i;
+  int32_t i;
 
   /* set gamma corrected values from grd_pal into tmp buf */
   for (i=start*3;i<3*(start+n);++i)
-    tmp_pal[i] = (uchar)fix_rint(fix_pow(fix_make(grd_pal[i],0)/255,gamma)*255);
+    tmp_pal[i] = (uint8_t)fix_rint(fix_pow(fix_make(grd_pal[i],0)/255,gamma)*255);
 
   /* write tmp buf into hardware */
   gr_set_screen_pal (0, 256, tmp_pal);
 }
 
 /* copy user's palette into shadow palette, then set real palette. */
-void gr_set_pal (int start, int n, uchar *pal_data)
+void gr_set_pal (int32_t start, int32_t n, uint8_t *pal_data)
 {
-   int i;
-   uchar r,g,b;            /* red,green,blue values */
+   int32_t i;
+   uint8_t r,g,b;            /* red,green,blue values */
 
    if (n <= 0)
       return;
@@ -97,7 +97,7 @@ void gr_set_pal (int start, int n, uchar *pal_data)
 }
 
 /* copy the shadow palette to a destination buffer. */
-void gr_get_pal (int start, int n, uchar *pal_data)
+void gr_get_pal (int32_t start, int32_t n, uint8_t *pal_data)
 {
    if (n <= 0)
       return;

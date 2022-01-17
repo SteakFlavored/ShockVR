@@ -60,17 +60,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define QT_RAW MAKE4('r','a','w',' ')
 #define QT_RLE MAKE4('r','l','e',' ')
 
-extern uchar std8Palette[];	// Mac ROM standard 8-bit color palette
+extern uint8_t std8Palette[];	// Mac ROM standard 8-bit color palette
 										// (it's in mac8pal.c)
 
 //	Internal prototypes
 
 void ReadVarChunk(FILE *fpi, QT_ChunkHdr *phdr, void **p);
-ushort Flip2Val(ushort v);
+uint16_t Flip2Val(uint16_t v);
 fix ComputeTotalTime();
-void AllocateVideoBuffers(int width, int height);
-uchar *GetVideoFrame(QTM *pqtm, FILE *fpi, long size, ushort *pbmtype,
-	long *plength, LGRect *pUpdateArea);
+void AllocateVideoBuffers(int32_t width, int32_t height);
+uint8_t *GetVideoFrame(QTM *pqtm, FILE *fpi, int32_t size, uint16_t *pbmtype,
+	int32_t *plength, LGRect *pUpdateArea);
 
 /*
 //	-------------------------------------------------------------
@@ -86,7 +86,7 @@ static QTS_STSD *pStsd;
 	QT_ChunkHdr chunkHdr;
 	QT_ChunkInfo *pinfo;
 	MovieTrackStatus tkStat;
-	int itrack;
+	int32_t itrack;
 
 //	Clear QTM structure
 
@@ -224,12 +224,12 @@ static QTS_STSD *pStsd;
 								}
 							else if (pqtm->track[itrack].qt_stsd.idesc.clutId == 0)
 								{
-								ushort *psrc;
-								int i,index;
-								uchar *ppall;
+								uint16_t *psrc;
+								int32_t i,index;
+								uint8_t *ppall;
 
 								pqtm->track[itrack].palette = Malloc(768);
-								psrc = (ushort *) (((uchar *) pStsd) +
+								psrc = (uint16_t *) (((uint8_t *) pStsd) +
 									sizeof(QTS_STSD_Base) + sizeof(QT_ImageDesc) + 8);
 								for (i = 0; i < 256; i++)
 									{
@@ -342,7 +342,7 @@ static QTS_STSD *pStsd;
 
 void QuikFreeMovie(QTM *pqtm)
 {
-	int itrack;
+	int32_t itrack;
 	MovieTrack *ptrack;
 
 //	Free up stuff alloced inside each track
@@ -413,15 +413,15 @@ fix QuikComputeFrameRate(QTM *pqtm)
 //	compressed, the sample is decompressed.  If the compress flag is set,
 //	the sample is then recompressed, currently using RSD8 encoding.
 
-void *QuikGetVideoSample(QTM *pqtm, int isample, FILE *fpi, long *plength,
-	uchar *pbmtype, fix *ptime)
+void *QuikGetVideoSample(QTM *pqtm, int32_t isample, FILE *fpi, int32_t *plength,
+	uint8_t *pbmtype, fix *ptime)
 {
-static uchar *buff = NULL;
-static ulong buffLen = 0;
+static uint8_t *buff = NULL;
+static uint32_t buffLen = 0;
 
-	long length;
-	ushort bmtype;
-	uchar *p;
+	int32_t length;
+	uint16_t bmtype;
+	uint8_t *p;
 	Rect area;
 
 //	VIDEO sample: seek to proper spot in file, call getVideoFrame() to
@@ -464,7 +464,7 @@ static ulong buffLen = 0;
 //
 //	QuikGetAudioSample() gets the next audio sample.
 
-void *QuikGetAudioSample(QTM *pqtm, int isample, long *plength, fix *ptime)
+void *QuikGetAudioSample(QTM *pqtm, int32_t isample, int32_t *plength, fix *ptime)
 {
 //	AUDIO sample: set chunk length, return ptr into audio sample buffer
 //	for this track.
@@ -500,7 +500,7 @@ void *QuikGetAudioSample(QTM *pqtm, int isample, long *plength, fix *ptime)
 
 static void QuikProcessMovie(QTM *pqtm, FILE *fpi)
 {
-	int itrack;
+	int32_t itrack;
 	MovieTrack *ptrack;
 
 //	The looping statement is an important part of any computer language
@@ -517,8 +517,8 @@ static void QuikProcessMovie(QTM *pqtm, FILE *fpi)
 			ptrack->numSamps = ptrack->qt_stsz->numEntries;
 			ptrack->sampBuff = NULL;
 			ptrack->sampTime = Malloc(sizeof(fix) * ptrack->numSamps);
-			ptrack->sampSize = Malloc(sizeof(ulong) * ptrack->numSamps);
-			ptrack->sampOffset = Malloc(sizeof(ulong) * ptrack->numSamps);
+			ptrack->sampSize = Malloc(sizeof(uint32_t) * ptrack->numSamps);
+			ptrack->sampOffset = Malloc(sizeof(uint32_t) * ptrack->numSamps);
 			ComputeSampleTimesVideo(ptrack);
 			ComputeSampleSizesVideo(ptrack);
 			ComputeSampleOffsetsVideo(ptrack);
@@ -543,8 +543,8 @@ static void QuikProcessMovie(QTM *pqtm, FILE *fpi)
 			ptrack->sampBuff = Calloc(ptrack->numSamps * ptrack->audioBlockSize);
 			ReadAudioSamples(ptrack, fpi);
 			ptrack->sampTime = Malloc(sizeof(fix) * ptrack->numSamps);
-			ptrack->sampSize = Malloc(sizeof(ulong) * ptrack->numSamps);
-			ptrack->sampOffset = Malloc(sizeof(ulong) * ptrack->numSamps);
+			ptrack->sampSize = Malloc(sizeof(uint32_t) * ptrack->numSamps);
+			ptrack->sampOffset = Malloc(sizeof(uint32_t) * ptrack->numSamps);
 			ComputeSampleTimesAudio(pqtm, ptrack);
 			ComputeSampleSizesAudio(ptrack);
 			ComputeSampleOffsetsAudio(ptrack);
@@ -565,7 +565,7 @@ static void QuikProcessMovie(QTM *pqtm, FILE *fpi)
 static void ComputeSampleTimesVideo(MovieTrack *ptrack)
 {
 	fix timeScale,currTime;
-	int isample,i,j;
+	int32_t isample,i,j;
 
 //	Read time scale from MDHD media header chunk
 //	Assume track starts at beginning of movie (???)
@@ -603,7 +603,7 @@ static void ComputeSampleTimesVideo(MovieTrack *ptrack)
 
 static void ComputeSampleSizesVideo(MovieTrack *ptrack)
 {
-	int i;
+	int32_t i;
 
 //	If the sampSize field is set, all samples are the same size.
 //	Just set them all to this field.
@@ -635,8 +635,8 @@ static void ComputeSampleSizesVideo(MovieTrack *ptrack)
 
 static void ComputeSampleOffsetsVideo(MovieTrack *ptrack)
 {
-	int ichunk,isample,scTableIndex,numSampsThisChunk;
-	ulong chunkOffset,sampleOffset;
+	int32_t ichunk,isample,scTableIndex,numSampsThisChunk;
+	uint32_t chunkOffset,sampleOffset;
 	QT_Samp2Chunk *psamp2chunk;
 
 //	Initialize:
@@ -704,8 +704,8 @@ static void ComputeSampleOffsetsVideo(MovieTrack *ptrack)
 
 static void ReadAudioSamples(MovieTrack *ptrack, FILE *fpi)
 {
-	int ichunk;
-	long index,isample,sampleSize,numBytes;
+	int32_t ichunk;
+	int32_t index,isample,sampleSize,numBytes;
 
 //	All movies encountered so far has audio STTS tables with one
 //	time->sample table entry.  If this does not hold true for further
@@ -749,7 +749,7 @@ static void ReadAudioSamples(MovieTrack *ptrack, FILE *fpi)
 static void ComputeSampleTimesAudio(QTM *pqtm, MovieTrack *ptrack)
 {
 	fix currTime;
-	int i;
+	int32_t i;
 
 //	Set each chunk time, then advance time by the amount of time it takes
 //	to play the fixed-size chunk at the sampling rate.
@@ -770,8 +770,8 @@ static void ComputeSampleTimesAudio(QTM *pqtm, MovieTrack *ptrack)
 
 static void ComputeSampleSizesAudio(MovieTrack *ptrack)
 {
-	int i;
-	long totBytes;
+	int32_t i;
+	int32_t totBytes;
 
 	totBytes = ptrack->qt_stsz->numEntries * ptrack->qt_stsd.sdesc.numChans;
 
@@ -790,8 +790,8 @@ static void ComputeSampleSizesAudio(MovieTrack *ptrack)
 
 static void ComputeSampleOffsetsAudio(MovieTrack *ptrack)
 {
-	int i;
-	ulong offset;
+	int32_t i;
+	uint32_t offset;
 
 	for (i = 0, offset = 0; i < ptrack->numSamps; i++)
 		{
@@ -807,11 +807,11 @@ static void ComputeSampleOffsetsAudio(MovieTrack *ptrack)
 //	GetVideoFrame() gets the current video frame.  It decompresses it
 //	if necessary.
 
-static uchar *GetVideoFrame(QTM *pqtm, FILE *fpi, long size, ushort *pbmtype,
-	long *plength, Rect *pUpdateArea)
+static uint8_t *GetVideoFrame(QTM *pqtm, FILE *fpi, int32_t size, uint16_t *pbmtype,
+	int32_t *plength, Rect *pUpdateArea)
 {
-   long u_frame_size;
-   int numBytesPix;
+   int32_t u_frame_size;
+   int32_t numBytesPix;
 
 //	Figure # bytes per pixel
 
@@ -819,7 +819,7 @@ static uchar *GetVideoFrame(QTM *pqtm, FILE *fpi, long size, ushort *pbmtype,
 		numBytesPix = 3;
 	else
 		numBytesPix = 1;
-   u_frame_size = (long) pqtm->frameWidth * (long) pqtm->frameHeight *
+   u_frame_size = (int32_t) pqtm->frameWidth * (int32_t) pqtm->frameHeight *
       numBytesPix;
 
 //	Allocate buffers
@@ -879,16 +879,16 @@ static uchar *GetVideoFrame(QTM *pqtm, FILE *fpi, long size, ushort *pbmtype,
 
 #pragma off(unreferenced);
 
-static void DecompressRaw(QTM *pqtm, uchar *pd, uchar *ps, long csize,
-	int numBytesPix)
+static void DecompressRaw(QTM *pqtm, uint8_t *pd, uint8_t *ps, int32_t csize,
+	int32_t numBytesPix)
 {
-	int y,widthSrc;
+	int32_t y,widthSrc;
 
 	if ((pqtm->frameWidth & 3) == 0)
 		{
 		memcpy(pd, ps, csize);
       if (numBytesPix == 3)
-         SwapRgb(pd, (int) (csize / 3));
+         SwapRgb(pd, (int32_t) (csize / 3));
 		}
 	else
 		{
@@ -902,20 +902,20 @@ static void DecompressRaw(QTM *pqtm, uchar *pd, uchar *ps, long csize,
 			{
 			memcpy(pd, ps, pqtm->frameWidth * numBytesPix);
          if (numBytesPix == 3)
-            SwapRgb(pd, (int) pqtm->frameWidth);
+            SwapRgb(pd, (int32_t) pqtm->frameWidth);
 			pd += pqtm->frameWidth * numBytesPix;
 			ps += widthSrc;
 			}
 		}
 }
 
-void SwapRgb(uchar *p, int n)
+void SwapRgb(uint8_t *p, int32_t n)
 {
    while (n-- > 0)
       {
-      uchar r = *p;
-      uchar g = *(p+1);
-      uchar b = *(p+2);
+      uint8_t r = *p;
+      uint8_t g = *(p+1);
+      uint8_t b = *(p+2);
 
       *p = g;
       *(p+1) = b;
@@ -930,18 +930,18 @@ void SwapRgb(uchar *p, int n)
 //	DecompressRle() decompresses frames encoded by the ANIM codec.
 
 
-static void DecompressRle(QTM *pqtm, uchar *pd, uchar *ps, long csize)
+static void DecompressRle(QTM *pqtm, uint8_t *pd, uint8_t *ps, int32_t csize)
 {
-	uchar *spoint=ps+15;
-	uchar *dpoint=pd;
-	int i,j,k;
-	int width_count=0,height_count=0;
-	uchar quit_flag=0;
-	char command;
+	uint8_t *spoint=ps+15;
+	uint8_t *dpoint=pd;
+	int32_t i,j,k;
+	int32_t width_count=0,height_count=0;
+	uint8_t quit_flag=0;
+	int8_t command;
 
 	while (!quit_flag)
 		{
-		command = *(char *)(spoint++);
+		command = *(int8_t *)(spoint++);
 		if (command == -1)
 			{
 			if (*(spoint++) == 1)
@@ -1007,14 +1007,14 @@ static void DecompressRle(QTM *pqtm, uchar *pd, uchar *ps, long csize)
 
 static void ReadVarChunk(FILE *fpi, QT_ChunkHdr *phdr, void **p)
 {
-	long length;
+	int32_t length;
 
 	length = phdr->length - sizeof(QT_ChunkHdr);
 	*p = Malloc(length);
 	QuikReadChunk(fpi, phdr, *p, length);
 }
 
-static ushort Flip2Val(ushort v)
+static uint16_t Flip2Val(uint16_t v)
 {
 	return(((v & 0xFF) << 8) | (v >> 8));
 }

@@ -58,16 +58,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //		or use seed time to create helper tables.  You may reseed at any
 //		time:
 //
-//		RndSeed(&myRs,savedSeed);		// any ulong value will do
+//		RndSeed(&myRs,savedSeed);		// any uint32_t value will do
 //
 //		You can get the next random value produced by the stream via a variety
 //		of macros and functions, depending on the type and range of random
 //		value you want:
 //
-//		ulong rval = Rnd(&myRs);		// get next value (16-bit generators
+//		uint32_t rval = Rnd(&myRs);		// get next value (16-bit generators
 //												// use high 16 bits, low 16 bits set to 0)
 //
-//		long rval = RndRange(&myRs,low,high);	// get next value scaled into
+//		int32_t rval = RndRange(&myRs,low,high);	// get next value scaled into
 //												// range from low to high, inclusive
 //
 //		fix rval = RndFix(&myRs);		// get next value as fix, range 0 to .9999
@@ -84,17 +84,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //		(in rnd.h):
 //
 //		#define RNDSTREAM_WHIZ(name) RndStream name = {0,RndWhiz,RndWhizSeed};
-//		ulong RndWhiz(RndStream *prs);
-//		void RndWhizSeed(RndStream *prs, ulong seed);
+//		uint32_t RndWhiz(RndStream *prs);
+//		void RndWhizSeed(RndStream *prs, uint32_t seed);
 //
 //		(in rnd.c):
 //
-//		ulong RndWhiz(RndStream *prs)
+//		uint32_t RndWhiz(RndStream *prs)
 //			{
 //			return(.....);
 //			}
 //
-//		void RndWhizSeed(RndStream *prs, ulong seed)
+//		void RndWhizSeed(RndStream *prs, uint32_t seed)
 //			{
 //			..... (any 32-bit value should be acceptable, transform if needed)
 //			prs->curr = ...;
@@ -103,7 +103,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //		If your random number generator normally works in 32-bit values, fine.
 //		If it works in values less than 32 bits wide, you must ensure that
 //		the values returned by your generator move those bits into the high
-//		bits of the ulong.  Generators which use more than 32 bits are not
+//		bits of the uint32_t.  Generators which use more than 32 bits are not
 //		currently supported.
 /*
 * $Header: n:/project/lib/src/rnd/RCS/rnd.c 1.2 1993/06/01 10:59:38 rex Exp $
@@ -136,11 +136,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #if defined(powerc) || defined(__powerc)
 
-ulong high_umpy(ulong a, ulong b);					//  Code in RndAsm.s
+uint32_t high_umpy(uint32_t a, uint32_t b);					//  Code in RndAsm.s
 
 #else
-ulong high_umpy(ulong a, ulong b);					// Proto
-ulong asm high_umpy(ulong a, ulong b)
+uint32_t high_umpy(uint32_t a, uint32_t b);					// Proto
+uint32_t asm high_umpy(uint32_t a, uint32_t b)
  {
  	move.l	4(A7), d0
 	dc.w		0x4C2F,0x0401,0x0008		// 	mulu.l	8(A7),d1:d0
@@ -161,7 +161,7 @@ ulong asm high_umpy(ulong a, ulong b)
 //
 //	Returns: next random value scaled into range low->high, inclusive
 
-long RndRange(RndStream *prs, long low, long high)
+int32_t RndRange(RndStream *prs, int32_t low, int32_t high)
 {
 	return(low + high_umpy(Rnd(prs), (high - low) + 1));
 }
@@ -190,13 +190,13 @@ fix RndRangeFix(RndStream *prs, fix low, fix high)
 #define LC16_MULT 2053
 #define LC16_ADD 13849
 
-ulong RndLc16(RndStream *prs)
+uint32_t RndLc16(RndStream *prs)
 {
 	prs->curr = (prs->curr * LC16_MULT) + LC16_ADD;	// only low 16 bits matter
 	return(prs->curr << 16);								// move them to high 16
 }
 
-void RndLc16Seed(RndStream *prs, ulong seed)
+void RndLc16Seed(RndStream *prs, uint32_t seed)
 {
 	prs->curr = seed ^ (seed >> 16);		// make sure something in low 16 bits
 }
@@ -208,11 +208,11 @@ void RndLc16Seed(RndStream *prs, ulong seed)
 
 #define NUM_PASSES
 
-ulong RndGauss16(RndStream *prs)
+uint32_t RndGauss16(RndStream *prs)
 {
-	long gauss;
-	ushort rnum;
-	int i;
+	int32_t gauss;
+	uint16_t rnum;
+	int32_t i;
 
 	gauss = 0;
 	rnum = prs->curr;						// prs->curr uses only low 16 bits
@@ -231,12 +231,12 @@ ulong RndGauss16(RndStream *prs)
 	else if (gauss > 32767)
 		gauss = 32767;
 
-	prs->curr = gauss + 32768;			// set our current rnum as ushort
+	prs->curr = gauss + 32768;			// set our current rnum as uint16_t
 
 	return(prs->curr << 16);			// return in high 16 bits
 }
 
-void RndGauss16Seed(RndStream *prs, ulong seed)
+void RndGauss16Seed(RndStream *prs, uint32_t seed)
 {
 	prs->curr = seed ^ (seed >> 16);	// make sure something in low 16 bits
 }
@@ -250,28 +250,28 @@ void RndGauss16Seed(RndStream *prs, ulong seed)
 #define NUM_GAUSSBITS 13			// we'll use 13 bits of our 16 bit rnums
 #define SIZE_GAUSSTABLE (1<<NUM_GAUSSBITS)	// # entries in table = 8192
 #define MASK_GAUSSTABLE (SIZE_GAUSSTABLE-1)	// mask for lookup
-static ushort *gaussTable;			// ptr to our 16K (gasp) table
+static uint16_t *gaussTable;			// ptr to our 16K (gasp) table
 
-ulong RndGauss16Fast(RndStream *prs)
+uint32_t RndGauss16Fast(RndStream *prs)
 {
 //	Compute 16-bit lc rnum & look up 16-bit gaussian rnum in table.
 //	Return it in high 16 bits.
 
 	prs->curr = (prs->curr * LC16_MULT) + LC16_ADD;
-	return((ulong)(gaussTable[prs->curr & MASK_GAUSSTABLE]) << 16);
+	return((uint32_t)(gaussTable[prs->curr & MASK_GAUSSTABLE]) << 16);
 }
 
-void RndGauss16FastSeed(RndStream *prs, ulong seed)
+void RndGauss16FastSeed(RndStream *prs, uint32_t seed)
 {
-	int i;
-	ushort *pg;
+	int32_t i;
+	uint16_t *pg;
 
 //	If table not allocated, allocate it and fill it using the RndGauss16
 //	generator.
 
 	if (gaussTable == NULL)
 	{
-		pg = gaussTable = (ushort *)NewPtr(SIZE_GAUSSTABLE * sizeof(short));
+		pg = gaussTable = (uint16_t *)NewPtr(SIZE_GAUSSTABLE * sizeof(int16_t));
 		for (i = 0; i < SIZE_GAUSSTABLE; i++)
 		{
 			prs->curr = i;

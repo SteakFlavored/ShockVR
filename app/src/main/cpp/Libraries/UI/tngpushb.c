@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <_ui.h>
 
 // Initializes the TNG G
-errtype tng_pushbutton_init(void *ui_data, TNG *ptng, TNGStyle *sty, int button_type, void *display_data, LGPoint size)
+errtype tng_pushbutton_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t button_type, void *display_data, LGPoint size)
 {
    TNG_pushbutton *ppbtng;
 
@@ -55,12 +55,12 @@ errtype tng_pushbutton_destroy(TNG *ptng)
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_pushbutton_2d_draw(TNG *ptng, ushort partmask, LGPoint loc)
+errtype tng_pushbutton_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc)
 {
    TNG_pushbutton *ppbtng;
    LGRect r;
    Ref id;
-   ushort dummy;
+   uint16_t dummy;
    dummy = partmask;
 
 //   Spew(DSRC_UI_Pushbutton, ("TNG Pushbutton 2d Draw at (%d, %d) -- partmask = %x\n",loc.x,loc.y,partmask));
@@ -79,14 +79,14 @@ errtype tng_pushbutton_2d_draw(TNG *ptng, ushort partmask, LGPoint loc)
    switch(ppbtng->type)
    {
       case TNG_COLORED_TYPE:
-         gr_set_fcolor(*((int *)(ppbtng->disp_data)));
+         gr_set_fcolor(*((int32_t *)(ppbtng->disp_data)));
          gr_rect(r.ul.x, r.ul.y, r.lr.x, r.lr.y);
          break;
       case TNG_TEXT_TYPE:
          gr_set_fcolor(ptng->style->textColor);
-         TNG_DRAW_TEXT(ptng, (char *)(ppbtng->disp_data), r.ul.x, r.ul.y);
+         TNG_DRAW_TEXT(ptng, (int8_t *)(ppbtng->disp_data), r.ul.x, r.ul.y);
 //         gr_set_font(ppbtng->font_buf);
-//         gr_string((char *)(ppbtng->disp_data), r.ul.x, r.ul.y);
+//         gr_string((int8_t *)(ppbtng->disp_data), r.ul.x, r.ul.y);
          break;
       case TNG_RESOURCE_TYPE:
          id = *((Ref *)(ppbtng->disp_data));
@@ -104,15 +104,15 @@ errtype tng_pushbutton_size(TNG *ptng, LGPoint *ppt)
 }
 
 // Returns the current "value" of the TNG
-int tng_pushbutton_getvalue(TNG *ptng)
+int32_t tng_pushbutton_getvalue(TNG *ptng)
 {
    return(TNG_PB(ptng)->pressed);
 }
 
 // React appropriately for receiving the specified cooked key
-bool tng_pushbutton_keycooked(TNG *ptng, ushort key)
+bool tng_pushbutton_keycooked(TNG *ptng, uint16_t key)
 {
-   int code = key & 0xff;
+   int32_t code = key & 0xff;
    bool retval = FALSE;
 
    if (code == 0xd)
@@ -126,7 +126,7 @@ bool tng_pushbutton_keycooked(TNG *ptng, ushort key)
 }
 
 // React appropriately for receiving the specified mouse button event
-bool tng_pushbutton_mousebutt(TNG *ptng, uchar type, LGPoint loc)
+bool tng_pushbutton_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
    bool retval = FALSE;
 //   Spew(DSRC_UI_Pushbutton, ("After doing cb_mousebutt, inside pushbutton_mousebutt\n"));
@@ -140,7 +140,7 @@ bool tng_pushbutton_mousebutt(TNG *ptng, uchar type, LGPoint loc)
 }
 
 // Handle incoming signals
-bool tng_pushbutton_signal(TNG *ptng, ushort signal)
+bool tng_pushbutton_signal(TNG *ptng, uint16_t signal)
 {
    bool retval = FALSE;
 //   Spew(DSRC_UI_Pushbutton, ("After doing cb_signal, inside pushbutton_signal\n"));

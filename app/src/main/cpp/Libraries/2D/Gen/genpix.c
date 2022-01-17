@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void *grd_fill_upixel_func();
 
 /* understands fill type. */
-int gen_fill_pixel (long color, short x, short y)
+int32_t gen_fill_pixel (int32_t color, int16_t x, int16_t y)
 {
    if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
       return CLIP_ALL;
@@ -46,7 +46,7 @@ int gen_fill_pixel (long color, short x, short y)
 }
 
 /* ignores fill type. */
-int gen_set_pixel (long color, short x, short y)
+int32_t gen_set_pixel (int32_t color, int16_t x, int16_t y)
 {
    if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
       return CLIP_ALL;
@@ -55,7 +55,7 @@ int gen_set_pixel (long color, short x, short y)
    return CLIP_NONE;
 }
 
-int gen_set_pixel_interrupt(long color, short x, short y)
+int32_t gen_set_pixel_interrupt(int32_t color, int16_t x, int16_t y)
 {
    if (x<grd_clip.left || x>=grd_clip.right || y<grd_clip.top || y>=grd_clip.bot)
       return CLIP_ALL;

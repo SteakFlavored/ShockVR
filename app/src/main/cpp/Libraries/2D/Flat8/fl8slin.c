@@ -59,7 +59,7 @@ do { \
     p[x] = i; \
   } while (0)
 
-void gri_flat8_usline_norm (long c, long parm, grs_vertex *v0,  grs_vertex *v1)
+void gri_flat8_usline_norm (int32_t c, int32_t parm, grs_vertex *v0,  grs_vertex *v1)
 {
 #include "fl8slin.h"
 }
@@ -67,10 +67,10 @@ void gri_flat8_usline_norm (long c, long parm, grs_vertex *v0,  grs_vertex *v1)
 #undef macro_plot_i
 #define macro_plot_i(x,p,i) \
 do { \
-    p[x] = (long) (((uchar *) parm)[i]); \
+    p[x] = (int32_t) (((uint8_t *) parm)[i]); \
    } while (0)
 
-void gri_flat8_usline_clut (long c, long parm, grs_vertex *v0,  grs_vertex *v1)
+void gri_flat8_usline_clut (int32_t c, int32_t parm, grs_vertex *v0,  grs_vertex *v1)
 {
 #include "fl8slin.h"
 }
@@ -81,7 +81,7 @@ do {\
     p[x] = p[x] ^ i; \
   } while (0)
 
-void gri_flat8_usline_xor (long c, long parm, grs_vertex *v0,  grs_vertex *v1)
+void gri_flat8_usline_xor (int32_t c, int32_t parm, grs_vertex *v0,  grs_vertex *v1)
 {
 #include "fl8slin.h"
 }
@@ -94,7 +94,7 @@ do { \
    p[x] = i; \
    } while (0)
 
-void gri_flat8_usline_blend (long c, long parm, grs_vertex *v0,  grs_vertex *v1)
+void gri_flat8_usline_blend (int32_t c, int32_t parm, grs_vertex *v0,  grs_vertex *v1)
 {
 #include "fl8slin.h"
 }

@@ -48,18 +48,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* returns the width in pixels of c in the specified font */
 
-void gr_font_char_size (grs_font *f, char c, short *w, short *h)
+void gr_font_char_size (grs_font *f, int8_t c, int16_t *w, int16_t *h)
 {
-   short *off_tab;            /* character offset table */
-   short offset;              /* offset of current character */
+   int16_t *off_tab;            /* character offset table */
+   int16_t offset;              /* offset of current character */
 
-   if ((uchar)c < f->min || (uchar)c > f->max) return;
+   if ((uint8_t)c < f->min || (uint8_t)c > f->max) return;
    off_tab = f->off_tab;
-   offset = off_tab[(uchar)c - f->min];
-   if ((uchar)c < f->min || (uchar)c > f->max)
+   offset = off_tab[(uint8_t)c - f->min];
+   if ((uint8_t)c < f->min || (uint8_t)c > f->max)
       *w = 0;
    else
-      *w = off_tab[(uchar)c - f->min+1]-offset;
+      *w = off_tab[(uint8_t)c - f->min+1]-offset;
    *h = f->h;
 }
 

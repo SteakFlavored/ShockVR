@@ -47,20 +47,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <keydefs.h>
 #include <musicai.h>       // for stop_digi_fx()
 */
-int loadcount = 0;
+int32_t loadcount = 0;
 
 extern Id critter_id_table[NUM_CRITTER][NUM_CRITTER_POSTURES];
 extern Id posture_bases[];
 
 extern void free_textures(void);
-int flush_resource_cache(void);
+int32_t flush_resource_cache(void);
 
-int hand_fnum, digi_fnum, critter_fnum, critter_fnum2,texture_fnum;
+int32_t hand_fnum, digi_fnum, critter_fnum, critter_fnum2,texture_fnum;
 
-int flush_resource_cache(void)
+int32_t flush_resource_cache(void)
 {
    Id curr_id = ID_MIN;
-   int count = 0;
+   int32_t count = 0;
    while (curr_id < resDescMax)
    {
       if (ResInUse(curr_id) && ResPtr(curr_id) && !ResLocked(curr_id))
@@ -73,7 +73,7 @@ int flush_resource_cache(void)
    return(count);
 }
 
-errtype free_dynamic_memory(int mask)
+errtype free_dynamic_memory(int32_t mask)
 {
    // Release textures
    if (loadcount & DYNMEM_TEXTURES & mask)
@@ -107,10 +107,10 @@ errtype free_dynamic_memory(int mask)
    return(OK);
 }
 
-errtype load_dynamic_memory(int mask)
+errtype load_dynamic_memory(int32_t mask)
 {
    FSSpec	fSpec;
-   extern short _new_mode;
+   extern int16_t _new_mode;
 
   FSMakeFSSpec(gDataVref, gDataDirID, "\ptexture.rsrc", &fSpec);
    if (_new_mode != -1)
@@ -167,11 +167,11 @@ errtype load_dynamic_memory(int mask)
 #define MAX_PTRS           			25
 #define MINIMUM_SLORK_SIZE 	100000
 
-int slorkatron_memory_check()
+int32_t slorkatron_memory_check()
 {
-   int retval,size;
-   int ptr_count,i;
-   uchar *mem_ptrs[MAX_PTRS];
+   int32_t retval,size;
+   int32_t ptr_count,i;
+   uint8_t *mem_ptrs[MAX_PTRS];
 
    for (ptr_count = 0; ptr_count < MAX_PTRS; ptr_count++)
       mem_ptrs[ptr_count] = NULL;
@@ -183,7 +183,7 @@ int slorkatron_memory_check()
 
    while ((size > MINIMUM_SLORK_SIZE) && (ptr_count < MAX_PTRS))
    {
-      mem_ptrs[ptr_count] = (uchar *)NewPtr(size);		//  mem_ptrs[ptr_count] = Malloc(size);
+      mem_ptrs[ptr_count] = (uint8_t *)NewPtr(size);		//  mem_ptrs[ptr_count] = Malloc(size);
       if (mem_ptrs[ptr_count] == NULL)
          size -= DECREMENT_INTERVAL;
       else

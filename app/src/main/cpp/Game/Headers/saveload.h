@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Prototypes
 errtype save_current_map(FSSpec* fSpec, Id id_num, bool flush_mem, bool pack);
 errtype load_current_map(Id id_num, FSSpec* dpath);
-bool go_to_different_level(int targlevel);
+bool go_to_different_level(int32_t targlevel);
 
 // Globals
 

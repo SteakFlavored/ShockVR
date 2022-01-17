@@ -34,11 +34,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ID2SPEC(id)  (objs[(id)].specID)
 
 #ifdef __OBJSIM_SRC
-int ObjBaseArray[255];
-int ClassBaseArray[16][16];
+int32_t ObjBaseArray[255];
+int32_t ClassBaseArray[16][16];
 #else
-extern int ObjBaseArray[255];
-extern int ClassBaseArray[16][16];
+extern int32_t ObjBaseArray[255];
+extern int32_t ClassBaseArray[16][16];
 #endif
 
 #define OBJ_PLAYER_CAMERA  0
@@ -84,28 +84,28 @@ Ref obj_cache_ref(ObjID id);
 #define ANIM_3D(x)      (((x) & 0x0400) >> 10)
 
 // Textured Polygons
-grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *type, Ref *ref);
+grs_bitmap *bitmap_from_tpoly_data(int32_t tpdata, uint8_t *scale, int32_t *index, uint8_t *type, Ref *ref);
 
 // Prototypes
 errtype obj_init();
 errtype obj_shutdown();
-ObjID obj_create_base(int triple);
+ObjID obj_create_base(int32_t triple);
 ObjID obj_create_clone(ObjID dna);
 errtype obj_move_to_vel(ObjID id, ObjLoc *newloc, bool phys_tel, fix x_dot, fix y_dot, fix z_dot);
 errtype obj_move_to(ObjID id, ObjLoc *newloc, bool phys_tel);
 bool obj_destroy(ObjID id);
 errtype obj_holocaust();
-bool obj_holocaust_func(short keycode, ulong context, void* data);
+bool obj_holocaust_func(int16_t keycode, uint32_t context, void* data);
 errtype obj_load_properties();
 errtype obj_create_player(ObjLoc *plr_loc);
-Ref ref_from_critter_data(ObjID oid, int triple, byte posture, short frame, short view);
+Ref ref_from_critter_data(ObjID oid, int32_t triple, int8_t posture, int16_t frame, int16_t view);
 errtype obj_zero_unused();
-errtype obj_model_hack(ObjID id, uchar *hack_x, uchar *hack_y, uchar *hack_z, uchar *hack_type);
+errtype obj_model_hack(ObjID id, uint8_t *hack_x, uint8_t *hack_y, uint8_t *hack_z, uint8_t *hack_type);
 bool obj_combat_destroy(ObjID id);
-ObjID object_place(int triple, LGPoint square);
-ushort obj_floor_compute(ObjID id, uchar flrh);
-ushort obj_floor_height(ObjID id);
-errtype obj_physics_refresh_area(short x, short y, bool use_floor);
+ObjID object_place(int32_t triple, LGPoint square);
+uint16_t obj_floor_compute(ObjID id, uint8_t flrh);
+uint16_t obj_floor_height(ObjID id);
+errtype obj_physics_refresh_area(int16_t x, int16_t y, bool use_floor);
 
 ObjID physics_handle_to_id(physics_handle p);
 

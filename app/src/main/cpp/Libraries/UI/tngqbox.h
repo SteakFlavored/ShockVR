@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * $Log: tngqbox.h $
  * Revision 1.13  1994/03/10  04:31:20  xemu
- * uint slots
+ * uint32_t slots
  *
  * Revision 1.12  1993/12/31  18:01:38  xemu
  * rename slots
@@ -77,9 +77,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Typedefs
 typedef struct _QuickboxSlot {
-   char *label;                // Text Label
-   ulong options;              // Options mask
-   int   vartype;              // Type of the slot
+   int8_t *label;                // Text Label
+   uint32_t options;              // Options mask
+   int32_t   vartype;              // Type of the slot
    void *var;                  // Pointer to actual variable
    void *p1, *p2;              // parameters
    struct _QuickboxSlot *next; // next slot in the box
@@ -92,17 +92,17 @@ typedef struct {
    TNG *tng_data;
    LGPoint size, slot_size, spacing, border;
    Ref left_id, right_id;
-   int aux_size, internal_margin;
-   ushort options;
+   int32_t aux_size, internal_margin;
+   uint16_t options;
    QuickboxSlot *slots;
    QuickboxSlot *current_slot;
 } TNG_quickbox;
 
 // SlotTypes
-#define QB_INT_SLOT        0   // var is an int *
-#define QB_SHORT_SLOT      1   // var is a short *
-#define QB_BYTE_SLOT       2   // var is a ubyte *
-#define QB_TEXT_SLOT       3   // var is a char *
+#define QB_INT_SLOT        0   // var is an int32_t *
+#define QB_SHORT_SLOT      1   // var is a int16_t *
+#define QB_BYTE_SLOT       2   // var is a uint8_t *
+#define QB_TEXT_SLOT       3   // var is a int8_t *
 #define QB_BOOL_SLOT       4   // var is a bool, and should be displayed as TRUE/FALSE
 #define QB_PUSHBUTTON_SLOT 5   // var is a GadgetCallback to be called when the button using the label as text is pressed
                                // requires parameters to be set.  P1 is the user_data for the callback.  If P2 is null,
@@ -110,7 +110,7 @@ typedef struct {
                                // pointer to a resource to display in the button, and the label will appear off to the
                                // right, like for other slot types
 #define QB_FIX_SLOT        6   // fixpoint number
-#define QB_UINT_SLOT        7   // var is an uint *
+#define QB_UINT_SLOT        7   // var is an uint32_t *
 
 // Overall Options
 // Align up all the data fields nicely
@@ -184,17 +184,17 @@ typedef struct {
 // Prototypes
 
 // Initializes the TNG
-errtype tng_quickbox_init(void *ui_data, TNG *ptng, TNGStyle *sty, ushort options, LGPoint slot_size, LGPoint spacing, LGPoint border,
+errtype tng_quickbox_init(void *ui_data, TNG *ptng, TNGStyle *sty, uint16_t options, LGPoint slot_size, LGPoint spacing, LGPoint border,
    Ref left_id, Ref right_id);
 
 // Add a line to a quickbox.  slot_type describes the type of slot, var is a pointer to the variable to be
 // displaying, and slot_options describes any additional modifiers to the qbox.  Note that some bizarre-o
 // combinations of options and types might not be implemented.
-errtype tng_quickbox_add(char *label, int slot_type, void *var, ulong slot_options);
+errtype tng_quickbox_add(int8_t *label, int32_t slot_type, void *var, uint32_t slot_options);
 
 // Just like gad_qbox_add but allows two parameters to be set for the slot.  Certain slot options require
 // this form of accessing.
-errtype tng_quickbox_add_parm(char *label, int slot_type, void *var, ulong slot_options, void *parm1, void *parm2);
+errtype tng_quickbox_add_parm(int8_t *label, int32_t slot_type, void *var, uint32_t slot_options, void *parm1, void *parm2);
 
 // Deallocate all memory used by the TNG
 errtype tng_quickbox_destroy(TNG *ptng);
@@ -204,25 +204,25 @@ errtype tng_quickbox_end();
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_quickbox_2d_draw(TNG *ptng, ushort partmask, LGPoint loc);
+errtype tng_quickbox_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc);
 
 // Fill in ppt with the size of the TNG
 errtype tng_quickbox_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG
-int tng_quickbox_getvalue(TNG *ptng);
+int32_t tng_quickbox_getvalue(TNG *ptng);
 
 // React appropriately for receiving the specified cooked key
-bool tng_quickbox_keycooked(TNG *ptng, ushort key);
+bool tng_quickbox_keycooked(TNG *ptng, uint16_t key);
 
 // React appropriately for receiving the specified mouse button event
-bool tng_quickbox_mousebutt(TNG *ptng, uchar type, LGPoint loc);
+bool tng_quickbox_mousebutt(TNG *ptng, uint8_t type, LGPoint loc);
 
 // Handle incoming signals
-bool tng_quickbox_signal(TNG *ptng, ushort signal);
+bool tng_quickbox_signal(TNG *ptng, uint16_t signal);
 
 // Rename a slot
-errtype tng_quickbox_rename_slot(TNG *qb, int slot_num, char *new_name);
+errtype tng_quickbox_rename_slot(TNG *qb, int32_t slot_num, int8_t *new_name);
 
 // Macros
 #define TNG_QB(ptng) ((TNG_quickbox *)(ptng->type_data))

@@ -42,15 +42,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define NULL_BARK_TIMEOUT 3
 
-#define mfd_bark_string (*(int*)(&player_struct.mfd_func_data[MFD_BARK_FUNC][0]))
-#define mfd_bark_speaker (*(ObjID*)(&player_struct.mfd_func_data[MFD_BARK_FUNC][sizeof(int)]))
-#define mfd_bark_color  (player_struct.mfd_func_data[MFD_BARK_FUNC][sizeof(int)+sizeof(ObjID)])
-#define mfd_bark_mug (player_struct.mfd_func_data[MFD_BARK_FUNC][sizeof(int)+sizeof(ObjID)+sizeof(uchar)])
+#define mfd_bark_string (*(int32_t*)(&player_struct.mfd_func_data[MFD_BARK_FUNC][0]))
+#define mfd_bark_speaker (*(ObjID*)(&player_struct.mfd_func_data[MFD_BARK_FUNC][sizeof(int32_t)]))
+#define mfd_bark_color  (player_struct.mfd_func_data[MFD_BARK_FUNC][sizeof(int32_t)+sizeof(ObjID)])
+#define mfd_bark_mug (player_struct.mfd_func_data[MFD_BARK_FUNC][sizeof(int32_t)+sizeof(ObjID)+sizeof(uint8_t)])
 
-extern void mfd_bark_expose(MFD* mfd, ubyte control);
-extern void long_bark(ObjID speaker_id, uchar mug_id, int string_id, ubyte color);
+extern void mfd_bark_expose(MFD* mfd, uint8_t control);
+extern void long_bark(ObjID speaker_id, uint8_t mug_id, int32_t string_id, uint8_t color);
 
 typedef struct {
-   ushort timestamp;
-   ushort type;
+   uint16_t timestamp;
+   uint16_t type;
 } BarkSchedEvent;

@@ -39,14 +39,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "InitInt.h"
 
 /* flag for whether 2d system has been fired up. */
-int grd_active = 0;
+int32_t grd_active = 0;
 
 /* start up 2d system.  try to detect what kind of video hardware is
    present, call device-dependent initialization, and save state.
    returns same as gr_detect() 0 if all is well, or error code. */
-int gri_init(void)
+int32_t gri_init(void)
 {
-   int err;
+   int32_t err;
    MemStack *tmp;
 
    if (grd_active != 0)

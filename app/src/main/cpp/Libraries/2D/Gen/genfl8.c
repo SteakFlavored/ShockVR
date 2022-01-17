@@ -69,12 +69,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* bozo flat8 bitmap drawer. */
-void gen_flat8_ubitmap (grs_bitmap *bm, short x, short y)
+void gen_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   uchar *src  = bm->bits;
-   short right = x+bm->w;
-   short bot   = y+bm->h;
-   short cur_x;
+   uint8_t *src  = bm->bits;
+   int16_t right = x+bm->w;
+   int16_t bot   = y+bm->h;
+   int16_t cur_x;
 
    if (bm->flags & BMF_TRANS) {
       for ( ; y<bot; y++, src+=bm->row-bm->w) {
@@ -92,12 +92,12 @@ void gen_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 }
 
 /* clip flat8 bitmap against cliprect and jump to unclipped drawer. */
-int gen_flat8_bitmap (grs_bitmap *bm, short x, short y)
+int32_t gen_flat8_bitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   short w,h;
-   uchar *p;
-   int extra;
-   int code = CLIP_NONE;
+   int16_t w,h;
+   uint8_t *p;
+   int32_t extra;
+   int32_t code = CLIP_NONE;
 
    /* save stuff that clipping changes. */
    w = bm->w; h = bm->h; p = bm->bits;

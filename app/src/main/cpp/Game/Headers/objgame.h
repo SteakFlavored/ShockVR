@@ -42,11 +42,11 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   ubyte trap_type;
-   ubyte destroy_count;
-   uint comparator;
-   uint p1,p2,p3,p4;
-   short access_level;
+   uint8_t trap_type;
+   uint8_t destroy_count;
+   uint32_t comparator;
+   uint32_t p1,p2,p3,p4;
+   int16_t access_level;
 } ObjFixture;
 
 typedef struct {
@@ -60,11 +60,11 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   short locked;
-   ubyte stringnum;
-   ubyte cosmetic_value;
-   ubyte access_level;
-   ubyte autoclose_time;
+   int16_t locked;
+   uint8_t stringnum;
+   uint8_t cosmetic_value;
+   uint8_t access_level;
+   uint8_t autoclose_time;
    ObjID other_half;
 } ObjDoor;
 
@@ -79,8 +79,8 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   ubyte start_frame;
-   ubyte end_frame;
+   uint8_t start_frame;
+   uint8_t end_frame;
    ObjID owner;
 } ObjAnimating;
 
@@ -95,10 +95,10 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   ubyte trap_type;
-   ubyte destroy_count;
-   uint comparator;
-   uint p1,p2,p3,p4;
+   uint8_t trap_type;
+   uint8_t destroy_count;
+   uint32_t comparator;
+   uint32_t p1,p2,p3,p4;
 } ObjTrap;
 
 typedef struct {
@@ -112,21 +112,21 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   int contents1;
-   int contents2;
-   ubyte dim_x;
-   ubyte dim_y;
-   ubyte dim_z;
-   int data1;
+   int32_t contents1;
+   int32_t contents2;
+   uint8_t dim_x;
+   uint8_t dim_y;
+   uint8_t dim_z;
+   int32_t data1;
 } ObjContainer;
 
 // Class typedefs
 typedef struct FixtureProp {
-   ubyte characteristics;
+   uint8_t characteristics;
 } FixtureProp;
 
 typedef struct DoorProp {
-   ubyte security_level;         // i.e difficulty to unlock
+   uint8_t security_level;         // i.e difficulty to unlock
 } DoorProp;
 
 #define ANIM_FLAG_NONE     0
@@ -134,114 +134,114 @@ typedef struct DoorProp {
 #define ANIM_FLAG_REVERSE  2
 
 typedef struct AnimatingProp {
-   ubyte    speed;
-   ubyte    flags;
+   uint8_t    speed;
+   uint8_t    flags;
 } AnimatingProp;
 
 typedef struct TrapProp {
-   ubyte dummy;
+   uint8_t dummy;
 } TrapProp;
 
 typedef struct ContainerProp {
    ObjID contents;           // obviously not the way to do it, but you get the idea
-   ubyte num_contents;
+   uint8_t num_contents;
 } ContainerProp;
 
 // Subclass typedefs
 typedef struct ControlFixtureProp {
-   ubyte dummy;
+   uint8_t dummy;
 } ControlFixtureProp;
 
 typedef struct ReceptacleFixtureProp {
-   ubyte dummy;
+   uint8_t dummy;
 } ReceptacleFixtureProp;
 
 typedef struct TerminalFixtureProp {
-   ubyte dummy;
+   uint8_t dummy;
 } TerminalFixtureProp;
 
 typedef struct PanelFixtureProp {
-   ubyte dummy;
+   uint8_t dummy;
 } PanelFixtureProp;
 
 typedef struct VendingFixtureProp {
-   ubyte dummy;
+   uint8_t dummy;
 } VendingFixtureProp;
 
 typedef struct CyberFixtureProp {
-   ubyte dummy;
+   uint8_t dummy;
 } CyberFixtureProp;
 
 typedef struct _NormalDoorProp {
-   ubyte dummy;
+   uint8_t dummy;
 } NormalDoorProp;
 
 typedef struct _DoorwaysDoorProp {
-   ubyte dummy;
+   uint8_t dummy;
 } DoorwaysDoorProp;
 
 typedef struct _ForceDoorProp {
-   ubyte dummy;
+   uint8_t dummy;
 } ForceDoorProp;
 
 typedef struct _ElevatorDoorProp {
-   ubyte dummy;
+   uint8_t dummy;
 } ElevatorDoorProp;
 
 typedef struct _SpecialDoorProp {
-   ubyte dummy;
+   uint8_t dummy;
 } SpecialDoorProp;
 
 typedef struct _ObjectsAnimatingProp {
-   ubyte dummy;
+   uint8_t dummy;
 } ObjectsAnimatingProp;
 
 typedef struct _TransitoryAnimatingProp {
-   ubyte dummy;
+   uint8_t dummy;
 } TransitoryAnimatingProp;
 
 typedef struct _ExplosionAnimatingProp {
-   ubyte    frame_explode;
+   uint8_t    frame_explode;
 } ExplosionAnimatingProp;
 
 typedef struct _TriggerTrapProp {
-   ubyte dummy;
+   uint8_t dummy;
 } TriggerTrapProp;
 
 typedef struct _FeedbacksTrapProp {
-   ubyte dummy;
+   uint8_t dummy;
 } FeedbacksTrapProp;
 
 typedef struct _SecretTrapProp {
-   ubyte dummy;
+   uint8_t dummy;
 } SecretTrapProp;
 
 typedef struct _ActualContainerProp {
-   ubyte dummy;
+   uint8_t dummy;
 } ActualContainerProp;
 
 typedef struct _WasteContainerProp {
-   ubyte dummy;
+   uint8_t dummy;
 } WasteContainerProp;
 
 typedef struct _LiquidContainerProp {
-   ubyte dummy;
+   uint8_t dummy;
 } LiquidContainerProp;
 
 typedef struct _MutantCorpseContainerProp {
-   ubyte dummy;
+   uint8_t dummy;
 } MutantCorpseContainerProp;
 
 typedef struct _RobotCorpseContainerProp {
-   ubyte dummy;
+   uint8_t dummy;
 } RobotCorpseContainerProp;
 
 typedef struct _CyborgCorpseContainerProp {
-   ubyte dummy;
+   uint8_t dummy;
 } CyborgCorpseContainerProp;
 
 typedef struct _OtherCorpseContainerProp {
-   ubyte dummy;
+   uint8_t dummy;
 } OtherCorpseContainerProp;
 
 // Quantity defines - subclasses

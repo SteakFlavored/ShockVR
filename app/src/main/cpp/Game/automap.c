@@ -84,15 +84,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -----------
 //  PROTOTYPES
 // -----------
-int mfd_to_map(int mid);
-void automap_expose_cross_section(MFD *m, ubyte tic);
-void automap_expose_zoom(MFD *m, ubyte tac);
+int32_t mfd_to_map(int32_t mid);
+void automap_expose_cross_section(MFD *m, uint8_t tic);
+void automap_expose_zoom(MFD *m, uint8_t tac);
 
 
 // -------
 // Globals
 // -------
-static long last_update=0;
+static int32_t last_update=0;
 extern bool full_game_3d;
 
 // ===========================================================================
@@ -116,9 +116,9 @@ errtype mfd_map_init(MFD_Func *)
    return OK;
 }
 
-int mfd_to_map(int mid)
+int32_t mfd_to_map(int32_t mid)
 {
-   int i=0, m;
+   int32_t i=0, m;
 
    for(m=0;m<mid;m++) {
       if(mfd_get_func(m,player_struct.mfd_current_slots[m])==MFD_MAP_FUNC)
@@ -139,9 +139,9 @@ int mfd_to_map(int mid)
 bool mfd_map_handler(MFD *m, uiEvent *e)
 {
    bool retval = FALSE;
-   ubyte map_state;
+   uint8_t map_state;
    uiMouseEvent *mouse;
-   int mapid=mfd_to_map(m->id);
+   int32_t mapid=mfd_to_map(m->id);
 
    // If we don't have an automap, we shouldn't do shit.
    if (player_struct.hardwarez[HARDWARE_AUTOMAP] == 0) return FALSE;
@@ -151,7 +151,7 @@ bool mfd_map_handler(MFD *m, uiEvent *e)
 
    if (e->pos.y>m->rect.lr.y-8)     // bottom row
    {
-      int xp=e->pos.x-m->rect.ul.x;
+      int32_t xp=e->pos.x-m->rect.ul.x;
 
       if (xp<MODE_RIGHT)
       {
@@ -171,7 +171,7 @@ bool mfd_map_handler(MFD *m, uiEvent *e)
       }
       else if (GetAutomapMode(mapid)==AUTOMAP_ZOOM)
       {
-         int zfac;
+         int32_t zfac;
          play_digi_fx(SFX_MAP_ZOOM,1);
          if (xp<(MFD_VIEW_WID/2))
             zfac=1;
@@ -182,14 +182,14 @@ bool mfd_map_handler(MFD *m, uiEvent *e)
    }
    else if(GetAutomapMode(mapid)!=AUTOMAP_STATION)
    {
-      char buf[80];
-      int tmpx=e->pos.x-m->rect.ul.x, tmpy=e->pos.y-m->rect.ul.y;
+      int8_t buf[80];
+      int32_t tmpx=e->pos.x-m->rect.ul.x, tmpy=e->pos.y-m->rect.ul.y;
       if (amap_deal_with_map_click(oAMap(mapid),&tmpx,&tmpy)!=NULL)
       {
          retval = amap_get_note(oAMap(mapid),buf);
          if (full_game_3d && !retval)
          {
-            extern bool mfd_scan_opacity(int mfd,LGPoint pos);
+            extern bool mfd_scan_opacity(int32_t mfd,LGPoint pos);
             retval = mfd_scan_opacity(m->id,e->pos);
          }
          if (retval)
@@ -211,18 +211,18 @@ bool mfd_map_handler(MFD *m, uiEvent *e)
 //
 #include "fullscrn.h"
 
-void mfd_map_expose(MFD *m, ubyte control)
+void mfd_map_expose(MFD *m, uint8_t control)
 {
-   ubyte map_state, last_map_state;
-   int mapid=mfd_to_map(m->id);
+   uint8_t map_state, last_map_state;
+   int32_t mapid=mfd_to_map(m->id);
 
    if ((control & MFD_EXPOSE) && ((!full_game_3d)||(full_visible&(visible_mask(m->id)))))
    {
       // If we don't have an automap, we shouldn't do shit.
       if (player_struct.hardwarez[HARDWARE_AUTOMAP] == 0)
        {
-         char buf[128];
-         short w,h;
+         int8_t buf[128];
+         int16_t w,h;
          gr_push_canvas(pmfd_canvas);
          ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
          if (!full_game_3d)
@@ -310,12 +310,12 @@ void mfd_map_expose(MFD *m, ubyte control)
 
 #define BUF_SIZE 10
 
-void automap_expose_cross_section(MFD *, ubyte)
+void automap_expose_cross_section(MFD *, uint8_t)
 {
    grs_font *mfdamapfont;
-   char buf[BUF_SIZE];
-   short w,h;
-   extern char *fsmap_get_lev_str(char* buf, int size);
+   int8_t buf[BUF_SIZE];
+   int16_t w,h;
+   extern int8_t *fsmap_get_lev_str(int8_t* buf, int32_t size);
 
    draw_res_bm(MKREF(RES_mfdArtOverlays,MFD_ART_STATN), 0, 0);
    draw_res_bm(MKREF(RES_mfdArtOverlays,MFD_ART_LVL(player_struct.level)), 0, 0);
@@ -343,10 +343,10 @@ void automap_expose_cross_section(MFD *, ubyte)
 //
 // The expose function for drawing the zoomed in mode for the automap
 
-void automap_expose_zoom(MFD *m, ubyte)
+void automap_expose_zoom(MFD *m, uint8_t)
 {
    grs_font *mfdamapfont;
-   int mapid=mfd_to_map(m->id);
+   int32_t mapid=mfd_to_map(m->id);
 
    amap_draw(oAMap(mapid),0);
    mfdamapfont=(grs_font *)ResLock(RES_mfdFont);

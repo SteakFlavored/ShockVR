@@ -123,9 +123,9 @@ frc* full_map_context;
 
 #define FSMAP_OPP 0x8000
 // note this makes the init code 0b00010100000101, or 0x505
-static ushort btn_to_code[]={DO_ZOOMIN,DO_ZOOMOUT,DO_RECENTER,DO_FULLMSG,DO_SECUR,DO_CRITTER,DO_SCAN,0};
+static uint16_t btn_to_code[]={DO_ZOOMIN,DO_ZOOMOUT,DO_RECENTER,DO_FULLMSG,DO_SECUR,DO_CRITTER,DO_SCAN,0};
 
-static ushort btn_to_amap[]={0,0,FSMAP_OPP|AMAP_TRACK_OBJ,AMAP_FULL_MSG,AMAP_SHOW_SEC,AMAP_SHOW_CRIT|AMAP_SHOW_ROB,AMAP_SHOW_SENS,0};
+static uint16_t btn_to_amap[]={0,0,FSMAP_OPP|AMAP_TRACK_OBJ,AMAP_FULL_MSG,AMAP_SHOW_SEC,AMAP_SHOW_CRIT|AMAP_SHOW_ROB,AMAP_SHOW_SENS,0};
 
 #define NUM_SIDE_BUTTONS 7
 
@@ -133,15 +133,15 @@ static ushort btn_to_amap[]={0,0,FSMAP_OPP|AMAP_TRACK_OBJ,AMAP_FULL_MSG,AMAP_SHO
 
 // should alloc and dealloc these?, or take them out of some memory pool
 static grs_canvas fsmap_actual, fsmap_bregion;
-static ushort     fsmap_buttons, fsmap_btn_pending;
-static uchar      bcolor[]={GREEN_8_BASE+7,GREEN_8_BASE+3,GREEN_8_BASE,GREEN_8_BASE+1};
-static int        cur_btn_hgt;
-static char      *cur_mapnote_base=NULL;
-static char      *cur_mapnote_ptr=NULL;
+static uint16_t     fsmap_buttons, fsmap_btn_pending;
+static uint8_t      bcolor[]={GREEN_8_BASE+7,GREEN_8_BASE+3,GREEN_8_BASE,GREEN_8_BASE+1};
+static int32_t        cur_btn_hgt;
+static int8_t      *cur_mapnote_base=NULL;
+static int8_t      *cur_mapnote_ptr=NULL;
 static bool       last_msg_ok=TRUE;
-static ulong      map_scrolltime=0L;
-static int      map_scroll_d=0;
-static char       map_scroll_code=0;
+static uint32_t      map_scrolltime=0;
+static int32_t      map_scroll_d=0;
+static int8_t       map_scroll_code=0;
 
 bool pend_check(void);
 
@@ -156,18 +156,18 @@ bool pend_check(void);
 // --------------------
 void trail_sp_punt(void);
 void fsmap_button_redraw(void);
-char *fsmap_get_lev_str(char* buf, int siz);
+int8_t *fsmap_get_lev_str(int8_t* buf, int32_t siz);
 void fsmap_interface_draw(void);
 void fsmap_message_redraw(void);
 void fsmap_draw_map(void);
-void fsmap_draw_screen(uint chng);
-int s_bf(int btn_id,int todo);
+void fsmap_draw_screen(uint32_t chng);
+int32_t s_bf(int32_t btn_id,int32_t todo);
 void fsmap_new_msg(curAMap *amptr);
 bool amap_scroll_handler(uiEvent* ev, LGRegion *r, void* user_data);
 void edit_mapnote(curAMap* amptr);
-bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte but);
-bool zoom_deal(curAMap *amptr, int btn);
-bool flags_deal(curAMap *amptr, int btn, int todo);
+bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t but);
+bool zoom_deal(curAMap *amptr, int32_t btn);
+bool flags_deal(curAMap *amptr, int32_t btn, int32_t todo);
 void btn_init(curAMap *amptr);
 
 
@@ -179,7 +179,7 @@ void btn_init(curAMap *amptr);
 void fsmap_startup(void)
 {
 	void btn_init(curAMap *amptr);
-	int 			i, n=0, f, b, todo;
+	int32_t 			i, n=0, f, b, todo;
 	grs_font	*fsmap_font;
 
 	// Do appropriate stuff to enter into amap mode here....
@@ -235,7 +235,7 @@ void fsmap_startup(void)
 
 void fsmap_free(void)
 {
-   int i;
+   int32_t i;
    for(i=0;i<NUM_MFDS;i++) {
       oAMap(i)->flags=oAMap(MFD_FULLSCR_MAP)->flags;
       oAMap(i)->flags |= AMAP_TRACK_OBJ;
@@ -264,8 +264,8 @@ void trail_sp_punt(void)
 
 void fsmap_button_redraw(void)
 {
-   int i, cb, bsx, bsy, cx, cy;
-   char button_buf[BUTTON_BUF_SIZE];
+   int32_t i, cb, bsx, bsy, cx, cy;
+   int8_t button_buf[BUTTON_BUF_SIZE];
 
    gr_push_canvas(&fsmap_bregion);
    for (cb=fsmap_buttons,i=0; i<NUM_SIDE_BUTTONS; i++,cb>>=2)
@@ -305,10 +305,10 @@ void fsmap_button_redraw(void)
    chg_unset_flg(AMAP_BUTTON_EV);
 }
 
-char *fsmap_get_lev_str(char* buf, int siz)
+int8_t *fsmap_get_lev_str(int8_t* buf, int32_t siz)
 {
-   extern char *level_to_floor(int lev_num, char *buf);
-   int l;
+   extern int8_t *level_to_floor(int32_t lev_num, int8_t *buf);
+   int32_t l;
 
    get_string(REF_STR_Level,buf,siz);
    l=strlen(buf);
@@ -323,7 +323,7 @@ char *fsmap_get_lev_str(char* buf, int siz)
 #define TRIOP_STRING_BASE  REF_STR_AutomapSpew
 void fsmap_interface_draw(void)
 {
-   char buf[TRIOP_BUF_SIZE];
+   int8_t buf[TRIOP_BUF_SIZE];
    gr_set_fcolor(GREEN_8_BASE);
    ss_box(0,0,grd_bm.w-1,grd_bm.h-1);
    ss_box(AMAP_LFT(grd_bm.w)-1,AMAP_TOP(grd_bm.h)-1,AMAP_RGT(grd_bm.w)+1,AMAP_BOT(grd_bm.h)+1);
@@ -339,9 +339,9 @@ void fsmap_interface_draw(void)
 #define MSG_BUF2_SIZE   25
 void fsmap_message_redraw(void)
 {
-   char buf[FSMAP_MAX_MSG];
-   char buf2[MSG_BUF2_SIZE];
-   short x,y,w,dummy;
+   int8_t buf[FSMAP_MAX_MSG];
+   int8_t buf2[MSG_BUF2_SIZE];
+   int16_t x,y,w,dummy;
 
    gr_set_font(fsmap_actual.gc.font);  	// so we dont need this as another global, ick
    gr_set_fcolor(0xFF);                   		// and someone keeps secretly reseting the font to ickiness
@@ -378,7 +378,7 @@ void fsmap_message_redraw(void)
 void fsmap_draw_map(void)
 {
 	FrameDesc	*f;
-//   short w,h;
+//   int16_t w,h;
 
 //   w=res_bm_width(REF_IMG_bmTriLogoBack);
 //   h=res_bm_height(REF_IMG_bmTriLogoBack);
@@ -390,7 +390,7 @@ void fsmap_draw_map(void)
    f = (FrameDesc *)RefLock(REF_IMG_bmTriLogoBack);
    if (f == NULL)
       critical_error(CRITERR_MEM|9);
-   f->bm.bits = (uchar *)(f+1);
+   f->bm.bits = (uint8_t *)(f+1);
    gr_scale_bitmap(&f->bm, (grd_bm.w - (f->bm.w*2))/2, (grd_bm.h - (f->bm.h*2))/2,
    							f->bm.w*2, f->bm.h*2);
    RefUnlock(REF_IMG_bmTriLogoBack);
@@ -402,9 +402,9 @@ void fsmap_draw_map(void)
 
 #define AMAP_ALLEVS (AMAP_FULLEXPOSE|AMAP_MAP_EV|AMAP_BUTTON_EV|AMAP_MESSAGE_EV)
 
-void fsmap_draw_screen(uint chng)
+void fsmap_draw_screen(uint32_t chng)
 {
-   int l,t,r,b;
+   int32_t l,t,r,b;
    LGRect cr;
 
    gr_push_canvas(grd_screen_canvas);
@@ -433,7 +433,7 @@ extern void mlimbs_do_ai();
 void automap_loop(void)
 {
    extern void loop_debug(void);
-   uint cf = _change_flag;
+   uint32_t cf = _change_flag;
 
 //KLC - does nothing      loopLine(GL|0x1D,synchronous_update());
    if (music_on)
@@ -454,10 +454,10 @@ void automap_loop(void)
    }
 }
 
-int s_bf(int btn_id,int todo)
+int32_t s_bf(int32_t btn_id,int32_t todo)
 {
-   int prtlmask=1<<(btn_id<<1);
-   int fullmask=prtlmask+(prtlmask<<1);
+   int32_t prtlmask=1<<(btn_id<<1);
+   int32_t fullmask=prtlmask+(prtlmask<<1);
    switch (todo)
    {
       case AMAP_TOGGLE: fsmap_buttons=(fsmap_buttons&~fullmask)+((fsmap_buttons&fullmask)^prtlmask); break; // xor on/off
@@ -505,8 +505,8 @@ bool pend_check(void)
 
 bool amap_scroll_handler(uiEvent* ev, LGRegion *, void* )
 {
-   int elapsed, now;
-   short code;
+   int32_t elapsed, now;
+   int16_t code;
    curAMap* amptr=oAMap(MFD_FULLSCR_MAP);
 
    if(map_scroll_code==0) return FALSE;
@@ -539,7 +539,7 @@ bool amap_scroll_handler(uiEvent* ev, LGRegion *, void* )
 void edit_mapnote(curAMap* amptr)
 {
    if ((cur_mapnote_ptr==NULL)&&(amptr->note_obj)) {
-      char buf[FSMAP_MAX_MSG];
+      int8_t buf[FSMAP_MAX_MSG];
       strcpy(buf,amap_note_string(amptr->note_obj));
       amap_str_delete(amap_note_string(amptr->note_obj));
       fsmap_new_msg(amptr);
@@ -549,10 +549,10 @@ void edit_mapnote(curAMap* amptr)
    }
 }
 
-bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte )
+bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t )
 {
 	extern void mouse_unconstrain(void);
-	int scregion=0;
+	int32_t scregion=0;
 
 	if(action&MOUSE_UPS)
 	{
@@ -586,8 +586,8 @@ bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte )
 			// KLC - changed to treat clicks and keyboard equivalents a little differently
 			// 		  in the Mac version.  Doesn't call the hack_kb_callback anymore.
 
-			int 	btn = y/BTN_HGT_MUL;
-   			char	todo = AMAP_TOGGLE;
+			int32_t 	btn = y/BTN_HGT_MUL;
+   			int8_t	todo = AMAP_TOGGLE;
 
 			if (btn == BTN_ZOOMIN || btn == BTN_ZOOMOUT)
 			{
@@ -698,9 +698,9 @@ bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte )
    return TRUE;
 }
 
-bool zoom_deal(curAMap *amptr, int btn)
+bool zoom_deal(curAMap *amptr, int32_t btn)
 {
-   int zfac;
+   int32_t zfac;
    bool res;
    // now, set up for real
    if (btn==BTN_ZOOMIN) zfac=1; else zfac=-1;
@@ -720,10 +720,10 @@ bool zoom_deal(curAMap *amptr, int btn)
    return res;
 }
 
-bool flags_deal(curAMap *amptr, int btn, int todo)
+bool flags_deal(curAMap *amptr, int32_t btn, int32_t todo)
 {
-   short flgs=btn_to_amap[btn];
-   int todo_bf=todo;
+   int16_t flgs=btn_to_amap[btn];
+   int32_t todo_bf=todo;
    bool res;
 
 //   mprintf("Think deal with %x - %d\n",flgs,todo);
@@ -744,7 +744,7 @@ bool flags_deal(curAMap *amptr, int btn, int todo)
 
 void btn_init(curAMap *amptr)
 {
-   int i,j;
+   int32_t i,j;
    for (i=3,j=(1<<(3*2)); i<BTN_NUM_REAL; i++,j<<=2)
       if (fsmap_buttons&j)
       {
@@ -756,10 +756,10 @@ void btn_init(curAMap *amptr)
          flags_deal(amptr,i,AMAP_UNSET);
 }
 
-bool amap_kb_callback(curAMap *amptr, int code)
+bool amap_kb_callback(curAMap *amptr, int32_t code)
 {
-//   char codewas;
-   int exp=0xff; // will get zeroed in case default for codes we ignore
+//   int8_t codewas;
+   int32_t exp=0xff; // will get zeroed in case default for codes we ignore
 
 /*KLC - we're just forgetting most of the key equivalents for now
 
@@ -801,7 +801,7 @@ bool amap_kb_callback(curAMap *amptr, int code)
       }
       else if (isprint(code))
       {  // make sure it isnt too long
-         int clen=strlen(cur_mapnote_base)+1;
+         int32_t clen=strlen(cur_mapnote_base)+1;
 
          if (amap_str_deref(cur_mapnote_base)+clen<AMAP_STRING_SIZE)
 	         if(clen<FSMAP_MAX_MSG) {
@@ -809,7 +809,7 @@ bool amap_kb_callback(curAMap *amptr, int code)
 	               memcpy(cur_mapnote_ptr+1,cur_mapnote_ptr,strlen(cur_mapnote_ptr));
 	            else
 	               *(cur_mapnote_ptr+1)='\0';
-	            *cur_mapnote_ptr++=(char)code;
+	            *cur_mapnote_ptr++=(int8_t)code;
 	         }
       }
       else if (code==KEY_BS)
@@ -828,7 +828,7 @@ bool amap_kb_callback(curAMap *amptr, int code)
 
    else
    {
-      char btn=-1, todo=AMAP_TOGGLE;
+      int8_t btn=-1, todo=AMAP_TOGGLE;
       map_scroll_code=0;
       switch (code&(~KB_FLAG_DOWN))
       {

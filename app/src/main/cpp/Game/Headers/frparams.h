@@ -43,51 +43,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct {
    struct {
-      uchar main:1;                    /* any textures? */
-      uchar wall:1;                    /*  if any, any walls */
-      uchar floor:1;                   /*          any floor */
-      uchar ceiling:1;                 /*          any ceiling */
-      uchar cyber:1;                   /* cyberspace instead */
-      uchar cyber_full:1;              /* full cursors */
+      uint8_t main:1;                    /* any textures? */
+      uint8_t wall:1;                    /*  if any, any walls */
+      uint8_t floor:1;                   /*          any floor */
+      uint8_t ceiling:1;                 /*          any ceiling */
+      uint8_t cyber:1;                   /* cyberspace instead */
+      uint8_t cyber_full:1;              /* full cursors */
    } faces;
    struct {
-      uchar highlights:1;              /* tilemap highlights of cones */
-      uchar tilecursor:1;              /* show the tilemap cursor in 3d */
-      uchar nodraw:1;                  /* dont actually render FB */
+      uint8_t highlights:1;              /* tilemap highlights of cones */
+      uint8_t tilecursor:1;              /* show the tilemap cursor in 3d */
+      uint8_t nodraw:1;                  /* dont actually render FB */
    } features;
    struct {
 #ifdef C_WERE_SUPER_COOL
-      uchar lighting:1;                /* any lighting at all? */
-      uchar terrain:1;                 /* terrain light values checked and used? */
-      uchar camera:1;                  /* camera light values used */
-      uchar normal_chk:1;              /* use normal when computing wall lighting */
+      uint8_t lighting:1;                /* any lighting at all? */
+      uint8_t terrain:1;                 /* terrain light values checked and used? */
+      uint8_t camera:1;                  /* camera light values used */
+      uint8_t normal_chk:1;              /* use normal when computing wall lighting */
 #else
-      uchar flags;                     /* 0,0,0,0,any,terr,cam,normal */
+      uint8_t flags;                     /* 0,0,0,0,any,terr,cam,normal */
 #endif
-      int   normal_shf;                /* what to shift normal by when adding to dist */
-      uchar rad[2];                    /* inner, outer lighting radius */
-      uchar base[2];                   /* inner, outer light values */
+      int32_t   normal_shf;                /* what to shift normal by when adding to dist */
+      uint8_t rad[2];                    /* inner, outer lighting radius */
+      uint8_t base[2];                   /* inner, outer light values */
       fix   slope;                     /* slope and yintercept */
       fix   yint;                      /*  of lighting line */
-      short global_mod;                /* change to all lighting */
+      int16_t global_mod;                /* change to all lighting */
    } lighting;
    struct {
-      uchar qscale_obj;                /* radius at which to qscale objects */
-      uchar qscale_crit;               /* radius at which to qscale critters */
-      uchar qscale_texture;            /* radius at which to qscale textures */
-      uchar detail;                    /* detail setting */
-      uchar clear_color;               /* color to clear background too */
-      uchar drop_rad[TM_SIZE_CNT];     /* radii to switch to lower res tmaps */
-      uchar odrop_rad[TM_SIZE_CNT];    /* original (base) drop radii to switch to lower res tmaps */
-      uchar radius;                    /* maximal view radius */
-      uchar show_all:1;                /* render whole world - no clip */
-      uchar cone_only:1;               /* no 2 1/2D clip, cone only */
+      uint8_t qscale_obj;                /* radius at which to qscale objects */
+      uint8_t qscale_crit;               /* radius at which to qscale critters */
+      uint8_t qscale_texture;            /* radius at which to qscale textures */
+      uint8_t detail;                    /* detail setting */
+      uint8_t clear_color;               /* color to clear background too */
+      uint8_t drop_rad[TM_SIZE_CNT];     /* radii to switch to lower res tmaps */
+      uint8_t odrop_rad[TM_SIZE_CNT];    /* original (base) drop radii to switch to lower res tmaps */
+      uint8_t radius;                    /* maximal view radius */
+      uint8_t show_all:1;                /* render whole world - no clip */
+      uint8_t cone_only:1;               /* no 2 1/2D clip, cone only */
    } view;
    struct {
-      long  last_chk_time;
-      long  last_frame_cnt;
-      long  tot_frame_cnt;
-      long  last_frame_len;
+      int32_t  last_chk_time;
+      int32_t  last_frame_cnt;
+      int32_t  tot_frame_cnt;
+      int32_t  last_frame_len;
    } time;
 } fauxrend_parameters;
 

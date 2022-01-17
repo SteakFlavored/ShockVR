@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Robot.cc is a test object for the Citadel physics system.  It uses the Citadel database
 //	for B/C, and should be fairly simple and robust.  Use the vector integrator!
@@ -37,8 +37,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "EDMS_chk.h"
 
 //extern "C" {
-//#include <i86.h>   
-//#include <dpmi.h>   
+//#include <i86.h>
+//#include <dpmi.h>
 #include "ss_flet.h"
 //}
 
@@ -47,24 +47,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern EDMS_Argblock_Pointer	A;
 extern Q	S[MAX_OBJ][7][4],
 		I[MAX_OBJ][DOF_MAX];
-extern int	no_no_not_me[MAX_OBJ];
+extern int32_t	no_no_not_me[MAX_OBJ];
 
 #define SOLITION_FRAME_CNT
 
 //	Functions...
 //	============
-extern void	( *idof_functions[MAX_OBJ] )( int ),
-		( *equation_of_motion[MAX_OBJ][7] )( int );
+extern void	( *idof_functions[MAX_OBJ] )( int32_t ),
+		( *equation_of_motion[MAX_OBJ][7] )( int32_t );
 
 
 //	Callbacks themselves...
 //	-----------------------
-extern void		( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int badness, long DATA1, long data2, fix loc[3] ),
+extern void		( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int32_t badness, int32_t DATA1, int32_t data2, fix loc[3] ),
 			( *EDMS_wall_contact )( physics_handle caller );
 
 
-//extern int	are_you_there( int );			//Collisions...
-//extern int	check_for_hit( int );
+//extern int32_t	are_you_there( int32_t );			//Collisions...
+//extern int32_t	check_for_hit( int32_t );
 
 
 static Q		fix_one = 1.,
@@ -81,7 +81,7 @@ static Q		object0, object1, object2, object3, object4,		//Howzat??
 
 //	First, here are the equations of motion (outdated!)...
 //	======================================================
-int     EDMS_robot_global_badness_indicator = 0;
+int32_t     EDMS_robot_global_badness_indicator = 0;
 
 //	Variables that are NOT on the stack...
 //	======================================
@@ -98,7 +98,7 @@ static Q	checker,
 		V_wall1;
 
 static Q	drug,
-		butt; 
+		butt;
 
 const Q		wt_pos = 0.001,
 		wt_neg = -wt_pos;
@@ -110,12 +110,12 @@ const Q		wt_pos = 0.001,
 
 //	Here are the internal degrees of freedom:
 //	=========================================
-void	robot_idof( int object ) {
+void	robot_idof( int32_t object ) {
 
 
 //	Call me instead of having special code everywhere...
 //	====================================================
-extern void	shall_we_dance( int object, Q& result0, Q& result1, Q& result2 );
+extern void	shall_we_dance( int32_t object, Q& result0, Q& result1, Q& result2 );
 
 
 	A00 = A[object][0][0];						//Dereference NOW!
@@ -137,8 +137,8 @@ extern void	shall_we_dance( int object, Q& result0, Q& result1, Q& result2 );
 			A20,
 			I[object][22],
 			on2ph[object] );
-        
-//        if (EDMS_robot_global_badness_indicator != 0 ) { 
+
+//        if (EDMS_robot_global_badness_indicator != 0 ) {
 //                                        mout << "!Robot.cc: thinks that X: " << A00 << ", Y: " << A10 << ", Z: " << A20 << "\n";
 //                                        mout << "!Robot.cc: has object number " << object << ", ph: " << on2ph[object] << "\n";
 //                                       }
@@ -226,8 +226,8 @@ Q               w0, w1, w2, w3, w4;
 //      ====================================
         if ( ss_edms_bcd_flags & SS_BCD_REPUL_ON ) {
 
-//              Get the speed... 
-Q               repulsor_speed = 21;                                                                                        
+//              Get the speed...
+Q               repulsor_speed = 21;
                 if ( (ss_edms_bcd_flags & SS_BCD_REPUL_SPD) == SS_BCD_REPUL_NORM ) repulsor_speed = 7;
 
 //              Assume we're going up, unless...
@@ -249,7 +249,7 @@ Q               io17 = repulsor_speed;
 
                 object9 = 1;
 
-                
+
          }
 
 
@@ -263,12 +263,12 @@ Q       o1 = 0, o0 = 0;
 		if ( ( checker > 0 ) && (abs(I[object][18]) + abs(I[object][19]) > .01) ) {
 
 Q                       ratio = (I[object][18]+A[object][0][1])*object0 + (I[object][19]+A[object][1][1])*object1;
-                        
+
 Q                       io17 = .5;
 
                         if ( ratio <= 0 ) { o1 = object1; o0 = object0; }
                         else  o1 = o0 = io17 = 0;
-                                                     
+
 	        	I[object][18] = -.3*I[object][22]*o0*object8/checker + .1*I[object][18];
 		        I[object][19] = -.3*I[object][22]*o1*object8/checker + .1*I[object][19];
 //	        	io18 = -.3*I[object][22]*o0*object8/checker + .1*I[object][18];
@@ -278,7 +278,7 @@ Q                       io17 = .5;
 //                    ===============
                       I[object][17] = 800*( io17 - A[object][2][1] );
 
-                       
+
                 }
         }
 
@@ -302,20 +302,20 @@ Q                       io17 = .5;
 	S[object][2][2] = butt*(          object8*object2			//Elasticity...
 					- object6				//Drag...
 					+ I[object][17]				//Control...
-					+ drug*A21 
+					+ drug*A21
                                         + object12 )
 
 					- I[object][25];			//Grav'ty...
 
 
 	S[object][0][2] = butt*(          object8*object0	 		//Elasticity...
-					- object4				//Drag... 
+					- object4				//Drag...
 					+ object9*I[object][18]			//Control...
 					+ drug*A01				//Drag...
 					+ object10 );				//Collide...
 
 
-	S[object][1][2] = butt*(	  object8*object1			//Elasticity... 
+	S[object][1][2] = butt*(	  object8*object1			//Elasticity...
  					- object5				//Drag...
 					+ object9*I[object][19]			//Control...
 					+ drug*A11				//Drag...
@@ -332,7 +332,7 @@ Q                       io17 = .5;
 //        mout << "3X: " << object8*object0 << " 3Y: " << object8*object1 << " 3Z: " << object8*object2 << "\n";
 //        mout << "FX: " << object8*object0 - object4 << " FY: " << object8*object1 - object5 << " FZ: " << object8*object2 - object6 << "\n";
 //        mout << "xx: " << drug*A01 << " yy: " << drug*A11 << " zz: " << drug*A21 << "\n";
-//          mout << " ZZ: " << S[object][2][2] << " : " << butt*(object8*object2 - object6) - I[object][25] << 
+//          mout << " ZZ: " << S[object][2][2] << " : " << butt*(object8*object2 - object6) - I[object][25] <<
 //          " : " << drug*A21 << " : " << object12 << " : " << I[object][17] << "\n";
 //        mout << I[object][17] << " : " << object << "\n";
 
@@ -367,7 +367,7 @@ Q	dam2 = object8*object2 - object6;
 		S[object][1][2] += /* I[object][24]* */ I[object][33]*check1;
 		S[object][2][2] += /* I[object][24]* */ I[object][34]*check2;
 
-//      mout << "  add " << /* I[object][24]* */ I[object][32]*check0 << " " << 
+//      mout << "  add " << /* I[object][24]* */ I[object][32]*check0 << " " <<
 //                          /* I[object][24]* */ I[object][33]*check0 << " " <<
 //                          /* I[object][24]* */ I[object][34]*check0 << "\n";
 
@@ -380,7 +380,7 @@ Q	dam2 = object8*object2 - object6;
 		I[object][34] = 0;
 
 		}
-					
+
 
 //	That's all, folks...
 //	====================
@@ -392,7 +392,7 @@ Q	dam2 = object8*object2 - object6;
 
 //	We might for now want to set some external forces on the robot...
 //	==================================================================
-void	robot_set_control( int robot, Q thrust_lever, Q attitude_jet, Q jump ) {
+void	robot_set_control( int32_t robot, Q thrust_lever, Q attitude_jet, Q jump ) {
 
 	sincos( S[robot][3][0], &object0, &object1 );
 
@@ -424,7 +424,7 @@ void	robot_set_control( int robot, Q thrust_lever, Q attitude_jet, Q jump ) {
 
 //	Here is a separate control routine for robots under AI domination...
 //	====================================================================
-void	robot_set_ai_control( int robot, Q desired_heading, Q desired_speed, Q sidestep, Q urgency, Q &there_yet, Q distance ) {
+void	robot_set_ai_control( int32_t robot, Q desired_heading, Q desired_speed, Q sidestep, Q urgency, Q &there_yet, Q distance ) {
 
 const Q	one_by_pi     = 0.31830,
 	pi	      = 3.14159,
@@ -442,7 +442,7 @@ const Q	one_by_pi     = 0.31830,
 	if ( desired_heading < 0 )      desired_heading += two_pi;
 
 
-//	Nota bene:  Here the desired heading is specified is in the range 
+//	Nota bene:  Here the desired heading is specified is in the range
 //		    0 <= desired_heading < 2pi.	Urgency is a number in the range
 //		    0 <= urgency <= 20.  A zero urgency will produce no control input.
 //		    ==================================================================
@@ -466,7 +466,7 @@ Q	speed = sqrt( S[robot][0][1]*S[robot][0][1] + S[robot][1][1]*S[robot][1][1] ),
 //	Set the control...
 //	------------------
 	I[robot][16] = .1*urgency*direction*I[robot][29];
-	
+
 //	Speed...
 //	--------
 	I[robot][17] = urgency*(1 / (10*there_yet+5) )*(desired_speed - speed);		//temporary...
@@ -500,10 +500,10 @@ Q	speed = sqrt( S[robot][0][1]*S[robot][0][1] + S[robot][1][1]*S[robot][1][1] ),
 
 
 
-int make_robot( Q init_state[6][3], Q params[10] ) {
+int32_t make_robot( Q init_state[6][3], Q params[10] ) {
 
 //	Sets up everything needed to manufacture a robot with initial state vector
-//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the 
+//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the
 //	object number, or else a negative error code (see Soliton.CPP for error handling and codes).
 //	============================================================================================
 
@@ -511,12 +511,12 @@ int make_robot( Q init_state[6][3], Q params[10] ) {
 
 //	Have some variables...
 //	======================
-int	object_number = -1,						//Three guesses...
+int32_t	object_number = -1,						//Three guesses...
 	error_code = -1;						//Guilty until...
 
 //	We need ignorable coordinates...
 //	================================
-extern void	null_function( int );
+extern void	null_function( int32_t );
 
 
 
@@ -532,15 +532,15 @@ extern void	null_function( int );
 
 //		Now we can create the robot:  first dump the initial state vector...
 //		=====================================================================
-		for ( int coord = 0; coord < 6; coord++ ) {
-		for ( int deriv = 0; deriv < 3;	deriv++ ) {			//Has alpha now...
-		S[object_number][coord][deriv] = 
+		for ( int32_t coord = 0; coord < 6; coord++ ) {
+		for ( int32_t deriv = 0; deriv < 3;	deriv++ ) {			//Has alpha now...
+		S[object_number][coord][deriv] =
 		A[object_number][coord][deriv] = init_state[coord][deriv];	//For collisions...
 		}}
 
 //		Put in the appropriate robot parameters...
 //		===========================================
-		for ( int copy = 0; copy < 10; copy++ ) {
+		for ( int32_t copy = 0; copy < 10; copy++ ) {
 		I[object_number][copy + 20] = params[copy];
 		}
 		I[object_number][30] = ROBOT;					//Hey, you are what you eat.
@@ -576,15 +576,15 @@ extern void	null_function( int );
 //		=============================================================
 		idof_functions[object_number] = robot_idof;
 
-		equation_of_motion[object_number][0] = 
-		equation_of_motion[object_number][1] = 
-		equation_of_motion[object_number][2] = 
-		equation_of_motion[object_number][3] = 
+		equation_of_motion[object_number][0] =
+		equation_of_motion[object_number][1] =
+		equation_of_motion[object_number][2] =
+		equation_of_motion[object_number][3] =
 		equation_of_motion[object_number][4] = 		  		//Nice symmetries, huh.
 		equation_of_motion[object_number][5] = null_function;
 
 
-//               for (int tt = 0; tt < 10; tt++ ) mout << params[tt] << " : ";
+//               for (int32_t tt = 0; tt < 10; tt++ ) mout << params[tt] << " : ";
 //               mout << "\n";
 
 //		Wakee wakee...
@@ -596,7 +596,7 @@ extern void	null_function( int );
 //		Things seem okay...
 //		===================
 		error_code = object_number;
-	
+
 
 	}
 

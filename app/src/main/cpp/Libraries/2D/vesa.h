@@ -43,6 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VESA_GET_MODE 0x4f03
 
 /* VESA support routines prototypes. */
-extern int vesa_get_info (grs_sys_info *info);
-extern int vesa_get_gran (int mode);
+extern int32_t vesa_get_info (grs_sys_info *info);
+extern int32_t vesa_get_gran (int32_t mode);
 #endif /* !__VESA_H */

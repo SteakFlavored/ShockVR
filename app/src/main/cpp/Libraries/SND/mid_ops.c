@@ -32,26 +32,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------
 //  Return a reference to a Tune Player.
 //---------------------------------------------------------
-TunePlayer snd_get_sequence(int seq_id)
+TunePlayer snd_get_sequence(int32_t seq_id)
 {
    return (_snd_seq_player[seq_id]);
 }
 
 /*¥¥¥
-snd_midi_parms *snd_sequence_parms(int hnd_id)
+snd_midi_parms *snd_sequence_parms(int32_t hnd_id)
 {
    return &_snd_midi_prm[hnd_id];
 }
 
 #ifdef TMP_MONO_DEBUG
-uchar *mono_base_b=0xb0000;
+uint8_t *mono_base_b=0xb0000;
 #define mono_ch(x,ch) mono_base_b[x * 2] = ch
 #else
 #define mono_ch(x,ch)
 #endif
 
 #ifdef DEBUG_KILL
-char pickch(int val)
+int8_t pickch(int32_t val)
 {
    if (val<10) return '0'+val;
    else if (val<16) return 'A'+val-10;
@@ -61,7 +61,7 @@ char pickch(int val)
 
 void cdecl seq_EOS_callback(SEQUENCE *S)
 {
-   int seq_id;
+   int32_t seq_id;
    snd_midi_parms *seq_parm;
    void cdecl (*seq_ecall)(snd_midi_parms *mprm);
 
@@ -78,9 +78,9 @@ void cdecl seq_EOS_callback(SEQUENCE *S)
    mono_ch(151,'e');
 }
 
-void cdecl seq_mtrig_callback(SEQUENCE *S, int channel, int value)
+void cdecl seq_mtrig_callback(SEQUENCE *S, int32_t channel, int32_t value)
 {
-   int seq_id;
+   int32_t seq_id;
    snd_midi_parms *seq_parm;
 
    if (seq_miditrig!=NULL)
@@ -95,7 +95,7 @@ void cdecl seq_mtrig_callback(SEQUENCE *S, int channel, int value)
 //---------------------------------------------------------
 //  Stop playing on a single Tune Player.
 //---------------------------------------------------------
-void snd_end_sequence(int seq_id)
+void snd_end_sequence(int32_t seq_id)
 {
 //¥¥¥ later	seq_EOS_callback(_snd_seq_hnd[seq_id]);
 	TuneStop(_snd_seq_player[seq_id], kStopTuneFade);
@@ -107,7 +107,7 @@ void snd_end_sequence(int seq_id)
 //---------------------------------------------------------
 void snd_kill_all_sequences(void)
 {
-	int i;
+	int32_t i;
 
 	for (i=0; i<_snd_seq_cnt; i++)
 	{
@@ -121,9 +121,9 @@ void snd_kill_all_sequences(void)
 //---------------------------------------------------------
 //  Return a Tune Player that's not busy.
 //---------------------------------------------------------
-int snd_find_free_sequence(void)
+int32_t snd_find_free_sequence(void)
 {
-	for (int i=0; i < _snd_seq_cnt; i++)
+	for (int32_t i=0; i < _snd_seq_cnt; i++)
 	{
 		TuneStatus	tpStatus;
 		TuneGetStatus(_snd_seq_player[i], &tpStatus);		// Get the tune player status
@@ -134,11 +134,11 @@ int snd_find_free_sequence(void)
 }
 
 /*
-int snd_sequence_play(int snd_ref, uchar *seq_dat, int seq_num, snd_midi_parms *mparm)
+int32_t snd_sequence_play(int32_t snd_ref, uint8_t *seq_dat, int32_t seq_num, snd_midi_parms *mparm)
 {
    SEQUENCE *S;
    snd_midi_parms *seq_parm;
-   int lpri=SND_DEF_PRI, seq_id, rv;
+   int32_t lpri=SND_DEF_PRI, seq_id, rv;
    if (mparm!=NULL) lpri=mparm->pri;
    if ((seq_id=snd_find_free_sequence(lpri,FALSE))==SND_PERROR)
     { snd_error=SND_NO_HANDLE; return SND_PERROR; }

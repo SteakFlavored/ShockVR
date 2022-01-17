@@ -34,5 +34,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __DETECT_H
 #define __DETECT_H
-extern int gr_detect (grs_sys_info *info);
+extern int32_t gr_detect (grs_sys_info *info);
 #endif /* !__DETECT_H */

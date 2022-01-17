@@ -36,7 +36,7 @@ void tng_menu_ui_display(void *vtng, LGRect *r)
 }
 
 // Initializes the TNG G
-errtype tng_menu_init(void *ui_data, TNG *ptng, TNGStyle *sty, LGPoint coord, int width, void (*upfunc)(TNG *ptng),
+errtype tng_menu_init(void *ui_data, TNG *ptng, TNGStyle *sty, LGPoint coord, int32_t width, void (*upfunc)(TNG *ptng),
    void (*downfunc)(TNG *ptng), void *ui_struct)
 {
    TNG_menu *pmntng;
@@ -91,15 +91,15 @@ errtype tng_menu_destroy(TNG *ptng)
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_menu_2d_draw(TNG *ptng, ushort partmask, LGPoint loc)
+errtype tng_menu_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc)
 {
    TNG_menu *pmntng;
-   int xloc, yloc;
-   ushort dummy;
-   char lstring[200], *s;
+   int32_t xloc, yloc;
+   uint16_t dummy;
+   int8_t lstring[200], *s;
 
    MenuElement *curp;
-   int count = 0;
+   int32_t count = 0;
    dummy = partmask;
 
    ptng->signal(ptng, TNG_SIGNAL_EXPOSE);
@@ -175,15 +175,15 @@ errtype tng_menu_size(TNG *ptng, LGPoint *ppt)
 }
 
 // Returns the current "value" of the TNG
-int tng_menu_getvalue(TNG *ptng)
+int32_t tng_menu_getvalue(TNG *ptng)
 {
    return(TNG_MN(ptng)->num_lines);
 }
 
 // React appropriately for receiving the specified cooked key
-bool tng_menu_keycooked(TNG *ptng, ushort key)
+bool tng_menu_keycooked(TNG *ptng, uint16_t key)
 {
-   ushort code = key ^ KB_FLAG_DOWN;
+   uint16_t code = key ^ KB_FLAG_DOWN;
    bool retval = FALSE;
    MenuElement *csel, *next;
 
@@ -230,10 +230,10 @@ bool tng_menu_keycooked(TNG *ptng, ushort key)
 }
 
 // React appropriately for receiving the specified mouse button event
-bool tng_menu_mousebutt(TNG *ptng, uchar type, LGPoint loc)
+bool tng_menu_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
    bool retval = FALSE;
-   int localy;
+   int32_t localy;
    TNG_menu *pmntng;
    MenuElement *curp;
 
@@ -261,7 +261,7 @@ bool tng_menu_mousebutt(TNG *ptng, uchar type, LGPoint loc)
 }
 
 // Handle incoming signals
-bool tng_menu_signal(TNG *ptng, ushort signal)
+bool tng_menu_signal(TNG *ptng, uint16_t signal)
 {
    bool retval = FALSE;
 
@@ -298,8 +298,8 @@ errtype tng_menu_selection(TNG *ptng)
    return(OK);
 }
 
-errtype tng_menu_add_line(TNG *ptng, char *label, hotkey_callback f, short keycode, ulong context,
-   void *user_data, char *help_text)
+errtype tng_menu_add_line(TNG *ptng, int8_t *label, hotkey_callback f, int16_t keycode, uint32_t context,
+   void *user_data, int8_t *help_text)
 {
    MenuElement *newelem;
 
@@ -314,7 +314,7 @@ errtype tng_menu_add_line(TNG *ptng, char *label, hotkey_callback f, short keyco
    return(OK);
 }
 
-errtype tng_menu_add_submenu(TNG *ptng, char *label, TNG *submenu)
+errtype tng_menu_add_submenu(TNG *ptng, int8_t *label, TNG *submenu)
 {
    MenuElement *newelem;
 
@@ -324,13 +324,13 @@ errtype tng_menu_add_submenu(TNG *ptng, char *label, TNG *submenu)
    return(OK);
 }
 
-MenuElement *tng_menu_add_basic(TNG *ptng, char *label)
+MenuElement *tng_menu_add_basic(TNG *ptng, int8_t *label)
 {
    MenuElement *newelem;
 
    newelem = (MenuElement *)NewPtr(sizeof(MenuElement));
 
-   newelem->label = (char *)NewPtr(sizeof(char) * (strlen(label) + 1));
+   newelem->label = (int8_t *)NewPtr(sizeof(int8_t) * (strlen(label) + 1));
    strcpy(newelem->label,label);
 
    newelem->submenu = NULL;

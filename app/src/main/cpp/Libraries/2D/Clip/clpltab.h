@@ -46,24 +46,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* functions living in the vector */
 
-extern int gri_line_clip_fill (long, long, grs_vertex *, grs_vertex *);
-extern int gri_iline_clip_fill (long, long, grs_vertex *, grs_vertex *);
-extern int gri_cline_clip_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1);
-extern int gri_sline_clip_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1);
-extern int gri_hline_clip_fill (short, short, short, long, long);
-extern int gri_vline_clip_fill (short, short, short, long, long);
+extern int32_t gri_line_clip_fill (int32_t, int32_t, grs_vertex *, grs_vertex *);
+extern int32_t gri_iline_clip_fill (int32_t, int32_t, grs_vertex *, grs_vertex *);
+extern int32_t gri_cline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_sline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_hline_clip_fill (int16_t, int16_t, int16_t, int32_t, int32_t);
+extern int32_t gri_vline_clip_fill (int16_t, int16_t, int16_t, int32_t, int32_t);
 
-extern int gri_wire_poly_line_clip_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1);
-extern int gri_wire_poly_sline_clip_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1);
-extern int gri_wire_poly_cline_clip_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_wire_poly_line_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_wire_poly_sline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_wire_poly_cline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
 
 /* actual clippers */
-extern int gri_line_clip (grs_vertex *, grs_vertex *);
-extern int gri_cline_clip (grs_vertex *, grs_vertex *);
-extern int gri_sline_clip (grs_vertex *, grs_vertex *);
+extern int32_t gri_line_clip (grs_vertex *, grs_vertex *);
+extern int32_t gri_cline_clip (grs_vertex *, grs_vertex *);
+extern int32_t gri_sline_clip (grs_vertex *, grs_vertex *);
 
 /* these are implemented, but are not used */
-extern int gri_hline_clip (short *, short *, short *);
-extern int gri_vline_clip (short *, short *, short *);
+extern int32_t gri_hline_clip (int16_t *, int16_t *, int16_t *);
+extern int32_t gri_vline_clip (int16_t *, int16_t *, int16_t *);
 
 #endif

@@ -45,28 +45,28 @@ QDGlobals	qd;
 #endif
 Handle			gExtraMemory = nil;
 ColorSpec 		*gOriginalColors;
-unsigned long	gRandSeed;
-short				gMainVRef;
+uint32_t	gRandSeed;
+int16_t				gMainVRef;
 CursHandle		gWatchCurs;
-short				gOriginalDepth = -1;
-short				gLastAlertDepth = -1;
-short				gStartupDepth;
+int16_t				gOriginalDepth = -1;
+int16_t				gLastAlertDepth = -1;
+int16_t				gStartupDepth;
 Ptr				gScreenAddress;
-long				gScreenRowbytes;
-short				gScreenWide, gScreenHigh;
-short				gActiveWide, gActiveHigh;
-short				gActiveLeft, gActiveTop;
+int32_t				gScreenRowbytes;
+int16_t				gScreenWide, gScreenHigh;
+int16_t				gActiveWide, gActiveHigh;
+int16_t				gActiveLeft, gActiveTop;
 Rect				gActiveArea, gOffActiveArea;
-Boolean			gIsPowerPC = false;
-long				gDataDirID;
-short				gDataVref;
-long				gCDDataDirID;
-short				gCDDataVref;
-long				gAlogDirID;
-short				gAlogVref;
-long				gBarkDirID;
-short				gBarkVref;
-Boolean			gMenusHid;
+bool			gIsPowerPC = false;
+int32_t				gDataDirID;
+int16_t				gDataVref;
+int32_t				gCDDataDirID;
+int16_t				gCDDataVref;
+int32_t				gAlogDirID;
+int16_t				gAlogVref;
+int32_t				gBarkDirID;
+int16_t				gBarkVref;
+bool			gMenusHid;
 
 //---------------------------
 //  Externs
@@ -88,8 +88,8 @@ void InstallETSPatch(void);
 //---------------------------
 TimerUPP		pShockTicksPtr;				// Globals for the Shock "tickcount" TM task.
 ShockTask		pShockTicksTask;			// It increments gShockTicks 280 times per second.
-long				gShockTicks;
-long 				*tmd_ticks;
+int32_t				gShockTicks;
+int32_t 				*tmd_ticks;
 //Handle			gTaskHdl;
 
 #if __profile__
@@ -135,7 +135,7 @@ pascal void ShockTicksProc(void)
 void InitMac(void)
 {
 	OSErr	err;
-	long		resp;
+	int32_t		resp;
 
 	InitGraf(&qd.thePort);
 	InitFonts();
@@ -146,7 +146,7 @@ void InitMac(void)
 	InitCursor();
 
 	MaxApplZone();
-	for (int i=0; i<10; i++)										// Get some room for more handles
+	for (int32_t i=0; i<10; i++)										// Get some room for more handles
 		MoreMasters();
 
 	// Allocate memory for various things, initialize others
@@ -182,8 +182,8 @@ void InitMac(void)
 void CheckConfig(void)
 {
 	OSErr				err;
-	long					resp;
-	int					depth;
+	int32_t					resp;
+	int32_t					depth;
 	GDHandle     		devhandle;
 	PixMapHandle 	pmhan;
 
@@ -241,7 +241,7 @@ void CheckConfig(void)
 
 	// Record info about the main monitor size.
 	gStartupDepth = depth;
-	gScreenRowbytes = (long)((*pmhan)->rowBytes & 0x7FFF);
+	gScreenRowbytes = (int32_t)((*pmhan)->rowBytes & 0x7FFF);
 	gScreenAddress = (*pmhan)->baseAddr;
 	gScreenWide = (*pmhan)->bounds.right - (*pmhan)->bounds.left;
 	gScreenHigh = (*pmhan)->bounds.bottom - (*pmhan)->bounds.top;
@@ -262,7 +262,7 @@ void CheckConfig(void)
 	SetRect(&gOffActiveArea, 0, 0, gActiveWide, gActiveHigh);
 
  	// Fix up ScreenAddress (so it really points to the first address of the active area)
-  	gScreenAddress += (gScreenRowbytes * (long)gActiveTop);
+  	gScreenAddress += (gScreenRowbytes * (int32_t)gActiveTop);
   	gScreenAddress += gActiveLeft;
 
 	// Check to see if we're running on a PowerPC
@@ -292,9 +292,9 @@ void SetupWindows(WindowPtr *mainWind)
 //------------------------------------------------------------------------------------
 //  Load and install the standard menus.
 //------------------------------------------------------------------------------------
-void SetUpMenus(MenuHandle *theMenus, short numMenus)
+void SetUpMenus(MenuHandle *theMenus, int16_t numMenus)
 {
-	short		i;
+	int16_t		i;
 
 	for (i=0; i<numMenus; i++)
 		FailNIL(theMenus[i] = GetMenu(128+i));		// get menu resources
@@ -313,7 +313,7 @@ void SetUpMenus(MenuHandle *theMenus, short numMenus)
 //#define PLAY_FROM_CD				//¥¥¥ Make sure this is defined for shipping version.
 void GetFolders(void)
 {
-	long						temp;
+	int32_t						temp;
 	HParamBlockRec 	hpb;
 	OSErr					err, verr;
 	Str255					volName;
@@ -338,8 +338,8 @@ void GetFolders(void)
 
 	// Check for the CD-ROM volume, and look for sub-folders there.
 
-	Boolean	foundCD = FALSE;
-	int		volIndex = 1;
+	bool	foundCD = FALSE;
+	int32_t		volIndex = 1;
 	do
 	{
 		hpb.volumeParam.ioCompletion = NULL;
@@ -410,7 +410,7 @@ void FailNIL(void *memory)
 //------------------------------------------------------------------------------------
 //		Get a resource and fail correctly if it can't be loaded.
 //------------------------------------------------------------------------------------
-Handle GetResourceFail(long id, short num)
+Handle GetResourceFail(int32_t id, int16_t num)
 {
 	Handle 	h;
 
@@ -529,7 +529,7 @@ void ShowMenuBar(void)
 //------------------------------------------------------------------------------------
 //  Display an alert using the str# resource with index strignum, then die.
 //------------------------------------------------------------------------------------
-void ErrorDie(short stringnum)
+void ErrorDie(int16_t stringnum)
 {
 	if (gExtraMemory)
 		DisposHandle(gExtraMemory);	// free our extra space
@@ -541,7 +541,7 @@ void ErrorDie(short stringnum)
 //------------------------------------------------------------------------------------
 // 	Display an alert using the str# resource with index strignum
 //------------------------------------------------------------------------------------
-void StringAlert(short stringnum)
+void StringAlert(int16_t stringnum)
 {
 	Str255		message, explain;
 

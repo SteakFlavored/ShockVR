@@ -16,15 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-int fnt_c_wid(char c);
-int fnt_s_wid(char *s);
-int fnt_c_draw(char c, int xpos, int ypos);
-int fnt_s_draw(char *s, int xpos, int ypos);
-int fnt_s_clr(char *s, int x, int y);
-int fnt_l_clr(int len, int x, int y);
-int fnt_c_clr(char c, int x, int y);
-int fnt_cursor(int x, int y);
-int anal_s_draw(char *s, int xpos, int ypos);
+int32_t fnt_c_wid(int8_t c);
+int32_t fnt_s_wid(int8_t *s);
+int32_t fnt_c_draw(int8_t c, int32_t xpos, int32_t ypos);
+int32_t fnt_s_draw(int8_t *s, int32_t xpos, int32_t ypos);
+int32_t fnt_s_clr(int8_t *s, int32_t x, int32_t y);
+int32_t fnt_l_clr(int32_t len, int32_t x, int32_t y);
+int32_t fnt_c_clr(int8_t c, int32_t x, int32_t y);
+int32_t fnt_cursor(int32_t x, int32_t y);
+int32_t anal_s_draw(int8_t *s, int32_t xpos, int32_t ypos);
 #ifdef nOAF
 TTFontInfo *build_fnt_TTFI(TextToolFontInfo *mfont);
 #endif

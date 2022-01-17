@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 WindowPtr	gMainWindow;
 
 // prototypes
-extern void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+extern void v_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
 
 void SetVertexLinear(grs_vertex **points);
 void SetVertexFloor(grs_vertex **points);
@@ -47,14 +47,14 @@ void Rotate90(grs_vertex **points);
    _vertex.u = fix_make(_u,0),             \
    _vertex.v = fix_make(_v,0),_vertex.w = _w, _vertex.i = _i;
 
-uchar pal_buf[768];
-uchar flat8_testbm2[4][4] =
+uint8_t pal_buf[768];
+uint8_t flat8_testbm2[4][4] =
    { { 1, 2, 3, 4},
    	 { 5, 6, 7, 8},
    	 { 1, 2, 3, 4},
    	 { 1, 2, 3, 4}};
 
-char test_clut[111] = {0,0,0,0,0,0,0,0,0,0,
+int8_t test_clut[111] = {0,0,0,0,0,0,0,0,0,0,
 											 0,0,0,0,0,0,0,0,0,0,
 											 0,0,0,0,0,0,0,0,0,0,
 											 0,0,0,0,54,0,0,0,0,0,
@@ -68,7 +68,7 @@ char test_clut[111] = {0,0,0,0,0,0,0,0,0,0,
 											 80
 											};
 
-uchar flat8_testbm[16][16] =
+uint8_t flat8_testbm[16][16] =
    { { 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34 },
      { 34, 34,  110,  110,  110,  110,  110,  110,  110,  110,  110,  110,  110,  110, 34, 34 },
      { 34,  110, 34,  110,  110,  110,  110,  110,  110,  110,  110,  110,  110, 34,  110, 34 },
@@ -87,7 +87,7 @@ uchar flat8_testbm[16][16] =
      { 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34 } };
 
 
-char bigblock[100000];
+int8_t bigblock[100000];
 
 extern "C" {extern fix fix_mul_asm_safe(fix a, fix b);}
 
@@ -96,10 +96,10 @@ void main (void)
 	grs_screen 	*screen;
 	Str255			str;
 	Handle			testRes,testRes2,testRes3;
-  short 			w,h;
-	long				time,i,j;
+  int16_t 			w,h;
+	int32_t				time,i,j;
 	grs_bitmap  bm;
-	char				temp[256];
+	int8_t				temp[256];
   grs_vertex 	v0,v1,v2,v3,v4;
 //  grs_vertex 	*points[5]= {&v0,&v1,&v2,&v3,&v4};
   grs_vertex 	*points[5];
@@ -111,7 +111,7 @@ void main (void)
 	Ptr					big_buffer;
 	FrameDesc		*fd;
 	EventRecord evt;
-	char				bogus_clut[256];
+	int8_t				bogus_clut[256];
 	grs_canvas 	*cnv;
   grs_tmap_info ti;
 	RGBColor	col = {0xFFFF, 0x3333, 0x3333};
@@ -132,13 +132,13 @@ void main (void)
 	gr_set_mode (GRM_640x480x8, TRUE);
 	screen = gr_alloc_screen (grd_cap->w, grd_cap->h);
 	gr_set_screen (screen);
-	gr_init_bm (&bm, (uchar *) flat8_testbm, BMT_FLAT8, 0, 16, 16);
+	gr_init_bm (&bm, (uint8_t *) flat8_testbm, BMT_FLAT8, 0, 16, 16);
 
 	testRes = GetResource('sIMG',1000);
 	HLock(testRes);
 	fd = (FrameDesc *) *testRes;
-	fd->bm.bits = (uchar *)(fd+1);
-	grd_unpack_buf = (uchar *) bigblock;
+	fd->bm.bits = (uint8_t *)(fd+1);
+	grd_unpack_buf = (uint8_t *) bigblock;
 //	gr_rsd8_convert(&fd->bm, &bm);
 	bm = fd->bm;
 
@@ -165,7 +165,7 @@ void main (void)
 
 	shade1 = GetResource('shad',1000);
 	HLock(shade1);
-	gr_set_light_tab((uchar *) *shade1);
+	gr_set_light_tab((uint8_t *) *shade1);
 
 	cnv = gr_alloc_canvas(BMT_FLAT8,640,480);
 	gr_set_canvas(cnv);
@@ -213,21 +213,21 @@ grs_bitmap dst;
   time = TickCount();
   for (i=0; i<1000; i++)
 //	  gr_per_umap(&bm, 4, points);
-		gr_clut_per_umap(&bm, 4, points, (uchar *) bogus_clut);
+		gr_clut_per_umap(&bm, 4, points, (uint8_t *) bogus_clut);
 //		gr_lit_per_umap(&bm, 4, points);
 //  		v_umap(&bm,4,points,&ti);		//¥¥ for wall 1D
  /*{
-extern void per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+extern void per_umap (grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
       grs_tmap_info ti;
       ti.tmap_type=GRC_CLUT_PER;
       ti.flags=TMF_CLUT;
-      ti.clut=(uchar *) bogus_clut;
+      ti.clut=(uint8_t *) bogus_clut;
       per_umap(&bm,4,points,&ti);
  }
  */
 /*
  {
-	extern int h_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+	extern int32_t h_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
   grs_tmap_info ti;
 	ti.tmap_type = GRC_TRANS_LIT_BILIN;
 	ti.flags = 0;
@@ -238,9 +238,9 @@ extern void per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti
 
 //  	gr_clear(i);
  /* {
-extern void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+extern void v_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
       grs_tmap_info ti;
-      ti.clut = (uchar *) bogus_clut;
+      ti.clut = (uint8_t *) bogus_clut;
       ti.tmap_type=GRC_CLUT_WALL1D;
       ti.flags=TMF_WALL|TMF_CLUT;
       v_umap(&bm,4,points,&ti);
@@ -268,7 +268,7 @@ extern void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
 
 void Rotate90(grs_vertex **points)
  {
- 	int i;
+ 	int32_t i;
 	fix	u,v;
 
 	u = points[0]->u; v = points[0]->v;

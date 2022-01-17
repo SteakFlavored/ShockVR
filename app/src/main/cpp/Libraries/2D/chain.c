@@ -68,12 +68,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 grs_func_chain *grd_chain_table[GRD_CANVAS_FUNCS];
 
-grs_func_chain *gr_chain_add_over(int n, void (*f)())
+grs_func_chain *gr_chain_add_over(int32_t n, void (*f)())
 {
    grs_func_chain *p = (grs_func_chain *)(NewPtr(sizeof(grs_func_chain)));	// was gr_malloc
    if (grd_chain_table[n] == NULL) {
       /* First time: stash and replace primitives */
-      int k;
+      int32_t k;
       chn_primitives[n] = (void (**)())(NewPtr(BMT_TYPES*sizeof(void (*)())));	// was gr_malloc
       for (k=0; k<BMT_TYPES; k++)
           if (grd_canvas_table_list[k] != NULL)
@@ -93,7 +93,7 @@ grs_func_chain *gr_chain_add_over(int n, void (*f)())
    return p;
 }
 
-grs_func_chain *gr_chain_add_before(int n, void (*f)(void))
+grs_func_chain *gr_chain_add_before(int32_t n, void (*f)(void))
 {
    grs_func_chain *p;
    p = gr_chain_add_over(n, f);
@@ -101,7 +101,7 @@ grs_func_chain *gr_chain_add_before(int n, void (*f)(void))
    return p;
 }
 
-grs_func_chain *gr_chain_add_after(int n, void (*f)(void))
+grs_func_chain *gr_chain_add_after(int32_t n, void (*f)(void))
 {
    grs_func_chain *p = (grs_func_chain *)(NewPtr(sizeof(grs_func_chain)));	// was gr_malloc
    p->f = f;
@@ -109,7 +109,7 @@ grs_func_chain *gr_chain_add_after(int n, void (*f)(void))
    p->flags = CHNF_VOID | CHNF_AFTER;
    if (grd_chain_table[n] == NULL) {
       /* First time: stash and replace primitives */
-      int k;
+      int32_t k;
       chn_primitives[n] = (void (**)())(NewPtr(BMT_TYPES*sizeof(void (*)())));	// was gr_malloc
       for (k=0; k<BMT_TYPES; k++)
           if (grd_canvas_table_list[k] != NULL)
@@ -130,9 +130,9 @@ grs_func_chain *gr_chain_add_after(int n, void (*f)(void))
    return p;
 }
 
-void gr_unchain(int n)
+void gr_unchain(int32_t n)
 {
-   int k;
+   int32_t k;
    /* check for unchained primitive */
    if (chn_primitives[n] == NULL) return;
    for (k=0; k<BMT_TYPES; k++)
@@ -140,9 +140,9 @@ void gr_unchain(int n)
          grd_canvas_table_list[k][n] = chn_primitives[n][k];
 }
 
-void gr_rechain(int n)
+void gr_rechain(int32_t n)
 {
-   int k;
+   int32_t k;
    if (chn_primitives[n] == NULL) return;
    for (k=0; k<BMT_TYPES; k++)
       if (grd_canvas_table_list[k] != NULL)
@@ -151,13 +151,13 @@ void gr_rechain(int n)
 
 void gr_unchain_all()
 {
-   int k;
+   int32_t k;
    for (k=0; k<GRD_CANVAS_FUNCS; k++) gr_unchain(k);
 }
 
 void gr_rechain_all()
 {
-   int k;
+   int32_t k;
    for (k=0; k<GRD_CANVAS_FUNCS; k++) gr_rechain(k);
 }
 

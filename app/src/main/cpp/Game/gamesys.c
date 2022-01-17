@@ -93,15 +93,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------
 // GLOBALS
 // -------
-int run_fatigue_rate = 5;
-extern short fr_solidfr_time;
-extern short fr_sfx_time;
-ulong fr_shake_time;
+int32_t run_fatigue_rate = 5;
+extern int16_t fr_solidfr_time;
+extern int16_t fr_sfx_time;
+uint32_t fr_shake_time;
 bool gamesys_on = TRUE;
 
 // hud vars
-short enviro_edrain_rate = 0;
-short enviro_absorb_rate = 0;
+int16_t enviro_edrain_rate = 0;
+int16_t enviro_absorb_rate = 0;
 
 LevelData level_gamedata;
 Schedule game_seconds_schedule;
@@ -112,14 +112,14 @@ void game_sched_free(void);
 void unshodanizing_callback(ObjID id, void *user_data);
 void check_nearby_objects(void);
 void fatigue_player(void);
-bool shodan_phase_in(uchar *bitmask, short x, short y, short w, short h, short num, bool dir);
+bool shodan_phase_in(uint8_t *bitmask, int16_t x, int16_t y, int16_t w, int16_t h, int16_t num, bool dir);
 void check_hazard_regions(MapElem* newElem);
 bool panel_ref_sanity(ObjID obj);
 void check_panel_ref(bool puntme);
-int apply_rate(int var, int rate, int t0, int t1, int vmin, int vmax);
+int32_t apply_rate(int32_t var, int32_t rate, int32_t t0, int32_t t1, int32_t vmin, int32_t vmax);
 void do_stuff_every_second(void);
-void expose_player_real(short damage, ubyte type, ushort tsecs);
-void expose_player(byte damage, ubyte type, ushort tsecs);
+void expose_player_real(int16_t damage, uint8_t type, uint16_t tsecs);
+void expose_player(int8_t damage, uint8_t type, uint16_t tsecs);
 
 
 void game_sched_init(void)
@@ -133,10 +133,10 @@ void game_sched_free(void)
    schedule_free(&game_seconds_schedule);
 }
 
-short fatigue_accum_rate = 100;
+int16_t fatigue_accum_rate = 100;
 
 #define OBJ_CHECK_TICKS    CIT_CYCLE
-ulong obj_check_time = 0;
+uint32_t obj_check_time = 0;
 
 #define MACHINE_LAYER_BASE    25
 #define OBJ_CHECK_RADIUS  7
@@ -173,21 +173,21 @@ void unshodanizing_callback(ObjID id, void *user_data)
 
 void check_nearby_objects()
 {
-   short x, y;
-   int dist,best_dist;
+   int16_t x, y;
+   int32_t dist,best_dist;
    ObjRefID oref;
-   int trip;
-   extern char mlimbs_machine;
-   extern int mlimbs_monster;
-   int new_monster;
-   extern short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type);
+   int32_t trip;
+   extern int8_t mlimbs_machine;
+   extern int32_t mlimbs_monster;
+   int32_t new_monster;
+   extern int16_t compute_3drep(Obj *cobj, ObjID cobjid, int32_t obj_type);
 #ifdef USE_3DREP_FOR_SHODANIZING
-   short rep;
+   int16_t rep;
 #endif
    ObjID id;
    ObjSpecID osid;
    LGPoint dest_pt, source_pt;
-   int pf_id;
+   int32_t pf_id;
    extern bool music_on;
 
    // Should probably distribute different kinds of checks so that there is not a big hit every OBJ_CHECK_TIME
@@ -293,7 +293,7 @@ void check_nearby_objects()
                         break;
                      case HORZ_KLAXON_TRIPLE:
                         {
-                           bool digi_fx_playing(int fx_id, int *handle_ptr);
+                           bool digi_fx_playing(int32_t fx_id, int32_t *handle_ptr);
                            if (!digi_fx_playing(SFX_KLAXON,NULL))
                               play_digi_fx_obj(SFX_KLAXON,1,id);
                         }
@@ -335,11 +335,11 @@ void check_nearby_objects()
 
 /*¥¥¥
 #define CFG_FATIGUE_VAR "fatigue"
-extern ubyte fatigue_threshold;
+extern uint8_t fatigue_threshold;
 void reload_fatigue_parms()
 {
-   int i;
-   int vec[5];
+   int32_t i;
+   int32_t vec[5];
    i = 5;
 //   player_struct.fatigue_regen = DEFAULT_FATIGUE_REGEN;
    if (config_get_value(CFG_FATIGUE_VAR,CONFIG_INT_TYPE,vec,&i))
@@ -365,19 +365,19 @@ void reload_fatigue_parms()
 */
 
 bool fatigue_warning;
-#define fatigue_val(x) (((x) > SPRINT_CONTROL_THRESHOLD) ? ((int)(x) - SPRINT_CONTROL_THRESHOLD): 0)
+#define fatigue_val(x) (((x) > SPRINT_CONTROL_THRESHOLD) ? ((int32_t)(x) - SPRINT_CONTROL_THRESHOLD): 0)
 #define FATIGUE_DENOM  (CONTROL_MAX_VAL - SPRINT_CONTROL_THRESHOLD)
 bool gamesys_fatigue = TRUE;
 
 #define SKATE_MOD 8
 
-extern int EDMS_pelvis_is_climbing;
+extern int32_t EDMS_pelvis_is_climbing;
 
 
 void fatigue_player(void)
 {
-   byte* c = player_struct.controls;
-   int deltat,deltaf;
+   int8_t* c = player_struct.controls;
+   int32_t deltat,deltaf;
    extern bool jumpjets_active;
    if (gamesys_fatigue && !jumpjets_active && !EDMS_pelvis_is_climbing)
    {
@@ -419,25 +419,25 @@ bool gamesys_slow_proj = TRUE;
 bool gamesys_beam_wpns = TRUE;
 bool gamesys_drugs = TRUE;
 
-ulong next_contin_trig;
+uint32_t next_contin_trig;
 
 #define NUM_CONTIN_SECONDS    5
 #define CONTIN_INTERVAL       CIT_CYCLE * NUM_CONTIN_SECONDS
 
-short fr_surge_time = 0;
-char surg_fx_frame = 0;
-short surge_duration = 60;
+int16_t fr_surge_time = 0;
+int8_t surg_fx_frame = 0;
+int16_t surge_duration = 60;
 
 #define NUM_SURG_FX_FRAMES 7
-short surge_vals[NUM_SURG_FX_FRAMES] = { -1 << 8 , -5 << 8, 0 << 8, 2 << 8, 2 << 8, 1 << 8, 1 << 8 };
+int16_t surge_vals[NUM_SURG_FX_FRAMES] = { -1 << 8 , -5 << 8, 0 << 8, 2 << 8, 2 << 8, 1 << 8, 1 << 8 };
 
 #define CONQUER_THRESHOLD     512
 #define UNCONQUER_THRESHOLD   32
 #define MAX_SHODAN_FAILURES   10
-char thresh_fail = 0;
-bool shodan_phase_in(uchar *bitmask, short x, short y, short w, short h, short num, bool dir)
+int8_t thresh_fail = 0;
+bool shodan_phase_in(uint8_t *bitmask, int16_t x, int16_t y, int16_t w, int16_t h, int16_t num, bool dir)
 {
-   int i = 0,nx,ny,val,oval;
+   int32_t i = 0,nx,ny,val,oval;
    while (i < num)
    {
       nx = rand() % w;
@@ -478,10 +478,10 @@ bool shodan_phase_in(uchar *bitmask, short x, short y, short w, short h, short n
 
 
 #define NUM_SHODAN_REGIONS 4
-short shodan_region_full_x[] = { 0, 0, FULL_VIEW_WIDTH * 7 / 8, 0 };
-short shodan_region_full_y[] = { 0, 0, 0, FULL_VIEW_HEIGHT * 7 / 8 };
-short shodan_region_full_width[] = { FULL_VIEW_WIDTH, FULL_VIEW_WIDTH / 8, FULL_VIEW_WIDTH / 8, FULL_VIEW_WIDTH};
-short shodan_region_full_height[] = {FULL_VIEW_HEIGHT / 8, FULL_VIEW_HEIGHT, FULL_VIEW_HEIGHT, FULL_VIEW_HEIGHT / 8};
+int16_t shodan_region_full_x[] = { 0, 0, FULL_VIEW_WIDTH * 7 / 8, 0 };
+int16_t shodan_region_full_y[] = { 0, 0, 0, FULL_VIEW_HEIGHT * 7 / 8 };
+int16_t shodan_region_full_width[] = { FULL_VIEW_WIDTH, FULL_VIEW_WIDTH / 8, FULL_VIEW_WIDTH / 8, FULL_VIEW_WIDTH};
+int16_t shodan_region_full_height[] = {FULL_VIEW_HEIGHT / 8, FULL_VIEW_HEIGHT, FULL_VIEW_HEIGHT, FULL_VIEW_HEIGHT / 8};
 
 // stolen from trigger.c
 #define GAME_OVER_HACK 0x6
@@ -496,17 +496,17 @@ errtype gamesys_run(void)
    bool dummy;
    extern void destroy_destroyed_objects(void);
    extern bool trap_activate(ObjID id, bool *use_message);
-   extern void set_global_lighting(short new_val);
-   extern uchar *shodan_bitmask;
-   extern ulong page_amount;
+   extern void set_global_lighting(int16_t new_val);
+   extern uint8_t *shodan_bitmask;
+   extern uint32_t page_amount;
 #ifdef AUTOCORRECT_DIFF_TRASH
-   int i;
+   int32_t i;
 #endif
 
 #ifdef AUTOCORRECT_DIFF_TRASH
    for (i=0; i < 4; i++)
    {
-      extern char diff_qvars[4];
+      extern int8_t diff_qvars[4];
       if (player_struct.difficulty[i] != QUESTVAR_GET(diff_qvars[i]))
          QUESTVAR_SET(diff_qvars[i],player_struct.difficulty[i]);
    }
@@ -554,13 +554,13 @@ errtype gamesys_run(void)
 
    if (shodan_bitmask != NULL)
    {
-      extern ulong time_until_shodan_avatar;
+      extern uint32_t time_until_shodan_avatar;
       if (player_struct.game_time > time_until_shodan_avatar)
       {
-         char i;
+         int8_t i;
          if (thresh_fail)
          {
-            errtype trap_hack_func(int p1, int p2, int p3, int p4);
+            errtype trap_hack_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
             extern void begin_shodan_conquer_fx(bool begin);
             begin_shodan_conquer_fx(FALSE);
             shodan_bitmask = NULL;
@@ -643,7 +643,7 @@ errtype gamesys_run(void)
 //
 // Checks to see if we're in a bio/radiation zone
 
-void expose_player_real(short damage, ubyte type, ushort tsecs);
+void expose_player_real(int16_t damage, uint8_t type, uint16_t tsecs);
 
 
 void check_hazard_regions(MapElem* newElem)
@@ -651,8 +651,8 @@ void check_hazard_regions(MapElem* newElem)
    fix hdiff = fix_from_obj_height(PLAYER_OBJ) - fix_from_map_height(me_height_flr(newElem));
    if (me_hazard_rad(newElem) > 0 && hdiff <= fix_make(level_gamedata.hazard.rad_h,0)/8)
    {
-      short exp = (short)me_hazard_rad(newElem)*(short)level_gamedata.hazard.rad;
-      exp -= (short)player_struct.hit_points_lost[RADIATION_TYPE-1];
+      int16_t exp = (int16_t)me_hazard_rad(newElem)*(int16_t)level_gamedata.hazard.rad;
+      exp -= (int16_t)player_struct.hit_points_lost[RADIATION_TYPE-1];
       if (exp > 0)
       {
          expose_player_real(exp,RADIATION_TYPE,0);
@@ -668,7 +668,7 @@ void check_hazard_regions(MapElem* newElem)
    {
       if (me_hazard_bio(newElem) > 0 && hdiff <= fix_make(level_gamedata.hazard.bio_h,0)/8)
       {
-         short exp = me_hazard_bio(newElem)*level_gamedata.hazard.bio;
+         int16_t exp = me_hazard_bio(newElem)*level_gamedata.hazard.bio;
          exp -= player_struct.hit_points_lost[BIO_TYPE-1];
          if (exp > 0)
             expose_player_real(exp,BIO_TYPE,0);
@@ -693,7 +693,7 @@ void check_hazard_regions(MapElem* newElem)
 
 bool panel_ref_sanity(ObjID obj)
 {
-   int objtrip=OPNUM(obj), obj_type;
+   int32_t objtrip=OPNUM(obj), obj_type;
    obj_type=ObjProps[objtrip].render_type;
    if ((obj_type==FAUBJ_TPOLY)||(obj_type==FAUBJ_TEXBITMAP))
 	   if(objs[obj].obclass==CLASS_FIXTURE)
@@ -727,16 +727,16 @@ bool panel_ref_sanity(ObjID obj)
 
 void check_panel_ref(bool puntme)
 {
-   static short old_x,old_y;
-   extern void restore_mfd_slot(int mfd_id);
+   static int16_t old_x,old_y;
+   extern void restore_mfd_slot(int32_t mfd_id);
    extern bool check_object_dist(ObjID obj1, ObjID obj2, fix crit);
 
    ObjID id = player_struct.panel_ref;
 
    if (id != OBJ_NULL && (id != PLAYER_OBJ || puntme))
    {
-      extern ubyte mfd_get_func(ubyte mfd_id, ubyte s);
-      extern bool mfd_distance_remove(ubyte slot_funca);
+      extern uint8_t mfd_get_func(uint8_t mfd_id, uint8_t s);
+      extern bool mfd_distance_remove(uint8_t slot_funca);
       bool punt = puntme;
       if(objs[id].active) {
          punt=punt || !check_object_dist(id,PLAYER_OBJ,MAX_USE_DIST);
@@ -745,7 +745,7 @@ void check_panel_ref(bool puntme)
       if (punt)
       {
          bool punt_mfd[NUM_MFDS], punting;
-         int mfd_id;
+         int32_t mfd_id;
 
          for(mfd_id=0;mfd_id<NUM_MFDS;mfd_id++) {
             punt_mfd[mfd_id]=mfd_distance_remove(mfd_get_func(mfd_id, MFD_INFO_SLOT));
@@ -779,7 +779,7 @@ void check_panel_ref(bool puntme)
 // Rates at which exposure levels degrade by type, in units of
 // percent per nerd minute, compounded every nerd second.
 
-uchar exposure_degrade_rates[] =
+uint8_t exposure_degrade_rates[] =
 {
    100, //   EXPLOSION_TYPE
    100, //   ENERGY_BEAM_TYPE
@@ -805,16 +805,16 @@ uchar exposure_degrade_rates[] =
 
 // t0 and t1 are times in nerd seconds, rate is in units per minute.
 
-int apply_rate(int var, int rate, int t0, int t1, int vmin, int vmax)
+int32_t apply_rate(int32_t var, int32_t rate, int32_t t0, int32_t t1, int32_t vmin, int32_t vmax)
 {
-   int delta = find_delta(t0,t1,rate,HEALTH_RESTORE_SHF);
-   int final = min(vmax,max(var + delta,vmin));
+   int32_t delta = find_delta(t0,t1,rate,HEALTH_RESTORE_SHF);
+   int32_t final = min(vmax,max(var + delta,vmin));
    return final;
 }
 
 #define ENERGY_VAR_RATE 50
 
-ulong time_until_shodan_avatar = 0;
+uint32_t time_until_shodan_avatar = 0;
 extern ObjID shodan_avatar_id;
 
 #define MY_FORALLOBJSPECS(pmo,objspec) for(\
@@ -828,27 +828,27 @@ extern ObjID shodan_avatar_id;
 #define REALSPACE_HUDS    (HUD_RADPOISON|HUD_BIOPOISON|HUD_FATIGUE|HUD_BIOHAZARD|HUD_RADIATION|HUD_ZEROGRAV|HUD_ENVIROUSE)
 
 
-extern Boolean	gPlayingGame;
-extern Boolean	gDeadPlayerQuit;
+extern bool	gPlayingGame;
+extern bool	gDeadPlayerQuit;
 
 void do_stuff_every_second()
 {
-   long running_dt = player_struct.game_time - player_struct.last_second_update;
-   extern int bio_energy_var;
-   extern int bio_absorb;
-   extern int rad_absorb;
-   extern ulong player_death_time;
-   int last = (player_struct.last_second_update >> HEALTH_RESTORE_PRECISION) & HEALTH_RESTORE_MASK;
-   int next = (player_struct.game_time >> HEALTH_RESTORE_PRECISION) & HEALTH_RESTORE_MASK;
+   int32_t running_dt = player_struct.game_time - player_struct.last_second_update;
+   extern int32_t bio_energy_var;
+   extern int32_t bio_absorb;
+   extern int32_t rad_absorb;
+   extern uint32_t player_death_time;
+   int32_t last = (player_struct.last_second_update >> HEALTH_RESTORE_PRECISION) & HEALTH_RESTORE_MASK;
+   int32_t next = (player_struct.game_time >> HEALTH_RESTORE_PRECISION) & HEALTH_RESTORE_MASK;
 
    if (running_dt > SECOND_UPDATE_FREQ)
    {
       if (global_fullmap->cyber)
       {
-         char i;
+         int8_t i;
          ObjSpecID osid;
          ObjID new_id, shrine_obj = OBJ_NULL;
-         extern uchar *shodan_bitmask;
+         extern uint8_t *shodan_bitmask;
 
          for (i=0; i < NUM_CS_EFFECTS; i++)
             if ((cspace_effect_times[i] != 0) && (cspace_effect_times[i] <= player_struct.game_time))
@@ -894,13 +894,13 @@ void do_stuff_every_second()
          if (next < last) next += HEALTH_RESTORE_UNIT;
          if (player_struct.energy_regen + player_struct.energy_spend != 0)
          {
-            int num = player_struct.energy_regen
+            int32_t num = player_struct.energy_regen
                - player_struct.energy_spend;
             if (num != 0)
             {
-               int finale = apply_rate(player_struct.energy,num,last,next,0, MAX_ENERGY);
+               int32_t finale = apply_rate(player_struct.energy,num,last,next,0, MAX_ENERGY);
                bio_energy_var -= ENERGY_VAR_RATE*(finale-player_struct.energy);
-               player_struct.energy = (ubyte) finale;
+               player_struct.energy = (uint8_t) finale;
                chg_set_flg(VITALS_UPDATE);
             }
          }
@@ -924,7 +924,7 @@ void do_stuff_every_second()
             && player_struct.hit_points_regen != 0)
          {
 
-            int num = player_struct.hit_points_regen;
+            int32_t num = player_struct.hit_points_regen;
             player_struct.hit_points =
                apply_rate(player_struct.hit_points,num,last,next,0,PLAYER_MAX_HP);
             mfd_notify_func(MFD_BIOWARE_FUNC,MFD_INFO_SLOT,FALSE,MFD_ACTIVE,FALSE);
@@ -932,16 +932,16 @@ void do_stuff_every_second()
          }
          if (player_struct.hit_points > 0)
          {
-            int i;
+            int32_t i;
             for (i = 0; i < NUM_DAMAGE_TYPES; i++)
                if (player_struct.hit_points_lost[i] > 0)
                {
-                  int num = player_struct.hit_points_lost[i];
-                  int degrade = exposure_degrade_rates[i];
-                  int deltahp = player_struct.hit_points
+                  int32_t num = player_struct.hit_points_lost[i];
+                  int32_t degrade = exposure_degrade_rates[i];
+                  int32_t deltahp = player_struct.hit_points
                      - apply_rate(player_struct.hit_points,-num,last,next,0,PLAYER_MAX_HP);
                   degrade = min(100,find_delta(last,next,degrade,HEALTH_RESTORE_SHF));
-                  damage_player((ubyte)deltahp,i+1,NO_SHIELD_ABSORBTION);
+                  damage_player((uint8_t)deltahp,i+1,NO_SHIELD_ABSORBTION);
                   player_struct.hit_points_lost[i] = num*(100-degrade)/100;
                }
             if (player_struct.hit_points_lost[RADIATION_TYPE-1] > 0)
@@ -958,7 +958,7 @@ void do_stuff_every_second()
       }
       if (player_struct.fatigue > 0 && player_struct.controls[CONTROL_YVEL] <= SPRINT_CONTROL_THRESHOLD && !EDMS_pelvis_is_climbing)
       {
-         int newf = player_struct.fatigue-player_struct.fatigue_regen;
+         int32_t newf = player_struct.fatigue-player_struct.fatigue_regen;
          player_struct.fatigue_regen += fatigue_accum_rate;
          if (player_struct.fatigue_regen > player_struct.fatigue_regen_max)
             player_struct.fatigue_regen = player_struct.fatigue_regen_max;
@@ -976,7 +976,7 @@ void do_stuff_every_second()
 
 	if(QUESTVAR_GET(MISSION_DIFF_QVAR)==3)
 	{
-		int remain=MISSION_3_TICKS-player_struct.game_time;
+		int32_t remain=MISSION_3_TICKS-player_struct.game_time;
 
 		if((remain/CIT_CYCLE)<=30)
 			secret_render_fx=TIMELIMIT_REND_SFX;
@@ -1013,11 +1013,11 @@ void do_stuff_every_second()
 
 #define MAX_UBYTE 0xFF
 
-int enviro_suit_absorb(int damage, int exposure, ubyte dtype);
+int32_t enviro_suit_absorb(int32_t damage, int32_t exposure, uint8_t dtype);
 
-void expose_player_real(short damage, ubyte type, ushort )
+void expose_player_real(int16_t damage, uint8_t type, uint16_t )
 {
-   int cval = player_struct.hit_points_lost[type-1];
+   int32_t cval = player_struct.hit_points_lost[type-1];
    if (damage == 0) return;
    damage = max(-cval,min(damage,MAX_UBYTE-cval));
    if (damage > 0 && (type == BIO_TYPE || type == RADIATION_TYPE))
@@ -1025,13 +1025,13 @@ void expose_player_real(short damage, ubyte type, ushort )
       damage = enviro_suit_absorb(damage,cval,type);
    }
    cval += damage;
-   player_struct.hit_points_lost[type-1] = (ubyte) cval;
+   player_struct.hit_points_lost[type-1] = (uint8_t) cval;
 #ifdef SCHEDULED_DECAY
    if (tsecs > 0)
    {
       SchedEvent  ev;
       SchedExposeData *xd = (SchedExposeData*)&ev.data;
-      int count = 1;
+      int32_t count = 1;
       ev.timestamp = TICKS2TSTAMP(player_struct.game_time + tsecs*CIT_CYCLE);
       ev.type = EXPOSE_SCHED_EVENT;
       xd->damage = -(damage/count); // plus or minus exposure increment
@@ -1044,7 +1044,7 @@ void expose_player_real(short damage, ubyte type, ushort )
 }
 
 
-void expose_player(byte damage, ubyte type, ushort tsecs)
+void expose_player(int8_t damage, uint8_t type, uint16_t tsecs)
 {
    expose_player_real(damage,type,tsecs);
 }
@@ -1054,7 +1054,7 @@ void expose_player(byte damage, ubyte type, ushort tsecs)
 //
 // returns damage to player after enviro-suit
 
-extern long long_sqrt(long num);
+extern int32_t long_sqrt(int32_t num);
 
 #define ENVIRO_ABSORB_DENOM 5
 #define ENVIRO_DRAIN_DENOM  1
@@ -1062,18 +1062,18 @@ extern long long_sqrt(long num);
 
 
 // biorhythm vars
-int bio_absorb = 0;
-int rad_absorb = 0;
+int32_t bio_absorb = 0;
+int32_t rad_absorb = 0;
 
 
-int enviro_suit_absorb(int damage, int exposure, ubyte dtype)
+int32_t enviro_suit_absorb(int32_t damage, int32_t exposure, uint8_t dtype)
 {
-   short drain;
-   short absorb;
-   short denom;
-   short energy;
-   short old_edrain_rate = enviro_edrain_rate;
-   ubyte version = player_struct.hardwarez[CPTRIP(ENV_HARD_TRIPLE)];
+   int16_t drain;
+   int16_t absorb;
+   int16_t denom;
+   int16_t energy;
+   int16_t old_edrain_rate = enviro_edrain_rate;
+   uint8_t version = player_struct.hardwarez[CPTRIP(ENV_HARD_TRIPLE)];
 
    if (dtype == RADIATION_TYPE && version > 0) version--;
    if (version == 0) return damage;
@@ -1101,10 +1101,10 @@ int enviro_suit_absorb(int damage, int exposure, ubyte dtype)
    switch(dtype)
    {
       case BIO_TYPE:
-         bio_absorb = 8+long_sqrt((int)damage);
+         bio_absorb = 8+long_sqrt((int32_t)damage);
          break;
       case RADIATION_TYPE:
-         rad_absorb = 8+long_sqrt((int)damage);
+         rad_absorb = 8+long_sqrt((int32_t)damage);
          break;
       default:
          break;
@@ -1113,12 +1113,12 @@ int enviro_suit_absorb(int damage, int exposure, ubyte dtype)
    {
       if (old_edrain_rate == 0)
       {
-         ulong time = 5 << APPROX_CIT_CYCLE_SHFT;
+         uint32_t time = 5 << APPROX_CIT_CYCLE_SHFT;
          hud_set_time(HUD_ENVIROUSE,time);
          hud_set_time(HUD_ENERGYUSE,time);
       }
    }
    else
       hud_unset(HUD_ENVIROUSE);
-   return (byte)damage;
+   return (int8_t)damage;
 }

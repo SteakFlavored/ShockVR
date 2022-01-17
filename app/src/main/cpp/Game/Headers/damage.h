@@ -88,10 +88,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_DESTROYED_OBJS    100
 
 #ifdef __COMBAT_C
-short destroyed_obj_count = 0;
+int16_t destroyed_obj_count = 0;
 ObjID destroyed_ids[MAX_DESTROYED_OBJS];
 #else
-extern short destroyed_obj_count;
+extern int16_t destroyed_obj_count;
 extern ObjID destroyed_ids[MAX_DESTROYED_OBJS];
 #endif
 
@@ -108,16 +108,16 @@ void destroy_destroyed_objects(void);
 // damage_object()
 // flags - if the low bit is set - then damage is not absorbed by shields
 // damage_modifier - raw damage value of attack - 0 if attacking player
-ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags);
+uint8_t damage_object(ObjID target_id, int32_t damage, int32_t dtype, uint8_t flags);
 
-int compute_damage(ObjID target,int damage_type,int damage_mod,ubyte offense,ubyte penet,int power_level,ubyte *effect,ubyte *effect_row, ubyte attack_effect_type);
+int32_t compute_damage(ObjID target,int32_t damage_type,int32_t damage_mod,uint8_t offense,uint8_t penet,int32_t power_level,uint8_t *effect,uint8_t *effect_row, uint8_t attack_effect_type);
 
-ubyte object_affect(ObjID target_id, short dtype);
+uint8_t object_affect(ObjID target_id, int16_t dtype);
 
 // simple_damage object just takes some damage and damage type
 // (and flags) and damages the object if it is vulnerable.
 
-bool simple_damage_object(ObjID target, int damage, ubyte dtype, ubyte flags);
+bool simple_damage_object(ObjID target, int32_t damage, uint8_t dtype, uint8_t flags);
 bool terrain_damage_object(physics_handle ph, fix raw_damage);
 bool special_terrain_hit(ObjID cobjid);
 
@@ -129,17 +129,17 @@ bool special_terrain_hit(ObjID cobjid);
 //   flags - see above
 //   power_level - will be ignored for projectile weapons, but used for grenades and beam guns
 //
-ubyte attack_object(ObjID target, int damage_type,int damage_mod, ubyte offense, ubyte penet, ubyte flags, int power_level, ubyte *effect_row, ubyte *effect, ubyte attack_effect_type, int *damage_inflicted);
+uint8_t attack_object(ObjID target, int32_t damage_type,int32_t damage_mod, uint8_t offense, uint8_t penet, uint8_t flags, int32_t power_level, uint8_t *effect_row, uint8_t *effect, uint8_t attack_effect_type, int32_t *damage_inflicted);
 
 // player_attack_object
 //
-ubyte player_attack_object(ObjID target, int wpn_triple, int power_level, Combat_Pt origin);
+uint8_t player_attack_object(ObjID target, int32_t wpn_triple, int32_t power_level, Combat_Pt origin);
 
 // get an estimate of how damaged we are, with above numerical index
-int get_damage_estimate(ObjSpecID osid);
+int32_t get_damage_estimate(ObjSpecID osid);
 
 void spew_object_specs(void);
-bool test_object_specs(short keycode, ulong context, void *data);
-bool damage_player(int damage, ubyte dtype, ubyte flags);
+bool test_object_specs(int16_t keycode, uint32_t context, void *data);
+bool damage_player(int32_t damage, uint8_t dtype, uint8_t flags);
 
 #endif // __DAMAGE_H

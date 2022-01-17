@@ -28,18 +28,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 extern MemStack *temp_mem_get_stack(void);
-extern int temp_mem_init(MemStack *ms);
-extern int temp_mem_uninit(void);
-extern void *temp_malloc(long n);
-extern void *temp_realloc(void *p,long n);
-extern int temp_free(void *p);
+extern int32_t temp_mem_init(MemStack *ms);
+extern int32_t temp_mem_uninit(void);
+extern void *temp_malloc(int32_t n);
+extern void *temp_realloc(void *p,int32_t n);
+extern int32_t temp_free(void *p);
 
 #ifdef DBG_ON
-extern int temp_spew_mem_init(MemStack *ms,char *file,int line);
-extern int temp_spew_mem_uninit(char *file,int line);
-extern void *temp_spew_malloc(long n,char *file,int line);
-extern void *temp_spew_realloc(void *p,long n,char *file,int line);
-extern int temp_spew_free(void *p,char *file,int line);
+extern int32_t temp_spew_mem_init(MemStack *ms,int8_t *file,int32_t line);
+extern int32_t temp_spew_mem_uninit(int8_t *file,int32_t line);
+extern void *temp_spew_malloc(int32_t n,int8_t *file,int32_t line);
+extern void *temp_spew_realloc(void *p,int32_t n,int8_t *file,int32_t line);
+extern int32_t temp_spew_free(void *p,int8_t *file,int32_t line);
 
 #define TempMemInit(ms) temp_spew_mem_init(ms,__FILE__,__LINE__)
 #define TempMemUninit() temp_spew_mem_uninit(__FILE__,__LINE__)

@@ -27,12 +27,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Citadel Renderer
  *  camera position/modification/creation system
  *
- * bool    fr_camera_create (cams *camtype, int *arg1, int *arg2)
- * int     fr_camera_update (cams *cam, int *arg1, int *arg2)
- * void    fr_camera_slewone(cams *cam, int which, int how)
+ * bool    fr_camera_create (cams *camtype, int32_t *arg1, int32_t *arg2)
+ * int32_t     fr_camera_update (cams *cam, int32_t *arg1, int32_t *arg2)
+ * void    fr_camera_slewone(cams *cam, int32_t which, int32_t how)
  * fix    *fr_camera_getpos (cams *cam)
  * void    fr_camera_setdef (cams *cam)
- * void    fr_camera_slewcam(cams *cam, int which, int how)
+ * void    fr_camera_slewcam(cams *cam, int32_t which, int32_t how)
  *
  * $Log: frcamera.c $
  * Revision 1.15  1994/07/15  13:58:34  dc
@@ -103,21 +103,21 @@ void    fr_camera_setdef (cams *cam)
 cams   *fr_camera_getdef (void)
  { return _def_cam; }
 
-bool    fr_camera_create (cams *cam, int camtype, void *arg1, void *arg2)
+bool    fr_camera_create (cams *cam, int32_t camtype, void *arg1, void *arg2)
 {
    _cam_top(cam) FALSE;
    _cam->type=camtype;
    if (camtype&CAMBIT_OBJ)
-      _cam->obj_id=(ushort)arg1;
+      _cam->obj_id=(uint16_t)arg1;
    else
       memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
    memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
    return TRUE;
 }
 
-uchar   fr_camera_modtype(cams *cam, uchar type_on, uchar type_off)
+uint8_t   fr_camera_modtype(cams *cam, uint8_t type_on, uint8_t type_off)
 {
-   uchar ret;
+   uint8_t ret;
    _cam_top(cam) 0;
    ret=_cam->type;
    _cam->type&=~type_off;
@@ -126,11 +126,11 @@ uchar   fr_camera_modtype(cams *cam, uchar type_on, uchar type_off)
 }
 
 // i'll give you fish, i'll give you candy, i'll give you, everything I have in my hand
-int     fr_camera_update (cams *cam, void *arg1, int whicharg, void *arg2)
+int32_t     fr_camera_update (cams *cam, void *arg1, int32_t whicharg, void *arg2)
 {
    _cam_top(cam) FALSE;
    if (arg1!=NULL)
-	   if (_cam->type&CAMBIT_OBJ) _cam->obj_id=(ushort)arg1; else memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
+	   if (_cam->type&CAMBIT_OBJ) _cam->obj_id=(uint16_t)arg1; else memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
    if (whicharg==CAM_UPDATE_ALL)
 	   memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
    else if (whicharg<CAM_ARGS_CNT)
@@ -138,7 +138,7 @@ int     fr_camera_update (cams *cam, void *arg1, int whicharg, void *arg2)
    return TRUE;
 }
 
-void    fr_camera_setone(cams *cam, int which, int newone)
+void    fr_camera_setone(cams *cam, int32_t which, int32_t newone)
 {
    _cam_top(cam);
    if (_cam->type&CAMBIT_OBJ)
@@ -147,9 +147,9 @@ void    fr_camera_setone(cams *cam, int which, int newone)
 	   _cam->coor[which]=newone;
 }
 
-void    fr_camera_slewone(cams *cam, int which, int how)
+void    fr_camera_slewone(cams *cam, int32_t which, int32_t how)
 {
-   uchar cv[3]={0,2,1};
+   uint8_t cv[3]={0,2,1};
    _cam_top(cam);
    if (which>=3)                       /* angles */
    {
@@ -184,13 +184,13 @@ void    fr_camera_slewone(cams *cam, int which, int how)
 // also in init.c
 #define MAGIC_SELFRUN_OBJID      0xC3
 
-void    fr_camera_getobjloc (int oid, fix *store)
+void    fr_camera_getobjloc (int32_t oid, fix *store)
 {
    Obj *cobj=&objs[oid];
    if (cobj->info.ph!=-1)
    {
 #ifndef __RENDTEST__
-      extern bool get_phys_info(int ph, fix *targ_array, int cnt);
+      extern bool get_phys_info(int32_t ph, fix *targ_array, int32_t cnt);
 #endif
      get_phys_info(cobj->info.ph,store,6);
    }
@@ -225,7 +225,7 @@ fix    *fr_camera_getpos (cams *cam)
    return &fr_camera_last[0];
 }
 
-void    fr_camera_slewcam(cams *cam, int which, int how)
+void    fr_camera_slewcam(cams *cam, int32_t which, int32_t how)
 {
    _cam_top(cam);
    if (_cam->type&CAMBIT_OBJ)

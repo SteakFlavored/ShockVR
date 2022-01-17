@@ -49,51 +49,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef STEREO_ON
 extern bool g3d_stereo;
 extern fix g3d_eyesep_raw;
-extern uchar *g3d_rt_canv_bits;
-extern uchar *g3d_lt_canv_bits;
+extern uint8_t *g3d_rt_canv_bits;
+extern uint8_t *g3d_lt_canv_bits;
 #endif
 
 
 // globals for state
 sts_vec  *std_vec;
-uchar    *std_col;
-int      std_num;
+uint8_t    *std_col;
+int32_t      std_num;
 
 fix   std_min_z  = 0x7fffffff;
 fix   std_max_rad = 0;
 
-int   std_size = 1;
+int32_t   std_size = 1;
 
 #ifdef STARS_ANTI_ALIAS
 // The canvas must be more than <std_alias_size> pixels wide
 // for us to anti-alias the stars (which makes them bigger,
 // hence the size restriction)
-int   std_alias_size = 640;
+int32_t   std_alias_size = 640;
 // This size is chosen so anti-aliasing starts happening
 // in full screen 640x400 modes.  Won't happen in demo mode
 // if demo mode uses a subcanvas
 
 // We must record the meaning of the colors of stars so
 // we can anti-alias them
-int   std_color_base, std_color_range;
+int32_t   std_color_base, std_color_range;
 
 // gamma-correct star colors
-uchar std_alias_color_table[256];
+uint8_t std_alias_color_table[256];
 #endif
 
 extern   g3s_vector _matrix_scale;
 extern   g3s_phandle _vbuf2;
-extern   int   _n_verts;
+extern   int32_t   _n_verts;
 
 // prototypes
 fix mag2_point(g3s_phandle p);
-void do_aa_star_pixel(int x, int y, int fx, int fy, int c);
-void do_aa_star(fix fx, fix fy, int c);
+void do_aa_star_pixel(int32_t x, int32_t y, int32_t fx, int32_t fy, int32_t c);
+void do_aa_star(fix fx, fix fy, int32_t c);
 void star_init_alias_table(void);
 
 // sets global pointers in the star library
 // to the number of stars, their positions, their colors
-void star_set(int n,sts_vec *vlist,uchar *clist)
+void star_set(int32_t n,sts_vec *vlist,uint8_t *clist)
 {
    std_num = n;
    std_vec = vlist;
@@ -101,11 +101,11 @@ void star_set(int n,sts_vec *vlist,uchar *clist)
 }
 
 // allocates the necessary space for stars using alloc
-int star_alloc(int n)
+int32_t star_alloc(int32_t n)
 {
    std_vec = (sts_vec *) NewPtr(n*sizeof(sts_vec)+n);
    if (std_vec == NULL) return -1;
-   std_col = (uchar *)(std_vec + n);
+   std_col = (uint8_t *)(std_vec + n);
    std_num = n;
    return n;
 }
@@ -131,8 +131,8 @@ void star_free(void)
 extern g3s_vector view_position;
 
 #ifdef STAR_SPEW
-extern   int   star_num_behind;
-extern   int   star_num_projected;
+extern   int32_t   star_num_behind;
+extern   int32_t   star_num_projected;
 #endif
 
 // for the love of god, I hate 3d scaling.
@@ -155,12 +155,12 @@ fix mag2_point(g3s_phandle p)
 // in stereo mode, we can leave this normal
 // and it should work, assuming the two
 // polygons are similar enough
-void star_poly(int n,g3s_phandle *vp)
+void star_poly(int32_t n,g3s_phandle *vp)
 {
-   int i;
+   int32_t i;
    fix m;
    g3s_phandle *p;
-   int f;
+   int32_t f;
 
    // draw star poly in color zero.  This part very
    // important, if not zero, won't work.
@@ -181,11 +181,11 @@ void star_poly(int n,g3s_phandle *vp)
 }
 
 
-void star_empty(int n,g3s_phandle *vp)
+void star_empty(int32_t n,g3s_phandle *vp)
 {
-   int i;
+   int32_t i;
    fix m;
-   int n1;
+   int32_t n1;
    g3s_phandle dest[10];   // assume max clip 10
 
    // clip it just like you would when you render
@@ -209,9 +209,9 @@ void star_sky(void)
 
 #ifdef STARS_ANTI_ALIAS
 // render a single pixel of an anti-aliased star
-void do_aa_star_pixel(int x, int y, int fx, int fy, int c)
+void do_aa_star_pixel(int32_t x, int32_t y, int32_t fx, int32_t fy, int32_t c)
 {
-  int q;
+  int32_t q;
 
   if (gr_get_pixel(x,y) == 0xff) {
     q = fx * fy * c;
@@ -228,15 +228,15 @@ void do_aa_star_pixel(int x, int y, int fx, int fy, int c)
 
 // render an anti-aliased star.
 // this is a prime candidate for being made table driven
-void do_aa_star(fix fx, fix fy, int c)
+void do_aa_star(fix fx, fix fy, int32_t c)
 {
   // isolate the fractions and the integers
-  int x_frac = fix_frac(fx) >> 8;
-  int y_frac = fix_frac(fy) >> 8;
-  int x = fix_int(fx);
-  int y = fix_int(fy);
+  int32_t x_frac = fix_frac(fx) >> 8;
+  int32_t y_frac = fix_frac(fy) >> 8;
+  int32_t x = fix_int(fx);
+  int32_t y = fix_int(fy);
 
-  int color = (std_color_base + std_color_range - 1 - c);
+  int32_t color = (std_color_base + std_color_range - 1 - c);
 
   // rescale the color so that it's 0..255, 0 = dark, 255 = light
   color = (255 * color) / (std_color_range+1);
@@ -252,7 +252,7 @@ void do_aa_star(fix fx, fix fy, int c)
 void star_init_alias_table(void)
 {
   // init gamma corrected table
-  int i,a;
+  int32_t i,a;
   fix b,gamma;
 
   gamma = fix_make(0, 30000);
@@ -269,16 +269,16 @@ void star_init_alias_table(void)
 
 void star_render(void)
 {
-   int i;
+   int32_t i;
    g3s_phandle s;
-   int x,y;
-   int x1,y1;
+   int32_t x,y;
+   int32_t x1,y1;
    g3s_vector v;
    #ifdef STEREO_ON
    bool  old_stereo;
    #endif
    #ifdef STARS_ANTI_ALIAS
-   int anti_alias = grd_bm.w >= std_alias_size;
+   int32_t anti_alias = grd_bm.w >= std_alias_size;
    #endif
 
    #ifdef STAR_SPEW
@@ -386,9 +386,9 @@ void star_render(void)
 // stuffs random vectors and colors into the set areas
 // randomly assigning a color range to them
 // feel free to seed
-void star_rand(uchar col,uchar range)
+void star_rand(uint8_t col,uint8_t range)
 {
-   int i;
+   int32_t i;
    g3s_vector v;
    sts_vec *s;
    fix m;
@@ -438,9 +438,9 @@ void star_rand(uchar col,uchar range)
 extern g3s_point 	*first_free;
 extern g3s_matrix view_matrix;
 #if (defined(powerc) || defined(__powerc))
-extern int code_point(g3s_point *pt);
+extern int32_t code_point(g3s_point *pt);
 #else
-extern asm int code_point(g3s_point *pt);
+extern asm int32_t code_point(g3s_point *pt);
 #endif
 
 // matrix rotate and code a star point.  Project if clip codes
@@ -463,7 +463,7 @@ g3s_phandle star_transform_point(g3s_vector *v)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(v->gZ, vm9, &result2);
 	AsmWideAdd(&result, &result2);
-	temp = (result.hi<<16) | (((ulong) result.lo)>>16);
+	temp = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
   // check out z, see if behind
   if (temp<std_min_z) {point->codes = CC_BEHIND; return(point);}
@@ -476,7 +476,7 @@ g3s_phandle star_transform_point(g3s_vector *v)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(v->gZ, vm7, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gX = (result.hi<<16) | (((ulong) result.lo)>>16);
+	point->gX = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column (y)
 	AsmWideMultiply(v->gX, vm2, &result);
@@ -484,7 +484,7 @@ g3s_phandle star_transform_point(g3s_vector *v)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(v->gZ, vm8, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gY = (result.hi<<16) | (((ulong) result.lo)>>16);
+	point->gY = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //call clip codes
 	if (code_point(point)) return(point);

@@ -60,23 +60,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* draw a string s in the specified font at (x0,y0).  does not perform
    any clipping. */
 
-void gen_font_ustring (grs_font *f, char *s, short x0, short y0)
+void gen_font_ustring (grs_font *f, int8_t *s, int16_t x0, int16_t y0)
 {
    grs_bitmap bm;             /* character bitmap */
-   short *offset_tab;         /* table of character offsets */
-   uchar *char_buf;           /* font pixel data */
-   short offset;              /* offset of current character */
-   short x, y;                /* position of current character */
-   uchar c;                    /* current character */
+   int16_t *offset_tab;         /* table of character offsets */
+   uint8_t *char_buf;           /* font pixel data */
+   int16_t offset;              /* offset of current character */
+   int16_t x, y;                /* position of current character */
+   uint8_t c;                    /* current character */
 
-   char_buf = (uchar *)f + f->buf;
+   char_buf = (uint8_t *)f + f->buf;
    offset_tab = f->off_tab;
    gr_init_bm (&bm, NULL, (f->id==0xcccc)? BMT_FLAT8: BMT_MONO,
                BMF_TRANS, 0, f->h);
    bm.row = f->w;
 
    x = x0; y = y0;
-   while ((c=(uchar) (*s++)) != '\0') {
+   while ((c=(uint8_t) (*s++)) != '\0') {
       if (c=='\n' || c==CHAR_SOFTCR) {
          x = x0;
          y += f->h;

@@ -40,10 +40,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grs.h"
 
 extern grs_screen *grd_screen;
-extern uchar grd_default_pal[];
-extern uchar *grd_pal;
+extern uint8_t grd_default_pal[];
+extern uint8_t *grd_pal;
 extern grs_rgb grd_default_bpal[];
 extern grs_rgb *grd_bpal;
-extern uchar *grd_ipal;
+extern uint8_t *grd_ipal;
 
 #endif /* !__SCRDAT_H */

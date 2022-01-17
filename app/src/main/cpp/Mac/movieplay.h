@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Prototypes
 //--------------------
-void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt);
-void PlayVMail(FSSpec *movieSpec, short orgx, short orgy);
+void PlayCutScene(FSSpec *movieSpec, bool showSubs, bool allowHalt);
+void PlayVMail(FSSpec *movieSpec, int16_t orgx, int16_t orgy);
 void PlayIntroCutScene(void);
-void PlayStartupMovie(FSSpec *movieSpec, short orgx, short orgy);
+void PlayStartupMovie(FSSpec *movieSpec, int16_t orgx, int16_t orgy);

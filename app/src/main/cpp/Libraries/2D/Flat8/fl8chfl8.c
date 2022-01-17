@@ -41,13 +41,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* draw an unclipped, horizontally flipped flat 8 bitmap to a flat 8
    canvas through a color lookup table (clut). */
-void flat8_clut_hflip_flat8_ubitmap (grs_bitmap *bm, short x, short y,uchar *cl)
+void flat8_clut_hflip_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y,uint8_t *cl)
 {
-	short w;                   /* bitmap width */
-	short h;                   /* height */
-	uchar *src;                /* pointer into source bitmap */
-	uchar *dst;                /* pointer into canvas memory */
-	ushort	row;
+	int16_t w;                   /* bitmap width */
+	int16_t h;                   /* height */
+	uint8_t *src;                /* pointer into source bitmap */
+	uint8_t *dst;                /* pointer into canvas memory */
+	uint16_t	row;
 
 	if (cl == NULL) cl=gr_get_clut();
 	h = bm->h;

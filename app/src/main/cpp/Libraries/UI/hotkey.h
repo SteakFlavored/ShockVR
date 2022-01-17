@@ -73,24 +73,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HKSORT_KEYCODE  1
 #define HKSORT_ASCII    2
 
-typedef bool (*hotkey_callback)(short keycode, ulong context, void* state);
+typedef bool (*hotkey_callback)(int16_t keycode, uint32_t context, void* state);
 
 typedef struct _hotkey_entry
 {
-   ushort key;
+   uint16_t key;
    Array keychain;
-   int first;
+   int32_t first;
 } hotkey_entry;
 
 typedef struct _hotkey_link
 {
-   ulong context;
+   uint32_t context;
 #ifdef HOTKEY_HELP
    hotkey_callback func;
 #endif
    void* state;
-   char *help_text;
-   int next;
+   int8_t *help_text;
+   int32_t next;
 } hotkey_link;
 
 #ifdef __HOTKEY_SRC
@@ -101,28 +101,28 @@ extern Hashtable hotkey_table;
 
 // Prototypes
 
-errtype hotkey_init(int tblsize);
+errtype hotkey_init(int32_t tblsize);
 // Initialize hotkey table, giving an initial context and table size.
 
-errtype hotkey_add(short keycode, ulong context_mask, hotkey_callback func, void* state);
+errtype hotkey_add(int16_t keycode, uint32_t context_mask, hotkey_callback func, void* state);
 // installs a hotkey handler for a specific cooked keycode in the set of contexts described by context_mask.
 // This handler will take precidence over previously-installed handlers.
 
 #ifdef HOTKEY_HELP
-errtype hotkey_add_help(short keycode, ulong context_mask, hotkey_callback func, void* state, char *help_text);
+errtype hotkey_add_help(int16_t keycode, uint32_t context_mask, hotkey_callback func, void* state, int8_t *help_text);
 // like hotkey_add, but also takes a help string which it stores
 // for later reference.
 
-char *hotkey_help_text(short keycode, ulong contexts, hotkey_callback func);
+int8_t *hotkey_help_text(int16_t keycode, uint32_t contexts, hotkey_callback func);
 // looks up the help string for a given hotkey
 
 #endif
 
-errtype hotkey_remove(short keycode, ulong context_mask, hotkey_callback func);
+errtype hotkey_remove(int16_t keycode, uint32_t context_mask, hotkey_callback func);
 // delete all hotkey handlers with the specified keycode and callback function
 // from the contexts specified by the context_mask.
 
-errtype hotkey_dispatch(short keycode);
+errtype hotkey_dispatch(int16_t keycode);
 // dispatches the keycode to the highest-priority key handler for that
 // keycode that has any set bits in common with HotkeyContext.
 
@@ -130,7 +130,7 @@ errtype hotkey_shutdown(void);
 // shut down the hotkey system.
 
 #ifdef GODDAMN_THIS_MESS_IS_IMPOSSIBLE
-bool hotkey_list(char **item, int sort_type);
+bool hotkey_list(int8_t **item, int32_t sort_type);
 // stores in item a string that is the next hotkey string off of the
 // list, along with it's help text.  Returns whether or not there
 // are more hotkeys to list out.  sort_type determines what sorting
@@ -142,6 +142,6 @@ errtype hotkey_list_clear();
 
 // Globals
 
-extern ulong HotkeyContext;
+extern uint32_t HotkeyContext;
 
 #endif // __HOTKEY_H

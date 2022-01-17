@@ -58,8 +58,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //----------------
 //  Internal Prototypes
 //----------------
-void convert_grenade_to_explosion(ExplosionData *edata, int triple);
-ubyte grenade_compute_damage(ObjID target, int wpn_triple, int power_level, ubyte *effect);
+void convert_grenade_to_explosion(ExplosionData *edata, int32_t triple);
+uint8_t grenade_compute_damage(ObjID target, int32_t wpn_triple, int32_t power_level, uint8_t *effect);
 ObjID explosion_ray_cast_attack(ObjID gren_id, ObjID target, ObjLoc *gren_loc, fix radius, fix mass, fix speed);
 void do_object_explosion(ObjID id);
 bool activate_grenade_on_cursor(void);
@@ -78,7 +78,7 @@ ExplosionData game_explosions[GAME_EXPLS] =
 // the dead grenade should have no explosion. this is because the scheduler will check for that unique id, and if
 // there is no grenade with the same ObjID AND unique id, then we have to believe that the grenade was
 // destroyed.
-static ubyte grenade_counter = 1;
+static uint8_t grenade_counter = 1;
 
 // checks the first two to be equal = which means in_between
 #define IN_BETWEEN_NOT_EQUAL(a,b,c) ((((a) <= (b)) && ((b) < (c))) || \
@@ -92,9 +92,9 @@ static ubyte grenade_counter = 1;
 // convert_grenade_to_explosion()
 //
 
-void convert_grenade_to_explosion(ExplosionData *edata, int triple)
+void convert_grenade_to_explosion(ExplosionData *edata, int32_t triple)
 {
-   int         ctrip = CPTRIP(triple);
+   int32_t         ctrip = CPTRIP(triple);
 
    edata->radius         = fix_make(GrenadeProps[ctrip].radius,0);
    edata->radius_change  = fix_make(GrenadeProps[ctrip].radius_change, 0);
@@ -110,9 +110,9 @@ void convert_grenade_to_explosion(ExplosionData *edata, int triple)
 // grenade_compute_damage()
 //
 
-ubyte grenade_compute_damage(ObjID target, int wpn_triple, int power_level, ubyte *effect)
+uint8_t grenade_compute_damage(ObjID target, int32_t wpn_triple, int32_t power_level, uint8_t *effect)
 {
-   ubyte effect_class = (objs[target].obclass == CLASS_CRITTER) ? CritterProps[CPNUM(target)].hit_effect : NON_CRITTER_EFFECT;
+   uint8_t effect_class = (objs[target].obclass == CLASS_CRITTER) ? CritterProps[CPNUM(target)].hit_effect : NON_CRITTER_EFFECT;
 
    *effect = effect_matrix[effect_class][GREN_TYPE][0];
 
@@ -134,7 +134,7 @@ ObjID explosion_ray_cast_attack(ObjID gren_id, ObjID target, ObjLoc *gren_loc, f
    ObjID       affected_object = OBJ_NULL;
    Combat_Pt         vector;
    fix               dist;
-   ubyte      floor_height;
+   uint8_t      floor_height;
 
    source.x = fix_from_obj_coord(gren_loc->x);
    source.y = fix_from_obj_coord(gren_loc->y);
@@ -150,7 +150,7 @@ ObjID explosion_ray_cast_attack(ObjID gren_id, ObjID target, ObjLoc *gren_loc, f
    if (objs[target].info.ph != -1)
    {
       State             new_state;
-      extern void get_phys_state(int ph, State *new_state, ObjID id);
+      extern void get_phys_state(int32_t ph, State *new_state, ObjID id);
       get_phys_state(objs[target].info.ph, &new_state,target);
       dest.x = new_state.X;   dest.y = new_state.Y;   dest.z = new_state.Z;
    }
@@ -211,12 +211,12 @@ ObjID explosion_ray_cast_attack(ObjID gren_id, ObjID target, ObjLoc *gren_loc, f
 // do_explosion()
 //
 
-void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionData *edata)
+void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, ExplosionData *edata)
 {
-   int   x = OBJ_LOC_BIN_X(loc);
-   int   y = OBJ_LOC_BIN_Y(loc);
-   int   cx, cy;
-   int   cradius = fix_int(edata->radius);
+   int32_t   x = OBJ_LOC_BIN_X(loc);
+   int32_t   y = OBJ_LOC_BIN_Y(loc);
+   int32_t   cx, cy;
+   int32_t   cradius = fix_int(edata->radius);
    fix      deltax, deltay,deltaz;
    fix      radius_squared = fix_mul(edata->radius, edata->radius);
    // we're dividing by two - to account later for lack of precision
@@ -224,10 +224,10 @@ void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionDa
    ObjRefID current_ref;
    ObjID    current_id;
    bool     no_effect;
-   ubyte    affect;
-   int      damage;
+   uint8_t    affect;
+   int32_t      damage;
    extern ObjID damage_sound_id;
-   extern char damage_sound_fx;
+   extern int8_t damage_sound_fx;
 
    if (special_effect)
    {
@@ -348,13 +348,13 @@ void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionDa
                      fix   ratio;
                      fix   obj_dist;
                      fix   damage_fix;
-                     int   percent_damage;
-                     ubyte effect;
-                     ubyte effect_class;
+                     int32_t   percent_damage;
+                     uint8_t effect;
+                     uint8_t effect_class;
 
                      // divide by 2 to take into account - fix's lack of precision
-                     int   dmg = edata->damage_mod >> 2;
-                     int   dmgc = edata->damage_change >> 2;
+                     int32_t   dmg = edata->damage_mod >> 2;
+                     int32_t   dmgc = edata->damage_change >> 2;
 
                      // let's get the object's distance from explosion!
                      obj_dist = fix_fast_pyth_dist(fix_fast_pyth_dist(deltax,deltay),deltaz);
@@ -390,13 +390,13 @@ void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionDa
                      if (damage>0)
                      {
                         bool explosion_affected;
-                        ubyte flags;
+                        uint8_t flags;
 
                         explosion_affected = FALSE;
                         if (objs[current_id].obclass == CLASS_GRENADE)
                         {
-                           ubyte    chaining;
-                           int      targ_triple;
+                           uint8_t    chaining;
+                           int32_t      targ_triple;
 
                            // check if this grenade will be affected by blast
                            targ_triple = MAKETRIP(objs[current_id].obclass, objs[current_id].subclass, objs[current_id].info.type);
@@ -442,7 +442,7 @@ void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionDa
                         else
                         {
                            bool do_effect = FALSE;
-                           ubyte destroy = ObjProps[OPNUM(current_id)].destroy_effect;
+                           uint8_t destroy = ObjProps[OPNUM(current_id)].destroy_effect;
                            if ((objs[current_id].info.current_hp <= damage) && DESTROY_OBJ_EFFECT(destroy))
                            {
                               objs[current_id].info.current_hp=0;
@@ -497,9 +497,9 @@ void do_grenade_explosion(ObjID id, bool special_effect)
    ObjID          grenade_location_id;
    ObjLoc         gren_loc;
    ExplosionData  edata;
-   int            triple;
+   int32_t            triple;
    bool           in_hand = (id == object_on_cursor);
-   ubyte          effect = (special_effect) ? (ObjProps[OPNUM(id)].destroy_effect&0x7F) : 0;
+   uint8_t          effect = (special_effect) ? (ObjProps[OPNUM(id)].destroy_effect&0x7F) : 0;
 
    // let's get the triple
    triple = MAKETRIP(objs[id].obclass, objs[id].subclass, objs[id].info.type);
@@ -529,7 +529,7 @@ void do_grenade_explosion(ObjID id, bool special_effect)
    // Special earthshaker hack
    if (ID2TRIP(id) == EARTH_G_TRIPLE)
    {
-      extern short fr_sfx_time;
+      extern int16_t fr_sfx_time;
       fr_global_mod_flag(FR_SFX_SHAKE, FR_SFX_MASK);
       fr_sfx_time = CIT_CYCLE << 1;
    }
@@ -574,9 +574,9 @@ void do_object_explosion(ObjID id)
 
 #define NAMEBUFSZ 50
 
-char* get_grenade_name(int gtype, char* buf)
+int8_t* get_grenade_name(int32_t gtype, int8_t* buf)
 {
-   int triple= nth_after_triple(MAKETRIP(CLASS_GRENADE,0,0),gtype);
+   int32_t triple= nth_after_triple(MAKETRIP(CLASS_GRENADE,0,0),gtype);
 
    get_object_short_name(triple,buf,NAMEBUFSZ);
 
@@ -590,12 +590,12 @@ char* get_grenade_name(int gtype, char* buf)
 void activate_grenade(ObjSpecID osid)
 {
    ObjID             id;
-   int               triple;
-   int               type;
-   ubyte             deviation;
-   int               tdev;
-   int               time;
-   ubyte             n;
+   int32_t               triple;
+   int32_t               type;
+   uint8_t             deviation;
+   int32_t               tdev;
+   int32_t               time;
+   uint8_t             n;
    GrenSchedEvent    new_event;
 
    id = objGrenades[osid].id;

@@ -32,26 +32,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------
 //MDI_DRIVER     	*_snd_midi=NULL;
 TunePlayer       		_snd_seq_player[SND_MAX_SEQUENCES];
-int             				_snd_seq_cnt;
+int32_t             				_snd_seq_cnt;
 snd_midi_parms  	_snd_midi_prm[SND_MAX_SEQUENCES];
 
-void (*seq_finish)(long seq_ind) = NULL;
+void (*seq_finish)(int32_t seq_ind) = NULL;
 TuneCallBackUPP	gTuneCBProcPtr;
 
 //--------------------------
 //  Prototypes
 //--------------------------
-pascal void HandleTuneCallBack(const TuneStatus *status, long refCon);
+pascal void HandleTuneCallBack(const TuneStatus *status, int32_t refCon);
 
 
 //---------------------------------------------------------
 //  Nothing for Mac to do here (none of that nasty sound card mess, thank God).
 //---------------------------------------------------------
-int snd_start_midi(void)
+int32_t snd_start_midi(void)
 {
 /*
    lib_PARMS libp, *lbpp;
-   char *driv_file;
+   int8_t *driv_file;
 
    if (snd_midi!=NULL)
       return SND_DRIVER_ALREADY;
@@ -73,7 +73,7 @@ int snd_start_midi(void)
 //---------------------------------------------------------
 // For Mac version:  Allocate all sound channels here.
 //---------------------------------------------------------
-int snd_set_midi_sequences(int seq_cnt)
+int32_t snd_set_midi_sequences(int32_t seq_cnt)
 {
 //   _midi_top;
 	if (seq_cnt > SND_MAX_SEQUENCES)
@@ -82,7 +82,7 @@ int snd_set_midi_sequences(int seq_cnt)
 /* Only called once in the game, so this doesn't apply.
 	if (_snd_seq_cnt > seq_cnt)  							// See if we have to lower allocation
 	{
-		for (int i=0; (i<_snd_seq_cnt)&&(seq_cnt<_snd_seq_cnt); )
+		for (int32_t i=0; (i<_snd_seq_cnt)&&(seq_cnt<_snd_seq_cnt); )
 			switch (AIL_sequence_status(_snd_seq_hnd[i]))
 			{
 			case SMP_DONE:
@@ -117,12 +117,12 @@ int snd_set_midi_sequences(int seq_cnt)
 //---------------------------------------------------------
 //  Stop playing and shut down all the tune players.
 //---------------------------------------------------------
-int snd_stop_midi(void)
+int32_t snd_stop_midi(void)
 {
 	snd_kill_all_sequences();
 //	AIL_uninstall_MDI_driver(snd_midi);
 //	snd_midi=NULL;
-	for (int i=0; i<_snd_seq_cnt; i++)
+	for (int32_t i=0; i<_snd_seq_cnt; i++)
 	{
 		CloseComponent(_snd_seq_player[i]);
 	}
@@ -136,7 +136,7 @@ int snd_stop_midi(void)
 //--------------------------------------------------------------------------
 //	Call-back routine.  Get's called when tune is finished.
 //--------------------------------------------------------------------------
-pascal void HandleTuneCallBack(const TuneStatus *, long refCon)
+pascal void HandleTuneCallBack(const TuneStatus *, int32_t refCon)
 {
 	if (seq_finish)
 		(*seq_finish)(refCon);

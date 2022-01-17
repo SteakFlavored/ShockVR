@@ -104,7 +104,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MFD_FONT                 RES_tinyTechFont
 
 
-extern ObjID panel_ref_unexpose(int mfd_id, int func);
+extern ObjID panel_ref_unexpose(int32_t mfd_id, int32_t func);
 
 // ----------
 // Structures
@@ -139,7 +139,7 @@ typedef struct {                             // Button panel structure
 } MFD_bPanel;
 
 typedef struct _MFD {
-  ubyte       id;
+  uint8_t       id;
   MFD_bPanel  bttn;                          // The button panel
   LGRect        rect;
   LGRegion      reg;
@@ -148,15 +148,15 @@ typedef struct _MFD {
 
 
 typedef struct _mfd_func {
-//   ubyte      id;
-   void       (*expose)(MFD *mfd, ubyte control);
+//   uint8_t      id;
+   void       (*expose)(MFD *mfd, uint8_t control);
    MFD_SimpHandler simp; // Retained for compatibility.
    errtype    (*init)(struct _mfd_func*);
-   uchar      priority;  // one is highest, zero is infinitely low
+   uint8_t      priority;  // one is highest, zero is infinitely low
    // The following stuff is most likely to want to be zero.  so nyah
-   ubyte      flags;                         // Static func-specific info
-   long       last;                          // Timestamp for incremental
-   int        handler_count;
+   uint8_t      flags;                         // Static func-specific info
+   int32_t       last;                          // Timestamp for incremental
+   int32_t        handler_count;
    MFDhandler handlers[NUM_MFD_HANDLERS];
 } MFD_Func;
 
@@ -165,25 +165,25 @@ extern void init_mfd_funcs();
 extern bool mfd_view_callback_full(uiEvent *e, LGRegion *r, void *udata);
 extern bool mfd_view_callback(uiEvent *e, LGRegion *r, void *udata);
 extern bool mfd_button_callback(uiEvent *e, LGRegion *r, void *udata);
-extern bool mfd_button_callback_kb(short keycode, ulong context, void *data);
-extern bool mfd_update_current_slot(ubyte mfd_id,ubyte status,ubyte num_steps);
+extern bool mfd_button_callback_kb(int16_t keycode, uint32_t context, void *data);
+extern bool mfd_update_current_slot(uint8_t mfd_id,uint8_t status,uint8_t num_steps);
 extern void mfd_init_funcs();
 extern void mfd_set_cliprect(LGRect *r);
-extern void set_mfd_func(int fnum, void *e, void *h, void *initf, ubyte flags);
-extern LGPoint mfd_draw_string(char *s, short x, short y, long c, bool DrawString);
-extern LGPoint mfd_draw_font_string(char *s, short x, short y, long c, int font, bool DrawString);
-extern LGPoint mfd_full_draw_string(char *s, short x, short y, long c, int font, bool DrawString, bool transp);
-extern void set_slot_to_func(ubyte snum, ubyte fnum, MFD_Status stat);
-extern void mfd_draw_bitmap(grs_bitmap* bmp, short x, short y);
+extern void set_mfd_func(int32_t fnum, void *e, void *h, void *initf, uint8_t flags);
+extern LGPoint mfd_draw_string(int8_t *s, int16_t x, int16_t y, int32_t c, bool DrawString);
+extern LGPoint mfd_draw_font_string(int8_t *s, int16_t x, int16_t y, int32_t c, int32_t font, bool DrawString);
+extern LGPoint mfd_full_draw_string(int8_t *s, int16_t x, int16_t y, int32_t c, int32_t font, bool DrawString, bool transp);
+extern void set_slot_to_func(uint8_t snum, uint8_t fnum, MFD_Status stat);
+extern void mfd_draw_bitmap(grs_bitmap* bmp, int16_t x, int16_t y);
 extern void mfd_partial_clear(LGRect *r);
 extern void init_newmfd_button_cursors();
-extern void mfd_update_display(MFD *m, short x0, short y0, short x1, short y1);
+extern void mfd_update_display(MFD *m, int16_t x0, int16_t y0, int16_t x1, int16_t y1);
 extern void mfd_clear_rects(void);
-extern errtype mfd_add_rect(short x, short y, short x1, short y1);
+extern errtype mfd_add_rect(int16_t x, int16_t y, int16_t x1, int16_t y1);
 extern void mfd_update_rects(MFD* m);
-extern ubyte mfd_get_func(ubyte mfd_id, ubyte s);
+extern uint8_t mfd_get_func(uint8_t mfd_id, uint8_t s);
 
-extern char* get_free_frame_buffer_bits(int);
+extern int8_t* get_free_frame_buffer_bits(int32_t);
 #define MFD_EXTRACT_BUF (get_free_frame_buffer_bits(-1))
 
 // -------
@@ -191,7 +191,7 @@ extern char* get_free_frame_buffer_bits(int);
 // -------
 extern MFD_Func mfd_funcs[MFD_NUM_FUNCS];
 extern bool mfd_string_wrap;
-extern ubyte mfd_string_shadow;
+extern uint8_t mfd_string_shadow;
 
 #define MFD_SHADOW_NEVER      0
 #define MFD_SHADOW_ALWAYS     1

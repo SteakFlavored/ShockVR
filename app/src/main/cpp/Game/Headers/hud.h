@@ -82,14 +82,14 @@ errtype hud_update(bool redraw_whole,frc* context);
 errtype cyber_hud_update(bool redraw_whole);
 
 // Set the data being displayed by the HUD.
-errtype hud_set(ulong hud_modes);
-errtype hud_unset(ulong hud_modes);
-errtype hud_set_time(ulong hud_modes, ulong ticks);
+errtype hud_set(uint32_t hud_modes);
+errtype hud_unset(uint32_t hud_modes);
+errtype hud_set_time(uint32_t hud_modes, uint32_t ticks);
 
 // Globals
 extern LGRect target_screen_rect;
-extern ubyte hud_colors[HUD_COLOR_BANKS][HUD_COLORS_PER_BANK];
-extern ubyte hud_color_bank;
+extern uint8_t hud_colors[HUD_COLOR_BANKS][HUD_COLORS_PER_BANK];
+extern uint8_t hud_color_bank;
 
 
 

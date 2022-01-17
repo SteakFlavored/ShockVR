@@ -40,40 +40,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define	kSliderBackPictDim	8992
 #define	kThumbIconDim			8993
 
-typedef pascal void (*SliderCallbackProcPtr)(short value);
+typedef pascal void (*SliderCallbackProcPtr)(int16_t value);
 
 //--------------------
 //  Globals
 //--------------------
-extern Boolean		gGrayOK;
-extern Boolean		gIgnoreGray;
+extern bool		gGrayOK;
+extern bool		gIgnoreGray;
 extern Str255		gDimTitle;
-extern Boolean		gDimmed;
+extern bool		gDimmed;
 extern MenuHandle	gPopupMenuHdl;
-extern short			gPopupSel;
-extern short			gSliderLastPos;
-extern Boolean		gSliderDimmed;
+extern int16_t			gPopupSel;
+extern int16_t			gSliderLastPos;
+extern bool		gSliderDimmed;
 
-extern short			gNewGameSel[4];
+extern int16_t			gNewGameSel[4];
 
 //--------------------
 //  Prototypes
 //--------------------
-void FlashButton(WindowPtr dlog, short itemN);
-pascal void OKButtonUser(WindowPtr dlog, short itemN);
+void FlashButton(WindowPtr dlog, int16_t itemN);
+pascal void OKButtonUser(WindowPtr dlog, int16_t itemN);
 
-pascal Boolean ShockFilterProc(DialogPtr dlog, EventRecord *evt, short *itemHit);
-pascal Boolean ShockAlertFilterProc(DialogPtr dlog, EventRecord *evt, short *itemHit);
+pascal bool ShockFilterProc(DialogPtr dlog, EventRecord *evt, int16_t *itemHit);
+pascal bool ShockAlertFilterProc(DialogPtr dlog, EventRecord *evt, int16_t *itemHit);
 
-pascal void DimStaticUser(WindowPtr dlog, short itemN);
+pascal void DimStaticUser(WindowPtr dlog, int16_t itemN);
 
-pascal void PopupMenuUser(WindowPtr dlog, short itemN);
-pascal void PopupMenuUserNG(WindowPtr dlog, short itemN);
+pascal void PopupMenuUser(WindowPtr dlog, int16_t itemN);
+pascal void PopupMenuUserNG(WindowPtr dlog, int16_t itemN);
 
-pascal void GroupBoxUser(WindowPtr dlog, short itemNum);
+pascal void GroupBoxUser(WindowPtr dlog, int16_t itemNum);
 
 void SetupSlider(void);
 void SetSliderBitmaps(void);
-pascal void DrawSlider(WindowPtr dlog, short itemNum);
-short DoSliderTracking(WindowPtr dlog, short itemNum, SliderCallbackProcPtr cb);
+pascal void DrawSlider(WindowPtr dlog, int16_t itemNum);
+int16_t DoSliderTracking(WindowPtr dlog, int16_t itemNum, SliderCallbackProcPtr cb);
 void FreeSlider(void);

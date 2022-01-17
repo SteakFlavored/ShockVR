@@ -70,7 +70,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    }                                                  \
    else                             /* long op */     \
    {                                                  \
-      ushort *rsd_usrc = (ushort *)++rsd_src;         \
+      uint16_t *rsd_usrc = (uint16_t *)++rsd_src;         \
                                                       \
       if (*rsd_usrc >= 0x8000)                        \
       {                                               \

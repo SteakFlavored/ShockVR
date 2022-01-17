@@ -57,12 +57,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 #include "clpfcn.h"
 
-int gr_clip_fix_poly (int n, fix *vlist, fix *clist)
+int32_t gr_clip_fix_poly (int32_t n, fix *vlist, fix *clist)
 {
    fix *tlist = (fix *)gr_alloc_temp (128*sizeof (fix));
    fix x0, y0;
    fix x1, y1;
-   int i, j;
+   int32_t i, j;
 
    /* clip left edge from vlist->tlist */
    x0 = vlist[2*(n-1)];

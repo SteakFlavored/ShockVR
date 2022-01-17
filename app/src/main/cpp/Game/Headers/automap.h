@@ -60,9 +60,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 typedef struct _AutoText{
-   char *letters;
+   int8_t *letters;
    Point coordinate;
-   int color;
+   int32_t color;
    struct _AutoText *next_entry;
 } AutoText;
 
@@ -81,14 +81,14 @@ typedef struct _AutoText{
 // Prototypes
 
 // Specify which level is the "current" automap level for viewing
-errtype automap_current(int level);
+errtype automap_current(int32_t level);
 
 // Set what kinds of information are shown by the automap
-errtype automap_infotype(ulong map_info);
+errtype automap_infotype(uint32_t map_info);
 
 // Draw the automap, scaled to specified size, in the area with upper left corner
 // as specified.
-errtype automap_draw(int map_size, Point ul_coord);
+errtype automap_draw(int32_t map_size, Point ul_coord);
 
 // Get a handle to a new text entry field on the automap, at specified coords
 errtype automap_new_entry(Point coord, AutoText *new_text);
@@ -97,7 +97,7 @@ errtype automap_new_entry(Point coord, AutoText *new_text);
 errtype automap_delete_entry(AutoText *victim);
 
 // Stubs for the MFD system
-void mfd_map_expose(MFD *m, ubyte control);
+void mfd_map_expose(MFD *m, uint8_t control);
 errtype mfd_map_init(MFD_Func *);
 bool mfd_map_handler(MFD *m, uiEvent *e);
 

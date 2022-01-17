@@ -52,24 +52,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VTAB_SIZE 100
 
 typedef struct {
-   uchar *p;        /* pointer to block. */
-   long  size;      /* size of block (address). */
+   uint8_t *p;        /* pointer to block. */
+   int32_t  size;      /* size of block (address). */
 } v_block;
 
 v_block v_table[VTAB_SIZE];
 #endif
 
 // globals
-uchar grd_valloc_mode = 0;
+uint8_t grd_valloc_mode = 0;
 
-uchar *valloc (short w, short h)
+uint8_t *valloc (int16_t w, int16_t h)
 {
    if (grd_valloc_mode)
-      return (uchar *)0;
+      return (uint8_t *)0;
    else
       return grd_cap->vbase;
 }
 
-void vfree (uchar *p)
+void vfree (uint8_t *p)
 {
 }

@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // asm is good
 // tmp should be half a max row
 // we copy to half row, then mirrow backwards, then copy half row in
-void do_flip_in_place(uchar *bits, uchar *tmp, int w, int h , int row);
+void do_flip_in_place(uint8_t *bits, uint8_t *tmp, int32_t w, int32_t h , int32_t row);
 #pragma aux do_flip_in_place =                                          \
 /* end of the loop thing, so we need to do it to start out */           \
    "mov eax, ecx"                                                       \
@@ -88,14 +88,14 @@ parm [esi] [edi] [ecx] [edx] modify [eax ebx];
 // row skip is used implicitly above
 void shock_hflip_in_place(grs_bitmap *bm)
 {
-   int row_skip=bm->row-bm->w;
-   uchar tmp[320];
+   int32_t row_skip=bm->row-bm->w;
+   uint8_t tmp[320];
 
    do_flip_in_place(bm->bits, tmp, bm->w, bm->h, row_skip);
 }
 #pragma enable_message(202)
 
-void _flip_in_place(uchar* bits, uchar* tmp, int w, int h, int row)
+void _flip_in_place(uint8_t* bits, uint8_t* tmp, int32_t w, int32_t h, int32_t row)
 {
    do_flip_in_place(bits,tmp,w,h,row-w);
 }

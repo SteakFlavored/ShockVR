@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ------------------------------
 
 
-static char* criterr_type_messages[CRITERR_CLASSES] =
+static int8_t* criterr_type_messages[CRITERR_CLASSES] =
    {
       "Test",
       "Configuration error",
@@ -67,8 +67,8 @@ static char* criterr_type_messages[CRITERR_CLASSES] =
 
 typedef struct _code_string
 {
-   short code;
-   char* message;
+   int16_t code;
+   int8_t* message;
 } _code_string;
 
 static _code_string code_messages[] =
@@ -111,7 +111,7 @@ static _code_string code_messages[] =
 
 #define NUM_CODE_MESSAGES  (sizeof(code_messages) / sizeof(_code_string))
 /*
-char *help_messages[] = {
+int8_t *help_messages[] = {
 "",
 "Common problem solutions:",
 "* Increase FILES in config.sys to 30 or more.",
@@ -128,7 +128,7 @@ char *help_messages[] = {
 // THE GLOBAL ERROR STATUS VARIABLE
 // --------------------------------
 
-static int error_status = NO_CRITICAL_ERROR;
+static int32_t error_status = NO_CRITICAL_ERROR;
 
 // ---------
 // INTERNALS
@@ -136,9 +136,9 @@ static int error_status = NO_CRITICAL_ERROR;
 
 void handle_critical_error(void)
 {
-   int i;
-   char* s;
-   char buf[256];
+   int32_t i;
+   int8_t* s;
+   int8_t buf[256];
    if (error_status == NO_CRITICAL_ERROR) return;
    strcpy(buf,GAME_NAME);
    strcat(buf," can no longer run due to a fatal error.");
@@ -170,12 +170,12 @@ void criterr_init(void)
 }
 */
 
-void critical_error(short code)
+void critical_error(int16_t code)
 {
-	char		buf[256];
-	char		explain[256];
-	char		*s;
-	int		i, len;
+	int8_t		buf[256];
+	int8_t		explain[256];
+	int8_t		*s;
+	int32_t		i, len;
 
 	if (code == NO_CRITICAL_ERROR)
 		return;
@@ -198,7 +198,7 @@ void critical_error(short code)
 	BlockMove(explain, explain+1, 255);
 	explain[0] = len;
 
-	ParamText((uchar *)buf, (uchar *)explain, "\p", "\p");			// Show the error.
+	ParamText((uint8_t *)buf, (uint8_t *)explain, "\p", "\p");			// Show the error.
 	if (len > 0)
 		StopAlert(1001, nil);
 	else

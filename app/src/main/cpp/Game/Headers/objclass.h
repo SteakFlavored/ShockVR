@@ -76,18 +76,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 // Prototypes
-short num_types(uchar obclass, uchar subclass);
+int16_t num_types(uint8_t obclass, uint8_t subclass);
 
 // Told to find the nth object of class "class", will return appropriate
 // triple or -1 if nth object didn't exist
-int get_triple_from_class_nth_item(uchar obclass, uchar n);
+int32_t get_triple_from_class_nth_item(uint8_t obclass, uint8_t n);
 
 // returns the triple which is n past the given base
-int nth_after_triple(int base, uchar n);
+int32_t nth_after_triple(int32_t base, uint8_t n);
 
 // given a triple, returns n which represents the count
 // past the first of its class
-int get_nth_from_triple(int triple);
+int32_t get_nth_from_triple(int32_t triple);
 
 // Defines
 /*

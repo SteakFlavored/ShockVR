@@ -47,11 +47,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void flat8_filter2_ubitmap (grs_bitmap *bm)
 {
    grs_rgb a;
-   int i,j;
-   uchar *src,*dst;
-   uchar *c;
-   int ds;
-   int dd;
+   int32_t i,j;
+   uint8_t *src,*dst;
+   uint8_t *c;
+   int32_t ds;
+   int32_t dd;
 
    dst = grd_bm.bits;
    src = bm->bits;

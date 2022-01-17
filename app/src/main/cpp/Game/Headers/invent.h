@@ -57,7 +57,7 @@ errtype inventory_draw(void);
 errtype inventory_full_redraw(void);
 
 // switch the inventory page to pgnum and redraw
-errtype inventory_draw_new_page(int pgnum);
+errtype inventory_draw_new_page(int32_t pgnum);
 
 
 // clears the inventory region
@@ -74,8 +74,8 @@ bool inventory_add_object (ObjID new_object,bool select);
 errtype inventory_remove_object(ObjID new_object);
 
 // Globals
-extern short inventory_page;
-extern short inv_last_page;
+extern int16_t inventory_page;
+extern int16_t inv_last_page;
 
 #endif // __INVENT_H
 

@@ -83,20 +83,20 @@ typedef struct {
    // These are indices into the texture_bitmaps array
    // Note that for animating textures, the entry and the
    // next 7 are all reserved for that texture.
-   int size_index[NUM_TEXTURE_SIZES];
-   ubyte sizes_loaded;
+   int32_t size_index[NUM_TEXTURE_SIZES];
+   uint8_t sizes_loaded;
 } TextureMap;
 
 typedef struct {
-   char family_texture;
-   char target_texture;
-   short resilience;
-   short distance_mod;
-   char friction_climb;
-   char friction_walk;
-   char force_dir;
-   char anim_group;
-   char group_pos;
+   int8_t family_texture;
+   int8_t target_texture;
+   int16_t resilience;
+   int16_t distance_mod;
+   int8_t friction_climb;
+   int8_t friction_walk;
+   int8_t force_dir;
+   int8_t anim_group;
+   int8_t group_pos;
 } TextureProp;
 
 #define ANIMTEXTURE_CYCLE  0x01
@@ -104,11 +104,11 @@ typedef struct {
 #define ANIMTEXTURE_REVERSED  0x80
 
 typedef struct {
-   short anim_speed;
-   short time_remainder;
-   char current_frame;
-   char num_frames;
-   char flags;
+   int16_t anim_speed;
+   int16_t time_remainder;
+   int8_t current_frame;
+   int8_t num_frames;
+   int8_t flags;
 } AnimTextureData;
 
 #define SUPER_MOD(val, modval) ((modval)?(val%modval):val)     // make sure modval is non-zero before moding
@@ -123,7 +123,7 @@ typedef struct {
 // Prototypes
 void load_textures();
 errtype load_alternate_textures();
-errtype bitmap_array_unload(int *num_bitmaps, grs_bitmap *arr[]);
+errtype bitmap_array_unload(int32_t *num_bitmaps, grs_bitmap *arr[]);
 errtype Init_Lighting(void);
 errtype load_master_texture_properties();
 errtype unload_master_texture_properties();
@@ -136,18 +136,18 @@ errtype clear_texture_properties();
 // Globals
 
 #ifdef __TEXTMAPS_SRC
-short loved_textures[NUM_LOADED_TEXTURES];
+int16_t loved_textures[NUM_LOADED_TEXTURES];
 TextureProp textprops[NUM_LOADED_TEXTURES];
 AnimTextureData animtextures[NUM_ANIM_TEXTURE_GROUPS];
-uchar shading_table[256 * 16];
-uchar bw_shading_table[256*16];
+uint8_t shading_table[256 * 16];
+uint8_t bw_shading_table[256*16];
 TextureProp *texture_properties;
 #else
-extern short loved_textures[NUM_LOADED_TEXTURES];
+extern int16_t loved_textures[NUM_LOADED_TEXTURES];
 extern TextureProp textprops[NUM_LOADED_TEXTURES];
 extern AnimTextureData animtextures[NUM_ANIM_TEXTURE_GROUPS];
-extern uchar shading_table[256 * 16];
-extern uchar bw_shading_table[256*16];
+extern uint8_t shading_table[256 * 16];
+extern uint8_t bw_shading_table[256*16];
 extern TextureProp *texture_properties;
 #endif
 

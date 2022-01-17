@@ -109,9 +109,9 @@ typedef Q (*EDMS_Argblock_Pointer)[DOF][DOF_DERIVS];
 typedef struct
 {
    fix		playfield_size;
-   int		min_physics_handle;
-   void	( *collision_callback )( physics_handle caller, physics_handle victim, int badness,
-                                  					long DATA1, long DATA2, fix location[3] ),
+   int32_t		min_physics_handle;
+   void	( *collision_callback )( physics_handle caller, physics_handle victim, int32_t badness,
+                                  					int32_t DATA1, int32_t DATA2, fix location[3] ),
 			( *autodestruct_callback )( physics_handle caller ),
 			( *awol_callback )( physics_handle caller ),
 			( *snooz_callback )( physics_handle caller );
@@ -131,7 +131,7 @@ typedef struct
 
 //	Stuff that used to be in physhand.h....
 //	=======================================
-typedef int object_number;
+typedef int32_t object_number;
 
 #define physics_handle_to_object_number(ph) (ph2on[ph])
 #define object_number_to_physics_handle(on) (on2ph[on])
@@ -153,12 +153,12 @@ void           EDMS_release_object( physics_handle ph );
 
 //	Terrain
 //	=======
-Q	terrain( Q X, Q Y, int deriv );			               	//This calls Terrain()
+Q	terrain( Q X, Q Y, int32_t deriv );			               	//This calls Terrain()
 void	indoor_terrain( Q X, Q Y, Q Z, Q R, physics_handle ph );     //Indoor for Citadel, FBO, etc...
 
 //extern "C" {
 
-fix	Terrain( fix X, fix Y, int deriv );			        						//This is provided by the user...
+fix	Terrain( fix X, fix Y, int32_t deriv );			        						//This is provided by the user...
 void	Indoor_Terrain( fix X, fix Y, fix Z, fix R, physics_handle ph ); 	//As is this...
 
 //	Here's the actual indoor guy we ask for...
@@ -186,7 +186,7 @@ typedef struct
 
 	fix	terrain_information;			//Squishiness, friction, et cetera...
 
-	long	DATA1,								//For terrain return information...
+	int32_t	DATA1,								//For terrain return information...
 			DATA2;
 
 	fix   my_size;                   				//Only needed for "fast" terrain calls
@@ -207,23 +207,23 @@ bool ff_raycast (Q x, Q y, Q z, Q vec[3], Q range, Q where_hit[3], terrain_ff* F
 
 //		Marble...
 //		---------
-void		marble_X( int ),
-			marble_Y( int ),
-			marble_Z( int );
+void		marble_X( int32_t ),
+			marble_Y( int32_t ),
+			marble_Z( int32_t );
 
 
 //		Robot...
 //		--------
-void		robot_X( int ),
-			robot_Y( int ),
-			robot_Z( int );
+void		robot_X( int32_t ),
+			robot_Y( int32_t ),
+			robot_Z( int32_t );
 
 
 //		Deformable objects...
 //		---------------------
-void		field_point_X( int ),
-			field_point_Y( int ),
-			field_point_Z( int );
+void		field_point_X( int32_t ),
+			field_point_Y( int32_t ),
+			field_point_Z( int32_t );
 
 
 

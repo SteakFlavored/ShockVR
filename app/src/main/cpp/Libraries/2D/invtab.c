@@ -35,7 +35,7 @@ fix inverse_table[1024];
 
 void init_inverse_table(void)
 {
-   int i;
+   int32_t i;
 
    inverse_table[0]=FIX_MAX;
    for (i=1; i<1024; i++)

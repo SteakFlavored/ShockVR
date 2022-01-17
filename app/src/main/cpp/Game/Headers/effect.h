@@ -75,7 +75,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NON_CRITTER_EFFECT       (CRIT_HIT_NUM-1)
 #define SPECIAL_TYPE       CRIT_HIT_NUM
 
-extern ubyte effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES];
+extern uint8_t effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES];
 
 // info about the destruction of an object
 // (a) should we play an effect?
@@ -158,10 +158,10 @@ extern ubyte effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES];
 typedef void (*AnimlistCB)(ObjID id,void *user_data);
 
 // do_special_effect
-ObjID do_special_effect(ObjID owner, ubyte effect, ubyte start, ObjID obj, short location);
-ObjID do_special_effect_location(ObjID owner, ubyte effect, ubyte start, ObjLoc *loc, short location);
+ObjID do_special_effect(ObjID owner, uint8_t effect, uint8_t start, ObjID obj, int16_t location);
+ObjID do_special_effect_location(ObjID owner, uint8_t effect, uint8_t start, ObjLoc *loc, int16_t location);
 void advance_animations(void);
-errtype add_obj_to_animlist(ObjID id, bool repeat, bool reverse, bool cycle, short speed, int cb_id, void *user_data, short cbtype);
+errtype add_obj_to_animlist(ObjID id, bool repeat, bool reverse, bool cycle, int16_t speed, int32_t cb_id, void *user_data, int16_t cbtype);
 errtype remove_obj_from_animlist(ObjID id);
 errtype animlist_clear();
 
@@ -177,18 +177,18 @@ errtype animlist_clear();
 
 typedef struct {
    ObjID id;
-   uchar flags;
-   short cbtype;
-   int callback;
+   uint8_t flags;
+   int16_t cbtype;
+   int32_t callback;
    void *user_data;
-   short speed;
+   int16_t speed;
 } AnimListing;
 
 #ifdef _EFFECT_SRC
-short anim_counter = 0;
+int16_t anim_counter = 0;
 AnimListing  animlist[MAX_ANIMLIST_SIZE];
 #else
-extern short anim_counter;
+extern int16_t anim_counter;
 extern AnimListing  animlist[MAX_ANIMLIST_SIZE];
 #endif
 

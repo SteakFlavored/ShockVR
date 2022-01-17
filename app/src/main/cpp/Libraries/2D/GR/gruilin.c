@@ -38,7 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    avoid shifts, but this is probably overkill.
 */
 
-void gri_all_uiline_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+void gri_all_uiline_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
    grs_vertex u0, u1;
 

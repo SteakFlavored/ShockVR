@@ -39,7 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KB_CNV_NOSHIFT 0
 #define KB_CNV_TBLSIZE 0xE0
 
-extern ushort kb_cnv_table[KB_CNV_TBLSIZE][2];
+extern uint16_t kb_cnv_table[KB_CNV_TBLSIZE][2];
 
 #ifdef DEBUG_ON
 #define KB_CNV(scan,shift) (((scan) >= KB_CNV_TBLSIZE) ? 0 : kb_cnv_table[scan][shift])
@@ -74,7 +74,7 @@ extern ushort kb_cnv_table[KB_CNV_TBLSIZE][2];
 
 #define KBC_EXTENDED 0x80
 
-errtype kb_cook(kbs_event code, ushort *cooked, bool *results);
+errtype kb_cook(kbs_event code, uint16_t *cooked, bool *results);
 // "cooks" kb event "code."  If cooking generates a cooked code, sets
 // *results to true and puts the result in *cooked.  Otherwise, *results = false.
 

@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Prototypes
 void select_current_target(ObjID id, bool force_mfd);
-void mfd_target_expose(MFD *m, ubyte control);
+void mfd_target_expose(MFD *m, uint8_t control);
 bool mfd_target_handler(MFD *m, uiEvent *e);
 void toggle_current_target();
 

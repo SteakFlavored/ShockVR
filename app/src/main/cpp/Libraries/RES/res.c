@@ -66,8 +66,8 @@ static bool resPushedAllocators;	// did we push our allocators?
 
 void ResInit()
 {
-//	char *p;
-//	int i;
+//	int8_t *p;
+//	int32_t i;
 /*
 //	We must exit cleanly
 
@@ -118,7 +118,7 @@ void ResInit()
 
 void ResTerm()
 {
-//	int i;
+//	int32_t i;
 /*
 //	Close all open resource files
 
@@ -160,7 +160,7 @@ void ResTerm()
 //  For Mac version:  This is now a function, because we have to check a few things
 //  before returning the size.
 //	---------------------------------------------------------
-long ResSize(Id id)
+int32_t ResSize(Id id)
 {
 	ResDesc *prd = RESDESC(id);
 
@@ -187,7 +187,7 @@ long ResSize(Id id)
 
 void ResGrowResDescTable(Id id)
 {
-	long	newAmt, currAmt;
+	int32_t	newAmt, currAmt;
 	Ptr	growPtr;
 
 //	Calculate size of new table and size of current
@@ -244,7 +244,7 @@ void ResGrowResDescTable(Id id)
 /*
 void ResShrinkResDescTable()
 {
-	long newAmt,currAmt;
+	int32_t newAmt,currAmt;
    // id is the largest used ID
    Id id;
 

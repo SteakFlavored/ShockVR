@@ -59,9 +59,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // a table is used to take the pretransformed base points into the above
 // in uv table note _uv1 is full, a is 2000, b is FROCT, c is 8000, d is -FROCT, e is -2000
 
-// pack to uchar, uchar, int
+// pack to uint8_t, uint8_t, int
 typedef struct {
-   short base, modcnt;
+   int16_t base, modcnt;
    fix   arg;
 } pt_mods;
 
@@ -97,8 +97,8 @@ typedef struct {
 #ifndef __FRTABLES_SRC
 extern fix      pt_offs[FRPTSOFFS];
 extern pt_mods  pt_deref[FRPTSUNIQUE];
-extern ushort   pt_uv[FRPTSUNIQUE][4][2];
-extern uchar    pt_from_faceoff[4][FRPTSOFFS];
+extern uint16_t   pt_uv[FRPTSUNIQUE][4][2];
+extern uint8_t    pt_from_faceoff[4][FRPTSOFFS];
 #endif
 
 //======== WallstoPts
@@ -123,8 +123,8 @@ extern uchar    pt_from_faceoff[4][FRPTSOFFS];
 typedef
  struct {
 //   union {
-	   uchar ul, ur, lr, ll;
-//      uchar ptlst[4];
+	   uint8_t ul, ur, lr, ll;
+//      uint8_t ptlst[4];
 //   };
 } WallsToPts;
 
@@ -147,8 +147,8 @@ extern WallsToPts wall_pts[FRWALLPTSCNT];
 //   that value up to that value + internal count are the internal walls
 
 typedef struct {
-   uchar wallbits;
-   uchar wallbase;
+   uint8_t wallbits;
+   uint8_t wallbase;
 } TilesToWalls;
 
 #define FRWALLNORTH (1<<7)
@@ -176,9 +176,9 @@ extern TilesToWalls tile_walls[FRTILEWALLCNT];
 //  holding either a 4 element floor or 1 or 2 3 element floors
 
 typedef struct {
-   uchar flags;
-   uchar ptsper;
-   uchar data[6];
+   uint8_t flags;
+   uint8_t ptsper;
+   uint8_t data[6];
 } TilesToFloors;
 
 #define FRFLRFLG_2ELEM 0x40
@@ -215,8 +215,8 @@ extern TilesToFloors tile_floors[FRTILEFLOORCNT];
 #define FRFNORM_VF_MIR 7
 
 #ifndef __FRTABLES_SRC
-extern ushort fr_wnorm_list[FRWALLPTSCNT];
-extern uchar  fr_fnorm_list[FRTILEFLOORCNT];
+extern uint16_t fr_wnorm_list[FRWALLPTSCNT];
+extern uint8_t  fr_fnorm_list[FRTILEFLOORCNT];
 extern fix fr_norm_elements[FRWNORM_MAX+1];
 #endif
 
@@ -241,7 +241,7 @@ extern fix fr_norm_elements[FRWNORM_MAX+1];
 #define FOBASECODES       64
 
 #ifndef __FRTABLES_SRC
-extern uchar face_obstruct[FRFACEOBSTRUCTCNT][FACE_CNT];
+extern uint8_t face_obstruct[FRFACEOBSTRUCTCNT][FACE_CNT];
 extern fix   fo_unpack[FOBASECODES][2];
 extern fix   fo_anti_unpack[FOBASECODES][2];
 #endif
@@ -250,8 +250,8 @@ extern fix   fo_anti_unpack[FOBASECODES][2];
 // what to or pt_codes with prior to derefing for mirror compatibility
 // mirror by flr/ciel by xor/and
 #ifndef __FRTABLES_SRC
-extern uchar merge_masks[5][2][2];
-extern uchar mmask_facelet[5][2][2];
+extern uint8_t merge_masks[5][2][2];
+extern uint8_t mmask_facelet[5][2][2];
 #endif
 
 //======== Tilelets
@@ -263,7 +263,7 @@ extern uchar mmask_facelet[5][2][2];
 //  otherwise, the low 4 bits are length, the top 12 an offset into the
 //   tilelet list array, where # 16bit facelet id's live
 
-typedef ushort TileLet;
+typedef uint16_t TileLet;
 
 #define TL_LEN_MASK (0x000F)
 #define TL_PTR_MASK (0xFFF0)
@@ -283,7 +283,7 @@ typedef ushort TileLet;
 //   middle - ptr to 4 5 bit fields + 4 bit width codes (3 bytes)
 //   full   - ptr to 4 8 bit heights + 2 4 bit width codes (5 bytes)
 
-typedef ushort FaceLet;
+typedef uint16_t FaceLet;
 
 #define FL_LEN_MASK  0x0003
 #define FL_FACE_MASK 0x000C

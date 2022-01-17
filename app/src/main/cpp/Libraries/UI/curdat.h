@@ -35,14 +35,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "curtyp.h"
 
-extern int MouseLock;
+extern int32_t MouseLock;
 extern LGRegion* CursorRegion;
 extern LGCursor* CurrentCursor;
 extern LGCursor* LastCursor;
 extern LGRegion* LastCursorRegion;
 extern LGPoint LastCursorPos;
 extern LGRect* HideRect;
-extern int curhiderect;
+extern int32_t curhiderect;
 extern grs_canvas* CursorCanvas;
 extern grs_canvas DefaultCursorCanvas;
 extern struct _cursor_saveunder SaveUnder;

@@ -69,7 +69,7 @@ extern errtype object_data_load(void);
       LGRect anchorArea;  // area to anchor sub-bitmap
       LGPoint anchorPt;   // point to anchor from
       } u;
-   long pallOff;        // offset to pallette
+   int32_t pallOff;        // offset to pallette
                         // bitmap's bits follow immediately
 } FrameDesc; */
 
@@ -83,21 +83,21 @@ void DoUpdateBrowseFonts(WindowPtr wnd);
 void SetFont(Ptr p);
 void DoClickBrowseFonts(Point localPt);
 void DoClickLoadPalette(Point localPt);
-void MoveSquare(short x, short y);
-Boolean IsOptKeyDown(void);
-Boolean IsCmdKeyDown(void);
+void MoveSquare(int16_t x, int16_t y);
+bool IsOptKeyDown(void);
+bool IsCmdKeyDown(void);
 
 //--------------------
 //  Globals
 //--------------------
-short		gCurrTest;
+int16_t		gCurrTest;
 
 // defines
-#define QuickTickCount() (* (long *) 0x16A)
+#define QuickTickCount() (* (int32_t *) 0x16A)
 
-Boolean IsOptKeyDown(void)
+bool IsOptKeyDown(void)
  {
-	long		keys[4];
+	int32_t		keys[4];
 
 #ifdef __MWERKS__
 		GetKeys((UInt32 *)keys);
@@ -107,9 +107,9 @@ Boolean IsOptKeyDown(void)
 	return((keys[1] & 0x00000004) != 0L);
  }
 
-Boolean IsCmdKeyDown(void)
+bool IsCmdKeyDown(void)
  {
-	long		keys[4];
+	int32_t		keys[4];
 
 #ifdef __MWERKS__
 		GetKeys((UInt32 *)keys);
@@ -171,7 +171,7 @@ void DoTestUpdate(WindowPtr wnd)
 Rect			pResourceBtns;
 Rect			pItemBtns;
 Rect			pDoneBtn;
-short			pResNum;
+int16_t			pResNum;
 RefTable	*pRefTbl;
 Ref			pRefId;
 Id				pResId;
@@ -205,7 +205,7 @@ void DoTestBrowseImages(void)
 	{
 		Id 				id;
 		ResDesc		*prd;
-		long			rfs;
+		int32_t			rfs;
 
 		for (id = ID_MIN; id <= resDescMax; id++)
 		{
@@ -251,7 +251,7 @@ void DoTestBrowseImages(void)
 void DoUpdateBrowseImages(WindowPtr)
 {
 	Rect			r;
-	short			x, y;
+	int16_t			x, y;
 	PicHandle	pic;
 
  	r = gMainWindow->portRect;
@@ -301,7 +301,7 @@ void DoUpdateBrowseImages(WindowPtr)
 void SetImage(Ptr p)
 {
 	FrameDesc	*fd = (FrameDesc *)p;
-	char			buff[256];
+	int8_t			buff[256];
 	RGBColor	black = {0, 0, 0};
 	RGBColor	white = {0xffff, 0xffff, 0xffff};
 	grs_bitmap	bm2;
@@ -322,7 +322,7 @@ void SetImage(Ptr p)
 	DrawText(buff, 0, strlen(buff));
 	RGBForeColor(&black);
 
-	fd->bm.bits = (uchar *)(fd+1);
+	fd->bm.bits = (uint8_t *)(fd+1);
 	if (fd->bm.type == 4)
 	{
 		gr_rsd8_convert(&fd->bm, &bm2);
@@ -342,8 +342,8 @@ void SetImage(Ptr p)
 void DoClickBrowseImages(Point localPt)
 {
 	Ptr		p;
-	short		id = REFID(pRefId);
-	short		ind = REFINDEX(pRefId);
+	int16_t		id = REFID(pRefId);
+	int16_t		ind = REFINDEX(pRefId);
 
 	if (PtInRect(localPt, &pDoneBtn))					// We're done.
 	{
@@ -477,7 +477,7 @@ void DoTestBrowseFonts(void)
 	{
 		Id 				id;
 		ResDesc		*prd;
-		long			rfs;
+		int32_t			rfs;
 
 		for (id = ID_MIN; id <= resDescMax; id++)
 		{
@@ -517,7 +517,7 @@ void DoTestBrowseFonts(void)
 void DoUpdateBrowseFonts(WindowPtr)
 {
 	Rect			r;
-	short			x, y;
+	int16_t			x, y;
 	PicHandle	pic;
 
  	r = gMainWindow->portRect;
@@ -562,8 +562,8 @@ void SetFont(Ptr p)
 	GrafPtr		savePort;
 	grs_font	*fd = (grs_font *)p;
 	Ptr			imgp, offp;
-	short			i;
-	char			buff[256];
+	int16_t			i;
+	int8_t			buff[256];
 	RGBColor	black = {0, 0, 0};
 	RGBColor	white = {0xffff, 0xffff, 0xffff};
 
@@ -628,7 +628,7 @@ void SetFont(Ptr p)
 void DoClickBrowseFonts(Point localPt)
 {
 	Ptr		p;
-	short		id = pResId;
+	int16_t		id = pResId;
 
 	if (PtInRect(localPt, &pDoneBtn))					// We're done.
 	{
@@ -719,7 +719,7 @@ void DoTestLoadPalette(void)
 	{
 		Id 				id;
 		ResDesc		*prd;
-		long			rfs;
+		int32_t			rfs;
 
 		for (id = ID_MIN; id <= resDescMax; id++)
 		{
@@ -746,7 +746,7 @@ void DoTestLoadPalette(void)
 	MenuHandle	mh = GetMenu(mTests);
 	DisableItem(mh, 0);
 
- 	gr_set_pal(0, 256, (uchar *)p);
+ 	gr_set_pal(0, 256, (uint8_t *)p);
 	DisposePtr(p);
 
 	gCurrTest = 2;
@@ -759,7 +759,7 @@ void DoTestLoadPalette(void)
 void DoClickLoadPalette(Point localPt)
 {
 	Ptr		p;
-	short		id = pResId;
+	int16_t		id = pResId;
 
 	if (PtInRect(localPt, &pDoneBtn))					// We're done.
 	{
@@ -811,7 +811,7 @@ void DoClickLoadPalette(Point localPt)
    			p = NewPtrClear(ResSize(n));
 			ResExtract(n, p);
 			ResUnlock(n);
- 			gr_set_pal(0, 256, (uchar *)p);
+ 			gr_set_pal(0, 256, (uint8_t *)p);
 			DisposePtr(p);
 		}
 		else SysBeep(0);
@@ -835,7 +835,7 @@ void DoTestMoveKeys(void)
 	GrafPtr		savePort;
 	RGBColor	black = {0, 0, 0};
 	RGBColor	white = {0xffff, 0xffff, 0xffff};
-	Boolean		done;
+	bool		done;
 
 	GetPort(&savePort);									// Clear out the offscreen bitmap
 	SetPort(gMainOffScreen.bits);
@@ -891,7 +891,7 @@ void DoTestMoveKeys(void)
 }
 
 //------------------------------------------------------------------------
-void MoveSquare(short x, short y)
+void MoveSquare(int16_t x, int16_t y)
 {
 	GrafPtr		savePort;
 	RGBColor	black = {0, 0, 0};
@@ -924,8 +924,8 @@ void DoTestMouse(void)
 	GrafPtr		savePort;
 	RGBColor	black = {0, 0, 0};
 	RGBColor	white = {0xffff, 0xffff, 0xffff};
-	Boolean		done;
-	int			callbackid = -1;
+	bool		done;
+	int32_t			callbackid = -1;
 
 	GetPort(&savePort);									// Clear out the offscreen bitmap
 	SetPort(gMainOffScreen.bits);
@@ -953,7 +953,7 @@ void DoTestMouse(void)
 	{
 		mouse_event e;
 		errtype err = mouse_next(&e);
-		char	buff[256];
+		int8_t	buff[256];
 		Rect	r;
 
 		if (err == OK)
@@ -1003,7 +1003,7 @@ void show_coords(mouse_event* e, void* )
 	RGBColor	black = {0, 0, 0};
 	RGBColor	col = {0xFFFF, 0x3333, 0x3333};
 	Rect			r;
-	char			buff[256];
+	int8_t			buff[256];
 
 	GetPort(&savePort);													// Erase text area
 	SetPort(gMainOffScreen.bits);
@@ -1032,9 +1032,9 @@ void show_coords(mouse_event* e, void* )
 //=======================================================================
 //  PLAY MOVIE TEST
 //=======================================================================
-pascal void TestCallbackProc(QTCallBack cb, long refCon);
+pascal void TestCallbackProc(QTCallBack cb, int32_t refCon);
 
-void DoPlayMovie(short cmd)
+void DoPlayMovie(int16_t cmd)
 {
 	StandardFileReply	reply;
 	SFTypeList				typeList;
@@ -1044,7 +1044,7 @@ void DoPlayMovie(short cmd)
 	RGBColor				black = {0, 0, 0};
 	RGBColor				white = {0xffff, 0xffff, 0xffff};
 #ifdef PAL_CHG_TEST
-	Boolean					chgPal = FALSE;
+	bool					chgPal = FALSE;
 #endif
 
 	EnterMovies();
@@ -1059,14 +1059,14 @@ void DoPlayMovie(short cmd)
 
 	// Get the movie.
 	{
-		short 	movieResFile;
+		int16_t 	movieResFile;
 
 		err = OpenMovieFile(&reply.sfFile, &movieResFile, fsRdPerm);
 		if (err == noErr)
 		{
-			short 		movieResID = 0;		// get first movie
+			int16_t 		movieResID = 0;		// get first movie
 			Str255 		movieName;
-			Boolean 		wasChanged;
+			bool 		wasChanged;
 
 			err = NewMovieFromFile(&aMovie, movieResFile, &movieResID,
 							movieName, newMovieActive, &wasChanged);
@@ -1088,19 +1088,19 @@ void DoPlayMovie(short cmd)
 		Rect 					movieBox, r;
 		EventRecord		theEvent;
 		WindowPtr			whichWindow;
-		Boolean				done;
+		bool				done;
 		TimeValue			tv;
 		TimeScale			ts;
-		short					mv;
+		int16_t					mv;
 		Fixed					mr;
-		long					tc;
-		long					mt;
+		int32_t					tc;
+		int32_t					mt;
 		Str255				mtStr;
-		long					ms;
+		int32_t					ms;
 		TimeBase			tb;
 		QTCallBack			qtb;
 		QTCallBackUPP	callbackProc;
-		char					buff[256];
+		int8_t					buff[256];
 		CTabHandle			ctab[16];
 		Track				vidTrack;
 		Media				vidMedia;
@@ -1154,8 +1154,8 @@ void DoPlayMovie(short cmd)
 			Track	track;
 			Media	media;
 
-			long	tc = GetMovieTrackCount(aMovie);
-			for (long t = 1; t <= tc; t++)
+			int32_t	tc = GetMovieTrackCount(aMovie);
+			for (int32_t t = 1; t <= tc; t++)
 			{
 				track = GetMovieIndTrack(aMovie, t);
 				if (track)
@@ -1173,8 +1173,8 @@ void DoPlayMovie(short cmd)
 
 							ImageDescriptionHandle	idh = (ImageDescriptionHandle)NewHandle(sizeof(ImageDescription));
 
-							long	sdc = GetMediaSampleDescriptionCount(media);
-							for (long s = 1; s <= sdc; s++)
+							int32_t	sdc = GetMediaSampleDescriptionCount(media);
+							for (int32_t s = 1; s <= sdc; s++)
 							{
 								GetMediaSampleDescription(media, s, (SampleDescriptionHandle)idh);
 								GetImageDescriptionCTable(idh, &ctab[s]);
@@ -1277,9 +1277,9 @@ void DoPlayMovie(short cmd)
 }
 
 //------------------------------------------------------------------------
-pascal void TestCallbackProc(QTCallBack cb, long refCon)
+pascal void TestCallbackProc(QTCallBack cb, int32_t refCon)
 {
-	char			buff[256];
+	int8_t			buff[256];
 	RGBColor	black = {0, 0, 0};
 	RGBColor	purple = {0xFFFF, 0x3333, 0x3333};
 	TimeBase	cbtb;
@@ -1300,7 +1300,7 @@ pascal void TestCallbackProc(QTCallBack cb, long refCon)
 //=======================================================================
 //  PLAY CUT SCENE TEST
 //=======================================================================
-void DoPlayCutScene(short cmd)
+void DoPlayCutScene(int16_t cmd)
 {
 	FSSpec	fSpec;
 
@@ -1362,7 +1362,7 @@ void DoPlayCutScene(short cmd)
 //=======================================================================
 //  PLAY AUDIOLOG AND BARK TEST
 //=======================================================================
-void DoPlayAudioLog(short cmd)
+void DoPlayAudioLog(int16_t cmd)
 {
 	switch (cmd)
 	{
@@ -1389,7 +1389,7 @@ void DoPlayAudioLog(short cmd)
 //=======================================================================
 errtype load_da_palette();
 
-void DoLoadLevelMap(short cmd)
+void DoLoadLevelMap(int16_t cmd)
 {
 	FSSpec	fSpec;
 
@@ -1417,7 +1417,7 @@ void DoLoadLevelMap(short cmd)
 }
 
 //------------------------------------------------------------------------
-void DoZoomCurrMap(short cmd)
+void DoZoomCurrMap(int16_t cmd)
 {
 	if (cmd == testZoomIn)
 		level_gamedata.auto_maps[MFD_FULLSCR_MAP].zoom++;
@@ -1434,8 +1434,8 @@ void DoZoomCurrMap(short cmd)
 #include "Profiler.h"
 #endif
 
-extern Boolean DoubleSize;
-extern Boolean SkipLines;
+extern bool DoubleSize;
+extern bool SkipLines;
 
 void RenderTest(void)
  {
@@ -1448,21 +1448,21 @@ void RenderTest(void)
    	fauxrend_context 	*_frc;
 	bool 						_rt_inside=TRUE;
 	bool 						all_axis = FALSE;
-	long						time,detailCheck;
+	int32_t						time,detailCheck;
 	Str255					str;
-	long						frames = 0L;
+	int32_t						frames = 0;
 	fix						sinEye,cosEye;
 	fix						moveAmt;
-	Boolean					profileOn = false;
-	extern void game_redrop_rad(int);
-	int						size_left, size_top, size_wide, size_high;
+	bool					profileOn = false;
+	extern void game_redrop_rad(int32_t);
+	int32_t						size_left, size_top, size_wide, size_high;
 	PicHandle				pic;
 	Rect						r;
-	Boolean				    	showFrames = false;
+	bool				    	showFrames = false;
 	extern 	void 			change_svga_screen_mode();
 	extern 	frc 			*svga_render_context;
-	extern void _fr_change_detail(int det);
-	extern char _g3d_enable_blend;
+	extern void _fr_change_detail(int32_t det);
+	extern int8_t _g3d_enable_blend;
 
 	object_data_load();
 	HideCursor();
@@ -1637,11 +1637,11 @@ void RenderTest(void)
 		 {
 		 	gr_set_fcolor(0);
 		 	gr_urect(0,410,48,420);
-		 	numtostring(frames,(char *) str);
-		 	strcat((char *) str,", 0");
-		 	str[strlen((char *) str)-1] += _frc->detail;
+		 	numtostring(frames,(int8_t *) str);
+		 	strcat((int8_t *) str,", 0");
+		 	str[strlen((int8_t *) str)-1] += _frc->detail;
 		 	MoveTo(2,418);
-		 	drawstring((char *) str);
+		 	drawstring((int8_t *) str);
 
 		 	frames = 0;
 		 	time = QuickTickCount();

@@ -66,9 +66,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 errtype gamerend_init(void);
 
 #ifdef __GAMEREND_SRC
-int secret_render_fx=0;
+int32_t secret_render_fx=0;
 #else
-extern int secret_render_fx;
+extern int32_t secret_render_fx;
 #endif
 
 #endif // __GAMEREND_H

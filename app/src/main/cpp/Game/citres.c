@@ -31,8 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "statics.h"
 
 // Internal Prototypes
-errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable *rt, bool tmp_mem,
-															LGRect *anchor, uchar *p);
+errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTable *rt, bool tmp_mem,
+															LGRect *anchor, uint8_t *p);
 
 
 grs_bitmap *lock_bitmap_from_ref_anchor(Ref r, LGRect *anchor)
@@ -46,7 +46,7 @@ grs_bitmap *lock_bitmap_from_ref_anchor(Ref r, LGRect *anchor)
 //      Warning(("Could not lock bitmap %d!",r));
       return(NULL);
    }
-   f->bm.bits = (uchar *)(f + 1);
+   f->bm.bits = (uint8_t *)(f + 1);
    if (anchor != NULL)
       *anchor = f->anchorArea;
 //   DBG((DSRC_GFX_Anim),
@@ -69,12 +69,12 @@ grs_bitmap *get_bitmap_from_ref_anchor(Ref r, LGRect* anchor)
 #pragma scheduling off
 #pragma global_optimizer off
 
-errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable *rt, bool tmp_mem, LGRect *anchor, uchar *p)
+errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTable *rt, bool tmp_mem, LGRect *anchor, uint8_t *p)
 {
    Ref rid;
    FrameDesc *f;
    bool alloced_fdesc = FALSE;
-   extern int memcount;
+   extern int32_t memcount;
 
    if(!RefIndexValid(rt,i))
    {
@@ -104,12 +104,12 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable 
    if (anchor != NULL)
       *anchor = f->anchorArea;
    if (!tmp_mem && p == NULL)
-      p = (uchar *)NewPtr(f->bm.w * f->bm.h * sizeof(uchar));
+      p = (uint8_t *)NewPtr(f->bm.w * f->bm.h * sizeof(uint8_t));
    if (tmp_mem)
-      p = (uchar *)(f+1);
+      p = (uint8_t *)(f+1);
 
-   memcount += f->bm.w * f->bm.h * sizeof(uchar);
-   if (!tmp_mem) memcpy(p,f+1,f->bm.w * f->bm.h * sizeof(uchar));
+   memcount += f->bm.w * f->bm.h * sizeof(uint8_t);
+   if (!tmp_mem) memcpy(p,f+1,f->bm.w * f->bm.h * sizeof(uint8_t));
 //¥¥¥
 if (bmp == NULL)
 	DebugStr("\pTrying to assign to a null bmp pointer!");
@@ -127,7 +127,7 @@ if (bmp == NULL)
 
 #pragma mark -
 
-errtype load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable *rt, bool /*transp*/, LGRect *anchor, uchar *p)
+errtype load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTable *rt, bool /*transp*/, LGRect *anchor, uint8_t *p)
 {
    return master_load_bitmap_from_res(bmp,id_num,i,rt,FALSE,anchor,p);
 }
@@ -157,10 +157,10 @@ errtype extract_temp_res_bitmap(grs_bitmap* bmp, Ref rid)
 errtype load_res_bitmap(grs_bitmap* bmp, Ref rid,bool alloc)
 {
    errtype retval = OK;
-   char* bits = bmp->bits;
+   int8_t* bits = bmp->bits;
    FrameDesc* f;
-   int sz;
-   extern int memcount;
+   int32_t sz;
+   extern int32_t memcount;
 
    f = RefLock(rid);
    sz = f->bm.w *f->bm.h;
@@ -169,7 +169,7 @@ errtype load_res_bitmap(grs_bitmap* bmp, Ref rid,bool alloc)
       bits = Malloc(sz);
       if (bits == NULL) { retval = ERR_NOMEM; goto out; }
    }
-   memcpy(bits,(char*)(f+1),sz);
+   memcpy(bits,(int8_t*)(f+1),sz);
    *bmp = f->bm;
    bmp->bits = bits;
 out:
@@ -189,16 +189,16 @@ errtype load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc
 {
    errtype retval = OK;
    LGRect anchor;
-   extern int memcount;
+   extern int32_t memcount;
 
    RefTable *rt = ResReadRefTable(REFID(rid));
 #ifdef SVGA_SUPPORT
-   short w,h;
-   short temp;
-   uchar *bits;
+   int16_t w,h;
+   int16_t temp;
+   uint8_t *bits;
    grs_bitmap temp_bmp;
    grs_canvas temp_canv;
-   uchar old_over = gr2ss_override;
+   uint8_t old_over = gr2ss_override;
    ss_set_hack_mode(2,&temp);
 
    gr2ss_override = OVERRIDE_ALL;
@@ -207,7 +207,7 @@ errtype load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc
    h = temp_bmp.h;
    ss_point_convert(&w,&h,FALSE);
    if (alloc)
-      bits = (uchar *)NewPtr(sizeof(char)*w*h);
+      bits = (uint8_t *)NewPtr(sizeof(int8_t)*w*h);
    else
       bits = bmp->bits;
    if (temp_bmp.bits == NULL)
@@ -255,7 +255,7 @@ errtype load_hires_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool all
 }
 
 /*
-void *CitMalloc(int n)
+void *CitMalloc(int32_t n)
 {
    return(Malloc(n));
 }

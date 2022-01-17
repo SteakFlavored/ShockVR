@@ -62,15 +62,15 @@ typedef struct {
    PAL_STATUS	status;
    PAL_TYPE		effect;
    PAL_MODE		mode;
-   short      			dsteps;				// Holds delay
-   short       		stages;				// Holds steps just for shift
-   short       		curr_dstep;		// Holds where we are in delay
-   short       		curr_stage;		// Holds where we are in shift
-   short       		entry_1;			// Doubles to hold cmap_index for Cycles
-   short       		entry_n;			// Doubles to hold curr_color for Cycles
-   short       		range;				// Cmap range used (shift/bank)/#cols (cycle)
-   uchar       		*from_pal;		// Doubles to hold colors array for Cycles
-   uchar       		*to_pal;			// sometimes useless
+   int16_t      			dsteps;				// Holds delay
+   int16_t       		stages;				// Holds steps just for shift
+   int16_t       		curr_dstep;		// Holds where we are in delay
+   int16_t       		curr_stage;		// Holds where we are in shift
+   int16_t       		entry_1;			// Doubles to hold cmap_index for Cycles
+   int16_t       		entry_n;			// Doubles to hold curr_color for Cycles
+   int16_t       		range;				// Cmap range used (shift/bank)/#cols (cycle)
+   uint8_t       		*from_pal;		// Doubles to hold colors array for Cycles
+   uint8_t       		*to_pal;			// sometimes useless
 } PAL_TABLE_ENTRY;
 
 /*
@@ -85,33 +85,33 @@ typedef struct {
  * ROUTINE PROTOTYPES
  */
 
-extern void palette_initialize(short table_size);
-extern void palette_set_rate(short time_units_per_step);
+extern void palette_initialize(int16_t table_size);
+extern void palette_set_rate(int16_t time_units_per_step);
 extern void palette_shutdown();
-extern void palette_init_smap(short first, short last, uchar *from, uchar *to,
-                              short num_steps);
+extern void palette_init_smap(int16_t first, int16_t last, uint8_t *from, uint8_t *to,
+                              int16_t num_steps);
 
-extern byte palette_install_effect(PAL_TYPE type,
+extern int8_t palette_install_effect(PAL_TYPE type,
                                    PAL_MODE mode,	// SHIFT  CYCLE  CBANK
-                                   short b1,         		// first  index  first
-                                   short b2,         		// last   #cols  last
-                                   short b3,         		// delay  delay  delay
-                                   short b4,         		// #steps --     --
-                                   uchar *ptr1,      	// from   colors --
-                                   uchar *ptr2);     	// to     --     --
+                                   int16_t b1,         		// first  index  first
+                                   int16_t b2,         		// last   #cols  last
+                                   int16_t b3,         		// delay  delay  delay
+                                   int16_t b4,         		// #steps --     --
+                                   uint8_t *ptr1,      	// from   colors --
+                                   uint8_t *ptr2);     	// to     --     --
 
-extern errtype palette_remove_effect(byte id);
-extern errtype palette_freeze_effect(byte id);
-extern errtype palette_unfreeze_effect(byte id);
-extern void palette_advance_effect(byte id, int steps); // DON'T call this
-extern void palette_advance_all_fx(long timestamp);  // Call this, rather...
-extern PAL_STATUS palette_query_effect(byte id);
-extern void palette_change_delay(byte id, short delay);
-extern void palette_swap_shadow(int s, int n, int d);
+extern errtype palette_remove_effect(int8_t id);
+extern errtype palette_freeze_effect(int8_t id);
+extern errtype palette_unfreeze_effect(int8_t id);
+extern void palette_advance_effect(int8_t id, int32_t steps); // DON'T call this
+extern void palette_advance_all_fx(int32_t timestamp);  // Call this, rather...
+extern PAL_STATUS palette_query_effect(int8_t id);
+extern void palette_change_delay(int8_t id, int16_t delay);
+extern void palette_swap_shadow(int32_t s, int32_t n, int32_t d);
 
 extern void palette_print_table();
 
-extern byte num_installed_shifts;
+extern int8_t num_installed_shifts;
 
 #endif // __PALETTE_H
 

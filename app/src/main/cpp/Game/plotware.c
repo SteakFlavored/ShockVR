@@ -53,7 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------
 // DEFINES
 // -------
-extern short qdata_get(short);
+extern int16_t qdata_get(int16_t);
 
 #define MFD_PLOTWARE_FUNC 16
 #define ITEM_COLOR 0x5A
@@ -65,27 +65,27 @@ extern short qdata_get(short);
 
 typedef struct _plot_display
 {
-   ubyte page;          // Page number of this display.
-   int name;            // string id of name.
-   ubyte color;         // color to display in
-   int baseval;         // base string id for val, zero means display as int
-   short questvar;      // Quest variable
+   uint8_t page;          // Page number of this display.
+   int32_t name;            // string id of name.
+   uint8_t color;         // color to display in
+   int32_t baseval;         // base string id for val, zero means display as int
+   int16_t questvar;      // Quest variable
 } plot_display;
 
 #define INT_TYPE        0
 #define COUNTDOWN_TYPE  1
 #define HACK_TYPE       2
-#define PLAYER_FIELD(fld) (char*)&(((Player*)(0))->fld)
+#define PLAYER_FIELD(fld) (int8_t*)&(((Player*)(0))->fld)
 
 #define MAIN_PROGRAM_QDATA 0x1009
 
 // ----------
 //  PROTOTYPES
 // ----------
-void fill_time(short val, char* vbuf);
-bool do_plotware_hack(int hack_num, char* vbuf);
-void mfd_plotware_expose(MFD* mfd, ubyte control);
-void plotware_showpage(uchar page);
+void fill_time(int16_t val, int8_t* vbuf);
+bool do_plotware_hack(int32_t hack_num, int8_t* vbuf);
+void mfd_plotware_expose(MFD* mfd, uint8_t control);
+void plotware_showpage(uint8_t page);
 bool plotware_button_handler(MFD* m, LGPoint bttn, uiEvent* ev, void* data);
 errtype mfd_plotware_init(MFD_Func* f);
 void plotware_turnon(bool visible,bool real);
@@ -122,7 +122,7 @@ plot_display PlotDisplays[] =
    { NULL_PAGE }
 };
 
-void fill_time(short val, char* vbuf)
+void fill_time(int16_t val, int8_t* vbuf)
 {
    if (val == 0)
    {
@@ -156,7 +156,7 @@ void fill_time(short val, char* vbuf)
 #define NODES_QDATA 0x1001
 #define TOTAL_NODES 27
 
-bool do_plotware_hack(int hack_num, char* vbuf)
+bool do_plotware_hack(int32_t hack_num, int8_t* vbuf)
 {
    switch(hack_num)
    {
@@ -178,7 +178,7 @@ bool do_plotware_hack(int hack_num, char* vbuf)
             return FALSE;
          else
          {
-            short val = QUESTVAR_GET(0x10 + player_struct.level) * 100 / player_struct.initial_shodan_vals[player_struct.level];
+            int16_t val = QUESTVAR_GET(0x10 + player_struct.level) * 100 / player_struct.initial_shodan_vals[player_struct.level];
             numtostring(val,vbuf);
             strcat(vbuf,"%");
             return TRUE;
@@ -251,7 +251,7 @@ bool do_plotware_hack(int hack_num, char* vbuf)
 
 #define BUTTON_Y (MFD_VIEW_HGT - res_bm_height(REF_IMG_PrevPage) - 2)
 
-void mfd_plotware_expose(MFD* mfd, ubyte control)
+void mfd_plotware_expose(MFD* mfd, uint8_t control)
 {
    extern void mfd_item_micro_hires_expose(bool,int);
    bool full = control & MFD_EXPOSE_FULL;
@@ -261,8 +261,8 @@ void mfd_plotware_expose(MFD* mfd, ubyte control)
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
    {
-      short y = DISPLAY_TOP_MARGIN;
-      int i;
+      int16_t y = DISPLAY_TOP_MARGIN;
+      int32_t i;
       // clear update rects
       mfd_clear_rects();
       // set up canvas
@@ -277,9 +277,9 @@ void mfd_plotware_expose(MFD* mfd, ubyte control)
       gr_set_font((grs_font*)ResLock(MFD_FONT));
       for (i = 0; PlotDisplays[i].page < NUM_PAGES; i++)
       {
-         char buf[40],vbuf[40];
-         short val;
-         short w,h;
+         int8_t buf[40],vbuf[40];
+         int16_t val;
+         int16_t w,h;
          plot_display* dp = &PlotDisplays[i];
          if (dp->page != PLOTWARE_PAGENUM) continue;
          switch(dp->baseval)
@@ -289,7 +289,7 @@ void mfd_plotware_expose(MFD* mfd, ubyte control)
             numtostring(val,vbuf);
             break;
          case COUNTDOWN_TYPE:
-            val = *(short*)(((char*)&player_struct)+dp->questvar);
+            val = *(int16_t*)(((int8_t*)&player_struct)+dp->questvar);
             fill_time(val,vbuf);
             break;
          case HACK_TYPE:
@@ -311,8 +311,8 @@ void mfd_plotware_expose(MFD* mfd, ubyte control)
       }
       if (full)
       {
-         char buf[50];
-         short w,h;
+         int8_t buf[50];
+         int16_t w,h;
          // Draw the page number
          get_string(REF_STR_pwPage0+PLOTWARE_PAGENUM,buf,sizeof(buf));
          gr_string_size(buf,&w,&h);
@@ -338,7 +338,7 @@ void mfd_plotware_expose(MFD* mfd, ubyte control)
 
 }
 
-void plotware_showpage(uchar page)
+void plotware_showpage(uint8_t page)
 {
    if(PLOTWARE_VERSION==0 || page>=NUM_PAGES) return;
    PLOTWARE_PAGENUM = page;
@@ -366,7 +366,7 @@ bool plotware_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 // --------------
 errtype mfd_plotware_init(MFD_Func* f)
 {
-   int cnt = 0;
+   int32_t cnt = 0;
    LGPoint bsize;
    LGPoint bdims;
    LGRect r;

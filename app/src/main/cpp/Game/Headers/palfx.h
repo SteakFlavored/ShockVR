@@ -29,6 +29,6 @@ extern void palfx_fade_up(bool do_now);
 extern void palfx_fade_down();
 extern void palfx_init();
 
-extern byte cyc_id0, cyc_id1, cyc_id2, cyc_id3, cyc_id4, cyc_id5;
+extern int8_t cyc_id0, cyc_id1, cyc_id2, cyc_id3, cyc_id4, cyc_id5;
 #endif // __PALFX_H
 

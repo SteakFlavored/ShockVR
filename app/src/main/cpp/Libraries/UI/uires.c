@@ -28,17 +28,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 
 // Prototypes
-errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable *rt,
-									bool tmp_mem, LGRect *anchor, uchar *p);
+errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTable *rt,
+									bool tmp_mem, LGRect *anchor, uint8_t *p);
 
 struct _uirestempbuffer uiResTempBuffer;
 
-errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable *rt, bool tmp_mem, LGRect *anchor, uchar *p)
+errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTable *rt, bool tmp_mem, LGRect *anchor, uint8_t *p)
 {
    Ref rid;
    FrameDesc *f;
    bool alloced_fdesc = FALSE;
-//   extern int memcount;
+//   extern int32_t memcount;
 
    if(!RefIndexValid(rt,i)) {
 //      Warning(("Bitmap index %i invalid!\n",i));
@@ -67,12 +67,12 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, RefTable 
    if (anchor != NULL)
       *anchor = f->anchorArea;
    if (!tmp_mem && p == NULL)
-      p = (uchar *)NewPtr(f->bm.w * f->bm.h * sizeof(uchar));
+      p = (uint8_t *)NewPtr(f->bm.w * f->bm.h * sizeof(uint8_t));
    if (tmp_mem)
-      p = (uchar*)(f+1);
+      p = (uint8_t*)(f+1);
 
-//   memcount += f->bm.w * f->bm.h * sizeof(uchar);
-   if (!tmp_mem) memcpy(p,f+1,f->bm.w * f->bm.h * sizeof(uchar));
+//   memcount += f->bm.w * f->bm.h * sizeof(uint8_t);
+   if (!tmp_mem) memcpy(p,f+1,f->bm.w * f->bm.h * sizeof(uint8_t));
    *bmp = f->bm;
    bmp->bits = p;
    if (alloced_fdesc)
@@ -84,11 +84,11 @@ errtype uiLoadRefBitmapCursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc)
 {
    errtype retval = OK;
    LGRect anchor;
-//   extern int memcount;
+//   extern int32_t memcount;
    bool buffer_snag = FALSE;
 
-   int numrefs = ResNumRefs(REFID(rid));
-   int tsize = REFTABLESIZE(numrefs);
+   int32_t numrefs = ResNumRefs(REFID(rid));
+   int32_t tsize = REFTABLESIZE(numrefs);
 
    RefTable *rt = NULL;
    if (uiResTempBuffer.mem != NULL && tsize <= uiResTempBuffer.size)
@@ -103,7 +103,7 @@ errtype uiLoadRefBitmapCursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc)
    retval = master_load_bitmap_from_res(bmp, REFID(rid), REFINDEX(rid), rt, FALSE, &anchor,(alloc) ? NULL : bmp->bits);
    if (buffer_snag)
    {
-      uiResTempBuffer.mem = (char*)rt;
+      uiResTempBuffer.mem = (int8_t*)rt;
       uiResTempBuffer.size += tsize;
    }
    else ResFreeRefTable(rt);

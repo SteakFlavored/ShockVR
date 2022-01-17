@@ -53,7 +53,7 @@ bool ResEraseIfInFile(Id id);				// erase item from file
 //	For Mac version:  Does nothing.  May go back later and add comment via the
 // desktop database, maybe.
 
-void ResSetComment(int /*filenum*/, char* /*comment*/)
+void ResSetComment(int32_t /*filenum*/, int8_t* /*comment*/)
 {
 /*
 	ResFileHeader *phead;
@@ -88,12 +88,12 @@ void ResSetComment(int /*filenum*/, char* /*comment*/)
 // do that first before writing.
 #define EXTRA 250
 
-int ResWrite(Id id)
+int32_t ResWrite(Id id)
 {
 	ResDesc 	*prd;
-	long 			compsize = -1;
-	long 			size = 0;
-	long 			sizeTable = 0;
+	int32_t 			compsize = -1;
+	int32_t 			size = 0;
+	int32_t 			sizeTable = 0;
 	Handle		compHdl = NULL;
 	Ptr			srcPtr, compPtr;
 
@@ -152,15 +152,15 @@ int ResWrite(Id id)
 	else
 		return (-1);
 /*
-static uchar pad[] = {0,0,0,0,0,0,0,0};
+static uint8_t pad[] = {0,0,0,0,0,0,0,0};
 	ResDesc *prd;
 	ResFile *prf;
 	ResDirEntry *pDirEntry;
-	uchar *p;
-	long size,sizeTable;
+	uint8_t *p;
+	int32_t size,sizeTable;
 	void *pcompbuff;
-	long compsize;
-	int padBytes;
+	int32_t compsize;
+	int32_t padBytes;
 
 //	Check for errors
 
@@ -320,13 +320,13 @@ void ResKill(Id id)
 //
 //	Returns: # bytes reclaimed
 
-long ResPack(int filenum)
+int32_t ResPack(int32_t filenum)
 {
 	ResFile *prf;
 	ResDirEntry *pDirEntry;
-	long numReclaimed,sizeReclaimed;
-	long dataRead,dataWrite;
-	int i;
+	int32_t numReclaimed,sizeReclaimed;
+	int32_t dataRead,dataWrite;
+	int32_t i;
 	ResDirEntry *peWrite;
 
 //	Check for errors
@@ -401,10 +401,10 @@ long ResPack(int filenum)
 
 #define SIZE_RESCOPY 32768
 
-static void ResCopyBytes(int fd, long writePos, long readPos, long size)
+static void ResCopyBytes(int32_t fd, int32_t writePos, int32_t readPos, int32_t size)
 {
-	long sizeCopy;
-	uchar *buff;
+	int32_t sizeCopy;
+	uint8_t *buff;
 
 	buff = Malloc(SIZE_RESCOPY);
 
@@ -438,7 +438,7 @@ bool ResEraseIfInFile(Id id)
 	ResDesc *prd;
 	ResFile *prf;
 	ResDirEntry *pDirEntry;
-	int i;
+	int32_t i;
 
 	prd = RESDESC(id);
 	prf = &resFile[prd->filenum];

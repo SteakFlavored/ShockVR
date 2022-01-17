@@ -21,9 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "diffq.h"
 #include "faketime.h"
 
-char mfd_setup_accesspanel(uchar special, ObjID id);
-char mfd_type_accesspanel(ObjID id);
-uchar mfd_solve_accesspanel(ObjID id);
+int8_t mfd_setup_accesspanel(uint8_t special, ObjID id);
+int8_t mfd_type_accesspanel(ObjID id);
+uint8_t mfd_solve_accesspanel(ObjID id);
 
 #define EPICK_SOLVED 0
 #define EPICK_FAILED 1
@@ -68,8 +68,8 @@ uchar mfd_solve_accesspanel(ObjID id);
 #define MAX_DIFFICULTY 3
 
 typedef struct {
-   uchar lpos;
-   uchar rpos;
+   uint8_t lpos;
+   uint8_t rpos;
 } wirePos;
 
 typedef struct {
@@ -78,30 +78,30 @@ typedef struct {
 } wirePTrg;
 
 typedef struct {
-   uchar    wirecnt;
-   uchar    pincnt;
-   uchar    scale;
-   uchar    score;
+   uint8_t    wirecnt;
+   uint8_t    pincnt;
+   uint8_t    scale;
+   uint8_t    score;
    wirePTrg wires[MAX_P_WIRES];     // internals for actual puzzle, 16 bytes
 
-   uchar    left_tap, right_tap;
+   uint8_t    left_tap, right_tap;
 
-   uchar    last_score;             // stuff for interface, mfd layer, so on
-   uchar    tscore;                 // target score
-   uchar    wires_moved;
-   uchar    wire_in_motion;
-   uchar    wim_tick;
-   uchar    wim_shown;
-   uchar    scorealg;
-   uchar    special;
+   uint8_t    last_score;             // stuff for interface, mfd layer, so on
+   uint8_t    tscore;                 // target score
+   uint8_t    wires_moved;
+   uint8_t    wire_in_motion;
+   uint8_t    wim_tick;
+   uint8_t    wim_shown;
+   uint8_t    scorealg;
+   uint8_t    special;
    ObjID    our_id;
-   uchar    have_won;
-   uchar    pad[3];
+   uint8_t    have_won;
+   uint8_t    pad[3];
 } wirePosPuzzle;
 
 // WP_SCALE_SHF is the number of bits of fractional precision to be used in
-// the scale field of a wirePosPuzzle (which is a uchar).  Thus, if scale
-// is to be a uchar, (256<<WP_SCALE_SHF)/P_CORRECT must be under 256.
+// the scale field of a wirePosPuzzle (which is a uint8_t).  Thus, if scale
+// is to be a uint8_t, (256<<WP_SCALE_SHF)/P_CORRECT must be under 256.
 
 #define WP_SCALE_SHF 2
 
@@ -141,17 +141,17 @@ typedef struct {
 
 typedef struct {
    ObjID our_id;                        // 2 bytes
-   uchar rows;			//:3;                        //  \_ 1 byte
-   uchar cols;			//:3;                        //  /  between us.
-   uchar control_alg;
-   uchar src;
-   uchar dest;
-   uchar have_won;
-   uchar winmove_r;	//:3;                   //  \_ 1 byte
-   uchar winmove_c;	//:3;                   //  /
-   uchar winmove_f;	//:1;                   // /
+   uint8_t rows;			//:3;                        //  \_ 1 byte
+   uint8_t cols;			//:3;                        //  /  between us.
+   uint8_t control_alg;
+   uint8_t src;
+   uint8_t dest;
+   uint8_t have_won;
+   uint8_t winmove_r;	//:3;                   //  \_ 1 byte
+   uint8_t winmove_c;	//:3;                   //  /
+   uint8_t winmove_f;	//:1;                   // /
 #ifdef GRIDP_AUTO_SOLVE
-   uchar solve_me;
+   uint8_t solve_me;
 #endif
 } gridFlowPuzzleLayout;
 
@@ -159,8 +159,8 @@ typedef struct {
 
 typedef struct {
    gridFlowPuzzleLayout gfLayout;
-   uint states[ GRIDP_STATE_INTS ];
-   uchar pad[ GRIDP_PADSIZE ];
+   uint32_t states[ GRIDP_STATE_INTS ];
+   uint8_t pad[ GRIDP_PADSIZE ];
 } gridFlowPuzzle;
 
 extern Region* mfd_regions[NUM_MFDS];
@@ -179,10 +179,10 @@ typedef enum {
 #define GRIDP_X_OFFSET 0
 #define GRIDP_Y_OFFSET 3
 
-gpz_state gpz_get_grid_state(gridFlowPuzzle *gfpz, short row, short col);
-void gpz_4int_init(gridFlowPuzzle *gfpz,uint p1,uint p2,uint p3,uint p4);
+gpz_state gpz_get_grid_state(gridFlowPuzzle *gfpz, int16_t row, int16_t col);
+void gpz_4int_init(gridFlowPuzzle *gfpz,uint32_t p1,uint32_t p2,uint32_t p3,uint32_t p4);
 void gpz_4int_update(gridFlowPuzzle *gfpz);
 
-#define last_access_help_string (*((int*)&player_struct.mfd_func_data[MFD_ACCESSPANEL_FUNC][0]))
-#define access_primary_mfd (*(((char*)&player_struct.mfd_func_data[MFD_ACCESSPANEL_FUNC][0]+sizeof(int))))
-#define grid_primary_mfd (*(((char*)&player_struct.mfd_func_data[MFD_GRIDPANEL_FUNC][0])))
+#define last_access_help_string (*((int32_t*)&player_struct.mfd_func_data[MFD_ACCESSPANEL_FUNC][0]))
+#define access_primary_mfd (*(((int8_t*)&player_struct.mfd_func_data[MFD_ACCESSPANEL_FUNC][0]+sizeof(int32_t))))
+#define grid_primary_mfd (*(((int8_t*)&player_struct.mfd_func_data[MFD_GRIDPANEL_FUNC][0])))

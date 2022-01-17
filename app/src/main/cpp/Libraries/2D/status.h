@@ -30,4 +30,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-extern int grd_active;
+extern int32_t grd_active;

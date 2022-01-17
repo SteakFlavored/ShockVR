@@ -44,17 +44,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 #include "flat8.h"
 
-void flat8_upoint(short x, short y)
+void flat8_upoint(int16_t x, int16_t y)
 {
-   uchar *p;
+   uint8_t *p;
 
    p = grd_bm.bits + y*grd_bm.row + x;
    *p = grd_gc.fcolor;
 }
 
-int flat8_point(short x, short y)
+int32_t flat8_point(int16_t x, int16_t y)
 {
-   uchar *p;
+   uint8_t *p;
 
    if (x<grd_clip.left || x>=grd_clip.right ||
        y<grd_clip.top  || y>=grd_clip.bot)

@@ -148,67 +148,67 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // structs
 typedef struct {
-   int (*s_wid)(char *s), (*s_draw)(char *s, int x, int y), (*c_wid)(char c), (*c_draw)(char c, int x, int y);
-   int (*s_clr)(char *s, int x, int y), (*l_clr)(int len, int x, int y), (*c_clr)(char c, int x, int y);
-   int (*cursor)(int x, int y);
-   int height, base_w;
-   uchar type;
+   int32_t (*s_wid)(int8_t *s), (*s_draw)(int8_t *s, int32_t x, int32_t y), (*c_wid)(int8_t c), (*c_draw)(int8_t c, int32_t x, int32_t y);
+   int32_t (*s_clr)(int8_t *s, int32_t x, int32_t y), (*l_clr)(int32_t len, int32_t x, int32_t y), (*c_clr)(int8_t c, int32_t x, int32_t y);
+   int32_t (*cursor)(int32_t x, int32_t y);
+   int32_t height, base_w;
+   uint8_t type;
 } TTFontInfo;
 
 typedef struct {
-   long  left_m, right_m;      // current margins
-   long  max_w;                // maximum width for a line, or 0 for none
-   ulong mode;                 // mode of editing
-   int   r_cnt;                // current repeat count
-   int   last_ev;              // last event (for multi-event stuff, like triple home)
+   int32_t  left_m, right_m;      // current margins
+   int32_t  max_w;                // maximum width for a line, or 0 for none
+   uint32_t mode;                 // mode of editing
+   int32_t   r_cnt;                // current repeat count
+   int32_t   last_ev;              // last event (for multi-event stuff, like triple home)
 } TTState;
 
 typedef struct {
-   long wid, stl;              // malloced width of line, length of string
-   long chr[2];                // l/r edge of screen char off
-   long pix[2];                // actual pix width there
-   uchar flg;                  // various text flags
+   int32_t wid, stl;              // malloced width of line, length of string
+   int32_t chr[2];                // l/r edge of screen int8_t off
+   int32_t pix[2];                // actual pix width there
+   uint8_t flg;                  // various text flags
 } TTCheats;
 
 typedef union {
-   int c[2];                   // coord x,y
+   int32_t c[2];                   // coord x,y
    struct {
-	   int x, y;
+	   int32_t x, y;
    } pt;
 } TTPoint;
 
 typedef struct {
    TTPoint crn;
-   int w, h;
+   int32_t w, h;
 } TTRect;
 
 typedef struct {
-   long max_w, max_h;          // max w/h in characters
-   long cur_w, cur_h;          // cursor w/h in characters
-   long disp_x, disp_y;        // x(abspix)/y(lines) of display top
-   int  disp_rows;             // number of rows we really can fit on the screen
-   int  cur_x, cur_y;          // x/y in scr pixels of cursor
+   int32_t max_w, max_h;          // max w/h in characters
+   int32_t cur_w, cur_h;          // cursor w/h in characters
+   int32_t disp_x, disp_y;        // x(abspix)/y(lines) of display top
+   int32_t  disp_rows;             // number of rows we really can fit on the screen
+   int32_t  cur_x, cur_y;          // x/y in scr pixels of cursor
    TTRect scr_loc;             // screen offset + size of the texttool
    void (*display_func)(void *, LGRect *);
    void *output_data;          // some appropriate output data
-   char **lines;               // the lines of actual text
+   int8_t **lines;               // the lines of actual text
    TTCheats *line_info;        // offsets for current lines
    TTFontInfo *lfont;          // the font being used
    TTState es;
 } TextTool;
 
 // prototypes
-TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_data, char *keymap,
+TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_data, int8_t *keymap,
    void (*d_func)(void *, LGRect *));
 #define tt_easy_build() tt_full_build(NULL,NULL,NULL,NULL,NULL)
 bool tt_toast(TextTool *old_tt);
 bool tt_set(TextTool *def_tt);
-long tt_parse_char(TextTool *tt, ushort key_code);
-long tt_parse_string(TextTool *tt, char *st);
-char *tt_get(TextTool *tt, long line_num);
+int32_t tt_parse_char(TextTool *tt, uint16_t key_code);
+int32_t tt_parse_string(TextTool *tt, int8_t *st);
+int8_t *tt_get(TextTool *tt, int32_t line_num);
 void tt_dump(TextTool *tt);
 void tt_display_all(TextTool *tt, LGRect *r);
 void tt_show_all(TextTool *tt);
-void tt_move(TextTool *tt, int xoff, int yoff);
-void tt_fill_line(TextTool *tt, int how, long line_num, char *s);
+void tt_move(TextTool *tt, int32_t xoff, int32_t yoff);
+void tt_fill_line(TextTool *tt, int32_t how, int32_t line_num, int8_t *s);
 #endif

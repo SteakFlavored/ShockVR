@@ -499,9 +499,9 @@ void g3_light_obj(g3s_phandle norm, g3s_phandle pos)
 // call this inside an object or inside a frame
 // at any rate, the points need to have been
 // transformed
-// g3_light_list(int n,g3s_phandle *norm,g3s_phandle *pos)
+// g3_light_list(int32_t n,g3s_phandle *norm,g3s_phandle *pos)
 //  [eax,edx,ebx]
-void g3_light_list(int n,g3s_phandle *norm,g3s_phandle *pos)
+void g3_light_list(int32_t n,g3s_phandle *norm,g3s_phandle *pos)
  {
  }
 

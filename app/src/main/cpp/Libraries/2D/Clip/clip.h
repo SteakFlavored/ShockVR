@@ -67,15 +67,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __CLIP_H
 #define __CLIP_H
 /* prototypes for analytic clippers. */
-extern int gr_clip_int_line (short *x0, short *y0, short *x1, short *y1);
-extern int gr_clip_fix_line (long *x0, long *y0, long *x1, long *y1);
-extern int gr_clip_fix_poly (int n, fix *vlist, fix *clist);
-extern int gr_clip_spoly (int n, fix *vlist, fix *clist, fix *ilist, fix *cilist);
-extern int gr_clip_fix_cpoly (int n, fix *vlist, grs_rgb *blist, fix *clist, grs_rgb *cblist);
-extern int gr_clip_rect (short *left, short *top, short *right, short *bot);
-extern int gr_clip_mono_bitmap (grs_bitmap *bm, short *x, short *y);
-extern int gr_clip_flat8_bitmap (grs_bitmap *bm, short *x, short *y);
-extern int gr_clip_flat24_bitmap (grs_bitmap *bm, short *x, short *y);
+extern int32_t gr_clip_int_line (int16_t *x0, int16_t *y0, int16_t *x1, int16_t *y1);
+extern int32_t gr_clip_fix_line (int32_t *x0, int32_t *y0, int32_t *x1, int32_t *y1);
+extern int32_t gr_clip_fix_poly (int32_t n, fix *vlist, fix *clist);
+extern int32_t gr_clip_spoly (int32_t n, fix *vlist, fix *clist, fix *ilist, fix *cilist);
+extern int32_t gr_clip_fix_cpoly (int32_t n, fix *vlist, grs_rgb *blist, fix *clist, grs_rgb *cblist);
+extern int32_t gr_clip_rect (int16_t *left, int16_t *top, int16_t *right, int16_t *bot);
+extern int32_t gr_clip_mono_bitmap (grs_bitmap *bm, int16_t *x, int16_t *y);
+extern int32_t gr_clip_flat8_bitmap (grs_bitmap *bm, int16_t *x, int16_t *y);
+extern int32_t gr_clip_flat24_bitmap (grs_bitmap *bm, int16_t *x, int16_t *y);
 
 /* clip codes. */
 #define CLIP_NONE    0

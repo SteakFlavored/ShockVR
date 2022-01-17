@@ -45,8 +45,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Typedefs
 typedef struct
 {
-   ushort timestamp;
-   ushort type;
+   uint16_t timestamp;
+   uint16_t type;
    ObjID target_id;
    ObjID source_id;
 } TrapSchedEvent;
@@ -59,30 +59,30 @@ typedef struct
 
 typedef struct
 {
-   ushort timestamp;
-   ushort type;
-   char semaphor;
-   char key;
-   char steps_remaining;
-   char sfx_code;
+   uint16_t timestamp;
+   uint16_t type;
+   int8_t semaphor;
+   int8_t key;
+   int8_t steps_remaining;
+   int8_t sfx_code;
 } HeightSchedEvent;
 
 // sfx_codes --
 // 0x1 for no terrain sound
 
 typedef struct {
-   uchar x;
-   uchar y;
-   uchar floor:1;
-   uchar key:7;
-   char inuse;
+   uint8_t x;
+   uint8_t y;
+   uint8_t floor:1;
+   uint8_t key:7;
+   int8_t inuse;
 } height_semaphor;
 
 typedef struct _EmailSchedEvent
 {
-   ushort timestamp;
-   ushort type;
-   short datamunge;
+   uint16_t timestamp;
+   uint16_t type;
+   int16_t datamunge;
 } EmailSchedEvent;
 
 // Prototypes
@@ -105,24 +105,24 @@ bool trap_activate(ObjID id, bool *use_message);
 
 
 // Use these functions to directly access trap-like functions
-errtype trap_teleport_func(int targ_x, int targ_y, int targ_z, int targlevel);
-errtype trap_scheduler_func(int p1, int p2, int p3, int p4);
-errtype trap_lighting_func(bool floor, int p1, int p2, int p3, int p4);
-errtype trap_damage_func(int p1, int p2, int p3, int p4);
-errtype trap_create_obj_func(int p1, int p2, int p3, int p4);
-errtype trap_questbit_func(int p1, int p2, int p3, int p4);
-errtype trap_cutscene_func(int p1, int p2, int p3, int p4);
-errtype trap_terrain_func(int p1, int p2, int p3, int p4);
-errtype trap_sfx_func(int p1, int p2, int p3, int p4);
+errtype trap_teleport_func(int32_t targ_x, int32_t targ_y, int32_t targ_z, int32_t targlevel);
+errtype trap_scheduler_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_lighting_func(bool floor, int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_damage_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_create_obj_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_questbit_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_cutscene_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_terrain_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
+errtype trap_sfx_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
 
 errtype check_deathwatch_triggers(ObjID id, bool really_dead);
-errtype check_entrance_triggers(uchar old_x, uchar old_y, uchar new_x, uchar new_y);
+errtype check_entrance_triggers(uint8_t old_x, uint8_t old_y, uint8_t new_x, uint8_t new_y);
 
 errtype do_multi_stuff(ObjID id);
 
 // Globals
 
-extern char *trapname_strings[];
+extern int8_t *trapname_strings[];
 
 #endif // __TRIGGER_H
 

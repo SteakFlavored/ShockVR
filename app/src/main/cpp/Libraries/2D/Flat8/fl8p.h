@@ -241,8 +241,8 @@ fix fix_mul_16_32_20 (fix a, fix b);
 #define VS_TS_ERR 12
 #define VS_TB_ERR 13
 
-extern ubyte flat8_per_ltol;
-extern ubyte flat8_per_wftol;
+extern uint8_t flat8_per_ltol;
+extern uint8_t flat8_per_wftol;
 extern fix gr_clut_lit_tol;
 
 #endif

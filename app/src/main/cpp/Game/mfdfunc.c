@@ -92,7 +92,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 static bool in_or_out = FALSE;
 
 extern void mouse_unconstrain(void);
-extern void mfd_ammo_expose(ubyte control);
+extern void mfd_ammo_expose(uint8_t control);
 extern bool mfd_ammo_handler(MFD* m, uiEvent* ev);
 
 #define LNAME_BUFSIZE   128
@@ -127,48 +127,48 @@ LGRegion* mfd_regions[NUM_MFDS];
 // ----------------
 
 void mfd_clear_view(void);
-int mfd_bmap_id(int triple);
+int32_t mfd_bmap_id(int32_t triple);
 void draw_blank_mfd(void);
-void draw_mfd_item_spew(Ref id, int n);
+void draw_mfd_item_spew(Ref id, int32_t n);
 
 errtype mfd_item_init(MFD_Func* mfd);
-void mfd_expose_blank(MFD *m, ubyte control);
-void mfd_item_expose(MFD *m, ubyte control);
+void mfd_expose_blank(MFD *m, uint8_t control);
+void mfd_item_expose(MFD *m, uint8_t control);
 bool mfd_item_handler(MFD *m, uiEvent *e);
-void mfd_item_micro_expose(bool full, int triple);
-void mfd_item_micro_hires_expose(bool full, int triple);
+void mfd_item_micro_expose(bool full, int32_t triple);
+void mfd_item_micro_hires_expose(bool full, int32_t triple);
 
-void mfd_general_inv_expose(MFD* m, ubyte control, ObjID id, bool full);
-bool mfd_general_inv_handler(MFD* m, uiEvent* ev, int row);
+void mfd_general_inv_expose(MFD* m, uint8_t control, ObjID id, bool full);
+bool mfd_general_inv_handler(MFD* m, uiEvent* ev, int32_t row);
 
 bool mfd_lantern_button_handler(MFD* m, LGPoint bttn, uiEvent* ev, void* data);
-void mfd_lantern_setting(int setting);
+void mfd_lantern_setting(int32_t setting);
 errtype mfd_lanternware_init(MFD_Func* f);
-void mfd_lanternware_expose(MFD* mfd, ubyte control);
+void mfd_lanternware_expose(MFD* mfd, uint8_t control);
 
-void draw_ammo_button(int triple, short x, short y);
+void draw_ammo_button(int32_t triple, int16_t x, int16_t y);
 
 errtype mfd_anim_init();
-void mfd_anim_expose(MFD *m, ubyte control);
+void mfd_anim_expose(MFD *m, uint8_t control);
 
 errtype mfd_weapon_init(MFD_Func* mfd);
 void weapon_mfd_for_reload(void);
-void mfd_weapon_expose(MFD *m, ubyte control);
+void mfd_weapon_expose(MFD *m, uint8_t control);
 bool mfd_weapon_handler(MFD *m, uiEvent *e);
 bool mfd_weapon_beam_handler(MFD *m, uiEvent *e);
 bool mfd_weapon_projectile_handler(MFD *m, uiEvent *e, weapon_slot *ws);
-bool mfd_weapon_expose_projectile(MFD *m, weapon_slot *ws, ubyte control);
-void mfd_weapon_expose_beam(weapon_slot *ws, ubyte id, bool Redraw);
-void mfd_weapon_draw_temp(ubyte temp);
-void mfd_weapon_draw_ammo_buttons(int num_ammo_buttons, int ammo_subclass,
-    ubyte *ammo_types, ubyte curr_ammo_type, int ammo_count);
-void mfd_weapon_draw_beam_status_bar(int charge, int setting, bool does_overload);
+bool mfd_weapon_expose_projectile(MFD *m, weapon_slot *ws, uint8_t control);
+void mfd_weapon_expose_beam(weapon_slot *ws, uint8_t id, bool Redraw);
+void mfd_weapon_draw_temp(uint8_t temp);
+void mfd_weapon_draw_ammo_buttons(int32_t num_ammo_buttons, int32_t ammo_subclass,
+    uint8_t *ammo_types, uint8_t curr_ammo_type, int32_t ammo_count);
+void mfd_weapon_draw_beam_status_bar(int32_t charge, int32_t setting, bool does_overload);
 
-void mfd_setup_keypad(char special);
+void mfd_setup_keypad(int8_t special);
 
 bool weapon_mfd_temp;
 
-void mfd_bioware_expose(MFD *m, ubyte control);
+void mfd_bioware_expose(MFD *m, uint8_t control);
 
 
 // ------------
@@ -184,10 +184,10 @@ void mfd_clear_view(void)
    mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 }
 
-int mfd_bmap_id(int triple)
+int32_t mfd_bmap_id(int32_t triple)
 {
-   int obclass = TRIP2CL(triple);
-   int t = CPTRIP(triple);
+   int32_t obclass = TRIP2CL(triple);
+   int32_t t = CPTRIP(triple);
    return MKREF(RES_mfdClass_1+obclass,t);
 }
 
@@ -212,7 +212,7 @@ void draw_blank_mfd(void)
 
 void mfd_init_funcs()
 {
-   int i;
+   int32_t i;
    // Define a couple of MFD functions.
    for (i = 0; i < MFD_NUM_FUNCS; i++)
       if (mfd_funcs[i].init != NULL)
@@ -307,7 +307,7 @@ LGRect MfdAmmoRectZone = { { 0, AMMO_BUTTON_Y}, { MFD_VIEW_WID, AMMO_BUTTON_Y + 
 LGRect MfdBeamStatusRect;
 
 #define NO_CONSTRAIN NUM_MFDS
-static ubyte beam_constrain = NO_CONSTRAIN;
+static uint8_t beam_constrain = NO_CONSTRAIN;
 
 LGCursor slider_cursor;
 grs_bitmap slider_cursor_bmap;
@@ -344,11 +344,11 @@ errtype mfd_weapon_init(MFD_Func* mfd)
 //
 // Draws an overlay of a weapon in the current mfd slot.
 
-void mfd_weapon_expose(MFD *m, ubyte control)
+void mfd_weapon_expose(MFD *m, uint8_t control)
 {
    weapon_slot *ws;
-   char        buf[50];
-   int         triple;
+   int8_t        buf[50];
+   int32_t         triple;
    bool        punt = player_struct.actives[ACTIVE_WEAPON] == EMPTY_WEAPON_SLOT;
    bool        Redraw = FALSE;
    bool        RedrawAmmoArea = TRUE;
@@ -407,7 +407,7 @@ void mfd_weapon_expose(MFD *m, ubyte control)
       // We draw it here because it is effectively "background"
       // Hopefully update-rects will take care of us..
       {
-         int id = mfd_bmap_id(triple);
+         int32_t id = mfd_bmap_id(triple);
 //KLC - chg for new art         draw_res_bm(id,(MFD_VIEW_WID-res_bm_width(id))/2, WEAPON_ART_Y);
          draw_hires_resource_bm(id,
          		(SCONV_X(MFD_VIEW_WID)-res_bm_width(id))/2, SCONV_Y(WEAPON_ART_Y));  //¥¥¥ is this right?
@@ -416,8 +416,8 @@ void mfd_weapon_expose(MFD *m, ubyte control)
       // This is all stuff that should be drawn for a full expose of
       // a new weapon
       if (Redraw) {
-         short y = 2;
-         short w,h;
+         int16_t y = 2;
+         int16_t w,h;
 
 
          // Print name of gun in top line of mfd
@@ -454,11 +454,11 @@ void mfd_weapon_expose(MFD *m, ubyte control)
 // Exposes relevant weapons mfd info for a projectile weapon.
 // returns whether or not it drew the ammo buttons
 
-bool mfd_weapon_expose_projectile(MFD *m, weapon_slot *ws, ubyte control)
+bool mfd_weapon_expose_projectile(MFD *m, weapon_slot *ws, uint8_t control)
 {
-   int         num_ammo_buttons;
-   int         ammo_subclass;
-   ubyte       ammo_types[3];
+   int32_t         num_ammo_buttons;
+   int32_t         ammo_subclass;
+   uint8_t       ammo_types[3];
    bool        RedrawAmmoFlag = FALSE;
 
    // Get the ammo data for the current weapon
@@ -485,14 +485,14 @@ bool mfd_weapon_expose_projectile(MFD *m, weapon_slot *ws, ubyte control)
 
 #define MAX_CART_COLORS 3
 #define CARTRIDGE_BRACKET 8              // cartridges per color
-static uchar cart_colors[MAX_CART_COLORS] = { GOOD_RED, 0x4b, GREEN_BASE + 2} ;
+static uint8_t cart_colors[MAX_CART_COLORS] = { GOOD_RED, 0x4b, GREEN_BASE + 2} ;
 
-void draw_ammo_button(int triple, short x, short y)
+void draw_ammo_button(int32_t triple, int16_t x, int16_t y)
 {
-   short h;
-   int id;
-   int carts = player_struct.cartridges[CPTRIP(triple)];
-   ubyte cnum = min(MAX_CART_COLORS-1,(carts-1)/CARTRIDGE_BRACKET);
+   int16_t h;
+   int32_t id;
+   int32_t carts = player_struct.cartridges[CPTRIP(triple)];
+   uint8_t cnum = min(MAX_CART_COLORS-1,(carts-1)/CARTRIDGE_BRACKET);
 
    // Draw the outline of an ammo box
    draw_res_bm(REF_IMG_BullFrame+min(2,max(3-carts,0)),x,y);
@@ -502,12 +502,12 @@ void draw_ammo_button(int triple, short x, short y)
    draw_hires_resource_bm(id, SCONV_X(x+4), SCONV_Y(y+AMMO_BUTTON_H-3)-h);
    if (carts > 0)
    {
-      int cnt = carts%CARTRIDGE_BRACKET;
+      int32_t cnt = carts%CARTRIDGE_BRACKET;
       if (cnt == 0) cnt = CARTRIDGE_BRACKET;
       gr_set_fcolor(cart_colors[cnum]);
       while(cnt-- > 0)
       {
-         short cy = y+AMMO_BUTTON_H-5-2*cnt;
+         int16_t cy = y+AMMO_BUTTON_H-5-2*cnt;
          ss_hline(x+AMMO_BUTTON_W-6,cy,x+AMMO_BUTTON_W-5);
       }
    }
@@ -515,17 +515,17 @@ void draw_ammo_button(int triple, short x, short y)
       mfd_add_rect(x,y,x+AMMO_BUTTON_W,y+AMMO_BUTTON_H);
 }
 
-void mfd_weapon_draw_ammo_buttons(int num_ammo_buttons, int ammo_subclass,
-    ubyte *ammo_types, ubyte curr_ammo_type, int ammo_count)
+void mfd_weapon_draw_ammo_buttons(int32_t num_ammo_buttons, int32_t ammo_subclass,
+    uint8_t *ammo_types, uint8_t curr_ammo_type, int32_t ammo_count)
 {
-   int  i, triple;
+   int32_t  i, triple;
 
    // Draw ammo boxes
    if (ammo_count == 0)
    {
       for (i = 0; i < num_ammo_buttons; i++)
       {
-         short x = (ammo_types[i]) * AMMO_BUTTON_W;
+         int16_t x = (ammo_types[i]) * AMMO_BUTTON_W;
          triple = MAKETRIP(CLASS_AMMO, ammo_subclass, ammo_types[i]);
          // Get useful ammo information for box label
          draw_ammo_button(triple,x,AMMO_BUTTON_Y);
@@ -535,7 +535,7 @@ void mfd_weapon_draw_ammo_buttons(int num_ammo_buttons, int ammo_subclass,
    }
    else
    {
-      char buf[4],buf2[50];
+      int8_t buf[4],buf2[50];
       triple = MAKETRIP(CLASS_AMMO, ammo_subclass, curr_ammo_type);
 
       numtostring(ammo_count, buf);  //KLC  itoa(ammo_count,buf,10);
@@ -544,7 +544,7 @@ void mfd_weapon_draw_ammo_buttons(int num_ammo_buttons, int ammo_subclass,
       mfd_draw_font_string(buf,MFD_VIEW_WID-gr_string_width(buf)-2, AMMO_BUTTON_Y+2, GOOD_RED,RES_mediumLEDFont,TRUE);
       mfd_string_shadow = MFD_SHADOW_FULLSCREEN; // default
 
-      get_object_short_name(triple,buf2,50);
+      get_object_int16_t_name(triple,buf2,50);
       gr_set_font((grs_font*)ResGet(MFD_FONT));
       mfd_draw_string(buf2, MFD_VIEW_WID -gr_string_width(buf2)-2, AMMO_NAME_Y, GREEN_YELLOW_BASE, TRUE);
 
@@ -564,16 +564,16 @@ void mfd_weapon_draw_ammo_buttons(int num_ammo_buttons, int ammo_subclass,
 #define MFD_BEAM_HOT         0x35
 #define MFD_BEAM_READY       0x58
 
-ubyte temp_levels[TEMPR_WIDTH] =
+uint8_t temp_levels[TEMPR_WIDTH] =
    {1,2,2,3,3,4,5,6,7,9,11,13,16};
 
 // --------------------------------------------------------------------------
 // mfd_weapon_draw_temp()
 //
 
-void mfd_weapon_draw_temp(ubyte temp)
+void mfd_weapon_draw_temp(uint8_t temp)
 {
-   int i;
+   int32_t i;
 
    gr_set_fcolor(MFD_BEAM_READY);
 
@@ -595,9 +595,9 @@ void mfd_weapon_draw_temp(ubyte temp)
 // Takes the current charge and the maximum charge, and draws the dynamic
 // portion of the beam weapon status bar
 
-void mfd_weapon_draw_beam_status_bar(int, int setting, bool does_overload)
+void mfd_weapon_draw_beam_status_bar(int32_t, int32_t setting, bool does_overload)
 {
-   ubyte setting_x;
+   uint8_t setting_x;
 
    setting = (BEAM_SETTING_VAL(setting) < MIN_ENERGY_USE) ? 1 : (BEAM_SETTING_VAL(setting)-MIN_ENERGY_USE);
    if (does_overload)
@@ -613,7 +613,7 @@ void mfd_weapon_draw_beam_status_bar(int, int setting, bool does_overload)
           MfdBeamStatusRect.lr.x + 1,
           MfdBeamStatusRect.lr.y + 1);
 
-   setting_x = (ubyte) fix_int(setting*mfd_pixels_per_charge_unit);
+   setting_x = (uint8_t) fix_int(setting*mfd_pixels_per_charge_unit);
    setting_x = min(MfdBeamStatusRect.lr.x-MfdBeamStatusRect.ul.x,setting_x);
 
    // draw the settings bar only if we're not in overload mode
@@ -633,11 +633,11 @@ void mfd_weapon_draw_beam_status_bar(int, int setting, bool does_overload)
 //
 // Exposes relevant weapons mfd info for a beam weapon.
 
-void mfd_weapon_expose_beam(weapon_slot *ws, ubyte id, bool Redraw)
+void mfd_weapon_expose_beam(weapon_slot *ws, uint8_t id, bool Redraw)
 {
-   char buf[ENERGY_TEXT_LEN];
+   int8_t buf[ENERGY_TEXT_LEN];
    bool does_overload = FALSE;
-   extern bool does_weapon_overload(int type, int subtype);
+   extern bool does_weapon_overload(int32_t type, int32_t subtype);
 
    ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
    if (id == MFD_LEFT)
@@ -659,7 +659,7 @@ void mfd_weapon_expose_beam(weapon_slot *ws, ubyte id, bool Redraw)
       // if beam weapon is not set to overload then draw overload button, otherwise say "overload enabled"
       if (Redraw && OVERLOAD_VALUE(ws->setting))
       {
-         short w = res_bm_width(REF_IMG_BeamOverloadOn);
+         int16_t w = res_bm_width(REF_IMG_BeamOverloadOn);
 
          draw_raw_resource_bm(REF_IMG_BeamOverloadOn,1,OVERLOAD_BUTTON_Y);
          mfd_add_rect(1,OVERLOAD_BUTTON_Y,1+w,MFD_VIEW_HGT);
@@ -669,7 +669,7 @@ void mfd_weapon_expose_beam(weapon_slot *ws, ubyte id, bool Redraw)
       }
       else
       {
-         short w = res_bm_width(REF_IMG_BeamOverload);
+         int16_t w = res_bm_width(REF_IMG_BeamOverload);
 
          if (Redraw)
          {
@@ -708,7 +708,7 @@ bool mfd_weapon_handler(MFD *m, uiEvent *e)
 {
    weapon_slot *ws;
    uiMouseEvent *mouse;
-   int triple;
+   int32_t triple;
 
    // Get the triple for the current weapon
    ws = &player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]];
@@ -735,27 +735,27 @@ bool mfd_weapon_handler(MFD *m, uiEvent *e)
    return FALSE;
 }
 
-ubyte old_energy_setting = 0xFF;
+uint8_t old_energy_setting = 0xFF;
 
 // ---------------------------------------------------------------------------
 // mfd_weapon_beam_handler()
 //
 // This is the handler for beam type weapons in the weapons mfd.
 
-extern bool does_weapon_overload(int type, int subtype);
+extern bool does_weapon_overload(int32_t type, int32_t subtype);
 
 bool mfd_weapon_beam_handler(MFD *m, uiEvent *e)
 {
    bool retval = TRUE;
    LGRect r;
-   ubyte setting, setting_x;
+   uint8_t setting, setting_x;
    uiMouseEvent *mouse;
    weapon_slot *ws = &player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]];
    bool overld = does_weapon_overload(ws->type, ws->subtype);
 
 #ifdef CURSOR_BACKUPS
    extern grs_bitmap backup_mfd_cursor;
-   extern uchar *backup[NUM_BACKUP_BITS];
+   extern uint8_t *backup[NUM_BACKUP_BITS];
 #endif
 
    mouse = (uiMouseEvent *) e;
@@ -819,7 +819,7 @@ bool mfd_weapon_beam_handler(MFD *m, uiEvent *e)
       // Get our funky mfd-beam-phaser-setting cursor
       uiPushRegionCursor(MFD_REGION(m),&slider_cursor);
 #ifdef CURSOR_BACKUPS
-   backup[20] = (uchar *)Malloc(f->bm.w * f->bm.h);
+   backup[20] = (uint8_t *)Malloc(f->bm.w * f->bm.h);
    memcpy(backup[20],f->bm.bits,f->bm.w * f->bm.h);
       gr_init_bm(&backup_mfd_cursor,backup[14],BMT_FLAT8, 0, mfd_cursor.w,mfd_cursor.h);
 #endif
@@ -853,7 +853,7 @@ bool mfd_weapon_beam_handler(MFD *m, uiEvent *e)
       return retval;
    old_energy_setting = setting_x;
 
-   setting = (ubyte) fix_int(setting_x * mfd_charge_units_per_pixel);
+   setting = (uint8_t) fix_int(setting_x * mfd_charge_units_per_pixel);
 
    if (overld)
       setting >>= 1;
@@ -874,8 +874,8 @@ bool mfd_weapon_beam_handler(MFD *m, uiEvent *e)
 
 bool mfd_weapon_projectile_handler(MFD *m, uiEvent *e, weapon_slot *ws)
 {
-   int          ammo_subclass, num_ammo_buttons;
-   ubyte        ammo_types[3];
+   int32_t          ammo_subclass, num_ammo_buttons;
+   uint8_t        ammo_types[3];
    uiMouseEvent *mouse;
    LGPoint pos = e->pos;
 
@@ -915,14 +915,14 @@ bool mfd_weapon_projectile_handler(MFD *m, uiEvent *e, weapon_slot *ws)
    get_available_ammo_type(ws->type, ws->subtype, &num_ammo_buttons,
       ammo_types, &ammo_subclass);
    {
-      int b = pos.x/AMMO_BUTTON_W;
-      int atype;
+      int32_t b = pos.x/AMMO_BUTTON_W;
+      int32_t atype;
       for(atype=0;atype<num_ammo_buttons;atype++) {
          // If we have a hit, we let each mfd know independently that
          // it needs to redraw its ammo buttons, to save redraw time
          if(b==ammo_types[atype] && change_ammo_type(b)) {
             if(weapon_mfd_temp) {
-               int mfd;
+               int32_t mfd;
                for(mfd=0;mfd<NUM_MFDS;mfd++) {
                   if(player_struct.mfd_current_slots[mfd]==MFD_WEAPON_SLOT)
                      restore_mfd_slot(mfd);
@@ -943,10 +943,10 @@ bool mfd_weapon_projectile_handler(MFD *m, uiEvent *e, weapon_slot *ws)
 
 void weapon_mfd_for_reload(void)
 {
-   uchar target_pri;
-   uchar take_mfd;
+   uint8_t target_pri;
+   uint8_t take_mfd;
 
-   extern int mfd_choose_func(int func, int slot);
+   extern int32_t mfd_choose_func(int32_t func, int32_t slot);
 
    // Do not take down target mfd in favor of weapon in this case!
    target_pri = mfd_funcs[MFD_TARGET_FUNC].priority;
@@ -1026,7 +1026,7 @@ errtype mfd_item_init(MFD_Func *)
 // Like mini-expose, but gets the name for you, and
 // conforms to our rect-o-tronic update facility
 
-void mfd_item_micro_expose(bool full, int triple)
+void mfd_item_micro_expose(bool full, int32_t triple)
 {
    if (!full_game_3d)
    {
@@ -1037,9 +1037,9 @@ void mfd_item_micro_expose(bool full, int triple)
    if (full)
    {
       LGPoint siz;
-      int id;
-      short y = 2;
-      char buf[LNAME_BUFSIZE];
+      int32_t id;
+      int16_t y = 2;
+      int8_t buf[LNAME_BUFSIZE];
       mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
       ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
@@ -1060,7 +1060,7 @@ void mfd_item_micro_expose(bool full, int triple)
 //--------------------------------------------------------------
 // Called by things that know they have hi-res art to display.
 
-void mfd_item_micro_hires_expose(bool full, int triple)
+void mfd_item_micro_hires_expose(bool full, int32_t triple)
 {
 	if (!full_game_3d)
 	{
@@ -1070,9 +1070,9 @@ void mfd_item_micro_hires_expose(bool full, int triple)
 	if (full)
 	{
 		LGPoint	siz;
-		int 		id;
-		short 	y = 2;
-		char 		buf[LNAME_BUFSIZE];
+		int32_t 		id;
+		int16_t 	y = 2;
+		int8_t 		buf[LNAME_BUFSIZE];
 
 		mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 		ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
@@ -1099,8 +1099,8 @@ void mfd_item_micro_hires_expose(bool full, int triple)
 #ifdef OLD_GRENADE_BUTTONS
 void mfd_item_draw_grenade_setting_boxes(MFD *m)
 {
-   char buf[2] ;
-   int i;
+   int8_t buf[2] ;
+   int32_t i;
 
    for (i = 0; i < 2; i++) {
       gr_set_fcolor(WHITE);
@@ -1127,7 +1127,7 @@ void mfd_item_draw_grenade_setting_boxes(MFD *m)
 // Draws an overlay of a drug molecule or whatever in the current slot.
 
 #define NULL_ACTIVE 0xFF
-static ubyte cat2active[MFD_INV_CATEGORIES] =
+static uint8_t cat2active[MFD_INV_CATEGORIES] =
    {
       NULL_ACTIVE,
       ACTIVE_DRUG,
@@ -1157,9 +1157,9 @@ Ref smallstuffSpews[] = {
    REF_STR_plotSpew0
 };
 
-void mfd_general_inv_expose(MFD*, ubyte, ObjID id, bool full)
+void mfd_general_inv_expose(MFD*, uint8_t, ObjID id, bool full)
 {
-   int triple;
+   int32_t triple;
    Ref spew=NULL_REF;
 
    if (id == OBJ_NULL)
@@ -1171,8 +1171,8 @@ void mfd_general_inv_expose(MFD*, ubyte, ObjID id, bool full)
    mfd_item_micro_expose(full,triple);
    if (full && !(ObjProps[OPNUM(id)].flags & INVENTORY_GENERAL))
    {
-      short x = (MFD_VIEW_WID-res_bm_width(TRASH_BUTTON))/2;
-      short y = (MFD_VIEW_HGT-res_bm_height(TRASH_BUTTON))/2;
+      int16_t x = (MFD_VIEW_WID-res_bm_width(TRASH_BUTTON))/2;
+      int16_t y = (MFD_VIEW_HGT-res_bm_height(TRASH_BUTTON))/2;
       draw_raw_resource_bm(TRASH_BUTTON,x,y);
       mfd_add_rect(x,y,x+res_bm_width(TRASH_BUTTON),y+res_bm_height(TRASH_BUTTON));
    }
@@ -1182,22 +1182,22 @@ void mfd_general_inv_expose(MFD*, ubyte, ObjID id, bool full)
       draw_mfd_item_spew(spew+objs[id].info.type,1);
 }
 
-bool mfd_general_inv_handler(MFD* m, uiEvent* ev, int row)
+bool mfd_general_inv_handler(MFD* m, uiEvent* ev, int32_t row)
 {
    ObjID id = player_struct.inventory[row];
    if (ev->type != UI_EVENT_MOUSE || !(ev->subtype & MOUSE_LDOWN)) return FALSE;
    if (!(ObjProps[OPNUM(id)].flags & INVENTORY_GENERAL))
    {
       LGPoint pos = MakePoint(ev->pos.x - m->rect.ul.x,ev->pos.y - m->rect.ul.y);
-      short x = (MFD_VIEW_WID-res_bm_width(TRASH_BUTTON))/2;
-      short y = (MFD_VIEW_HGT-res_bm_height(TRASH_BUTTON))/2;
+      int16_t x = (MFD_VIEW_WID-res_bm_width(TRASH_BUTTON))/2;
+      int16_t y = (MFD_VIEW_HGT-res_bm_height(TRASH_BUTTON))/2;
       LGRect r;
       r.ul = r.lr = MakePoint(x,y);
       r.lr.x += res_bm_width(TRASH_BUTTON);
       r.lr.y += res_bm_height(TRASH_BUTTON);
       if (RECT_TEST_PT(&r,pos))
       {
-         int i;
+         int32_t i;
          obj_destroy(id);
          for (i = row+1; i < NUM_GENERAL_SLOTS; i++)
             player_struct.inventory[i-1] = player_struct.inventory[i];
@@ -1216,13 +1216,13 @@ bool mfd_general_inv_handler(MFD* m, uiEvent* ev, int row)
 //#define SPEW_VERT_MARGIN 10
 #define SPEW_VERT_MARGIN 2
 
-void draw_mfd_item_spew(Ref id, int n)
+void draw_mfd_item_spew(Ref id, int32_t n)
 {
    bool oldwrap = mfd_string_wrap;
-   short w,h;
-   short x,y;
-   char buf[256];
-   int i;
+   int16_t w,h;
+   int16_t x,y;
+   int8_t buf[256];
+   int32_t i;
 
    gr_set_font((grs_font*)ResLock(MFD_FONT));
    buf[0] = '\0';
@@ -1243,11 +1243,11 @@ void draw_mfd_item_spew(Ref id, int n)
 }
 
 
-void mfd_item_expose(MFD *m, ubyte control)
+void mfd_item_expose(MFD *m, uint8_t control)
 {
-   ubyte lastclass, currclass, lasttype, currtype = MFD_INV_NOTYPE;
+   uint8_t lastclass, currclass, lasttype, currtype = MFD_INV_NOTYPE;
    bool FullRedraw = FALSE;
-   int triple;
+   int32_t triple;
 
    currclass = MFDGetCurrItemClass(m->id);
    lastclass = MFDGetLastItemClass(m->id);
@@ -1315,9 +1315,9 @@ void mfd_item_expose(MFD *m, ubyte control)
 //            }
 //            else
             {
-               extern bool is_passive_hardware(int n);
-               int id;
-               short x = HARDWARE_BUTTON_X,y = HARDWARE_BUTTON_Y;
+               extern bool is_passive_hardware(int32_t n);
+               int32_t id;
+               int16_t x = HARDWARE_BUTTON_X,y = HARDWARE_BUTTON_Y;
                triple = get_triple_from_class_nth_item(CLASS_HARDWARE,currtype);
 
 //KLC - chg for new art               mfd_item_micro_expose(FullRedraw, triple);
@@ -1330,7 +1330,7 @@ void mfd_item_expose(MFD *m, ubyte control)
                }
                if (FullRedraw)
                {
-                  uchar version = player_struct.hardwarez[currtype];
+                  uint8_t version = player_struct.hardwarez[currtype];
                   draw_mfd_item_spew(REF_STR_wareSpew0 + STRINGS_PER_WARE*currtype,version);
                }
             }
@@ -1349,8 +1349,8 @@ void mfd_item_expose(MFD *m, ubyte control)
          case MFD_INV_SOFT_MISC:
             // Monkey see, monkey do, monkey will destroy you.
             {
-               extern bool is_oneshot_misc_software(int n);
-               short x = HARDWARE_BUTTON_X,y = HARDWARE_BUTTON_Y;
+               extern bool is_oneshot_misc_software(int32_t n);
+               int16_t x = HARDWARE_BUTTON_X,y = HARDWARE_BUTTON_Y;
                triple = get_ware_triple(currclass-MFD_INV_SOFT_COMBAT+WARE_SOFT_COMBAT,currtype);
 
                mfd_item_micro_expose(FullRedraw,triple);
@@ -1396,10 +1396,10 @@ bool mfd_item_handler(MFD *m, uiEvent *e)
 
 #ifdef OLD_GRENADE_BUTTONS
       {
-         int i;
+         int32_t i;
          LGRect r[2];
-         int triple;
-         ubyte min, max;
+         int32_t triple;
+         uint8_t min, max;
          triple = get_triple_from_class_nth_item(CLASS_GRENADE,MFDGetCurrItemType(m->id));
          if (!(TRIP2SC(triple) == GRENADE_SUBCLASS_TIMED)) return retval;
 
@@ -1492,13 +1492,13 @@ bool mfd_item_handler(MFD *m, uiEvent *e)
 
 extern bool muzzle_fire_light;
 
-int energy_cost(int warenum);
+int32_t energy_cost(int32_t warenum);
 
 bool mfd_lantern_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 {
-   int n = CPTRIP(LANTERN_HARD_TRIPLE);
-   int s = player_struct.hardwarez_status[n];
-   void mfd_lantern_setting(int setting);
+   int32_t n = CPTRIP(LANTERN_HARD_TRIPLE);
+   int32_t s = player_struct.hardwarez_status[n];
+   void mfd_lantern_setting(int32_t setting);
 
    if (bttn.x >= player_struct.hardwarez[n] || !(ev->subtype & MOUSE_LDOWN))
       return FALSE; // Version too high
@@ -1511,10 +1511,10 @@ bool mfd_lantern_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
    return TRUE;
 }
 
-void mfd_lantern_setting(int setting)
+void mfd_lantern_setting(int32_t setting)
 {
-   int n = CPTRIP(LANTERN_HARD_TRIPLE);
-   int s = player_struct.hardwarez_status[n];
+   int32_t n = CPTRIP(LANTERN_HARD_TRIPLE);
+   int32_t s = player_struct.hardwarez_status[n];
 
    if (s & WARE_ON)
       set_player_energy_spend(player_struct.energy_spend - energy_cost(n));
@@ -1526,13 +1526,13 @@ void mfd_lantern_setting(int setting)
       lamp_set_vals();
    }
    if (player_struct.hardwarez_status[n] & WARE_ON)
-      set_player_energy_spend(min(MAX_ENERGY,(int)player_struct.energy_spend + energy_cost(n)));
+      set_player_energy_spend(min(MAX_ENERGY,(int32_t)player_struct.energy_spend + energy_cost(n)));
    mfd_notify_func(MFD_LANTERN_FUNC, MFD_ITEM_SLOT, FALSE, MFD_ACTIVE, FALSE);
 }
 
 errtype mfd_lanternware_init(MFD_Func* f)
 {
-   int cnt = 0;
+   int32_t cnt = 0;
    LGPoint bsize;
    LGPoint bdims;
    LGRect r;
@@ -1551,9 +1551,9 @@ errtype mfd_lanternware_init(MFD_Func* f)
    return OK;
 }
 
-void mfd_lanternware_expose(MFD* mfd, ubyte control)
+void mfd_lanternware_expose(MFD* mfd, uint8_t control)
 {
-   int n,s,v;
+   int32_t n,s,v;
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0) return;
    n = CPTRIP(LANTERN_HARD_TRIPLE);
@@ -1573,14 +1573,14 @@ void mfd_lanternware_expose(MFD* mfd, ubyte control)
       || LANTERN_LAST_VERSION(mfd->id) != v
       || LANTERN_LAST_STATE(mfd->id) != s & WARE_ON)
    {
-      int xjump = LANTERN_BARRAY_WD - res_bm_width(REF_IMG_LitLamp0);
-      int i;
+      int32_t xjump = LANTERN_BARRAY_WD - res_bm_width(REF_IMG_LitLamp0);
+      int32_t i;
       for (i = 0; i < v; i++)
       {
-         int lit = i == LAMP_SETTING(s) && (s & WARE_ON);
-         int id = (lit) ?  REF_IMG_LitLamp0 : REF_IMG_UnlitLamp0;
-         short x = LANTERN_BARRAY_X+i*xjump/(LAMP_VERSIONS-1);
-         short y = LANTERN_BARRAY_Y;
+         int32_t lit = i == LAMP_SETTING(s) && (s & WARE_ON);
+         int32_t id = (lit) ?  REF_IMG_LitLamp0 : REF_IMG_UnlitLamp0;
+         int16_t x = LANTERN_BARRAY_X+i*xjump/(LAMP_VERSIONS-1);
+         int16_t y = LANTERN_BARRAY_Y;
          draw_raw_resource_bm(id+i,x,LANTERN_BARRAY_Y);
          if (i == LAMP_SETTING(s))
          {
@@ -1611,18 +1611,18 @@ void mfd_lanternware_expose(MFD* mfd, ubyte control)
 
 #define SHIELD_SETTINGS 3
 
-void mfd_shield_setting(int setting);
+void mfd_shield_setting(int32_t setting);
 bool mfd_shield_handler(MFD* m, uiEvent* e);
 bool mfd_shield_button_handler(MFD* m, LGPoint bttn, uiEvent* ev, void* data);
 errtype mfd_shield_init(MFD_Func* f);
-void mfd_shieldware_expose(MFD* mfd, ubyte control);
+void mfd_shieldware_expose(MFD* mfd, uint8_t control);
 
 bool mfd_shield_handler(MFD* m, uiEvent* e)
 {
    bool retval = FALSE;
    LGPoint pos = e->pos;
-   ubyte n = CPTRIP(SHIELD_HARD_TRIPLE);
-   ubyte v = player_struct.hardwarez[n];
+   uint8_t n = CPTRIP(SHIELD_HARD_TRIPLE);
+   uint8_t v = player_struct.hardwarez[n];
    if (v != SHIELD_VERSIONS) // are we at max version
       return FALSE;
    if (!(e->subtype & MOUSE_LDOWN))
@@ -1640,8 +1640,8 @@ bool mfd_shield_handler(MFD* m, uiEvent* e)
 
 bool mfd_shield_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 {
-   int n = CPTRIP(SHIELD_HARD_TRIPLE);
-   int s = player_struct.hardwarez_status[n];
+   int32_t n = CPTRIP(SHIELD_HARD_TRIPLE);
+   int32_t s = player_struct.hardwarez_status[n];
 
    if (bttn.x >= player_struct.hardwarez[n] || !(ev->subtype & MOUSE_LDOWN))
       return FALSE; // Version too high
@@ -1654,11 +1654,11 @@ bool mfd_shield_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
    return TRUE;
 }
 
-void mfd_shield_setting(int setting)
+void mfd_shield_setting(int32_t setting)
 {
    extern void shield_set_absorb(void);
-   int n = CPTRIP(SHIELD_HARD_TRIPLE);
-   int s = player_struct.hardwarez_status[n];
+   int32_t n = CPTRIP(SHIELD_HARD_TRIPLE);
+   int32_t s = player_struct.hardwarez_status[n];
 
    if (s & WARE_ON)
       set_player_energy_spend(player_struct.energy_spend - energy_cost(n));
@@ -1667,14 +1667,14 @@ void mfd_shield_setting(int setting)
    if(s & WARE_ON)
    {
       shield_set_absorb();
-      set_player_energy_spend(min(MAX_ENERGY,(int)player_struct.energy_spend + energy_cost(n)));
+      set_player_energy_spend(min(MAX_ENERGY,(int32_t)player_struct.energy_spend + energy_cost(n)));
    }
    mfd_notify_func(MFD_SHIELD_FUNC, MFD_ITEM_SLOT, FALSE, MFD_ACTIVE, FALSE);
 }
 
 errtype mfd_shield_init(MFD_Func* f)
 {
-   int cnt = 0;
+   int32_t cnt = 0;
    LGPoint bsize;
    LGPoint bdims;
    LGRect r;
@@ -1693,9 +1693,9 @@ errtype mfd_shield_init(MFD_Func* f)
    return OK;
 }
 
-void mfd_shieldware_expose(MFD* mfd, ubyte control)
+void mfd_shieldware_expose(MFD* mfd, uint8_t control)
 {
-   int n,s,v;
+   int32_t n,s,v;
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0) return;
    n = CPTRIP(SHIELD_HARD_TRIPLE);
@@ -1714,20 +1714,20 @@ void mfd_shieldware_expose(MFD* mfd, ubyte control)
    if (full || s != SHIELD_LAST_STATUS(mfd->id)
       || SHIELD_LAST_VERSION(mfd->id) != v)
    {
-      int xjump = SHIELD_BARRAY_WD/SHIELD_SETTINGS;
-      int i;
+      int32_t xjump = SHIELD_BARRAY_WD/SHIELD_SETTINGS;
+      int32_t i;
       if (v >= SHIELD_VERSIONS)
       {
-         int id = (s & WARE_ON) ? REF_IMG_LitShieldSuper : REF_IMG_UnlitShieldSuper;
+         int32_t id = (s & WARE_ON) ? REF_IMG_LitShieldSuper : REF_IMG_UnlitShieldSuper;
          draw_raw_resource_bm(id,SHIELD_BARRAY_X+(SHIELD_BARRAY_WD-res_bm_width(id))/2,SHIELD_BARRAY_Y);
          mfd_add_rect(SHIELD_BARRAY_X,SHIELD_BARRAY_Y,SHIELD_BARRAY_X+SHIELD_BARRAY_WD,MFD_VIEW_WID);
       }
       else for (i = 0; i < v; i++)
       {
-         int id = (i == SHIELD_SETTING(s) && (s & WARE_ON)) ? REF_IMG_LitShield0 : REF_IMG_UnlitShield0;
+         int32_t id = (i == SHIELD_SETTING(s) && (s & WARE_ON)) ? REF_IMG_LitShield0 : REF_IMG_UnlitShield0;
          grs_bitmap* bm = lock_bitmap_from_ref(id+i);
-         short x = SHIELD_BARRAY_X+i*xjump;
-         short y = SHIELD_BARRAY_Y;
+         int16_t x = SHIELD_BARRAY_X+i*xjump;
+         int16_t y = SHIELD_BARRAY_Y;
          mfd_draw_bitmap(bm,x,y);
          if (i == SHIELD_SETTING(s))
          {
@@ -1763,12 +1763,12 @@ void mfd_shieldware_expose(MFD* mfd, ubyte control)
 
 bool mfd_motion_button_handler(MFD* m, LGPoint bttn, uiEvent* ev, void* data);
 errtype mfd_motion_init(MFD_Func* f);
-void mfd_motionware_expose(MFD* mfd, ubyte control);
+void mfd_motionware_expose(MFD* mfd, uint8_t control);
 
 bool mfd_motion_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 {
-   int n = CPTRIP(MOTION_HARD_TRIPLE);
-   int s = player_struct.hardwarez_status[n];
+   int32_t n = CPTRIP(MOTION_HARD_TRIPLE);
+   int32_t s = player_struct.hardwarez_status[n];
 //   if (bttn.x >= player_struct.hardwarez[n] ||
    if (!(ev->subtype & MOUSE_LDOWN))
       return FALSE;
@@ -1788,7 +1788,7 @@ bool mfd_motion_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
    else
    {
       motionware_mode = bttn.x + 1;
-      set_player_energy_spend(min(MAX_ENERGY,(int)player_struct.energy_spend + energy_cost(n)));
+      set_player_energy_spend(min(MAX_ENERGY,(int32_t)player_struct.energy_spend + energy_cost(n)));
    }
    mfd_notify_func(MFD_MOTION_FUNC, MFD_ITEM_SLOT, FALSE, MFD_ACTIVE, FALSE);
    return TRUE;
@@ -1796,7 +1796,7 @@ bool mfd_motion_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 
 errtype mfd_motion_init(MFD_Func* f)
 {
-   int cnt = 0;
+   int32_t cnt = 0;
    LGPoint bsize;
    LGPoint bdims;
    LGRect r;
@@ -1815,9 +1815,9 @@ errtype mfd_motion_init(MFD_Func* f)
    return OK;
 }
 
-void mfd_motionware_expose(MFD* mfd, ubyte control)
+void mfd_motionware_expose(MFD* mfd, uint8_t control)
 {
-   int n,s,v;
+   int32_t n,s,v;
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0) return;
    n = CPTRIP(MOTION_HARD_TRIPLE);
@@ -1833,14 +1833,14 @@ void mfd_motionware_expose(MFD* mfd, ubyte control)
    if (full || s != MOTION_LAST_STATUS(mfd->id)
       || MOTION_LAST_VERSION(mfd->id) != v)
    {
-      int xjump = MOTION_BARRAY_WD/MOTION_BUTTONS;
-      int i;
+      int32_t xjump = MOTION_BARRAY_WD/MOTION_BUTTONS;
+      int32_t i;
       for (i = 0; i < min(v,MOTION_BUTTONS); i++)
       {
-         int id = ((i == MOTION_SETTING(s) && (s & WARE_ON))) ? REF_IMG_LitMotion0 : REF_IMG_UnlitMotion0;
+         int32_t id = ((i == MOTION_SETTING(s) && (s & WARE_ON))) ? REF_IMG_LitMotion0 : REF_IMG_UnlitMotion0;
          grs_bitmap *bm = lock_bitmap_from_ref(id+i);
-         short x = MOTION_BARRAY_X+i*xjump;
-         short y = MOTION_BARRAY_Y;
+         int16_t x = MOTION_BARRAY_X+i*xjump;
+         int16_t y = MOTION_BARRAY_Y;
          mfd_draw_bitmap(bm,x,y);
          if (i == MOTION_SETTING(s))
          {
@@ -1876,20 +1876,20 @@ void mfd_motionware_expose(MFD* mfd, ubyte control)
 
 #define GRENADE_HIRES_CUTOFF 100
 
-bool mfd_grenade_slider_handler(MFD* m,short val, uiEvent* ev, void* data);
+bool mfd_grenade_slider_handler(MFD* m,int16_t val, uiEvent* ev, void* data);
 bool mfd_grenade_handler(MFD* m, uiEvent* ev);
 errtype mfd_grenade_init(MFD_Func* f);
-void mfd_grenade_expose(MFD* mfd, ubyte control);
+void mfd_grenade_expose(MFD* mfd, uint8_t control);
 
-bool mfd_grenade_slider_handler(MFD* m,short val, uiEvent* ev, void*)
+bool mfd_grenade_slider_handler(MFD* m,int16_t val, uiEvent* ev, void*)
 {
    uiMouseEvent* mev = (uiMouseEvent*)ev;
-   int n = player_struct.actives[ACTIVE_GRENADE];
-   int triple = nth_after_triple(MAKETRIP(CLASS_GRENADE,0,0),n);
-   short min = TimedGrenadeProps[SCTRIP(triple)].min_time_set*GRENADE_TIME_UNIT;
-   short max = TimedGrenadeProps[SCTRIP(triple)].max_time_set*GRENADE_TIME_UNIT;
-   short width = GRENADE_SLIDER_W;
-   short setting;
+   int32_t n = player_struct.actives[ACTIVE_GRENADE];
+   int32_t triple = nth_after_triple(MAKETRIP(CLASS_GRENADE,0,0),n);
+   int16_t min = TimedGrenadeProps[SCTRIP(triple)].min_time_set*GRENADE_TIME_UNIT;
+   int16_t max = TimedGrenadeProps[SCTRIP(triple)].max_time_set*GRENADE_TIME_UNIT;
+   int16_t width = GRENADE_SLIDER_W;
+   int16_t setting;
 
    if (max > 2*GRENADE_HIRES_CUTOFF)
    {
@@ -1903,7 +1903,7 @@ bool mfd_grenade_slider_handler(MFD* m,short val, uiEvent* ev, void*)
    if (ev->subtype & MOUSE_LDOWN)
    {
       LGRect r = mfd_funcs[MFD_GRENADE_FUNC].handlers[GRENADE_SLIDER_IDX].r;
-      int my=((uiMouseEvent*)ev)->pos.y;
+      int32_t my=((uiMouseEvent*)ev)->pos.y;
       RECT_OFFSETTED_RECT(&r,m->rect.ul,&r);
       slider_cursor.hotspot.x=slider_cursor_bmap.w/2;
       slider_cursor.hotspot.y=(slider_cursor_bmap.h/2)+my-(r.ul.y+r.lr.y)/2;
@@ -1912,7 +1912,7 @@ bool mfd_grenade_slider_handler(MFD* m,short val, uiEvent* ev, void*)
       GRENADE_MOUSE_CONSTRAINED = m->id + 1;
       // Get our funky mfd-beam-phaser-setting cursor
 #ifdef CURSOR_BACKUPS
-   backup[20] = (uchar *)Malloc(f->bm.w * f->bm.h);
+   backup[20] = (uint8_t *)Malloc(f->bm.w * f->bm.h);
    memcpy(backup[20],f->bm.bits,f->bm.w * f->bm.h);
       gr_init_bm(&backup_mfd_cursor,backup[14],BMT_FLAT8, 0, mfd_cursor.w,mfd_cursor.h);
 #endif
@@ -1954,7 +1954,7 @@ bool mfd_grenade_handler(MFD* m, uiEvent* ev)
 
 errtype mfd_grenade_init(MFD_Func* f)
 {
-   int cnt = 0;
+   int32_t cnt = 0;
    errtype err;
    LGRect r = { { GRENADE_SLIDER_X, GRENADE_SLIDER_Y},
               { GRENADE_SLIDER_X + GRENADE_SLIDER_W,
@@ -1963,7 +1963,7 @@ errtype mfd_grenade_init(MFD_Func* f)
    if (err != OK) return err;
    f->handler_count = cnt;
 #ifdef CURSOR_BACKUPS
-   backup[21] = (uchar *)Malloc(slider_bmap.w * slider_bmap.h);
+   backup[21] = (uint8_t *)Malloc(slider_bmap.w * slider_bmap.h);
    memcpy(backup[21],slider_bmap.bits,slider_bmap.w * slider_bmap.h);
    gr_init_bm(&backup_slider_cursor,backup[21],BMT_FLAT8,0,slider_bmap.w,slider_bmap.h);
 #endif
@@ -1979,13 +1979,13 @@ errtype mfd_grenade_init(MFD_Func* f)
 #define TIME_TEXT_Y (GRENADE_SLIDER_Y - 8)
 #define TIME_TEXT_LEN  128
 
-void mfd_grenade_expose(MFD* mfd, ubyte control)
+void mfd_grenade_expose(MFD* mfd, uint8_t control)
 {
    MFD_Func* f = &mfd_funcs[MFD_GRENADE_FUNC];
-   int n = player_struct.actives[ACTIVE_GRENADE];
-   int triple = nth_after_triple(MAKETRIP(CLASS_GRENADE,0,0),n);
+   int32_t n = player_struct.actives[ACTIVE_GRENADE];
+   int32_t triple = nth_after_triple(MAKETRIP(CLASS_GRENADE,0,0),n);
    bool full = (control & MFD_EXPOSE_FULL) || (n != LAST_GRENADE(mfd->id));
-   short setting = player_struct.grenades_time_setting[n];
+   int16_t setting = player_struct.grenades_time_setting[n];
 
    if (control == 0)
    {
@@ -2012,13 +2012,13 @@ void mfd_grenade_expose(MFD* mfd, ubyte control)
    LAST_GRENADE(mfd->id) = n;
    if (full || LAST_GRENADE_SETTING(mfd->id) != setting)
    {
-      char buf[TIME_TEXT_LEN];
+      int8_t buf[TIME_TEXT_LEN];
       LGRect* r = &f->handlers[GRENADE_SLIDER_IDX].r;
-      short min = TimedGrenadeProps[SCTRIP(triple)].min_time_set*GRENADE_TIME_UNIT;
-      short max = TimedGrenadeProps[SCTRIP(triple)].max_time_set*GRENADE_TIME_UNIT;
-      short width = GRENADE_SLIDER_W;
-      short base = 0;
-      short x;
+      int16_t min = TimedGrenadeProps[SCTRIP(triple)].min_time_set*GRENADE_TIME_UNIT;
+      int16_t max = TimedGrenadeProps[SCTRIP(triple)].max_time_set*GRENADE_TIME_UNIT;
+      int16_t width = GRENADE_SLIDER_W;
+      int16_t base = 0;
+      int16_t x;
       if (max > 2*GRENADE_HIRES_CUTOFF)
       {
          width /= 2;
@@ -2071,7 +2071,7 @@ void mfd_grenade_expose(MFD* mfd, ubyte control)
 
 #define LAST_HP(mfd) (mfd_fdata[MFD_BIOWARE_FUNC][4*mfd])
 #define LAST_FATIGUE(mfd) (mfd_fdata[MFD_BIOWARE_FUNC][1+4*mfd])
-#define LAST_DRUGBITS(mfd) (*(ushort*)&mfd_fdata[MFD_BIOWARE_FUNC][2+4*mfd])
+#define LAST_DRUGBITS(mfd) (*(uint16_t*)&mfd_fdata[MFD_BIOWARE_FUNC][2+4*mfd])
 
 // this is stolen from gamesys.c
 #define MAX_FATIGUE 10000
@@ -2084,11 +2084,11 @@ void mfd_grenade_expose(MFD* mfd, ubyte control)
 #define BITS_PER_DRUG 2
 
 
-void mfd_bioware_expose(MFD *m, ubyte control)
+void mfd_bioware_expose(MFD *m, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
-   int i, y = 2, triple;
-   char buf2[12];
+   int32_t i, y = 2, triple;
+   int8_t buf2[12];
    LGRect r;
 
    r.ul.x = BIO_TEXT_X; r.ul.y = 20; r.lr.x = MFD_VIEW_WID; r.lr.y = MFD_VIEW_HGT;
@@ -2096,12 +2096,12 @@ void mfd_bioware_expose(MFD *m, ubyte control)
    // turn off the bioware if there's no exposed mfd.
    {
       extern WARE HardWare[NUM_HARDWAREZ];
-      int i;
+      int32_t i;
       bool on = full || control & MFD_EXPOSE;
       for (i = 0; i < NUM_MFDS; i++)
       {
-         ubyte slot = player_struct.mfd_current_slots[i];
-         ubyte func = mfd_get_func(i,slot);
+         uint8_t slot = player_struct.mfd_current_slots[i];
+         uint8_t func = mfd_get_func(i,slot);
          if (func == MFD_BIOWARE_FUNC && (control != 0 || m->id != i))
             on = TRUE;
       }
@@ -2113,11 +2113,11 @@ void mfd_bioware_expose(MFD *m, ubyte control)
 
    if (control & MFD_EXPOSE)
    {
-      char *s;
-      char pct[] = "%";
-      short x;
-      ubyte v = player_struct.hardwarez[HARDWARE_BIOWARE];
-      int ref = MKREF(RES_mfdArtOverlays,MFD_ART_HUMAN);
+      int8_t *s;
+      int8_t pct[] = "%";
+      int16_t x;
+      uint8_t v = player_struct.hardwarez[HARDWARE_BIOWARE];
+      int32_t ref = MKREF(RES_mfdArtOverlays,MFD_ART_HUMAN);
       bool stam = player_struct.drug_status[CPTRIP(STAMINA_DRUG_TRIPLE)] > 0;
 
       PUSH_CANVAS(pmfd_canvas);
@@ -2146,7 +2146,7 @@ void mfd_bioware_expose(MFD *m, ubyte control)
       // Health
       if (full || (LAST_HP(m->id) != player_struct.hit_points))
       {
-         uint hp; LGRect rest;
+         uint32_t hp; LGRect rest;
          s = get_temp_string(REF_STR_BiowareHealth);
          x = BIO_TEXT_X + gr_string_width(s);
          if (full)
@@ -2174,7 +2174,7 @@ void mfd_bioware_expose(MFD *m, ubyte control)
       if (full || stam || (LAST_FATIGUE(m->id) != 100*(uint)player_struct.fatigue/MAX_FATIGUE))
       {
          LGRect rest;
-         ubyte f = 100*(uint)player_struct.fatigue/MAX_FATIGUE;
+         uint8_t f = 100*(uint)player_struct.fatigue/MAX_FATIGUE;
          s = get_temp_string(REF_STR_BiowareFatigue);
          x = BIO_TEXT_X + gr_string_width(s);
          if (full)
@@ -2208,7 +2208,7 @@ void mfd_bioware_expose(MFD *m, ubyte control)
 
       if (v > 1)
       {
-         ushort drugbits = 0;
+         uint16_t drugbits = 0;
          for (i = 0; i < NUM_DRUGS; i++)
          {
             if (player_struct.drug_status[i] > 0)
@@ -2219,16 +2219,16 @@ void mfd_bioware_expose(MFD *m, ubyte control)
 
          if (full || drugbits != LAST_DRUGBITS(m->id))
          {
-            short savey = y;
+            int16_t savey = y;
             LAST_DRUGBITS(m->id) = drugbits;
             for (i = 0; i < NUM_DRUGS; i++, drugbits >>= BITS_PER_DRUG)
             {
-               ushort drugged = drugbits & ((1 << BITS_PER_DRUG) - 1);
+               uint16_t drugged = drugbits & ((1 << BITS_PER_DRUG) - 1);
                if (drugged != BIO_DRUG_CLEAN)
                {
-                  ubyte color = (drugged == BIO_DRUG_UP) ? GREEN_BASE + 3 : GOOD_RED;
+                  uint8_t color = (drugged == BIO_DRUG_UP) ? GREEN_BASE + 3 : GOOD_RED;
                   triple = drug2triple(i);
-                  get_object_short_name(triple,buf2,sizeof(buf2));
+                  get_object_int16_t_name(triple,buf2,sizeof(buf2));
                   mfd_draw_string(buf2,BIO_TEXT_X,y,color,TRUE);
                   y+=Y_STEP;
                }
@@ -2272,10 +2272,10 @@ errtype mfd_anim_init()
 //
 // Strictly temporary code.  Starts or stops the space station animation.
 
-void mfd_anim_expose(MFD *m, ubyte control)
+void mfd_anim_expose(MFD *m, uint8_t control)
 {
 #ifndef NO_DUMMIES
-   MFD *dummy; ubyte dummy2; dummy = m; dummy2 = control;
+   MFD *dummy; uint8_t dummy2; dummy = m; dummy2 = control;
 #endif
 #ifdef USING_DORKY_BROKEN_ANIM
    static bool AnimOn[2];
@@ -2283,7 +2283,7 @@ void mfd_anim_expose(MFD *m, ubyte control)
 
    if (control & MFD_EXPOSE) {
 
-      gr_set_fcolor((long)BLACK);
+      gr_set_fcolor((int32_t)BLACK);
       ss_rect(m->rect.ul.x, m->rect.ul.y, m->rect.lr.x, m->rect.lr.y);
 
       anim[m->id] = AnimPlayRegion(REF_ANIM_space4, &(m->reg), m->rect.ul, 0);
@@ -2304,11 +2304,11 @@ void mfd_anim_expose(MFD *m, ubyte control)
 // SHODAN!!
 // Note this expects all appropriate 2d preparation to already be done!!
 
-errtype draw_shodan_influence(MFD *mfd, uchar amt);
+errtype draw_shodan_influence(MFD *mfd, uint8_t amt);
 
-errtype draw_shodan_influence(MFD *, uchar amt)
+errtype draw_shodan_influence(MFD *, uint8_t amt)
 {
-   char			*s = get_temp_string(SHODAN_FAILURE_STRING);
+   int8_t			*s = get_temp_string(SHODAN_FAILURE_STRING);
    grs_bitmap	bm;
    bm.bits = NULL;
 
@@ -2354,25 +2354,25 @@ errtype draw_shodan_influence(MFD *, uchar amt)
 
 typedef struct _elev_data
 {
-   ushort shownlvls;  // level shown on the button panel (bitmask)
-   ushort reachlvls;  // level actually reachable        (bitmask)
+   uint16_t shownlvls;  // level shown on the button panel (bitmask)
+   uint16_t reachlvls;  // level actually reachable        (bitmask)
    struct _mfd_specific
    {
-      ubyte currlev: 4; // current level shown
-      ubyte selected: 4; // currently selected button
+      uint8_t currlev: 4; // current level shown
+      uint8_t selected: 4; // currently selected button
    } stat,mfd_last[NUM_MFDS];
 } elev_data_type;
 
-uchar curr_elev_special = 0;
+uint8_t curr_elev_special = 0;
 
-errtype mfd_elevator_setlev(MFD *mfd, short lev, elev_data_type *elev_data);
+errtype mfd_elevator_setlev(MFD *mfd, int16_t lev, elev_data_type *elev_data);
 bool mfd_elevator_button_handler(MFD* mfd, LGPoint bttn, uiEvent* ev, void* data);
 errtype mfd_elevator_init(MFD_Func* f);
-void mfd_setup_elevator(ushort levmask, ushort reachmask, ushort curlevel, uchar special);
-char *level_to_floor(int lev_num, char *buf);
-void mfd_elevator_expose(MFD* mfd, ubyte control);
+void mfd_setup_elevator(uint16_t levmask, uint16_t reachmask, uint16_t curlevel, uint8_t special);
+int8_t *level_to_floor(int32_t lev_num, int8_t *buf);
+void mfd_elevator_expose(MFD* mfd, uint8_t control);
 
-errtype mfd_elevator_setlev(MFD *mfd, short lev, elev_data_type *elev_data)
+errtype mfd_elevator_setlev(MFD *mfd, int16_t lev, elev_data_type *elev_data)
 {
    elev_data->stat.currlev = lev;
    mfd_notify_func(MFD_ELEV_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, TRUE);
@@ -2383,11 +2383,11 @@ errtype mfd_elevator_setlev(MFD *mfd, short lev, elev_data_type *elev_data)
 bool mfd_elevator_button_handler(MFD* mfd, LGPoint bttn, uiEvent* ev, void*)
 {
    elev_data_type* elev_data = (elev_data_type*)&player_struct.mfd_func_data[MFD_ELEV_FUNC][0];
-   int b = bttn.x*ELEV_BTTN_ROWS+bttn.y;
-   int c;
-   ubyte l;
-   ubyte reachl;
-   ushort bit;
+   int32_t b = bttn.x*ELEV_BTTN_ROWS+bttn.y;
+   int32_t c;
+   uint8_t l;
+   uint8_t reachl;
+   uint16_t bit;
    uiMouseEvent* mort=(uiMouseEvent*)ev;
 
    if(!(mort->action & MOUSE_LDOWN))
@@ -2430,7 +2430,7 @@ bool mfd_elevator_button_handler(MFD* mfd, LGPoint bttn, uiEvent* ev, void*)
          string_message_info(REF_STR_UseTooFar);
       else
       {
-         int oldlev;
+         int32_t oldlev;
          oldlev = elev_data->stat.currlev;
          mfd_elevator_setlev(mfd, l, elev_data);
          if (!elevator_use(l, reachl-1))
@@ -2444,7 +2444,7 @@ bool mfd_elevator_button_handler(MFD* mfd, LGPoint bttn, uiEvent* ev, void*)
 
 errtype mfd_elevator_init(MFD_Func* f)
 {
-   int cnt = 0;
+   int32_t cnt = 0;
    errtype err;
    LGPoint bsize = { ELEV_BTTN_WD, ELEV_BTTN_HT };
    LGPoint bdims = { ELEV_BTTN_COLS, ELEV_BTTN_ROWS} ;
@@ -2465,7 +2465,7 @@ errtype mfd_elevator_init(MFD_Func* f)
 
 
 // Does every thing but set the slot..
-void mfd_setup_elevator(ushort levmask, ushort reachmask, ushort curlevel, uchar special)
+void mfd_setup_elevator(uint16_t levmask, uint16_t reachmask, uint16_t curlevel, uint8_t special)
 {
    elev_data_type* elev_data = (elev_data_type*)&player_struct.mfd_func_data[MFD_ELEV_FUNC][0];
    elev_data->shownlvls = levmask;
@@ -2477,10 +2477,10 @@ void mfd_setup_elevator(ushort levmask, ushort reachmask, ushort curlevel, uchar
 
 }
 
-char *level_to_floor(int lev_num, char *buf)
+int8_t *level_to_floor(int32_t lev_num, int8_t *buf)
 {
-   int bpos=0;
-   char grov_init=toupper(get_temp_string(REF_STR_GroveWord)[0]);
+   int32_t bpos=0;
+   int8_t grov_init=toupper(get_temp_string(REF_STR_GroveWord)[0]);
 
    switch (lev_num)
    {
@@ -2509,10 +2509,10 @@ char *level_to_floor(int lev_num, char *buf)
 // if we null your panel_ref, return the value
 // before we nulled it.  Otherwise, return NULL.
 //
-ObjID panel_ref_unexpose(int mfdid, int func)
+ObjID panel_ref_unexpose(int32_t mfdid, int32_t func)
 {
    bool found = FALSE;
-   int id = NUM_MFDS;
+   int32_t id = NUM_MFDS;
    ObjID pr=player_struct.panel_ref;
 
    while (mfd_yield_func(func,&id))
@@ -2528,10 +2528,10 @@ ObjID panel_ref_unexpose(int mfdid, int func)
 }
 
 
-void mfd_elevator_expose(MFD* mfd, ubyte control)
+void mfd_elevator_expose(MFD* mfd, uint8_t control)
 {
    elev_data_type* elev_data = (elev_data_type*)&player_struct.mfd_func_data[MFD_ELEV_FUNC][0];
-   char buf[NUMBER_BUFSZ];
+   int8_t buf[NUMBER_BUFSZ];
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)
    {
@@ -2549,8 +2549,8 @@ void mfd_elevator_expose(MFD* mfd, ubyte control)
    {
       if (full || elev_data->mfd_last[mfd->id].currlev != elev_data->stat.currlev)
       {
-         short w,h;
-         int lev = elev_data->stat.currlev;
+         int16_t w,h;
+         int32_t lev = elev_data->stat.currlev;
          gr_set_font((grs_font*)ResLock(ELEV_STATUS_FONT));
          level_to_floor(lev, buf);
          gr_string_size(buf,&w,&h);
@@ -2560,15 +2560,15 @@ void mfd_elevator_expose(MFD* mfd, ubyte control)
       }
       if (full || elev_data->mfd_last[mfd->id].selected != elev_data->stat.selected)
       {
-         int i;
-         int l;
-         short w,h;
+         int32_t i;
+         int32_t l;
+         int16_t w,h;
 //         LGPoint bstep = { ELEV_BTTNS_WD/ELEV_BTTN_COLS,
 //                        ELEV_BTTNS_HT/ELEV_BTTN_ROWS };
          gr_set_font((grs_font*)ResLock(MFD_FONT));
          for (i = 0,l=0; i < NUM_ELEVATOR_BUTTONS; i++)
          {
-            ubyte clr;
+            uint8_t clr;
             LGPoint bttn;
 
             bttn.x = ELEV_BTTNS_X + (i/ELEV_BTTN_ROWS)*(ELEV_BTTNS_WD-ELEV_BTTN_WD)/(ELEV_BTTN_COLS-1);
@@ -2585,9 +2585,9 @@ void mfd_elevator_expose(MFD* mfd, ubyte control)
                clr = SELECTED_ITEM_COLOR;
             else
                clr = ITEM_COLOR;
-            gr_set_fcolor((long)clr);
+            gr_set_fcolor((int32_t)clr);
             ss_box(bttn.x,bttn.y,bttn.x+ELEV_BTTN_WD,bttn.y+ELEV_BTTN_HT);
-            gr_set_fcolor((long)ITEM_COLOR+2);
+            gr_set_fcolor((int32_t)ITEM_COLOR+2);
             ss_box(bttn.x-1,bttn.y-1,bttn.x+ELEV_BTTN_WD+1,bttn.y+ELEV_BTTN_HT+1);
             level_to_floor(l, buf);
             gr_string_size(buf,&w,&h);
@@ -2627,31 +2627,31 @@ void mfd_elevator_expose(MFD* mfd, ubyte control)
 #define KEYPAD_STATUS_COLOR (GOOD_RED)
 
 
-Boolean	gKeypadOverride = FALSE;			// When this is true, don't move the player.
+bool	gKeypadOverride = FALSE;			// When this is true, don't move the player.
 
 typedef struct _keypad_data
 {
-   uchar curr_digit;
-   uchar last_digit;
-   uchar digits[MAX_KEYPAD_DIGITS];
-   uchar special;
+   uint8_t curr_digit;
+   uint8_t last_digit;
+   uint8_t digits[MAX_KEYPAD_DIGITS];
+   uint8_t special;
 } keypad_data_type;
 
-uchar keypad_num(int b);
-char *keypad_name(int b, char *buf);
-char *mfd_keypad_assemble(keypad_data_type *keypad_data, char *buf);
-errtype mfd_keypad_input(MFD *m, char b_num);
-bool keypad_hotkey_func(short keycode, ulong context, void* data);
+uint8_t keypad_num(int32_t b);
+int8_t *keypad_name(int32_t b, int8_t *buf);
+int8_t *mfd_keypad_assemble(keypad_data_type *keypad_data, int8_t *buf);
+errtype mfd_keypad_input(MFD *m, int8_t b_num);
+bool keypad_hotkey_func(int16_t keycode, uint32_t context, void* data);
 void install_keypad_hotkeys(void);
 bool mfd_keypad_handler(MFD* m, uiEvent* ev);
 bool mfd_keypad_button_handler(MFD* mfd, LGPoint bttn, uiEvent* ev, void* data);
 errtype mfd_keypad_init(MFD_Func* f);
-void mfd_keypad_expose(MFD* mfd, ubyte control);
+void mfd_keypad_expose(MFD* mfd, uint8_t control);
 
-uchar keypad_num(int b)
+uint8_t keypad_num(int32_t b)
 {
 #ifdef KEYPAD_NUM_CASE
-   uchar retval;
+   uint8_t retval;
    // as Doug points out, this case statement is expressed algorithmically,
    // but hey, this is already done, easier to modify and maybe even easier
    // to understand.
@@ -2673,13 +2673,13 @@ uchar keypad_num(int b)
    return(retval);
 #endif
 
-   static uchar retval[]={1,4,7,10,2,5,8,0,3,6,9,11};
+   static uint8_t retval[]={1,4,7,10,2,5,8,0,3,6,9,11};
 
    return(retval[b]);
 }
 
 // note that the b in keypad_name is already converted from keypad_num
-char *keypad_name(int b, char *buf)
+int8_t *keypad_name(int32_t b, int8_t *buf)
 {
    switch(b)
    {
@@ -2692,10 +2692,10 @@ char *keypad_name(int b, char *buf)
    return(buf);
 }
 
-char *mfd_keypad_assemble(keypad_data_type *keypad_data, char *buf)
+int8_t *mfd_keypad_assemble(keypad_data_type *keypad_data, int8_t *buf)
 {
-   char tmp[5];
-   int i;
+   int8_t tmp[5];
+   int32_t i;
    strcpy(buf, "");
    for (i=0; i < keypad_data->curr_digit; i++)
    {
@@ -2705,10 +2705,10 @@ char *mfd_keypad_assemble(keypad_data_type *keypad_data, char *buf)
 }
 
 
-errtype mfd_keypad_input(MFD *, char b_num)
+errtype mfd_keypad_input(MFD *, int8_t b_num)
 {
    keypad_data_type* keypad_data = (keypad_data_type*)&player_struct.mfd_func_data[MFD_KEYPAD_FUNC][0];
-   extern errtype keypad_trigger(ObjID id, uchar digits[MAX_KEYPAD_DIGITS]);
+   extern errtype keypad_trigger(ObjID id, uint8_t digits[MAX_KEYPAD_DIGITS]);
 
    switch (b_num)
    {
@@ -2735,11 +2735,11 @@ errtype mfd_keypad_input(MFD *, char b_num)
    return(OK);
 }
 
-bool keypad_hotkey_func(short keycode, ulong, void*)
+bool keypad_hotkey_func(int16_t keycode, uint32_t, void*)
 {
    extern MFD mfd[];
-   uchar digit = kb2ascii(keycode) - '0';
-   int m = NUM_MFDS;
+   uint8_t digit = kb2ascii(keycode) - '0';
+   int32_t m = NUM_MFDS;
    while(mfd_yield_func(MFD_KEYPAD_FUNC,&m))
    {
       mfd_keypad_input(&mfd[m],digit);
@@ -2750,7 +2750,7 @@ bool keypad_hotkey_func(short keycode, ulong, void*)
 
 void install_keypad_hotkeys(void)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < 10 ; i++)
 //KLC      hotkey_add(('0'+i)|KB_FLAG_DOWN|KB_FLAG_2ND, DEMO_CONTEXT, keypad_hotkey_func, NULL);
       hotkey_add(('0'+i)|KB_FLAG_DOWN, DEMO_CONTEXT, keypad_hotkey_func, NULL);
@@ -2760,7 +2760,7 @@ void install_keypad_hotkeys(void)
 bool mfd_keypad_handler(MFD* m, uiEvent* ev)
 {
    bool retval = FALSE;
-   char n;
+   int8_t n;
    uiCookedKeyEvent *e = (uiCookedKeyEvent *)ev;
 
    if (e->type != UI_EVENT_KBD_COOKED)
@@ -2776,7 +2776,7 @@ bool mfd_keypad_handler(MFD* m, uiEvent* ev)
 
 bool mfd_keypad_button_handler(MFD* mfd, LGPoint bttn, uiEvent* ev, void*)
 {
-   int b = bttn.x*KEYPAD_BTTN_ROWS+bttn.y;
+   int32_t b = bttn.x*KEYPAD_BTTN_ROWS+bttn.y;
 
    // Filter out anything that isn't a left-click down at all
    if ((ev->subtype&(MOUSE_LDOWN|UI_MOUSE_LDOUBLE))==0)
@@ -2787,7 +2787,7 @@ bool mfd_keypad_button_handler(MFD* mfd, LGPoint bttn, uiEvent* ev, void*)
 
 errtype mfd_keypad_init(MFD_Func* f)
 {
-   int cnt = 0;
+   int32_t cnt = 0;
    errtype err;
    LGPoint bsize = { KEYPAD_BTTN_WD, KEYPAD_BTTN_HT };
    LGPoint bdims = { KEYPAD_BTTN_COLS, KEYPAD_BTTN_ROWS} ;
@@ -2801,9 +2801,9 @@ errtype mfd_keypad_init(MFD_Func* f)
 
 
 // Does every thing but set the slot..
-void mfd_setup_keypad(char special)
+void mfd_setup_keypad(int8_t special)
 {
-   int i;
+   int32_t i;
    keypad_data_type* keypad_data = (keypad_data_type*)&player_struct.mfd_func_data[MFD_KEYPAD_FUNC][0];
    keypad_data->curr_digit = 0;
    for (i=0; i < MAX_KEYPAD_DIGITS; i++)
@@ -2814,10 +2814,10 @@ void mfd_setup_keypad(char special)
 
 #define NUMBER_BUFSZ 3
 
-void mfd_keypad_expose(MFD* mfd, ubyte control)
+void mfd_keypad_expose(MFD* mfd, uint8_t control)
 {
    keypad_data_type* keypad_data = (keypad_data_type*)&player_struct.mfd_func_data[MFD_KEYPAD_FUNC][0];
-   char buf[NUMBER_BUFSZ];
+   int8_t buf[NUMBER_BUFSZ];
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)
    {
@@ -2836,8 +2836,8 @@ void mfd_keypad_expose(MFD* mfd, ubyte control)
    {
       if (full || (keypad_data->last_digit != keypad_data->curr_digit))
       {
-         int i;
-         short w,h;
+         int32_t i;
+         int16_t w,h;
 //         LGPoint bstep = { KEYPAD_BTTNS_WD/KEYPAD_BTTN_COLS,
 //                        KEYPAD_BTTNS_HT/KEYPAD_BTTN_ROWS };
 
@@ -2853,7 +2853,7 @@ void mfd_keypad_expose(MFD* mfd, ubyte control)
          gr_set_font((grs_font*)ResLock(MFD_FONT));
          for (i = 0; i < NUM_KEYPAD_BUTTONS; i++)
          {
-            ubyte clr;
+            uint8_t clr;
             LGPoint bttn;
 
             bttn.x = KEYPAD_BTTNS_X + (i/KEYPAD_BTTN_ROWS)*(KEYPAD_BTTNS_WD-KEYPAD_BTTN_WD)/(KEYPAD_BTTN_COLS-1);
@@ -2863,7 +2863,7 @@ void mfd_keypad_expose(MFD* mfd, ubyte control)
                clr = SELECTED_ITEM_COLOR;
             else
                clr = ITEM_COLOR;
-            gr_set_fcolor((long)clr);
+            gr_set_fcolor((int32_t)clr);
             ss_box(bttn.x,bttn.y,bttn.x+KEYPAD_BTTN_WD,bttn.y+KEYPAD_BTTN_HT);
             gr_set_fcolor(ITEM_COLOR + 2);
             ss_box(bttn.x-1,bttn.y-1,bttn.x+KEYPAD_BTTN_WD+1,bttn.y+KEYPAD_BTTN_HT+1);
@@ -2894,9 +2894,9 @@ void mfd_keypad_expose(MFD* mfd, ubyte control)
 #define HUDWARE_VERSION (player_struct.hardwarez[CPTRIP(HUD_GOG_TRIPLE)])
 
 
-ushort hud_ware_bits[] = { HUD_COMPASS, HUD_DETECT_EXP, HUD_GRENADE };
+uint16_t hud_ware_bits[] = { HUD_COMPASS, HUD_DETECT_EXP, HUD_GRENADE };
 
-#define NUM_HUDWARE_DISPLAYS (sizeof(hud_ware_bits)/sizeof(ushort))
+#define NUM_HUDWARE_DISPLAYS (sizeof(hud_ware_bits)/sizeof(uint16_t))
 
 #define HUDWARE_DISPLAY_AVAILABLE(dnum) (HUDWARE_VERSION & ( 1 << (dnum)))
 
@@ -2943,14 +2943,14 @@ errtype mfd_hud_init(MFD_Func* f)
    LGPoint bdims = { 1, NUM_HUDWARE_DISPLAYS };
    LGRect  brect = { { 0, HUDWARE_BUTTON_Y },
                   { MFD_VIEW_WID, HUDWARE_BUTTON_Y + NUM_HUDWARE_DISPLAYS*HUDWARE_LINE_SPACING}};
-   int cnt = 0;
+   int32_t cnt = 0;
    err = MFDBttnArrayInit(&f->handlers[cnt++],&brect,bdims,bsize,mfd_hud_button_handler,NULL);
    if (err != OK) return err;
    f->handler_count = cnt;
    return OK;
 }
 
-void mfd_hud_expose(MFD* mfd, ubyte control)
+void mfd_hud_expose(MFD* mfd, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0) return;
@@ -2966,14 +2966,14 @@ void mfd_hud_expose(MFD* mfd, ubyte control)
 
    if (full || HUDWARE_STATUS != HUDWARE_LAST_STATUS(mfd->id))
    {
-      int i;
+      int32_t i;
       for (i = 0; i < NUM_HUDWARE_DISPLAYS; i++)
          if (HUDWARE_DISPLAY_AVAILABLE(i))
          {
-            short x = HUDWARE_BUTTON_X;
-            short y = HUDWARE_BUTTON_Y + i * HUDWARE_LINE_SPACING;
-            short textx;
-            char* s;
+            int16_t x = HUDWARE_BUTTON_X;
+            int16_t y = HUDWARE_BUTTON_Y + i * HUDWARE_LINE_SPACING;
+            int16_t textx;
+            int8_t* s;
             // draw an "x" if active
             if (HUDWARE_DISPLAY_ACTIVE(i))
             {
@@ -2998,7 +2998,7 @@ void mfd_hud_expose(MFD* mfd, ubyte control)
 
 void hudware_update_status(bool on)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_HUDWARE_DISPLAYS; i++)
       if (HUDWARE_DISPLAY_ACTIVE(i) && on)
          hud_set(hud_ware_bits[i]);
@@ -3014,18 +3014,18 @@ void hudware_update_status(bool on)
 // THE GOOFY SEVERED HEAD MFD
 // ----------------------------------------------------------
 
-void severed_head_expose(MFD* mfd, ubyte control);
+void severed_head_expose(MFD* mfd, uint8_t control);
 
-void severed_head_expose(MFD* mfd, ubyte control)
+void severed_head_expose(MFD* mfd, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (full)
    {
       grs_bitmap bm;
-      ubyte headnum = player_struct.actives[ACTIVE_GENERAL];
+      uint8_t headnum = player_struct.actives[ACTIVE_GENERAL];
       ObjID head = player_struct.inventory[headnum];
-      int mug;
-      uint trip=ID2TRIP(head);
+      int32_t mug;
+      uint32_t trip=ID2TRIP(head);
 
       if (head == OBJ_NULL || !(trip == HEAD_TRIPLE || trip==HEAD2_TRIPLE))
          return;
@@ -3069,7 +3069,7 @@ void severed_head_expose(MFD* mfd, ubyte control)
 
 
 
-void mfd_expose_blank(MFD *m, ubyte control)
+void mfd_expose_blank(MFD *m, uint8_t control)
 {
    if (full_game_3d)
    {
@@ -3101,7 +3101,7 @@ void mfd_expose_blank(MFD *m, ubyte control)
 // Called by the inventory whenever a new drug, ware, something is clicked
 // on in the inventory panel.
 
-ulong catbasetrips [MFD_INV_CATEGORIES] =
+uint32_t catbasetrips [MFD_INV_CATEGORIES] =
 {
    0,
    MAKETRIP(CLASS_DRUG,0,0),
@@ -3116,7 +3116,7 @@ ulong catbasetrips [MFD_INV_CATEGORIES] =
 };
 
 // look, another array that should not exist.
-ubyte catactives[] =
+uint8_t catactives[] =
 {
    0,
    ACTIVE_DRUG,
@@ -3130,7 +3130,7 @@ ubyte catactives[] =
    ACTIVE_MISC_SOFT,
 };
 
-ubyte activecats[] =
+uint8_t activecats[] =
 {
    MFD_INV_WEAPON,
    MFD_INV_GRENADE,
@@ -3146,18 +3146,18 @@ ubyte activecats[] =
 
 
 
-extern void set_current_active(int);
+extern void set_current_active(int32_t);
 void update_item_mfd(void);
-bool mfd_distance_remove(ubyte slot_func);
+bool mfd_distance_remove(uint8_t slot_func);
 bool mfd_target_qual(void);
 bool mfd_automap_qual(void);
 bool mfd_weapon_qual(void);
 
-void set_inventory_mfd(ubyte obclass, ubyte type, bool grab)
+void set_inventory_mfd(uint8_t obclass, uint8_t type, bool grab)
 {
-   int i;
-   ubyte func = MFD_EMPTY_FUNC;
-   ubyte slot;
+   int32_t i;
+   uint8_t func = MFD_EMPTY_FUNC;
+   uint8_t slot;
    MFD_Status stat;
    bool classhit = FALSE;
 
@@ -3205,7 +3205,7 @@ void set_inventory_mfd(ubyte obclass, ubyte type, bool grab)
          }
          else
          {
-            ulong opnum = (obclass != MFD_INV_GENINV) ? OPTRIP(catbasetrips[obclass]) + type : OPNUM(player_struct.inventory[type]);
+            uint32_t opnum = (obclass != MFD_INV_GENINV) ? OPTRIP(catbasetrips[obclass]) + type : OPNUM(player_struct.inventory[type]);
             func = ObjProps[opnum].mfd_id;
             if (func == MFD_EMPTY_FUNC) func = MFD_ITEM_FUNC;
             set_current_active(catactives[obclass]);
@@ -3219,7 +3219,7 @@ void set_inventory_mfd(ubyte obclass, ubyte type, bool grab)
 #ifdef RAISE_ON_SELECT
       if (full_game_3d)
       {
-         int i;
+         int32_t i;
          for (i = 0; i < NUM_MFDS; i++)
          {
             if (player_struct.mfd_current_slots[i] == MFD_ITEM_SLOT)
@@ -3266,13 +3266,13 @@ void set_inventory_mfd(ubyte obclass, ubyte type, bool grab)
 
 void update_item_mfd(void)
 {
-   ubyte curr = player_struct.current_active;
+   uint8_t curr = player_struct.current_active;
    if (curr != NULL_ACTIVE)
    {
-      ubyte obclass = activecats[curr];
-      ubyte type = player_struct.actives[curr];
-      ulong opnum = (obclass != MFD_INV_GENINV) ? OPTRIP(catbasetrips[obclass]) + type : OPNUM(player_struct.inventory[type]);
-      int func = ObjProps[opnum].mfd_id;
+      uint8_t obclass = activecats[curr];
+      uint8_t type = player_struct.actives[curr];
+      uint32_t opnum = (obclass != MFD_INV_GENINV) ? OPTRIP(catbasetrips[obclass]) + type : OPNUM(player_struct.inventory[type]);
+      int32_t func = ObjProps[opnum].mfd_id;
       if (func != MFD_EMPTY_FUNC)
       {
          mfd_notify_func(func,MFD_ITEM_FUNC,TRUE,MFD_ACTIVE,TRUE);
@@ -3280,7 +3280,7 @@ void update_item_mfd(void)
    }
 }
 
-bool mfd_distance_remove(ubyte slot_func)
+bool mfd_distance_remove(uint8_t slot_func)
 {
    switch (slot_func)
    {
@@ -3316,35 +3316,35 @@ bool mfd_weapon_qual(void)
 // --------------------------------------------------------
 // THE STATIC MFD_FUNCS ARRAY
 
-extern void mfd_view360_expose(MFD* mfd, ubyte control);
-extern void mfd_dummy_expose(MFD* mfd, ubyte control);
-extern void mfd_fixture_expose(MFD* mfd, ubyte control);
+extern void mfd_view360_expose(MFD* mfd, uint8_t control);
+extern void mfd_dummy_expose(MFD* mfd, uint8_t control);
+extern void mfd_fixture_expose(MFD* mfd, uint8_t control);
 extern bool mfd_fixture_handler(MFD* mfd, uiEvent* e);
-extern void mfd_emailmug_expose(MFD* mfd, ubyte control);
+extern void mfd_emailmug_expose(MFD* mfd, uint8_t control);
 extern bool mfd_emailmug_handler(MFD* mfd, uiEvent* e);
 extern errtype mfd_emailware_init(MFD_Func* f);
-extern void mfd_emailware_expose(MFD*,ubyte);
-extern void mfd_plotware_expose(MFD*,ubyte);
+extern void mfd_emailware_expose(MFD*,uint8_t);
+extern void mfd_plotware_expose(MFD*,uint8_t);
 extern errtype mfd_plotware_init(MFD_Func* f);
-extern void mfd_bark_expose(MFD*,ubyte);
+extern void mfd_bark_expose(MFD*,uint8_t);
 extern errtype mfd_accesspanel_init(MFD_Func* f);
 extern bool mfd_accesspanel_handler(MFD* mfd, uiEvent* ev);
-extern void mfd_accesspanel_expose(MFD* mfd, ubyte control);
+extern void mfd_accesspanel_expose(MFD* mfd, uint8_t control);
 extern errtype mfd_gridpanel_init(MFD_Func* f);
-extern void mfd_gridpanel_expose(MFD* mfd, ubyte control);
+extern void mfd_gridpanel_expose(MFD* mfd, uint8_t control);
 extern bool mfd_gridpanel_handler(MFD* mfd, uiEvent* ev);
-extern void mfd_targetware_expose(MFD* mfd, ubyte control);
+extern void mfd_targetware_expose(MFD* mfd, uint8_t control);
 extern bool mfd_targetware_handler(MFD* mfd, uiEvent* ev);
-extern void mfd_gump_expose(MFD* mfd, ubyte control);
+extern void mfd_gump_expose(MFD* mfd, uint8_t control);
 extern bool mfd_gump_handler(MFD* mfd, uiEvent* ev);
-extern void mfd_accesscard_expose(MFD* mfd, ubyte control);
-extern void mfd_biohelp_expose(MFD* mfd, ubyte control);
+extern void mfd_accesscard_expose(MFD* mfd, uint8_t control);
+extern void mfd_biohelp_expose(MFD* mfd, uint8_t control);
 extern errtype mfd_biohelp_init(MFD_Func* f);
 extern bool mfd_biohelp_handler(MFD* mfd, uiEvent* ev);
-extern void mfd_cspace_expose(MFD* mfd, ubyte control);
-extern void mfd_viewhelp_expose(MFD* mfd, ubyte control);
+extern void mfd_cspace_expose(MFD* mfd, uint8_t control);
+extern void mfd_viewhelp_expose(MFD* mfd, uint8_t control);
 extern errtype mfd_viewhelp_init(MFD_Func* f);
-extern void mfd_gear_expose(MFD* mfd, ubyte control);
+extern void mfd_gear_expose(MFD* mfd, uint8_t control);
 extern bool mfd_gear_handler(MFD* mfd, uiEvent* ev);
 
 

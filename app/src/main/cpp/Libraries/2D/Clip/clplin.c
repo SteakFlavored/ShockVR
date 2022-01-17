@@ -60,9 +60,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Returns clip code for fixed-point coordinates for the Cohen-Sutherland
    line clipper. */
-int gr_clip_fix_code (fix x, fix y)
+int32_t gr_clip_fix_code (fix x, fix y)
 {
-   int code = 0;
+   int32_t code = 0;
 
    if (x < grd_fix_clip.left)
       code |= CLIP_LEFT;
@@ -77,11 +77,11 @@ int gr_clip_fix_code (fix x, fix y)
 }
 
 /* fixed-point Cohen-Sutherland line clipper. */
-int gr_clip_fix_line (fix *x0, fix *y0, fix *x1, fix *y1)
+int32_t gr_clip_fix_line (fix *x0, fix *y0, fix *x1, fix *y1)
 {
-   int code0;                 /* clip code for (x0,y0) */
-   int code1;                 /* code for (x1,y1) */
-   int code;                  /* code for current point */
+   int32_t code0;                 /* clip code for (x0,y0) */
+   int32_t code1;                 /* code for (x1,y1) */
+   int32_t code;                  /* code for current point */
    fix dx;                    /* x distance */
    fix dy;                    /* y distance */
    fix *px;                   /* pointer to x current coordinate */

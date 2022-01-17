@@ -43,9 +43,9 @@ asm void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz);
 //void xlate_rotate_point(g3s_vector *v, fix *x, fix *y, fix *z);
 #define xlate_rotate_point(v,x,y,z) do_rotate(v->gX-_view_position.gX, v->gY-_view_position.gY, v->gZ-_view_position.gZ,x,y,z)
 
-extern int code_point(g3s_point *pt);
-extern char SubLongWithOverflow(long *result, long src, long dest);
-extern char AddLongWithOverflow(long *result, long src, long dest);
+extern int32_t code_point(g3s_point *pt);
+extern int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
+extern int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
 
 //for temp use in rotate_list, etc.
 g3s_codes g_codes;
@@ -102,7 +102,7 @@ g3s_phandle g3_transform_point(g3s_vector *v)
 // returns 0 if z<=0, 1 if z>0.
 // trashes eax,ecx,edx.
 #if (defined(powerc) || defined(__powerc))
-int g3_project_point(g3s_phandle p)
+int32_t g3_project_point(g3s_phandle p)
  {
  	fix		x,y,z,res;
 
@@ -208,7 +208,7 @@ no_stereo2:
  }
 #else
 // 68K g3_project_point
-asm int g3_project_point(g3s_phandle p)
+asm int32_t g3_project_point(g3s_phandle p)
  {
 	move.l	d3,a1		// save d3
 
@@ -298,9 +298,9 @@ endif
 */
 
 //takes esi=ptr to array of vectors, edi=ptr to list for point handles, ecx=count
-g3s_codes g3_transform_list(short n, g3s_phandle *dest_list, g3s_vector *v)
+g3s_codes g3_transform_list(int16_t n, g3s_phandle *dest_list, g3s_vector *v)
  {
- 	int					i;
+ 	int32_t					i;
  	g3s_phandle	temphand;
 
  	g_codes.or = 0;
@@ -319,9 +319,9 @@ g3s_codes g3_transform_list(short n, g3s_phandle *dest_list, g3s_vector *v)
 
 //takes esi=ptr to array of vectors, edi=ptr to list for point handles, ecx=count
 //returns bh=codes and, bl=codes or
-g3s_codes g3_rotate_list(short n,g3s_phandle *dest_list,g3s_vector *v)
+g3s_codes g3_rotate_list(int16_t n,g3s_phandle *dest_list,g3s_vector *v)
  {
- 	int					i;
+ 	int32_t					i;
  	g3s_phandle	temphand;
 
  	g_codes.or = 0;
@@ -340,9 +340,9 @@ g3s_codes g3_rotate_list(short n,g3s_phandle *dest_list,g3s_vector *v)
 
 
 //takes esi=ptr to array of point handles, ecx=count
-g3s_codes g3_project_list(short n,g3s_phandle *point_list)
+g3s_codes g3_project_list(int16_t n,g3s_phandle *point_list)
  {
- 	int					i;
+ 	int32_t					i;
  	g3s_phandle	temphand;
 
  	g_codes.or = 0;
@@ -392,7 +392,7 @@ void do_norm_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(z, uvm7, &result2);
 	AsmWideAdd(&result, &result2);
-	*rx = (result.hi<<16) | (((ulong) result.lo)>>16);
+	*rx = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column
 	AsmWideMultiply(x, uvm2, &result);
@@ -400,7 +400,7 @@ void do_norm_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(z, uvm8, &result2);
 	AsmWideAdd(&result, &result2);
-	*ry = (result.hi<<16) | (((ulong) result.lo)>>16);
+	*ry = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //third column
 	AsmWideMultiply(x, uvm3, &result);
@@ -408,7 +408,7 @@ void do_norm_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(z, uvm9, &result2);
 	AsmWideAdd(&result, &result2);
-	*rz = (result.hi<<16) | (((ulong) result.lo)>>16);
+	*rz = (result.hi<<16) | (((uint32_t) result.lo)>>16);
  }
 
 // made this a define - MLA
@@ -432,7 +432,7 @@ void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(z, vm7, &result2);
 	AsmWideAdd(&result, &result2);
-	*rx = (result.hi<<16) | (((ulong) result.lo)>>16);
+	*rx = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column
 	AsmWideMultiply(x, vm2, &result);
@@ -440,7 +440,7 @@ void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(z, vm8, &result2);
 	AsmWideAdd(&result, &result2);
-	*ry = (result.hi<<16) | (((ulong) result.lo)>>16);
+	*ry = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //third column
 	AsmWideMultiply(x, vm3, &result);
@@ -448,7 +448,7 @@ void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(z, vm9, &result2);
 	AsmWideAdd(&result, &result2);
-	*rz = (result.hi<<16) | (((ulong) result.lo)>>16);
+	*rz = (result.hi<<16) | (((uint32_t) result.lo)>>16);
  }
 #else
 asm void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz)
@@ -567,19 +567,19 @@ void g3_rotate_delta_xz(g3s_vector *dest,fix dx,fix dz)
 	AsmWideMultiply(dx, vm1, &result);
 	AsmWideMultiply(dz, vm7, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gX = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gX = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column
 	AsmWideMultiply(dx, vm2, &result);
 	AsmWideMultiply(dz, vm8, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gY = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gY = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //third column
 	AsmWideMultiply(dx, vm3, &result);
 	AsmWideMultiply(dz, vm9, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gZ = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gZ = (result.hi<<16) | (((uint32_t) result.lo)>>16);
  }
 
 //rotate an xy delta. takes edi=dest vector, eax=dx, ebx=dy
@@ -592,19 +592,19 @@ void g3_rotate_delta_xy(g3s_vector *dest,fix dx,fix dy)
 	AsmWideMultiply(dx, vm1, &result);
 	AsmWideMultiply(dy, vm4, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gX = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gX = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column
 	AsmWideMultiply(dx, vm2, &result);
 	AsmWideMultiply(dy, vm5, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gY = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gY = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //third column
 	AsmWideMultiply(dx, vm3, &result);
 	AsmWideMultiply(dy, vm6, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gZ = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gZ = (result.hi<<16) | (((uint32_t) result.lo)>>16);
  }
 
 //rotate a yz delta. takes edi=dest vector, eax=dy, ebx=dz
@@ -617,19 +617,19 @@ void g3_rotate_delta_yz(g3s_vector *dest,fix dy,fix dz)
 	AsmWideMultiply(dy, vm4, &result);
 	AsmWideMultiply(dz, vm7, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gX = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gX = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column
 	AsmWideMultiply(dy, vm5, &result);
 	AsmWideMultiply(dz, vm8, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gY = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gY = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //third column
 	AsmWideMultiply(dy, vm6, &result);
 	AsmWideMultiply(dz, vm9, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gZ = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gZ = (result.hi<<16) | (((uint32_t) result.lo)>>16);
  }
 
 //rotate a delta vector. takes edi=dest, eax,ebx,ecx=dx,dy,dz
@@ -722,19 +722,19 @@ void g3_add_delta_xy(g3s_phandle p,fix dx,fix dy)
 	AsmWideMultiply(dx, vm1, &result);
 	AsmWideMultiply(dy, vm4, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gX += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gX += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column
 	AsmWideMultiply(dx, vm2, &result);
 	AsmWideMultiply(dy, vm5, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gY += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gY += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //third column
 	AsmWideMultiply(dx, vm3, &result);
 	AsmWideMultiply(dy, vm6, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gZ += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gZ += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
  	p->p3_flags &= ~PF_PROJECTED;
  	code_point(p);
@@ -750,19 +750,19 @@ void g3_add_delta_xz(g3s_phandle p,fix dx,fix dz)
 	AsmWideMultiply(dx, vm1, &result);
 	AsmWideMultiply(dz, vm7, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gX += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gX += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column
 	AsmWideMultiply(dx, vm2, &result);
 	AsmWideMultiply(dz, vm8, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gY += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gY += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //third column
 	AsmWideMultiply(dx, vm3, &result);
 	AsmWideMultiply(dz, vm9, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gZ += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gZ += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
  	p->p3_flags &= ~PF_PROJECTED;
  	code_point(p);
@@ -779,19 +779,19 @@ void g3_add_delta_yz(g3s_phandle p,fix dy,fix dz)
 	AsmWideMultiply(dy, vm4, &result);
 	AsmWideMultiply(dz, vm7, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gX += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gX += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //second column
 	AsmWideMultiply(dy, vm5, &result);
 	AsmWideMultiply(dz, vm8, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gY += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gY += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 //third column
 	AsmWideMultiply(dy, vm6, &result);
 	AsmWideMultiply(dz, vm9, &result2);
 	AsmWideAdd(&result, &result2);
-	p->gZ += (result.hi<<16) | (((ulong) result.lo)>>16);
+	p->gZ += (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
  	p->p3_flags &= ~PF_PROJECTED;
  	code_point(p);
@@ -918,19 +918,19 @@ g3s_phandle g3_copy_add_delta_xy(g3s_phandle src,fix dx,fix dy)
 	AsmWideMultiply(dx, vm1, &result);
 	AsmWideMultiply(dy, vm4, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gX = src->gX + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gX = src->gX + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
 //second column
 	AsmWideMultiply(dx, vm2, &result);
 	AsmWideMultiply(dy, vm5, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gY = src->gY + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gY = src->gY + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
 //third column
 	AsmWideMultiply(dx, vm3, &result);
 	AsmWideMultiply(dy, vm6, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gZ = src->gZ + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gZ = src->gZ + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
  	point->p3_flags = 0;
  	code_point(point);
@@ -951,19 +951,19 @@ g3s_phandle g3_copy_add_delta_xz(g3s_phandle src,fix dx,fix dz)
 	AsmWideMultiply(dx, vm1, &result);
 	AsmWideMultiply(dz, vm7, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gX = src->gX + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gX = src->gX + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
 //second column
 	AsmWideMultiply(dx, vm2, &result);
 	AsmWideMultiply(dz, vm8, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gY = src->gY + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gY = src->gY + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
 //third column
 	AsmWideMultiply(dx, vm3, &result);
 	AsmWideMultiply(dz, vm9, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gZ = src->gZ + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gZ = src->gZ + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
  	point->p3_flags = 0;
  	code_point(point);
@@ -985,19 +985,19 @@ g3s_phandle g3_copy_add_delta_yz(g3s_phandle src,fix dy,fix dz)
 	AsmWideMultiply(dy, vm4, &result);
 	AsmWideMultiply(dz, vm7, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gX = src->gX + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gX = src->gX + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
 //second column
 	AsmWideMultiply(dy, vm5, &result);
 	AsmWideMultiply(dz, vm8, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gY = src->gY + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gY = src->gY + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
 //third column
 	AsmWideMultiply(dy, vm6, &result);
 	AsmWideMultiply(dz, vm9, &result2);
 	AsmWideAdd(&result, &result2);
-	point->gZ = src->gZ + ((result.hi<<16) | (((ulong) result.lo)>>16));
+	point->gZ = src->gZ + ((result.hi<<16) | (((uint32_t) result.lo)>>16));
 
  	point->p3_flags = 0;
  	code_point(point);

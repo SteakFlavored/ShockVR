@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Internal Prototypes
-void set_dumb_terrain_normal(int which, fix norm[3]);
+void set_dumb_terrain_normal(int32_t which, fix norm[3]);
 
 /*
  * facelet system
@@ -43,7 +43,7 @@ void set_dumb_terrain_normal(int which, fix norm[3]);
  */
 
 typedef struct {
-   uchar cnt, prim, lprim, pad;
+   uint8_t cnt, prim, lprim, pad;
    fix   nrm[3], tval, bval, batt;
 } tf_norm_cmp;
 
@@ -57,7 +57,7 @@ static tf_norm_set facets[3];
 // really, have to say this is a pretty simple one, really
 void facelet_clear(void)
 {
-   memset(&facets[0], 0, sizeof(facets));	//   _memset32l(&facets[0],0,sizeof(facets)/sizeof(long));
+   memset(&facets[0], 0, sizeof(facets));	//   _memset32l(&facets[0],0,sizeof(facets)/sizeof(int32_t));
 }
 
 // facelet_add adds to the current facelet arrays
@@ -68,7 +68,7 @@ void facelet_clear(void)
 // norm is the normal, unattenuated
 // atten is the 0-1.0 attenuation factor for it
 // value is the actual compression data
-void facelet_add(int which, fix norm[3], fix atten, fix comp, int prim)
+void facelet_add(int32_t which, fix norm[3], fix atten, fix comp, int32_t prim)
 {
    tf_norm_set *cur_face;
    tf_norm_cmp *cur_cmp;
@@ -116,7 +116,7 @@ extern TerrainData terrain_info;
 #ifdef COMPUTE_SEPARATES
 // for now, since we dont have real distributed unit and mag
 // we build it ourselves, for maximal pain
-void set_real_terrain_normal(int which, fix mag, fix norm[3])
+void set_real_terrain_normal(int32_t which, fix mag, fix norm[3])
 {
    fix *targ_vec=&terrain_info.cx+(which*3);
    *targ_vec++=fix_mul(norm[0],mag);
@@ -124,7 +124,7 @@ void set_real_terrain_normal(int which, fix mag, fix norm[3])
    *targ_vec  =fix_mul(norm[2],mag);
 }
 #else
-void set_dumb_terrain_normal(int which, fix norm[3])
+void set_dumb_terrain_normal(int32_t which, fix norm[3])
 {  // we aint proud
    g3s_vector *targ_vec= (g3s_vector *) (&terrain_info.cx+(which*3));
 
@@ -136,7 +136,7 @@ void set_dumb_terrain_normal(int which, fix norm[3])
 
 void facelet_send(void)
 {
-   int i;
+   int32_t i;
    tf_norm_set *cur_face;
    tf_norm_cmp *cur_cmp;
    fix mag, *nrm;

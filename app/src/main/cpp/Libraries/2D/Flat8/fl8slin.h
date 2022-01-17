@@ -78,7 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    fix i0, i1;
    fix di;			/* delta intensity */
 
-   uchar *p;			/* pointer into the canvas */
+   uint8_t *p;			/* pointer into the canvas */
 
 
    x0 = v0->x; y0 = v0->y;

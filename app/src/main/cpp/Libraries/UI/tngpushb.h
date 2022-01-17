@@ -52,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct {
    TNG *tng_data;
    LGPoint size;
-   int type;
+   int32_t type;
    bool pressed;
    void *disp_data;
 } TNG_pushbutton;
@@ -66,29 +66,29 @@ typedef struct {
 // Prototypes
 
 // Initializes the TNG
-errtype tng_pushbutton_init(void *ui_data, TNG *ptng, TNGStyle *sty, int button_type, void *display_data, LGPoint size);
+errtype tng_pushbutton_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t button_type, void *display_data, LGPoint size);
 
 // Deallocate all memory used by the TNG
 errtype tng_pushbutton_destroy(TNG *ptng);
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_pushbutton_2d_draw(TNG *ptng, ushort partmask, LGPoint loc);
+errtype tng_pushbutton_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc);
 
 // Fill in ppt with the size of the TNG
 errtype tng_pushbutton_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG
-int tng_pushbutton_getvalue(TNG *ptng);
+int32_t tng_pushbutton_getvalue(TNG *ptng);
 
 // React appropriately for receiving the specified cooked key
-bool tng_pushbutton_keycooked(TNG *ptng, ushort key);
+bool tng_pushbutton_keycooked(TNG *ptng, uint16_t key);
 
 // React appropriately for receiving the specified mouse button event
-bool tng_pushbutton_mousebutt(TNG *ptng, uchar type, LGPoint loc);
+bool tng_pushbutton_mousebutt(TNG *ptng, uint8_t type, LGPoint loc);
 
 // Handle incoming signals
-bool tng_pushbutton_signal(TNG *ptng, ushort signal);
+bool tng_pushbutton_signal(TNG *ptng, uint16_t signal);
 
 errtype tng_pushbutton_pressed(TNG_pushbutton *ppbtng);
 errtype tng_pushbutton_released(TNG_pushbutton *ppbtng);

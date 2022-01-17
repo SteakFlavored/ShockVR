@@ -27,10 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-void fr_show_rate(int color);
+void fr_show_rate(int32_t color);
 void game_fr_startup(void);
 void game_fr_shutdown(void);
-uchar *get_free_frame_buffer_bits(int size); // to get bitmap bits
-void *get_scr_canvas_from_frame_buffer(int x, int y, int wid, int hgt); // to get an actual canvas
-void game_fr_reparam(int is_128s, int full_scrn, int show_all);
+uint8_t *get_free_frame_buffer_bits(int32_t size); // to get bitmap bits
+void *get_scr_canvas_from_frame_buffer(int32_t x, int32_t y, int32_t wid, int32_t hgt); // to get an actual canvas
+void game_fr_reparam(int32_t is_128s, int32_t full_scrn, int32_t show_all);
 #endif // __RENDTOOL_H

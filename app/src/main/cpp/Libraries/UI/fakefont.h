@@ -21,24 +21,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // prototypes
 // drawing - return the width drawn
-int fnt_c_draw(char  c, int xpos, int ypos);
-int fnt_s_draw(char *s, int xpos, int ypos);
-int fnt_c_width(char  c);
-int fnt_s_width(char *s);
-int fnt_l_clr(int len, int xpos, int ypos);
-int fnt_s_clr(char *s, int xpos, int ypos);
-int fnt_c_clr(char c, int xpos, int ypos);
-int fnt_no_cursor(int x, int y);
+int32_t fnt_c_draw(int8_t  c, int32_t xpos, int32_t ypos);
+int32_t fnt_s_draw(int8_t *s, int32_t xpos, int32_t ypos);
+int32_t fnt_c_width(int8_t  c);
+int32_t fnt_s_width(int8_t *s);
+int32_t fnt_l_clr(int32_t len, int32_t xpos, int32_t ypos);
+int32_t fnt_s_clr(int8_t *s, int32_t xpos, int32_t ypos);
+int32_t fnt_c_clr(int8_t c, int32_t xpos, int32_t ypos);
+int32_t fnt_no_cursor(int32_t x, int32_t y);
 
 // load/system
-int fnt_init(char *def_fname);      // ret handle of def_fname, -1 fail,
+int32_t fnt_init(int8_t *def_fname);      // ret handle of def_fname, -1 fail,
                                     //  0 if def_fname NULL + succesful
-int fnt_init_from_style(void *style_ptr);
+int32_t fnt_init_from_style(void *style_ptr);
 bool fnt_free(void);                // free the font system
-int fnt_load(char *fnt_fname);      // returns the handle
-int fnt_load_from_style(void *style_ptr);
-bool fnt_unload(int fnt_handle);    // these both
-bool fnt_select(int fnt_handle);    //   return success or not
+int32_t fnt_load(int8_t *fnt_fname);      // returns the handle
+int32_t fnt_load_from_style(void *style_ptr);
+bool fnt_unload(int32_t fnt_handle);    // these both
+bool fnt_select(int32_t fnt_handle);    //   return success or not
 
 // for texttools...
 #ifdef NOT

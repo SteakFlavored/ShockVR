@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "amaploop.h"
 #include "lvldata.h"
 
-extern bool amap_ms_callback(curAMap *amptr,int x,int y,short action,ubyte but);
+extern bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t but);
 extern bool amap_scroll_handler(uiEvent* ev, 	LGRegion* r, void* user_data);
 
 // -------------------
@@ -54,7 +54,7 @@ bool amap_mouse_handler(uiEvent *ev, LGRegion *, void *)
    return(TRUE);
 }
 
-bool amap_kb_callback(curAMap *amptr, int code);
+bool amap_kb_callback(curAMap *amptr, int32_t code);
 
 bool amap_key_handler(uiEvent *ev, LGRegion *r, void *user_data)
 {
@@ -75,7 +75,7 @@ LGRegion amap_root_region;
 
 errtype amap_init(void)
 {
-	int 		id;
+	int32_t 		id;
 	LGRect	mac_rect = {{0,0},{640,480}};
 
    generic_reg_init(TRUE,&amap_root_region,&mac_rect,&amap_slab,amap_key_handler,amap_mouse_handler);

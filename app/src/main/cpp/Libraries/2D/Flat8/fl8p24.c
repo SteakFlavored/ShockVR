@@ -35,10 +35,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* set an unclipped pixel in bank-switched memory.  draws 8-8-8 long
    rgb c at (x,y). */
-void flat8_set_upixel24(long c,short x,short y)
+void flat8_set_upixel24(int32_t c,int16_t x,int16_t y)
 {
-   uchar *p;
-   int i;
+   uint8_t *p;
+   int32_t i;
 
    i = gr_index_lrgb(c);
    p = grd_bm.bits + grd_bm.row*y + x;
@@ -47,10 +47,10 @@ void flat8_set_upixel24(long c,short x,short y)
 
 /* set a clipped pixel in bank-switched memory.  draws an 8-8-8 long
    rgb c at (x,y).  return the clip code. */
-int flat8_set_pixel24(long c, short x, short y)
+int32_t flat8_set_pixel24(int32_t c, int16_t x, int16_t y)
 {
-   uchar *p;
-   int i;
+   uint8_t *p;
+   int32_t i;
 
    if (x<grd_clip.left || x>grd_clip.right ||
        y<grd_clip.top || y>grd_clip.bot)

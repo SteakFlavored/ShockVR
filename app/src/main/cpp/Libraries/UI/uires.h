@@ -47,8 +47,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // will Free their buffers immediately.
 extern struct _uirestempbuffer
 {
-   char* mem;
-   uint size;
+   int8_t* mem;
+   uint32_t size;
 } uiResTempBuffer;
 
 

@@ -53,7 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define BARK_MARGIN 2
 
-void mfd_bark_expose(MFD* mfd, ubyte control)
+void mfd_bark_expose(MFD* mfd, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
@@ -76,7 +76,7 @@ void mfd_bark_expose(MFD* mfd, ubyte control)
       if (mfd_bark_mug>0)
       {
          grs_bitmap bm;
-         int mug=REF_IMG_EmailMugShotBase+mfd_bark_mug;
+         int32_t mug=REF_IMG_EmailMugShotBase+mfd_bark_mug;
 
          bm.bits = NULL;
 
@@ -102,10 +102,10 @@ void mfd_bark_expose(MFD* mfd, ubyte control)
 
       if (full && mfd_bark_string != REF_STR_Null)
       {
-         extern int hyphenated_wrap_text(char*, char*, short);
-         char buf[256];
-         short x,y;
-         short w,h;
+         extern int32_t hyphenated_wrap_text(int8_t*, int8_t*, int16_t);
+         int8_t buf[256];
+         int16_t x,y;
+         int16_t w,h;
          RefTable *prt = (RefTable *)ResLock(REFID(mfd_bark_string));
 //            ResReadRefTable(REFID(mfd_bark_string));
 
@@ -140,9 +140,9 @@ void mfd_bark_expose(MFD* mfd, ubyte control)
 }
 
 
-void long_bark(ObjID speaker_id, uchar mug_id, int string_id, ubyte color)
+void long_bark(ObjID speaker_id, uint8_t mug_id, int32_t string_id, uint8_t color)
 {
-   short mfd_id = mfd_grab_func(MFD_BARK_FUNC,MFD_INFO_SLOT);
+   int16_t mfd_id = mfd_grab_func(MFD_BARK_FUNC,MFD_INFO_SLOT);
 #ifdef AUDIOLOGS
    errtype alog_rv = ERR_NOEFFECT;
 #endif

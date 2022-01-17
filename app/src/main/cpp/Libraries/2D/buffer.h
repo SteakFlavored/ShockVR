@@ -34,6 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define gr_alloc_temp temp_malloc
 #define gr_free_temp temp_free
 #else /* GR_TEMP_USE_MEMSTACK */
-extern void *gr_alloc_temp (int n);
+extern void *gr_alloc_temp (int32_t n);
 extern void gr_free_temp (void *p);
 #endif /* GR_TEMP_USE_MEMSTACK */

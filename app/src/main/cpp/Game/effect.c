@@ -60,7 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_ANIMLIST_CALLBACKS   10
 AnimlistCB animlist_callbacks[MAX_ANIMLIST_CALLBACKS];
 
-ubyte effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES] = {
+uint8_t effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES] = {
    {
       // soft mutants - blood
       {BLOOD_LIGHT, BLOOD_LIGHT},      // projectiles
@@ -104,8 +104,8 @@ extern void do_object_explosion(ObjID id);
 // Internal Prototypes
 void critter_light_world(ObjID id);
 void critter_unlight_world(ObjID id);
-int anim_frames(ObjID id);
-errtype increment_anim(ulong num_units);
+int32_t anim_frames(ObjID id);
+errtype increment_anim(uint32_t num_units);
 bool anim_data_from_id(ObjID id, bool* reverse, bool* cycle);
 void init_animlist(void);
 
@@ -115,11 +115,11 @@ void init_animlist(void);
 
 ObjID beam_effect_id=OBJ_NULL;
 
-ObjID do_special_effect_location(ObjID owner, ubyte effect, ubyte start, ObjLoc *loc, short )
+ObjID do_special_effect_location(ObjID owner, uint8_t effect, uint8_t start, ObjLoc *loc, int16_t )
 {
 	ObjID				new_id=OBJ_NULL;
 	ObjSpecID			osid;
-	int					triple = 0;
+	int32_t					triple = 0;
 
    // are we suppose to destroy the attached object?
    bool  special = DESTROY_OBJ_EFFECT(effect);
@@ -155,10 +155,10 @@ ObjID do_special_effect_location(ObjID owner, ubyte effect, ubyte start, ObjLoc 
       if (AnimatingProps[CPNUM(new_id)].flags & EFFECT_LIGHT_FLAG)
       {
          MapElem  *mmp;
-         ubyte    i;
-         ubyte    x = OBJ_LOC_BIN_X(*loc);
-         ubyte    y = OBJ_LOC_BIN_Y(*loc);
-         ubyte    light_bits = 0;
+         uint8_t    i;
+         uint8_t    x = OBJ_LOC_BIN_X(*loc);
+         uint8_t    y = OBJ_LOC_BIN_Y(*loc);
+         uint8_t    light_bits = 0;
 
          for (i=0; i<4;i++)
          {
@@ -180,7 +180,7 @@ ObjID do_special_effect_location(ObjID owner, ubyte effect, ubyte start, ObjLoc 
 // do_special_effect()
 //
 
-ObjID do_special_effect(ObjID owner, ubyte effect, ubyte start, ObjID target_id, short location)
+ObjID do_special_effect(ObjID owner, uint8_t effect, uint8_t start, ObjID target_id, int16_t location)
 {
    ObjLoc   loc= objs[target_id].loc;
 
@@ -189,10 +189,10 @@ ObjID do_special_effect(ObjID owner, ubyte effect, ubyte start, ObjID target_id,
 
 void critter_light_world(ObjID id)
 {
-   int      j;
-   ubyte    light_bits=0;
-   ubyte    x = OBJ_LOC_BIN_X(objs[id].loc);
-   ubyte    y = OBJ_LOC_BIN_Y(objs[id].loc);
+   int32_t      j;
+   uint8_t    light_bits=0;
+   uint8_t    x = OBJ_LOC_BIN_X(objs[id].loc);
+   uint8_t    y = OBJ_LOC_BIN_Y(objs[id].loc);
    MapElem *mmp;
 
    for (j=0; j<4;j++)
@@ -215,10 +215,10 @@ void critter_light_world(ObjID id)
 
 void critter_unlight_world(ObjID id)
 {
-   ubyte    light_bits = CRITTER_LAMP(id);
-   ubyte    x = CRITLOCX(id);
-   ubyte    y = CRITLOCY(id);
-   ubyte    j;
+   uint8_t    light_bits = CRITTER_LAMP(id);
+   uint8_t    x = CRITLOCX(id);
+   uint8_t    y = CRITLOCY(id);
+   uint8_t    j;
    MapElem *mmp;
 
    if (light_bits)
@@ -245,9 +245,9 @@ void critter_unlight_world(ObjID id)
 #define MAX_TELEPORT_FRAME    10
 #define DIEGO_DEATH_BATTLE_LEVEL 8
 
-int anim_frames(ObjID id)
+int32_t anim_frames(ObjID id)
 {
-   int retval = 1;
+   int32_t retval = 1;
    RefTable *prt;
 
    switch(objs[id].obclass)
@@ -291,9 +291,9 @@ int anim_frames(ObjID id)
 #define BRIGHT_LIGHT_FLASH 60L    // brightness of flash
 #define LIGHT_DELTA 4           // time length of flash
 
-extern void lamp_change_setting(byte offset);
-extern ubyte energy_expulsion;
-extern ubyte handart_count;
+extern void lamp_change_setting(int8_t offset);
+extern uint8_t energy_expulsion;
+extern uint8_t handart_count;
 extern bool handart_flash;
 
 #define DEFAULT_ANIMATION_SPEED  32
@@ -306,29 +306,29 @@ extern bool handart_flash;
 #else
 fix standard_critter_speed = fix_make(0,0x5800);
 fix min_mojo = fix_make(0,0x1a00);
-int min_critter_anim_speed = 35;
-int max_critter_anim_speed = 170;
-int attacking_anim_speed = 45;
+int32_t min_critter_anim_speed = 35;
+int32_t max_critter_anim_speed = 170;
+int32_t attacking_anim_speed = 45;
 #endif
 
-errtype increment_anim(ulong num_units)
+errtype increment_anim(uint32_t num_units)
 {
    ObjSpecID      osid;
    ObjID          id;
-   uchar          anim_rem[MAX_ANIMLIST_SIZE];
-   uchar          cb_list[MAX_ANIMLIST_SIZE];
-   int            triple,num_frames;
-   char curr_frames;
-   int post,i;
-   short rem_num=0, cb_num=0;
-   int interval;
-   ulong new_units;
-   ulong hand_speed=HANDART_SPEED;
-   ubyte old_handart;
+   uint8_t          anim_rem[MAX_ANIMLIST_SIZE];
+   uint8_t          cb_list[MAX_ANIMLIST_SIZE];
+   int32_t            triple,num_frames;
+   int8_t curr_frames;
+   int32_t post,i;
+   int16_t rem_num=0, cb_num=0;
+   int32_t interval;
+   uint32_t new_units;
+   uint32_t hand_speed=HANDART_SPEED;
+   uint8_t old_handart;
    LightSchedEvent      new_event;
    extern bool anim_on;
 #ifdef SPEW_ON
-   char ft1[30];
+   int8_t ft1[30];
 #endif
 
    // *************************************************************
@@ -356,15 +356,15 @@ errtype increment_anim(ulong num_units)
    }
    if ((handart_show != 1) && handart_flash)
    {
-      byte  light_val;
-      ubyte slot = player_struct.actives[ACTIVE_WEAPON];
-      extern byte gun_fire_offset;
+      int8_t  light_val;
+      uint8_t slot = player_struct.actives[ACTIVE_WEAPON];
+      extern int8_t gun_fire_offset;
 
       switch (player_struct.weapons[slot].type)
       {
          case (GUN_SUBCLASS_BEAM):
             if (energy_expulsion)
-               light_val = (ubyte) ((BRIGHT_LIGHT_FLASH*energy_expulsion)/100);
+               light_val = (uint8_t) ((BRIGHT_LIGHT_FLASH*energy_expulsion)/100);
             break;
          case (GUN_SUBCLASS_HANDTOHAND):
             light_val = 0;
@@ -407,7 +407,7 @@ errtype increment_anim(ulong num_units)
    osid = objAnimatings[0].id;
    while (osid != OBJ_SPEC_NULL)
    {
-      short dest_frame;
+      int16_t dest_frame;
 
       id = objAnimatings[osid].id;
       if (id == OBJ_NULL)
@@ -416,8 +416,8 @@ errtype increment_anim(ulong num_units)
       }
       else
       {
-         ubyte spd;
-         int cptrip;
+         uint8_t spd;
+         int32_t cptrip;
 
          triple = MAKETRIP(objs[id].obclass, objs[id].subclass, objs[id].info.type);
          new_units = num_units + objs[id].info.time_remainder;
@@ -446,10 +446,10 @@ errtype increment_anim(ulong num_units)
          {
             if (AnimatingProps[CPNUM(id)].flags & EFFECT_LIGHT_FLAG)
             {
-               ubyte    i;
-               ubyte    light_bits = EFFECT_LIGHT_MAP(objAnimatings[objs[id].specID].start_frame);
-               ubyte    x = OBJ_LOC_BIN_X(objs[id].loc);
-               ubyte    y = OBJ_LOC_BIN_Y(objs[id].loc);
+               uint8_t    i;
+               uint8_t    light_bits = EFFECT_LIGHT_MAP(objAnimatings[objs[id].specID].start_frame);
+               uint8_t    x = OBJ_LOC_BIN_X(objs[id].loc);
+               uint8_t    y = OBJ_LOC_BIN_Y(objs[id].loc);
                MapElem *mmp;
 
                for (i=0; i<4;i++)
@@ -587,7 +587,7 @@ errtype increment_anim(ulong num_units)
    osid = objCritters[0].id;
    while (osid != OBJ_SPEC_NULL)
    {
-      int cptripnum,asp;
+      int32_t cptripnum,asp;
       id = objCritters[osid].id;
       triple = MAKETRIP(objs[id].obclass, objs[id].subclass, objs[id].info.type);
       if ((triple == DIEGO_TRIPLE) && (get_crit_posture(objs[id].specID) == DEATH_CRITTER_POSTURE) &&
@@ -598,7 +598,7 @@ errtype increment_anim(ulong num_units)
                }
       if (EFFECT_LOC(id))
       {
-//         ulong time = (player_struct.game_time & 0x03);
+//         uint32_t time = (player_struct.game_time & 0x03);
 //         if ((time/32) != EFFECT_EIGHTH(id))
 //         {
 //            SET_EFFECT_FRAME(id,EFFECT_FRAME(id)+(((time/32)+8-EFFECT_EIGHTH(id))%8));
@@ -625,7 +625,7 @@ errtype increment_anim(ulong num_units)
                State s;
                fix pd;
 #ifdef USE_PHYS_STATE
-               extern void get_phys_state(int ph, State *new_state, ObjID id);
+               extern void get_phys_state(int32_t ph, State *new_state, ObjID id);
                get_phys_state(objs[id].info.ph, &s,id);
 #else
                EDMS_get_state(objs[id].info.ph, &s);
@@ -656,7 +656,7 @@ errtype increment_anim(ulong num_units)
          curr_frames = (objs[id].subclass == CRITTER_SUBCLASS_CYBER) ? 4 : CritterProps[CPTRIP(triple)].frames[post];
          if ((post == ATTACKING_CRITTER_POSTURE) || (post == ATTACKING2_CRITTER_POSTURE))
          {
-            short att_frame;
+            int16_t att_frame;
 
             att_frame = (CritterProps[CPTRIP(triple)].fire_frame == 0) ?
                (curr_frames*3)/4 : CritterProps[CPTRIP(triple)].fire_frame;
@@ -761,7 +761,7 @@ errtype increment_anim(ulong num_units)
 
 void advance_animations(void)
 {
-   ulong time_diff;
+   uint32_t time_diff;
 
    time_diff = (player_struct.game_time - player_struct.last_anim_check);
    increment_anim(time_diff);
@@ -773,7 +773,7 @@ void advance_animations(void)
 // NULL pointer about a piece of data if you don't want it.
 bool anim_data_from_id(ObjID id, bool* reverse, bool* cycle)
 {
-   int i;
+   int32_t i;
 
    for(i=0;i<anim_counter;i++) {
       if(animlist[i].id==id) {
@@ -788,13 +788,13 @@ bool anim_data_from_id(ObjID id, bool* reverse, bool* cycle)
 }
 
 #define CHECK_ANIM_SPEED
-errtype add_obj_to_animlist(ObjID id, bool repeat, bool reverse, bool cycle, short speed, int cb_id, void *user_data, short cbtype)
+errtype add_obj_to_animlist(ObjID id, bool repeat, bool reverse, bool cycle, int16_t speed, int32_t cb_id, void *user_data, int16_t cbtype)
 {
-   int i=0;
+   int32_t i=0;
    bool replace_me = FALSE;
-   int use_counter = anim_counter;
+   int32_t use_counter = anim_counter;
 #ifdef CHECK_ANIM_SPEED
-   char count=0;
+   int8_t count=0;
 #endif
 
 
@@ -850,7 +850,7 @@ errtype add_obj_to_animlist(ObjID id, bool repeat, bool reverse, bool cycle, sho
 
 errtype remove_obj_from_animlist(ObjID id)
 {
-   int i = 0;
+   int32_t i = 0;
    AnimlistCB cb = NULL;
    void *ud;
 

@@ -121,7 +121,7 @@ fix pixratio_xy=FIX_UNIT;
 #define coor_to_pix(y) fix_mul(pixratio_yx,(y))
 #define pix_to_coor(y) fix_mul(pixratio_xy,(y))
 #else
-int pixratio_shf=0;
+int32_t pixratio_shf=0;
 #define coor_to_pix(y) ((y)<<pixratio_shf)
 #define pix_to_coor(y) ((y)>>pixratio_shf)
 #endif
@@ -145,24 +145,24 @@ int pixratio_shf=0;
 //-------------------
 // Prototypes
 //-------------------
-void amap_version_set(int id, int new_ver);
-void obj_draw(int xm, int ym, Obj *cobj, int tsize, int so, int color);
-void line_draw(int xm, int ym, Obj *cobj, int tsize, int full, int color);
-void obj_mess(curAMap *amptr, MapElem *curmp, int drw, int xm, int ym, int tsize, int pass);
-bool wall_seen_p(int wallcode, int csbits, MapElem *cur);
-void tile_draw(int xm, int ym, int tiletype, int size, int offs, int color);
-void wall_draw(int xm, int ym, int wallcode, int size, MapElem *cur);
-void draw_radius_obj(curAMap *amptr, short OtoF, int col, int zeroscrx,int zeroscry,int rad);
-void draw_full_obj(curAMap *amptr, short OtoF, int col, int zeroscrx,int zeroscry);
+void amap_version_set(int32_t id, int32_t new_ver);
+void obj_draw(int32_t xm, int32_t ym, Obj *cobj, int32_t tsize, int32_t so, int32_t color);
+void line_draw(int32_t xm, int32_t ym, Obj *cobj, int32_t tsize, int32_t full, int32_t color);
+void obj_mess(curAMap *amptr, MapElem *curmp, int32_t drw, int32_t xm, int32_t ym, int32_t tsize, int32_t pass);
+bool wall_seen_p(int32_t wallcode, int32_t csbits, MapElem *cur);
+void tile_draw(int32_t xm, int32_t ym, int32_t tiletype, int32_t size, int32_t offs, int32_t color);
+void wall_draw(int32_t xm, int32_t ym, int32_t wallcode, int32_t size, MapElem *cur);
+void draw_radius_obj(curAMap *amptr, int16_t OtoF, int32_t col, int32_t zeroscrx,int32_t zeroscry,int32_t rad);
+void draw_full_obj(curAMap *amptr, int16_t OtoF, int32_t col, int32_t zeroscrx,int32_t zeroscry);
 void amap_pixratio_set(fix ratio);
-void *amap_loc_to_sq(curAMap *amptr, int *x, int *y);
+void *amap_loc_to_sq(curAMap *amptr, int32_t *x, int32_t *y);
 void *amap_loc_get_note(void *map_sq);
-void amap_fixup_existing(int tolera, int delta);
-grs_bitmap *screen_automap_bitmap(char which_amap);
+void amap_fixup_existing(int32_t tolera, int32_t delta);
+grs_bitmap *screen_automap_bitmap(int8_t which_amap);
 
 
 // for now, create a default automap thingy
-void amap_version_set(int id, int new_ver)
+void amap_version_set(int32_t id, int32_t new_ver)
 {
    curAMap* amptr=oAMap(id);
 
@@ -190,7 +190,7 @@ void amap_version_set(int id, int new_ver)
    amptr->version_id=new_ver;
 }
 
-void automap_init(int version, int id)
+void automap_init(int32_t version, int32_t id)
 {
    curAMap *amptr;
    amptr=oAMap(id);
@@ -204,7 +204,7 @@ void automap_init(int version, int id)
    amptr->init=TRUE;
 }
 
-void amap_invalidate(int id)
+void amap_invalidate(int32_t id)
 {
    oAMap(id)->init=FALSE;
 }
@@ -217,7 +217,7 @@ void amap_settings_copy(curAMap* from, curAMap* to)
 
 
 #ifdef USE_COMPILED_WALLS
-bool wall_seen_p(int wallcode, int csbits, MapElem *cur)
+bool wall_seen_p(int32_t wallcode, int32_t csbits, MapElem *cur)
 {
    if(textprops[me_tmap_flr(cur)].force_dir==1)
       return 0;
@@ -227,7 +227,7 @@ bool wall_seen_p(int wallcode, int csbits, MapElem *cur)
    }
    else
    {
-      int mo1, mo2, lb1, lb2, ck1, ck2;
+      int32_t mo1, mo2, lb1, lb2, ck1, ck2;
       switch (me_tiletype(cur))
       {
       case TILE_SOLID_NW: mo1=-MAP_XSIZE; mo2= 1; ck1=FMK_NW; ck2=FMK_WW; break;
@@ -243,7 +243,7 @@ bool wall_seen_p(int wallcode, int csbits, MapElem *cur)
 }
 #else
 #include "fredge.h"
-bool wall_seen_p(int wallcode, int csbits, MapElem *cur)
+bool wall_seen_p(int32_t wallcode, int32_t csbits, MapElem *cur)
 {
    if(textprops[me_tmap_flr(cur)].force_dir)
       return 0;
@@ -271,7 +271,7 @@ bool wall_seen_p(int wallcode, int csbits, MapElem *cur)
 #endif
 
 #ifdef REAL_XIST_CHECK
-bool wall_xist_p(int wallcode, int csbits, MapElem *cur)
+bool wall_xist_p(int32_t wallcode, int32_t csbits, MapElem *cur)
 {
    if (wallcode<FMK_INT_INT)
 	   return ((csbits&(wallcode>>4))==0);       // wow, this is super wacky (tm)? punt diags and go with?
@@ -291,7 +291,7 @@ bool wall_xist_p(int wallcode, int csbits, MapElem *cur)
 #define wall_xist_p(wc,cs,cur) (wallcode<FMK_INT_INT)
 #endif
 
-void wall_draw(int xm, int ym, int wallcode, int size, MapElem *cur)
+void wall_draw(int32_t xm, int32_t ym, int32_t wallcode, int32_t size, MapElem *cur)
 {
    switch (wallcode)
    {
@@ -308,7 +308,7 @@ void wall_draw(int xm, int ym, int wallcode, int size, MapElem *cur)
    }
 }
 
-static void tri_draw(int x1, int y1, int x2, int y2, int x3, int y3, int color)
+static void tri_draw(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, int32_t color)
 {
    grs_vertex vert[3], *pervert[3];
 
@@ -326,7 +326,7 @@ static void tri_draw(int x1, int y1, int x2, int y2, int x3, int y3, int color)
    gr_poly(color,3,pervert);
 }
 
-void tile_draw(int xm, int ym, int tiletype, int size, int offs, int color)
+void tile_draw(int32_t xm, int32_t ym, int32_t tiletype, int32_t size, int32_t offs, int32_t color)
 {
    while ((offs>0)&&(size<2*offs)) offs--;
    switch(tiletype) {
@@ -348,7 +348,7 @@ void tile_draw(int xm, int ym, int tiletype, int size, int offs, int color)
    }
 }
 
-void obj_draw(int xm, int ym, Obj *cobj, int tsize, int so, int color)
+void obj_draw(int32_t xm, int32_t ym, Obj *cobj, int32_t tsize, int32_t so, int32_t color)
 {
    xm+=((cobj->loc.x&0xff)*tsize)>>8;
    ym-=((cobj->loc.y&0xff)*tsize)>>8;
@@ -357,7 +357,7 @@ void obj_draw(int xm, int ym, Obj *cobj, int tsize, int so, int color)
    am_rect(xm-so,ym-so,xm+so,ym+so);
 }
 
-void line_draw(int xm, int ym, Obj *cobj, int tsize, int full, int color)
+void line_draw(int32_t xm, int32_t ym, Obj *cobj, int32_t tsize, int32_t full, int32_t color)
 {
    if (cobj->loc.h&~0xc0) return;
    gr_set_fcolor(color);
@@ -388,14 +388,14 @@ void line_draw(int xm, int ym, Obj *cobj, int tsize, int full, int color)
 // need to add bridges... perhaps something for energy, switches and levers
 // works in three sorting passes: terrain type stuff (e.g., doors),
 // other "real" objects, and map notes and stuff.
-void obj_mess(curAMap *amptr, MapElem *curmp, int drw, int xm, int ym, int tsize, int pass)
+void obj_mess(curAMap *amptr, MapElem *curmp, int32_t drw, int32_t xm, int32_t ym, int32_t tsize, int32_t pass)
 {
    Obj *cobj;
    ObjID cobjid;
    ObjRefID curORef;
-   int col, px, md;
-   short w, h;
-   char buf[50];
+   int32_t col, px, md;
+   int16_t w, h;
+   int8_t buf[50];
    grs_font* fon;
 
    curORef=curmp->objRef;
@@ -415,8 +415,8 @@ void obj_mess(curAMap *amptr, MapElem *curmp, int drw, int xm, int ym, int tsize
             if(pass!=REAL_OBJ_PASS) break;
             if ((drw&(DRAW_MASK_FULL|DRAW_MASK_RAD))&&(amptr->flags&(AMAP_SHOW_CRIT|AMAP_SHOW_ROB)))
             {
-               static uchar base_col[3]={PURPLE_8_BASE+7,METALBLUE_8_BASE+7,BRIGHTBROWN_8_BASE+7};
-               uchar col;
+               static uint8_t base_col[3]={PURPLE_8_BASE+7,METALBLUE_8_BASE+7,BRIGHTBROWN_8_BASE+7};
+               uint8_t col;
 
                if ((cobj->subclass!=CRITTER_SUBCLASS_ROBOT)&&((amptr->flags&AMAP_SHOW_CRIT)==0))
                   break;
@@ -436,8 +436,8 @@ void obj_mess(curAMap *amptr, MapElem *curmp, int drw, int xm, int ym, int tsize
                if (drw&DRAW_MASK_SEEN)    // used to do FULL too
                   if ((cobj->loc.p|cobj->loc.b)==0)      // if pitched or banked, hit the road
                   {
-   	               int col=MAIZE_8_BASE;
-                     int trip=ID2TRIP(cobjid);
+   	               int32_t col=MAIZE_8_BASE;
+                     int32_t trip=ID2TRIP(cobjid);
    	               if ((trip>=SECRET_DOOR1_TRIPLE)&&(trip<=SECRET_DOOR3_TRIPLE)) col=GREEN_BASE+2;
                      if (USE_MODE(cobjid)==NULL_USE_MODE) col=GREEN_BASE+2;
 //                     if (trip==INVISO_DOOR_TRIPLE) col=AQUA_8_BASE+2;
@@ -517,9 +517,9 @@ void obj_mess(curAMap *amptr, MapElem *curmp, int drw, int xm, int ym, int tsize
 }  // end of objs loop
 
 
-void draw_radius_obj(curAMap *amptr, short OtoF, int col, int zeroscrx,int zeroscry,int rad)
+void draw_radius_obj(curAMap *amptr, int16_t OtoF, int32_t col, int32_t zeroscrx,int32_t zeroscry,int32_t rad)
 {
-   int xm, ym;
+   int32_t xm, ym;
 
    xm=zeroscrx+((objs[OtoF].loc.x<<amptr->zoom)>>8);
    ym=zeroscry-((objs[OtoF].loc.y<<amptr->zoom)>>8);
@@ -528,10 +528,10 @@ void draw_radius_obj(curAMap *amptr, short OtoF, int col, int zeroscrx,int zeros
    am_int_circle(xm,ym,(rad<<amptr->zoom)>>8);
 }
 
-void draw_full_obj(curAMap *amptr, short OtoF, int col, int zeroscrx,int zeroscry)
+void draw_full_obj(curAMap *amptr, int16_t OtoF, int32_t col, int32_t zeroscrx,int32_t zeroscry)
 {
-   int hd=objs[amptr->obj_to_follow].loc.h;     // should add pitch and bank, really
-   int xm, ym;
+   int32_t hd=objs[amptr->obj_to_follow].loc.h;     // should add pitch and bank, really
+   int32_t xm, ym;
    fix tx,ty,lx,ly,rx,ry;
    fix csin,ccos;
 
@@ -564,7 +564,7 @@ void draw_full_obj(curAMap *amptr, short OtoF, int col, int zeroscrx,int zeroscr
 
 
 #ifdef AMAP_SENS_TILEBOUND
-static char facecheck[] = { (1<<NORTH)|(1<<WEST), (1<<NORTH)|(1<<EAST),
+static int8_t facecheck[] = { (1<<NORTH)|(1<<WEST), (1<<NORTH)|(1<<EAST),
                             (1<<SOUTH)|(1<<EAST), (1<<SOUTH)|(1<<WEST) };
 #endif
 
@@ -592,19 +592,19 @@ void amap_pixratio_set(fix ratio)
 }
 #endif
 
-void amap_draw(curAMap *amptr, int expose)
+void amap_draw(curAMap *amptr, int32_t expose)
 {
-   int xc,yc,xm,ym,drw,static_drw,cv;  // loop control, so on
-   int zeroscrx,zeroscry,init_yc;      // x and y screen coordinate for 0,0 of map
-   int tsize=1<<amptr->zoom;
+   int32_t xc,yc,xm,ym,drw,static_drw,cv;  // loop control, so on
+   int32_t zeroscrx,zeroscry,init_yc;      // x and y screen coordinate for 0,0 of map
+   int32_t tsize=1<<amptr->zoom;
 #ifdef AMAP_SENS_TILEBOUND
-   int facemask;
+   int32_t facemask;
 #endif
-   int mt, pass;
-   ushort sensor_x,sensor_y;
+   int32_t mt, pass;
+   uint16_t sensor_x,sensor_y;
    MapElem *curmp=MAP_GET_XY(0,0);
    fix amrh, amrw;
-   int max_xc,max_yc,xbase,crnr_x,crnr_y;             // am w and h radius
+   int32_t max_xc,max_yc,xbase,crnr_x,crnr_y;             // am w and h radius
    MapElem *mapybase, *init_mapybase;
 
    if (amptr->flags&AMAP_TRACK_OBJ)
@@ -671,8 +671,8 @@ void amap_draw(curAMap *amptr, int expose)
                  tile_draw(xm,ym,mt,tsize,1,BROWN_8_BASE+4);
                if (amptr->flags&AMAP_SHOW_HAZ)
                {              // bio, rad, both
-                  static uchar col_map[]={YELLOW_8_BASE+6,RED_8_BASE+6,ORANGE_8_BASE+5};
-                  int hv=0;
+                  static uint8_t col_map[]={YELLOW_8_BASE+6,RED_8_BASE+6,ORANGE_8_BASE+5};
+                  int32_t hv=0;
                   if (level_gamedata.hazard.zerogbio==0)
 	                  if (me_hazard_bio_x(curmp)) hv=1;
                   if (me_hazard_rad_x(curmp)) hv|=2;
@@ -695,7 +695,7 @@ void amap_draw(curAMap *amptr, int expose)
 
          if ((me_tiletype(curmp)!=TILE_SOLID)&&(drw!=0))
          {
-            int csbits=me_clearsolid(curmp), loop;
+            int32_t csbits=me_clearsolid(curmp), loop;
 
 #ifndef REAL_XIST_CHECK
             if (drw&DRAW_MASK_TERR)
@@ -797,7 +797,7 @@ void amap_draw(curAMap *amptr, int expose)
       draw_full_obj(amptr,amptr->obj_to_follow,PURPLE_8_BASE+3,zeroscrx,zeroscry);
 #ifdef AMAP_SENS_CIRCLE
    if(drw & DRAW_MASK_SENS) {
-      int r=amptr->sensor_rad;
+      int32_t r=amptr->sensor_rad;
       // accound for needing to see the center of square and
       // the fact that we're an octagon, not a circle.
       r = (r*89)/100 - (1<<8)*707/1000;
@@ -813,9 +813,9 @@ void amap_draw(curAMap *amptr, int expose)
 // returns NULL for not in map, else a mapelem *
 // this can be checked for mapnotes, or one can be added
 // functions to do these things exist as well
-void *amap_loc_to_sq(curAMap *amptr, int *x, int *y)
+void *amap_loc_to_sq(curAMap *amptr, int32_t *x, int32_t *y)
 {
-   int offsx, offsy;
+   int32_t offsx, offsy;
    MapElem *curmp=MAP_MAP;
    fix tmpy;
 
@@ -862,7 +862,7 @@ void *amap_loc_get_note(void *map_sq)
 // returns MapElem of the square if NO_NOTE
 // returns NULL if OFF_MAP, note this line was shorter than the others
 // returns Obj of the map_note if HAVE_NOTE
-void *amap_loc_note_check(curAMap *amptr, int *x, int *y, int *to_do)
+void *amap_loc_note_check(curAMap *amptr, int32_t *x, int32_t *y, int32_t *to_do)
 {
    void *map_note;
    MapElem *curmp= (MapElem *)amap_loc_to_sq(amptr,x,y);
@@ -875,7 +875,7 @@ void *amap_loc_note_check(curAMap *amptr, int *x, int *y, int *to_do)
    map_note=amap_loc_get_note(curmp);
    if (map_note==NULL)
    {  // check around, in the traditional way - big zoom = small map
-   	int extloop, inloop, clen, dvec[2]={0,1}, rad=2*(3-amptr->zoom), mx=*x, my=*y;
+   	int32_t extloop, inloop, clen, dvec[2]={0,1}, rad=2*(3-amptr->zoom), mx=*x, my=*y;
 //      mprintf("Looking around %d from %x %x dv %d %d\n",rad,mx,my,dvec[0],dvec[1]);
       for (clen=1; clen<rad; clen++) // for each radius
 			for (extloop=0; extloop<2; extloop++) // two of each
@@ -910,7 +910,7 @@ hack_breakout:
    }
 }
 
-bool amap_flags(curAMap *amptr, int flags, int set)
+bool amap_flags(curAMap *amptr, int32_t flags, int32_t set)
 {
    flags&=amptr->avail_flags;
    if (flags==0) return FALSE;
@@ -928,7 +928,7 @@ bool amap_flags(curAMap *amptr, int flags, int set)
    return TRUE;
 }
 
-bool amap_zoom(curAMap *amptr, bool set, int zoom_delta)
+bool amap_zoom(curAMap *amptr, bool set, int32_t zoom_delta)
 {
    if (set)
       amptr->zoom=zoom_delta;
@@ -943,9 +943,9 @@ bool amap_zoom(curAMap *amptr, bool set, int zoom_delta)
    return TRUE;
 }
 
-void amap_pan(curAMap *amptr, int dir, int* dist)
+void amap_pan(curAMap *amptr, int32_t dir, int32_t* dist)
 {
-   int d;
+   int32_t d;
    d=*dist>>amptr->zoom;
    *dist-=d<<amptr->zoom;
    switch (dir)
@@ -958,16 +958,16 @@ void amap_pan(curAMap *amptr, int dir, int* dist)
    amptr->flags&=~AMAP_TRACK_OBJ;
 }
 
-void *amap_deal_with_map_click(curAMap *amptr, int *x, int *y)
+void *amap_deal_with_map_click(curAMap *amptr, int32_t *x, int32_t *y)
 {
-   int todo;
+   int32_t todo;
    void *datum;
    // actually clicked on the map, we should deal...
    datum=amap_loc_note_check(amptr,x,y,&todo);
    switch (todo)
    {
    case AMAP_NO_NOTE:   amptr->note_obj=NULL; return datum;
-   case AMAP_HAVE_NOTE: amptr->note_obj=(int)datum; return AMAP_NOTE_HACK_PTR;
+   case AMAP_HAVE_NOTE: amptr->note_obj=(int32_t)datum; return AMAP_NOTE_HACK_PTR;
 	}
 //   case AMAP_OFF_MAP:   return NULL;
    return NULL;
@@ -975,36 +975,36 @@ void *amap_deal_with_map_click(curAMap *amptr, int *x, int *y)
 
 
 // string hacks
-char amap_strings[AMAP_STRING_SIZE];
-char *amap_str_ptr=&amap_strings[0];
+int8_t amap_strings[AMAP_STRING_SIZE];
+int8_t *amap_str_ptr=&amap_strings[0];
 
-char *amap_str_next(void)
+int8_t *amap_str_next(void)
 {
    return amap_str_ptr;
 }
 
-void amap_str_grab(char *str)
+void amap_str_grab(int8_t *str)
 {
    amap_str_ptr=str+strlen(str)+1;
 }
 
-int amap_str_deref(char *str)
+int32_t amap_str_deref(int8_t *str)
 {
    return str-&amap_strings[0];  // get offset into string cluster
 }
 
-char *amap_str_reref(int offs)
+int8_t *amap_str_reref(int32_t offs)
 {
    return (&amap_strings[0])+offs;  // go offset into string cluster
 }
 
-void amap_str_startup(int magic_num)
+void amap_str_startup(int32_t magic_num)
 {
    amap_str_ptr = &amap_strings[0] + magic_num;
 }
 
 
-void amap_fixup_existing(int tolera, int delta)
+void amap_fixup_existing(int32_t tolera, int32_t delta)
 {
    ObjSpecID pmo;
    ObjID cur_obj;
@@ -1018,11 +1018,11 @@ void amap_fixup_existing(int tolera, int delta)
 }
 
 // simply recompact
-void amap_str_delete(char *toast_str)
+void amap_str_delete(int8_t *toast_str)
 {
-   int del_len=strlen(toast_str)+1;        // how much to delete
-   char *s=toast_str+del_len;              // beginning of real data
-   int recompact_len=amap_str_ptr-s;       // how much to copy around
+   int32_t del_len=strlen(toast_str)+1;        // how much to delete
+   int8_t *s=toast_str+del_len;              // beginning of real data
+   int32_t recompact_len=amap_str_ptr-s;       // how much to copy around
    if (s==amap_str_ptr)
       amap_str_ptr=toast_str;              // we are freeing the last created string
    else
@@ -1033,7 +1033,7 @@ void amap_str_delete(char *toast_str)
    }
 }
 
-bool amap_get_note(curAMap *amptr, char *buf)
+bool amap_get_note(curAMap *amptr, int8_t *buf)
 {
    bool retval = TRUE;
 // later, do this for real
@@ -1042,10 +1042,10 @@ bool amap_get_note(curAMap *amptr, char *buf)
    if (amptr->note_obj!=NULL)
    {
 	   strcpy(buf,"map note 0000");
-      buf[9] ='0'+(((int)amptr->note_obj)/1000)%10;
-      buf[10]='0'+(((int)amptr->note_obj)/100)%10;
-      buf[11]='0'+(((int)amptr->note_obj)/10)%10;
-      buf[12]='0'+(((int)amptr->note_obj)%10);
+      buf[9] ='0'+(((int32_t)amptr->note_obj)/1000)%10;
+      buf[10]='0'+(((int32_t)amptr->note_obj)/100)%10;
+      buf[11]='0'+(((int32_t)amptr->note_obj)/10)%10;
+      buf[12]='0'+(((int32_t)amptr->note_obj)%10);
    }
 #else
    if (amptr->note_obj!=NULL)
@@ -1059,7 +1059,7 @@ bool amap_get_note(curAMap *amptr, char *buf)
    return retval;
 }
 
-grs_bitmap *screen_automap_bitmap(char)
+grs_bitmap *screen_automap_bitmap(int8_t)
 {
    extern grs_bitmap *static_bitmap;
    return(static_bitmap);

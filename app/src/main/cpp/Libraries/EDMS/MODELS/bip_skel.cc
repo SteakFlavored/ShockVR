@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Takes data from the Biped models and fills out a pretransformed skeleton, which
 //	requires only camera rotation (NOT LOCAL) and translation before rendering...
@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	========
 extern Q	S[MAX_OBJ][7][4],					//State info...
 		I[MAX_OBJ][DOF_MAX];					//Private info...
-extern int	no_no_not_me[MAX_OBJ];
+extern int32_t	no_no_not_me[MAX_OBJ];
 
 //	Here is where the skeleton lives for the biped...
 //	=================================================
@@ -64,19 +64,19 @@ static Q	sin_xi_alpha = 0,
 
 //	Here are the variables for the transformations...
 //	=================================================
-static Q 	cos_alpha, 
+static Q 	cos_alpha,
 		cos_beta,
-		cos_gamma, 
-		sin_alpha, 
+		cos_gamma,
+		sin_alpha,
 		sin_beta,
-		sin_gamma; 
+		sin_gamma;
 
 
 
 
 //	Now just do the work...
 //	=======================
-void make_biped_skeleton( int object ) {
+void make_biped_skeleton( int32_t object ) {
 
 
 //	This globalizes on the state rather that argument vector...
@@ -104,7 +104,7 @@ Q	xi_alpha = utility_pointer[object][27],
 	if ( I[object][30] != BIPED ) return;
 
 //	Got anything new for me?
-//	------------------------	
+//	------------------------
 //	if ( no_no_not_me[object] == 0 ) return;
 
 
@@ -149,9 +149,9 @@ Q	xi_alpha = utility_pointer[object][27],
 //	----------------
 	utility_pointer[object][18] = I[object][23];	//Right then left...
 	utility_pointer[object][21] =-I[object][23];
-	utility_pointer[object][19] = 
-	utility_pointer[object][20] = 
-	utility_pointer[object][22] = 
+	utility_pointer[object][19] =
+	utility_pointer[object][20] =
+	utility_pointer[object][22] =
 	utility_pointer[object][23] = 0;
 
 	globalize_S(
@@ -168,16 +168,16 @@ Q	xi_alpha = utility_pointer[object][27],
 
 //	Center o' mass...
 //	-----------------
-	utility_pointer[object][24] = 
-	utility_pointer[object][25] = 
+	utility_pointer[object][24] =
+	utility_pointer[object][25] =
 	utility_pointer[object][26] = 0;
 
 
 
 //	Neck...
 //	-------
-	sincos( -xi_alpha, &sin_xi_alpha, &cos_xi_alpha );	
-	sincos( -xi_beta,  &sin_xi_beta,  &cos_xi_beta  );	
+	sincos( -xi_alpha, &sin_xi_alpha, &cos_xi_alpha );
+	sincos( -xi_beta,  &sin_xi_beta,  &cos_xi_beta  );
 
 	utility_pointer[object][27] = I[object][26]*sin_xi_alpha;
 	utility_pointer[object][28] = I[object][26]*sin_xi_beta;
@@ -307,7 +307,7 @@ Q	x = X,
 
 		Y    =     x*( cos_alpha*sin_gamma )
 		     +  y*( cos_beta*cos_gamma + sin_alpha*sin_beta*sin_gamma )
-		     +  z*( cos_beta*sin_alpha*sin_gamma - cos_gamma*sin_beta );		
+		     +  z*( cos_beta*sin_alpha*sin_gamma - cos_gamma*sin_beta );
 
 		Z    = 	x*( -sin_alpha )
 		     +  y*( cos_alpha*sin_beta )

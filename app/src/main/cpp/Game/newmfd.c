@@ -99,27 +99,27 @@ grs_canvas _offscreen_mfd, _fullscreen_mfd;
 // Prototypes
 // -----------
 void mfd_language_change(void);
-void mfd_set_slot(ubyte mfd_id, ubyte newSlot, bool OnOff);
-void mfd_draw_all_buttons(ubyte mfd_id);
+void mfd_set_slot(uint8_t mfd_id, uint8_t newSlot, bool OnOff);
+void mfd_draw_all_buttons(uint8_t mfd_id);
 errtype mfd_update_screen_mode();
 errtype mfd_clear_all();
 void mfd_change_fullscreen(bool on);
 
-void mfd_clear_func(ubyte func_id);
-int mfd_choose_func(int my_func, int my_slot);
-void mfd_zoom_rect(LGRect* start, int mfdnum);
-void fullscreen_refresh_mfd(ubyte mfd_id);
+void mfd_clear_func(uint8_t func_id);
+int32_t mfd_choose_func(int32_t my_func, int32_t my_slot);
+void mfd_zoom_rect(LGRect* start, int32_t mfdnum);
+void fullscreen_refresh_mfd(uint8_t mfd_id);
 
-bool mfd_object_cursor_handler(uiEvent* ev, LGRegion*, int which_mfd);
-bool mfd_scan_opacity(int mfd_id, LGPoint epos);
+bool mfd_object_cursor_handler(uiEvent* ev, LGRegion*, int32_t which_mfd);
+bool mfd_scan_opacity(int32_t mfd_id, LGPoint epos);
 
-void mfd_draw_button_panel(ubyte mfd_id);
-void mfd_draw_button(ubyte mfd_id, ubyte b);
-void mfd_select_button(int which_panel, int which_button);
+void mfd_draw_button_panel(uint8_t mfd_id);
+void mfd_draw_button(uint8_t mfd_id, uint8_t b);
+void mfd_select_button(int32_t which_panel, int32_t which_button);
 
-void mfd_default_mru( uchar func );
-void set_mfd_from_defaults(int mfd_id, uchar func, uchar slot);
-void cap_mfds_with_func(uchar func, uchar max);
+void mfd_default_mru( uint8_t func );
+void set_mfd_from_defaults(int32_t mfd_id, uint8_t func, uint8_t slot);
+void cap_mfds_with_func(uint8_t func, uint8_t max);
 
 
 //KLC  dbg_mfd_state used to be here.
@@ -137,7 +137,7 @@ void cap_mfds_with_func(uchar func, uchar max);
 
 void init_newmfd()
 {
-   ubyte i;
+   uint8_t i;
 
    // Set the default MFD function
    set_default_to_func(MFD_LEFT,  MFD_EMPTY_FUNC);
@@ -171,8 +171,8 @@ void init_newmfd()
 // as spec'd in last nights warren/artist/programmers meeting (SPAZ 8/5)
 
 
-static char* cursor_strings[MFD_NUM_BTTNS];
-static char  cursor_strbuf[128];
+static int8_t* cursor_strings[MFD_NUM_BTTNS];
+static int8_t  cursor_strbuf[128];
 
 
 void mfd_language_change(void)
@@ -182,7 +182,7 @@ void mfd_language_change(void)
 
 void init_newmfd_button_cursors()
 {
-   int i;
+   int32_t i;
    mfd_language_change();
    for (i = 0; i < NUM_MFDS; i++)
    {
@@ -226,8 +226,8 @@ void screen_init_mfd(bool fullscrn)
 {
    static bool done_init = FALSE;
    FrameDesc *f;
-   int id;
-   int lval, rval;
+   int32_t id;
+   int32_t lval, rval;
 
    lval = MFD_LEFT;                    // Screen callbacks need to know their
    rval = MFD_RIGHT;                   // left from their right, thusly
@@ -310,8 +310,8 @@ void screen_init_mfd(bool fullscrn)
       // Pull in the background bitmap
       f = (FrameDesc*)RefLock(REF_IMG_bmBlankMFD);
       mfd_background = f->bm;
-//KLC      mfd_background.bits = (uchar *)NewPtr(MAX_WD(MFD_VIEW_WID)*MAX_HT(MFD_VIEW_HGT));
-      mfd_background.bits = (uchar *)NewPtr(f->bm.w * f->bm.h);
+//KLC      mfd_background.bits = (uint8_t *)NewPtr(MAX_WD(MFD_VIEW_WID)*MAX_HT(MFD_VIEW_HGT));
+      mfd_background.bits = (uint8_t *)NewPtr(f->bm.w * f->bm.h);
       memcpy(mfd_background.bits,(f+1),f->bm.w * f->bm.h);
       RefUnlock(REF_IMG_bmBlankMFD);
 
@@ -418,7 +418,7 @@ void keyboard_init_mfd()
 //
 // Sets a slot to point to a given function struct, and sets status too.
 
-void set_slot_to_func(ubyte snum, ubyte fnum, MFD_Status stat)
+void set_slot_to_func(uint8_t snum, uint8_t fnum, MFD_Status stat)
 {
 
       player_struct.mfd_all_slots[snum] = fnum;
@@ -435,7 +435,7 @@ void set_slot_to_func(ubyte snum, ubyte fnum, MFD_Status stat)
 // Set a functions last update to current game time, clear its CHANGEBIT
 // field if set.
 
-void mfd_clear_func(ubyte func_id)
+void mfd_clear_func(uint8_t func_id)
 {
    mfd_funcs[func_id].last = player_struct.game_time;
 
@@ -455,11 +455,11 @@ void mfd_clear_func(ubyte func_id)
 // status as demanded.
 
 //#define MFD_STEREO_HACK_MODE  ((i6d_device == I6D_CTM) ? 6 : 7)
-void mfd_notify_func(ubyte fnum, ubyte snum, bool Grab, MFD_Status stat, bool Full)
+void mfd_notify_func(uint8_t fnum, uint8_t snum, bool Grab, MFD_Status stat, bool Full)
 {
-   ubyte i, j;
-   int oldf = player_struct.mfd_all_slots[snum];
-   byte mfd_but[NUM_MFDS];
+   uint8_t i, j;
+   int32_t oldf = player_struct.mfd_all_slots[snum];
+   int8_t mfd_but[NUM_MFDS];
 
    if (fnum == NOTIFY_ANY_FUNC) fnum = oldf;
 
@@ -475,10 +475,10 @@ void mfd_notify_func(ubyte fnum, ubyte snum, bool Grab, MFD_Status stat, bool Fu
    player_struct.mfd_func_status[fnum]           |= MFD_CHANGEBIT;
    if (Full)
    {
-      void mfd_default_mru(uchar func);
+      void mfd_default_mru(uint8_t func);
 #ifdef SVGA_SUPPORT
-      uchar old_over = gr2ss_override;
-      short temp;
+      uint8_t old_over = gr2ss_override;
+      int16_t temp;
       gr2ss_override = OVERRIDE_ALL;
       ss_set_hack_mode(MFD_STEREO_HACK_MODE,&temp);
 #endif
@@ -537,9 +537,9 @@ void mfd_notify_func(ubyte fnum, ubyte snum, bool Grab, MFD_Status stat, bool Fu
 //
 // Returns an MFD's slot's function.
 
-ubyte mfd_get_func(ubyte mfd_id, ubyte s)
+uint8_t mfd_get_func(uint8_t mfd_id, uint8_t s)
 {
-   ubyte slot_num;
+   uint8_t slot_num;
 
    slot_num = player_struct.mfd_virtual_slots[mfd_id][s];
 
@@ -556,13 +556,13 @@ ubyte mfd_get_func(ubyte mfd_id, ubyte s)
 // previously there, or any change-related state.  Permits usage from both
 // initializer and slot-changer.
 
-void mfd_set_slot(ubyte mfd_id, ubyte newSlot, bool OnOff)
+void mfd_set_slot(uint8_t mfd_id, uint8_t newSlot, bool OnOff)
 {
 	MFD_Func *f;
-	ubyte old_index;
-	ubyte f_id;
-	ubyte new_slot;
-	ubyte old_slot;
+	uint8_t old_index;
+	uint8_t f_id;
+	uint8_t new_slot;
+	uint8_t old_slot;
 
 	old_index = player_struct.mfd_current_slots[mfd_id];
 	old_slot  = player_struct.mfd_virtual_slots[mfd_id][old_index];
@@ -571,8 +571,8 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, bool OnOff)
 	if (!OnOff && ((player_struct.mfd_slot_status[old_slot] != MFD_EMPTY) ||
 		(player_struct.mfd_slot_status[new_slot] != MFD_EMPTY)))
 	{
-		uchar old_over = gr2ss_override;
-		short temp;
+		uint8_t old_over = gr2ss_override;
+		int16_t temp;
 		gr2ss_override = OVERRIDE_ALL;
 		ss_set_hack_mode(MFD_STEREO_HACK_MODE,&temp);
 		f_id = mfd_get_func(mfd_id, newSlot);
@@ -630,9 +630,9 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, bool OnOff)
 //
 // Shifts an mfd over to a new slot.
 
-void mfd_change_slot(ubyte mfd_id, ubyte new_slot)
+void mfd_change_slot(uint8_t mfd_id, uint8_t new_slot)
 {
-   ubyte old;
+   uint8_t old;
 
    if (global_fullmap->cyber && (new_slot != MFD_INFO_SLOT || mfd_id != MFD_RIGHT)) return; // no slots in c-space
    old = player_struct.mfd_current_slots[mfd_id];
@@ -663,16 +663,16 @@ void mfd_change_slot(ubyte mfd_id, ubyte new_slot)
 // Picks an MFD to grab (i.e. the MFD whose information is
 // lowest priority.  Returns the mfd id.
 
-int mfd_grab(void)
+int32_t mfd_grab(void)
 {
-   int i;
-   ubyte min = 0;
-   int id;
+   int32_t i;
+   uint8_t min = 0;
+   int32_t id;
    for (i = 0; i < NUM_MFDS; i++)
    {
-      ubyte slot = player_struct.mfd_current_slots[i];
-      ubyte func = mfd_get_func(i,slot);
-      ubyte p = mfd_funcs[func].priority;
+      uint8_t slot = player_struct.mfd_current_slots[i];
+      uint8_t func = mfd_get_func(i,slot);
+      uint8_t p = mfd_funcs[func].priority;
       if (p > min)
       {
          min = p;
@@ -697,12 +697,12 @@ int mfd_grab(void)
 // assume we necessarily actually want to grab the mfd it returns, and
 // therefore does not restore to other mfds on the same slot.
 //
-int mfd_choose_func(int my_func, int my_slot)
+int32_t mfd_choose_func(int32_t my_func, int32_t my_slot)
 {
-   int i;
-   ubyte min = 0;
-   ubyte slot, func, p;
-   int lowid, retval, sameslotid=-1;
+   int32_t i;
+   uint8_t min = 0;
+   uint8_t slot, func, p;
+   int32_t lowid, retval, sameslotid=-1;
 
    for (i = 0; i < NUM_MFDS; i++)
    {
@@ -726,10 +726,10 @@ int mfd_choose_func(int my_func, int my_slot)
    return retval;
 }
 
-int mfd_grab_func(int my_func, int my_slot)
+int32_t mfd_grab_func(int32_t my_func, int32_t my_slot)
 {
-   ubyte mfd,slot;
-   int i;
+   uint8_t mfd,slot;
+   int32_t i;
 
    mfd=mfd_choose_func(my_func, my_slot);
    slot=player_struct.mfd_current_slots[mfd];
@@ -759,9 +759,9 @@ int mfd_grab_func(int my_func, int my_slot)
 // function which just finds out if some mfd has this current function,
 // which is what I need, and it's loads more generally useful.  Har har.
 
-bool mfd_yield_func(int func, int* mfd_id)
+bool mfd_yield_func(int32_t func, int32_t* mfd_id)
 {
-   int id;
+   int32_t id;
 
    for( id=(*mfd_id != NUM_MFDS) ?(*mfd_id)+1:0 ; id<NUM_MFDS ; id++) {
       if(mfd_get_active_func(id)==func) {
@@ -773,12 +773,12 @@ bool mfd_yield_func(int func, int* mfd_id)
 }
 
 // -----------------------------------------------------------
-// mfd_zoom_rect(Rect* start, int mfd)
+// mfd_zoom_rect(Rect* start, int32_t mfd)
 //
 // Zooms a rect from the specified starting point to the
 // the indicated rect.
 
-void mfd_zoom_rect(LGRect* start, int mfdnum)
+void mfd_zoom_rect(LGRect* start, int32_t mfdnum)
 {
    extern void zoom_rect(LGRect* start, LGRect* end);
    LGRect r1, r2;
@@ -802,11 +802,11 @@ void mfd_zoom_rect(LGRect* start, int mfdnum)
 extern bool inventory_add_object(ObjID,bool);
 bool object_button_down = FALSE;
 
-bool mfd_object_cursor_handler(uiEvent* ev, LGRegion*, int which_mfd)
+bool mfd_object_cursor_handler(uiEvent* ev, LGRegion*, int32_t which_mfd)
 {
    bool retval = FALSE;
-   int trip, mid;
-   int new_slot=-1;
+   int32_t trip, mid;
+   int32_t new_slot=-1;
    ObjID obj = object_on_cursor;
    if (ev->type != UI_EVENT_MOUSE) return TRUE;
    if (ev->subtype & (MOUSE_RDOWN|MOUSE_LDOWN))
@@ -816,7 +816,7 @@ bool mfd_object_cursor_handler(uiEvent* ev, LGRegion*, int which_mfd)
    }
    if ((ev->subtype & (MOUSE_LUP|MOUSE_RUP)) && object_button_down)
    {
-      extern uchar gump_num_objs;
+      extern uint8_t gump_num_objs;
       bool is_gump = mfd_get_active_func(which_mfd)==MFD_GUMP_FUNC && gump_num_objs!=0;
 
       object_button_down = FALSE;
@@ -870,12 +870,12 @@ bool mfd_object_cursor_handler(uiEvent* ev, LGRegion*, int which_mfd)
 
 #define SEARCH_MARGIN 2
 
-bool mfd_scan_opacity(int mfd_id, LGPoint epos)
+bool mfd_scan_opacity(int32_t mfd_id, LGPoint epos)
 {
    bool retval = FALSE;
    LGPoint pos = epos;
-   short x,y;
-   grs_canvas* cv = ((int)mfd_id == MFD_RIGHT) ?  &_fullscreen_mfd : &_offscreen_mfd;
+   int16_t x,y;
+   grs_canvas* cv = ((int32_t)mfd_id == MFD_RIGHT) ?  &_fullscreen_mfd : &_offscreen_mfd;
 
    pos.x -= mfd[mfd_id].reg.abs_x;
    pos.y -= mfd[mfd_id].reg.abs_y;
@@ -893,8 +893,8 @@ bool mfd_scan_opacity(int mfd_id, LGPoint epos)
 bool mfd_view_callback_full(uiEvent *e, LGRegion *r, void *udata)
 {
    bool retval = FALSE;
-   uchar mask;
-   if ((int)udata == MFD_RIGHT)
+   uint8_t mask;
+   if ((int32_t)udata == MFD_RIGHT)
       mask = FULL_R_MFD_MASK;
    else
       mask = FULL_L_MFD_MASK;
@@ -903,7 +903,7 @@ bool mfd_view_callback_full(uiEvent *e, LGRegion *r, void *udata)
       retval = mfd_view_callback(e,r,udata);
       if (!retval)
       {
-         retval = mfd_scan_opacity((int)udata,e->pos);
+         retval = mfd_scan_opacity((int32_t)udata,e->pos);
       }
    }
    return retval;
@@ -911,16 +911,16 @@ bool mfd_view_callback_full(uiEvent *e, LGRegion *r, void *udata)
 
 bool mfd_view_callback(uiEvent *e, LGRegion *r, void *udata)
 {
-   int i;
-   int which_mfd;
+   int32_t i;
+   int32_t which_mfd;
    MFD *m;
-   ubyte func_id;
+   uint8_t func_id;
    MFD_Func *f;
 
    LGRegion dummy; // dummy
    dummy = *r;   // dummy
 
-   which_mfd = (int) udata;
+   which_mfd = (int32_t) udata;
 
    // We should pass on info to the appropriate slot's current handler
    if (which_mfd == MFD_LEFT) m = &mfdL;
@@ -975,11 +975,11 @@ bool mfd_view_callback(uiEvent *e, LGRegion *r, void *udata)
 //
 // The callback for the MFD button panels.  Triggered by mouseclicks inside
 // the button panels.
-int last_mfd_cnum[NUM_MFDS] = {-1,-1};
+int32_t last_mfd_cnum[NUM_MFDS] = {-1,-1};
 bool mfd_button_callback(uiEvent *e, LGRegion *r, void *udata)
 {
    uiMouseEvent *m;
-   int cnum, which_panel, which_button;
+   int32_t cnum, which_panel, which_button;
    div_t result;
 
 #ifndef NO_DUMMIES
@@ -994,7 +994,7 @@ bool mfd_button_callback(uiEvent *e, LGRegion *r, void *udata)
    else
    {
       m           = (uiMouseEvent *) e;
-      which_panel = (int)            udata;
+      which_panel = (int32_t)            udata;
 
       // Divide mouseclick height to discover which button we meant
       result = div((m->pos.y - MFD_BTTN_Y), MFD_BTTN_SZ + MFD_BTTN_BLNK);
@@ -1037,22 +1037,22 @@ bool mfd_button_callback(uiEvent *e, LGRegion *r, void *udata)
 //
 // The callback for the MFD button panels, as triggered by function keys
 
-bool mfd_button_callback_kb(short keycode, ulong context, void *data)
+bool mfd_button_callback_kb(int16_t keycode, uint32_t context, void *data)
 {
-   int which_panel, which_button;
-   int fkeynum;
+   int32_t which_panel, which_button;
+   int32_t fkeynum;
 
    if (!global_fullmap->cyber)
    {
-      fkeynum = (int) context; // dummy funcs
-      fkeynum = (int) keycode;
+      fkeynum = (int32_t) context; // dummy funcs
+      fkeynum = (int32_t) keycode;
 
-      fkeynum = (int) data;
+      fkeynum = (int32_t) data;
 
       if (fkeynum >= MFD_NUM_VIRTUAL_SLOTS) which_panel = MFD_RIGHT;
       else                                  which_panel = MFD_LEFT;
 
-      which_button = ((int)data) % MFD_NUM_VIRTUAL_SLOTS;
+      which_button = ((int32_t)data) % MFD_NUM_VIRTUAL_SLOTS;
 
       mfd_select_button(which_panel, which_button);
    }
@@ -1069,11 +1069,11 @@ bool mfd_button_callback_kb(short keycode, ulong context, void *data)
 // The passed argument is the equivalent of the function key number, even
 // if we got it from the mouse handler.
 
-void mfd_select_button(int which_panel, int which_button)
+void mfd_select_button(int32_t which_panel, int32_t which_button)
 {
    // Play sound effect
-   ubyte old = player_struct.mfd_current_slots[which_panel];
-   int hnd;
+   uint8_t old = player_struct.mfd_current_slots[which_panel];
+   int32_t hnd;
    hnd = play_digi_fx(SFX_MFD_BUTTON,1);
    if (hnd >= 0)
    {
@@ -1091,7 +1091,7 @@ void mfd_select_button(int which_panel, int which_button)
       full_visible &= ~visible_mask(which_panel);
    }
    else
-      mfd_change_slot((ubyte) which_panel, (ubyte) which_button);
+      mfd_change_slot((uint8_t) which_panel, (uint8_t) which_button);
 
    return;
 }
@@ -1106,11 +1106,11 @@ void mfd_select_button(int which_panel, int which_button)
 void mfd_update()
 {
    static bool LastFlash = FALSE;
-   ubyte   steps_cache[NUM_MFDS] = { 0, 0};
+   uint8_t   steps_cache[NUM_MFDS] = { 0, 0};
 
-   int    i, j;
-   ubyte  slots[NUM_MFDS];
-   ubyte   status_cache[NUM_MFDS];
+   int32_t    i, j;
+   uint8_t  slots[NUM_MFDS];
+   uint8_t   status_cache[NUM_MFDS];
 
       Flash = (bool) ((player_struct.game_time/MFD_BTTN_FLASH_TIME) %2);
 
@@ -1150,14 +1150,14 @@ void mfd_update()
    // Build the status cache.
    for(i = 0; i < NUM_MFDS; i++)
    {
-      ubyte f_id = mfd_get_active_func(i);
+      uint8_t f_id = mfd_get_active_func(i);
       MFD_Func* f = &(mfd_funcs[f_id]);
       status_cache[i] = (player_struct.mfd_func_status[f_id] );
       if (f->flags & MFD_INCREMENTAL)
       {
-         long deltat = (player_struct.game_time - f->last)>>4;
-         ubyte increment = (player_struct.mfd_func_status[f_id] >> 4);
-         ubyte num_steps = ( increment > 0) ? max(0,deltat/increment) : 0;
+         int32_t deltat = (player_struct.game_time - f->last)>>4;
+         uint8_t increment = (player_struct.mfd_func_status[f_id] >> 4);
+         uint8_t num_steps = ( increment > 0) ? max(0,deltat/increment) : 0;
          steps_cache[i] = num_steps;
          chg_set_flg(MFD_UPDATE);
       }
@@ -1170,7 +1170,7 @@ void mfd_update()
    {
       if ((status_cache[i] & (MFD_CHANGEBIT|MFD_CHANGEBIT_FULL)) || steps_cache[i] > 0)
       {
-         ubyte f_id = mfd_get_active_func(i);
+         uint8_t f_id = mfd_get_active_func(i);
          mfd_clear_func(f_id);
          mfd_update_current_slot(i,status_cache[i],steps_cache[i]);
       }
@@ -1184,15 +1184,15 @@ void mfd_update()
 // See if we need to update anything in the current slot being
 // viewed in an MFD.  Returns TRUE if it updated a function.
 
-bool mfd_update_current_slot(ubyte mfd_id,ubyte status,ubyte num_steps)
+bool mfd_update_current_slot(uint8_t mfd_id,uint8_t status,uint8_t num_steps)
 {
    MFD_Func *f;
-   ubyte f_id;
-   ubyte control;
+   uint8_t f_id;
+   uint8_t control;
    MFD *m;
 
    extern ObjID check_panel_ref(bool puntme);
-   extern bool mfd_distance_remove(ubyte func);
+   extern bool mfd_distance_remove(uint8_t func);
 
    f_id = mfd_get_active_func(mfd_id);
    f    = &(mfd_funcs[f_id]);
@@ -1207,8 +1207,8 @@ bool mfd_update_current_slot(ubyte mfd_id,ubyte status,ubyte num_steps)
 
       {
 #ifdef SVGA_SUPPORT
-         uchar old_over = gr2ss_override;
-         short temp;
+         uint8_t old_over = gr2ss_override;
+         int16_t temp;
          gr2ss_override = OVERRIDE_ALL;
          ss_set_hack_mode(MFD_STEREO_HACK_MODE,&temp);
 #endif
@@ -1247,7 +1247,7 @@ bool mfd_update_current_slot(ubyte mfd_id,ubyte status,ubyte num_steps)
 
 void mfd_force_update()
 {
-   ubyte i;
+   uint8_t i;
    for (i = 0; i < NUM_MFDS; i++) {
       mfd_force_update_single(i);
    }
@@ -1258,9 +1258,9 @@ void mfd_force_update()
 //
 // Forces a redraw of one of the button panels and mfd slots
 
-void mfd_force_update_single(int which_mfd)
+void mfd_force_update_single(int32_t which_mfd)
 {
-   ubyte      f_id, s_id;
+   uint8_t      f_id, s_id;
    MFD_Status stat;
 
       if (_current_loop <= FULLSCREEN_LOOP)
@@ -1280,14 +1280,14 @@ void mfd_force_update_single(int which_mfd)
 //
 // re-blits a single mfd.
 
-void fullscreen_refresh_mfd(ubyte mfd_id)
+void fullscreen_refresh_mfd(uint8_t mfd_id)
 {
-   ushort a,b,c,d;
+   uint16_t a,b,c,d;
    LGRect r;
    MFD* m = &mfd[mfd_id];
    bool visible = (full_visible & visible_mask(mfd_id)) != 0;
 #ifdef SVGA_SUPPORT
-   uchar old_over = gr2ss_override;
+   uint8_t old_over = gr2ss_override;
 #endif
    if (visible)
    {
@@ -1352,13 +1352,13 @@ void fullscreen_refresh_mfd(ubyte mfd_id)
 
 bool cyber_button_back_door = FALSE;
 
-void mfd_draw_button(ubyte mfd_id, ubyte b)
+void mfd_draw_button(uint8_t mfd_id, uint8_t b)
 {
    MFD *m;
    LGRect r;
-   ubyte slot;
+   uint8_t slot;
 #ifdef SVGA_SUPPORT
-   uchar old_over = gr2ss_override;
+   uint8_t old_over = gr2ss_override;
    gr2ss_override = OVERRIDE_ALL;
 #endif
 
@@ -1380,17 +1380,17 @@ void mfd_draw_button(ubyte mfd_id, ubyte b)
       else if (player_struct.mfd_slot_status[slot] == MFD_ACTIVE) gr_set_fcolor(MFD_BTTN_ACTIVE);
       else if (player_struct.mfd_slot_status[slot] == MFD_UNAVAIL) gr_set_fcolor(MFD_BTTN_UNAVAIL);
       else if (player_struct.mfd_slot_status[slot] == MFD_FLASH) {
-         if (Flash) gr_set_fcolor((long)MFD_BTTN_FLASH);    // Is blink on or off?
-         else       gr_set_fcolor((long)MFD_BTTN_EMPTY);     // Draw appropriately
+         if (Flash) gr_set_fcolor((int32_t)MFD_BTTN_FLASH);    // Is blink on or off?
+         else       gr_set_fcolor((int32_t)MFD_BTTN_EMPTY);     // Draw appropriately
       }
 
-      if (mfd_index(m->id) == b) gr_set_fcolor((long)MFD_BTTN_SELECT); // current
+      if (mfd_index(m->id) == b) gr_set_fcolor((int32_t)MFD_BTTN_SELECT); // current
 
       uiHideMouse(&r);
 //KLC - chg for new art      ss_rect(r.ul.x, r.ul.y, r.lr.x-2, r.lr.y-2);
 {
-	short		bx = (mfd_id == 0) ? 3 : 629;
-	short		by = 333 + (b*26);
+	int16_t		bx = (mfd_id == 0) ? 3 : 629;
+	int16_t		by = 333 + (b*26);
 	gr_rect(bx, by, bx+6, by+17);
 }
 #ifdef SVGA_SUPPORT
@@ -1410,9 +1410,9 @@ void mfd_draw_button(ubyte mfd_id, ubyte b)
 #define MFD_LEFT_PANEL_X      1
 #define MFD_RIGHT_PANEL_X     627
 
-void mfd_draw_button_panel(ubyte mfd_id)
+void mfd_draw_button_panel(uint8_t mfd_id)
 {
-   int x[2] = { MFD_LEFT_PANEL_X, MFD_RIGHT_PANEL_X };
+   int32_t x[2] = { MFD_LEFT_PANEL_X, MFD_RIGHT_PANEL_X };
 
    draw_hires_resource_bm(REF_IMG_bmMFDButtonBackground, x[mfd_id], MFD_PANEL_Y);
    mfd_draw_all_buttons(mfd_id);
@@ -1424,9 +1424,9 @@ void mfd_draw_button_panel(ubyte mfd_id)
 //
 // Draws an MFD's panel of buttons.
 
-void mfd_draw_all_buttons(ubyte mfd_id)
+void mfd_draw_all_buttons(uint8_t mfd_id)
 {
-   ubyte i;
+   uint8_t i;
 
    for (i = 0; i < MFD_NUM_VIRTUAL_SLOTS; i++)
       mfd_draw_button(mfd_id, i);
@@ -1444,14 +1444,14 @@ void mfd_draw_all_buttons(ubyte mfd_id)
 
 
 bool mfd_string_wrap = TRUE;
-ubyte mfd_string_shadow = MFD_SHADOW_FULLSCREEN;
+uint8_t mfd_string_shadow = MFD_SHADOW_FULLSCREEN;
 
-LGPoint mfd_full_draw_string(char *s, short x, short y, long c, int font, bool DrawString, bool transp)
+LGPoint mfd_full_draw_string(int8_t *s, int16_t x, int16_t y, int32_t c, int32_t font, bool DrawString, bool transp)
 {
    LGPoint siz;
-   short w,h;
-   ushort sc1,sc2,sc3,sc4;
-   short border = 0;
+   int16_t w,h;
+   uint16_t sc1,sc2,sc3,sc4;
+   int16_t border = 0;
    grs_font* thefont = (grs_font*)ResLock(font);
 
    x = min(max(x,0),MFD_VIEW_WID-1);
@@ -1491,7 +1491,7 @@ out:
    return siz;
 }
 
-LGPoint mfd_draw_font_string(char *s, short x, short y, long c, int font, bool DrawString)
+LGPoint mfd_draw_font_string(int8_t *s, int16_t x, int16_t y, int32_t c, int32_t font, bool DrawString)
 {
    // Hey, this used to always specify non-transparent strings,but that just plain
    // seemed wrong, so I switched it.... -- Xemu
@@ -1499,7 +1499,7 @@ LGPoint mfd_draw_font_string(char *s, short x, short y, long c, int font, bool D
 }
 
 
-LGPoint mfd_draw_string(char *s, short x, short y, long c, bool DrawString)
+LGPoint mfd_draw_string(int8_t *s, int16_t x, int16_t y, int32_t c, bool DrawString)
 {
    return mfd_draw_font_string(s,x,y,c,RES_tinyTechFont,DrawString);
 }
@@ -1508,7 +1508,7 @@ LGPoint mfd_draw_string(char *s, short x, short y, long c, bool DrawString)
 // mfd_draw_bitmap() draws a bitmap and adds its rect to the
 // update list.
 
-void mfd_draw_bitmap(grs_bitmap* bmp, short x, short y)
+void mfd_draw_bitmap(grs_bitmap* bmp, int16_t x, int16_t y)
 {
    ss_bitmap(bmp,x,y);
    mfd_add_rect(x,y,x+bmp->w,y+bmp->h);
@@ -1541,7 +1541,7 @@ void mfd_partial_clear(LGRect *r)
 
 #define NUM_MFD_RECTS 16
 LGRect mfd_update_list[NUM_MFD_RECTS];
-int  mfd_num_updates = 0;
+int32_t  mfd_num_updates = 0;
 
 
 // -------------------------------------------------------------------
@@ -1557,11 +1557,11 @@ void mfd_clear_rects(void)
 //
 // mfd_add_rect() adds a rect to the rect list.
 
-errtype mfd_add_rect(short x, short y, short x1, short y1)
+errtype mfd_add_rect(int16_t x, int16_t y, int16_t x1, int16_t y1)
 {
-   int i;
+   int32_t i;
    LGRect r;
-   short tmp;
+   int16_t tmp;
    // check for invalid rect
    if(x>x1) {
       tmp=x;
@@ -1601,7 +1601,7 @@ errtype mfd_add_rect(short x, short y, short x1, short y1)
 
 void mfd_update_rects(MFD* m)
 {
-   int i;
+   int32_t i;
    for(i = 0; i < mfd_num_updates; i++)
    {
       LGRect* r = &mfd_update_list[i];
@@ -1619,10 +1619,10 @@ void mfd_update_rects(MFD* m)
 //
 // Updates a portion of the view window from canvas.
 
-void mfd_update_display(MFD *m, short x0, short y0, short x1, short y1)
+void mfd_update_display(MFD *m, int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
-   ushort a,b,c,d;
-   uchar old_over = gr2ss_override;
+   uint16_t a,b,c,d;
+   uint8_t old_over = gr2ss_override;
 
    if (!full_game_3d)
    {
@@ -1671,8 +1671,8 @@ extern bool mfd_automap_qual(void);
 extern bool mfd_weapon_qual(void);
 
 typedef struct {
-   uchar          func;
-   uchar          slot;
+   uint8_t          func;
+   uint8_t          slot;
    mfd_def_qual   qual;
 } mfd_default;
 
@@ -1684,9 +1684,9 @@ mfd_default default_mfds[] = {
 
 #define NUM_MFD_DEFAULTS (sizeof(default_mfds)/sizeof(mfd_default))
 
-void mfd_default_mru( uchar func )
+void mfd_default_mru( uint8_t func )
 {
-   int i, pos=-1;
+   int32_t i, pos=-1;
    mfd_default tmp;
 
    for( i=0; i<NUM_MFD_DEFAULTS; i++ ) {
@@ -1704,10 +1704,10 @@ void mfd_default_mru( uchar func )
 }
 
 
-void save_mfd_slot(int mfd_id)
+void save_mfd_slot(int32_t mfd_id)
 {
-	uchar func,mask;
-	int slot;
+	uint8_t func,mask;
+	int32_t slot;
 
 	if (global_fullmap->cyber)
 		return;
@@ -1737,9 +1737,9 @@ void save_mfd_slot(int mfd_id)
 // note that if you pass in MFD_EMPTY_FUNC, a new setting is always selected,
 // so the slot argument is ignored.
 
-void set_mfd_from_defaults(int mfd_id, uchar func, uchar slot)
+void set_mfd_from_defaults(int32_t mfd_id, uint8_t func, uint8_t slot)
 {
-	uchar def, mid;
+	uint8_t def, mid;
 	bool check;
 
 	def=0;
@@ -1774,9 +1774,9 @@ void set_mfd_from_defaults(int mfd_id, uchar func, uchar slot)
 // once it have found max such mfd's, starts setting any subsequent mfd's
 // with that func to defaults as above.
 
-void cap_mfds_with_func(uchar func, uchar max)
+void cap_mfds_with_func(uint8_t func, uint8_t max)
 {
-   int mid;
+   int32_t mid;
 
    for(mid=0;mid<NUM_MFDS;mid++) {
       if(mfd_get_func(mid,player_struct.mfd_current_slots[mid])==func) {
@@ -1788,9 +1788,9 @@ void cap_mfds_with_func(uchar func, uchar max)
    }
 }
 
-void restore_mfd_slot(int mfd_id)
+void restore_mfd_slot(int32_t mfd_id)
 {
-   uchar func, slot;
+   uint8_t func, slot;
    if(global_fullmap->cyber) return;
    if(full_game_3d && !(visible_mask(mfd_id)&full_visible)) return;
    if(player_struct.mfd_save_slot[mfd_id]<0)

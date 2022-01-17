@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    fix dx, dy;			/* deltas in x and y */
    fix t;			/* temporary fix */
 
-   uchar *p;			/* pointer into canvas */
+   uint8_t *p;			/* pointer into canvas */
 
    x0 = v0->x; y0 = v0->y;
    x1 = v1->x; y1 = v1->y;

@@ -35,11 +35,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "plytyp.h"
 #include "tmaps.h"
 
-extern void per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
-extern void h_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
-extern void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
-extern int per_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
-extern int h_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
-extern int v_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+extern void per_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
+extern void h_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
+extern void v_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
+extern int32_t per_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
+extern int32_t h_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
+extern int32_t v_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
 
 #endif /* __TMAPFCN_H */

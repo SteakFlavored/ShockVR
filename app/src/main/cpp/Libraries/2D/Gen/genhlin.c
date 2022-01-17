@@ -59,19 +59,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* draw a clipped horizontal line with integral coordinates.  returns a clip
    code. */
 
-int gen_hline (short x0, short y0, short x1)
+int32_t gen_hline (int16_t x0, int16_t y0, int16_t x1)
 {
-   int r;
+   int32_t r;
 
    r = grd_hline_clip_fill (x0, y0, x1, gr_get_fcolor(), gr_get_fill_parm());
 
    return r;
 }
 
-int gri_hline_clip_fill (short x0, short y0, short x1, long c, long parm)
+int32_t gri_hline_clip_fill (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
 {
-   int r = CLIP_NONE;
-   short t;
+   int32_t r = CLIP_NONE;
+   int16_t t;
 
    if (x0 > x1) {
       t = x0; x0 = x1; x1 = t;

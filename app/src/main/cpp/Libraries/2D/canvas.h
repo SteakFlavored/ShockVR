@@ -39,16 +39,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __CANVAS_H
 
 extern void gr_set_canvas (grs_canvas *c);
-extern int gr_push_canvas (grs_canvas *c);
+extern int32_t gr_push_canvas (grs_canvas *c);
 extern grs_canvas *gr_pop_canvas (void);
 extern void gr_make_canvas (grs_bitmap *bm, grs_canvas *c);
-extern void gr_init_canvas (grs_canvas *c, uchar *p, int type, short w, short h);
+extern void gr_init_canvas (grs_canvas *c, uint8_t *p, int32_t type, int16_t w, int16_t h);
 extern void gr_init_sub_canvas (grs_canvas *sc, grs_canvas *dc,
-                                short x, short y, short w, short h);
-extern grs_canvas *gr_alloc_canvas (int type, short w, short h);
+                                int16_t x, int16_t y, int16_t w, int16_t h);
+extern grs_canvas *gr_alloc_canvas (int32_t type, int16_t w, int16_t h);
 extern void gr_free_canvas (grs_canvas *c);
-extern grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, short x, short y,
-                                        short w, short h);
+extern grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, int16_t x, int16_t y,
+                                        int16_t w, int16_t h);
 extern void gr_free_sub_canvas (grs_canvas *c);
 
 #endif /* !__CANVAS_H */

@@ -39,8 +39,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define USE_USE_MODE       1
 #define NULL_USE_MODE      (INVENT_USEMODE >> INVENT_USEMODE_SHF)
 
-extern ubyte use_distance_mod;
-extern ubyte pickup_distance_mod;
+extern uint8_t use_distance_mod;
+extern uint8_t pickup_distance_mod;
 
 #define BASE_PICKUP_DIST (FIX_UNIT*20/8)
 #define BASE_USE_DIST    BASE_PICKUP_DIST
@@ -55,10 +55,10 @@ extern ubyte pickup_distance_mod;
 // Typedefs
 typedef struct
 {
-   ushort timestamp;
-   ushort type;
+   uint16_t timestamp;
+   uint16_t type;
    ObjID door_id;
-   ushort secret_code;
+   uint16_t secret_code;
 } DoorSchedEvent;
 
 // Prototypes
@@ -72,7 +72,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj);
 errtype obj_door_lock(ObjID door_id, bool new_lock);
 
 // Special case for elevator
-bool elevator_use(short dest_level, ubyte which_panel);
+bool elevator_use(int16_t dest_level, uint8_t which_panel);
 
 errtype obj_cspace_collide(ObjID id, ObjID collider);
 

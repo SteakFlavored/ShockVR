@@ -47,14 +47,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fl8tf.h"
 #include "lg.h"
 
-extern int gen_flat8_bitmap(grs_bitmap *bm, short x, short y);
-int gri_flat8_mask_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten)
+extern int32_t gen_flat8_bitmap(grs_bitmap *bm, int16_t x, int16_t y);
+int32_t gri_flat8_mask_bitmap(grs_bitmap *bm, int16_t x, int16_t y, grs_stencil *sten)
 {
    if (sten==NULL) return gen_flat8_bitmap(bm, x, y);
    else {
-      int yf=y+bm->h;
-      uchar *dst;
-      uchar *src=bm->bits-x;
+      int32_t yf=y+bm->h;
+      uint8_t *dst;
+      uint8_t *src=bm->bits-x;
       if (yf>grd_clip.bot) yf=grd_clip.bot;
       if (y<grd_clip.top) {
          src+=(grd_clip.top-y)*bm->row;
@@ -62,7 +62,7 @@ int gri_flat8_mask_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten)
       }
       dst=grd_bm.bits+y*grd_bm.row;
       for (;y<yf;y++) {
-         int xi=x,xf=x+bm->w;
+         int32_t xi=x,xf=x+bm->w;
          grs_sten_elem *s;
 #ifdef NEW_STENCILS
          s=&(sten[y]);
@@ -78,7 +78,7 @@ int gri_flat8_mask_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten)
             if (s->r<xf) xf=s->r;
             if (xf>xi) {
                if (bm->flags & BMF_TRANS) {
-                  int i;
+                  int32_t i;
                   for (i=xi;i<xf;i++)
                      if (src[i]) dst[i]=src[i];
                } else {
@@ -93,15 +93,15 @@ int gri_flat8_mask_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten)
    return CLIP_NONE;  /* actually, who knows? */
 }
 
-extern int gen_flat8_clut_bitmap(grs_bitmap *bm, short x, short y, uchar *clut);
-int gri_flat8_mask_fill_clut_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten)
+extern int32_t gen_flat8_clut_bitmap(grs_bitmap *bm, int16_t x, int16_t y, uint8_t *clut);
+int32_t gri_flat8_mask_fill_clut_bitmap(grs_bitmap *bm, int16_t x, int16_t y, grs_stencil *sten)
 {
-   uchar *clut=(uchar *)(grd_gc.fill_parm);
+   uint8_t *clut=(uint8_t *)(grd_gc.fill_parm);
    if (sten==NULL) return gen_flat8_clut_bitmap(bm, x, y, clut);
    else {
-      int yf=y+bm->h;
-      uchar *dst;
-      uchar *src=bm->bits-x;
+      int32_t yf=y+bm->h;
+      uint8_t *dst;
+      uint8_t *src=bm->bits-x;
       if (yf>grd_clip.bot) yf=grd_clip.bot;
       if (y<grd_clip.top) {
          src+=(grd_clip.top-y)*bm->row;
@@ -109,7 +109,7 @@ int gri_flat8_mask_fill_clut_bitmap(grs_bitmap *bm, short x, short y, grs_stenci
       }
       dst=grd_bm.bits+y*grd_bm.row;
       for (;y<yf;y++) {
-         int xi=x,xf=x+bm->w;
+         int32_t xi=x,xf=x+bm->w;
          grs_sten_elem *s;
 #ifdef NEW_STENCILS
          s=&(sten[y]);
@@ -124,7 +124,7 @@ int gri_flat8_mask_fill_clut_bitmap(grs_bitmap *bm, short x, short y, grs_stenci
             if (s->l>xi) xi=s->l;
             if (s->r<xf) xf=s->r;
             if (xf>xi) {
-               int i;
+               int32_t i;
                if (bm->flags & BMF_TRANS) {
                   for (i=xi;i<xf;i++)
                      if (src[i]) dst[i]=clut[src[i]];

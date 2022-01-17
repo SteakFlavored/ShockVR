@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Pelvis.cc is a destroyed biped.  R.I.P.  Life is pain, and in addition this should make it
 //	less fun to move in the indoor games.  You should probably use the Biped instead unless
@@ -37,23 +37,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	Super secret Church-Blackley Boundary Condition Descriptor (BCD)...
 //	===================================================================
 extern "C" {
-int	EDMS_BCD = 0; }
+int32_t	EDMS_BCD = 0; }
 
 //	Functions...
 //	============
-extern void	( *idof_functions[MAX_OBJ] )( int ),
-		( *equation_of_motion[MAX_OBJ][6] )( int );
+extern void	( *idof_functions[MAX_OBJ] )( int32_t ),
+		( *equation_of_motion[MAX_OBJ][6] )( int32_t );
 
 
 //	Collision callback stuff...
 //	---------------------------
-static int		badness;
+static int32_t		badness;
 static physics_handle	C,
 			V;
 
 //	Callbacks themselves...
 //	-----------------------
-extern void		( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int badness, long DATA1, long DATA2 ),
+extern void		( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int32_t badness, int32_t DATA1, int32_t DATA2 ),
 			( *EDMS_wall_contact )( physics_handle caller );
 
 static Q		fix_one = 1.,
@@ -87,12 +87,12 @@ Q       head_delta[3],
 
 //	Here are the internal degrees of freedom:
 //	=========================================
-void	pelvis_idof( int object ) {
+void	pelvis_idof( int32_t object ) {
 
 
 //      To do the head motion...
 //      ------------------------
-void    get_head_of_death( int );
+void    get_head_of_death( int32_t );
 
 
 Q	V_ceiling[3],
@@ -153,7 +153,7 @@ Q		mag = I[object][18]*I[object][18] + I[object][19]*I[object][19];
 
 //              object8 = I[object][20]( 4*checker/(I[object][22]*I[object][22]) + 1 );
 		object8 = I[object][20];
-				
+
 		object7 = I[object][21]*( A[object][0][1]*object4	//Delta_magnitude...
 					+ A[object][1][1]*object5
 					+ A[object][2][1]*object6 );
@@ -171,11 +171,11 @@ Q		mag = I[object][18]*I[object][18] + I[object][19]*I[object][19];
 		I[object][19] *= ( V_wall[1] == 0 );
 		I[object][17] *= ( V_ceiling[2] == 0 );
 
-		
+
 //		Cyberama...
-//		-----------		
+//		-----------
 		if ( object9 == 0 && I[object][10] == 0 ) {
-		I[object][18] = 
+		I[object][18] =
 		I[object][19] = 0;
 		I[object][17] = 0;
 		}
@@ -190,14 +190,14 @@ Q		mag = I[object][18]*I[object][18] + I[object][19]*I[object][19];
 
 		if ( are_you_there( object ) ) {
 
-                for ( int other_object = 0; other_object < MAX_OBJ && S[other_object][0][0] > END; other_object++ ) {
+                for ( int32_t other_object = 0; other_object < MAX_OBJ && S[other_object][0][0] > END; other_object++ ) {
 		if ( check_for_hit_mac( other_object ) && object != other_object) {
 
-		object12 = sqrt ( 
+		object12 = sqrt (
 			( A[object][0][0] - A[other_object][0][0] )*
 			( A[object][0][0] - A[other_object][0][0] )
 		      + ( A[object][1][0] - A[other_object][1][0] )*
-			( A[object][1][0] - A[other_object][1][0] )			
+			( A[object][1][0] - A[other_object][1][0] )
 		      + ( A[object][2][0] - A[other_object][2][0] )*
 			( A[object][2][0] - A[other_object][2][0] ) );			//Little ...
 
@@ -215,7 +215,7 @@ Q		mag = I[object][18]*I[object][18] + I[object][19]*I[object][19];
 
 		object14 = ( A[object][0][0] - A[other_object][0][0] );			//Dx...
 		object15 = ( A[object][1][0] - A[other_object][1][0] );			//Dy...
-		
+
 		object16 = I[object][20]*( object13 - object12 );		   	//Eta...
 
 		object10 += object16*object14/object12;
@@ -256,7 +256,7 @@ Q       	ass = sqrt( I[object][18]*I[object][18]
 		if (checker>0) {
 
                 mout << "Ass = " << ass << ", object0 = " << object0 << ", object1 = " << object1 << "\n";
-                
+
                 I[object][17] = .02*ass;
 		I[object][18] = -.2*I[object][22]*object0*object8/checker;
 		I[object][19] = -.2*I[object][22]*object1*object8/checker;
@@ -272,7 +272,7 @@ Q       	ass = sqrt( I[object][18]*I[object][18]
 
 //	Crouch torso bend thang and boogie boogie boogie...
 //	===================================================
-	if ( (I[object][7] > 0.0) || (I[object][0] < I[object][6]) ) I[object][0] = I[object][6]*(1 - .636*abs(S[object][4][0]));          //Crouch...                                        
+	if ( (I[object][7] > 0.0) || (I[object][0] < I[object][6]) ) I[object][0] = I[object][6]*(1 - .636*abs(S[object][4][0]));          //Crouch...
         else I[object][0] = I[object][6];
 
 //      The head...
@@ -323,7 +323,7 @@ Q       	ass = sqrt( I[object][18]*I[object][18]
 
 Q       Head_tau_beta =  -.1*I[object][0]*sin_beta*(  head_kappa[2] - head_delta[2] ),
         Head_tau_gamma = -.1*I[object][0]*sin_gamma*( head_kappa[2] - head_delta[2] );
-                          
+
 
 	T_beta  = -( lp_z*Fmxm ) + I[object][7] + Head_tau_beta;               			//Actual torques...
         T_gamma = -( - Fmym*lp_z) + .04*I[object][16] + Head_tau_gamma;
@@ -354,8 +354,8 @@ Q       Head_tau_beta =  -.1*I[object][0]*sin_beta*(  head_kappa[2] - head_delta
 
         S[object][2][2] = I[object][24]*( object22 ) - (1-.1*I[object][10])*I[object][25];
 
-        S[object][3][2] = I[object][27]*( I[object][16]				
-					- object17*A[object][3][1] );	
+        S[object][3][2] = I[object][27]*( I[object][16]
+					- object17*A[object][3][1] );
 
 //        mout << S[object][3][2] << "\n";
 
@@ -380,7 +380,7 @@ Q       Head_tau_beta =  -.1*I[object][0]*sin_beta*(  head_kappa[2] - head_delta
 
 //      Here we'll get the head information we all want so badly...
 //      ===========================================================
-void    get_head_of_death( int object ) {
+void    get_head_of_death( int32_t object ) {
 
 Q       vec0,
         vec1,
@@ -399,7 +399,7 @@ Q       offset_x = I[object][0]*sin( A[object][4][0] ),
 
 	indoor_terrain( A[object][0][0] + offset_x,
                         A[object][1][0] + offset_y,
-                        A[object][2][0] + offset_z, 
+                        A[object][2][0] + offset_z,
 			.75*I[object][22],
 			on2ph[object] );
 
@@ -453,7 +453,7 @@ Q       offset_x = I[object][0]*sin( A[object][4][0] ),
 
 //	We might for now want to set some external forces on the pelvis...
 //	==================================================================
-void	pelvis_set_control( int pelvis, Q forward, Q turn, Q sidestep, Q lean, Q jump, int crouch ) {
+void	pelvis_set_control( int32_t pelvis, Q forward, Q turn, Q sidestep, Q lean, Q jump, int32_t crouch ) {
 
 const Q         pi_by_two = 1.5707;                                             //Yea, flixpoint...
 
@@ -490,7 +490,7 @@ const Q         pi_by_two = 1.5707;                                             
 //      And finally leaning about...
 //      ----------------------------
         I[pelvis][15] = I[pelvis][29]*lean*I[pelvis][1];				//Exactly the angle!
-                                                             
+
 //	Crouching (overpowers jumping )...
 //	----------------------------------
 	if ( crouch > 0 ) I[pelvis][7] = .15*crouch*I[pelvis][1];
@@ -506,10 +506,10 @@ const Q         pi_by_two = 1.5707;                                             
 
 
 
-int make_pelvis( Q init_state[6][3], Q params[10] ) {
+int32_t make_pelvis( Q init_state[6][3], Q params[10] ) {
 
 //	Sets up everything needed to manufacture a pelvis with initial state vector
-//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the 
+//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the
 //	object number, or else a negative error code (see Soliton.CPP for error handling and codes).
 //	============================================================================================
 
@@ -517,17 +517,17 @@ int make_pelvis( Q init_state[6][3], Q params[10] ) {
 
 //	Have some variables...
 //	======================
-int	object_number = -1,						//Three guesses...
+int32_t	object_number = -1,						//Three guesses...
 	error_code = -1;						//Guilty until...
 
 //	We need ignorable coordinates...
 //	================================
-extern void	null_function( int );
+extern void	null_function( int32_t );
 
 
 //	First find out which object we're going to be...
 //	================================================
-	while ( S[++object_number][0][0] > END );			//Jon's first C trickie... 
+	while ( S[++object_number][0][0] > END );			//Jon's first C trickie...
 
 
 //	Is it an allowed object number?  Are we full? Why are we here? Is there a God?
@@ -538,15 +538,15 @@ extern void	null_function( int );
 
 //		Now we can create the pelvis:  first dump the initial state vector...
 //		=====================================================================
-		for ( int coord = 0; coord < 6; coord++ ) {
-		for ( int deriv = 0; deriv < 3;	deriv++ ) {			//Has alpha now...
-		S[object_number][coord][deriv] = 
+		for ( int32_t coord = 0; coord < 6; coord++ ) {
+		for ( int32_t deriv = 0; deriv < 3;	deriv++ ) {			//Has alpha now...
+		S[object_number][coord][deriv] =
 		A[object_number][coord][deriv] = init_state[coord][deriv];	//For collisions...
 		}}
 
 //		Put in the appropriate pelvis parameters...
 //		===========================================
-		for ( int copy = 0; copy < 10; copy++ ) {
+		for ( int32_t copy = 0; copy < 10; copy++ ) {
 		I[object_number][copy + 20] = params[copy];
 		}
 		I[object_number][30] = PELVIS;					//Hey, you are what you eat.
@@ -559,7 +559,7 @@ extern void	null_function( int );
                 I[object_number][1] = 20*I[object_number][29];
                 I[object_number][2] = 4*sqrt( I[object_number][29]*I[object_number][1] );
 
-                                       
+
 //		Put in the collision information...
 //		===================================
 		I[object_number][31] = I[object_number][22];
@@ -584,11 +584,11 @@ extern void	null_function( int );
 //		=============================================================
 		idof_functions[object_number] = pelvis_idof;
 
-		equation_of_motion[object_number][0] =				//Nice symmetries, huh. 
-		equation_of_motion[object_number][1] = 
-		equation_of_motion[object_number][2] = 
-		equation_of_motion[object_number][3] = 
-		equation_of_motion[object_number][4] = 		  		
+		equation_of_motion[object_number][0] =				//Nice symmetries, huh.
+		equation_of_motion[object_number][1] =
+		equation_of_motion[object_number][2] =
+		equation_of_motion[object_number][3] =
+		equation_of_motion[object_number][4] =
 		equation_of_motion[object_number][5] = null_function;
 
 
@@ -600,7 +600,7 @@ extern void	null_function( int );
 //		Things seem okay...
 //		===================
 		error_code = object_number;
-	
+
 
 	}
 

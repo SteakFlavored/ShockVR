@@ -40,17 +40,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 #include "fl8tf.h"
 
-void gri_flat8_fill_clut_ubitmap (grs_bitmap *bm, short x, short y) {
-   gri_flat8_clut_ubitmap (bm, x, y, (uchar *)(grd_gc.fill_parm));
+void gri_flat8_fill_clut_ubitmap (grs_bitmap *bm, int16_t x, int16_t y) {
+   gri_flat8_clut_ubitmap (bm, x, y, (uint8_t *)(grd_gc.fill_parm));
 }
 
-void gri_flat8_clut_ubitmap (grs_bitmap *bm, short x, short y, uchar *cl)
+void gri_flat8_clut_ubitmap (grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
-   uchar *src,*dst,*srcf;
-   short w = bm->w;
-   short h = bm->h;
-   int ds = bm->row-w;
-   int dd = grd_bm.row-w;
+   uint8_t *src,*dst,*srcf;
+   int16_t w = bm->w;
+   int16_t h = bm->h;
+   int32_t ds = bm->row-w;
+   int32_t dd = grd_bm.row-w;
 
    src = bm->bits;
    dst = grd_bm.bits + grd_bm.row*y + x;

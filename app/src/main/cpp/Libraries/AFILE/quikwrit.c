@@ -66,15 +66,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	Internal prototypes
 
 void QuikStartSubChunk(QTM *pqtm, FILE *fp, QT_Ctype ctype, void *data,
-	long len);
+	int32_t len);
 void QuikEndSubChunk(QTM *pqtm, FILE *fp);
-void QuikWriteMVHD(QTM *pqtm, FILE *fp, ulong timeTot);
-void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, ulong timeTot);
+void QuikWriteMVHD(QTM *pqtm, FILE *fp, uint32_t timeTot);
+void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, uint32_t timeTot);
 void WriteChunkWithString(FILE *fp, QT_Ctype ctype, void *data,
-	long len, char *str);
-ulong QuikComputeTotalTime(QTM *pqtm);
-long QuikSampleLenMsec(fix t, fix tlast);
-fix QuikSampleLenMsecBackToFix(long msec);
+	int32_t len, int8_t *str);
+uint32_t QuikComputeTotalTime(QTM *pqtm);
+int32_t QuikSampleLenMsec(fix t, fix tlast);
+fix QuikSampleLenMsecBackToFix(int32_t msec);
 
 //	-------------------------------------------------------------
 //		MOVIE WRITING
@@ -93,7 +93,7 @@ void QuikCreateMovie(QTM *pqtm, FILE *fp)
 //
 //	QuikSetPal() sets the video track's palette
 
-void QuikSetPal(QTM *pqtm, uchar *pal)
+void QuikSetPal(QTM *pqtm, uint8_t *pal)
 {
 	if (pqtm->pVideoTrack == NULL)
 		pqtm->pVideoTrack = &pqtm->track[pqtm->numTracks++];
@@ -109,13 +109,13 @@ void QuikSetPal(QTM *pqtm, uchar *pal)
 void QuikAddVideoSample(QTM *pqtm, FILE *fp, grs_bitmap *pbm, fix time)
 {
 	MovieTrack *ptrack;
-	uchar *p;
-	uchar *ppal;
-	uchar *pbuff;
-	uchar *pd;
-	uchar *prgb;
-	int x,y;
-	ushort color16;
+	uint8_t *p;
+	uint8_t *ppal;
+	uint8_t *pbuff;
+	uint8_t *pd;
+	uint8_t *prgb;
+	int32_t x,y;
+	uint16_t color16;
 
 //	Can't handle anything but 8-bit raw
 
@@ -135,26 +135,26 @@ void QuikAddVideoSample(QTM *pqtm, FILE *fp, grs_bitmap *pbm, fix time)
 			return;
 		}
 		ppal = pqtm->pVideoTrack->palette;
-		pbuff = (uchar *)malloc(pbm->w * sizeof(ushort));
+		pbuff = (uint8_t *)malloc(pbm->w * sizeof(uint16_t));
 		for (y = 0, p = pbm->bits; y < pbm->h; y++, p += (pbm->row - pbm->w))
 		{
 			for (x = 0, pd = pbuff; x < pbm->w; x++)
 			{
-				prgb = &ppal[((ushort) *p++) * 3];
-				color16 = (ushort)(*prgb++ >> 3) << 10;
-				color16 |= (ushort)(*prgb++ >> 3) << 5;
-				color16 |= (ushort)(*prgb++ >> 3);
+				prgb = &ppal[((uint16_t) *p++) * 3];
+				color16 = (uint16_t)(*prgb++ >> 3) << 10;
+				color16 |= (uint16_t)(*prgb++ >> 3) << 5;
+				color16 |= (uint16_t)(*prgb++ >> 3);
 				*pd++ = color16 >> 8;
 				*pd++ = color16 & 0xFF;
 			}
-			fwrite(pbuff, pbm->w * sizeof(ushort), 1, fp);
+			fwrite(pbuff, pbm->w * sizeof(uint16_t), 1, fp);
 		}
 		free(pbuff);
 	}
 	else
 	{
 		if (pbm->w == pbm->row)
-			fwrite(pbm->bits, (long) pbm->w * (long) pbm->h, 1, fp);
+			fwrite(pbm->bits, (int32_t) pbm->w * (int32_t) pbm->h, 1, fp);
 		else
 		{
 			for (y = 0, p = pbm->bits; y < pbm->h; y++, p += pbm->row)
@@ -207,7 +207,7 @@ void QuikAddVideoSample(QTM *pqtm, FILE *fp, grs_bitmap *pbm, fix time)
 		ptrack->qt_stsd.idesc.hRes = fix_make(72,0);
 		ptrack->qt_stsd.idesc.vRes = fix_make(72,0);
 		ptrack->qt_stsd.idesc.frameCount = 1;
-		strcpy((char *)ptrack->qt_stsd.idesc.name, (char *)"\pNone");
+		strcpy((int8_t *)ptrack->qt_stsd.idesc.name, (int8_t *)"\pNone");
 		if (pqtm->depth16)
 		{
 			ptrack->qt_stsd.idesc.depth = 16;
@@ -243,7 +243,7 @@ void QuikAddVideoSample(QTM *pqtm, FILE *fp, grs_bitmap *pbm, fix time)
 
 void QuikWriteMovieAndClose(QTM *pqtm, FILE *fp)
 {
-	ulong timeTot;
+	uint32_t timeTot;
 
 //	Close 'mdat' chunk
 
@@ -275,7 +275,7 @@ void QuikWriteMovieAndClose(QTM *pqtm, FILE *fp)
 //	QuikStartSubChunk() starts a new subchunk.
 
 void QuikStartSubChunk(QTM *pqtm, FILE *fp, QT_Ctype ctype, void *data,
-	long len)
+	int32_t len)
 {
 	if (pqtm->indexOffsetStack >= QTM_MAX_CHUNK_NESTING)
 	{
@@ -294,7 +294,7 @@ void QuikStartSubChunk(QTM *pqtm, FILE *fp, QT_Ctype ctype, void *data,
 
 void QuikEndSubChunk(QTM *pqtm, FILE *fp)
 {
-	long currPos,length;
+	int32_t currPos,length;
 
 	if (pqtm->indexOffsetStack == 0)
 	{
@@ -315,7 +315,7 @@ void QuikEndSubChunk(QTM *pqtm, FILE *fp)
 //
 //	QuikWriteMVHD() writes MVHD chunk
 
-void QuikWriteMVHD(QTM *pqtm, FILE *fp, ulong timeTot)
+void QuikWriteMVHD(QTM *pqtm, FILE *fp, uint32_t timeTot)
 {
 	pqtm->qt_mvhd.createTime = DEFAULT_MACTIME;
 	pqtm->qt_mvhd.modTime = DEFAULT_MACTIME;
@@ -337,23 +337,23 @@ void QuikWriteMVHD(QTM *pqtm, FILE *fp, ulong timeTot)
 //
 //	QuikWriteVideoTrack() writes video track out.
 
-void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, ulong timeTot)
+void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, uint32_t timeTot)
 {
 	MovieTrack *ptrack;
-	uchar *pStsd;
-	int i,ilast;
-	ushort *ppw;
-	uchar *ppr;
-	ushort r,g,b;
-	long len;
-	ulong offset;
-	long tlen,tlenLast;
+	uint8_t *pStsd;
+	int32_t i,ilast;
+	uint16_t *ppw;
+	uint8_t *ppr;
+	uint16_t r,g,b;
+	int32_t len;
+	uint32_t offset;
+	int32_t tlen,tlenLast;
 	fix tlast;
-	long sampSize;
+	int32_t sampSize;
 	QTS_ELST elst;
 	QTS_HDLR hdlr;
 	QTS_VMHD vmhd;
-	uchar dref[20];
+	uint8_t dref[20];
 
 //	If no video track, don't write it obviously
 
@@ -446,11 +446,11 @@ void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, ulong timeTot)
 //	Write STBL chunk hdr and STSD chunk
 
 	QuikStartSubChunk(pqtm, fp, QT_STBL, NULL, 0);
-	pStsd = (uchar *)malloc(sizeof(ptrack->qt_stsd) + 0x0800 + 8);
+	pStsd = (uint8_t *)malloc(sizeof(ptrack->qt_stsd) + 0x0800 + 8);
 	memcpy(pStsd, &ptrack->qt_stsd, sizeof(ptrack->qt_stsd));
 	if (ptrack->palette && !pqtm->depth16)
 		{
-		ppw = (ushort *) (pStsd + sizeof(QTS_STSD_Base) +
+		ppw = (uint16_t *) (pStsd + sizeof(QTS_STSD_Base) +
 			sizeof(QT_ImageDesc) + 8);
 		*(ppw - 1) = 0xFF00;
 		ppr = ptrack->palette;
@@ -513,9 +513,9 @@ void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, ulong timeTot)
 
 //	Write STSZ chunk
 
-	len = sizeof(QTS_STSZ) - sizeof(ulong);	// don't include sampSizeTab[]
+	len = sizeof(QTS_STSZ) - sizeof(uint32_t);	// don't include sampSizeTab[]
 	ptrack->qt_stsz = (QTS_STSZ *)malloc(len);
-	sampSize = (long) pqtm->frameWidth * (long) pqtm->frameHeight;
+	sampSize = (int32_t) pqtm->frameWidth * (int32_t) pqtm->frameHeight;
 	if (pqtm->depth16)
 		sampSize *= 2;
 	ptrack->qt_stsz->sampSize = sampSize;
@@ -524,7 +524,7 @@ void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, ulong timeTot)
 
 //	Write STCO chunk
 
-	len = sizeof(QTS_STCO) + ((ptrack->numSamps - 1) * sizeof(ulong));
+	len = sizeof(QTS_STCO) + ((ptrack->numSamps - 1) * sizeof(uint32_t));
 	ptrack->qt_stco = (QTS_STCO *)malloc(len);
 	ptrack->qt_stco->numEntries = ptrack->numSamps;
 	offset = sizeof(QT_ChunkHdr);
@@ -540,7 +540,7 @@ void QuikWriteVideoTrack(QTM *pqtm, FILE *fp, ulong timeTot)
 //
 //	SetPascalString() puts C string into PStr field.
 
-static void SetPascalString(PStr *pstr, char *str)
+static void SetPascalString(PStr *pstr, int8_t *str)
 {
 	pstr->len = strlen(str);
 	memcpy(pstr->str, str, pstr->len);
@@ -551,9 +551,9 @@ static void SetPascalString(PStr *pstr, char *str)
 //	WriteChunkWithString() writes a var-length data chunk with trailing PStr.
 
 static void WriteChunkWithString(FILE *fp, QT_Ctype ctype, void *data,
-	long len, char *str)
+	int32_t len, int8_t *str)
 {
-	char buff[128];
+	int8_t buff[128];
 
 	memcpy(buff, data, len - sizeof(PStr));
 	SetPascalString((PStr *) (buff + len - sizeof(PStr)), str);
@@ -564,7 +564,7 @@ static void WriteChunkWithString(FILE *fp, QT_Ctype ctype, void *data,
 //
 //	QuikComputeTotalTime() computes total time of movie.
 
-ulong QuikComputeTotalTime(QTM *pqtm)
+uint32_t QuikComputeTotalTime(QTM *pqtm)
 {
 	MovieTrack *ptrack;
 	fix fixtime;
@@ -583,10 +583,10 @@ ulong QuikComputeTotalTime(QTM *pqtm)
 //
 //	QuikSampleLenMsec() returns sample length in msecs.
 
-long QuikSampleLenMsec(fix t, fix tlast)
+int32_t QuikSampleLenMsec(fix t, fix tlast)
 {
 	fix fixtime;
-	long msec;
+	int32_t msec;
 
 	fixtime = t - tlast;
 #if MDHD_TIMESCALE == 1000
@@ -606,7 +606,7 @@ long QuikSampleLenMsec(fix t, fix tlast)
 //
 //	QuikSampleLenMsecBackToFix() converts msec to fix
 
-fix QuikSampleLenMsecBackToFix(long msec)
+fix QuikSampleLenMsecBackToFix(int32_t msec)
 {
 	fix tfix;
 

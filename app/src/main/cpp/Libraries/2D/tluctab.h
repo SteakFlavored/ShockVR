@@ -54,15 +54,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grmalloc.h"
 #include "tlucdat.h"
 
-extern uchar *gr_init_translucency_table(uchar *p, fix opacity, fix purity, grs_rgb color);
-extern uchar *gr_init_lit_translucency_table(uchar *p, fix opacity, fix purity, grs_rgb color, grs_rgb light);
-extern uchar *gr_init_lit_translucency_tables(uchar *p, fix opacity, fix purity, grs_rgb color, int n);
+extern uint8_t *gr_init_translucency_table(uint8_t *p, fix opacity, fix purity, grs_rgb color);
+extern uint8_t *gr_init_lit_translucency_table(uint8_t *p, fix opacity, fix purity, grs_rgb color, grs_rgb light);
+extern uint8_t *gr_init_lit_translucency_tables(uint8_t *p, fix opacity, fix purity, grs_rgb color, int32_t n);
 
-extern int gr_dump_tluc8_table(uchar *buf, int nlit);
-extern void gr_read_tluc8_table(uchar *buf);
+extern int32_t gr_dump_tluc8_table(uint8_t *buf, int32_t nlit);
+extern void gr_read_tluc8_table(uint8_t *buf);
 
 #define gr_alloc_translucency_table(n) \
-   ((uchar *)NewPtr(n*256))
+   ((uint8_t *)NewPtr(n*256))
 #define gr_free_translucency_table(tab) (DisposePtr((Ptr) tab))
 
 #define gr_make_translucency_table(op, pu, co) \

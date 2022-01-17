@@ -46,11 +46,11 @@ vscan=vertical scanlines.
 **************************************************************/
 
 // prototypes
-void gri_lit_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps);
-void gri_lit_per_umap_vscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps);
+void gri_lit_per_umap_hscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps);
+void gri_lit_per_umap_vscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps);
 
 
-void gri_lit_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps)
+void gri_lit_per_umap_hscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps)
 {
    grs_per_info pi;
    fix y_prime[10];
@@ -60,10 +60,10 @@ void gri_lit_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_set
    fix dx_left,dx_right;
    fix i_left,i_right;
    fix di_left,di_right;
-   int yp_min,yp_max,yp_next;
-   int x_min,x_max,xr_min,xr_max,xl_min,xl_max;
-   int n_min,n_left,n_right;
-   int j;
+   int32_t yp_min,yp_max,yp_next;
+   int32_t x_min,x_max,xr_min,xr_max,xl_min,xl_max;
+   int32_t n_min,n_left,n_right;
+   int32_t j;
 
    pi.scale=grd_bm.w;
    pi.scan_slope=ps->scan_slope;
@@ -145,7 +145,7 @@ void gri_lit_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_set
    while (pi.yp<yp_max) {
       /* check left edge */
       if (fix_cint(y_prime[n_left])<=pi.yp) {
-         int n_prev,dyp;
+         int32_t n_prev,dyp;
          fix d;
          do {
             if (fix_cint(y_prime[n_left])==pi.yp) n_prev=n_left;
@@ -183,7 +183,7 @@ void gri_lit_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_set
 
       /* check right edge */
       if (fix_cint(y_prime[n_right])<=pi.yp) {
-         int n_prev,dyp;
+         int32_t n_prev,dyp;
          fix d;
          do {
             if (fix_cint(y_prime[n_right])==pi.yp) n_prev=n_right;
@@ -305,7 +305,7 @@ void gri_lit_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_set
    }
 }
 
-void gri_lit_per_umap_vscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps)
+void gri_lit_per_umap_vscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps)
 {
    grs_per_info pi;
    fix x_prime[10];
@@ -315,10 +315,10 @@ void gri_lit_per_umap_vscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_set
    fix dy_top,dy_bot;
    fix i_top,i_bot;
    fix di_top,di_bot;
-   int xp_min,xp_max,xp_next;
-   int y_min,y_max,yr_min,yr_max,yl_min,yl_max;
-   int n_min,n_top,n_bot;
-   int j;
+   int32_t xp_min,xp_max,xp_next;
+   int32_t y_min,y_max,yr_min,yr_max,yl_min,yl_max;
+   int32_t n_min,n_top,n_bot;
+   int32_t j;
 
    pi.scale=grd_bm.w;
    pi.scan_slope=ps->scan_slope;
@@ -400,7 +400,7 @@ void gri_lit_per_umap_vscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_set
    while (pi.xp<xp_max) {
       /* check top edge */
       if (fix_cint(x_prime[n_top])<=pi.xp) {
-         int n_prev,dxp;
+         int32_t n_prev,dxp;
          fix d;
          do {
             if (fix_cint(x_prime[n_top])==pi.xp) n_prev=n_top;
@@ -438,7 +438,7 @@ void gri_lit_per_umap_vscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_set
 
       /* check bot edge */
       if (fix_cint(x_prime[n_bot])<=pi.xp) {
-         int n_prev,dxp;
+         int32_t n_prev,dxp;
          fix d;
          do {
             if (fix_cint(x_prime[n_bot])==pi.xp) n_prev=n_bot;

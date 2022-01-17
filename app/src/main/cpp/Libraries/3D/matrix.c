@@ -109,15 +109,15 @@ fix		d89;	// fix	?
 fix		den;	// fix	?
 
 // prototypes
-void angles_2_matrix(g3s_angvec *angles, g3s_matrix *view_matrix, int rotation_order);
+void angles_2_matrix(g3s_angvec *angles, g3s_matrix *view_matrix, int32_t rotation_order);
 void process_view_matrix(void);
 void scale_view_matrix(void);
 void get_pyr_vector(g3s_vector *corners);
 
 #if (defined(powerc) || defined(__powerc))
-int code_point(g3s_point *pt);
+int32_t code_point(g3s_point *pt);
 #else
-asm int code_point(g3s_point *pt);
+asm int32_t code_point(g3s_point *pt);
 #endif
 
 void compute_XYZ(g3s_matrix *view_matrix);
@@ -144,7 +144,7 @@ void (*rotation_table[])(g3s_matrix *) =
 
 // build the view matrix from view angles, etc.
 // takes esi=pos, ebx=angles, eax=zoom, ecx=rotation order
-void g3_set_view_angles(g3s_vector *pos,g3s_angvec *angles,int rotation_order,fix zoom)
+void g3_set_view_angles(g3s_vector *pos,g3s_angvec *angles,int32_t rotation_order,fix zoom)
  {
  	_view_zoom = zoom;	// mov	_view_zoom,eax	;save zoom
 	_view_position = *pos;
@@ -174,7 +174,7 @@ void g3_set_view_matrix(g3s_vector *pos,g3s_matrix *m,fix zoom)
 //note that these routines use variables called sinp,sinb,etc., which
 //are really just rotations around certain axes, and don't necessarily
 //mean pitch,bank, or heading in each coordinated system
-void angles_2_matrix(g3s_angvec *angles, g3s_matrix *view_matrix, int rotation_order)
+void angles_2_matrix(g3s_angvec *angles, g3s_matrix *view_matrix, int32_t rotation_order)
  {
  	fix_sincos(angles->tx, &sinp, &cosp);
  	fix_sincos(angles->ty, &sinh_s, &cosh_s);
@@ -337,7 +337,7 @@ void process_view_matrix(void)
 // performs various scaling and other operations on the view matrix
 void scale_view_matrix(void)
  {
- 	long	temp_long;
+ 	int32_t	temp_long;
  	fix		temp_fix;
 
 // set matrix scale vector based on zoom
@@ -391,10 +391,10 @@ void scale_view_matrix(void)
 // that contained no jumps.  On my (Matt's) 486, this dull, straightforward
 // one was just as fast as any other, and short, too.
 #if (defined(powerc) || defined(__powerc))
-int code_point(g3s_point *pt)
+int32_t code_point(g3s_point *pt)
  {
- 	int	code;
- 	int	tempX,tempY,tempZ;
+ 	int32_t	code;
+ 	int32_t	tempX,tempY,tempZ;
 
  	tempX = pt->gX;
  	tempY = pt->gY;
@@ -418,7 +418,7 @@ int code_point(g3s_point *pt)
  	return(code);
  }
 #else
-asm int code_point(g3s_point *pt)
+asm int32_t code_point(g3s_point *pt)
  {
  	move.l	4(sp),a0
  	move.l	d3,a1					// save d3
@@ -459,7 +459,7 @@ bot_ok:
 void g3_vec_rotate(g3s_vector *dest,g3s_vector *src,g3s_matrix *m)
  {
 	AWide	result,result2;
-	long	srcX,srcY,srcZ; 	// in locals for PPC speed
+	int32_t	srcX,srcY,srcZ; 	// in locals for PPC speed
 
 	srcX = src->gX;
 	srcY = src->gY;
@@ -471,7 +471,7 @@ void g3_vec_rotate(g3s_vector *dest,g3s_vector *src,g3s_matrix *m)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(srcZ, m->m7, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gX = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gX = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 // second column
 	AsmWideMultiply(srcX, m->m2, &result);
@@ -479,7 +479,7 @@ void g3_vec_rotate(g3s_vector *dest,g3s_vector *src,g3s_matrix *m)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(srcZ, m->m8, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gY = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gY = (result.hi<<16) | (((uint32_t) result.lo)>>16);
 
 // third column
 	AsmWideMultiply(srcX, m->m3, &result);
@@ -487,7 +487,7 @@ void g3_vec_rotate(g3s_vector *dest,g3s_vector *src,g3s_matrix *m)
 	AsmWideAdd(&result, &result2);
 	AsmWideMultiply(srcZ, m->m9, &result2);
 	AsmWideAdd(&result, &result2);
-	dest->gZ = (result.hi<<16) | (((ulong) result.lo)>>16);
+	dest->gZ = (result.hi<<16) | (((uint32_t) result.lo)>>16);
  }
 
 // transpose a matrix at esi in place
@@ -525,7 +525,7 @@ void g3_copy_transpose(g3s_matrix *dest,g3s_matrix *src)       //copy and transp
 	AsmWideAdd(&result, &result2);\
 	AsmWideMultiply(src1->s1_3, src2->s2_3, &result2);\
 	AsmWideAdd(&result, &result2);\
-	dest->dst = (result.hi<<16) | (((ulong) result.lo)>>16);}
+	dest->dst = (result.hi<<16) | (((uint32_t) result.lo)>>16);}
 
 // matrix by matrix multiply:  ebx = esi * edi
 // does ebx = edi * esi
@@ -559,7 +559,7 @@ void g3_matrix_x_matrix(g3s_matrix *dest,g3s_matrix *src1 ,g3s_matrix *src2 )
 	AsmWideMultiply(v1, v2, &result2);\
 	AsmWideNegate(&result); \
 	AsmWideAdd(&result, &result2);\
-	res = (result.hi<<16) | (((ulong) result.lo)>>16);}
+	res = (result.hi<<16) | (((uint32_t) result.lo)>>16);}
 
 #define do_cross_nofixup(v1,v2,v3,v4,wide_res) \
   {AWide	result2; \

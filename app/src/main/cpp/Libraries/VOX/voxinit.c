@@ -43,7 +43,7 @@ fix *zdydz;
 
 #ifdef DBG_ON
 // maximal dimension use for bounds checking
-int vxd_maxd;
+int32_t vxd_maxd;
 #endif
 
 // Startup for the voxel system, it needs to allocate
@@ -51,7 +51,7 @@ int vxd_maxd;
 // pass it the maximum pixel dimension of any of the
 // voxel objects you anticipate drawing
 // returns TRUE for success, FALSE if unable to allocate
-bool vx_init(int max_depth)
+bool vx_init(int32_t max_depth)
 {
    zdxdz = (fix *)NewPtr(2 * max_depth * sizeof(fix));
    zdydz = zdxdz + max_depth;
@@ -71,7 +71,7 @@ void vx_close()
 
 // Der, this could be a macro, and
 // maybe should be
-void vx_init_vox(vxs_vox *v,fix pix_dist,fix pix_size,int depth,grs_bitmap *col,grs_bitmap *ht)
+void vx_init_vox(vxs_vox *v,fix pix_dist,fix pix_size,int32_t depth,grs_bitmap *col,grs_bitmap *ht)
 {
    v->pix_dist = pix_dist;
    v->pix_size = pix_size;

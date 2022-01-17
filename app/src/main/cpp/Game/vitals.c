@@ -45,8 +45,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void status_vitals_start();
 void status_vitals_end();
-errtype draw_status_arrow(int x_coord, int y);
-void draw_status_bar(ushort x0, ushort x1, ushort cutoff, ushort y);
+errtype draw_status_arrow(int32_t x_coord, int32_t y);
+void draw_status_bar(uint16_t x0, uint16_t x1, uint16_t cutoff, uint16_t y);
 
 
 // ===========================================================================
@@ -80,13 +80,13 @@ void status_vitals_init()
 void status_vitals_start()
 {
    // load in our bitmaps!
-   for (int i=0; i < NUM_STATUS_ARROWS; i++)
+   for (int32_t i=0; i < NUM_STATUS_ARROWS; i++)
       simple_load_res_bitmap(&status_arrows[i],REF_IMG_bmStatusAngle1 + i);
 }
 
 void status_vitals_end()
 {
-   int i;
+   int32_t i;
    for (i=0;i<NUM_STATUS_ARROWS;i++)
       DisposePtr((Ptr)status_arrows[i].bits);
 }
@@ -104,16 +104,16 @@ void status_vitals_end()
 
 errtype status_vitals_update(bool Full_Redraw)
 {
-   static short last_health_x = 0;
-   static short last_energy_x = 0;
+   static int16_t last_health_x = 0;
+   static int16_t last_energy_x = 0;
    grs_bitmap *icon_bmp;
    extern bool full_game_3d;
    Ref ref;
 
-   short health_value,energy_value,health_x,energy_x;
-   ushort minx,maxx;
-//   static long last_time=0L;
-//   long delta;
+   int16_t health_value,energy_value,health_x,energy_x;
+   uint16_t minx,maxx;
+//   static int32_t last_time=0L;
+//   int32_t delta;
 
    if (global_fullmap->cyber)
       health_value = player_struct.cspace_hp;
@@ -179,15 +179,15 @@ errtype status_vitals_update(bool Full_Redraw)
 }
 
 // ---------------------------------------------------------------------------
-// draw_status_arrow(int x_coord, int y)
+// draw_status_arrow(int32_t x_coord, int32_t y)
 //
 // Draws a status arrow at the appropriate location, using the
 // right bitmap for that location.  A negative x_coord means to "undraw"
 // an angle at that coordinate.
 // NOTE:  x_coord in in angle units, not pixels!  y is still in pixels
-errtype draw_status_arrow(int x_coord, int y)
+errtype draw_status_arrow(int32_t x_coord, int32_t y)
 {
-   int index;
+   int32_t index;
    if (x_coord < 0)
    {
       index = 3;
@@ -212,9 +212,9 @@ errtype draw_status_arrow(int x_coord, int y)
 // Draws a series of status angles at the specified height, within the specified coordinate
 // range, color shaded as appropriate.
 
-void draw_status_bar(ushort x0, ushort x1, ushort cutoff, ushort y)
+void draw_status_bar(uint16_t x0, uint16_t x1, uint16_t cutoff, uint16_t y)
 {
-   int i;
+   int32_t i;
    LGRect r;
 
    r.ul = MakePoint(STATUS_VITALS_X_BASE + (x0 * STATUS_ANGLE_SIZE),y);

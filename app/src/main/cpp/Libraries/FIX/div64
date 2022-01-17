@@ -17,7 +17,7 @@ Divide64(
   UnsignedWide   *quotientPtr /* Quotient, result     */
  )
 {
-  register int   i;
+  register int32_t   i;
   UnsignedWide   accumulator[2];
   static const UInt32  kHighBit = 0x80000000L;
 

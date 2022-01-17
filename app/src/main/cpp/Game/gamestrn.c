@@ -46,14 +46,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // GLOBALS
 // -------
 
-int string_res_file; 							// string res filenum
+int32_t string_res_file; 							// string res filenum
 
 // ---------
 // EXTERNALS
 // ---------
 
-//uchar *language_files[] = { "\pcybstrng.rsrc", "\pfrnstrng.rsrc", "\pgerstrng.rsrc" } ;
-char which_lang;
+//uint8_t *language_files[] = { "\pcybstrng.rsrc", "\pfrnstrng.rsrc", "\pgerstrng.rsrc" } ;
+int8_t which_lang;
 
 void init_strings(void)
 {
@@ -66,10 +66,10 @@ void init_strings(void)
 	if (string_res_file < 0)
 		critical_error(CRITERR_RES|0);
 
-	lg_sprintf_install_stringfunc((char*(*)(ulong))RefGet);
+	lg_sprintf_install_stringfunc((int8_t*(*)(uint32_t))RefGet);
 }
 
-char* get_string(int num, char* buf, int bufsize)
+int8_t* get_string(int32_t num, int8_t* buf, int32_t bufsize)
 {
    if (!ResInUse(REFID(num)) ||
        !RefIndexValid((RefTable*)ResGet(REFID(num)),REFINDEX(num)))
@@ -83,7 +83,7 @@ char* get_string(int num, char* buf, int bufsize)
    }
    if (buf != NULL)
    {
-      char* s = (char *)RefLock(num);
+      int8_t* s = (int8_t *)RefLock(num);
       if (s != NULL)
       {
          strncpy(buf,s,bufsize);
@@ -95,17 +95,17 @@ char* get_string(int num, char* buf, int bufsize)
    else return get_temp_string(num);
 }
 
-char* get_temp_string(int num)
+int8_t* get_temp_string(int32_t num)
 {
-   return (char*)RefGet(num);
+   return (int8_t*)RefGet(num);
 }
 
-char* get_object_short_name(int trip, char* buf, int bufsize)
+int8_t* get_object_short_name(int32_t trip, int8_t* buf, int32_t bufsize)
 {
    return get_string(MKREF(RES_objshortnames,OPTRIP(trip)),buf,bufsize);
 }
 
-char* get_object_long_name(int trip, char* buf, int bufsize)
+int8_t* get_object_long_name(int32_t trip, int8_t* buf, int32_t bufsize)
 {
    return get_string(MKREF(RES_objlongnames,OPTRIP(trip)),buf,bufsize);
 }
@@ -115,13 +115,13 @@ void shutdown_strings(void)
    ResCloseFile(string_res_file);
 }
 
-char* get_texture_name(int abs_texture,char* buf, int bufsiz)
+int8_t* get_texture_name(int32_t abs_texture,int8_t* buf, int32_t bufsiz)
 {
    return get_string(MKREF(RES_texnames,abs_texture),buf,bufsiz);
 }
 
 
-char* get_texture_use_string(int abs_texture, char* buf, int bufsiz)
+int8_t* get_texture_use_string(int32_t abs_texture, int8_t* buf, int32_t bufsiz)
 {
    return get_string(MKREF(RES_texuse,abs_texture), buf, bufsiz);
 }

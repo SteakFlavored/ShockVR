@@ -28,40 +28,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CHAIN_LENGTH 2
 #define CHAIN_END -1
 
-ulong HotkeyContext = 0xFFFFFFFF;
+uint32_t HotkeyContext = 0xFFFFFFFF;
 
 
 #pragma require_prototypes off
-int hotkey_hash_func(void* v)
+int32_t hotkey_hash_func(void* v)
 {
    hotkey_entry* e = (hotkey_entry*)v;
    return e->key;
 }
 
-int hotkey_equ_func(void* v1, void* v2)
+int32_t hotkey_equ_func(void* v1, void* v2)
 {
    return ((hotkey_entry*)v1)->key - ((hotkey_entry*)v2)->key;
 }
 #pragma require_prototypes on
 
 
-errtype hotkey_init(int tblsize)
+errtype hotkey_init(int32_t tblsize)
 {
    return hash_init(&hotkey_table,sizeof(hotkey_entry),tblsize,hotkey_hash_func,hotkey_equ_func);
 }
 
-errtype hotkey_add(short keycode, ulong contexts, hotkey_callback func, void* state)
+errtype hotkey_add(int16_t keycode, uint32_t contexts, hotkey_callback func, void* state)
 {
 #ifdef HOTKEY_HELP
    return(hotkey_add_help(keycode,contexts,func,state,NULL));
 }
 
-errtype hotkey_add_help(short keycode, ulong contexts, hotkey_callback func, void* state, char * /*help_text*/)
+errtype hotkey_add_help(int16_t keycode, uint32_t contexts, hotkey_callback func, void* state, int8_t * /*help_text*/)
 {
 #endif
    hotkey_entry e,*ch;
    errtype err;
-   int i;
+   int32_t i;
    hotkey_link *chain;
    e.key = keycode;
    err = hash_lookup(&hotkey_table,&e,(void **)&ch);
@@ -92,11 +92,11 @@ errtype hotkey_add_help(short keycode, ulong contexts, hotkey_callback func, voi
 
 /* KLC - not used
 #ifdef HOTKEY_HELP
-char *hotkey_help_text(short keycode, ulong contexts, hotkey_callback func)
+int8_t *hotkey_help_text(int16_t keycode, uint32_t contexts, hotkey_callback func)
 {
    hotkey_entry *ch;
    errtype err;
-   int i;
+   int32_t i;
    hotkey_link *chain;
    err = hash_lookup(&hotkey_table,(hotkey_entry*)&keycode,(void **)&ch);
    if (err != OK) return(NULL) ;
@@ -112,7 +112,7 @@ char *hotkey_help_text(short keycode, ulong contexts, hotkey_callback func)
    }
    for(i = ch->first; chain[i].next != CHAIN_END; i = chain[i].next)
    {
-      int n = chain[i].next;
+      int32_t n = chain[i].next;
       if (chain[n].func == func)
       {
          chain[n].context &= ~contexts;
@@ -127,11 +127,11 @@ char *hotkey_help_text(short keycode, ulong contexts, hotkey_callback func)
 #endif
 */
 
-errtype hotkey_remove(short keycode, ulong contexts, hotkey_callback func)
+errtype hotkey_remove(int16_t keycode, uint32_t contexts, hotkey_callback func)
 {
    hotkey_entry *ch;
    errtype err;
-   int i;
+   int32_t i;
    hotkey_link *chain;
    err = hash_lookup(&hotkey_table,(hotkey_entry*)&keycode,(void **)&ch);
    if (err != OK) return err;
@@ -152,7 +152,7 @@ errtype hotkey_remove(short keycode, ulong contexts, hotkey_callback func)
    }
    for(i = ch->first; chain[i].next != CHAIN_END; i = chain[i].next)
    {
-      int n = chain[i].next;
+      int32_t n = chain[i].next;
       if (chain[n].func == func)
       {
          chain[n].context &= ~contexts;
@@ -170,11 +170,11 @@ errtype hotkey_remove(short keycode, ulong contexts, hotkey_callback func)
 }
 
 
-errtype hotkey_dispatch(short keycode)
+errtype hotkey_dispatch(int16_t keycode)
 {
    hotkey_entry *ch;
    errtype err;
-   int i;
+   int32_t i;
    hotkey_link *chain;
    err = hash_lookup(&hotkey_table,(hotkey_entry*)&keycode,(void **)&ch);
    if (err != OK) return err;
@@ -201,7 +201,7 @@ static bool shutdown_iter_func(void* elem, void* data)
    hotkey_entry* ch = (hotkey_entry*)elem;
 /* KLC
 #ifdef HOTKEY_HELP
-   int i;
+   int32_t i;
    hotkey_link *chain = (hotkey_link*)(ch->keychain.vec);
 
    if (ch == NULL) return FALSE;
@@ -225,15 +225,15 @@ errtype hotkey_shutdown(void)
    return OK;
 }
 
-int list_index = 0;
+int32_t list_index = 0;
 
 #ifdef GODDAMN_THIS_MESS_IS_IMPOSSIBLE
-bool hotkey_list(char **item, int sort_type)
+bool hotkey_list(int8_t **item, int32_t sort_type)
 {
    void *res;
    hotkey_entry* ch;
    hotkey_link *chain;
-   int i;
+   int32_t i;
 
    hash_step(&hotkey_table, &res, &list_index);
    ch = (hotkey_entry *)res;

@@ -57,9 +57,9 @@ typedef struct _Gadget{
    TNG *tng_data;
    void *device_data;
    LGPoint conversion;
-   int handler_id;
-   int draw_parts;
-   int (*destroy_func)(struct _Gadget *g, void *user_data);
+   int32_t handler_id;
+   int32_t draw_parts;
+   int32_t (*destroy_func)(struct _Gadget *g, void *user_data);
 } Gadget;
 
 #include "tng.h"
@@ -67,7 +67,7 @@ typedef struct _Gadget{
 // A GadgetData is installed as the userdata for a region to get
 // a pointer back to the gadget, as well as other useful info
 typedef struct {
-   char *name;
+   int8_t *name;
    Gadget *g;
 } GadgetData;
 
@@ -80,48 +80,48 @@ typedef struct {
 
 // Initialize a gadget system for a particular display type.  Returns the gadget that is the "root" gadget
 // for that display.
-Gadget *gadget_init(int display_type, LGPoint extent);
+Gadget *gadget_init(int32_t display_type, LGPoint extent);
 
 // Forces a gadget to display itself across a rectangle.
 // If r is NULL, entire gadget is displayed.
 // Coordinates for r are in g's coordinates.
 errtype gadget_display(Gadget *g, LGRect *r);
-errtype gadget_display_part(Gadget *g, LGRect *r, ushort partmask);
+errtype gadget_display_part(Gadget *g, LGRect *r, uint16_t partmask);
 
 // Destroys the gadget and any children gadgets
 errtype gadget_destroy(Gadget **pvic);
 
 // Moves the gadget to a new x, y, z coordinate (relative)
-errtype gadget_move(Gadget *g, LGPoint coord, int z);
+errtype gadget_move(Gadget *g, LGPoint coord, int32_t z);
 
 // Resizes a gadget
-errtype gadget_resize(Gadget* g, int xsize, int ysize);
+errtype gadget_resize(Gadget* g, int32_t xsize, int32_t ysize);
 
 // Installs a callback onto a Gadget, triggered by a particular kind of pushbutton input.
 // The callback will be called with the gadget and the user_data as arguments, assuming the input
 // is allowed by the input_mask.
-errtype gad_callback_install(Gadget *g, ushort event_type, ushort condition, TNGCallback tngcb, void *user_data, int *id);
+errtype gad_callback_install(Gadget *g, uint16_t event_type, uint16_t condition, TNGCallback tngcb, void *user_data, int32_t *id);
 
 // Removes the callback installed on gadgets g identified by identifier id
-errtype gad_callback_uninstall(Gadget *g, int id);
+errtype gad_callback_uninstall(Gadget *g, int32_t id);
 
 // Shut down the gadget system
 errtype gadget_shutdown(void);
 
 // Draw the bitmap resource named by id, at location (x,y)
-errtype draw_resource_bm(Ref id, int x, int y);
+errtype draw_resource_bm(Ref id, int32_t x, int32_t y);
 
-int resource_bm_width(Ref id);
-int resource_bm_height(Ref id);
+int32_t resource_bm_width(Ref id);
+int32_t resource_bm_height(Ref id);
 
 bool gadget_tng_vga_expose(LGRegion *reg, LGRect *r);
 bool gadget_tng_mono_expose(LGRegion *reg, LGRect *r);
 bool gadget_tng_Mac_expose(LGRegion *reg, LGRect *r);
 bool gadget_tng_mouse_handler(uiEvent *e, LGRegion *r, void *state);
 bool gadget_tng_keyboard_handler(uiEvent *e, LGRegion *r, void *state);
-errtype gadget_tng_vga_expose_part(LGRegion *reg, LGRect *r, ushort partmask);
-errtype gadget_create_setup(Gadget **pg, Gadget *parent, GadgetClass cl, LGRect *dim, int z, char *name);
-errtype gadget_change_flags(Gadget *g, ulong flags, bool on, bool children);
+errtype gadget_tng_vga_expose_part(LGRegion *reg, LGRect *r, uint16_t partmask);
+errtype gadget_create_setup(Gadget **pg, Gadget *parent, GadgetClass cl, LGRect *dim, int32_t z, int8_t *name);
+errtype gadget_change_flags(Gadget *g, uint32_t flags, bool on, bool children);
 
 // Defines
 #define NULL_TYPE       -1

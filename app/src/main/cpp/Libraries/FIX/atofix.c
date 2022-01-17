@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "fix.h"
 
-static void fixgetab(char *p, short fracshift, short *a, short *b, short *sign);
+static void fixgetab(int8_t *p, int16_t fracshift, int16_t *a, int16_t *b, int16_t *sign);
 
 //	----------------------------------------------------------
 //		CONVERSION ROUTINES
@@ -43,9 +43,9 @@ static void fixgetab(char *p, short fracshift, short *a, short *b, short *sign);
 //
 //	atofix() converts an ascii string into a fixed-point number
 
-fix atofix(char *p)
+fix atofix(int8_t *p)
 {
-	short a, b, sign;
+	int16_t a, b, sign;
 
 	fixgetab(p, 16, &a, &b, &sign);
 	return(sign*fix_make(a,b));
@@ -55,9 +55,9 @@ fix atofix(char *p)
 //
 //	atofix24() converts an ascii string into a fix24
 /*
-fix24 atofix24(char *p)
+fix24 atofix24(int8_t *p)
 {
-	int a,b,sign;
+	int32_t a,b,sign;
 
 	fixgetab(p,8,&a,&b,&sign);
 	return(sign*fix24_make(a,b));
@@ -70,9 +70,9 @@ fix24 atofix24(char *p)
 //
 //	fixgetab() gets integer and fractional part from ascii buffer
 
-static void fixgetab(char *p, short fracshift, short *a, short *b, short *sign)
+static void fixgetab(int8_t *p, int16_t fracshift, int16_t *a, int16_t *b, int16_t *sign)
 {
-	short divis;
+	int16_t divis;
 
 //	sign is +1 or -1
 

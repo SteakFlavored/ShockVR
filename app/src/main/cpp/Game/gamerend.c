@@ -71,21 +71,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "audiolog.h"
 #endif
 
-extern uchar  tmap_big_buffer[];
+extern uint8_t  tmap_big_buffer[];
 
 
 // prototypes
 void set_shield_raisage(bool going_up);
 void begin_shodan_conquer_fx(bool begin);
-void set_dmg_percentage(int which, ubyte percent);
+void set_dmg_percentage(int32_t which, uint8_t percent);
 void do_secret_fx(void);
 void gamesys_render_effects(void);
 bool use_ir_hack(void);
-void draw_single_static_line(uchar *line_base, int lx, int rx, int c_base);
-void draw_line_static(grs_bitmap *stat_dest, int dens1, int color1);
-void draw_full_static(grs_bitmap *stat_dest, int c_base);
-bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y, int flags);
-void gamesys_render_func(void *fake_dest_bitmap, int flags);
+void draw_single_static_line(uint8_t *line_base, int32_t lx, int32_t rx, int32_t c_base);
+void draw_line_static(grs_bitmap *stat_dest, int32_t dens1, int32_t color1);
+void draw_full_static(grs_bitmap *stat_dest, int32_t c_base);
+bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int32_t x, int32_t y, int32_t flags);
+void gamesys_render_func(void *fake_dest_bitmap, int32_t flags);
 
 errtype gamerend_init(void)
 {
@@ -94,9 +94,9 @@ errtype gamerend_init(void)
 }
 
 // note these are now 0-255, like all computer percentages should be...
-static ubyte fr_sfx_color;
-static ubyte dmg_percentage;
-static char shield_raisage;
+static uint8_t fr_sfx_color;
+static uint8_t dmg_percentage;
+static int8_t shield_raisage;
 
 void set_shield_raisage(bool going_up)
 {
@@ -112,11 +112,11 @@ void begin_shodan_conquer_fx(bool begin)
       fr_global_mod_flag(0, FR_OVERLAY_SHODAN);
 }
 
-uchar color_base[]={BLUE_8_BASE,RED_8_BASE,GREEN_8_BASE};
+uint8_t color_base[]={BLUE_8_BASE,RED_8_BASE,GREEN_8_BASE};
 
 #define MIN_STATIC 10
 
-void set_dmg_percentage(int which, ubyte percent)
+void set_dmg_percentage(int32_t which, uint8_t percent)
 {
    if (percent>dmg_percentage)
    {
@@ -155,7 +155,7 @@ extern bool kill_player(void);
 
 #define build_systems_y_coor(i) (5+(14*i))
 
-static uchar systems_line_colors[]=
+static uint8_t systems_line_colors[]=
   {RED_8_BASE,RED_8_BASE+3,ORANGE_8_BASE,ORANGE_8_BASE+3,GREEN_8_BASE};
 
 //#define NUM_SYS_LINES ((sizeof(systems_lines)/sizeof(systems_lines[0])))
@@ -168,15 +168,15 @@ static uchar systems_line_colors[]=
 #define CURRENT_VIEW_H (_current_view->r->lr.y-_current_view->r->ul.y)
 
 extern  void  regenerate_player(void);
-ulong secret_sfx_time;
+uint32_t secret_sfx_time;
 void do_secret_fx(void)
 {     // boy is this a hack....
-   static char dot_buf[]="........";
-   static char tmp_buf[]="99";
+   static int8_t dot_buf[]="........";
+   static int8_t tmp_buf[]="99";
    static grs_font *fx_font=NULL;
-   static long sfx_time=0;
-   int c_val=secret_render_fx&VAL_REND_SFX, i, cap;
-   char line_buf[LINE_BUF_SIZE];
+   static int32_t sfx_time=0;
+   int32_t c_val=secret_render_fx&VAL_REND_SFX, i, cap;
+   int8_t line_buf[LINE_BUF_SIZE];
    Ref str;
 
    if (fx_font==NULL)
@@ -260,8 +260,8 @@ void do_secret_fx(void)
    case TIMELIMIT_REND_SFX:
    {
       grs_font* f;
-      short w,h;
-      int stage = (MISSION_3_TICKS-player_struct.game_time)/CIT_CYCLE;
+      int16_t w,h;
+      int32_t stage = (MISSION_3_TICKS-player_struct.game_time)/CIT_CYCLE;
 
       tmp_buf[0]=tmp_buf[1]='0';
       f=(grs_font*)ResLock(FAKEWIN_NUM_FONT);
@@ -277,7 +277,7 @@ void do_secret_fx(void)
    }
    case FAKEWIN_REND_SFX:        // do stuff
       {
-         char stage = (*tmd_ticks - secret_sfx_time) / CIT_CYCLE;
+         int8_t stage = (*tmd_ticks - secret_sfx_time) / CIT_CYCLE;
          gr_set_fcolor(RED_BASE + 6);
          if (stage < 2)
             break;
@@ -305,9 +305,9 @@ void do_secret_fx(void)
          {
             if (c_val == 1)
             {
-               extern void long_bark(ObjID speaker_id, uchar mug_id, int string_id, ubyte color);
-               extern void add_email_datamunge(short mung,bool select);
-               extern void read_email(Id new_base, int num);
+               extern void long_bark(ObjID speaker_id, uint8_t mug_id, int32_t string_id, uint8_t color);
+               extern void add_email_datamunge(int16_t mung,bool select);
+               extern void read_email(Id new_base, int32_t num);
                fr_global_mod_flag(FR_SFX_SHAKE, FR_SFX_MASK);
                long_bark(OBJ_NULL, FIRST_SHODAN_MUG + 3, REF_STR_Null, 0);
                mfd_change_slot(MFD_LEFT, MFD_INFO_SLOT);
@@ -337,14 +337,14 @@ void do_secret_fx(void)
 	 { ResUnlock(RES_mfdFont); fx_font=NULL; chg_unset_sta(GL_CHG_2); chg_unset_flg(GL_CHG_2); }
 }
 
-extern short mouse_attack_x;
-extern short mouse_attack_y;
-extern ulong next_fire_time;
+extern int16_t mouse_attack_x;
+extern int16_t mouse_attack_y;
+extern uint32_t next_fire_time;
 extern bool overload_beam;
 extern bool saveload_static;
-extern Boolean DoubleSize;
+extern bool DoubleSize;
 
-byte beam_offset[NUM_BEAM_GUN]={-12,-8,-4};
+int8_t beam_offset[NUM_BEAM_GUN]={-12,-8,-4};
 #define DRAW_BEAM_LINE(c1,c2,c3,c4) { \
      a = mx+(c1);\
      b = my+(c2);\
@@ -369,15 +369,15 @@ byte beam_offset[NUM_BEAM_GUN]={-12,-8,-4};
 void gamesys_render_effects(void)
 {
 	Ref      temp;
-	int deltax, deltay;
-	short    mx,my;
+	int32_t deltax, deltay;
+	int16_t    mx,my;
 	extern bool full_game_3d;
 
 	if ((!global_fullmap->cyber)&&(!secret_render_fx))
 	{
-		ubyte active = player_struct.actives[ACTIVE_WEAPON];
+		uint8_t active = player_struct.actives[ACTIVE_WEAPON];
 		extern bool hack_takeover;
-		extern ulong player_death_time;
+		extern uint32_t player_death_time;
 
 		// check to make sure we have an active weapon before drawing handart
 		if ((player_struct.weapons[active].type != EMPTY_WEAPON_SLOT) && !hack_takeover && !saveload_static)
@@ -414,11 +414,11 @@ void gamesys_render_effects(void)
 					// If this is a beam weapon, we need to draw the beam during attack.
 					if (player_struct.weapons[active].type == GUN_SUBCLASS_BEAM)
 					{
-						short    base_color = (overload_beam) ? BLUE_BASE : TURQUOISE_BASE;
-						byte     boff = beam_offset[player_struct.weapons[active].subtype];
+						int16_t    base_color = (overload_beam) ? BLUE_BASE : TURQUOISE_BASE;
+						int8_t     boff = beam_offset[player_struct.weapons[active].subtype];
 						if (beam_effect_id)
 						{
-							int i;
+							int32_t i;
 							bool draw_beam=FALSE;
 
 							for (i=0;i<current_num_hudobjs;i++)
@@ -438,7 +438,7 @@ void gamesys_render_effects(void)
  							}
 							if (draw_beam)
 							{
-								short a,b;
+								int16_t a,b;
 
 								gr_set_fcolor(base_color+5);
 								if (overload_beam)
@@ -515,10 +515,10 @@ bool use_ir_hack(void)
 #define LC16_MULT 2053
 #define LC16_ADD 13849
 
-void draw_single_static_line(uchar *line_base, int lx, int rx, int c_base)
+void draw_single_static_line(uint8_t *line_base, int32_t lx, int32_t rx, int32_t c_base)
 {
-   uchar *cur_pix;
-   int our_seed=rand();
+   uint8_t *cur_pix;
+   int32_t our_seed=rand();
    for (cur_pix=line_base+lx; lx<rx; lx++, cur_pix++)
    {
 #ifdef SIMPLE_LC_WAY
@@ -529,7 +529,7 @@ void draw_single_static_line(uchar *line_base, int lx, int rx, int c_base)
          *cur_pix=0;
 #else
       if (our_seed&0x300)
-       { *cur_pix=c_base+(our_seed&0x7); our_seed+=(long)cur_pix; c_ror_by_5(our_seed); }
+       { *cur_pix=c_base+(our_seed&0x7); our_seed+=(int32_t)cur_pix; c_ror_by_5(our_seed); }
       else
        { *cur_pix=0; our_seed+=(our_seed * LC16_MULT) + LC16_ADD; }
 //       { *cur_pix=0; our_seed+=rand(); }
@@ -539,10 +539,10 @@ void draw_single_static_line(uchar *line_base, int lx, int rx, int c_base)
 
 #define LAST_INITIAL 32
 // probably have to split it up, and then have a static pass and a translucency pass...
-void draw_line_static(grs_bitmap *stat_dest, int dens1, int color1)
+void draw_line_static(grs_bitmap *stat_dest, int32_t dens1, int32_t color1)
 {
-   int y,last=0,lx,rx,cwid=stat_dest->w;
-   uchar *line_base;
+   int32_t y,last=0,lx,rx,cwid=stat_dest->w;
+   uint8_t *line_base;
 
    dens1>>=1;
    for (line_base=stat_dest->bits,y=0; y<stat_dest->h; y++,line_base+=stat_dest->row)
@@ -559,10 +559,10 @@ void draw_line_static(grs_bitmap *stat_dest, int dens1, int color1)
    }
 }
 
-void draw_full_static(grs_bitmap *stat_dest, int c_base)
+void draw_full_static(grs_bitmap *stat_dest, int32_t c_base)
 {  // note we do this as a for, not a big fill, so it will work with row hacks, full screen, so on....
-   uchar *line_base;
-   int y;
+   uint8_t *line_base;
+   int32_t y;
 
    for (line_base=stat_dest->bits,y=0; y<stat_dest->h; y++,line_base+=stat_dest->row)
       draw_single_static_line(line_base,0,stat_dest->w,c_base);
@@ -570,18 +570,18 @@ void draw_full_static(grs_bitmap *stat_dest, int c_base)
 
 #define TELEPORT_COLOR        0x1C
 #define VHOLD_SHIFT_AMOUNT 7
-short vhold_shift = 0;
+int16_t vhold_shift = 0;
 
 #define FULL_CONVERT_X
 
 // returns whether to send the bitmap out in the render
-bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y, int flags)
+bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int32_t x, int32_t y, int32_t flags)
 {
-   extern hud_do_objs(short xtop, short ytop, short xwid, short ywid, bool rev);
+   extern hud_do_objs(int16_t xtop, int16_t ytop, int16_t xwid, int16_t ywid, bool rev);
    grs_canvas *dest_canvas = (grs_canvas *)fake_dest_canvas;
    grs_bitmap *dest_bm = (grs_bitmap *)fake_dest_bm;
-   uchar *orig_bits;
-   int orig_h, loop, orig_w;
+   uint8_t *orig_bits;
+   int32_t orig_h, loop, orig_w;
 
    if (flags&FR_WINDOWD_MASK)
       gamesys_render_effects();     // static gets drawn over window dressing due to this
@@ -612,7 +612,7 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y,
 				// 320x200 coordinates is to avoid the wacky class of bugs of
 				// shifting screen mode in the middle of an EMP grenade
 				{
-					short vhs = vhold_shift;
+					int16_t vhs = vhold_shift;
 					if (convert_use_mode)
 						vhs = SCONV_Y(vhold_shift);
 
@@ -651,8 +651,8 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y,
             break;
          case FR_SFX_TELEPORT:
             {
-               uchar *p = dest_bm->bits;
-               int count = 0;
+               uint8_t *p = dest_bm->bits;
+               int32_t count = 0;
                while (count < (dest_bm->w * dest_bm->h))
                {
                   *p = TELEPORT_COLOR + (rand()&0x3);
@@ -680,15 +680,15 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y,
       {
          case FR_OVERLAY_SHODAN:
             {
-               int i;
-               extern ulong time_until_shodan_avatar;
-               extern uchar *shodan_bitmask;
+               int32_t i;
+               extern uint32_t time_until_shodan_avatar;
+               extern uint8_t *shodan_bitmask;
                extern grs_bitmap shodan_draw_fs;
                extern grs_bitmap shodan_draw_normal;
-               extern char thresh_fail;
-               uchar *shodan_draw_bits;
+               extern int8_t thresh_fail;
+               uint8_t *shodan_draw_bits;
                grs_bitmap *curr_shodan;
-               short shodan_level = (player_struct.game_time - time_until_shodan_avatar) >> SHODAN_TIME_SHIFT;
+               int16_t shodan_level = (player_struct.game_time - time_until_shodan_avatar) >> SHODAN_TIME_SHIFT;
                if (shodan_level > MAX_SHODAN_LEVEL)
                   shodan_level = MAX_SHODAN_LEVEL;
                if (full_game_3d)
@@ -764,7 +764,7 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y,
    return TRUE;         // let the renderer do the blit
 }
 
-void gamesys_render_func(void *fake_dest_bitmap, int flags)
+void gamesys_render_func(void *fake_dest_bitmap, int32_t flags)
 {
    grs_bitmap *dest_bitmap = (grs_bitmap *)fake_dest_bitmap;
    grs_canvas temp_canvas;

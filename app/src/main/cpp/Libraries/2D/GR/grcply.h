@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tabdat.h"
 
 #define gr_ucpoly \
-   ((void (*)(long c, int n,grs_vertex **vpl))grd_canvas_table[FIX_UCPOLY])
+   ((void (*)(int32_t c, int32_t n,grs_vertex **vpl))grd_canvas_table[FIX_UCPOLY])
 #define gr_cpoly \
-   ((int (*)(long c, int n,grs_vertex **vpl))grd_canvas_table[FIX_CPOLY])
+   ((int32_t (*)(int32_t c, int32_t n,grs_vertex **vpl))grd_canvas_table[FIX_CPOLY])
 #endif /* !__GRCPLY_H */

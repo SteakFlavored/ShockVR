@@ -122,14 +122,14 @@ asm fix fix_mul_16_32_20 (fix a, fix b)
  }
 #endif
 
-extern int gri_per_umap_setup(int n, grs_vertex **vpl, grs_per_setup *ps);
+extern int32_t gri_per_umap_setup(int32_t n, grs_vertex **vpl, grs_per_setup *ps);
 
 bool grd_enable_quad_blend=FALSE;
 
-int per_map (grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
+int32_t per_map (grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti)
 {
    grs_vertex **cpl;          /* clipped vertices */
-   int m;                     /* number of clipped vertices */
+   int32_t m;                     /* number of clipped vertices */
 
    cpl = NULL;
    m = gr_clip_poly(n,5,vpl,&cpl);
@@ -140,11 +140,11 @@ int per_map (grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
    return ((m>2) ? CLIP_NONE : CLIP_ALL);
 }
 
-void per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
+void per_umap (grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti)
 {
-   short percode;
+   int16_t percode;
    grs_per_setup ps;
-   uchar *save_bits;
+   uint8_t *save_bits;
 
    ps.dp=bm->flags&BMF_TRANS;
    if (2*grd_gc.fill_type + ps.dp==2*FILL_SOLID) {
@@ -154,15 +154,15 @@ void per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
 //¥¥¥ÊMLA - doesnt' ever appear to use this
 /*
    if ((bm->type==BMT_FLAT8)&&grd_enable_quad_blend) {
-      int u_min=vpl[0]->u;
-      int u_max=u_min;
-      int v_min=vpl[0]->v;
-      int v_max=v_min;
-      int x_min=vpl[0]->x;
-      int x_max=x_min;
-      int y_min=vpl[0]->y;
-      int y_max=y_min;
-      int i,canvas_delta;
+      int32_t u_min=vpl[0]->u;
+      int32_t u_max=u_min;
+      int32_t v_min=vpl[0]->v;
+      int32_t v_max=v_min;
+      int32_t x_min=vpl[0]->x;
+      int32_t x_max=x_min;
+      int32_t y_min=vpl[0]->y;
+      int32_t y_max=y_min;
+      int32_t i,canvas_delta;
 
       for (i=1;i<n;i++) {
          if (vpl[i]->u>u_max) u_max=vpl[i]->u;
@@ -184,9 +184,9 @@ void per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
       if (canvas_delta>30*FIX_UNIT) {
          if ((fix_int(u_max)-fix_int(u_min)<4)&&
              (fix_int(v_max)-fix_int(v_min)<4)) {
-            extern void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *sbm, grs_bitmap *dbm, int u, int v);
-            int u=fix_int(u_min);
-            int v=fix_int(v_min);
+            extern void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *sbm, grs_bitmap *dbm, int32_t u, int32_t v);
+            int32_t u=fix_int(u_min);
+            int32_t v=fix_int(v_min);
             grs_bitmap tbm;
 
             if (u+4>=bm->w) u=bm->w-4;
@@ -226,11 +226,11 @@ void per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
    switch (percode) {
    case GR_PER_CODE_BIGSLOPE:
    	  ((void (*)(grs_bitmap *, grs_per_setup *))(grd_tmap_hscan_init_table[ps.dp]))(bm,&ps);
-      ((void (*)(grs_bitmap *, int, grs_vertex **, grs_per_setup *))(ps.shell_func))(bm,n,vpl,&ps);
+      ((void (*)(grs_bitmap *, int32_t, grs_vertex **, grs_per_setup *))(ps.shell_func))(bm,n,vpl,&ps);
       break;
    case GR_PER_CODE_SMALLSLOPE:
       ((void (*)(grs_bitmap *, grs_per_setup *))(grd_tmap_vscan_init_table[ps.dp]))(bm,&ps);
-      ((void (*)(grs_bitmap *, int, grs_vertex **, grs_per_setup *))(ps.shell_func))(bm,n,vpl,&ps);
+      ((void (*)(grs_bitmap *, int32_t, grs_vertex **, grs_per_setup *))(ps.shell_func))(bm,n,vpl,&ps);
       break;
    case GR_PER_CODE_LIN:
       ti->tmap_type+=GRC_BILIN-GRC_PER;

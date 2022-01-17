@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __BLNDAT_H
 #define __BLNDAT_H
-extern uchar *grd_blend;
-extern uchar *grd_half_blend;
-extern int grd_log_blend_levels;
+extern uint8_t *grd_blend;
+extern uint8_t *grd_half_blend;
+extern int32_t grd_log_blend_levels;
 #endif /* !__BLNDAT_H */

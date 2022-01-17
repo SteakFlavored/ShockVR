@@ -76,11 +76,11 @@ void android_main(struct android_app* app) {
     while (app->destroyRequested == 0) {
         // Read all pending events.
         for (;;) {
-            int events;
+            int32_t events;
             struct android_poll_source* source;
             // If the timeout is zero, returns immediately without blocking.
             // If the timeout is negative, waits indefinitely until an event appears.
-            const int timeoutMilliseconds =
+            const int32_t timeoutMilliseconds =
                     (!appState.Resumed && app->destroyRequested == 0) ? -1 : 0;
             if (ALooper_pollAll(timeoutMilliseconds, nullptr, &events, (void**)&source) < 0) {
                 break;

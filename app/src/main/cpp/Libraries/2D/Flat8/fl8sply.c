@@ -34,19 +34,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tlucdat.h"
 
 // prototypes
-int gri_spoly_loop (grs_tmap_loop_info *ti);
+int32_t gri_spoly_loop (grs_tmap_loop_info *ti);
 void gri_spoly_init (grs_tmap_loop_info *ti);
 void gri_clut_spoly_init (grs_tmap_loop_info *ti);
 void gri_stpoly_init (grs_tmap_loop_info *ti);
 void gri_clut_stpoly_init (grs_tmap_loop_info *ti);
 
 
-int gri_spoly_loop (grs_tmap_loop_info *ti)
+int32_t gri_spoly_loop (grs_tmap_loop_info *ti)
 {
-	int 		d;
+	int32_t 		d;
 	fix 		i,di;
 	fix 		xl,xr;
-	uchar 	*ti_d;
+	uint8_t 	*ti_d;
 	fix			ti_li,ti_ri;
 
 	xl=ti->left.x;
@@ -63,7 +63,7 @@ int gri_spoly_loop (grs_tmap_loop_info *ti)
 
 	  if ((d=fix_cint(xr)-fix_cint(xl)) > 0) {
 	     switch (ti->bm.hlog) {
-	        int x;
+	        int32_t x;
 	     case GRL_OPAQUE:
 	        for (x=fix_cint(xl); x<fix_cint(xr); x++)
 	        {

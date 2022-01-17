@@ -80,7 +80,7 @@ void (*exit_modes[])(void)={screen_exit,fullscreen_exit,screen_exit, screen_exit
 void (*enter_modes[])(void)={screen_start, fullscreen_start, NULL,NULL,NULL,NULL,NULL,NULL,amap_start};
 void (*exit_modes[])(void)={screen_exit, fullscreen_exit, NULL, NULL,NULL,NULL,NULL,NULL,amap_exit};
 
-void loopmode_switch(short *cmode)
+void loopmode_switch(int16_t *cmode)
 {
 #ifdef SVGA_SUPPORT
 	extern bool wrapper_screenmode_hack;
@@ -104,14 +104,14 @@ void loopmode_switch(short *cmode)
 #endif*/
 }
 
-void loopmode_exit(short loopmode)
+void loopmode_exit(int16_t loopmode)
 {
 	if (exit_modes[loopmode])
 		(*exit_modes[loopmode])();
 }
 
 /*¥¥¥
-void loopmode_enter(short loopmode)
+void loopmode_enter(int16_t loopmode)
 {
    (*enter_modes[loopmode])();
 }

@@ -41,8 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct
 {
-	short		language;
-	long		startingTime;
+	int16_t		language;
+	int32_t		startingTime;
 	Str255	subtitle;
 } SubtitleEntry;
 
@@ -52,30 +52,30 @@ typedef struct
 Rect				gSubRect;							// Rectangle for showing sub-titles.
 Rect 				gMovieBox;						// Rectangle of the movie box.
 CTabHandle		gCTab[16];						// Color tables for the movie.
-long				gChgTime[16];					// When to change colors.
-long				gPalIndex;							// Which palette to change to.
-Boolean			gShowSubs;
+int32_t				gChgTime[16];					// When to change colors.
+int32_t				gPalIndex;							// Which palette to change to.
+bool			gShowSubs;
 SubtitleEntry	*gCurrSub;
 
 //--------------------
 //  Internal Prototypes
 //--------------------
-pascal OSErr DrawDoneProc(Movie theMovie, long refCon);
+pascal OSErr DrawDoneProc(Movie theMovie, int32_t refCon);
 void DoSubtitle(TimeValue time);
-void DrawSubtitle(char *title);
+void DrawSubtitle(int8_t *title);
 void GetNextSubtitle(void);
 
 
 //------------------------------------------------------------------------------------
 //		Play a movie with palette changes, either cut-scenes or v-mail.
 //------------------------------------------------------------------------------------
-void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
+void PlayCutScene(FSSpec *movieSpec, bool showSubs, bool allowHalt)
 {
 	RGBColor			black = {0, 0, 0};
 	RGBColor			white = {0xffff, 0xffff, 0xffff};
 	OSErr				err;
-	short 				movieResFile;
-	long					i;
+	int16_t 				movieResFile;
+	int32_t					i;
 	Movie				theMovie;
 	Handle				subHdl = nil;
 	Handle				qpalHdl = nil;
@@ -109,9 +109,9 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 	err = OpenMovieFile(movieSpec, &movieResFile, fsRdPerm);
 	if (err == noErr)
 	{
-		short 		movieResID = 0;
+		int16_t 		movieResID = 0;
 		Str255 		movieName;
-		Boolean 		wasChanged;
+		bool 		wasChanged;
 																			// Load the 'moov' resource.
 		err = NewMovieFromFile(&theMovie, movieResFile, &movieResID,
 						movieName, newMovieActive, &wasChanged);
@@ -143,8 +143,8 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 	}
 
 	// Get a reference to the video track and media, and load all the palettes for the movie.
-	long	tc = GetMovieTrackCount(theMovie);
-	for (long t = 1; t <= tc; t++)
+	int32_t	tc = GetMovieTrackCount(theMovie);
+	for (int32_t t = 1; t <= tc; t++)
 	{
 		vidTrack = GetMovieIndTrack(theMovie, t);
 		if (vidTrack)
@@ -159,8 +159,8 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 				{
 					ImageDescriptionHandle	idh = (ImageDescriptionHandle)NewHandle(sizeof(ImageDescription));
 
-					long	sdc = GetMediaSampleDescriptionCount(vidMedia);
-					for (long s = 1; s <= sdc; s++)
+					int32_t	sdc = GetMediaSampleDescriptionCount(vidMedia);
+					for (int32_t s = 1; s <= sdc; s++)
 					{
 						GetMediaSampleDescription(vidMedia, s, (SampleDescriptionHandle)idh);
 						GetImageDescriptionCTable(idh, &gCTab[s-1]);
@@ -249,11 +249,11 @@ void PlayCutScene(FSSpec *movieSpec, Boolean showSubs, Boolean allowHalt)
 //------------------------------------------------------------------------
 //  Callback routine to change the palette.
 //------------------------------------------------------------------------
-pascal OSErr DrawDoneProc(Movie theMovie, long )
+pascal OSErr DrawDoneProc(Movie theMovie, int32_t )
 {
 	RGBColor	black = {0, 0, 0};
 	TimeValue	tv;
-	long			chkTime;
+	int32_t			chkTime;
 
 	chkTime = gChgTime[gPalIndex];						// Get the next time for a palette change.
 	if (chkTime != -1)											// If it's a valid time,
@@ -288,7 +288,7 @@ void DoSubtitle(TimeValue time)
 	if (gCurrSub->startingTime != -1 &&					// If it's a valid time
 		 time >= gCurrSub->startingTime)					// and it's time to show it
 	{
-		DrawSubtitle((char *)gCurrSub->subtitle);		// Draw the thang.
+		DrawSubtitle((int8_t *)gCurrSub->subtitle);		// Draw the thang.
 		gCurrSub++;
 		GetNextSubtitle();
 	}
@@ -297,9 +297,9 @@ void DoSubtitle(TimeValue time)
 //------------------------------------------------------------------------
 //  Draw a subtitle (centered and everything).
 //------------------------------------------------------------------------
-void DrawSubtitle(char *title)
+void DrawSubtitle(int8_t *title)
 {
-	short		tl;
+	int16_t		tl;
 
 	EraseRect(&gSubRect);									// Blank out before drawing.
 
@@ -322,17 +322,17 @@ void GetNextSubtitle(void)
 //------------------------------------------------------------------------------------
 //	  Play a v-mail movie, always showing the intro first.
 //------------------------------------------------------------------------------------
-void PlayVMail(FSSpec *movieSpec, short orgx, short orgy)
+void PlayVMail(FSSpec *movieSpec, int16_t orgx, int16_t orgy)
 {
 	Size					dummy;
 	RGBColor			black = {0, 0, 0};
 	RGBColor			white = {0xffff, 0xffff, 0xffff};
 	OSErr				err;
-	short 				movieResFile;
+	int16_t 				movieResFile;
 	Rect					movieBox;
 	Movie				theMovie[2];
 	Fixed					mr;
-	short 				i;
+	int16_t 				i;
 
 	MaxMem(&dummy);							// Compact heap before loading the movie.
 
@@ -344,9 +344,9 @@ void PlayVMail(FSSpec *movieSpec, short orgx, short orgy)
 		err = OpenMovieFile(movieSpec, &movieResFile, fsRdPerm);
 		if (err == noErr)
 		{
-			short 		movieResID = 0;
+			int16_t 		movieResID = 0;
 			Str255 		movieName;
-			Boolean 		wasChanged;
+			bool 		wasChanged;
 																				// Load the 'moov' resource.
 			err = NewMovieFromFile(&theMovie[i], movieResFile, &movieResID,
 							movieName, newMovieActive, &wasChanged);
@@ -399,8 +399,8 @@ void PlayVMail(FSSpec *movieSpec, short orgx, short orgy)
 }
 
 
-//uchar *intro_files[] = { "\pIntro", "\pIntro (French)", "\pIntro (German)" } ;
-//extern char which_lang;
+//uint8_t *intro_files[] = { "\pIntro", "\pIntro (French)", "\pIntro (German)" } ;
+//extern int8_t which_lang;
 
 //------------------------------------------------------------------------------------
 //	  Play the intro cut-scene.
@@ -427,12 +427,12 @@ void PlayIntroCutScene()
 //------------------------------------------------------------------------------------
 //	  Play a startup movie.
 //------------------------------------------------------------------------------------
-void PlayStartupMovie(FSSpec *movieSpec, short orgx, short orgy)
+void PlayStartupMovie(FSSpec *movieSpec, int16_t orgx, int16_t orgy)
 {
 	RGBColor			black = {0, 0, 0};
 	RGBColor			white = {0xffff, 0xffff, 0xffff};
 	OSErr				err;
-	short 				movieResFile;
+	int16_t 				movieResFile;
 	Rect					movieBox;
 	Movie				theMovie;
 	Fixed					mr;
@@ -442,9 +442,9 @@ void PlayStartupMovie(FSSpec *movieSpec, short orgx, short orgy)
 	err = OpenMovieFile(movieSpec, &movieResFile, fsRdPerm);
 	if (err == noErr)
 	{
-		short 		movieResID = 0;
+		int16_t 		movieResID = 0;
 		Str255 		movieName;
-		Boolean 		wasChanged;
+		bool 		wasChanged;
 																			// Load the 'moov' resource.
 		err = NewMovieFromFile(&theMovie, movieResFile, &movieResID,
 						movieName, newMovieActive, &wasChanged);

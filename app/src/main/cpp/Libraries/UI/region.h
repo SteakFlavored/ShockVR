@@ -43,19 +43,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _Region
 {
-	int     abs_x, abs_y;			// upper left in absolute coords
+	int32_t     abs_x, abs_y;			// upper left in absolute coords
 	LGRect  *r;						// rectangle covered by this region, in coord frame of parent.
-	int     z;						// z-coordinate to determine stacking
-	int 	moving;
+	int32_t     z;						// z-coordinate to determine stacking
+	int32_t 	moving;
 	bool 	(*expose)(struct _Region *reg, LGRect *r);		// function to draw a given rectangle
 	bool 	(*save_under)(struct _Region *reg, LGRect *r);	// function to save under a given rectangle
 	bool 	(*replace)(struct _Region *reg, LGRect *r);
-	ulong  	status_flags;
-	int    	device_type;
+	uint32_t  	status_flags;
+	int32_t    	device_type;
 	void 	*handler;
 	void 	*cursors;
 	void 	*user_data;				// user-provided region information for callback use
-	int    	event_order;
+	int32_t    	event_order;
 	struct 	_Region *sub_region;   	// Head of children regions
 	struct 	_Region *next_region;	// next region at same level
 	struct 	_Region *parent; 		// parent of this region
@@ -94,8 +94,8 @@ errtype region_init();
 // Note that when creating the root region, you must set the device_type by hand -- this
 // will then be inherited by each subregion as they are created.
 
-errtype region_create(LGRegion *parent, LGRegion *ret, LGRect *r, int z, int event_order,
-   ulong status, RectCallback expose,
+errtype region_create(LGRegion *parent, LGRegion *ret, LGRect *r, int32_t z, int32_t event_order,
+   uint32_t status, RectCallback expose,
    RectCallback save_under, RectCallback replace, void *user_data);
 
 #define REG_USER_CONTROLLED   EVENT_CB | EXPOSE_CB | SAVEUNDER_CB | REPLACE_CB
@@ -114,12 +114,12 @@ errtype region_destroy(LGRegion *reg, bool draw);
 // callbacks are dished out for the original area and any newly covered
 // area.  As usual, these coords are relative....
 
-errtype region_move(LGRegion *reg, int new_x, int new_y, int new_z);
+errtype region_move(LGRegion *reg, int32_t new_x, int32_t new_y, int32_t new_z);
 
 // Change the size of a region.  Appropriate callbacks are
 // triggered if the regions masks allow.
 
-errtype region_resize(LGRegion *reg, int new_x_size, int new_y_size);
+errtype region_resize(LGRegion *reg, int32_t new_x_size, int32_t new_y_size);
 
 errtype region_expose(LGRegion *reg, LGRect *exp_rect);
 
@@ -129,13 +129,13 @@ errtype region_expose(LGRegion *reg, LGRect *exp_rect);
 // function ever returns a non-zero value, the traversal stops.  Returns
 // true if non-zero value was returned during traversal.
 
-int region_traverse_rect(LGRegion *reg, LGRect *target, TravRectCallback fn, int order, void *data);
-int region_traverse_point(LGRegion *reg, LGPoint target, TravRectCallback fn, int order, void *data);
-int region_traverse(LGRegion *reg, TravCallback fn, int order, void *data);
+int32_t region_traverse_rect(LGRegion *reg, LGRect *target, TravRectCallback fn, int32_t order, void *data);
+int32_t region_traverse_point(LGRegion *reg, LGPoint target, TravRectCallback fn, int32_t order, void *data);
+int32_t region_traverse(LGRegion *reg, TravCallback fn, int32_t order, void *data);
 
 // Converts a rectangle from a given region's coordinate system to the frame of a child of that
 // coordinate system.
-int region_convert_rect(LGRegion *from_reg, LGRect *conv);
+int32_t region_convert_rect(LGRegion *from_reg, LGRect *conv);
 
 // Converts a rectangle within a region to the absolute coords for that region, not relative
 errtype region_abs_rect(LGRegion *reg, LGRect *orig_rect, LGRect *conv);
@@ -147,8 +147,8 @@ errtype region_convert_to_root(LGRegion *reg, LGRegion **root_reg, LGRect *rect,
 // Returns whether or not a particular rectangle within a region is obscured by anything or
 // not.  The coordinates of the rectangle are local coords.  region_foreign_obscured is
 // like region_obscured but ignores children for purposes of obscuration.
-int region_obscured(LGRegion *reg, LGRect *obs_rect);
-int foreign_region_obscured(LGRegion *reg, LGRect *obs_rect);
+int32_t region_obscured(LGRegion *reg, LGRect *obs_rect);
+int32_t foreign_region_obscured(LGRegion *reg, LGRect *obs_rect);
 
 // These functions control whether or not the region library thinks the application is
 // in the middle of a sequence which will generate multiple, probably duplicate, expose events.

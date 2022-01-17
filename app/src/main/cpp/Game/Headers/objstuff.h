@@ -43,9 +43,9 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   short cosmetic_value;
-   int data1;
-   int data2;
+   int16_t cosmetic_value;
+   int32_t data1;
+   int32_t data2;
 } ObjBigstuff;
 
 typedef struct {
@@ -59,80 +59,80 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   short cosmetic_value;
-   int data1;
-   int data2;
+   int16_t cosmetic_value;
+   int32_t data1;
+   int32_t data2;
 } ObjSmallstuff;
 
 // Class typedefs
 typedef struct _BigstuffProp {
-   int data;
+   int32_t data;
 } BigstuffProp;
 
 typedef struct _SmallstuffProp {
-   short uses_flags;
+   int16_t uses_flags;
 } SmallstuffProp;
 
 // Subclass typedefs
 typedef struct _ElectronicBigstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } ElectronicBigstuffProp;
 
 typedef struct _FurnishingBigstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } FurnishingBigstuffProp;
 
 typedef struct _OnthewallBigstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } OnthewallBigstuffProp;
 
 typedef struct _LightBigstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } LightBigstuffProp ;
 
 typedef struct _LabgearBigstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } LabgearBigstuffProp ;
 
 typedef struct _TechnoBigstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } TechnoBigstuffProp ;
 
 typedef struct _DecorBigstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } DecorBigstuffProp ;
 
 typedef struct _TerrainBigstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } TerrainBigstuffProp ;
 
 typedef struct _UselessSmallstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } UselessSmallstuffProp ;
 
 typedef struct _BrokenSmallstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } BrokenSmallstuffProp ;
 
 typedef struct _CorpselikeSmallstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } CorpselikeSmallstuffProp ;
 
 typedef struct _GearSmallstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } GearSmallstuffProp ;
 
 typedef struct _CardsSmallstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } CardsSmallstuffProp ;
 
 #define NUM_SMALLSTUFF_VCOLORS   6
 typedef struct _CyberSmallstuffProp {
-   uchar vcolors[NUM_SMALLSTUFF_VCOLORS];
+   uint8_t vcolors[NUM_SMALLSTUFF_VCOLORS];
 } CyberSmallstuffProp ;
 
 typedef struct _OnthewallSmallstuffProp {
-   ubyte dummy;
+   uint8_t dummy;
 } OnthewallSmallstuffProp ;
 
 typedef struct _PlotSmallstuffProp {

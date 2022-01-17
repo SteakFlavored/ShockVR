@@ -33,15 +33,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 grs_screen *grd_screen=NULL;
 
 /* pointer to palette */
-uchar grd_default_pal[768];
-uchar *grd_pal=grd_default_pal;
+uint8_t grd_default_pal[768];
+uint8_t *grd_pal=grd_default_pal;
 
 /* pointer to blend palette */
 grs_rgb grd_default_bpal[1024];
 grs_rgb *grd_bpal=grd_default_bpal;
 
 /* pointer to inverse palette */
-uchar *grd_ipal=NULL;
+uint8_t *grd_ipal=NULL;
 
 /* pointer to a canvas for the current virtual screen. */
 grs_canvas *grd_screen_canvas;
@@ -70,14 +70,14 @@ void (**grd_pixel_table)();
 void (**grd_canvas_table)();
 
 /* currently active graphics mode. -1 means unrecognized mode */
-int grd_mode=-1;
+int32_t grd_mode=-1;
 
 /* flag for whether we are executing in an interrupt. */
 bool grd_interrupt=0;
 
 /* Function chaining globals.  Set during gr_set_canvas; that's why I moved them here. */
-short grd_pixel_index, grd_canvas_index;
-uchar chn_flags;
+int16_t grd_pixel_index, grd_canvas_index;
+uint8_t chn_flags;
 
 /* Graphics capability detection function pointer. */
-int (*grd_detect_func)(grs_sys_info *info);
+int32_t (*grd_detect_func)(grs_sys_info *info);

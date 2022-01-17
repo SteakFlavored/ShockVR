@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "plytyp.h"
 #include "linfcn.h"
 
-#define gr_get_ipal_index(r,g,b)   (long) ((((r)>>19) &0x1f) | (((g)>>14) & 0x3e0) | (((b)>>9) & 0x7c00))
+#define gr_get_ipal_index(r,g,b)   (int32_t) ((((r)>>19) &0x1f) | (((g)>>14) & 0x3e0) | (((b)>>9) & 0x7c00))
 #define do_hline_inc_x \
    do {        \
       p[x]=c;  \
@@ -48,15 +48,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       p[x]=c;        \
    } while (x>x_new)
 
-void gri_flat8_wire_poly_uline(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
-   int y,y_max,x,x_new;
+void gri_flat8_wire_poly_uline(int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1) {
+   int32_t y,y_max,x,x_new;
    fix x0,y0;
    fix x1,y1;
    fix x_fix,dx;
-   uchar *p;
+   uint8_t *p;
 
-   if (gr_get_fill_type()==FILL_SOLID) c=(uchar )parm;
-   else if (gr_get_fill_type()==FILL_CLUT) c=((uchar *)parm)[c];
+   if (gr_get_fill_type()==FILL_SOLID) c=(uint8_t )parm;
+   else if (gr_get_fill_type()==FILL_CLUT) c=((uint8_t *)parm)[c];
    if (v1->y>v0->y) {
       y=fix_cint(v0->y);
       y_max=fix_cint(v1->y);

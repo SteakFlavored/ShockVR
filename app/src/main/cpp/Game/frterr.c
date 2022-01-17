@@ -50,7 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FLIP_BITS
 
 // for the game system to grab and deparse for distance and all
-int _game_fr_tmap;
+int32_t _game_fr_tmap;
 
 // these should go somewhere else...
 #define MAX_HGT HGT_STEPS
@@ -63,70 +63,70 @@ int _game_fr_tmap;
 // really need oct_low and oct_high mirrors for fhgt_list so we can +/- 33 as oct_parm
 
 // globals
-int  _fdt_dist;											// distance in hv squares to us
+int32_t  _fdt_dist;											// distance in hv squares to us
 fix  _fr_fhgt_step;									// single hgt step
 fix  _fr_fhgt_list[MAX_HGT+1];         		// all hgt steps fix mapping
 sfix _fr_sfuv_list[(2*MAX_HGT)+1];   	// all hgt steps uv mapping
 fix  slope_norm[MAX_HGT][3];             		// table for sloped floors
 
 // these example values are for a 32wide map, they get set in frpipe when map is resized
-int  wall_adds[]={DEF_MAP_SZ,1,-DEF_MAP_SZ,-1};  			// how to get from one tile to next ptr math
-int  csp_trans_add[]={0,DEF_MAP_SZ,DEF_MAP_SZ+1,1}; 	// alternate mapping of same deltas
+int32_t  wall_adds[]={DEF_MAP_SZ,1,-DEF_MAP_SZ,-1};  			// how to get from one tile to next ptr math
+int32_t  csp_trans_add[]={0,DEF_MAP_SZ,DEF_MAP_SZ+1,1}; 	// alternate mapping of same deltas
 
-int _fdt_x, _fdt_y, _fdt_mask;					// implicit parameters to draw tile
+int32_t _fdt_x, _fdt_y, _fdt_mask;					// implicit parameters to draw tile
 MapElem *_fdt_mptr;                              	// more implicit parameters
 
 // texture mapping function pointers.
-void (*_fr_lit_floor_func)(int, g3s_phandle *, grs_bitmap *);
-void (*_fr_floor_func)(int, g3s_phandle *, grs_bitmap *);
-void (*_fr_lit_wall_func)(int, g3s_phandle *, grs_bitmap *);
-void (*_fr_wall_func)(int, g3s_phandle *, grs_bitmap *);
-void (*_fr_lit_per_func)(int, g3s_phandle *, grs_bitmap *);
-void (*_fr_per_func)(int, g3s_phandle *, grs_bitmap *);
+void (*_fr_lit_floor_func)(int32_t, g3s_phandle *, grs_bitmap *);
+void (*_fr_floor_func)(int32_t, g3s_phandle *, grs_bitmap *);
+void (*_fr_lit_wall_func)(int32_t, g3s_phandle *, grs_bitmap *);
+void (*_fr_wall_func)(int32_t, g3s_phandle *, grs_bitmap *);
+void (*_fr_lit_per_func)(int32_t, g3s_phandle *, grs_bitmap *);
+void (*_fr_per_func)(int32_t, g3s_phandle *, grs_bitmap *);
 
 
 #if _fr_defdbg(CURSOR)
-int _fr_cursorx, _fr_cursory;
+int32_t _fr_cursorx, _fr_cursory;
 #endif
 
 #if _fr_defdbg(ALTCAM)
-int _fr_altcamx, _fr_altcamy;
+int32_t _fr_altcamx, _fr_altcamy;
 #endif
 
 // various nested locals, read static globals in C
-static uchar         _fdt_tt;          				// local storage of our current tile's tiletype
+static uint8_t         _fdt_tt;          				// local storage of our current tile's tiletype
 static TilesToWalls  	_fdt_ttw;				// secret tiles to walls code
 static TilesToFloors 	*_fdt_ttf;				// pointer to current floor spew
-static uchar		 _fdt_hgts[5];				// parm, flr, ceil, fprm, cprm
+static uint8_t		 _fdt_hgts[5];				// parm, flr, ceil, fprm, cprm
 static fix			 _fdt_fix_parm;    			// fix rep for parameter
 static fix			 _fdt_cur_parm;			// dont pass around, as it is constant per tile
-static char			 _fdt_icnt;						// internal walls count - can be made a local again, i think
-static uchar		*_fdt_fo;						// current tile's fo data
+static int8_t			 _fdt_icnt;						// internal walls count - can be made a local again, i think
+static uint8_t		*_fdt_fo;						// current tile's fo data
 static fix			_fdt_hgt_val;					// last point hgt world coordinate
-static uchar		_fdt_whichpt;				//  fhgt_list_entry 0-MAX_HGT for last point looked up height w/parm adjust
-static uchar		_fdt_hgt_pt;					// actual fdt_hgts value for this whichpt, since we use it 4-8 times for lit pts
+static uint8_t		_fdt_whichpt;				//  fhgt_list_entry 0-MAX_HGT for last point looked up height w/parm adjust
+static uint8_t		_fdt_hgt_pt;					// actual fdt_hgts value for this whichpt, since we use it 4-8 times for lit pts
 g3s_phandle		_fdt_tmppts[8];				// these are used for all temporary point sets
-static int			_fdt_wallid;					// current external wall id
+static int32_t			_fdt_wallid;					// current external wall id
 static g3s_phandle  *_fdt_lcore;				// left core for external walls
 static g3s_phandle  *_fdt_rcore;				// right core for external walls
-static int   			_fdt_rbase;					// value of pbase at right of external walls, we use pbase itself for left
-static int 			_fdt_me_flags;				// hold store the current map flags
-static int			_fdt_wmap;					// current tmap family to use
+static int32_t   			_fdt_rbase;					// value of pbase at right of external walls, we use pbase itself for left
+static int32_t 			_fdt_me_flags;				// hold store the current map flags
+static int32_t			_fdt_wmap;					// current tmap family to use
 static sfix			_fdt_slock;					// sfix value for vlock in square
 
-int 					_fdt_pbase;					// where pbase is, for corner for idx lookup - sadly global for object lighting
+int32_t 					_fdt_pbase;					// where pbase is, for corner for idx lookup - sadly global for object lighting
 
-static uchar		last_csp_fr=0;				// last frame annoyance
-static uchar		 _fdt_flip;						// tile flippitude of cur tile
+static uint8_t		last_csp_fr=0;				// last frame annoyance
+static uint8_t		 _fdt_flip;						// tile flippitude of cur tile
 static bool			_fdt_terr;						// are we doing terrain or physics
 
 // indirections for low level render functions
-static void (*_fr_terr_int_wall)(int wall_id);
+static void (*_fr_terr_int_wall)(int32_t wall_id);
 static void (*_fr_terr_ext_wall)(fix pt_list[4][2]);
 static void (*_fr_terr_flr)(void);
 static void (*_fr_terr_ceil)(void);
 // how to render a composite inner wall
-static void (*_fr_render_walls)(int which, int cnt);
+static void (*_fr_render_walls)(int32_t which, int32_t cnt);
 // how to deal w/the object chain at a square
 static void (*_fr_parse_obj)(void);
 
@@ -137,7 +137,7 @@ static void (*_fr_parse_obj)(void);
 #else
 #define IsTpropNotStars() (_game_fr_tmap>=4)
 #endif
-extern bool draw_tmap_p(int ptcnt);
+extern bool draw_tmap_p(int32_t ptcnt);
 #define quik_draw_tmap_p(ptcnt) ((IsTpropNotStars())||(draw_tmap_p(ptcnt)))
 //#define quik_draw_tmap_p(ptcnt) (TRUE)
 
@@ -152,30 +152,30 @@ extern bool draw_tmap_p(int ptcnt);
 #define FDT_PT_FPRM   3
 #define FDT_PT_CPRM   4
 
-int _fr_terr_prim=1;
+int32_t _fr_terr_prim=1;
 
 // Internal prototypes (for Mac version)
-void _fr_figure_pt(g3s_phandle tmp, int pt_code);
+void _fr_figure_pt(g3s_phandle tmp, int32_t pt_code);
 fix get_light(fix dist_to);
-int _fr_do_light_val(int which, fix dist_val);
-int _obj_do_light(int which, fix dist);
-void _fr_do_cspace(g3s_phandle wrk, int which);
+int32_t _fr_do_light_val(int32_t which, fix dist_val);
+int32_t _obj_do_light(int32_t which, fix dist);
+void _fr_do_cspace(g3s_phandle wrk, int32_t which);
 void _fr_draw_wire_cpoly_4(void);
-void _fr_draw_wire_cpoly_3or4(int cnt);
-void flip_setup(int wall_code);
-int fr_get_ext_gap(fix *face_l, uchar in_fo, uchar *hgts, uchar *mmptr);
-int _fr_get_anti_gap(fix *face_l, uchar in_fo, uchar *hgts, uchar *mmptr);
-void _render_3d_walls(int which, int cnt);
-int merge_walls(fix *dst_wall,fix *i_wall,int i_cnt,fix *o_wall,int o_cnt);
+void _fr_draw_wire_cpoly_3or4(int32_t cnt);
+void flip_setup(int32_t wall_code);
+int32_t fr_get_ext_gap(fix *face_l, uint8_t in_fo, uint8_t *hgts, uint8_t *mmptr);
+int32_t _fr_get_anti_gap(fix *face_l, uint8_t in_fo, uint8_t *hgts, uint8_t *mmptr);
+void _render_3d_walls(int32_t which, int32_t cnt);
+int32_t merge_walls(fix *dst_wall,fix *i_wall,int32_t i_cnt,fix *o_wall,int32_t o_cnt);
 void parse_clip_tile();
-void fr_terr_cspace_pick(uchar do_wall);
-int _fr_tfunc_flr_normal(fix *vec, int *lflg, int fnorm_entry);
-int _fr_tfunc_ceil_normal(fix *vec, int *lflg, int fnorm_entry);
-int do_fc_trans(fix *xy, fix *sc, fix *vals);
-void do_floor_element(int nrm_mask);
-void do_ceil_element(int nrm_mask);
+void fr_terr_cspace_pick(uint8_t do_wall);
+int32_t _fr_tfunc_flr_normal(fix *vec, int32_t *lflg, int32_t fnorm_entry);
+int32_t _fr_tfunc_ceil_normal(fix *vec, int32_t *lflg, int32_t fnorm_entry);
+int32_t do_fc_trans(fix *xy, fix *sc, fix *vals);
+void do_floor_element(int32_t nrm_mask);
+void do_ceil_element(int32_t nrm_mask);
 void fr_tfunc_grab_start(void) ;
-void fr_tfunc_grab_fast(int mask);
+void fr_tfunc_grab_fast(int32_t mask);
 
 
 
@@ -203,7 +203,7 @@ void fr_tfunc_grab_fast(int mask);
 // and i...  dont want to know if you are lonely
 
 // hmm.. have to deal with halve points and such
-void _fr_figure_pt(g3s_phandle tmp, int pt_code)
+void _fr_figure_pt(g3s_phandle tmp, int32_t pt_code)
 {
    g3s_phandle *core;
    pt_mods *ptm;
@@ -239,36 +239,36 @@ fix get_light(fix dist_to) // , fix dot_prod)
 //	   dist_to+=fix_mul(dist_to>>fr_normal_shf,fix_make(1,0)-dot_prod);      // 1/(1<<norm_shf) * dist_to*(anti_dot_prod)
 //   Spew(DSRC_TESTING_Test1,("v%s",fix_sprint(ft,dist_to)));
 // wow, fix this up, make fixes in frp, so on
-   if (dist_to<fix_make((int)_frp.lighting.rad[0],0))
-      return fix_make((int)_frp.lighting.base[0],0);
-   if (dist_to>fix_make((int)_frp.lighting.rad[1],0))
-      return fix_make((int)_frp.lighting.base[1],0);
+   if (dist_to<fix_make((int32_t)_frp.lighting.rad[0],0))
+      return fix_make((int32_t)_frp.lighting.base[0],0);
+   if (dist_to>fix_make((int32_t)_frp.lighting.rad[1],0))
+      return fix_make((int32_t)_frp.lighting.base[1],0);
    return fix_mul(dist_to,_frp.lighting.slope)+_frp.lighting.yint;
 }
 
 
 #define get_light_t(targ,dist_to) \
-   if (dist_to<fix_make((int)_frp.lighting.rad[0],0)) \
-      targ=((int)_frp.lighting.base[0])<<8; \
-   else if (dist_to>fix_make((int)_frp.lighting.rad[1],0)) \
-      targ=((int)_frp.lighting.base[1])<<8; \
+   if (dist_to<fix_make((int32_t)_frp.lighting.rad[0],0)) \
+      targ=((int32_t)_frp.lighting.base[0])<<8; \
+   else if (dist_to>fix_make((int32_t)_frp.lighting.rad[1],0)) \
+      targ=((int32_t)_frp.lighting.base[1])<<8; \
    else targ=(fix_mul(dist_to,_frp.lighting.slope)+_frp.lighting.yint)>>8
 
 #ifndef NEW_WAY
 #define set_terr_light(our_mp,which) \
       if (which==FRPTSZCEIL_DN) \
-	      i=(int)me_light_ceil(our_mp)-(int)me_templight_ceil(our_mp); \
+	      i=(int32_t)me_light_ceil(our_mp)-(int32_t)me_templight_ceil(our_mp); \
 	   else \
-	      i=(int)me_light_flr(our_mp)-(int)me_templight_flr(our_mp); \
+	      i=(int32_t)me_light_flr(our_mp)-(int32_t)me_templight_flr(our_mp); \
       if (i<0) i=0
 #else
 #define set_terr_light(our_mp,which) \
    { \
-      int j; \
+      int32_t j; \
       if (which==FRPTSZCEIL_DN) \
-       { i=(int)me_light_ceil(our_mp); j=(int)me_templight_ceil(our_mp); } \
+       { i=(int32_t)me_light_ceil(our_mp); j=(int32_t)me_templight_ceil(our_mp); } \
 	   else \
-	    { i=(int)me_light_flr(our_mp);  j=(int)me_templight_flr(our_mp);  } \
+	    { i=(int32_t)me_light_flr(our_mp);  j=(int32_t)me_templight_flr(our_mp);  } \
       i=min(i,j); \
    }
 #endif
@@ -277,10 +277,10 @@ fix get_light(fix dist_to) // , fix dot_prod)
 // for now hack with which to get stuff running
 // later we want an interpolator
 // rewrite this in assembler
-int _fr_do_light_val(int which, fix dist_val)
+int32_t _fr_do_light_val(int32_t which, fix dist_val)
 {
    MapElem *our_mp=_fdt_mptr;
-   int i;
+   int32_t i;
 
       our_mp+=csp_trans_add[_fdt_pbase];
       set_terr_light(our_mp,which);
@@ -316,18 +316,18 @@ int _fr_do_light_val(int which, fix dist_val)
 
 //   if (_frp_light_bits_norm())
 //   wrk->i=i;
-//   *((uchar *)&wrk->i)=i;
+//   *((uint8_t *)&wrk->i)=i;
 //   return wrk->i;
 }
 
-int _fr_do_light(g3s_phandle wrk, int which)
+int32_t _fr_do_light(g3s_phandle wrk, int32_t which)
 {
 //   fix dval=abs(wrk->x)+abs(wrk->y)+abs(wrk->z));
 //   fix dval=fix_fast_pyth_dist(fix_fast_pyth_dist(wrk->x,wrk->y),wrk->z);
 // really, we want the original, not transformed, points
 // how bout this mess, eh?
-   static int x_mod[]={0,0,1,1}, y_mod[]={0,1,1,0};
-   int _lgt_x, _lgt_y;
+   static int32_t x_mod[]={0,0,1,1}, y_mod[]={0,1,1,0};
+   int32_t _lgt_x, _lgt_y;
    fix dval;
    _lgt_x=_fdt_x+x_mod[_fdt_pbase];
    _lgt_y=_fdt_y+y_mod[_fdt_pbase];
@@ -337,14 +337,14 @@ int _fr_do_light(g3s_phandle wrk, int which)
    return wrk->i;
 }
 
-int _obj_do_light(int which, fix dist)
+int32_t _obj_do_light(int32_t which, fix dist)
 {
    return _fr_do_light_val(which,dist);
 }
 
-void _fr_do_cspace(g3s_phandle wrk, int which)
+void _fr_do_cspace(g3s_phandle wrk, int32_t which)
 {
-   int col, dst, ncval;
+   int32_t col, dst, ncval;
    MapElem *our_mp=_fdt_mptr+csp_trans_add[_fdt_pbase];
    if (which==FRPTSZCEIL_DN) col=me_cybcolor_ceil(our_mp); else col=me_cybcolor_flr(our_mp);
    // light table based on radius here, somehow....
@@ -369,7 +369,7 @@ void _fr_draw_wire_cpoly_4(void)
    g3_draw_cline(_fdt_tmppts[3],_fdt_tmppts[0]);
 }
 
-void _fr_draw_wire_cpoly_3or4(int cnt)
+void _fr_draw_wire_cpoly_3or4(int32_t cnt)
 {
    g3_draw_cline(_fdt_tmppts[0],_fdt_tmppts[1]);
    g3_draw_cline(_fdt_tmppts[1],_fdt_tmppts[2]);
@@ -382,9 +382,9 @@ void _fr_draw_wire_cpoly_3or4(int cnt)
    }
 }
 
-void flip_setup(int wall_code)
+void flip_setup(int32_t wall_code)
 {
-   int lflags=_fdt_me_flags;
+   int32_t lflags=_fdt_me_flags;
    if (lflags&MAP_FLIP_FNCY_MASK)
    {
       lflags&=~MAP_FLIP_FNCY_MASK;                              /* clear fancy bit */
@@ -471,10 +471,10 @@ void flip_setup(int wall_code)
 
 // tabs_int_wall
 //#pragma disable_message(202)
-static void _fr_null_int_wall(int wall_id) {}
+static void _fr_null_int_wall(int32_t wall_id) {}
 //#pragma enable_message(202)
 
-static void _fr_flat_int_wall(int wall_id)
+static void _fr_flat_int_wall(int32_t wall_id)
 {
    WallsToPts *wpt=&wall_pts[wall_id];
    // need to have face_code set and be ready with flip and hold and all that jazz
@@ -487,7 +487,7 @@ static void _fr_flat_int_wall(int wall_id)
 }
 
 #ifdef FLAT_SUPPORT
-static void _fr_flat_lit_int_wall(int wall_id)
+static void _fr_flat_lit_int_wall(int32_t wall_id)
 {
    WallsToPts *wpt=&wall_pts[wall_id];
    // need to have face_code set and be ready with flip and hold and all that jazz
@@ -503,7 +503,7 @@ static void _fr_flat_lit_int_wall(int wall_id)
 #define _fr_flat_lit_int_wall _fr_tmap_lit_int_wall
 #endif
 
-static void _fr_tmap_int_wall(int wall_id)
+static void _fr_tmap_int_wall(int32_t wall_id)
 {
    WallsToPts *wpt=&wall_pts[wall_id];
    // need to have face_code set and be ready with flip and hold and all that jazz
@@ -516,7 +516,7 @@ static void _fr_tmap_int_wall(int wall_id)
    _fr_sdbg(STATS,_frp.stats.int_wall++);
 }
 
-static void _fr_tmap_lit_int_wall(int wall_id)
+static void _fr_tmap_lit_int_wall(int32_t wall_id)
 {
    WallsToPts *wpt=&wall_pts[wall_id];
    // need to have face_code set and be ready with flip and hold and all that jazz
@@ -529,7 +529,7 @@ static void _fr_tmap_lit_int_wall(int wall_id)
    _fr_sdbg(STATS,_frp.stats.int_wall++);
 }
 
-static void _fr_cspace_wire_int_wall(int wall_id)
+static void _fr_cspace_wire_int_wall(int32_t wall_id)
 {
    WallsToPts *wpt=&wall_pts[wall_id];
    // need to have face_code set and be ready with flip and hold and all that jazz
@@ -541,7 +541,7 @@ static void _fr_cspace_wire_int_wall(int wall_id)
    _fr_sdbg(STATS,_frp.stats.int_wall++);
 }
 
-static void _fr_cspace_full_int_wall(int wall_id)
+static void _fr_cspace_full_int_wall(int32_t wall_id)
 {
    WallsToPts *wpt=&wall_pts[wall_id];
    // need to have face_code set and be ready with flip and hold and all that jazz
@@ -648,8 +648,8 @@ static void _fr_null_flrceil(void) {}
 // lets start a war, jack up the dow jones
 static void _fr_flat_flr(void)
 {
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
-   int i, pt_code, loopcnt;
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   int32_t i, pt_code, loopcnt;
    g3s_phandle *pb;
 
    loopcnt=_fdt_ttf->flags>>FRFLRSHF_2ELEM;  // 0 or 1
@@ -669,8 +669,8 @@ static void _fr_flat_flr(void)
 #ifdef FLAT_SUPPORT
 static void _fr_flat_lit_flr(void)
 {
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
-   int i, pt_code, loopcnt;
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   int32_t i, pt_code, loopcnt;
    g3s_phandle *pb;
 
    loopcnt=_fdt_ttf->flags>>FRFLRSHF_2ELEM;  // 0 or 1
@@ -692,11 +692,11 @@ static void _fr_flat_lit_flr(void)
 
 static void _fr_tmap_flr(void)
 {
-   uchar nrm_mask=fr_fnorm_list[_fdt_tt];
-   int i, pt_code, loopcnt;
+   uint8_t nrm_mask=fr_fnorm_list[_fdt_tt];
+   int32_t i, pt_code, loopcnt;
    g3s_phandle *pb;
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
-   int pt_rot=me_rotflr(_fdt_mptr);
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   int32_t pt_rot=me_rotflr(_fdt_mptr);
 
    loopcnt=_fdt_ttf->flags>>FRFLRSHF_2ELEM;  // 0 or 1
    pt_merge_mask=merge_masks[me_bits_mirror(_fdt_mptr)][FDT_LK_FLR];
@@ -719,11 +719,11 @@ static void _fr_tmap_flr(void)
 
 static void _fr_tmap_lit_flr(void)
 {
-   uchar nrm_mask=fr_fnorm_list[_fdt_tt];
-   int i, pt_code, loopcnt;
+   uint8_t nrm_mask=fr_fnorm_list[_fdt_tt];
+   int32_t i, pt_code, loopcnt;
    g3s_phandle *pb;
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
-   int pt_rot=me_rotflr(_fdt_mptr);
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   int32_t pt_rot=me_rotflr(_fdt_mptr);
 
    loopcnt=_fdt_ttf->flags>>FRFLRSHF_2ELEM;  // 0 or 1
    pt_merge_mask=merge_masks[me_bits_mirror(_fdt_mptr)][FDT_LK_FLR];
@@ -746,8 +746,8 @@ static void _fr_tmap_lit_flr(void)
 
 static void _fr_cspace_wire_flr(void)
 {
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
-   int i, pt_code, loopcnt;
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   int32_t i, pt_code, loopcnt;
    g3s_phandle *pb;
 
    loopcnt=_fdt_ttf->flags>>FRFLRSHF_2ELEM;  // 0 or 1
@@ -766,8 +766,8 @@ static void _fr_cspace_wire_flr(void)
 
 static void _fr_cspace_full_flr(void)
 {
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
-   int i, pt_code, loopcnt;
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   int32_t i, pt_code, loopcnt;
    g3s_phandle *pb;
 
    loopcnt=_fdt_ttf->flags>>FRFLRSHF_2ELEM;  // 0 or 1
@@ -787,9 +787,9 @@ static void _fr_cspace_full_flr(void)
 // tabs_ceil
 static void _fr_flat_ceil(void)
 {
-   int i, pt_code, loopcnt=1;
+   int32_t i, pt_code, loopcnt=1;
    g3s_phandle *pb;
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
 
    if (_fdt_ttf->flags&FRFLRFLG_NOTOP) return;
    pt_merge_mask=merge_masks[me_bits_mirror(_fdt_mptr)][FDT_LK_CEIL];
@@ -807,9 +807,9 @@ static void _fr_flat_ceil(void)
 #ifdef FLAT_SUPPORT
 static void _fr_flat_lit_ceil(void)
 {
-   int i, pt_code, loopcnt=1;
+   int32_t i, pt_code, loopcnt=1;
    g3s_phandle *pb;
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
 
    if (_fdt_ttf->flags&FRFLRFLG_NOTOP) return;
    pt_merge_mask=merge_masks[me_bits_mirror(_fdt_mptr)][FDT_LK_CEIL];
@@ -830,11 +830,11 @@ static void _fr_flat_lit_ceil(void)
 
 static void _fr_tmap_ceil(void)
 {
-   uchar nrm_mask=fr_fnorm_list[_fdt_tt];
-   int i, pt_code, loopcnt=1;
+   uint8_t nrm_mask=fr_fnorm_list[_fdt_tt];
+   int32_t i, pt_code, loopcnt=1;
    g3s_phandle *pb;
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
-   int pt_rot=me_rotceil(_fdt_mptr);
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   int32_t pt_rot=me_rotceil(_fdt_mptr);
 
    if (_fdt_ttf->flags&FRFLRFLG_NOTOP) return;
    pt_merge_mask=merge_masks[me_bits_mirror(_fdt_mptr)][FDT_LK_CEIL];
@@ -857,11 +857,11 @@ static void _fr_tmap_ceil(void)
 
 static void _fr_tmap_lit_ceil(void)
 {
-   uchar nrm_mask=fr_fnorm_list[_fdt_tt];
-   int i, pt_code, loopcnt=1;
+   uint8_t nrm_mask=fr_fnorm_list[_fdt_tt];
+   int32_t i, pt_code, loopcnt=1;
    g3s_phandle *pb;
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
-   int pt_rot=me_rotceil(_fdt_mptr);
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   int32_t pt_rot=me_rotceil(_fdt_mptr);
 
    if (_fdt_ttf->flags&FRFLRFLG_NOTOP) return;
    pt_merge_mask=merge_masks[me_bits_mirror(_fdt_mptr)][FDT_LK_CEIL];
@@ -885,9 +885,9 @@ static void _fr_tmap_lit_ceil(void)
 //#pragma disable_message(202)
 static void _fr_cspace_wire_ceil(void)
 {
-   int i, pt_code, loopcnt=1;
+   int32_t i, pt_code, loopcnt=1;
    g3s_phandle *pb;
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
 
    if (_fdt_ttf->flags&FRFLRFLG_NOTOP) return;
    pt_merge_mask=merge_masks[me_bits_mirror(_fdt_mptr)][FDT_LK_CEIL];
@@ -904,9 +904,9 @@ static void _fr_cspace_wire_ceil(void)
 
 static void _fr_cspace_full_ceil(void)
 {
-   int i, pt_code, loopcnt=1;
+   int32_t i, pt_code, loopcnt=1;
    g3s_phandle *pb;
-   uchar *ptdat=_fdt_ttf->data, *pt_merge_mask;
+   uint8_t *ptdat=_fdt_ttf->data, *pt_merge_mask;
 
    if (_fdt_ttf->flags&FRFLRFLG_NOTOP) return;
    pt_merge_mask=merge_masks[me_bits_mirror(_fdt_mptr)][FDT_LK_CEIL];
@@ -927,16 +927,16 @@ static void _fr_cspace_full_ceil(void)
 
 // i ask for nothing, for myself
 // for i am dead, for i am dead
-int fr_get_ext_gap(fix *face_l, uchar in_fo, uchar *hgts, uchar *mmptr)
+int32_t fr_get_ext_gap(fix *face_l, uint8_t in_fo, uint8_t *hgts, uint8_t *mmptr)
 {
-   int fo_t, fo_b;
+   int32_t fo_t, fo_b;
    if (in_fo==0xff) return 0;
 //   if (in_fo&FO_HT_MSK)
    fo_t=(in_fo^mmptr[2])&mmptr[3]; fo_b=(in_fo^mmptr[0])&mmptr[1];
 //   if (_fdt_ttf->flags&FRFLRFLG_USEPR)
    if ((fo_t|fo_b)&FO_HT_MSK)
    {
-//	   uchar cur_fo;
+//	   uint8_t cur_fo;
 //    cur_fo=(in_fo^mmptr[2])&mmptr[3];
 	   *(face_l+0)=fo_unpack[fo_t&FO_LR_MSK][T_LEFT];     // set x for left ceil
 	   *(face_l+2)=fo_unpack[fo_t&FO_LR_MSK][T_RIGHT];    // set x for right ceil
@@ -975,10 +975,10 @@ int fr_get_ext_gap(fix *face_l, uchar in_fo, uchar *hgts, uchar *mmptr)
 // connect the god damn dots
 // who am i trying to impress
 // who could care less
-int _fr_get_anti_gap(fix *face_l, uchar in_fo, uchar *hgts, uchar *mmptr)
+int32_t _fr_get_anti_gap(fix *face_l, uint8_t in_fo, uint8_t *hgts, uint8_t *mmptr)
 {
-   int fo_t, fo_b;
-   int facecnt=1;
+   int32_t fo_t, fo_b;
+   int32_t facecnt=1;
 // more importantly, we think face_l is starting 4 in, we fill normally which works
 // also note that if no height changes, it could mean we have half walls
 // so we check in that case, and if so, add it in place
@@ -986,7 +986,7 @@ int _fr_get_anti_gap(fix *face_l, uchar in_fo, uchar *hgts, uchar *mmptr)
    fo_t=(in_fo^mmptr[2])&mmptr[3]; fo_b=(in_fo^mmptr[0])&mmptr[1];
    if ((fo_t|fo_b)&FO_HT_MSK)
    {                                                             // these cant be at top, since they have parameter
-//	   uchar cur_fo;                                              // unless of course it masks out.... hmmm
+//	   uint8_t cur_fo;                                              // unless of course it masks out.... hmmm
 //      cur_fo=(in_fo^mmptr[2])&mmptr[3];
       if (((fo_t&FO_HT_MSK)==0)&&(hgts[FDT_PT_CEIL]==MAX_HGT)) // we are fully at top
          facecnt|=ANTI_MASK_PUNTTOP;
@@ -1057,7 +1057,7 @@ void hack_show(fix edward[4][2])
 #endif
 
 // renders icnt of final_walls
-void _render_3d_walls(int which, int cnt)
+void _render_3d_walls(int32_t which, int32_t cnt)
 {
    WallsToPts *wpt=&wall_pts[FROUTERWALLS+which];
    _fdt_wallid=which;
@@ -1097,7 +1097,7 @@ void _render_3d_walls(int which, int cnt)
 #define dst_from_i(dwp,iwp)      { (*(dst_wall+(dwp<<1)+1))=(*(i_wall+(iwp<<1)+1)); (*(dst_wall+(dwp<<1)))=(*(i_wall+(iwp<<1))); }
 #define dst_from_o(dwp,owp)      { (*(dst_wall+(dwp<<1)+1))=(*(o_wall+(owp<<1)+1)); (*(dst_wall+(dwp<<1)))=(*(o_wall+(owp<<1))); }
 
-int f_is_i;
+int32_t f_is_i;
 
 /*
  * currently broken when the following is true:             40000 40000
@@ -1107,10 +1107,10 @@ int f_is_i;
  * the problem is 40 40 > 10 20, and 10 <= 10 but 20 ! <= 10 so it thinks bottom crossing failure
  */
 // a hack is now in to fix this, should be rewritten in assembler as well
-int merge_walls(fix *dst_wall,fix *i_wall,int i_cnt,fix *o_wall,int o_cnt)
+int32_t merge_walls(fix *dst_wall,fix *i_wall,int32_t i_cnt,fix *o_wall,int32_t o_cnt)
 {
-   int cur_i=0, cur_o=0, f_cnt=0, tmp1, tmp2;
-   int sgn0,sgn1,sgn2,sgn3;
+   int32_t cur_i=0, cur_o=0, f_cnt=0, tmp1, tmp2;
+   int32_t sgn0,sgn1,sgn2,sgn3;
 
    f_is_i=TRUE;
    while (cur_i<i_cnt)
@@ -1156,19 +1156,19 @@ int merge_walls(fix *dst_wall,fix *i_wall,int i_cnt,fix *o_wall,int o_cnt)
    return f_cnt;
 }
 
-uchar solid_chk[4]={FMK_INT_NW,FMK_INT_EW,FMK_INT_SW,FMK_INT_WW};
-uchar clear_chk[4]={FMK_NW,FMK_EW,FMK_SW,FMK_WW};
+uint8_t solid_chk[4]={FMK_INT_NW,FMK_INT_EW,FMK_INT_SW,FMK_INT_WW};
+uint8_t clear_chk[4]={FMK_NW,FMK_EW,FMK_SW,FMK_WW};
 
 // local statics dont actually work, since i define static null in debug, so this is here
-static int last_ocnt=-1;
+static int32_t last_ocnt=-1;
 
 // look around at all my playthings
 // eighteen percent a year, for nothing
-static void _fr_parse_wall(int which)
+static void _fr_parse_wall(int32_t which)
 {
-   int icnt, fcnt, ocnt, useocnt, are_solid;
+   int32_t icnt, fcnt, ocnt, useocnt, are_solid;
    MapElem *oth_mptr;
-   uchar oth_hgts[3], oth_fo;
+   uint8_t oth_hgts[3], oth_fo;
 
    oth_mptr=_fdt_mptr+wall_adds[which];
 
@@ -1192,10 +1192,10 @@ static void _fr_parse_wall(int which)
    {
       _fr_sdbg(STATS,if ((me_clearsolid(_fdt_mptr)&solid_chk[which])==0) _frp.stats.setsolid++);
       _me_clearsolid(_fdt_mptr)|=solid_chk[which];
-// int walls doesnt know about parameters, so we lost
+// int32_t walls doesnt know about parameters, so we lost
 //      if (_fdt_ttf->flags&FRFLRFLG_USEPR)
 //      {
-         fcnt=fr_get_ext_gap(&final_wall[0][0][0], _fdt_fo[which], _fdt_hgts, (uchar *)mmask_facelet[me_bits_mirror(_fdt_mptr)]);
+         fcnt=fr_get_ext_gap(&final_wall[0][0][0], _fdt_fo[which], _fdt_hgts, (uint8_t *)mmask_facelet[me_bits_mirror(_fdt_mptr)]);
          if (fcnt==0)
           { _me_clearsolid(_fdt_mptr)|=clear_chk[which]; _fr_sdbg(STATS, _frp.stats.setclear++); }
          else
@@ -1210,7 +1210,7 @@ static void _fr_parse_wall(int which)
    oth_hgts[FDT_PT_FLR]  = me_height_flr(oth_mptr);
    oth_hgts[FDT_PT_CEIL] = MAX_HGT-me_height_ceil(oth_mptr);
    oth_hgts[FDT_PT_PARM] = me_param(oth_mptr);
-   ocnt=_fr_get_anti_gap(&outer_wall[0][0][0], oth_fo, oth_hgts, (uchar *)mmask_facelet[me_bits_mirror(oth_mptr)]);
+   ocnt=_fr_get_anti_gap(&outer_wall[0][0][0], oth_fo, oth_hgts, (uint8_t *)mmask_facelet[me_bits_mirror(oth_mptr)]);
    if (ocnt!=ANTI_RET_PUNTALL)
    {
 	   useocnt=(ocnt&ANTI_MASK_COUNT);
@@ -1227,7 +1227,7 @@ static void _fr_parse_wall(int which)
 	   else { use_outer_wall=&outer_wall[1][0][0]; useocnt--; }
 	   _fr_sdbg(SANITY,if (useocnt==0) mprintf("_fr_parse_wall: have 0 usecnt, but didnt punt yet\n"));
 	   _fr_sdbg(SANITY,if (_fdt_fo[which]==0xff) mprint("_fr_parse_wall: local fo==0xff, wallbits should have been 0"));
-	   icnt=fr_get_ext_gap(&inner_wall[0][0][0], _fdt_fo[which], _fdt_hgts, (uchar *)mmask_facelet[me_bits_mirror(_fdt_mptr)]);
+	   icnt=fr_get_ext_gap(&inner_wall[0][0][0], _fdt_fo[which], _fdt_hgts, (uint8_t *)mmask_facelet[me_bits_mirror(_fdt_mptr)]);
 
       fcnt=merge_walls(&final_wall[0][0][0],&inner_wall[0][0][0],icnt,use_outer_wall,useocnt);
       if ((f_is_i)&&(fcnt==icnt))
@@ -1236,7 +1236,7 @@ static void _fr_parse_wall(int which)
 
 #ifdef HACK_SHOW
 		{
-	      int i;
+	      int32_t i;
 	      mprintf("%d outer (%d) are:\n",useocnt,me_tiletype(oth_mptr)); for (i=0; i<useocnt; i++) hack_show(use_outer_wall+(i*8));
 	      mprintf("%d inner (%d) are:\n",icnt,me_tiletype(_fdt_mptr)); for (i=0; i<icnt; i++) hack_show(inner_wall[i]);
 	      mprintf("%d final walls be:\n",fcnt); for (i=0; i<fcnt; i++) hack_show(final_wall[i]);
@@ -1308,8 +1308,8 @@ void fr_draw_tile(void)
 
    if (_frp.faces.cyber&&_fdt_terr)
 	{
-      int tmp=me_bits_flip(_fdt_mptr);
-	   void fr_terr_cspace_pick(uchar do_w);
+      int32_t tmp=me_bits_flip(_fdt_mptr);
+	   void fr_terr_cspace_pick(uint8_t do_w);
 
       if (tmp!=last_csp_fr)
          fr_terr_cspace_pick(last_csp_fr=tmp);
@@ -1378,7 +1378,7 @@ void fr_draw_tile(void)
 #define FRT_NULL     6
 #define FRT_MAX_F    7
 
-static void (*_fr_tabs_int_wall[FRT_MAX_F])(int wall_id)=
+static void (*_fr_tabs_int_wall[FRT_MAX_F])(int32_t wall_id)=
 {_fr_flat_int_wall,_fr_flat_lit_int_wall,_fr_tmap_int_wall,_fr_tmap_lit_int_wall,_fr_cspace_wire_int_wall,_fr_cspace_full_int_wall,_fr_null_int_wall};
 static void (*_fr_tabs_ext_wall[FRT_MAX_F])(fix pt_list[4][2])=
 {_fr_flat_ext_wall,_fr_flat_lit_ext_wall,_fr_tmap_ext_wall,_fr_tmap_lit_ext_wall,_fr_cspace_wire_ext_wall,_fr_cspace_full_ext_wall,_fr_null_ext_wall};
@@ -1389,9 +1389,9 @@ static void (*_fr_tabs_ceil[FRT_MAX_F])(void)=
 
 #define CSPACE_WALLS
 
-void fr_terr_cspace_pick(uchar do_wall)
+void fr_terr_cspace_pick(uint8_t do_wall)
 {
-   int to_do, wall_do;
+   int32_t to_do, wall_do;
 
    if (do_wall)
    {
@@ -1419,7 +1419,7 @@ void fr_terr_cspace_pick(uchar do_wall)
 // setup the point revector
 void fr_terr_frame_start(void)
 {
-   int wall_do, ceil_do, flr_do;
+   int32_t wall_do, ceil_do, flr_do;
 
 // cspace
    if (_fr_curflags&FR_PICKUPM_MASK)
@@ -1431,7 +1431,7 @@ void fr_terr_frame_start(void)
       wall_do=ceil_do=flr_do=_frp.faces.cyber_full+FRT_CSPACE;
    else
 	{  // realspace
-      int lmod=_frp_light_bits_any()?1:0;
+      int32_t lmod=_frp_light_bits_any()?1:0;
       wall_do=lmod+(((_frp.faces.main)&&(_frp.faces.wall   ))?FRT_TMAP:0);
       ceil_do=lmod+(((_frp.faces.main)&&(_frp.faces.ceiling))?FRT_TMAP:0);
 	   flr_do =lmod+(((_frp.faces.main)&&(_frp.faces.floor  ))?FRT_TMAP:0);
@@ -1464,7 +1464,7 @@ void fr_terr_frame_end(void)
 #if _fr_defdbg(CURSOR)
 // wrapped within the walkman with a halo of distortion
 // aural contraceptive aborting pregnant conversation
-void fr_set_cursor(int x, int y)
+void fr_set_cursor(int32_t x, int32_t y)
  { _fr_cursorx=x; _fr_cursory=y; }
 #endif
 
@@ -1482,7 +1482,7 @@ void fr_set_cursor(int x, int y)
 //#define AddTmapFlags(fl) if (_game_fr_tmap<10) fl|=SS_BCD_MISC_CLIMB
 #define AddTmapFlags(fl) if (textprops[_game_fr_tmap].friction_climb) fl|=SS_BCD_MISC_CLIMB
 
-uchar wall_pc[]=
+uint8_t wall_pc[]=
 {
    SS_BCD_PRIM_NEG_Y|SS_BCD_TYPE_WALL, SS_BCD_PRIM_NEG_X|SS_BCD_TYPE_WALL,
    SS_BCD_PRIM_YAXIS|SS_BCD_TYPE_WALL, SS_BCD_PRIM_XAXIS|SS_BCD_TYPE_WALL,
@@ -1492,10 +1492,10 @@ uchar wall_pc[]=
 // secret gnosis becomes the order of the day
 // we set up primary and transform the center point into our space
 // then we just pass it on to facelet_solve, none the worse for wear...
-static void _render_tfunc_walls(int which, int cnt)
+static void _render_tfunc_walls(int32_t which, int32_t cnt)
 {  // fuck it, ext_walls are always ext, so punt generality, lets go
    fix pt[3];
-   int pc=wall_pc[which];
+   int32_t pc=wall_pc[which];
    switch (which)    // set up localized point set
    {  // NESW
    case 0: pt[2]=fix_1-tf_loc_pt[1]; pt[0]=tf_loc_pt[0]; break;
@@ -1516,10 +1516,10 @@ static void _render_tfunc_walls(int which, int cnt)
    }
 }
 
-static void _fr_tfunc_diag_wall(int wall_id)
+static void _fr_tfunc_diag_wall(int32_t wall_id)
 {
    fix pt[3], C;
-   int pfl;
+   int32_t pfl;
    switch (wall_id)
    {
    case 0: // nw - se, normal to upper ne
@@ -1550,15 +1550,15 @@ static void _fr_tfunc_diag_wall(int wall_id)
 }
 
 // hack this for now for diagonals
-static void _fr_tfunc_int_wall(int wall_id)
+static void _fr_tfunc_int_wall(int32_t wall_id)
 {
    if ((_fdt_mask&FACELET_MASK_I)==0) return;
    _fr_tfunc_diag_wall(wall_id);
 }
 
-int _fr_tfunc_flr_normal(fix *vec, int *lflg, int fnorm_entry)
+int32_t _fr_tfunc_flr_normal(fix *vec, int32_t *lflg, int32_t fnorm_entry)
 {
-   int rv;
+   int32_t rv;
    if (me_bits_mirror_x(_fdt_mptr)==(MAP_FFLAT<<MAP_MIRROR_SHF))
       fnorm_entry=FRFNORM_VFULL;
    else
@@ -1578,9 +1578,9 @@ int _fr_tfunc_flr_normal(fix *vec, int *lflg, int fnorm_entry)
    return rv;
 }
 
-int _fr_tfunc_ceil_normal(fix *vec, int *lflg, int fnorm_entry)
+int32_t _fr_tfunc_ceil_normal(fix *vec, int32_t *lflg, int32_t fnorm_entry)
 {
-   int tmp=me_bits_mirror(_fdt_mptr), rv;
+   int32_t tmp=me_bits_mirror(_fdt_mptr), rv;
    switch (tmp)
    {
    case MAP_CFLAT:  fnorm_entry=FRFNORM_VFULL; break;
@@ -1608,20 +1608,20 @@ int _fr_tfunc_ceil_normal(fix *vec, int *lflg, int fnorm_entry)
 static fix _tfunc_real_floor[4][2]={{0,fix_1},{fix_1,fix_1},{fix_1,0},{0,0}};
 
 static fix _tfunc_nrm[3], _tfunc_rpts[3];
-static int _tfunc_flg;
+static int32_t _tfunc_flg;
 
-int do_fc_trans(fix *xy, fix *sc, fix *vals)
+int32_t do_fc_trans(fix *xy, fix *sc, fix *vals)
 {
-   int rm=fix_div(fix_1,sc[0]);
+   int32_t rm=fix_div(fix_1,sc[0]);
    vals[0]=fix_mul(xy[0], sc[0])+fix_mul(xy[1],-sc[1]);
    vals[1]=fix_mul(xy[0], sc[1])+fix_mul(xy[1], sc[0]);
 //   mprintf("dft: from %x %x and %x %x stores %x %x, rm %x\n",xy[0],xy[1],sc[0],sc[1],vals[0],vals[1],rm);
    return rm;
 }
 
-void do_floor_element(int nrm_mask)
+void do_floor_element(int32_t nrm_mask)
 {
-   int code;
+   int32_t code;
    fix sc[2], xy[2];
 
    _tfunc_flg=0;
@@ -1646,9 +1646,9 @@ void do_floor_element(int nrm_mask)
    	tf_solve_aligned_face(_tfunc_rpts,_tfunc_real_floor,_tfunc_flg|TF_FLG_BOX_FULL,_tfunc_nrm);
 }
 
-void do_ceil_element(int nrm_mask)
+void do_ceil_element(int32_t nrm_mask)
 {
-   int code;
+   int32_t code;
    fix sc[2], xy[2];
 
    _tfunc_flg=0;
@@ -1673,8 +1673,8 @@ void do_ceil_element(int nrm_mask)
 
 static void _fr_tfunc_flr(void)
 {
-   uchar nrm_mask=fr_fnorm_list[_fdt_tt];
-   int fcecnt;
+   uint8_t nrm_mask=fr_fnorm_list[_fdt_tt];
+   int32_t fcecnt;
 
    if ((_fdt_mask&FACELET_MASK_F)==0) return;
    fcecnt=_fdt_ttf->flags>>FRFLRSHF_2ELEM;  // 0 or 1
@@ -1684,8 +1684,8 @@ static void _fr_tfunc_flr(void)
       do_floor_element(nrm_mask&0xf);
    else
    {
-      int tmp=me_bits_mirror(_fdt_mptr);
-      uchar icky=(_fdt_tt>=TILE_SLOPECV_NW);
+      int32_t tmp=me_bits_mirror(_fdt_mptr);
+      uint8_t icky=(_fdt_tt>=TILE_SLOPECV_NW);
       if (tmp==MAP_FFLAT)
          do_floor_element(FRFNORM_VFULL);
       else if (icky)
@@ -1707,8 +1707,8 @@ static void _fr_tfunc_flr(void)
 
 static void _fr_tfunc_ceil(void)
 {
-   uchar nrm_mask=fr_fnorm_list[_fdt_tt];
-   int fcecnt;
+   uint8_t nrm_mask=fr_fnorm_list[_fdt_tt];
+   int32_t fcecnt;
 
    if ((_fdt_mask&FACELET_MASK_C)==0) return;
    if (_fdt_ttf->flags&FRFLRFLG_NOTOP) return;
@@ -1719,8 +1719,8 @@ static void _fr_tfunc_ceil(void)
       do_ceil_element(nrm_mask);
    else
    {
-      int tmp=me_bits_mirror(_fdt_mptr);
-      uchar icky=(_fdt_tt<TILE_SLOPECV_NW), hard;
+      int32_t tmp=me_bits_mirror(_fdt_mptr);
+      uint8_t icky=(_fdt_tt<TILE_SLOPECV_NW), hard;
       if (tmp==MAP_CFLAT)       hard=0;
       else if (tmp==MAP_MIRROR) hard=!icky;
       else hard=icky;
@@ -1758,7 +1758,7 @@ void fr_tfunc_grab_start(void)
    _fr_render_walls  = _render_tfunc_walls;
 }
 
-void fr_tfunc_grab_fast(int mask)
+void fr_tfunc_grab_fast(int32_t mask)
 {
    me_subclip_set(_fdt_mptr,SUBCLIP_FULL_TILE);
    _fdt_mask=mask;
@@ -1783,16 +1783,16 @@ void fr_tfunc_grab_fast(int mask)
 //==============================================================================
 //  Edge-finding routines.
 //==============================================================================
-bool edge_get_fandc(MapElem *mp, int c_edge, char *e_list);
+bool edge_get_fandc(MapElem *mp, int32_t c_edge, int8_t *e_list);
 
 #define EDGE_GET
 
 #include "fredge.h"
 #ifdef EDGE_GET
 
-bool edge_get_fandc(MapElem *mp, int c_edge, char *e_list)
+bool edge_get_fandc(MapElem *mp, int32_t c_edge, int8_t *e_list)
 {
-   uchar *mmptr, fo, p=me_param(mp), in_fo;
+   uint8_t *mmptr, fo, p=me_param(mp), in_fo;
    in_fo=face_obstruct[me_tiletype(mp)][c_edge];
    if ((me_tiletype(mp)==TILE_SOLID)||(in_fo==0xff))
    {
@@ -1807,7 +1807,7 @@ bool edge_get_fandc(MapElem *mp, int c_edge, char *e_list)
    }
    else
    {
-	   mmptr=(uchar *)mmask_facelet[me_bits_mirror(mp)];
+	   mmptr=(uint8_t *)mmask_facelet[me_bits_mirror(mp)];
   	   e_list[0]=e_list[1]=me_height_flr(mp);
 	   fo=(in_fo^mmptr[0])&mmptr[1];
   	   if (fo&FO_L_PARM) e_list[0]+=p;
@@ -1820,12 +1820,12 @@ bool edge_get_fandc(MapElem *mp, int c_edge, char *e_list)
    return TRUE;
 }
 
-char edge_vals[3];
+int8_t edge_vals[3];
 // returns left and right heights for a map edge
 // ceil_p is 1 if it is the ceiling you care about
-char *map_get_edge(void *omp, int edge, int ceil_p)
+int8_t *map_get_edge(void *omp, int32_t edge, int32_t ceil_p)
 {
-   uchar *mmptr, fo, p, in_fo;
+   uint8_t *mmptr, fo, p, in_fo;
    MapElem *mp=(MapElem *)omp;
 
    p=me_param(mp);
@@ -1840,7 +1840,7 @@ char *map_get_edge(void *omp, int edge, int ceil_p)
    }
    else
    {
-	   mmptr=(uchar *)mmask_facelet[me_bits_mirror(mp)];
+	   mmptr=(uint8_t *)mmask_facelet[me_bits_mirror(mp)];
 	   if (ceil_p)
 	   {
 	  	   edge_vals[0]=edge_vals[1]=MAX_HGT-me_height_ceil(mp);
@@ -1863,10 +1863,10 @@ char *map_get_edge(void *omp, int edge, int ceil_p)
 // this is a really dumb way to a do this, really
 // returns 0 if no edge space, 1 for flat, 2 for mini-step, 3 for step
 //   4 for ledge, 5 for cliff
-int get_edge_code(void *omp, int edge)
+int32_t get_edge_code(void *omp, int32_t edge)
 {
-   char     edge_list[8], d_list[4], x_diff[4];
-   char     el, el2, max_df[2], min_dc[2], gap[2];
+   int8_t     edge_list[8], d_list[4], x_diff[4];
+   int8_t     el, el2, max_df[2], min_dc[2], gap[2];
    MapElem *mp=(MapElem *)omp, *oth_mp=mp+wall_adds[edge];
 
    // get the real data, if no internal edge we go home and punt...

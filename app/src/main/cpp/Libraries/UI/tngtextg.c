@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fakefont.h"
 #include "tngfont.h"
 
-errtype tng_textgadget_move(TNG *ptng, short code);
+errtype tng_textgadget_move(TNG *ptng, int16_t code);
 
 // Callbacks....
 
@@ -69,7 +69,7 @@ errtype tng_textgadget_destroy(TNG *ptng)
 }
 
 // Initializes the TNG
-errtype tng_textgadget_init(void *ui_data, TNG *ptng, TNGStyle *sty, ulong options, LGPoint size, LGPoint abs_loc)
+errtype tng_textgadget_init(void *ui_data, TNG *ptng, TNGStyle *sty, uint32_t options, LGPoint size, LGPoint abs_loc)
 {
    TNG_textgadget *ptxtng;
    extern TTFontInfo TTTNGFontInfo;
@@ -136,7 +136,7 @@ errtype tng_textgadget_init(void *ui_data, TNG *ptng, TNGStyle *sty, ulong optio
 errtype tng_textgadget_init2(TNG *ptng)
 {
    TNG_textgadget *ptxtng;
-   int id;
+   int32_t id;
    LGPoint sloc, ssize;
 
    ptxtng = TNG_TG(ptng);
@@ -173,7 +173,7 @@ errtype tng_textgadget_init2(TNG *ptng)
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_textgadget_2d_draw(TNG *ptng, ushort , LGPoint loc)
+errtype tng_textgadget_2d_draw(TNG *ptng, uint16_t , LGPoint loc)
 {
    TNG_textgadget *ptxtng;
    LGRect r;
@@ -204,15 +204,15 @@ errtype tng_textgadget_size(TNG *ptng, LGPoint *ppt)
 }
 
 // Returns the current "value" of the TNG
-int tng_textgadget_getvalue(TNG *ptng)
+int32_t tng_textgadget_getvalue(TNG *ptng)
 {
    return(TNG_TG(ptng)->last_key);
 }
 
 // React appropriately for receiving the specified cooked key
-bool tng_textgadget_keycooked(TNG *ptng, ushort key)
+bool tng_textgadget_keycooked(TNG *ptng, uint16_t key)
 {
-   short code;
+   int16_t code;
    bool retval = FALSE;
 /*¥¥¥
 
@@ -240,13 +240,13 @@ bool tng_textgadget_keycooked(TNG *ptng, ushort key)
 }
 
 // React appropriately for receiving the specified mouse button event
-bool tng_textgadget_mousebutt(TNG *ptng, uchar type, LGPoint loc)
+bool tng_textgadget_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
    return(tng_cb_mousebutt(ptng,type,loc));
 }
 
 // Handle incoming signals
-bool tng_textgadget_signal(TNG *ptng, ushort signal)
+bool tng_textgadget_signal(TNG *ptng, uint16_t signal)
 {
    bool retval = FALSE;
    //Spew(DSRC_UI_Textgadget, ("Textgadget Received signal: %x\n",signal));
@@ -266,7 +266,7 @@ bool tng_textgadget_signal(TNG *ptng, ushort signal)
 errtype tng_textgadget_scroll(TNG *ptng)
 {
 /*¥¥¥
-   short code;
+   int16_t code;
    TNG *which_bar;
    bool increm;
    code = TNG_TG_LASTKEY(ptng);
@@ -302,7 +302,7 @@ errtype tng_textgadget_scroll(TNG *ptng)
    return(OK);
 }
 
-errtype tng_textgadget_addstring(TNG *ptng, char *s)
+errtype tng_textgadget_addstring(TNG *ptng, int8_t *s)
 {
    region_begin_sequence();
    tt_parse_string(TNG_TG_TT(ptng), s);

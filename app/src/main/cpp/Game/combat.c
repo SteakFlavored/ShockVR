@@ -231,7 +231,7 @@ ObjID ray_cast_objects(ObjID src, ObjID dest, fix bullet_mass, fix bullet_size, 
    if (objs[dest].info.ph != -1)
    {
       State             new_state;
-      void get_phys_state(int ph, State *new_state, ObjID id);
+      void get_phys_state(int32_t ph, State *new_state, ObjID id);
 
       get_phys_state(objs[dest].info.ph, &new_state,dest);
       target_loc.x = new_state.X;   target_loc.y = new_state.Y;   target_loc.z = new_state.Z;
@@ -277,7 +277,7 @@ void find_fire_vector(LGPoint *pt, Combat_Pt *vector)
 {
    fix         x1, x2, y1, y2, z1, z2;
    fix         dist;
-   int         x, y;
+   int32_t         x, y;
 
    x = pt->x - ((fauxrend_context *)_current_fr_context)->xtop;
    y = pt->y - ((fauxrend_context *)_current_fr_context)->ytop;

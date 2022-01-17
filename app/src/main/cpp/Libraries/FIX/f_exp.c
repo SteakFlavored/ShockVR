@@ -38,9 +38,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 fix fix_exp (fix x)
 {
-	int int_part = fix_int (x);
+	int32_t int_part = fix_int (x);
 	fix exp_int_part;
-	int basex, fracx;
+	int32_t basex, fracx;
 	fix loy, hiy;
 	fix exp_frac_part;
 

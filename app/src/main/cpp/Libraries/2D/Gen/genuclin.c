@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #define fix_make_nof(x)           fix_make(x,0x0000)
-#define macro_get_ipal(r,g,b)     (long) ((r>>19) &0x1f) | ((g>>14) & 0x3e0) | ((b>>9) & 0x7c00)
+#define macro_get_ipal(r,g,b)     (int32_t) ((r>>19) &0x1f) | ((g>>14) & 0x3e0) | ((b>>9) & 0x7c00)
 
 /* the color passed into the line fill is the calculated one, not the
    param -- see above
@@ -51,16 +51,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // MLA #pragma off (unreferenced)
 #define macro_plot_rgb(x,y,i)     grd_pixel_fill(grd_ipal[i],parm,x,y)
 
-void gri_gen_ucline_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+void gri_gen_ucline_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
    fix x0, y0, x1, y1;
    fix dx, dy;			/* deltas in x and y */
    fix t;			/* tmp */
 
-   uchar r0, g0, b0, r1, g1, b1; /* rgb values of endpt colors */
+   uint8_t r0, g0, b0, r1, g1, b1; /* rgb values of endpt colors */
    fix r,g,b;			/* current intensities */
    fix dr, dg, db;		/* deltas for each of rgb */
-   long i;			/* color index */
+   int32_t i;			/* color index */
 
    /* NB: this code mimics the code in fl8clin.c for flat8_ucline's.
       this leads to much more separation among e.g +/- dx and dy is
@@ -115,7 +115,7 @@ void gri_gen_ucline_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
       the variable (x0 or y0) for the long dimension is treated as a fix
       and incremented using ++, the other is kept as fixpoint and
       incremented by the fixpoint delta (dx or dy).  Then it's shifted
-      to int for pixel drawing.
+      to int32_t for pixel drawing.
 
       there are two sub-cases - a horizontal or vertical line,
       and the dx or dy being added or subtracted.
@@ -126,8 +126,8 @@ void gri_gen_ucline_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
       since everything is an integer
       */
 
-   r0 = (uchar) (v0->u); g0 = (uchar) (v0->v); b0 = (uchar) (v0->w);
-   r1 = (uchar) (v1->u); g1 = (uchar) (v1->v); b1 = (uchar) (v1->w);
+   r0 = (uint8_t) (v0->u); g0 = (uint8_t) (v0->v); b0 = (uint8_t) (v0->w);
+   r1 = (uint8_t) (v1->u); g1 = (uint8_t) (v1->v); b1 = (uint8_t) (v1->w);
 
    if (dx > dy) {
 

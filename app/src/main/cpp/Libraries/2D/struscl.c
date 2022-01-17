@@ -35,20 +35,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "chr.h"
 #include "general.h"
 
-void gen_font_scale_ustring (grs_font *f, char *s, short x0, short y0, short w, short h)
+void gen_font_scale_ustring (grs_font *f, int8_t *s, int16_t x0, int16_t y0, int16_t w, int16_t h)
 {
    grs_bitmap bm;             /* character bitmap */
-   short *offset_tab;         /* table of character offsets */
-   uchar *char_buf;           /* font pixel data */
-   short offset;              /* offset of current character */
-   short str_w, str_h;        /* width and height of src string */
+   int16_t *offset_tab;         /* table of character offsets */
+   uint8_t *char_buf;           /* font pixel data */
+   int16_t offset;              /* offset of current character */
+   int16_t str_w, str_h;        /* width and height of src string */
    fix x, y;                  /* position of current character */
    fix x_scale, y_scale;      /* x and y scale factors */
    fix next_x, next_y, del_y; /* need to use next, del_y since it's const */
-   int i;
-   uchar c;                    /* current character */
+   int32_t i;
+   uint8_t c;                    /* current character */
 
-   char_buf = (uchar *)f + f->buf;
+   char_buf = (uint8_t *)f + f->buf;
    offset_tab = f->off_tab;
    gr_init_bm (&bm, NULL, (f->id==0xcccc)? BMT_FLAT8: BMT_MONO,
                BMF_TRANS, 0, f->h);
@@ -64,7 +64,7 @@ void gen_font_scale_ustring (grs_font *f, char *s, short x0, short y0, short w, 
    for (i=0, del_y = 0; i < f->h; del_y += y_scale, i++);  /* multiply fix by int, faster ?? */
    next_y = y + del_y;
 
-   while ((c = (uchar)(*s++)) != '\0') {
+   while ((c = (uint8_t)(*s++)) != '\0') {
       if (c=='\n' || c==CHAR_SOFTCR) {
          x = x0<<16;
 	 y = next_y;

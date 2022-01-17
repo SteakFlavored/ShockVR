@@ -41,15 +41,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tluctab.h"
 #include "fl8tf.h"
 
-void flat8_tluc8_ubitmap (grs_bitmap *bm, short x, short y)
+void flat8_tluc8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-	uchar *src;
-	uchar *dst;
-	long 	w = bm->w;
-	long 	h = bm->h;
-	long 	i;
-	long	grow = grd_bm.row;
-	long  brow = bm->row;
+	uint8_t *src;
+	uint8_t *dst;
+	int32_t 	w = bm->w;
+	int32_t 	h = bm->h;
+	int32_t 	i;
+	int32_t	grow = grd_bm.row;
+	int32_t  brow = bm->row;
 
 	src = bm->bits;
 	dst = grd_bm.bits + grow*y + x;

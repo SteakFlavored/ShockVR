@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lgsndx.h"
 
 extern snd_digi_parms  _snd_smp_prm[];
-extern int             _snd_smp_cnt;
+extern int32_t             _snd_smp_cnt;
 
 extern SndCallBackUPP  gDigiCallBackProcPtr;
 

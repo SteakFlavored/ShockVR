@@ -45,12 +45,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "flat8.h"
 #include "lg.h"
 
-void flat8_urect(short left, short top, short right, short bot)
+void flat8_urect(int16_t left, int16_t top, int16_t right, int16_t bot)
 {
-	uchar 	*p;
-	int 		w, h;
-	int 		grow = grd_bm.row;
-	long 		fcolor = grd_gc.fcolor;
+	uint8_t 	*p;
+	int32_t 		w, h;
+	int32_t 		grow = grd_bm.row;
+	int32_t 		fcolor = grd_gc.fcolor;
 
 
 	p = grd_bm.bits + top*grow + left;

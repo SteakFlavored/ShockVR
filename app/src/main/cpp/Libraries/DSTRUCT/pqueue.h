@@ -48,20 +48,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 // Comparson function, works like strcmp
-typedef int (*QueueCompare)(void* elem1, void* elem2);
+typedef int32_t (*QueueCompare)(void* elem1, void* elem2);
 
 typedef struct _pqueue
 {
-   int size;
-   int fullness;
-   int elemsize;
+   int32_t size;
+   int32_t fullness;
+   int32_t elemsize;
    bool grow;
-   char* vec;
+   int8_t* vec;
    QueueCompare comp;
 } PQueue;
 
 // Prototypes
-errtype pqueue_init(PQueue* q, int size, int elemsize, QueueCompare comp,  bool grow);
+errtype pqueue_init(PQueue* q, int32_t size, int32_t elemsize, QueueCompare comp,  bool grow);
 // Initializes a Priority queue to a particular size, with a
 // particular element size and comparison function.
 
@@ -76,11 +76,11 @@ errtype pqueue_least(PQueue* q, void* elem);
 // Copies the least element into *elem, but does not
 // remove it.  (constant time)
 
-errtype pqueue_write(PQueue* q,int fd,void (*writefunc)(int fd,void* elem));
+errtype pqueue_write(PQueue* q,int32_t fd,void (*writefunc)(int32_t fd,void* elem));
 // Writes out a queue to file number fd, calling writefunc to write out each element.
 // If writefunc is NULL, simply writes the literal data in each element.
 
-errtype pqueue_read(PQueue* q, int fd, void (*readfunc)(int fd, void* elem));
+errtype pqueue_read(PQueue* q, int32_t fd, void (*readfunc)(int32_t fd, void* elem));
 // Reads in a queue from file number fd, calling readfunc to read each element.
 // If readfunc is NULL, reads each element literally.
 

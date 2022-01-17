@@ -19,37 +19,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frprotox.h"
 
 #ifdef SVGA_SUPPORT
-extern void ss_string(char *s, short x, short y);
-extern void ss_bitmap(grs_bitmap *bmp, short x, short y);
-extern void ss_ubitmap(grs_bitmap *bmp, short x, short y);
-extern void ss_scale_bitmap(grs_bitmap *bmp, short x, short y, short w, short h);
-extern void ss_noscale_bitmap(grs_bitmap *bmp, short x, short y);
-extern void ss_rect(short x1, short y1, short x2, short y2);
-extern void ss_box(short x1, short y1, short x2, short y2);
-extern void ss_int_line(short x1, short y1,short x2,short y2);
-extern void ss_thick_int_line(short x1, short y1,short x2,short y2);
-extern void ss_int_disk(short x1, short y1,short rad);
-extern void ss_safe_set_cliprect(short x1,short y1,short x2,short y2);
-extern void ss_cset_cliprect(grs_canvas *pcanv, short x1,short y1,short x2,short y2);
-extern void ss_vline(short x1,short y1,short y2);
-extern void ss_hline(short x1,short y1,short y2);
+extern void ss_string(int8_t *s, int16_t x, int16_t y);
+extern void ss_bitmap(grs_bitmap *bmp, int16_t x, int16_t y);
+extern void ss_ubitmap(grs_bitmap *bmp, int16_t x, int16_t y);
+extern void ss_scale_bitmap(grs_bitmap *bmp, int16_t x, int16_t y, int16_t w, int16_t h);
+extern void ss_noscale_bitmap(grs_bitmap *bmp, int16_t x, int16_t y);
+extern void ss_rect(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+extern void ss_box(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+extern void ss_int_line(int16_t x1, int16_t y1,int16_t x2,int16_t y2);
+extern void ss_thick_int_line(int16_t x1, int16_t y1,int16_t x2,int16_t y2);
+extern void ss_int_disk(int16_t x1, int16_t y1,int16_t rad);
+extern void ss_safe_set_cliprect(int16_t x1,int16_t y1,int16_t x2,int16_t y2);
+extern void ss_cset_cliprect(grs_canvas *pcanv, int16_t x1,int16_t y1,int16_t x2,int16_t y2);
+extern void ss_vline(int16_t x1,int16_t y1,int16_t y2);
+extern void ss_hline(int16_t x1,int16_t y1,int16_t y2);
 extern void ss_fix_line(fix x1, fix y1, fix x2, fix y2);
 extern void ss_thick_fix_line(fix x1, fix y1, fix x2, fix y2);
-extern void ss_get_bitmap(grs_bitmap *bmp, short x, short y);
-extern void ss_set_pixel(long color, short x, short y);
-extern void ss_set_thick_pixel(long color, short x, short y);
-extern void ss_clut_ubitmap(grs_bitmap *bmp, short x, short y, uchar *cl);
-extern void ss_recompute_zoom(frc *w, short oldm);
-extern void ss_mouse_convert(short *px, short *py, bool down);
-extern void ss_mouse_convert_round(short *px, short *py, bool down);
-extern void ss_point_convert(short *px, short *py, bool down);
+extern void ss_get_bitmap(grs_bitmap *bmp, int16_t x, int16_t y);
+extern void ss_set_pixel(int32_t color, int16_t x, int16_t y);
+extern void ss_set_thick_pixel(int32_t color, int16_t x, int16_t y);
+extern void ss_clut_ubitmap(grs_bitmap *bmp, int16_t x, int16_t y, uint8_t *cl);
+extern void ss_recompute_zoom(frc *w, int16_t oldm);
+extern void ss_mouse_convert(int16_t *px, int16_t *py, bool down);
+extern void ss_mouse_convert_round(int16_t *px, int16_t *py, bool down);
+extern void ss_point_convert(int16_t *px, int16_t *py, bool down);
 
-extern void gr2ss_register_init(char convert_type, short init_x, short init_y);
-extern void gr2ss_register_mode(char conv_mode, short nx, short ny);
+extern void gr2ss_register_init(int8_t convert_type, int16_t init_x, int16_t init_y);
+extern void gr2ss_register_mode(int8_t conv_mode, int16_t nx, int16_t ny);
 
-extern short ss_curr_mode_width(void);
-extern short ss_curr_mode_height(void);
-extern void ss_set_hack_mode(short new_m, short *tval);
+extern int16_t ss_curr_mode_width(void);
+extern int16_t ss_curr_mode_height(void);
+extern void ss_set_hack_mode(int16_t new_m, int16_t *tval);
 
 #define MAX_CONVERT_TYPES  4
 #define MAX_USE_MODES      8
@@ -59,11 +59,11 @@ extern fix convert_y[MAX_CONVERT_TYPES][MAX_USE_MODES];
 extern fix inv_convert_x[MAX_CONVERT_TYPES][MAX_USE_MODES];
 extern fix inv_convert_y[MAX_CONVERT_TYPES][MAX_USE_MODES];
 
-extern char convert_type;
-extern char convert_use_mode;
+extern int8_t convert_type;
+extern int8_t convert_use_mode;
 
-extern short MODE_SCONV_X(short cval, short m);
-extern short MODE_SCONV_Y(short cval, short m);
+extern int16_t MODE_SCONV_X(int16_t cval, int16_t m);
+extern int16_t MODE_SCONV_Y(int16_t cval, int16_t m);
 
 #define SCONV_X(x)   fast_fix_mul_int(fix_make((x),0), convert_x[convert_type][convert_use_mode])
 #define SCONV_Y(y)   fast_fix_mul_int(fix_make((y),0), convert_y[convert_type][convert_use_mode])
@@ -78,7 +78,7 @@ extern short MODE_SCONV_Y(short cval, short m);
 #define INV_FIXCONV_X(x)   fast_fix_mul((x), inv_convert_x[convert_type][convert_use_mode])
 #define INV_FIXCONV_Y(y)   fast_fix_mul((y), inv_convert_y[convert_type][convert_use_mode])
 
-extern uchar gr2ss_override;
+extern uint8_t gr2ss_override;
 
 #define OVERRIDE_NONE   0x00
 #define OVERRIDE_SCALE  0x01
@@ -116,8 +116,8 @@ extern uchar gr2ss_override;
 #define gr2ss_register_init(convert_type,init_x,init_y)
 #define gr2ss_register_mode(conv_mode,nx,ny)
 
-extern void ss_mouse_convert(short *px, short *py, bool down);
-extern void ss_mouse_convert_round(short *px, short *py, bool down);
+extern void ss_mouse_convert(int16_t *px, int16_t *py, bool down);
+extern void ss_mouse_convert_round(int16_t *px, int16_t *py, bool down);
 
 #define SCONV_X(x)   x
 #define SCONV_Y(y)   y

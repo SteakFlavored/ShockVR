@@ -32,14 +32,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern bool		olh_active;
 extern bool 	olh_overlay_on;
 
-void olh_do_hudobjs(short xl, short yl);
+void olh_do_hudobjs(int16_t xl, int16_t yl);
 void olh_overlay(void);
 void olh_scan_objects(void);
 void olh_init(void);
 void olh_closedown(void);
 void olh_shutdown(void);
-bool toggle_olh_func(short , ulong , void* );
-bool olh_overlay_func(short keycode, ulong context, void* );
+bool toggle_olh_func(int16_t , uint32_t , void* );
+bool olh_overlay_func(int16_t keycode, uint32_t context, void* );
 
 #endif // __OLHEXT_H
 

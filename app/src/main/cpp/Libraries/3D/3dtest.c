@@ -38,10 +38,10 @@ void main (void)
  {
 	grs_screen 	*screen;
 	Str255			str;
-  short 			w,h;
-	long				time,i,j;
+  int16_t 			w,h;
+	int32_t				time,i,j;
 	grs_bitmap  bm;
-	char				temp[256];
+	int8_t				temp[256];
 	Rect				r;
 	Ptr					p;
 

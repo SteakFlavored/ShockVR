@@ -72,10 +72,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void DoGameOptionsDlg(void);
 void DoSoundOptionsDlg(void);
 void DoGraphicsOptionsDlg(void);
-Boolean DoNewGameDlg(void);
+bool DoNewGameDlg(void);
 void DoEndgameDlg(void);
 
-void StartProgressDlg(const Str255& title, int numSteps);
+void StartProgressDlg(const Str255& title, int32_t numSteps);
 void AdvanceProgress(void);
 void EndProgressDlg(void);
 

@@ -31,16 +31,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "movie.h"
 
-long SwapLongBytes(long in);
-short SwapShortBytes(short in);
+int32_t SwapLongBytes(int32_t in);
+int16_t SwapShortBytes(int16_t in);
 
 MovieHeader mh;
 
 // The 'subt' resource is an array of these structs.
 typedef struct
 {
-	short	language;
-	long	startingTime;
+	int16_t	language;
+	int32_t	startingTime;
 	Str255	subtitle;
 } SubtitleEntry;
 
@@ -51,33 +51,33 @@ typedef struct
 
 void main(void)
 {
-static char *chunkNames[] = {
+static int8_t *chunkNames[] = {
    "END  ","VIDEO","AUDIO","TEXT ","PAL  ","TABLE","?????","?????"};
-static char *bmTypeNames[] = {
+static int8_t *bmTypeNames[] = {
    "DEVICE","MONO","FLAT8","FLAT24","RSD8","TLUC8","SPAN","GEN",
 	"","","","","","","","4X4",
 };
-static char *palNames[] = {
+static int8_t *palNames[] = {
 	"SET","BLACK","???","???","???","???","???","???",
 };
-static char *tableNames[] = {
+static int8_t *tableNames[] = {
 	"COLORSET","HUFFTAB","???","???","???","???","???","???",
 	"???","???","???","???","???","???","???","???",
 };
 
 	FILE *fpi;
-	int iarg;
-	long length;
+	int32_t iarg;
+	int32_t length;
 	MovieChunk *pmc,*pmcBase;
-	char infile[128];
-	char buff[128];
+	int8_t infile[128];
+	int8_t buff[128];
 
-	short	outResNum;
+	int16_t	outResNum;
 	Handle	subHdl;
 	SubtitleEntry	*subPtr;
-	short	numSubs = 0;
-	short	segment = 0;
-	long	segTime = 0;
+	int16_t	numSubs = 0;
+	int16_t	segment = 0;
+	int32_t	segTime = 0;
 
 	printf ("File to extract subtitles: ");
 	fgets (infile, sizeof(infile), stdin);
@@ -169,13 +169,13 @@ static char *tableNames[] = {
   	pmcBase = pmc;
 	while (TRUE)
 	{
-		uchar	s1, s2;
+		uint8_t	s1, s2;
 
 		// Swap bytes around.
-		s1 = *((uchar *)pmc);
-		s2 = *(((uchar *)pmc)+2);
-		*(((uchar*)pmc)+2) = s1;
-		*((uchar*)pmc) = s2;
+		s1 = *((uint8_t *)pmc);
+		s2 = *(((uint8_t *)pmc)+2);
+		*(((uint8_t*)pmc)+2) = s1;
+		*((uint8_t*)pmc) = s2;
 		pmc->offset = SwapLongBytes(pmc->offset);
 
 		// Do this for all chunks, until the end.
@@ -186,8 +186,8 @@ static char *tableNames[] = {
 			if (pmc->chunkType == MOVIE_CHUNK_TEXT)
 			{
 				MovieTextItem *mti;
-				ulong 	tag;
-				char	*cp;
+				uint32_t 	tag;
+				int8_t	*cp;
 
 				// Read the text
 				fseek(fpi, pmc->offset, SEEK_SET);
@@ -197,22 +197,22 @@ static char *tableNames[] = {
 				mti->offset = SwapLongBytes(mti->offset);
 
 				// If it's actually text (not a textitem command)
-				if (tag == (ulong)'STD ' ||
-					tag == (ulong)'FRN ' ||
-					tag == (ulong)'GER ')
+				if (tag == (uint32_t)'STD ' ||
+					tag == (uint32_t)'FRN ' ||
+					tag == (uint32_t)'GER ')
 				{
-					if (tag == (ulong)'STD ')				// Place info in struct
+					if (tag == (uint32_t)'STD ')				// Place info in struct
 						subPtr->language = 0;
-					else if (tag == (ulong)'FRN ')
+					else if (tag == (uint32_t)'FRN ')
 						subPtr->language = 1;
-					else if (tag == (ulong)'GER ')
+					else if (tag == (uint32_t)'GER ')
 						subPtr->language = 2;
 					subPtr->startingTime = (fix_int(pmc->time) * 600)
 										 	+ fix_rint(fix_mul(fix_frac(pmc->time),fix_make(600, 0)));
-					BlockMove((char *)mti + mti->offset, subPtr->subtitle, 255);
+					BlockMove((int8_t *)mti + mti->offset, subPtr->subtitle, 255);
 
 					// Replace any linefeeds (0x0A) with carriage returns (0x0D)
-					cp = (char *)subPtr->subtitle;
+					cp = (int8_t *)subPtr->subtitle;
 					while (*cp)
 					{
 						if (*cp == 0x0A)
@@ -225,7 +225,7 @@ static char *tableNames[] = {
 
 					printf("'%c%c%c%c': %s\n", 				// and the text info.
 						tag >> 24, (tag >> 16) & 0xFF, (tag >> 8) & 0xFF, tag & 0xFF,
-						(char *)mti + mti->offset);
+						(int8_t *)mti + mti->offset);
 
 					subPtr++;
 					numSubs++;
@@ -267,20 +267,20 @@ static char *tableNames[] = {
 
 
 //	---------------------------------------------------------
-long SwapLongBytes(long in)
+int32_t SwapLongBytes(int32_t in)
 {
-	long	out;
-	*(uchar*)&out = *(((uchar *)&in)+3);
-	*(((uchar*)&out)+1) = *(((uchar *)&in)+2);
-	*(((uchar*)&out)+2) = *(((uchar *)&in)+1);
-	*(((uchar*)&out)+3) = *(uchar *)&in;
+	int32_t	out;
+	*(uint8_t*)&out = *(((uint8_t *)&in)+3);
+	*(((uint8_t*)&out)+1) = *(((uint8_t *)&in)+2);
+	*(((uint8_t*)&out)+2) = *(((uint8_t *)&in)+1);
+	*(((uint8_t*)&out)+3) = *(uint8_t *)&in;
 	return(out);
 }
 
-short SwapShortBytes(short in)
+int16_t SwapShortBytes(int16_t in)
 {
-	short out;
-	*(uchar*)&out = *(((uchar *)&in)+1);
-	*(((uchar*)&out)+1) = *(uchar *)&in;
+	int16_t out;
+	*(uint8_t*)&out = *(((uint8_t *)&in)+1);
+	*(((uint8_t*)&out)+1) = *(uint8_t *)&in;
 	return(out);
 }

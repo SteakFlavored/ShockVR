@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * This file is part of the input library.
  */
 
-extern long *kbd_global;
+extern int32_t *kbd_global;
 
 enum {
    KBI_QUEUE_HEAD,

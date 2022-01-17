@@ -30,8 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tmapint.h"
 
 /* bitmap blitters */
-extern void gen_flat8_ubitmap (grs_bitmap *bm, short x, short y);
-extern int gen_flat8_bitmap (grs_bitmap *bm, short x, short y);
+extern void gen_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
+extern int32_t gen_flat8_bitmap (grs_bitmap *bm, int16_t x, int16_t y);
 
 /* init functions */
 extern void gri_gen_opaque_lin_umap_init();
@@ -91,8 +91,8 @@ extern void gri_gen_tpoly_init();
 extern void gri_gen_stpoly_init();
 
 /* rsd8 */
-extern void gri_gen_rsd8_ubitmap (grs_bitmap *bm, short x, short y);
-extern int gri_gen_rsd8_bitmap (grs_bitmap *bm, short x_left, short y_top);
+extern void gri_gen_rsd8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
+extern int32_t gri_gen_rsd8_bitmap (grs_bitmap *bm, int16_t x_left, int16_t y_top);
 
 extern void rsd8_tm_init(grs_tmap_loop_info *ti);
 extern void rsd8_pm_init(grs_bitmap *bm, grs_per_setup *ps);

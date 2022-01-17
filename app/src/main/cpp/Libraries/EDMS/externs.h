@@ -66,10 +66,10 @@ extern Q I[MAX_OBJ][DOF_MAX];
 extern Q k[4][MAX_OBJ][DOF];
 
 // 0 if this object is sleeping ??
-extern int no_no_not_me[MAX_OBJ];
+extern int32_t no_no_not_me[MAX_OBJ];
 
 // minimum valid physics handle
-extern int min_physics_handle;
+extern int32_t min_physics_handle;
 
 // ??
 extern const Q min_scale_slice;
@@ -84,15 +84,15 @@ extern object_number ph2on[MAX_OBJ];
 extern physics_handle on2ph[MAX_OBJ];
 
 // callback functions
-extern void	( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int badness,
-                                        long DATA1, long DATA2, fix location[3] );
+extern void	( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int32_t badness,
+                                        int32_t DATA1, int32_t DATA2, fix location[3] );
 extern void ( *EDMS_autodestruct )( physics_handle caller );
 extern void ( *EDMS_off_playfield )( physics_handle caller );
 extern void ( *EDMS_sleepy_snoozy )( physics_handle caller );
 
 //// collide.cc
 
-extern unsigned int data[ EDMS_DATA_SIZE ][ EDMS_DATA_SIZE ];
+extern uint32_t data[ EDMS_DATA_SIZE ][ EDMS_DATA_SIZE ];
 
 ////
 
@@ -100,15 +100,15 @@ extern unsigned int data[ EDMS_DATA_SIZE ][ EDMS_DATA_SIZE ];
 extern Q	hash_scale;
 
 // ??
-extern int     EDMS_robot_global_badness_indicator;
+extern int32_t     EDMS_robot_global_badness_indicator;
 
 ////////////////////////////// functions
 
 //	Killers and snoozers...
 //	=======================
 void	EDMS_initialize( EDMS_data* D );
-int	EDMS_kill( int object );
-void	collision_wakeup( int object );
+int32_t	EDMS_kill( int32_t object );
+void	collision_wakeup( int32_t object );
 
 
 //	Solvers
@@ -121,40 +121,40 @@ void	soliton_vector_holistic( Q timestep );
 
 // Tools
 // =====
-int	settle_object( int object );
-void	mprint_state( int object );
-void	inventory_and_statistics( int show_sleepers );
-int	sanity_check( void );
+int32_t	settle_object( int32_t object );
+void	mprint_state( int32_t object );
+void	inventory_and_statistics( int32_t show_sleepers );
+int32_t	sanity_check( void );
 
 //	Collisions
 //	==========
-void exclude_from_collisions( int guy_1, int guy_2 );
-void reset_collisions( int object );
+void exclude_from_collisions( int32_t guy_1, int32_t guy_2 );
+void reset_collisions( int32_t object );
 
 //	EDMS internal testbed wireframe...
 //	==================================
-void	draw_object( int );
+void	draw_object( int32_t );
 void	setup_graphics( void );
 void	kill_graphics( void );
 
 //	Get the Euler angles we need from the stuff in the state...
 //	===========================================================
-void	EDMS_get_Euler_angles( Q &alpha, Q &beta, Q &gamma, int object );
+void	EDMS_get_Euler_angles( Q &alpha, Q &beta, Q &gamma, int32_t object );
 
 ////////////////////////////// more stuff
 
 // Collision handling...
 // ---------------------
-void  write_object( int );          //Write and unwrite to the collision table
-void  delete_object( int );         //based on arguments...
-void  state_write_object( int );    //and state.
-void  state_delete_object( int );
-int   are_you_there( int object );
-bool  object_check_hash (int object, int hx, int hy);
+void  write_object( int32_t );          //Write and unwrite to the collision table
+void  delete_object( int32_t );         //based on arguments...
+void  state_write_object( int32_t );    //and state.
+void  state_delete_object( int32_t );
+int32_t   are_you_there( int32_t object );
+bool  object_check_hash (int32_t object, int32_t hx, int32_t hy);
 
-extern unsigned int test_bitmask;
+extern uint32_t test_bitmask;
 
-// int check_for_hit( int other_object ); // are_you_there must be called first!
+// int32_t check_for_hit( int32_t other_object ); // are_you_there must be called first!
 // has been turned into a macro in edms_int.h!
 
 #endif // __EXTERNS_H

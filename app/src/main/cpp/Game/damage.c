@@ -72,21 +72,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PLAYER_DEFENSE_VALUE     4
 #define MAX_DAMAGE               2500
 
-extern void    set_dmg_percentage(int which, ubyte percent);
+extern void    set_dmg_percentage(int32_t which, uint8_t percent);
 
 //----------------
 //  Internal Prototypes
 //----------------
-int random_bell_modifier(bool attack_on_player);
-int randomize_damage(int damage,bool attack_on_player);
-int armor_absorption(int raw_damage, int obj_triple, ubyte penetrate);
-int shield_absorb_damage(int damage, ubyte dtype, byte shield_absorb, ubyte shield_threshold);
+int32_t random_bell_modifier(bool attack_on_player);
+int32_t randomize_damage(int32_t damage,bool attack_on_player);
+int32_t armor_absorption(int32_t raw_damage, int32_t obj_triple, uint8_t penetrate);
+int32_t shield_absorb_damage(int32_t damage, uint8_t dtype, int8_t shield_absorb, uint8_t shield_threshold);
 bool kill_player(void);
 void regenerate_player(void);
 void player_dies();
-ubyte damage_player(int damage, ubyte dtype, ubyte flags);
+uint8_t damage_player(int32_t damage, uint8_t dtype, uint8_t flags);
 void slow_proj_hit(ObjID id, ObjID victim);
-void critter_hit_effect(ObjID target, ubyte effect,Combat_Pt location, int damage, int max_damage);
+void critter_hit_effect(ObjID target, uint8_t effect,Combat_Pt location, int32_t damage, int32_t max_damage);
 
 
 // -------------------------------------------
@@ -95,7 +95,7 @@ void critter_hit_effect(ObjID target, ubyte effect,Combat_Pt location, int damag
 
 void destroy_destroyed_objects(void)
 {
-   int      i, j;
+   int32_t      i, j;
    bool     change_target = FALSE;
    bool     dupe;
    ObjID    id;
@@ -172,7 +172,7 @@ void destroy_destroyed_objects(void)
 
 bool is_obj_destroyed(ObjID id)
 {
-   int   i;
+   int32_t   i;
    bool  found = FALSE;
 
    for (i=0; i<destroyed_obj_count;i++)
@@ -190,14 +190,14 @@ bool is_obj_destroyed(ObjID id)
 // random_bell_modifier()
 //
 
-int random_bell_modifier(bool attack_on_player)
+int32_t random_bell_modifier(bool attack_on_player)
 {
-   int   rtotal;
-   int   i;
-   int   rval;
-   int   retval;
-   ubyte   dies, die_value, handicap;
-   ubyte  difficulty = (global_fullmap->cyber) ?
+   int32_t   rtotal;
+   int32_t   i;
+   int32_t   rval;
+   int32_t   retval;
+   uint8_t   dies, die_value, handicap;
+   uint8_t  difficulty = (global_fullmap->cyber) ?
       player_struct.difficulty[CYBER_DIFF_INDEX] : player_struct.difficulty[COMBAT_DIFF_INDEX];
 
    if (attack_on_player)
@@ -241,12 +241,12 @@ int random_bell_modifier(bool attack_on_player)
 // randomize_damage()
 //
 
-int randomize_damage(int damage,bool attack_on_player)
+int32_t randomize_damage(int32_t damage,bool attack_on_player)
 {
-   int        dtotal;
-   ubyte      iterations;
-   int        i;
-   ubyte  difficulty = (global_fullmap->cyber) ?
+   int32_t        dtotal;
+   uint8_t      iterations;
+   int32_t        i;
+   uint8_t  difficulty = (global_fullmap->cyber) ?
       player_struct.difficulty[CYBER_DIFF_INDEX] : player_struct.difficulty[COMBAT_DIFF_INDEX];
 
    dtotal = damage/2;
@@ -273,10 +273,10 @@ int randomize_damage(int damage,bool attack_on_player)
 // there has been a hit, now we check how much an object is affected
 //
 
-ubyte object_affect(ObjID target_id, short dtype)
+uint8_t object_affect(ObjID target_id, int16_t dtype)
 {
-   ubyte affected = 0;
-   int   resis;
+   uint8_t affected = 0;
+   int32_t   resis;
 
    if (!target_id)
    {
@@ -290,7 +290,7 @@ ubyte object_affect(ObjID target_id, short dtype)
       // are the super damage the same, and we have a non-zero primary damage
       if ((SUPER_DAMAGE(resis) == SUPER_DAMAGE(dtype)) && (SUPER_DAMAGE(resis)))
       {
-         ubyte  difficulty = (global_fullmap->cyber) ?
+         uint8_t  difficulty = (global_fullmap->cyber) ?
             player_struct.difficulty[CYBER_DIFF_INDEX] : player_struct.difficulty[COMBAT_DIFF_INDEX];
 
          // don't do as much super damage if we're on combat diff 3
@@ -310,10 +310,10 @@ ubyte object_affect(ObjID target_id, short dtype)
 // armor_absorption()
 //
 
-int armor_absorption(int raw_damage, int obj_triple, ubyte penetrate)
+int32_t armor_absorption(int32_t raw_damage, int32_t obj_triple, uint8_t penetrate)
 {
-   short       real_penetration = (((short) penetrate * (90 + RndRange(&damage_rnd, 0, 20)))/100);
-   int         damage;
+   int16_t       real_penetration = (((int16_t) penetrate * (90 + RndRange(&damage_rnd, 0, 20)))/100);
+   int32_t         damage;
 
    damage = (ObjProps[OPTRIP(obj_triple)].armor - real_penetration);
    damage = (damage > 0) ? raw_damage - damage : raw_damage;
@@ -325,14 +325,14 @@ int armor_absorption(int raw_damage, int obj_triple, ubyte penetrate)
 }
 
 // some globals
-uchar sound_hurt_threshold = 10;
-uchar static_pain_time = 64;
-uchar static_pain_base = 30;
-uchar static_pain_delta = 30;
-uchar shield_blowout_threshold = 15;
+uint8_t sound_hurt_threshold = 10;
+uint8_t static_pain_time = 64;
+uint8_t static_pain_base = 30;
+uint8_t static_pain_delta = 30;
+uint8_t shield_blowout_threshold = 15;
 
-short fr_solidfr_time;
-short fr_sfx_time;
+int16_t fr_solidfr_time;
+int16_t fr_sfx_time;
 
 
 // this is the voodoo threshold for shields, so that we have a reference
@@ -344,12 +344,12 @@ short fr_sfx_time;
 //
 // returns damage to the player after shields
 
-short shield_absorb_perc = 0;
+int16_t shield_absorb_perc = 0;
 bool shield_used;
 
-int shield_absorb_damage(int damage, ubyte, byte shield_absorb, ubyte shield_threshold)
+int32_t shield_absorb_damage(int32_t damage, uint8_t, int8_t shield_absorb, uint8_t shield_threshold)
 {
-   ubyte          shield_drain=0;
+   uint8_t          shield_drain=0;
 
    if ((damage|player_struct.hit_points)==0)
       return 0;     // 0 hp is already dead, eh?, 0 damage no matter
@@ -404,7 +404,7 @@ int shield_absorb_damage(int damage, ubyte, byte shield_absorb, ubyte shield_thr
 
    // let's reuse the shield_drain variable
    // let's get the percentage absorbed (w.r.t. the VOODOO_SHIELD_THRESHOLD)
-   shield_drain = (ubyte) (((int) shield_drain << 8) / VOODOO_SHIELD_THRESHOLD);
+   shield_drain = (uint8_t) (((int32_t) shield_drain << 8) / VOODOO_SHIELD_THRESHOLD);
 
    if ((shield_used = (shield_drain > 0)) == TRUE)
       set_dmg_percentage(DMG_SHIELD,shield_drain);
@@ -414,8 +414,8 @@ int shield_absorb_damage(int damage, ubyte, byte shield_absorb, ubyte shield_thr
 
 
 bool alternate_death = FALSE;
-extern Boolean	gPlayingGame;
-extern Boolean	gDeadPlayerQuit;
+extern bool	gPlayingGame;
+extern bool	gDeadPlayerQuit;
 
 // kill_player()
 // kills the player, checks for traps and stuff, so on
@@ -459,9 +459,9 @@ bool kill_player(void)
 
 void regenerate_player(void)
 {
-   extern void wear_off_drug(int i);
+   extern void wear_off_drug(int32_t i);
    extern void regenetron_door_hack(void);
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_DAMAGE_TYPES; i++)
       player_struct.hit_points_lost[i] = 0;
    hud_unset(HUD_RADPOISON|HUD_BIOPOISON);
@@ -495,7 +495,7 @@ void regenerate_player(void)
 #define MAX_FATIGUE  10000
 #define DEATH_TICKS  CIT_CYCLE
 
-ulong player_death_time = 0;
+uint32_t player_death_time = 0;
 
 // Something has caused the player to become a fatality
 // typically this is damage, but can be delayed-death due to craze
@@ -503,9 +503,9 @@ void player_dies()
 {
    extern void physics_zero_all_controls();
    extern void clear_digi_fx();
-   extern short inventory_page;
+   extern int16_t inventory_page;
 #ifdef AUDIOLOGS
-   extern char secret_pending_hack;
+   extern int8_t secret_pending_hack;
    secret_pending_hack = 0;
 #endif
 
@@ -541,12 +541,12 @@ void player_dies()
 
 #define DAMAGE_DIFFICULTY ((global_fullmap->cyber) ? 3 : 0)
 
-ubyte damage_player(int damage, ubyte dtype, ubyte flags)
+uint8_t damage_player(int32_t damage, uint8_t dtype, uint8_t flags)
 {
-   ubyte *cur_hp;
-   short rawval;
+   uint8_t *cur_hp;
+   int16_t rawval;
    bool dead = 0, damage_dealt=FALSE;
-   char dlev, dmg_type=DMG_BLOOD;
+   int8_t dlev, dmg_type=DMG_BLOOD;
 
    if (secret_render_fx > 0)
       return 0;
@@ -567,7 +567,7 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags)
       dmg_type=DMG_RAD;
    else if (!(flags & NO_SHIELD_ABSORBTION))
    {
-      byte absorb_rate, thresh_val;
+      int8_t absorb_rate, thresh_val;
 
       // compensate for difficulty level
       dlev = player_struct.difficulty[DAMAGE_DIFFICULTY];
@@ -585,7 +585,7 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags)
       }
       else
       {
-         absorb_rate=(byte)player_struct.shield_absorb_rate;
+         absorb_rate=(int8_t)player_struct.shield_absorb_rate;
          thresh_val =player_struct.shield_threshold;
       }
       damage = shield_absorb_damage(damage,dtype,absorb_rate,thresh_val);
@@ -598,7 +598,7 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags)
    // Play digi FX should go in here when we have appropriate SFX
    if ((!global_fullmap->cyber) && (damage > static_pain_base + rand()%static_pain_delta))
    {
-      extern char static_density, static_color, static_grouping;
+      extern int8_t static_density, static_color, static_grouping;
       // Turn on fullscreen static & turn off any SFX that might be otherwise going on.
       fr_global_mod_flag(FR_SOLIDFR_STATIC, FR_SOLIDFR_MASK|FR_SFX_MASK);
       fr_solidfr_time = (static_pain_time);
@@ -644,7 +644,7 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags)
    }
    if (!damage_dealt)
    {
-      extern int mai_damage_sum;
+      extern int32_t mai_damage_sum;
 
       *cur_hp -= damage;
 	   mai_damage_sum += damage;
@@ -656,7 +656,7 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags)
      rawval = ((damage<<8) / (*cur_hp));      // what is this minmax3/20xff thing?
                                              							// it's my voodoo - minman
    if (!shield_used)
-      set_dmg_percentage(dmg_type,(ubyte) min(max(rawval,((damage*3)/2)),0x00FF));
+      set_dmg_percentage(dmg_type,(uint8_t) min(max(rawval,((damage*3)/2)),0x00FF));
 
    // makes sure gamescreen knows that it should be updated
    chg_set_flg(VITALS_UPDATE);
@@ -672,13 +672,13 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags)
 // also does the appropriate texture map change if
 // object is destroyed???????
 
-ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags)
+uint8_t damage_object(ObjID target_id, int32_t damage, int32_t dtype, uint8_t flags)
 {
-   int   obclass = objs[target_id].obclass;
-   int   dead = 0;
+   int32_t   obclass = objs[target_id].obclass;
+   int32_t   dead = 0;
    bool  tranq=FALSE;
    bool  stun= FALSE;
-   short target_hp = ObjProps[OPNUM(target_id)].hit_points;
+   int16_t target_hp = ObjProps[OPNUM(target_id)].hit_points;
 
    // If we've already been destroyed, or don't care, thendon't bother us.
    if ((objs[target_id].info.inst_flags & INDESTRUCT_FLAG) ||
@@ -687,7 +687,7 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags)
 
    // let the player get his/her own special treatment
    if (target_id == PLAYER_OBJ)
-      dead = damage_player(damage, (ubyte) PRIMARY_DAMAGE(dtype), flags);
+      dead = damage_player(damage, (uint8_t) PRIMARY_DAMAGE(dtype), flags);
    else
    {
       // are we still alive - then do special stuff that we only care about if
@@ -698,7 +698,7 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags)
          dead = 0;
          if (obclass == CLASS_CRITTER)
          {
-            int   pct = (450L * damage)/objs[target_id].info.current_hp;
+            int32_t   pct = (450L * damage)/objs[target_id].info.current_hp;
             tranq = dtype & TRANQ_FLAG;
             stun  = (flags & STUN_ATTACK);
 
@@ -736,7 +736,7 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags)
          if (DESTROY_SOUND_EFFECT(ObjProps[OPNUM(target_id)].destroy_effect))
          {
             extern ObjID damage_sound_id;
-            extern char damage_sound_fx;
+            extern int8_t damage_sound_fx;
 
             damage_sound_fx = SFX_CPU_EXPLODE;
             damage_sound_id = target_id;
@@ -745,8 +745,8 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags)
 
       if ((obclass == CLASS_CRITTER) && !global_fullmap->cyber)
       {
-         ubyte seriousness=0;
-         extern void hud_report_damage(ObjID target, byte seriousness);
+         uint8_t seriousness=0;
+         extern void hud_report_damage(ObjID target, int8_t seriousness);
 
          // marc's desired code
          if (stun)
@@ -780,7 +780,7 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags)
 // and applies it to the object if it is vulnerable to the type.
 // returns whether the object was destroyed.
 
-bool simple_damage_object(ObjID target, int damage, ubyte dtype, ubyte flags)
+bool simple_damage_object(ObjID target, int32_t damage, uint8_t dtype, uint8_t flags)
 {
    if (object_affect(target,1 << (dtype-1) ))
       return damage_object(target,damage,dtype,flags);
@@ -797,12 +797,12 @@ void slow_proj_hit(ObjID id, ObjID victim)
    ObjLoc      loc = objs[id].loc;
    ObjRefID    current_ref;
    ObjID       current_id;
-   ubyte       affect;
-   ubyte       dtype;
-   ubyte       proj_power;
-   ubyte       special_effect = EFFECT_VAL(ObjProps[OPNUM(id)].destroy_effect);
-   int         a;
-   int         weapon_triple;
+   uint8_t       affect;
+   uint8_t       dtype;
+   uint8_t       proj_power;
+   uint8_t       special_effect = EFFECT_VAL(ObjProps[OPNUM(id)].destroy_effect);
+   int32_t         a;
+   int32_t         weapon_triple;
 
    current_ref = MAP_GET_XY(OBJ_LOC_BIN_X(objs[id].loc), OBJ_LOC_BIN_Y(objs[id].loc))->objRef;
 
@@ -954,12 +954,12 @@ bool terrain_damage_object(physics_handle ph, fix raw_damage)
 // *effect        returns the effect number to be played
 // *effect_row    a pointer to the effect row
 
-int compute_damage(ObjID target,int damage_type,int damage_mod,ubyte offense,ubyte penet,int power_level,ubyte *effect,ubyte *effect_row, ubyte attack_effect_type)
+int32_t compute_damage(ObjID target,int32_t damage_type,int32_t damage_mod,uint8_t offense,uint8_t penet,int32_t power_level,uint8_t *effect,uint8_t *effect_row, uint8_t attack_effect_type)
 {
-   int      damage = 0;
-   int      delta;
-   int      modifier;
-   ubyte    affect;
+   int32_t      damage = 0;
+   int32_t      delta;
+   int32_t      modifier;
+   uint8_t    affect;
 
    // AFFECTIVENESS
    //
@@ -1037,10 +1037,10 @@ int compute_damage(ObjID target,int damage_type,int damage_mod,ubyte offense,uby
 // --------------------------------------------------------------
 // critter_hit_effect()
 //
-void critter_hit_effect(ObjID target, ubyte effect,Combat_Pt location, int damage, int max_damage)
+void critter_hit_effect(ObjID target, uint8_t effect,Combat_Pt location, int32_t damage, int32_t max_damage)
 {
    fix      radius, height;
-   byte      ht;
+   int8_t      ht;
    ObjLoc   loc = objs[target].loc;
 
    // temporary - to hit effect_center - will take care of later
@@ -1083,10 +1083,10 @@ void critter_hit_effect(ObjID target, ubyte effect,Combat_Pt location, int damag
 // Returns a number from DAMAGE_MIN to DAMAGE_MAX indicating how wounded
 // a creature is.
 
-int get_damage_estimate(ObjSpecID osid)
+int32_t get_damage_estimate(ObjSpecID osid)
 {
    ObjID    id = objCritters[osid].id;
-   int      triple = ID2TRIP(id);
+   int32_t      triple = ID2TRIP(id);
 
    return(DAMAGE_MAX -
       ((objs[id].info.current_hp*DAMAGE_MAX)/
@@ -1108,10 +1108,10 @@ int get_damage_estimate(ObjSpecID osid)
 //
 // returns whether target died
 
-ubyte attack_object(ObjID target, int damage_type,int damage_mod, ubyte offense, ubyte penet, ubyte flags, int power_level, ubyte *effect_row, ubyte *effect, ubyte attack_effect_type, int *damage_inflicted)
+uint8_t attack_object(ObjID target, int32_t damage_type,int32_t damage_mod, uint8_t offense, uint8_t penet, uint8_t flags, int32_t power_level, uint8_t *effect_row, uint8_t *effect, uint8_t attack_effect_type, int32_t *damage_inflicted)
 {
-   int    damage;
-   char   diff;
+   int32_t    damage;
+   int8_t   diff;
 
    if (effect)
 	   *effect = 0;
@@ -1164,25 +1164,25 @@ ubyte attack_object(ObjID target, int damage_type,int damage_mod, ubyte offense,
 
 #define CRAZE_DAMAGE_MOD 2
 
-ubyte player_attack_object(ObjID target, int wpn_triple, int power_level, Combat_Pt origin)
+uint8_t player_attack_object(ObjID target, int32_t wpn_triple, int32_t power_level, Combat_Pt origin)
 {
-   ubyte offense;
-   int   damage_mod;
-   int   wpn_class = TRIP2CL(wpn_triple);
-   int   dtype;
-   int   damage_inflicted;
-   int   prop_val;
-   ubyte penet;
-   ubyte effect;
-   ubyte *effect_row;
-   ubyte attack_effect_type;
-   ubyte special_effect = 0;
-   ubyte flags = 0;
+   uint8_t offense;
+   int32_t   damage_mod;
+   int32_t   wpn_class = TRIP2CL(wpn_triple);
+   int32_t   dtype;
+   int32_t   damage_inflicted;
+   int32_t   prop_val;
+   uint8_t penet;
+   uint8_t effect;
+   uint8_t *effect_row;
+   uint8_t attack_effect_type;
+   uint8_t special_effect = 0;
+   uint8_t flags = 0;
    ObjID effect_id = OBJ_NULL;
    bool  dead = FALSE;
    bool  new_loc = FALSE;
    ObjLoc            loc;
-   ubyte effect_class = (objs[target].obclass == CLASS_CRITTER) ? CritterProps[CPNUM(target)].hit_effect : NON_CRITTER_EFFECT;
+   uint8_t effect_class = (objs[target].obclass == CLASS_CRITTER) ? CritterProps[CPNUM(target)].hit_effect : NON_CRITTER_EFFECT;
 
    // Special targeting ware hack
    if ((objs[target].obclass == CLASS_CRITTER) &&
@@ -1267,7 +1267,7 @@ ubyte player_attack_object(ObjID target, int wpn_triple, int power_level, Combat
 
    if (dead)
    {
-      ubyte    old_effect = effect;
+      uint8_t    old_effect = effect;
 
       // check to see if we're suppose to play an animation if object is destroyed....
       if (EFFECT_VAL(ObjProps[OPNUM(target)].destroy_effect))

@@ -52,8 +52,8 @@ void LzwTerm(void);		// Calls LzwFreeBuffer()
 //	Lzw buffer management (if lzw compress/expand routine called and no
 //	buffer has been set or allocated, one will automatically be allocated).
 
-int LzwSetBuffer(void *buff, long buffSize);	// Set buffer for lzw use
-int LzwMallocBuffer();								// Malloc buffer for lzw use
+int32_t LzwSetBuffer(void *buff, int32_t buffSize);	// Set buffer for lzw use
+int32_t LzwMallocBuffer();								// Malloc buffer for lzw use
 void LzwFreeBuffer();								// free alloced buffer if any
 
 //	Sizing constants (just needed to define LZW_BUFF_SIZE)
@@ -77,7 +77,7 @@ void LzwFreeBuffer();								// free alloced buffer if any
 //	LzwSetBuffer() requires a buffer of at least this size:
 
 #define LZW_BUFF_SIZE (LZW_DECODE_STACK_SIZE + LZW_FD_READ_BUFF_SIZE + LZW_FD_WRITE_BUFF_SIZE + \
-	(LZW_TABLE_SIZE * (sizeof(short) + sizeof(ushort) + sizeof(uchar))))
+	(LZW_TABLE_SIZE * (sizeof(int16_t) + sizeof(uint16_t) + sizeof(uint8_t))))
 
 //	Other constants
 
@@ -88,39 +88,39 @@ typedef enum {BEGIN,END} LzwCtrl;	// LzwCtrl's used to start/stop lzw
 
 //	The Ginzo compression knife
 
-long LzwCompress(
-	void (*f_SrcCtrl)(long srcLoc, LzwCtrl ctrl),	// func to control source
-	uchar (*f_SrcGet)(),						// func to get bytes from source
-	long srcLoc,								// source "location" (ptr, FILE *, etc.)
-	long srcSize,								// size of source in bytes
-	void (*f_DestCtrl)(long destLoc, LzwCtrl ctrl),	// func to control dest
-	void (*f_DestPut)(uchar byte),		// func to put bytes to dest
-	long destLoc,								// dest "location" (ptr, FILE *, etc.)
-	long destSizeMax							// max size of dest (or LZW_MAXSIZE)
+int32_t LzwCompress(
+	void (*f_SrcCtrl)(int32_t srcLoc, LzwCtrl ctrl),	// func to control source
+	uint8_t (*f_SrcGet)(),						// func to get bytes from source
+	int32_t srcLoc,								// source "location" (ptr, FILE *, etc.)
+	int32_t srcSize,								// size of source in bytes
+	void (*f_DestCtrl)(int32_t destLoc, LzwCtrl ctrl),	// func to control dest
+	void (*f_DestPut)(uint8_t byte),		// func to put bytes to dest
+	int32_t destLoc,								// dest "location" (ptr, FILE *, etc.)
+	int32_t destSizeMax							// max size of dest (or LZW_MAXSIZE)
 	);
 
 //	And its expansion counterpart, both for $19.95 while supplies last
 
-long LzwExpand(
-	void (*f_SrcCtrl)(long srcLoc, LzwCtrl ctrl),	// func to control source
-	uchar (*f_SrcGet)(),						// func to get bytes from source
-	long srcLoc,								// source "location" (ptr, FILE *, etc.)
-	void (*f_DestCtrl)(long destLoc, LzwCtrl ctrl),	// func to control dest
-	void (*f_DestPut)(uchar byte),		// func to put bytes to dest
-	long destLoc,								// dest "location" (ptr, FILE *, etc.)
-	long destSkip,								// # dest bytes to skip over (or 0)
-	long destSize								// # dest bytes to capture (if 0, all)
+int32_t LzwExpand(
+	void (*f_SrcCtrl)(int32_t srcLoc, LzwCtrl ctrl),	// func to control source
+	uint8_t (*f_SrcGet)(),						// func to get bytes from source
+	int32_t srcLoc,								// source "location" (ptr, FILE *, etc.)
+	void (*f_DestCtrl)(int32_t destLoc, LzwCtrl ctrl),	// func to control dest
+	void (*f_DestPut)(uint8_t byte),		// func to put bytes to dest
+	int32_t destLoc,								// dest "location" (ptr, FILE *, etc.)
+	int32_t destSkip,								// # dest bytes to skip over (or 0)
+	int32_t destSize								// # dest bytes to capture (if 0, all)
 	);
 
 //	Macros which implement all the varied compression forms, using the
 //	standard supplied sources and destinations, or user-supplied ones.
 //
 //	LzwCompressBuff2Buff	- src is memory block, dest is memory block
-//	LzwCompressBuff2Fd	- src is memory block, dest is file desc (int fd)
+//	LzwCompressBuff2Fd	- src is memory block, dest is file desc (int32_t fd)
 //	LzwCompressBuff2Fp	- src is memory block, dest is file ptr (FILE *fp)
 //	LzwCompressBuff2Null	- src is memory block, no dest (used to find size)
 //	LzwCompressBuff2User	- src is memory buffer, dest is user-supplied
-//	LzwCompressFd2Buff	- src is file desc (int fd), dest is memory block
+//	LzwCompressFd2Buff	- src is file desc (int32_t fd), dest is memory block
 //	LzwCompressFd2Fd     - src is file desc, dest is file desc
 //	LzwCompressFd2Fp		- src is file desc, dest is file ptr
 //	LzwCompressFd2Null	- src is file desc, no dest (used to find size)
@@ -131,7 +131,7 @@ long LzwExpand(
 //	LzwCompressFp2Null	- src is file ptr, no dest (used to find size)
 //	LzwCompressFp2User	- src is file ptr, dest is user-supplied
 //	LzwCompressUser2Buff	- src is user-supplied, dest is memory block
-//	LzwCompressUser2Fd	- src is user-supplied, dest is file desc (int fd)
+//	LzwCompressUser2Fd	- src is user-supplied, dest is file desc (int32_t fd)
 //	LzwCompressUser2Fp	- src is user-supplied, dest is file ptr (FILE *fp)
 //	LzwCompressUser2Null	- src is user-supplied, no dest (used to find size)
 //	LzwCompressUser2User	- src is user-supplied, dest is user-supplied
@@ -206,13 +206,13 @@ long LzwExpand(
 
 //	These macros are used to help implement the compression macros
 
-#define LzwBuffSrcC(psrc,srcSize) LzwBuffSrcCtrl, LzwBuffSrcGet, (long) psrc, srcSize
-#define LzwFdSrcC(fdSrc,srcSize) LzwFdSrcCtrl, LzwFdSrcGet, (long) fdSrc, srcSize
-#define LzwFpSrcC(fpSrc,srcSize) LzwFpSrcCtrl, LzwFpSrcGet, (long) fpSrc, srcSize
+#define LzwBuffSrcC(psrc,srcSize) LzwBuffSrcCtrl, LzwBuffSrcGet, (int32_t) psrc, srcSize
+#define LzwFdSrcC(fdSrc,srcSize) LzwFdSrcCtrl, LzwFdSrcGet, (int32_t) fdSrc, srcSize
+#define LzwFpSrcC(fpSrc,srcSize) LzwFpSrcCtrl, LzwFpSrcGet, (int32_t) fpSrc, srcSize
 
-#define LzwBuffDestC(pdest,destSizeMax) LzwBuffDestCtrl, LzwBuffDestPut, (long) pdest, destSizeMax
-#define LzwFdDestC(fdDest) LzwFdDestCtrl, LzwFdDestPut, (long) fdDest, LZW_MAXSIZE
-#define LzwFpDestC(fpDest) LzwFpDestCtrl, LzwFpDestPut, (long) fpDest, LZW_MAXSIZE
+#define LzwBuffDestC(pdest,destSizeMax) LzwBuffDestCtrl, LzwBuffDestPut, (int32_t) pdest, destSizeMax
+#define LzwFdDestC(fdDest) LzwFdDestCtrl, LzwFdDestPut, (int32_t) fdDest, LZW_MAXSIZE
+#define LzwFpDestC(fpDest) LzwFpDestCtrl, LzwFpDestPut, (int32_t) fpDest, LZW_MAXSIZE
 #define LzwNullDestC() LzwNullDestCtrl, LzwNullDestPut, NULL, LZW_MAXSIZE
 
 
@@ -220,11 +220,11 @@ long LzwExpand(
 //	standard supplied sources and destinations, or user-supplied ones.
 //
 //	LzwExpandBuff2Buff	- src is memory block, dest is memory block
-//	LzwExpandBuff2Fd		- src is memory block, dest is file desc (int fd)
+//	LzwExpandBuff2Fd		- src is memory block, dest is file desc (int32_t fd)
 //	LzwExpandBuff2Fp		- src is memory block, dest is file ptr (FILE *fp)
 //	LzwExpandBuff2Null	- src is memory block, no dest (used to find size)
 //	LzwExpandBuff2User	- src is memory buffer, dest is user-supplied
-//	LzwExpandFd2Buff		- src is file desc (int fd), dest is memory block
+//	LzwExpandFd2Buff		- src is file desc (int32_t fd), dest is memory block
 //	LzwExpandFd2Fd			- src is file desc, dest is file desc
 //	LzwExpandFd2Fp			- src is file desc, dest is file ptr
 //	LzwExpandFd2Null		- src is file desc, no dest (used to find size)
@@ -235,7 +235,7 @@ long LzwExpand(
 //	LzwExpandFp2Null		- src is file ptr, no dest (used to find size)
 //	LzwExpandFp2User		- src is file ptr, dest is user-supplied
 //	LzwExpandUser2Buff	- src is user-supplied, dest is memory block
-//	LzwExpandUser2Fd		- src is user-supplied, dest is file desc (int fd)
+//	LzwExpandUser2Fd		- src is user-supplied, dest is file desc (int32_t fd)
 //	LzwExpandUser2Fp		- src is user-supplied, dest is file ptr (FILE *fp)
 //	LzwExpandUser2Null	- src is user-supplied, no dest (used to find size)
 //	LzwExpandUser2User	- src is user-supplied, dest is user-supplied
@@ -306,37 +306,37 @@ long LzwExpand(
 
 //	These macros are used to help implement the expansion macros
 
-#define LzwBuffSrcE(psrc) LzwBuffSrcCtrl, LzwBuffSrcGet, (long) psrc
-#define LzwFdSrcE(fdSrc) LzwFdSrcCtrl, LzwFdSrcGet, (long) fdSrc
-#define LzwFpSrcE(fpSrc) LzwFpSrcCtrl, LzwFpSrcGet, (long) fpSrc
+#define LzwBuffSrcE(psrc) LzwBuffSrcCtrl, LzwBuffSrcGet, (int32_t) psrc
+#define LzwFdSrcE(fdSrc) LzwFdSrcCtrl, LzwFdSrcGet, (int32_t) fdSrc
+#define LzwFpSrcE(fpSrc) LzwFpSrcCtrl, LzwFpSrcGet, (int32_t) fpSrc
 
 #define LzwBuffDestE(pdest, destSkip, destSize) \
-	LzwBuffDestCtrl, LzwBuffDestPut, (long) pdest, destSkip, destSize
+	LzwBuffDestCtrl, LzwBuffDestPut, (int32_t) pdest, destSkip, destSize
 #define LzwFdDestE(fdDest, destSkip, destSize) \
-	LzwFdDestCtrl, LzwFdDestPut, (long) fdDest, destSkip, destSize
+	LzwFdDestCtrl, LzwFdDestPut, (int32_t) fdDest, destSkip, destSize
 #define LzwFpDestE(fpDest, destSkip, destSize) \
-	LzwFpDestCtrl, LzwFpDestPut, (long) fpDest, destSkip, destSize
+	LzwFpDestCtrl, LzwFpDestPut, (int32_t) fpDest, destSkip, destSize
 #define LzwNullDestE(destSkip, destSize) \
 	LzwNullDestCtrl, LzwNullDestPut, NULL, destSkip, destSize
 
 //	Prototypes of standard sources
 
-void LzwBuffSrcCtrl(long srcLoc, LzwCtrl ctrl);
-uchar LzwBuffSrcGet();
-void LzwFdSrcCtrl(long srcLoc, LzwCtrl ctrl);
-uchar LzwFdSrcGet();
-void LzwFpSrcCtrl(long srcLoc, LzwCtrl ctrl);
-uchar LzwFpSrcGet();
+void LzwBuffSrcCtrl(int32_t srcLoc, LzwCtrl ctrl);
+uint8_t LzwBuffSrcGet();
+void LzwFdSrcCtrl(int32_t srcLoc, LzwCtrl ctrl);
+uint8_t LzwFdSrcGet();
+void LzwFpSrcCtrl(int32_t srcLoc, LzwCtrl ctrl);
+uint8_t LzwFpSrcGet();
 
 //	Prototypes of standard destinations
 
-void LzwBuffDestCtrl(long destLoc, LzwCtrl ctrl);
-void LzwBuffDestPut(uchar byte);
-void LzwFdDestCtrl(long destLoc, LzwCtrl ctrl);
-void LzwFdDestPut(uchar byte);
-void LzwFpDestCtrl(long destLoc, LzwCtrl ctrl);
-void LzwFpDestPut(uchar byte);
-void LzwNullDestCtrl(long destLoc, LzwCtrl ctrl);
-void LzwNullDestPut(uchar byte);
+void LzwBuffDestCtrl(int32_t destLoc, LzwCtrl ctrl);
+void LzwBuffDestPut(uint8_t byte);
+void LzwFdDestCtrl(int32_t destLoc, LzwCtrl ctrl);
+void LzwFdDestPut(uint8_t byte);
+void LzwFpDestCtrl(int32_t destLoc, LzwCtrl ctrl);
+void LzwFpDestPut(uint8_t byte);
+void LzwNullDestCtrl(int32_t destLoc, LzwCtrl ctrl);
+void LzwNullDestPut(uint8_t byte);
 
 #endif

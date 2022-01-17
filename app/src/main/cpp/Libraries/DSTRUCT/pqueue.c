@@ -48,20 +48,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------
 // GLOBALS
 // -------
-static char* swap_buffer = NULL;
-static int swap_bufsize = 0;
+static int8_t* swap_buffer = NULL;
+static int32_t swap_bufsize = 0;
 
 // -------
 // PROTOS
 // -------
-void swapelems(PQueue* q,int i, int j);
+void swapelems(PQueue* q,int32_t i, int32_t j);
 void re_heapify(PQueue *q);
-void double_re_heapify(PQueue *q, int head);
+void double_re_heapify(PQueue *q, int32_t head);
 
 // ---------
 // INTERNALS
 // ---------
-void swapelems(PQueue* q,int i, int j)
+void swapelems(PQueue* q,int32_t i, int32_t j)
 {
    memcpy(swap_buffer,NTH(q,i),q->elemsize);
    memcpy(NTH(q,i),NTH(q,j),q->elemsize);
@@ -70,12 +70,12 @@ void swapelems(PQueue* q,int i, int j)
 
 void re_heapify(PQueue *q)
 {
-   uint head = 0;
+   uint32_t head = 0;
    while (head < q->fullness)
    {
-      uint lchild = LCHILD(head);
-      uint rchild = RCHILD(head);
-      uint minchild = NULL_CHILD;
+      uint32_t lchild = LCHILD(head);
+      uint32_t rchild = RCHILD(head);
+      uint32_t minchild = NULL_CHILD;
       if (rchild >= q->fullness)
          minchild = lchild;
       if (lchild >= q->fullness)
@@ -99,12 +99,12 @@ void re_heapify(PQueue *q)
 }
 
 
-void double_re_heapify(PQueue *q, int head)
+void double_re_heapify(PQueue *q, int32_t head)
 {
-   uint lchild = LCHILD(head);
-   uint rchild = RCHILD(head);
-   uint minchild = NULL_CHILD;
-   uint maxchild = NULL_CHILD;
+   uint32_t lchild = LCHILD(head);
+   uint32_t rchild = RCHILD(head);
+   uint32_t minchild = NULL_CHILD;
+   uint32_t maxchild = NULL_CHILD;
    if (rchild >= q->fullness)
       minchild = lchild;
    if (lchild >= q->fullness)
@@ -133,7 +133,7 @@ void double_re_heapify(PQueue *q, int head)
 // EXTERNALS
 // ---------
 
-errtype pqueue_init(PQueue* q, int size, int elemsize, QueueCompare comp, bool grow)
+errtype pqueue_init(PQueue* q, int32_t size, int32_t elemsize, QueueCompare comp, bool grow)
 {
    if (size < 1) return ERR_RANGE;
    q->vec = NewPtr(elemsize*size);
@@ -160,7 +160,7 @@ errtype pqueue_init(PQueue* q, int size, int elemsize, QueueCompare comp, bool g
 
 errtype pqueue_insert(PQueue* q, void* elem)
 {
-   int n;
+   int32_t n;
    if (!q->grow && q->fullness >= q->size)
       return ERR_DOVERFLOW;
    while (q->fullness >= q->size)
@@ -202,23 +202,23 @@ errtype pqueue_least(PQueue* q, void* elem)
    return OK;
 }
 /*
-errtype pqueue_write(PQueue* q, int fd, void (*writefunc)(int fd, void* elem))
+errtype pqueue_write(PQueue* q, int32_t fd, void (*writefunc)(int32_t fd, void* elem))
 {
-   int i;
-   write(fd,(char*)q,sizeof(PQueue));
+   int32_t i;
+   write(fd,(int8_t*)q,sizeof(PQueue));
    for(i = 0; i < q->fullness; i++)
    {
       if (writefunc != NULL)
          writefunc(fd,NTH(q,i));
-      else write(fd,(char*)NTH(q,i),q->elemsize);
+      else write(fd,(int8_t*)NTH(q,i),q->elemsize);
    }
    return OK;
 }
 
-errtype pqueue_read(PQueue* q, int fd, void (*readfunc)(int fd, void* elem))
+errtype pqueue_read(PQueue* q, int32_t fd, void (*readfunc)(int32_t fd, void* elem))
 {
-   int i;
-   read(fd,(char*)q,sizeof(PQueue));
+   int32_t i;
+   read(fd,(int8_t*)q,sizeof(PQueue));
    if (q->grow) q->size = q->fullness;
    q->vec = NewPtr(q->size*q->elemsize);
    if (q->vec == NULL) return ERR_NOMEM;
@@ -226,7 +226,7 @@ errtype pqueue_read(PQueue* q, int fd, void (*readfunc)(int fd, void* elem))
    {
       if (readfunc != NULL)
          readfunc(fd,NTH(q,i));
-      else read(fd,(char*)NTH(q,i),q->elemsize);
+      else read(fd,(int8_t*)NTH(q,i),q->elemsize);
    }
    return OK;
 }

@@ -94,9 +94,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // INTERNAL PROTOTYPES
 // -----------------
 void load_level_data();
-void store_objects(char** buf, ObjID *obj_array, char obj_count);
-void restore_objects(char* buf, ObjID *obj_array, char obj_count);
-errtype write_id(Id id_num, short index, void *ptr, long sz, int fd, short flags);
+void store_objects(int8_t** buf, ObjID *obj_array, int8_t obj_count);
+void restore_objects(int8_t* buf, ObjID *obj_array, int8_t obj_count);
+errtype write_id(Id id_num, int16_t index, void *ptr, int32_t sz, int32_t fd, int16_t flags);
 
 
 #define REF_WRITE(id_num,index,x) write_id(id_num, index, &(x), sizeof(x), fd, 0);    AdvanceProgress()
@@ -109,10 +109,10 @@ errtype write_id(Id id_num, short index, void *ptr, long sz, int fd, short flags
 
 #define SAVE_AUTOMAP_STRINGS
 
-char saveload_string[30];
+int8_t saveload_string[30];
 bool display_saveload_checkpoints = FALSE;
 bool saveload_static = FALSE;
-uint dynmem_mask = DYNMEM_ALL;
+uint32_t dynmem_mask = DYNMEM_ALL;
 
 extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
 extern ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
@@ -121,10 +121,10 @@ extern bool trigger_check;
 
 
 //-------------------------------------------------------
-void store_objects(char** buf, ObjID *obj_array, char obj_count)
+void store_objects(int8_t** buf, ObjID *obj_array, int8_t obj_count)
 {
-   char*	s = (char *)NewPtr(obj_count * sizeof(Obj) * 3);
-   int 		i;
+   int8_t*	s = (int8_t *)NewPtr(obj_count * sizeof(Obj) * 3);
+   int32_t 		i;
    if (s == NULL)
       critical_error(CRITERR_MEM|3);
    *buf = s;
@@ -158,10 +158,10 @@ void store_objects(char** buf, ObjID *obj_array, char obj_count)
 
 
 //-------------------------------------------------------
-void restore_objects(char* buf, ObjID *obj_array, char obj_count)
+void restore_objects(int8_t* buf, ObjID *obj_array, int8_t obj_count)
 {
-   char* s = buf;
-   int i;
+   int8_t* s = buf;
+   int32_t i;
    for (i = 0; i < obj_count; i++)
    {
       Obj* next = (Obj*)s;
@@ -174,7 +174,7 @@ void restore_objects(char* buf, ObjID *obj_array, char obj_count)
       {
          ObjID id = obj_create_base(MAKETRIP(next->obclass,next->subclass,next->info.type));
          ObjSpecHeader* sh = &objSpecHeaders[next->obclass];
-         char* spec;
+         int8_t* spec;
          s+=sizeof(Obj);
          if (id != OBJ_NULL)
          {
@@ -193,10 +193,10 @@ void restore_objects(char* buf, ObjID *obj_array, char obj_count)
 //-------------------------------------------------------
 #define SECRET_VOODOO_ENDGAME_CSPACE   10
 
-bool go_to_different_level(int targlevel)
+bool go_to_different_level(int32_t targlevel)
 {
    State player_state;
-   char* buf;
+   int8_t* buf;
    extern void update_level_gametime(void);
    extern errtype do_level_entry_triggers();
    bool in_cyber = global_fullmap->cyber;
@@ -244,7 +244,7 @@ bool go_to_different_level(int targlevel)
 	//			  continues playing.  We'll do this by queueing up 3 additional chunks of music.
 	else if (music_on)
 	{
-		for (int t = 0; t < 3; t++)
+		for (int32_t t = 0; t < 3; t++)
 		{
 			MacTuneQueueTune(mlimbs_boredom);
 			mlimbs_boredom++;
@@ -334,7 +334,7 @@ bool go_to_different_level(int targlevel)
 
 #define ANOTHER_DEFINE_FOR_NUM_LEVELS  16
 
-errtype write_id(Id id_num, short index, void *ptr, long sz, int fd, short flags)
+errtype write_id(Id id_num, int16_t index, void *ptr, int32_t sz, int32_t fd, int16_t flags)
 {
    ResMake(id_num + index, ptr, sz, RTYPE_APP, fd, flags);
    if (ResWrite(id_num + index) == -1)
@@ -345,16 +345,16 @@ errtype write_id(Id id_num, short index, void *ptr, long sz, int fd, short flags
 
 errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
 {
-   int i,goof;
-   int idx = 0;
-   int fd;
-   int vnum = MAP_VERSION_NUMBER;
-   int ovnum = OBJECT_VERSION_NUMBER;
-   int mvnum = MISC_SAVELOAD_VERSION_NUMBER;
+   int32_t i,goof;
+   int32_t idx = 0;
+   int32_t fd;
+   int32_t vnum = MAP_VERSION_NUMBER;
+   int32_t ovnum = OBJECT_VERSION_NUMBER;
+   int32_t mvnum = MISC_SAVELOAD_VERSION_NUMBER;
    ObjLoc plr_loc;
    bool make_player = FALSE;
    State player_edms;
-   int verify_cookie = 0;
+   int32_t verify_cookie = 0;
 
 //KLC - Mac cursor showing at this time   begin_wait();
 
@@ -405,7 +405,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    // Here we are writing out the schedules.  It's only a teeny tiny rep exposure.
    for (i = 0; i < NUM_MAP_SCHEDULES; i++)
    {
-      int sz = min(global_fullmap->sched[i].queue.fullness+1,global_fullmap->sched[i].queue.size);
+      int32_t sz = min(global_fullmap->sched[i].queue.fullness+1,global_fullmap->sched[i].queue.size);
       REF_WRITE_RAW(id_num,idx++,global_fullmap->sched[i].queue.vec, sizeof(SchedEvent)*sz);
    }
    REF_WRITE(id_num,idx++,loved_textures);
@@ -477,7 +477,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
 /* KLC - not used
    if (pack)
    {
-      int reclaim;
+      int32_t reclaim;
       reclaim = ResPack(fd);
       if (reclaim == 0)
          Warning(("%d bytes reclaimed from ResPack!\n",reclaim));
@@ -507,16 +507,16 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
 /*KLC - no map conversion needed in Mac version.
 
 extern bool init_done;
-extern int loadcount;
+extern int32_t loadcount;
 
 #ifdef SUPPORT_9_TO_10
 #pragma disable_message(202)
-void convert_map_element_9_10(oMapElem *ome, MapElem *me, int x, int y)
+void convert_map_element_9_10(oMapElem *ome, MapElem *me, int32_t x, int32_t y)
 {
    me->tiletype=ome->tiletype;
    if (ome->param && (tile_floors[ome->tiletype].flags&FRFLRFLG_USEPR))
    {  // cool, erik has params and flags which mean NOTHING... neat... now need to detect
-      int tmp=(ome->flags&MAP_MIRROR_MASK)>>MAP_MIRROR_SHF;
+      int32_t tmp=(ome->flags&MAP_MIRROR_MASK)>>MAP_MIRROR_SHF;
 
       if ((tmp==MAP_MATCH)||(tmp==MAP_FFLAT))
       {
@@ -555,7 +555,7 @@ void convert_map_element_9_10(oMapElem *ome, MapElem *me, int x, int y)
 #endif
 
 #pragma disable_message(202)
-void convert_map_element_10_11(oMapElem *ome, MapElem *me, int x, int y)
+void convert_map_element_10_11(oMapElem *ome, MapElem *me, int32_t x, int32_t y)
 {
    me_tiletype_set(me,ome_tiletype(ome));
    me_height_flr_set(me,ome_height_flr(ome));
@@ -589,7 +589,7 @@ void convert_map_element_10_11(oMapElem *ome, MapElem *me, int x, int y)
 
 void convert_cit_map(oFullMap *omp, FullMap **mp)
 {
-   int i, j, ibase;
+   int32_t i, j, ibase;
    if ((*mp)!=NULL)
     { Free((*mp)->map); Free(*mp); }
    *mp=Malloc(sizeof(FullMap));
@@ -606,11 +606,11 @@ extern ObjSpecID HeaderObjSpecGrab (ObjClass obclass, ObjSpecHeader *head);
 extern bool HeaderObjSpecCopy (ObjClass cls, ObjSpecID old, ObjSpecID new, ObjSpecHeader *head);
 extern const ObjSpecHeader old_objSpecHeaders[NUM_CLASSES];
 
-errtype fix_free_chain(char cl, short limit)
+errtype fix_free_chain(int8_t cl, int16_t limit)
 {
    ObjSpec *osp, *next_item, *next_next_item;
-   short ss;
-   char *data;
+   int16_t ss;
+   int8_t *data;
    bool cont = TRUE;
 
    ss = old_objSpecHeaders[cl].struct_size;
@@ -640,11 +640,11 @@ errtype fix_free_chain(char cl, short limit)
    return(OK);
 }
 
-bool one_compression_pass(char cl,short start)
+bool one_compression_pass(int8_t cl,int16_t start)
 {
    ObjSpec *osp;
-   short ss;
-   char *data;
+   int16_t ss;
+   int8_t *data;
    ObjID fugitive = OBJ_NULL;
    ObjSpec *p1;
    ObjSpecID new_objspec, old_specid;
@@ -692,7 +692,7 @@ bool one_compression_pass(char cl,short start)
    return(TRUE);
 }
 
-errtype compress_old_class(char cl)
+errtype compress_old_class(int8_t cl)
 {
    bool cont = TRUE;
    fix_free_chain(cl, objSpecHeaders[cl].size);
@@ -702,12 +702,12 @@ errtype compress_old_class(char cl)
 }
 #endif
 
-errtype expand_old_class(char cl, short new_start)
+errtype expand_old_class(int8_t cl, int16_t new_start)
 {
    ObjSpec *osp, *next_item;
    ObjSpecID osid;
-   short ss;
-   char *data;
+   int16_t ss;
+   int8_t *data;
    bool cont = TRUE;
 
    ss = objSpecHeaders[cl].struct_size;
@@ -748,13 +748,13 @@ void load_level_data()
 
 void SwapLongBytes(void *pval4);
 void SwapShortBytes(void *pval2);
-#define MAKE4(c0,c1,c2,c3) ((((ulong)c0)<<24)|(((ulong)c1)<<16)|(((ulong)c2)<<8)|((ulong)c3))
+#define MAKE4(c0,c1,c2,c3) ((((uint32_t)c0)<<24)|(((uint32_t)c1)<<16)|(((uint32_t)c2)<<8)|((uint32_t)c3))
 
 //	---------------------------------------------------------
 // ¥¥¥¥ Put this in some more appropriate, global place.
 void SwapLongBytes(void *pval4)
 {
-	long	*temp = (long *)pval4;
+	int32_t	*temp = (int32_t *)pval4;
 	*temp = MAKE4(*temp & 0xFF,
 							  (*temp >> 8) & 0xFF,
 							  (*temp >> 16) & 0xFF,
@@ -763,7 +763,7 @@ void SwapLongBytes(void *pval4)
 
 void SwapShortBytes(void *pval2)
 {
-	short		*temp = (short *)pval2;
+	int16_t		*temp = (int16_t *)pval2;
 	*temp = ((*temp & 0xFF) << 8) | ((*temp >> 8) & 0xFF);
 }
 
@@ -771,29 +771,29 @@ void SwapShortBytes(void *pval2)
 //---------------------------------------------------------------------------------
 //  Loads in the map for a level, and all the other related resources (2+ MB worth).
 //---------------------------------------------------------------------------------
-//errtype load_current_map(char* fn, Id id_num, Datapath* dpath)
+//errtype load_current_map(int8_t* fn, Id id_num, Datapath* dpath)
 errtype load_current_map(Id id_num, FSSpec* spec)
 {
 	void rendedit_process_tilemap(FullMap* fmap, LGRect* r, bool newMap);
 	extern errtype set_door_data(ObjID id);
-	extern int physics_handle_max;
+	extern int32_t physics_handle_max;
 	extern ObjID physics_handle_id[MAX_OBJ];
 	void cit_sleeper_callback(physics_handle caller);
 	extern void edms_delete_go();
 	extern void reload_motion_cursors(bool cyber);
-	extern char old_bits;
-	extern int compare_events(void* e1, void* e2);
+	extern int8_t old_bits;
+	extern int32_t compare_events(void* e1, void* e2);
 
-	int 			i, idx = 0, fd, version;
+	int32_t 			i, idx = 0, fd, version;
 	LGRect 		bounds;
 	errtype 		retval = OK;
 	bool 			make_player = FALSE;
 	ObjLoc 		plr_loc;
 	ObjID 		oid;
-	char			*schedvec;			//KLC - don't need an array.  Only one in map.
+	int8_t			*schedvec;			//KLC - don't need an array.  Only one in map.
 //	State 			player_edms;
 	curAMap 	saveAMaps[NUM_O_AMAP];
-	uchar 		savedMaps;
+	uint8_t 		savedMaps;
 	bool 			do_anims = FALSE;
 
 //   _MARK_("load_current_map:Start");
@@ -831,7 +831,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 
 	if (ResInUse(SAVELOAD_VERIFICATION_ID))
 	{
-		int verify_cookie;
+		int32_t verify_cookie;
 		ResExtract(SAVELOAD_VERIFICATION_ID, &verify_cookie);
 		if ((verify_cookie != VERIFY_COOKIE_VALID) && (verify_cookie != OLD_VERIFY_COOKIE_VALID))
 			critical_error(CRITERR_FILE|5);
@@ -951,7 +951,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
          objs[x].next = old_objs[x].next;
          objs[x].prev = old_objs[x].prev;
          objs[x].loc = old_objs[x].loc;
-         objs[x].info.ph = (char)(old_objs[x].info.ph);
+         objs[x].info.ph = (int8_t)(old_objs[x].info.ph);
          objs[x].info.type = old_objs[x].info.type;
          objs[x].info.current_hp = old_objs[x].info.current_hp;
          objs[x].info.make_info = old_objs[x].info.make_info;
@@ -967,7 +967,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 	// Read in object information.  For the Mac version, copy from the resource's 27-byte structs, then
 	// place it into an Obj struct (which is 28 bytes, due to alignment).  Swap bytes as needed.
 /*	{
-		uchar	*op = (uchar *)ResLock(id_num + idx);
+		uint8_t	*op = (uint8_t *)ResLock(id_num + idx);
 		for(i = 0; i < NUM_OBJECTS; i++)
 		{
 			BlockMoveData(op, &objs[i], 3);
@@ -1056,7 +1056,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 
 	// Read in and convert the hardwares.  Resource is array of 7-byte structs.  Ours are 8.
 /*	{
-		uchar	*hp = (uchar *)ResLock(id_num + idx);
+		uint8_t	*hp = (uint8_t *)ResLock(id_num + idx);
 		for (i=0; i < NUM_OBJECTS_HARDWARE; i++)
 		{
 			BlockMoveData(hp, &objHardwares[i], 7);
@@ -1072,7 +1072,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 
 	// Read in and convert the softwares.  Resource is array of 9-byte structs.  Ours are 10.
 /*	{
-		uchar	*sp = (uchar *)ResLock(id_num + idx);
+		uint8_t	*sp = (uint8_t *)ResLock(id_num + idx);
 		for (i=0; i < NUM_OBJECTS_SOFTWARE; i++)
 		{
 			BlockMoveData(sp, &objSoftwares[i], 7);
@@ -1164,7 +1164,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 
 	// Read in and convert the containers.  Resource is array of 21-byte structs.  Ours are 22.
 /*	{
-		uchar	*sp = (uchar *)ResLock(id_num + idx);
+		uint8_t	*sp = (uint8_t *)ResLock(id_num + idx);
 		for (i=0; i < NUM_OBJECTS_CONTAINER; i++)
 		{
 			BlockMoveData(sp, &objContainers[i], 17);
@@ -1247,7 +1247,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 
 	// Convert the default hardware.  Resource is array of 7-byte structs.  Ours is 8.
 /*	{
-		uchar	*hp = (uchar *)ResLock(id_num + idx);
+		uint8_t	*hp = (uint8_t *)ResLock(id_num + idx);
 		BlockMoveData(hp, &default_hardware, 7);
 		SwapShortBytes(&default_hardware.id);
 		SwapShortBytes(&default_hardware.next);
@@ -1259,7 +1259,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 
 	// Convert the default software.  Resource is array of 9-byte structs.  Ours is 10.
 /*	{
-		uchar	*sp = (uchar *)ResLock(id_num + idx);
+		uint8_t	*sp = (uint8_t *)ResLock(id_num + idx);
 		BlockMoveData(sp, &default_software, 7);
 		BlockMoveData(sp+7, &default_software.data_munge, 2);
 		SwapShortBytes(&default_software.id);
@@ -1329,7 +1329,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 
 /*	// Convert the default container.  Resource is a 21-byte struct.  Ours is 22.
 	{
-		uchar	*sp = (uchar *)ResLock(id_num + idx);
+		uint8_t	*sp = (uint8_t *)ResLock(id_num + idx);
 		BlockMoveData(sp, &default_container, 17);
 		BlockMoveData(sp+17, &default_container.data1, 4);
 		SwapShortBytes(&default_container.id);
@@ -1374,7 +1374,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 
 	// Convert the anim textures.  Resource is a 7-byte struct.  Ours is 8.
 /*	{
-		uchar	*ap = (uchar *)ResLock(id_num + idx);
+		uint8_t	*ap = (uint8_t *)ResLock(id_num + idx);
 		for (i=0; i < NUM_ANIM_TEXTURE_GROUPS; i++)
 		{
 			BlockMoveData(ap, &animtextures[i], 7);
@@ -1410,7 +1410,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 	// Get other level data at next id
 	REF_READ( id_num, idx++, level_gamedata);
 /*	{
-		uchar *ldp = (uchar *)ResLock(id_num + idx);
+		uint8_t *ldp = (uint8_t *)ResLock(id_num + idx);
 		memset(&level_gamedata, 0, sizeof(LevelData));
 		BlockMoveData(ldp, &level_gamedata, 9);
 		BlockMoveData(ldp+9, &level_gamedata.exit_time, 4);
@@ -1437,8 +1437,8 @@ global_fullmap->sched[0].queue.grow = TRUE;
 
 #ifdef SAVE_AUTOMAP_STRINGS
 	{
-		int	amap_magic_num;
-		char	*cp = amap_str_reref(0);
+		int32_t	amap_magic_num;
+		int8_t	*cp = amap_str_reref(0);
 		ResExtract(id_num + idx++, cp);
 //		REF_READ(id_num, idx++, amap_str_reref(0));		old way
 		REF_READ(id_num, idx++, amap_magic_num);
@@ -1476,7 +1476,7 @@ global_fullmap->sched[0].queue.grow = TRUE;
 	REF_READ(id_num,idx++,used_paths);
 //	SwapShortBytes(&used_paths);
 
-/*	uchar	*ap = (uchar *)ResLock(id_num + idx);
+/*	uint8_t	*ap = (uint8_t *)ResLock(id_num + idx);
 	for (i=0; i < MAX_ANIMLIST_SIZE; i++)
 	{
 		BlockMoveData(ap, &animlist[i].id, 2);
@@ -1556,7 +1556,7 @@ obj_out:
 
    if (make_player)
    {
-      extern int score_playing;
+      extern int32_t score_playing;
       obj_create_player(&plr_loc);
       if (version > 9)
       {

@@ -43,8 +43,8 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-	ubyte    ammo_type;
-	ubyte    ammo_count;
+	uint8_t    ammo_type;
+	uint8_t    ammo_count;
 } ObjGun;
 
 typedef struct {
@@ -72,9 +72,9 @@ typedef struct {
 	};
 	ObjSpecID prev;
    ObjID    owner;
-   int      bullet_triple;
-   int      duration;
-//   char     power;
+   int32_t      bullet_triple;
+   int32_t      duration;
+//   int8_t     power;
    ObjLoc   p1, p2, p3;
 } ObjPhysics;
 
@@ -89,46 +89,46 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-   ubyte unique_id;
-   ubyte walls_hit;
-   short flags;
-   short timestamp;
+   uint8_t unique_id;
+   uint8_t walls_hit;
+   int16_t flags;
+   int16_t timestamp;
 } ObjGrenade;
 
 // Class typedefs
 
 #define COMBAT_DATA_FIELDS \
-   short damage_modifier;  \
-   ubyte offense_value;    \
-   int   damage_type;      \
-   ubyte penetration
+   int16_t damage_modifier;  \
+   uint8_t offense_value;    \
+   int32_t   damage_type;      \
+   uint8_t penetration
 
 typedef struct _GunProp {
-   ubyte fire_rate;
-   ubyte useable_ammo_type;
+   uint8_t fire_rate;
+   uint8_t useable_ammo_type;
 } GunProp;
 
 typedef struct _AmmoProp {
    COMBAT_DATA_FIELDS;
-   ubyte cartridge_size;
-   ubyte bullet_mass;
-   short bullet_speed;
-   ubyte range;
-   ubyte recoil_force;
+   uint8_t cartridge_size;
+   uint8_t bullet_mass;
+   int16_t bullet_speed;
+   uint8_t range;
+   uint8_t recoil_force;
 } AmmoProp;
 
 typedef struct _PhysicsProp {
-   ubyte flags;
+   uint8_t flags;
 } PhysicsProp;
 
 typedef struct _GrenadeProp {
    COMBAT_DATA_FIELDS;
-   ubyte touchiness;
-   ubyte radius;
-   ubyte radius_change;
-   ubyte damage_change;
-   ubyte attack_mass;
-   short flags;            // Does it spew shrapnel? Can timer be set? Can it stick to wall?
+   uint8_t touchiness;
+   uint8_t radius;
+   uint8_t radius_change;
+   uint8_t damage_change;
+   uint8_t attack_mass;
+   int16_t flags;            // Does it spew shrapnel? Can timer be set? Can it stick to wall?
 } GrenadeProp;
 
 // Subclass typedefs
@@ -137,119 +137,119 @@ typedef struct _GrenadeProp {
 
 typedef struct _PistolGunProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } PistolGunProp;
 
 typedef struct _AutoGunProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } AutoGunProp;
 
 typedef struct _SpecialGunProp {
    COMBAT_DATA_FIELDS;
-   ubyte speed;
-   int   proj_triple;
-   ubyte attack_mass;
-   short attack_speed;
+   uint8_t speed;
+   int32_t   proj_triple;
+   uint8_t attack_mass;
+   int16_t attack_speed;
 } SpecialGunProp;
 
 typedef struct _HandtohandGunProp {
    COMBAT_DATA_FIELDS;
-   ubyte energy_use;
-   ubyte attack_mass;
-   ubyte attack_range;
-   short attack_speed;
+   uint8_t energy_use;
+   uint8_t attack_mass;
+   uint8_t attack_range;
+   int16_t attack_speed;
 } HandtohandGunProp;
 
 typedef struct _BeamGunProp {
    COMBAT_DATA_FIELDS;
-   ubyte max_charge;
-   ubyte attack_mass;
-   ubyte attack_range;
-   short attack_speed;
+   uint8_t max_charge;
+   uint8_t attack_mass;
+   uint8_t attack_range;
+   int16_t attack_speed;
 } BeamGunProp;
 
 typedef struct _BeamprojGunProp {
    COMBAT_DATA_FIELDS;
-   ubyte max_charge;
-   ubyte attack_mass;
-   short attack_speed;
-   ubyte speed;
-   int   proj_triple;
-   ubyte flags;
+   uint8_t max_charge;
+   uint8_t attack_mass;
+   int16_t attack_speed;
+   uint8_t speed;
+   int32_t   proj_triple;
+   uint8_t flags;
 } BeamprojGunProp;
 
 typedef struct _PistolAmmoProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } PistolAmmoProp;
 
 typedef struct _NeedleAmmoProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } NeedleAmmoProp;
 
 typedef struct _MagnumAmmoProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } MagnumAmmoProp;
 
 typedef struct _RifleAmmoProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } RifleAmmoProp;
 
 typedef struct _FlechetteAmmoProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } FlechetteAmmoProp;
 
 typedef struct _AutoAmmoProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } AutoAmmoProp;
 
 typedef struct _ProjAmmoProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } ProjAmmoProp;
 
 typedef struct _TracerPhysicsProp {
-   short xcoords[4];
-   short ycoords[4];
-   ubyte zcoords[4];
+   int16_t xcoords[4];
+   int16_t ycoords[4];
+   uint8_t zcoords[4];
 } TracerPhysicsProp;
 
 #define NUM_SLOW_VCOLORS   6
 typedef struct _SlowPhysicsProp {
-   uchar vcolors[NUM_SLOW_VCOLORS];
+   uint8_t vcolors[NUM_SLOW_VCOLORS];
 } SlowPhysicsProp;
 
 typedef struct _CameraPhysicsProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } CameraPhysicsProp;
 
 typedef struct _DirectGrenadeProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } DirectGrenadeProp;
 
 typedef struct _TimedGrenadeProp {
-   ubyte min_time_set;
-   ubyte max_time_set;
-   ubyte timing_deviation;
+   uint8_t min_time_set;
+   uint8_t max_time_set;
+   uint8_t timing_deviation;
 } TimedGrenadeProp;
 
 // Gun

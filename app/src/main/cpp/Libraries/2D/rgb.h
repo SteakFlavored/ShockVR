@@ -65,15 +65,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define gr_index_brgb(c) \
    ((((c)>>5)&0x1f)|(((c)>>11)&0x3e0)|(((c)>>17)&0x7c00))
 
-extern void gr_split_rgb (grs_rgb c, uchar *r, uchar *g, uchar *b);
+extern void gr_split_rgb (grs_rgb c, uint8_t *r, uint8_t *g, uint8_t *b);
 
 /* Generate an inverse palette for the given screen palette */
-int gr_alloc_ipal(void);
+int32_t gr_alloc_ipal(void);
 
 /* Reinitialize the ipal for the current palette */
-int gr_init_ipal(void);
+int32_t gr_init_ipal(void);
 
 /* Destroy the current inverse palette, freeing memory */
-int gr_free_ipal(void);
+int32_t gr_free_ipal(void);
 
 #endif /* !__RGB_H */

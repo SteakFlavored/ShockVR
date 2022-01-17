@@ -24,25 +24,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // GLOBALS
 // -------
 
-ushort hudobj_classes[NUM_CLASSES];
+uint16_t hudobj_classes[NUM_CLASSES];
 
 struct _hudobj_data hudobj_vec[NUM_HUDOBJS];
 
-ubyte current_num_hudobjs = 0;
+uint8_t current_num_hudobjs = 0;
 
 
 // -------------
 // API FUNCTIONS
 // -------------
 
-void hudobj_set_subclass(ubyte obclass, ubyte subclass, bool val)
+void hudobj_set_subclass(uint8_t obclass, uint8_t subclass, bool val)
 {
-   ushort mask = (subclass == HUDOBJ_ALL_SUBCLASSES) ? 0xFFFF : (1 << subclass);
+   uint16_t mask = (subclass == HUDOBJ_ALL_SUBCLASSES) ? 0xFFFF : (1 << subclass);
    if (val) hudobj_classes[obclass] |= mask;
    else hudobj_classes[obclass] &= ~mask;
 }
 
-void hudobj_set_id(short id, bool val)
+void hudobj_set_id(int16_t id, bool val)
 {
    if (id == OBJ_NULL) return;
    if (val) objs[id].info.inst_flags |=  HUDOBJ_INST_FLAG;

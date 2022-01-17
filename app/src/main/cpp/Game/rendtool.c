@@ -74,12 +74,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 LGRect *rendrect;
 extern fauxrend_context *_fr;
-ubyte mouselocked = 0;
+uint8_t mouselocked = 0;
 
 #define NUM_STARS 500
 
 sts_vec star_vec[NUM_STARS];
-uchar star_col[NUM_STARS];
+uint8_t star_col[NUM_STARS];
 
 
 //------------------------
@@ -87,36 +87,36 @@ uchar star_col[NUM_STARS];
 //------------------------
 void rend_mouse_hide(void);
 void rend_mouse_show(void);
-bool game_obj_block_home(void *vmptr, uchar *_sclip, int *loc);
-bool game_obj_block(void *vmptr, uchar *_sclip, int *loc);
-int game_fr_idx(void);
+bool game_obj_block_home(void *vmptr, uint8_t *_sclip, int32_t *loc);
+bool game_obj_block(void *vmptr, uint8_t *_sclip, int32_t *loc);
+int32_t game_fr_idx(void);
 grs_bitmap *game_fr_tmap_128(void);
 grs_bitmap *game_fr_tmap_64(void);
 grs_bitmap *game_fr_tmap_full(void);
 void game_rend_start(void);
 void game_fr_clip_start(bool headnorth);
 
-void game_redrop_rad(int rad_mod);
-void change_detail_level(byte new_level);
-void set_global_lighting(short l_lev);
+void game_redrop_rad(int32_t rad_mod);
+void change_detail_level(int8_t new_level);
+void set_global_lighting(int16_t l_lev);
 void fauxrend_camera_setfunc(TileCamera* tc);
 void rendedit_process_tilemap(FullMap* fmap, LGRect* r, bool newMap);
-ushort fr_get_at_raw(frc *fr, int x, int y, bool again, bool transp);
-void load_model_vtexts(char model_num);
-void free_model_vtexts(char model_num);
+uint16_t fr_get_at_raw(frc *fr, int32_t x, int32_t y, bool again, bool transp);
+void load_model_vtexts(int8_t model_num);
+void free_model_vtexts(int8_t model_num);
 
 // Note that I have fixed this so that the cursor does not flicker.
 // It just works.  Note its simplistic beauty.	I love this job.
 void rend_mouse_hide(void)
 {
-	extern Boolean		DoubleSize;
+	extern bool		DoubleSize;
 	extern grs_canvas	gDoubleSizeOffCanvas;
-	extern Boolean		view360_is_rendering;
+	extern bool		view360_is_rendering;
 
 	MouseLock++;
 	if (MouseLock==1 && CurrentCursor != NULL)
 	{
-		int			cmd = CURSOR_DRAW;
+		int32_t			cmd = CURSOR_DRAW;
 		LGPoint 		pos = LastCursorPos;
 		grs_canvas	*old_canvas = CursorCanvas;
 
@@ -158,7 +158,7 @@ void rend_mouse_show(void)
    MouseLock -=mouselocked;
 }
 
-extern int _game_fr_tmap;  // current tmap
+extern int32_t _game_fr_tmap;  // current tmap
 extern MapElem *_fdt_mptr;
 
 extern grs_bitmap tmap_bm[32];	// this is dumb, yea yea
@@ -166,7 +166,7 @@ extern grs_bitmap tmap_bm[32];	// this is dumb, yea yea
 static MapElem *home_ptr;
 
 
-bool game_obj_block_home(void *vmptr, uchar *_sclip, int *loc)
+bool game_obj_block_home(void *vmptr, uint8_t *_sclip, int32_t *loc)
 {
    MapElem *mptr=(MapElem *)vmptr;
    Obj *cobj;
@@ -230,7 +230,7 @@ bool game_obj_block_home(void *vmptr, uchar *_sclip, int *loc)
    return FALSE;     // for now, no blockage in home square
 }
 
-bool game_obj_block(void *vmptr, uchar *_sclip, int *loc)
+bool game_obj_block(void *vmptr, uint8_t *_sclip, int32_t *loc)
 {
    MapElem *mptr=(MapElem *)vmptr;
    Obj *cobj;
@@ -273,7 +273,7 @@ bool game_obj_block(void *vmptr, uchar *_sclip, int *loc)
 }
 
 
-int game_fr_idx(void)
+int32_t game_fr_idx(void)
 {
    return _game_fr_tmap;
 }
@@ -289,10 +289,10 @@ int game_fr_idx(void)
 
 extern g3s_phandle _fdt_tmppts[8];   /* these are used for all temporary point sets */
 
-bool draw_tmap_p(int ptcnt);
+bool draw_tmap_p(int32_t ptcnt);
 
 // should i draw this texture/map/so on
-bool draw_tmap_p(int ptcnt)
+bool draw_tmap_p(int32_t ptcnt)
 {
    // JAEMZ JAEMZ JAEMZ JAEMZ
    // notify yourself here, i would guess....
@@ -323,8 +323,8 @@ bool draw_tmap_p(int ptcnt)
 grs_bitmap *game_fr_tmap_128(void)
 {
    grs_bitmap *draw_me;
-   register int loop=TEXTURE_128_INDEX;
-   register int cur_drop=_frp.view.drop_rad[0] + textprops[_game_fr_tmap].distance_mod;
+   register int32_t loop=TEXTURE_128_INDEX;
+   register int32_t cur_drop=_frp.view.drop_rad[0] + textprops[_game_fr_tmap].distance_mod;
 
    if (cur_drop<_fdt_dist)
    {
@@ -344,8 +344,8 @@ grs_bitmap *game_fr_tmap_128(void)
 grs_bitmap *game_fr_tmap_64(void)
 {
    grs_bitmap *draw_me;
-   register int loop=TEXTURE_64_INDEX;
-   register int cur_drop=_frp.view.drop_rad[1] + textprops[_game_fr_tmap].distance_mod;
+   register int32_t loop=TEXTURE_64_INDEX;
+   register int32_t cur_drop=_frp.view.drop_rad[1] + textprops[_game_fr_tmap].distance_mod;
 
    if (cur_drop<_fdt_dist)
    {
@@ -361,7 +361,7 @@ grs_bitmap *game_fr_tmap_64(void)
 grs_bitmap *game_fr_tmap_full(void)
 {
    grs_bitmap *draw_me;
-   int loop=TEXTURE_128_INDEX, lmask;
+   int32_t loop=TEXTURE_128_INDEX, lmask;
    register cur_drop=_frp.view.drop_rad[0] + textprops[_game_fr_tmap].distance_mod;
 
    if (cur_drop<_fdt_dist)
@@ -392,7 +392,7 @@ draw_it:
 void game_rend_start(void)
 {
    extern ObjID no_render_obj;
-   extern uchar cam_mode;
+   extern uint8_t cam_mode;
    cams *cur_cam;
    // hey, gots to do this somewhere
    // remove self from object list
@@ -419,22 +419,22 @@ void game_fr_clip_start(bool headnorth)
    }
 }
 
-extern int gamesys_draw_func(void *dest_canvas, void *dest_bm, int x, int y, int flags);
-extern void gamesys_render_func(void *dest_bitmap, int flags);
+extern int32_t gamesys_draw_func(void *dest_canvas, void *dest_bm, int32_t x, int32_t y, int32_t flags);
+extern void gamesys_render_func(void *dest_bitmap, int32_t flags);
 
 /*KLC - no longer used here
 // new regieme, has gruesome hacks for memory saving....
 #define FRAME_BUFFER_SIZE (320*200)
-static uchar *frameBufferFreePtr=NULL;
-extern uchar  frameBuffer[];
+static uint8_t *frameBufferFreePtr=NULL;
+extern uint8_t  frameBuffer[];
 */
 
-uchar model_base_nums[MAX_VTEXT_OBJS];
+uint8_t model_base_nums[MAX_VTEXT_OBJS];
 
 void game_fr_startup(void)
 {
-   short curr, index;
-   extern int std_alias_size;
+   int16_t curr, index;
+   extern int32_t std_alias_size;
 
 // we know that the main screen we support is 320x200, so.....
 //KLC   frameBufferFreePtr=frameBuffer;
@@ -476,7 +476,7 @@ void game_fr_shutdown(void)
 }
 
 //#pragma disable_message(202)
-void game_fr_reparam(int is_128s, int , int )
+void game_fr_reparam(int32_t is_128s, int32_t , int32_t )
 {
    if (is_128s!=-1)
 	   fr_get_tmap=is_128s?game_fr_tmap_128:game_fr_tmap_64;
@@ -487,7 +487,7 @@ void game_fr_reparam(int is_128s, int , int )
 	}
 }
 
-void game_redrop_rad(int rad_mod)
+void game_redrop_rad(int32_t rad_mod)
 {
    _frp.view.drop_rad[0]=_frp.view.odrop_rad[0]+rad_mod;
    _frp.view.drop_rad[1]=_frp.view.odrop_rad[1]+rad_mod;
@@ -496,13 +496,13 @@ void game_redrop_rad(int rad_mod)
 //#pragma enable_message(202)
 
 // errtype is icky
-extern int _fr_global_detail;
-void change_detail_level(byte new_level)
+extern int32_t _fr_global_detail;
+void change_detail_level(int8_t new_level)
 {
    _fr_global_detail=new_level;
 }
 
-void set_global_lighting(short l_lev)
+void set_global_lighting(int16_t l_lev)
 {
    _frp.lighting.global_mod+=l_lev;
 }
@@ -529,10 +529,10 @@ void fauxrend_camera_setfunc(TileCamera* tc)
 
 
 // Like fr_get_at, but takes real screen coordinates.
-ushort fr_get_at_raw(frc *fr, int x, int y, bool again, bool transp)
+uint16_t fr_get_at_raw(frc *fr, int32_t x, int32_t y, bool again, bool transp)
 {
    extern fauxrend_context *_sr;
-   extern ushort fr_get_again(frc *fr, int x, int y);
+   extern uint16_t fr_get_again(frc *fr, int32_t x, int32_t y);
    _fr_top(fr);
    if (again)
       return fr_get_again(_fr, x - _fr->xtop, y - _fr->ytop);
@@ -542,13 +542,13 @@ ushort fr_get_at_raw(frc *fr, int x, int y, bool again, bool transp)
 
 /*KLC - no longer used
 // this is a hack for render canvas memory usage....
-uchar *get_free_frame_buffer_bits(int size)
+uint8_t *get_free_frame_buffer_bits(int32_t size)
 {
    if ((size==FRAME_BUFFER_SIZE)||(size<=0))
       return frameBuffer;
    else
    {
-      uchar *tmp=frameBufferFreePtr;
+      uint8_t *tmp=frameBufferFreePtr;
       if (frameBufferFreePtr-frameBuffer+size>FRAME_BUFFER_SIZE)
       {
 //	 Warning(("Mini Frame Buffers Too Big %d\n",size));
@@ -562,9 +562,9 @@ uchar *get_free_frame_buffer_bits(int size)
 
 #define MATERIAL_BASE	RES_materialMaps
 
-void load_model_vtexts(char model_num)
+void load_model_vtexts(int8_t model_num)
 {
-   short curr = model_base_nums[model_num];
+   int16_t curr = model_base_nums[model_num];
    grs_bitmap *stupid;
    if (model_num >= MAX_VTEXT_OBJS)
       return;
@@ -576,9 +576,9 @@ void load_model_vtexts(char model_num)
    }
 }
 
-void free_model_vtexts(char model_num)
+void free_model_vtexts(int8_t model_num)
 {
-   short curr = model_base_nums[model_num];
+   int16_t curr = model_base_nums[model_num];
    if (model_num >= MAX_VTEXT_OBJS)
       return;
    while (model_vtext_data[curr] != -1)

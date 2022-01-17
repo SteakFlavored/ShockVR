@@ -22,17 +22,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "vmouse.h"
 //#include <mprintf.h>
 
-void (*ui_mouse_convert)(short *px, short *py, bool down) = NULL;
-void (*ui_mouse_convert_round)(short *px, short *py, bool down) = NULL;
+void (*ui_mouse_convert)(int16_t *px, int16_t *py, bool down) = NULL;
+void (*ui_mouse_convert_round)(int16_t *px, int16_t *py, bool down) = NULL;
 
-errtype ui_mouse_do_conversion(short *pmx, short *pmy, bool down)
+errtype ui_mouse_do_conversion(int16_t *pmx, int16_t *pmy, bool down)
 {
    if (ui_mouse_convert != NULL)
       ui_mouse_convert(pmx,pmy,down);
    return(OK);
 }
 
-errtype ui_mouse_get_xy(short *pmx, short *pmy)
+errtype ui_mouse_get_xy(int16_t *pmx, int16_t *pmy)
 {
    errtype retval;
    retval = mouse_get_xy(pmx,pmy);
@@ -40,7 +40,7 @@ errtype ui_mouse_get_xy(short *pmx, short *pmy)
    return(retval);
 }
 
-errtype ui_mouse_put_xy(short pmx, short pmy)
+errtype ui_mouse_put_xy(int16_t pmx, int16_t pmy)
 {
    errtype retval;
    ui_mouse_do_conversion(&pmx,&pmy,FALSE);
@@ -48,13 +48,13 @@ errtype ui_mouse_put_xy(short pmx, short pmy)
    return(retval);
 }
 
-errtype ui_mouse_constrain_xy(short xl, short yl, short xh, short yh)
+errtype ui_mouse_constrain_xy(int16_t xl, int16_t yl, int16_t xh, int16_t yh)
 {
    if (ui_mouse_convert == NULL)
       return(mouse_constrain_xy(xl,yl,xh,yh));
    else
    {
-      short uxl,uyl,uxh,uyh;
+      int16_t uxl,uyl,uxh,uyh;
       uxl=xl;
       uyl=yl;
       uxh=xh;

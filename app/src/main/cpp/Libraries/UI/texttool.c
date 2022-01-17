@@ -45,25 +45,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LastChar(_lt,lnum)  (_lt->lines[lnum][_lt->line_info[lnum].stl-1])
 
 // internal prototypes
-void _tt_build_cheat(long line_num);
-void _tt_new_line(long line_num);
-TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_data, char *keymap, void *(d_func)(void *, LGRect *));
-void tt_resize(TextTool *tt, int wid, int height);
-void _tt_display_line(long line_num, long p_left, long p_right);
-void _tt_show_line(long line_num, long p_left, long p_right);
-int _tt_word_len(int which_word, char *s, long pos);
-void _tt_resize_line(long line_num, long new_len);
-void _tt_break_line(long line_num, long break_pt);
-void _tt_rem_front(long line_num, long rem_pos);
-void _tt_rem_mid(long line_num, long left_c, long right_c);
-bool _tt_wrap_check(long *line_num, long *cur_pos);
-bool _tt_add_char(long *line_num, long *cur_pos, char c);
-bool _tt_del_chars(long *line_num, long *cur_pos, int cnt);
-bool _tt_chg_line(int how);
-bool _tt_chg_colu(int how);
+void _tt_build_cheat(int32_t line_num);
+void _tt_new_line(int32_t line_num);
+TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_data, int8_t *keymap, void *(d_func)(void *, LGRect *));
+void tt_resize(TextTool *tt, int32_t wid, int32_t height);
+void _tt_display_line(int32_t line_num, int32_t p_left, int32_t p_right);
+void _tt_show_line(int32_t line_num, int32_t p_left, int32_t p_right);
+int32_t _tt_word_len(int32_t which_word, int8_t *s, int32_t pos);
+void _tt_resize_line(int32_t line_num, int32_t new_len);
+void _tt_break_line(int32_t line_num, int32_t break_pt);
+void _tt_rem_front(int32_t line_num, int32_t rem_pos);
+void _tt_rem_mid(int32_t line_num, int32_t left_c, int32_t right_c);
+bool _tt_wrap_check(int32_t *line_num, int32_t *cur_pos);
+bool _tt_add_char(int32_t *line_num, int32_t *cur_pos, int8_t c);
+bool _tt_del_chars(int32_t *line_num, int32_t *cur_pos, int32_t cnt);
+bool _tt_chg_line(int32_t how);
+bool _tt_chg_colu(int32_t how);
 void _tt_return(void);
-ulong _tt_check_cursor_position(void);
-int _tt_do_event(long tt_event);
+uint32_t _tt_check_cursor_position(void);
+int32_t _tt_do_event(int32_t tt_event);
 
 // static local coolness
 static TextTool *cur_tt=NULL, *_tt=NULL;
@@ -87,10 +87,10 @@ TTFontInfo TTDefFont  =
 
 
 // public useful stuff
-TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_data, char *keymap, void (*d_func)(void *, LGRect *))
+TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_data, int8_t *keymap, void (*d_func)(void *, LGRect *))
 {
    TextTool *new_tt;
-   char *dummy;
+   int8_t *dummy;
    dummy = keymap;
 
    new_tt=(TextTool *)NewPtr(sizeof(TextTool));
@@ -103,7 +103,7 @@ TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_
    else           _tt->lfont=&TTDefFont;
    _tt->output_data = output_data;
    _tt->display_func = d_func;
-   _tt->lines=(char **)NewPtr(1);
+   _tt->lines=(int8_t **)NewPtr(1);
    _tt->line_info=(TTCheats *)NewPtr(1);
    _tt->disp_rows=(_tt->scr_loc.h+_tt->lfont->height-1)/_tt->lfont->height;
    _tt_new_line(0);
@@ -114,7 +114,7 @@ TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_
 
 bool tt_toast(TextTool *old_tt)
 {
-   int i;
+   int32_t i;
    for (i=0; i<old_tt->max_h; i++)
       DisposePtr((Ptr)old_tt->lines[i]);
    DisposePtr((Ptr)*(old_tt->lines));
@@ -129,13 +129,13 @@ bool tt_set(TextTool *def_tt)
    return TRUE;
 }
 
-void tt_move(TextTool *tt, int xoff, int yoff)
+void tt_move(TextTool *tt, int32_t xoff, int32_t yoff)
 {
    _tt_top(tt);
    _tt->scr_loc.crn.pt.x=xoff; _tt->scr_loc.crn.pt.y=yoff;
 }
 
-void tt_resize(TextTool *tt, int wid, int height)
+void tt_resize(TextTool *tt, int32_t wid, int32_t height)
 {
    _tt_top(tt);
    _tt->scr_loc.w=wid; _tt->scr_loc.h=height;
@@ -146,11 +146,11 @@ void tt_resize(TextTool *tt, int wid, int height)
 // delete a line
 
 // build a cheat for one line
-void _tt_build_cheat(long line_num)
+void _tt_build_cheat(int32_t line_num)
 {
    TTCheats *loc=&(_tt->line_info[line_num]);
-   int x_pix=0, x_chr=0, a_wid;
-   char *sb=_tt->lines[line_num], *s;
+   int32_t x_pix=0, x_chr=0, a_wid;
+   int8_t *sb=_tt->lines[line_num], *s;
 
    // recheck carefully for proportional font stuff...
    // should probably modularize out the selector for optimal expose events
@@ -180,23 +180,23 @@ void _tt_build_cheat(long line_num)
 }
 
 // inserts a new line at line_num, inserts appropriately if necessary
-void _tt_new_line(long line_num)
+void _tt_new_line(int32_t line_num)
 {
    _tt->max_h++;
-//¥¥¥   _tt->lines=(char **)Realloc(_tt->lines,sizeof(char *)*_tt->max_h);
+//¥¥¥   _tt->lines=(int8_t **)Realloc(_tt->lines,sizeof(int8_t *)*_tt->max_h);
 //¥¥¥   _tt->line_info=(TTCheats *)Realloc(_tt->line_info,sizeof(TTCheats)*_tt->max_h);
    DisposePtr((Ptr)_tt->lines);
-   _tt->lines = (char **)NewPtr(sizeof(char *)*_tt->max_h);
+   _tt->lines = (int8_t **)NewPtr(sizeof(int8_t *)*_tt->max_h);
    DisposePtr((Ptr)_tt->line_info);
    _tt->line_info = (TTCheats *)NewPtr(sizeof(TTCheats)*_tt->max_h);
    if (line_num<_tt->max_h-1)                 /* insert case */
    {
       memmove(&_tt->line_info[line_num+1],&_tt->line_info[line_num],sizeof(TTCheats)*(_tt->max_h-line_num-1));
-      memmove(&_tt->lines[line_num+1],&_tt->lines[line_num],sizeof(char *)*(_tt->max_h-line_num-1));
+      memmove(&_tt->lines[line_num+1],&_tt->lines[line_num],sizeof(int8_t *)*(_tt->max_h-line_num-1));
    }
    _tt->line_info[line_num].wid=TTL_INIT;     		/* totally empty at first */
    _tt->line_info[line_num].flg|=TTC_FLG_RET; 		/* should be a return there */
-   _tt->lines[line_num]=(char *)NewPtr(TTL_INIT);   /* and it is empty (\0) */
+   _tt->lines[line_num]=(int8_t *)NewPtr(TTL_INIT);   /* and it is empty (\0) */
    _tt->lines[line_num][0]='\0';
    _tt_build_cheat(line_num);                 /* so we need a cheat for it */
 }
@@ -205,7 +205,7 @@ void _tt_new_line(long line_num)
 // returns whether there are characters on the line in the specified range
 // sets c_l and c_r to the character counts for the pix counts in p_l and p_r
 // based on the string in l_n
-bool _tt_pix_cnv(long l_n, long p_l, long p_r, long *c_l, long *c_r)
+bool _tt_pix_cnv(int32_t l_n, int32_t p_l, int32_t p_r, int32_t *c_l, int32_t *c_r)
 {
 
 
@@ -218,12 +218,12 @@ bool _tt_pix_cnv(long l_n, long p_l, long p_r, long *c_l, long *c_r)
 // display a rectangle of the area
 
 // do appropriate gadgety things to display the line.
-void _tt_display_line(long line_num, long p_left, long p_right)
+void _tt_display_line(int32_t line_num, int32_t p_left, int32_t p_right)
 {
    LGRect disp_rect;
-   int llin;
+   int32_t llin;
 
-   long dummy;
+   int32_t dummy;
    dummy = p_left;
    dummy = p_right;
 
@@ -237,10 +237,10 @@ void _tt_display_line(long line_num, long p_left, long p_right)
 }
 
 // for real, display a partial (or full) line
-void _tt_show_line(long line_num, long p_left, long p_right)
+void _tt_show_line(int32_t line_num, int32_t p_left, int32_t p_right)
 {
-   int llin=line_num-_tt->disp_y, cy=line_num;
-//   long c_left, c_right;
+   int32_t llin=line_num-_tt->disp_y, cy=line_num;
+//   int32_t c_left, c_right;
    bool blnk_line=TRUE;
 
    if ((line_num<_tt->disp_y)||(line_num>=_tt->disp_y+_tt->disp_rows)) return;
@@ -257,8 +257,8 @@ void _tt_show_line(long line_num, long p_left, long p_right)
 //    _tt_pix_cnv(_tt->lines[cy],p_left,p_right,&c_left,&c_right);
       if (_tt->line_info[cy].chr[0]!=TTC_NOTHING)
       {
-         char *st_base, *s, c;
-         long wid;
+         int8_t *st_base, *s, c;
+         int32_t wid;
 
   	      st_base=_tt->lines[cy];
   	      s=st_base+_tt->line_info[cy].chr[1]+1;
@@ -284,7 +284,7 @@ void tt_display_all(TextTool *tt, LGRect *r)
 // fpr real, send full screen to output
 void tt_show_all(TextTool *tt)
 {
-   long ay;
+   int32_t ay;
    _tt_top(tt);
    for (ay=0; ay<_tt->disp_rows; ay++)
       _tt_show_line(ay+_tt->disp_y,-1,-1);
@@ -293,18 +293,18 @@ void tt_show_all(TextTool *tt)
 
 void tt_dump(TextTool *tt)
 {
-   long ay;
+   int32_t ay;
    _tt_top(tt);
    printf("DUMP:\n");
    for (ay=0; ay<_tt->max_h; ay++)
       printf("%5.5d %s\n", ay, _tt->lines[ay]);
 }
 
-// return the length of which_word (see defines TTWL_?) in char *s
-int _tt_word_len(int which_word, char *s, long pos)
+// return the length of which_word (see defines TTWL_?) in int8_t *s
+int32_t _tt_word_len(int32_t which_word, int8_t *s, int32_t pos)
 {
-   char *p, *q, sw;
-   int val=-1;                         /* so we can see if this is acting way zany */
+   int8_t *p, *q, sw;
+   int32_t val=-1;                         /* so we can see if this is acting way zany */
 
    switch (which_word)
    {
@@ -318,10 +318,10 @@ int _tt_word_len(int which_word, char *s, long pos)
    return val;
 }
 
-void _tt_resize_line(long line_num, long new_len)
+void _tt_resize_line(int32_t line_num, int32_t new_len)
 {
-   long cur_len=_tt->line_info[line_num].wid;
-   long n_num, new_targ;
+   int32_t cur_len=_tt->line_info[line_num].wid;
+   int32_t n_num, new_targ;
 
    new_len+=2;                          // \0 and pad space
    n_num=(new_len-TTL_INIT)/TTL_BASE;   // num of chunks
@@ -334,9 +334,9 @@ void _tt_resize_line(long line_num, long new_len)
 }
 
 // fills line_num with s
-void tt_fill_line(TextTool *tt, int how, long line_num, char *s)
+void tt_fill_line(TextTool *tt, int32_t how, int32_t line_num, int8_t *s)
 {
-   long r_len=strlen(s), loop;
+   int32_t r_len=strlen(s), loop;
    _tt_top(tt);
    if (line_num>=_tt->max_h)
       for (loop=_tt->max_h; loop<=line_num; loop++)
@@ -369,7 +369,7 @@ void tt_fill_line(TextTool *tt, int how, long line_num, char *s)
 }
 
 // breaks off the first break_pt characters of line_num
-void _tt_break_line(long line_num, long break_pt)
+void _tt_break_line(int32_t line_num, int32_t break_pt)
 {
    if (break_pt>=_tt->line_info[line_num].stl) return;
    _tt->lines[line_num][break_pt]='\0';
@@ -378,9 +378,9 @@ void _tt_break_line(long line_num, long break_pt)
    _tt_display_line(line_num,-1,-1);
 }
 
-void _tt_rem_front(long line_num, long rem_pos)
+void _tt_rem_front(int32_t line_num, int32_t rem_pos)
 {
-   int lin_len=_tt->line_info[line_num].stl;
+   int32_t lin_len=_tt->line_info[line_num].stl;
    if (rem_pos>=lin_len) return;
    memmove(_tt->lines[line_num],_tt->lines[line_num]+rem_pos, lin_len-rem_pos);
    _tt_resize_line(line_num,lin_len-rem_pos+1);
@@ -388,9 +388,9 @@ void _tt_rem_front(long line_num, long rem_pos)
    _tt_display_line(line_num,-1,-1);
 }
 
-void _tt_rem_mid(long line_num, long left_c, long right_c)
+void _tt_rem_mid(int32_t line_num, int32_t left_c, int32_t right_c)
 {
-   int lin_len=_tt->line_info[line_num].stl, rem_cnt=right_c-left_c+1;
+   int32_t lin_len=_tt->line_info[line_num].stl, rem_cnt=right_c-left_c+1;
    if ((rem_cnt>=lin_len)||(left_c>right_c)) return;
    memmove(_tt->lines[line_num]+left_c,_tt->lines[line_num]+right_c, lin_len-right_c);
    _tt_resize_line(line_num,lin_len-rem_cnt);
@@ -399,10 +399,10 @@ void _tt_rem_mid(long line_num, long left_c, long right_c)
 }
 
 // given that only line line_num changed, do wrap checks
-bool _tt_wrap_check(long *line_num, long *cur_pos)
+bool _tt_wrap_check(int32_t *line_num, int32_t *cur_pos)
 {
-   char *s, *p, sw=0;                   /* pointers for manipulation, sw is the swap character */
-   long ln=*line_num;
+   int8_t *s, *p, sw=0;                   /* pointers for manipulation, sw is the swap character */
+   int32_t ln=*line_num;
    bool wr=FALSE;
    // first, do we wrap back to the last line (should use pixwid, not stl)
    if (LineExist(_tt,ln-1)&&((_tt->line_info[ln-1].flg&TTC_FLG_RET)==0))
@@ -411,7 +411,7 @@ bool _tt_wrap_check(long *line_num, long *cur_pos)
    // now, does our line wrap
    if (_tt->line_info[ln].stl>=_tt->es.right_m)
    {
-      char *base=_tt->lines[ln];
+      int8_t *base=_tt->lines[ln];
       s=strrchr(base,' ');
       while ((s>base)&&(s-base>=_tt->es.right_m))
       {
@@ -421,7 +421,7 @@ bool _tt_wrap_check(long *line_num, long *cur_pos)
       if (sw!=0) *p=sw;                  /* put any punted characters back */
       if (s>base)
       {                                  /* do the wrap */
-         int brk=(++s)-base;             /* skip the space, figure out where to break */
+         int32_t brk=(++s)-base;             /* skip the space, figure out where to break */
          printf("Want to wrap -%s-...",s);
          tt_fill_line(NULL,TTF_INSFRONT,ln+1,s);
          _tt_break_line(ln,brk-1);
@@ -438,10 +438,10 @@ bool _tt_wrap_check(long *line_num, long *cur_pos)
 }
 
 // currently returns whether the line wrapped? why? who knows.
-bool _tt_add_char(long *line_num, long *cur_pos, char c)
+bool _tt_add_char(int32_t *line_num, int32_t *cur_pos, int8_t c)
 {
-   long new_stl=_tt->line_info[*line_num].stl, new_pos=*cur_pos;
-   char *s=_tt->lines[*line_num];
+   int32_t new_stl=_tt->line_info[*line_num].stl, new_pos=*cur_pos;
+   int8_t *s=_tt->lines[*line_num];
    bool add_at_end=TRUE;
 
    if (new_stl>*cur_pos)                         // insert
@@ -466,11 +466,11 @@ bool _tt_add_char(long *line_num, long *cur_pos, char c)
 }
 
 // learn this about return flag
-bool _tt_del_chars(long *line_num, long *cur_pos, int cnt)
+bool _tt_del_chars(int32_t *line_num, int32_t *cur_pos, int32_t cnt)
 {
-   int lin_wid=_tt->line_info[*line_num].stl, nlpos=*cur_pos, nrpos=*cur_pos;
-//   int dir;
-   char *s=_tt->lines[*line_num];
+   int32_t lin_wid=_tt->line_info[*line_num].stl, nlpos=*cur_pos, nrpos=*cur_pos;
+//   int32_t dir;
+   int8_t *s=_tt->lines[*line_num];
 
    if (cnt<0) nlpos+=cnt; else nrpos+=cnt;
    if ((nlpos>=0)&&(nrpos<=lin_wid))
@@ -495,7 +495,7 @@ bool _tt_del_chars(long *line_num, long *cur_pos, int cnt)
 }
 
 // return TRUE if we are out of space
-bool _tt_chg_line(int how)
+bool _tt_chg_line(int32_t how)
 {
    bool edge=FALSE;                    /* edge of available space */
    how+=_tt->cur_h;
@@ -521,9 +521,9 @@ bool _tt_chg_line(int how)
 }
 
 // returns if it hit the edge
-bool _tt_chg_colu(int how)
+bool _tt_chg_colu(int32_t how)
 {
-   int dir, ncpos=_tt->cur_w+how, lin_wid=_tt->line_info[_tt->cur_h].stl;
+   int32_t dir, ncpos=_tt->cur_w+how, lin_wid=_tt->line_info[_tt->cur_h].stl;
 
    if ((ncpos>=0)&&(ncpos<=lin_wid))
       _tt->cur_w=ncpos;
@@ -567,9 +567,9 @@ void _tt_return(void)
 }
 
 // returns changes based on _tt->cur_w and h in terms of scrolling and such
-ulong _tt_check_cursor_position(void)
+uint32_t _tt_check_cursor_position(void)
 {
-   ulong changed=0;
+   uint32_t changed=0;
    if (_tt->cur_h<_tt->disp_y)                          /* cursor off top of screen */
     { _tt->disp_y=_tt->cur_h; changed|=TTCHG_REDRAW; }  /* focus up there */
    if (_tt->cur_h>=_tt->disp_y+_tt->disp_rows)
@@ -579,10 +579,10 @@ ulong _tt_check_cursor_position(void)
 }
 
 // actually does things.  This takes events, which can come out of script files, macros, or keystroke parses
-int _tt_do_event(long tt_event)
+int32_t _tt_do_event(int32_t tt_event)
 {
-//   int old_w=_tt->cur_w, old_h=_tt->cur_h;
-   int changed=0;
+//   int32_t old_w=_tt->cur_w, old_h=_tt->cur_h;
+   int32_t changed=0;
 
    if (tt_event&_ALL_M)
    {
@@ -627,11 +627,11 @@ int _tt_do_event(long tt_event)
 
 // converts an input character into an event for the tt system
 // returns -1 or the line selected (w/return)
-long tt_parse_char(TextTool *tt, ushort key_code)
+int32_t tt_parse_char(TextTool *tt, uint16_t key_code)
 {
-   char c = (key_code & 0xFF);
-   int ret;
-   int event = TTEV_NULL;
+   int8_t c = (key_code & 0xFF);
+   int32_t ret;
+   int32_t event = TTEV_NULL;
    _tt_top(tt);
 
    if (key_code & TEXTTOOL_KB_FLAG_CTRL)
@@ -683,11 +683,11 @@ long tt_parse_char(TextTool *tt, ushort key_code)
    return (event==TTEV_RET)?_tt->cur_h:-1;
 }
 
-long tt_parse_string(TextTool *tt, char *st)
+int32_t tt_parse_string(TextTool *tt, int8_t *st)
 {
-   char c;
-   int ret, i;
-   int event;
+   int8_t c;
+   int32_t ret, i;
+   int32_t event;
    _tt_top(tt);
 
    for (i=0; i<strlen(st); i++)
@@ -705,7 +705,7 @@ long tt_parse_string(TextTool *tt, char *st)
    return (event==TTEV_RET)?_tt->cur_h:-1;
 }
 
-char *tt_get(TextTool *tt, long line_num)
+int8_t *tt_get(TextTool *tt, int32_t line_num)
 {
    _tt_top(tt);
    return (line_num>=_tt->max_h)?NULL:_tt->lines[line_num];

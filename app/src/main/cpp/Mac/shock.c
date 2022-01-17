@@ -67,15 +67,15 @@ extern bool startup_music;
 WindowPtr			gMainWindow;
 MenuHandle		gMainMenus[kNumMenus];
 RgnHandle			gCursorRgn;
-short					gCursorSet;
-Boolean				gDone = false;
-Boolean				gInForeground = true;
-Boolean				gPlayingGame;		//¥¥¥ Temp
-Boolean				gIsNewGame;
+int16_t					gCursorSet;
+bool				gDone = false;
+bool				gInForeground = true;
+bool				gPlayingGame;		//¥¥¥ Temp
+bool				gIsNewGame;
 FSSpec				gSavedGameFile;
-long					gGameSavedTime;
-Boolean				gDeadPlayerQuit;
-Boolean				gGameCompletedQuit;
+int32_t					gGameSavedTime;
+bool				gDeadPlayerQuit;
+bool				gGameCompletedQuit;
 
 //--------------------
 //  Prototypes
@@ -83,7 +83,7 @@ Boolean				gGameCompletedQuit;
 extern void init_all(void);
 extern void inv_change_fullscreen(bool on);
 extern void object_data_flush(void);
-extern Boolean IsFullscreenWareOn(void);
+extern bool IsFullscreenWareOn(void);
 extern errtype load_da_palette(void);
 
 void SetupTitleMenus(void);
@@ -93,7 +93,7 @@ void ShockGameLoop(void);
 void HandlePausedEvents(void);
 void SetupPauseMenus(void);
 void RestoreTitleScreen(void);
-errtype CheckFreeSpace(short	checkRefNum);
+errtype CheckFreeSpace(int16_t	checkRefNum);
 
 
 //------------------------------------------------------------------------------------
@@ -171,9 +171,9 @@ void HandleEvents(void)
 {
 	WindowPtr 	whichWindow;
 	EventRecord 	theEvent;
-	char				theKey;
+	int8_t				theKey;
 	GrafPtr			savePort;
-//	long				temp;
+//	int32_t				temp;
 
 	if (WaitNextEvent(everyEvent, &theEvent, 10L, 0L))
 	{
@@ -332,11 +332,11 @@ void UpdateWindow(WindowPtr wind)
 //------------------------------------------------------------------------------------
 //		Perform the menu commands.
 //------------------------------------------------------------------------------------
-void DoCommand(unsigned long mResult)
+void DoCommand(uint32_t mResult)
 {
-	short					theItem;
+	int16_t					theItem;
 	Str255				name;
-	Boolean				savedOK;
+	bool				savedOK;
 	ModalFilterUPP	stdFilterProcPtr;
 
 	theItem = LoWord(mResult);
@@ -375,7 +375,7 @@ void DoCommand(unsigned long mResult)
 			 		{
 				 		if (*tmd_ticks > (gGameSavedTime + (5 * CIT_CYCLE)))		// If the current game needs saving...
 				 		{
-				 			short		btn;
+				 			int16_t		btn;
 							stdFilterProcPtr = NewModalFilterProc(ShockAlertFilterProc);
 					 		btn = Alert((global_fullmap->cyber) ? 1010 :1009, stdFilterProcPtr);
 							DisposeRoutineDescriptor(stdFilterProcPtr);
@@ -429,7 +429,7 @@ void DoCommand(unsigned long mResult)
 
 				case fileResumeGame:
 					{
-						long		keys[4];
+						int32_t		keys[4];
 
 						do
 							GetKeys((UInt32 *)keys);
@@ -444,7 +444,7 @@ void DoCommand(unsigned long mResult)
 			 		{
 				 		if (*tmd_ticks > (gGameSavedTime + (5 * CIT_CYCLE)))		// If the current game needs saving...
 				 		{
-							short		btn;
+							int16_t		btn;
 							stdFilterProcPtr = NewModalFilterProc(ShockAlertFilterProc);
 					 		btn = Alert((global_fullmap->cyber) ? 1010 :1009, stdFilterProcPtr);
 							DisposeRoutineDescriptor(stdFilterProcPtr);
@@ -877,7 +877,7 @@ void HandlePausedEvents(void)
 {
 	WindowPtr 	whichWindow;
 	EventRecord 	theEvent;
-	char				theKey;
+	int8_t				theKey;
 	GrafPtr			savePort;
 
 	if (WaitNextEvent(everyEvent, &theEvent, 10L, 0L))
@@ -1019,7 +1019,7 @@ void RestoreTitleScreen(void)
 //------------------------------------------------------------------------------------
 //  "Save As" the current game (always ask for file name).
 //------------------------------------------------------------------------------------
-Boolean DoSaveGameAs(void)
+bool DoSaveGameAs(void)
 {
 	StandardFileReply	reply;
 	Str255					titleStr, temp;
@@ -1067,7 +1067,7 @@ Boolean DoSaveGameAs(void)
 //------------------------------------------------------------------------------------
 //  Save the current game (don't prompt for file name, just do it).
 //------------------------------------------------------------------------------------
-Boolean DoSaveGame(void)
+bool DoSaveGame(void)
 {
 	Str255					titleStr, temp;
 
@@ -1098,7 +1098,7 @@ Boolean DoSaveGame(void)
 //------------------------------------------------------------------------------------
 //  See if we have enough free space to save the file.
 //------------------------------------------------------------------------------------
-errtype CheckFreeSpace(short	checkRefNum)
+errtype CheckFreeSpace(int16_t	checkRefNum)
 {
 	HParamBlockRec	pbRec;
 	OSErr				err;
@@ -1111,7 +1111,7 @@ errtype CheckFreeSpace(short	checkRefNum)
 	err = PBHGetVInfo(&pbRec, FALSE);							// Get the volume info.
 	if (err == noErr)
 	{
-		if ((ulong)(pbRec.volumeParam.ioVAlBlkSiz * pbRec.volumeParam.ioVFrBlk) < NEEDED_DISKSPACE)
+		if ((uint32_t)(pbRec.volumeParam.ioVAlBlkSiz * pbRec.volumeParam.ioVFrBlk) < NEEDED_DISKSPACE)
 			return (ERR_NOMEM);
 	}
 	return (OK);

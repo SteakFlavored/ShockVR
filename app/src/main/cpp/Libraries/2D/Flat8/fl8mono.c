@@ -49,13 +49,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 #include "flat8.h"
 
-void flat8_mono_ubitmap (grs_bitmap *bm, short x, short y)
+void flat8_mono_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   short w, h;                /* working width and height */
-   int bit;                   /* bit from 0-7 in source byte */
-   uchar *p_row;              /* pointer to current row of bitmap */
-   uchar *p_src;              /* pointer to source byte */
-   uchar *p_dst;
+   int16_t w, h;                /* working width and height */
+   int32_t bit;                   /* bit from 0-7 in source byte */
+   uint8_t *p_row;              /* pointer to current row of bitmap */
+   uint8_t *p_src;              /* pointer to source byte */
+   uint8_t *p_dst;
 
    h = bm->h;
    p_row = bm->bits;

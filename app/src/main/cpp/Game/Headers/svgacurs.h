@@ -19,5 +19,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SVGA_CURSOR_WIDTH  256
 #define SVGA_CURSOR_HEIGHT 256
 
-extern uchar svga_cursor_bits[SVGA_CURSOR_WIDTH * SVGA_CURSOR_HEIGHT];
+extern uint8_t svga_cursor_bits[SVGA_CURSOR_WIDTH * SVGA_CURSOR_HEIGHT];
 extern grs_bitmap svga_cursor_bmp;

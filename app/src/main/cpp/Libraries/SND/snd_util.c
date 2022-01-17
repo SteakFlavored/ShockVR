@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Handle		gHeaderHdl;
 Handle		gTuneHdl;
 Handle		gOfsHdl;
-long			*gOffsets;
+int32_t			*gOffsets;
 
 
 //--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ OSErr snd_load_theme(FSSpec *specPtr, TunePlayer thePlayer)
 {
 	OSErr	err;
 
-	short	refNum = FSpOpenResFile(specPtr, fsRdPerm);
+	int16_t	refNum = FSpOpenResFile(specPtr, fsRdPerm);
 	if (refNum >= 0)
 	{
 		gHeaderHdl = GetResource('thdr', 128);
@@ -49,13 +49,13 @@ OSErr snd_load_theme(FSSpec *specPtr, TunePlayer thePlayer)
 
 		// Set the tune header.
 		HLock(gHeaderHdl);
-		err = TuneSetHeader(thePlayer, (unsigned long *)*gHeaderHdl);
+		err = TuneSetHeader(thePlayer, (uint32_t *)*gHeaderHdl);
 		err = TunePreroll(thePlayer);
 
 		// Lock down the offsets and data.
 		HLock(gTuneHdl);
 		HLock(gOfsHdl);
-		gOffsets = (long *)*gOfsHdl;
+		gOffsets = (int32_t *)*gOfsHdl;
 
 		return(0);
 	}
@@ -88,22 +88,22 @@ void snd_release_current_theme(void)
 
 
 /*
-char *snd_load_raw(char *fname, int *ldat)
+int8_t *snd_load_raw(int8_t *fname, int32_t *ldat)
 {
-   int fh;
+   int32_t fh;
 
    if ((fh=open(fname,O_RDONLY|O_BINARY))!=-1)
    {
-      ulong len;
-      uchar *ptr;
+      uint32_t len;
+      uint8_t *ptr;
       len=lseek(fh,0,SEEK_END);
       lseek(fh,0,SEEK_SET);
-      if ((ptr=(uchar *)Malloc(len))!=NULL)
+      if ((ptr=(uint8_t *)Malloc(len))!=NULL)
       {
 	      read(fh,ptr,len);
          close(fh);
 	      if (ldat!=NULL)
-	       { ldat[0]=len; ldat[1]=(int)ptr; }
+	       { ldat[0]=len; ldat[1]=(int32_t)ptr; }
 	      return ptr;
       }
       close(fh);

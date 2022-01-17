@@ -53,16 +53,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* returns the width of string s in pixels for the specified font */
 
-short gr_font_string_width (grs_font *f, char *s)
+int16_t gr_font_string_width (grs_font *f, int8_t *s)
 {
-   short *offset_tab;         /* table of character offsets */
-   short offset;              /* offset of current character */
-   short w_lin=0;             /* current line's width so far */
-   short w=0;                 /* width of widest line */
-   uchar c;                    /* current character */
+   int16_t *offset_tab;         /* table of character offsets */
+   int16_t offset;              /* offset of current character */
+   int16_t w_lin=0;             /* current line's width so far */
+   int16_t w=0;                 /* width of widest line */
+   uint8_t c;                    /* current character */
 
    offset_tab = f->off_tab;
-   while ((c= (uchar) (*s++)) != '\0') {
+   while ((c= (uint8_t) (*s++)) != '\0') {
       if (c == CHAR_SOFTSP)
          continue;
       if (c=='\n' || c==CHAR_SOFTCR) {

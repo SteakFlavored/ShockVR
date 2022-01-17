@@ -113,7 +113,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // breaks our naming convention, being as it is the number of types in the
 // subclass ANIMATING_SUBCLASS_OBJECTS, not ANIMATING_SUBCLASS_OBJECT.
 
-static uchar numtypes_array[NUM_CLASSES][MAX_SUBCLASSES] = {
+static uint8_t numtypes_array[NUM_CLASSES][MAX_SUBCLASSES] = {
     { NUM_PISTOL_GUN, NUM_AUTO_GUN, NUM_SPECIAL_GUN, NUM_HANDTOHAND_GUN,
       NUM_BEAM_GUN, NUM_BEAMPROJ_GUN, },
     { NUM_PISTOL_AMMO, NUM_NEEDLE_AMMO, NUM_MAGNUM_AMMO, NUM_RIFLE_AMMO,
@@ -143,7 +143,7 @@ static uchar numtypes_array[NUM_CLASSES][MAX_SUBCLASSES] = {
       NUM_CYBER_CRITTER, NUM_ROBOBABE_CRITTER, }
 };
 
-short num_types(uchar obclass, uchar subclass)
+int16_t num_types(uint8_t obclass, uint8_t subclass)
 {
    if (obclass>=NUM_CLASSES || subclass>=num_subclasses[obclass])
    {
@@ -161,10 +161,10 @@ short num_types(uchar obclass, uchar subclass)
 // return the corresponding triple.  Returns -1 if the nth item of
 // the class did not exist.
 
-int get_triple_from_class_nth_item(uchar obclass, uchar n)
+int32_t get_triple_from_class_nth_item(uint8_t obclass, uint8_t n)
 {
-   ubyte i, subclass_types, total_types;
-   int   triple;
+   uint8_t i, subclass_types, total_types;
+   int32_t   triple;
 
    total_types = 0;
 
@@ -196,11 +196,11 @@ int get_triple_from_class_nth_item(uchar obclass, uchar n)
 //
 // Returns the nth valid object triple after base
 
-int nth_after_triple(int base, uchar n)
+int32_t nth_after_triple(int32_t base, uint8_t n)
 {
-   ubyte i, subclass_types, total_types;
-   int   triple;
-   ubyte obclass;
+   uint8_t i, subclass_types, total_types;
+   int32_t   triple;
+   uint8_t obclass;
 
    total_types = 0;
 
@@ -232,10 +232,10 @@ int nth_after_triple(int base, uchar n)
 // get_nth_from_triple()
 //
 
-int get_nth_from_triple(int triple)
+int32_t get_nth_from_triple(int32_t triple)
 {
-   ubyte    obclass, subclass;
-   int      n, j;
+   uint8_t    obclass, subclass;
+   int32_t      n, j;
 
    obclass = TRIP2CL(triple);
    subclass = TRIP2SC(triple);
@@ -271,7 +271,7 @@ int get_nth_from_triple(int triple)
 
 errtype sanity_check_obj_props()
 {
-   int i;
+   int32_t i;
    extern Id posture_bases[];
    extern Id critter_id_table[];
 

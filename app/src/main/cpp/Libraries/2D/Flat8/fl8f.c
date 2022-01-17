@@ -40,13 +40,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fl8tmapdv.h"
 
 
-int gri_floor_umap_loop(grs_tmap_loop_info *tli);
+int32_t gri_floor_umap_loop(grs_tmap_loop_info *tli);
 
 // 68K stuff
 #if !(defined(powerc) || defined(__powerc))
 // main loop routine
-asm int Handle_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
-															grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row);
+asm int32_t Handle_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
+															grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row);
 
 // specific inner looops
 asm void floor_opaque_log2(void);
@@ -60,24 +60,24 @@ void (*floor_in_loop[8])(void) = {gr_not_imp, gr_not_imp, floor_opaque_log2, flo
 #endif
 
 // globals used by 68K routines
-uchar *f_clut_68K;
-ulong	f_wlog_68K;
-ulong	f_mask_68K;
+uint8_t *f_clut_68K;
+uint32_t	f_wlog_68K;
+uint32_t	f_mask_68K;
 
 
-int gri_floor_umap_loop(grs_tmap_loop_info *tli) {
+int32_t gri_floor_umap_loop(grs_tmap_loop_info *tli) {
    fix u,v,du,dv,dx,d;
 
 	// locals used to store copies of tli-> stuff, so its in registers on the PPC
-	uchar	t_wlog;
-	ulong	t_mask;
-	int 	x,k;
-	uchar *t_bits;
-	uchar *p_dest;
+	uint8_t	t_wlog;
+	uint32_t	t_mask;
+	int32_t 	x,k;
+	uint8_t *t_bits;
+	uint8_t *p_dest;
 	fix		inv;
-	uchar *t_clut;
-	uchar temp_pix;
-	long	*t_vtab;
+	uint8_t *t_clut;
+	uint8_t temp_pix;
+	int32_t	*t_vtab;
 
 #if InvDiv
   inv = fix_div(fix_make(1,0),tli->w);
@@ -166,7 +166,7 @@ int gri_floor_umap_loop(grs_tmap_loop_info *tli) {
             }
             break;
          case GRL_OPAQUE|GRL_LOG2|GRL_CLUT:
-         			 while ((long) p_dest & 3 != 0)
+         			 while ((int32_t) p_dest & 3 != 0)
          			  {
 	               k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
 		           	 *(p_dest++) = t_clut[t_bits[k]];		// gr_fill_upixel(tli->clut[t_bits[k]],x,t_y);
@@ -195,7 +195,7 @@ int gri_floor_umap_loop(grs_tmap_loop_info *tli) {
 		           	 inv |= t_clut[t_bits[k]];		// gr_fill_upixel(tli->clut[t_bits[k]],x,t_y);
 	               u+=du; v+=dv;
 
-								 * (long *) p_dest = inv;
+								 * (int32_t *) p_dest = inv;
 								 x -= 4;
 								 p_dest += 4;
             	  }
@@ -248,8 +248,8 @@ int gri_floor_umap_loop(grs_tmap_loop_info *tli) {
 
 // Main 68K handler loop
 #if !(defined(powerc) || defined(__powerc))
-asm int Handle_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
-												grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row)
+asm int32_t Handle_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
+												grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row)
  {
   movem.l	d0-d7/a0-a6,-(sp)
 
@@ -406,7 +406,7 @@ asm int Handle_Floor_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
 asm void floor_opaque_log2(void)
  {
 /*  for (x=t_xl; x<t_xr; x++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      *(p_dest++) = t_bits[k];		// gr_fill_upixel(t_bits[k],x,t_y);
      u+=du; v+=dv;
   }*/
@@ -439,7 +439,7 @@ asm void floor_opaque_clut_log2(void)
  {
 /*
 	for (x=t_xl; x<t_xr; x++) {
-	   int k=t_vtab[fix_fint(v)]+fix_fint(u);
+	   int32_t k=t_vtab[fix_fint(v)]+fix_fint(u);
 	   *(p_dest++) = t_clut[t_bits[k]];		// gr_fill_upixel(tli->clut[t_bits[k]],x,y);
 	   u+=du; v+=dv;
 	}*/
@@ -478,7 +478,7 @@ asm void floor_trans_log2(void)
  {
 /*
   for (x=t_xl; x<t_xr; x++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      if (temp_pix=t_bits[k]) *p_dest = temp_pix;		// gr_fill_upixel(t_bits[k],x,y);
      p_dest++; u+=du; v+=dv;
   }*/
@@ -523,7 +523,7 @@ asm void floor_trans_clut_log2(void)
  {
 /*
   for (x=t_xl; x<t_xr; x++) {
-     int k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
+     int32_t k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
      if (k=t_bits[k]) *p_dest = t_clut[k];		// gr_fill_upixel(tli->clut[k],x,y);
      p_dest++; u+=du; v+=dv;
   }*/

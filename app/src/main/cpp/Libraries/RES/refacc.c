@@ -98,7 +98,7 @@ void *RefLock(Ref ref)
 	if (!RefIndexValid(prt, index))
 		return (NULL);
 	else
-		return (((uchar *)prt) + (prt->offset[index]));
+		return (((uint8_t *)prt) + (prt->offset[index]));
 }
 
 
@@ -150,7 +150,7 @@ void *RefGet(Ref ref)
 	if (!RefIndexValid(prt, index))
 		return (NULL);
 	else
-		return (((uchar *)prt) + (prt->offset[index]));
+		return (((uint8_t *)prt) + (prt->offset[index]));
 }
 
 
@@ -169,9 +169,9 @@ RefTable *ResReadRefTable(Id id)
 	ResDesc 	*prd;
 	Handle		resHdl;
 	RefIndex	numRefs;
-	short			tableSize;
+	int16_t			tableSize;
 	RefTable 	*prt;
-	short			err;
+	int16_t			err;
 
 	prd = RESDESC(id);
 
@@ -223,7 +223,7 @@ RefTable *ResReadRefTable(Id id)
 	read(fd, &numRefs, sizeof(RefIndex));
 	prt = Malloc(REFTABLESIZE(numRefs));
 	prt->numRefs = numRefs;
-	read(fd, &prt->offset[0], sizeof(long) * (numRefs + 1));
+	read(fd, &prt->offset[0], sizeof(int32_t) * (numRefs + 1));
 
 	return(prt);
 */
@@ -240,10 +240,10 @@ RefTable *ResReadRefTable(Id id)
 //
 //	Returns: 0 if ok, -1 if error
 
-int ResExtractRefTable(Id id, RefTable *prt, long size)
+int32_t ResExtractRefTable(Id id, RefTable *prt, int32_t size)
 {
 	ResDesc *prd;
-	int fd;
+	int32_t fd;
 
 //	Check id and file number and make sure compound
 
@@ -271,7 +271,7 @@ int ResExtractRefTable(Id id, RefTable *prt, long size)
 		Warning(("ResExtractRefTable: ref table too large for buffer\n"));
 		return(-1);
 		}
-	read(fd, &prt->offset[0], sizeof(long) * (prt->numRefs + 1));
+	read(fd, &prt->offset[0], sizeof(int32_t) * (prt->numRefs + 1));
 
 	return(0);
 }
@@ -281,7 +281,7 @@ int ResExtractRefTable(Id id, RefTable *prt, long size)
 // return number of refs, or -1 if error
 //
 //	---------------------------------------------------------
-int ResNumRefs(Id id)
+int32_t ResNumRefs(Id id)
 {
 	ResDesc *prd;
 
@@ -302,7 +302,7 @@ int ResNumRefs(Id id)
    }
    else
    {
-      int fd = resFile[prd->filenum].fd;
+      int32_t fd = resFile[prd->filenum].fd;
       RefIndex result;
    	DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
 	   	Warning(("ResNumRefs: id $%x doesn't exist\n", id)); \
@@ -333,7 +333,7 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
 	RefIndex	index = REFINDEX(ref);
 	ResDesc		*prd = RESDESC(REFID(ref));
 	Handle		resHdl;
-	short			err;
+	int16_t			err;
 
 	SetResLoad(FALSE);													// Get resource handle without
 	resHdl = GetResource(resMacTypes[prd->type], REFID(ref));
@@ -371,10 +371,10 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
 	return (buff);
 
 /*
-	int fd;
-   long refsize;
+	int32_t fd;
+   int32_t refsize;
    RefIndex numrefs;
-   long offset;
+   int32_t offset;
 
 //	Check id, get file number
 
@@ -394,9 +394,9 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
       // seek into the file and find the stuff.
    	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
    	read(fd, &numrefs, sizeof(RefIndex));
-   	lseek(fd, index*sizeof(long), SEEK_CUR);
-      read(fd,&offset,sizeof(long));
-      read(fd,&refsize,sizeof(long));
+   	lseek(fd, index*sizeof(int32_t), SEEK_CUR);
+      read(fd,&offset,sizeof(int32_t));
+      read(fd,&refsize,sizeof(int32_t));
       refsize -= offset;
       Warning(("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs));
    }
@@ -436,14 +436,14 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
 }
 
 /*
-int RefInject(RefTable *prt, Ref ref, void *buff)
+int32_t RefInject(RefTable *prt, Ref ref, void *buff)
 {
 	RefIndex index;
 	ResDesc *prd;
-	int fd;
-   long refsize;
+	int32_t fd;
+   int32_t refsize;
    RefIndex numrefs;
-   long offset;
+   int32_t offset;
 
 //	Check id, get file number
 
@@ -469,9 +469,9 @@ int RefInject(RefTable *prt, Ref ref, void *buff)
       // seek into the file and find the stuff.
    	lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
    	read(fd, &numrefs, sizeof(RefIndex));
-   	lseek(fd, index*sizeof(long), SEEK_CUR);
-      read(fd,&offset,sizeof(long));
-      read(fd,&refsize,sizeof(long));
+   	lseek(fd, index*sizeof(int32_t), SEEK_CUR);
+      read(fd,&offset,sizeof(int32_t));
+      read(fd,&refsize,sizeof(int32_t));
       refsize -= offset;
       Warning(("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs));
    }

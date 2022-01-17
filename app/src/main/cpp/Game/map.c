@@ -37,10 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------
 //  Prototypes
 //------------------------
-errtype _map_init_elem(FullMap *fmap, int i, int j);
+errtype _map_init_elem(FullMap *fmap, int32_t i, int32_t j);
 
 
-errtype _map_init_elem(FullMap *fmap, int i, int j)
+errtype _map_init_elem(FullMap *fmap, int32_t i, int32_t j)
 {
    MapElem *me = FULLMAP_GET_XY(fmap,i,j);
    // clear tiletype
@@ -78,9 +78,9 @@ errtype _map_init_elem(FullMap *fmap, int i, int j)
    return(OK);
 }
 
-FullMap* map_create(int xshf, int yshf,int zshf, bool cyb)
+FullMap* map_create(int32_t xshf, int32_t yshf,int32_t zshf, bool cyb)
 {
-	int i,j;
+	int32_t i,j;
 	FullMap* fmap = (FullMap *)NewPtr(sizeof(FullMap));
 	fmap->x_shft = xshf;
 	fmap->y_shft = yshf;
@@ -119,7 +119,7 @@ void map_free(void)
 {
 	extern errtype schedule_free(Schedule* s);
 
-	for (int i = 0; i < NUM_MAP_SCHEDULES; i++)
+	for (int32_t i = 0; i < NUM_MAP_SCHEDULES; i++)
 		schedule_free(&global_fullmap->sched[i]);
 	DisposePtr((Ptr)fm_map(global_fullmap));
 	DisposePtr((Ptr)global_fullmap);

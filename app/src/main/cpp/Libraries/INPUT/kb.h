@@ -32,10 +32,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __KBS_H
 #define __KBS_H
 typedef struct {
-   uchar code;
-   uchar state;
-   uchar ascii;				// Added for Mac version
-   uchar modifiers;			//   "    "   "     "
+   uint8_t code;
+   uint8_t state;
+   uint8_t ascii;				// Added for Mac version
+   uint8_t modifiers;			//   "    "   "     "
 } kbs_event;
 #endif /* !__KBS_H */
 
@@ -65,32 +65,32 @@ typedef struct {
 #ifdef __INLINE_FUNCTIONS__
 #define kb_state(code) (kbd_lowmem_start[KBD_ARRAY_START+code]&KBA_STATE)
 #else
-extern uchar kb_state(uchar code);
+extern uint8_t kb_state(uint8_t code);
 #endif
 
 #define kb_init kb_startup
 #define kb_close kb_shutdown
-extern int kb_startup(void *init_buf);
-extern int kb_shutdown(void);
+extern int32_t kb_startup(void *init_buf);
+extern int32_t kb_shutdown(void);
 
 extern kbs_event kb_next(void);
 extern kbs_event kb_look_next(void);
 extern void kb_flush(void);
-extern uchar kb_get_state(uchar kb_code);
-extern void kb_clear_state(uchar kb_code, uchar bits);
-extern void kb_set_state(uchar kb_code, uchar bits);
-extern void kb_set_signal(uchar code, uchar int_no);
-extern int kb_get_flags();
-extern void kb_set_flags(int flags);
+extern uint8_t kb_get_state(uint8_t kb_code);
+extern void kb_clear_state(uint8_t kb_code, uint8_t bits);
+extern void kb_set_state(uint8_t kb_code, uint8_t bits);
+extern void kb_set_signal(uint8_t code, uint8_t int_no);
+extern int32_t kb_get_flags();
+extern void kb_set_flags(int32_t flags);
 extern void kb_generate(kbs_event e);
 //extern void kb_flush_bios(void);				// For Mac version
 #define kb_flush_bios	kb_flush
-extern bool kb_get_cooked(ushort* key);
+extern bool kb_get_cooked(uint16_t* key);
 #define KBA_STATE (1)
 #define KBA_REPEAT (2)
 #define KBA_SIGNAL (4)
 #define __KBD_INC (1)
-extern char * kbd_lowmem_start;
+extern int8_t * kbd_lowmem_start;
 #define __KBERR_INC (1)
 #define KBE_ALLOC_LOWMEM (0)
 #define KBE_FREE_LOWMEM (1)

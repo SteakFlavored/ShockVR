@@ -37,10 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  be better to wait until other 2d.h changes
  */
 
-void gr_int_uelipse (int x0, int y0, int a, int b)
+void gr_int_uelipse (int32_t x0, int32_t y0, int32_t a, int32_t b)
 {
-  int x;
-  int y;
+  int32_t x;
+  int32_t y;
 
   fix24 a_sq, b_sq;
   fix24 d1,d2,t1,t2;
@@ -107,10 +107,10 @@ void gr_int_uelipse (int x0, int y0, int a, int b)
   }
 }
 
-int gr_int_elipse (int x0, int y0, int a, int b)
+int32_t gr_int_elipse (int32_t x0, int32_t y0, int32_t a, int32_t b)
 {
-  int x;
-  int y;
+  int32_t x;
+  int32_t y;
 
   fix24 a_sq, b_sq;
   fix24 d1,d2,t1,t2;

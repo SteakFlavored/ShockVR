@@ -58,9 +58,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* clipped vertical line with integral coordinates.  returns clip
    code. */
 
-int gen_vline (short x0, short y0, short y1)
+int32_t gen_vline (int16_t x0, int16_t y0, int16_t y1)
 {
-   int r;
+   int32_t r;
 
    r = grd_vline_clip_fill (x0, y0, y1, gr_get_fcolor(), gr_get_fill_parm());
 
@@ -68,10 +68,10 @@ int gen_vline (short x0, short y0, short y1)
 
 }
 
-int gri_vline_clip_fill (short x0, short y0, short y1, long c, long parm)
+int32_t gri_vline_clip_fill (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-   short t;
-   int r = CLIP_NONE;
+   int16_t t;
+   int32_t r = CLIP_NONE;
 
    /* the clip code needs to be buried in here so that this can
       be called from an interrupt handle !

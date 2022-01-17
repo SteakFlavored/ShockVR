@@ -35,8 +35,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dirac.h"
 #include "framer8.h"
 
-ulong last_real_time = 0;
-char reflex_remainder=0;
+uint32_t last_real_time = 0;
+int8_t reflex_remainder=0;
 
 #define MAX_DELTAT  (CIT_CYCLE/MIN_FRAME_RATE)
 #define MIN_DELTAT  (CIT_CYCLE/MAX_FRAME_RATE)
@@ -50,7 +50,7 @@ errtype update_state(bool time_running)
    bool update = TRUE;
    if (time_running)
    {
-      ulong deltat;
+      uint32_t deltat;
       if (player_struct.drug_status[DRUG_REFLEX] > 0 && !global_fullmap->cyber)
       {
          // So we effectively downshift deltat by 2 to divide by 4
@@ -78,7 +78,7 @@ errtype update_state(bool time_running)
 }
 
 
-// static ulong time_at_suspend = 0;
+// static uint32_t time_at_suspend = 0;
 
 void suspend_game_time(void)
 {
@@ -98,8 +98,8 @@ void resume_game_time(void)
 
 void update_level_gametime(void)
 {
-   ulong oldtime = level_gamedata.exit_time;
-   ulong deltat = player_struct.game_time - oldtime;
+   uint32_t oldtime = level_gamedata.exit_time;
+   uint32_t deltat = player_struct.game_time - oldtime;
    run_schedules();
    // run ai's
 //KLC   ai_time_passes(&deltat);

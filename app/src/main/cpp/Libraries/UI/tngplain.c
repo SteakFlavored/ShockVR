@@ -20,20 +20,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <_ui.h>
 
 #pragma require_prototypes off
-bool tng_plain_keycooked(TNG *ptng, ushort key)
+bool tng_plain_keycooked(TNG *ptng, uint16_t key)
 {
    bool retval = FALSE;
    IF_SET_RV(tng_cb_keycooked(ptng, key));
    return(retval);
 }
 
-bool tng_plain_mousebutt(TNG *ptng, uchar type, LGPoint loc)
+bool tng_plain_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
    tng_cb_mousebutt(ptng,type,loc);
    return(TRUE);
 }
 
-bool tng_plain_signal(TNG *ptng, ushort signal)
+bool tng_plain_signal(TNG *ptng, uint16_t signal)
 {
    tng_cb_signal(ptng,signal);
    return(TRUE);
@@ -73,7 +73,7 @@ errtype tng_plain_size(TNG *ptng, LGPoint *ppt)
 }
 
 // Returns the current "value" of the TNG
-int tng_plain_getvalue(TNG *ptng)
+int32_t tng_plain_getvalue(TNG *ptng)
 {
    void *dummy;   dummy = ptng;
    return(0);

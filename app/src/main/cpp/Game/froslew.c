@@ -64,13 +64,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tilename.h"
 #include "mapflags.h"
 
-long eye_mods[3]={0,0,0};
+int32_t eye_mods[3]={0,0,0};
 
 // prototype
-long *fr_objslew_obj_to_list(long *flist, Obj *cobj, int count);
-Obj  *fr_objslew_list_to_obj(long *flist, Obj *cobj, int count);
+int32_t *fr_objslew_obj_to_list(int32_t *flist, Obj *cobj, int32_t count);
+Obj  *fr_objslew_list_to_obj(int32_t *flist, Obj *cobj, int32_t count);
 
-long *fr_objslew_obj_to_list(long *flist, Obj *cobj, int count)
+int32_t *fr_objslew_obj_to_list(int32_t *flist, Obj *cobj, int32_t count)
 {
    switch (count-1)
    {
@@ -86,7 +86,7 @@ long *fr_objslew_obj_to_list(long *flist, Obj *cobj, int count)
    return flist;
 }
 
-Obj  *fr_objslew_list_to_obj(long *flist, Obj *cobj, int count)
+Obj  *fr_objslew_list_to_obj(int32_t *flist, Obj *cobj, int32_t count)
 {
    switch (count-1)
    {
@@ -103,10 +103,10 @@ Obj  *fr_objslew_list_to_obj(long *flist, Obj *cobj, int count)
 }
 
 // returns whether the camera moved or not
-bool fr_objslew_go_real_height(Obj *cobj, long *eye)
+bool fr_objslew_go_real_height(Obj *cobj, int32_t *eye)
 {
-   long     leye[3];
-   int      x,y,z;
+   int32_t     leye[3];
+   int32_t      x,y,z;
    MapElem *o_t;
 
    if (cobj!=NULL) { eye=leye; fr_objslew_obj_to_list(eye,cobj,3); }
@@ -118,7 +118,7 @@ bool fr_objslew_go_real_height(Obj *cobj, long *eye)
    if (me_bits_mirror(o_t)!=MAP_FFLAT)
 	   if ((me_tiletype(o_t)>=TILE_SLOPEUP_N)&&(me_tiletype(o_t)<=TILE_SLOPEUP_W))
 	   {
-	      int diff;
+	      int32_t diff;
 	      switch (me_tiletype(o_t))
 	      {
 	      case TILE_SLOPEUP_N: diff=eye[1]&MAP_MK; break;
@@ -134,9 +134,9 @@ bool fr_objslew_go_real_height(Obj *cobj, long *eye)
    return TRUE;
 }
 
-bool fr_objslew_allowed(Obj *cobj, long *eye)
+bool fr_objslew_allowed(Obj *cobj, int32_t *eye)
 {
-   int x,y; //z
+   int32_t x,y; //z
    MapElem *o_t;
 
    if (cobj!=NULL) fr_objslew_obj_to_list(eye,cobj,3);
@@ -152,9 +152,9 @@ bool fr_objslew_allowed(Obj *cobj, long *eye)
 
 // to physics teleport or not
 // should teach it not to slam all velocities!
-bool fr_objslew_moveone(Obj *cobj, ObjID objnum, int which, int how, bool conform)
+bool fr_objslew_moveone(Obj *cobj, ObjID objnum, int32_t which, int32_t how, bool conform)
 {
-   long eye[4];
+   int32_t eye[4];
    bool valid_pos=TRUE;
 
    if (cobj==NULL) cobj=&objs[objnum];
@@ -188,7 +188,7 @@ bool fr_objslew_moveone(Obj *cobj, ObjID objnum, int which, int how, bool confor
 
 // to physics teleport or not
 //#pragma disable_message(202)
-bool fr_objslew_setone(int which, int l_new)
+bool fr_objslew_setone(int32_t which, int32_t l_new)
 {
    switch (which)
    {
@@ -209,7 +209,7 @@ bool fr_objslew_setone(int which, int l_new)
 //#pragma enable_message(202)
 
 /* KLC - not used
-bool fr_objslew_tele_to(Obj *, int , int )
+bool fr_objslew_tele_to(Obj *, int32_t , int32_t )
 {
    return TRUE;
 }

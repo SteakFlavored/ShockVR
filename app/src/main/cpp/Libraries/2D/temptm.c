@@ -48,208 +48,208 @@ enum {
 };
 
 // prototypes
-void temp_upoint(short x, short y);
-void temp_point(short x, short y);
-void temp_flat8_mask_bitmap (grs_bitmap *bm, int x, int y, grs_stencil *sten);
-void temp_flat8_clut_ubitmap (grs_bitmap *bm, int x, int y, uchar *cl);
-void temp_tluc8_ubitmap (grs_bitmap *bm, int x, int y);
-void temp_per_map (grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_clut_per_map (grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut);
-void temp_clut_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut);
-void temp_lit_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_lit_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_lit_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_clut_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-void temp_clut_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-void temp_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_clut_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-void temp_lit_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_clut_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-void temp_lit_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_scale_umap(grs_bitmap *bm, short x, short y, short w, short h);
-void temp_clut_scale_umap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
-int gri_scale_clip(grs_vertex *v0, grs_vertex *v1);
+void temp_upoint(int16_t x, int16_t y);
+void temp_point(int16_t x, int16_t y);
+void temp_flat8_mask_bitmap (grs_bitmap *bm, int32_t x, int32_t y, grs_stencil *sten);
+void temp_flat8_clut_ubitmap (grs_bitmap *bm, int32_t x, int32_t y, uint8_t *cl);
+void temp_tluc8_ubitmap (grs_bitmap *bm, int32_t x, int32_t y);
+void temp_per_map (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_per_umap (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_clut_per_map (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *clut);
+void temp_clut_per_umap (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *clut);
+void temp_lit_per_umap (grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_lin_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_lin_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_lit_lin_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_lit_lin_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_clut_lin_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+void temp_clut_lin_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+void temp_floor_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_clut_floor_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+void temp_lit_floor_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_wall_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_clut_wall_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl);
+void temp_lit_wall_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl);
+void temp_scale_umap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h);
+void temp_clut_scale_umap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl);
+int32_t gri_scale_clip(grs_vertex *v0, grs_vertex *v1);
 
-void temp_rsd8_ubitmap (grs_bitmap *bm, int x, int y);
-void temp_rsd8_bitmap (grs_bitmap *bm, int x, int y);
+void temp_rsd8_ubitmap (grs_bitmap *bm, int32_t x, int32_t y);
+void temp_rsd8_bitmap (grs_bitmap *bm, int32_t x, int32_t y);
 
 
-void temp_upoint(short x, short y)
+void temp_upoint(int16_t x, int16_t y)
 {
    gr_fill_upixel(grd_gc.fcolor, x, y);
 }
 
-void temp_point(short x, short y)
+void temp_point(int16_t x, int16_t y)
 {
    gr_fill_pixel(grd_gc.fcolor, x, y);
 }
 
-void temp_rsd8_ubitmap (grs_bitmap *bm, int x, int y)
+void temp_rsd8_ubitmap (grs_bitmap *bm, int32_t x, int32_t y)
 {
-   ((void (*)(grs_bitmap *_bm,int _x, int _y))
+   ((void (*)(grs_bitmap *_bm,int32_t _x, int32_t _y))
       grd_function_table[GRC_BITMAP+BMT_RSD8*GRD_FUNCS])(bm, x, y);
 }
 
-void temp_rsd8_bitmap (grs_bitmap *bm, int x, int y)
+void temp_rsd8_bitmap (grs_bitmap *bm, int32_t x, int32_t y)
 {
-   ((void (*)(grs_bitmap *_bm,int _x, int _y, grs_stencil *_sten))
+   ((void (*)(grs_bitmap *_bm,int32_t _x, int32_t _y, grs_stencil *_sten))
       grd_function_table[GRC_STENCIL_BITMAP+BMT_RSD8*GRD_FUNCS])(bm, x, y, grd_clip.sten);
 }
 
-void temp_flat8_mask_bitmap (grs_bitmap *bm, int x, int y, grs_stencil *sten)
+void temp_flat8_mask_bitmap (grs_bitmap *bm, int32_t x, int32_t y, grs_stencil *sten)
 {
-   ((void (*)(grs_bitmap *_bm,int _x, int _y, grs_stencil *_sten))
+   ((void (*)(grs_bitmap *_bm,int32_t _x, int32_t _y, grs_stencil *_sten))
       grd_function_table[GRC_STENCIL_BITMAP+BMT_FLAT8*GRD_FUNCS])(bm, x, y, sten);
 }
 
-void temp_flat8_clut_ubitmap (grs_bitmap *bm, int x, int y, uchar *cl)
+void temp_flat8_clut_ubitmap (grs_bitmap *bm, int32_t x, int32_t y, uint8_t *cl)
 {
-   ((void (*)(grs_bitmap *_bm,int _x, int _y, uchar *_cl))
+   ((void (*)(grs_bitmap *_bm,int32_t _x, int32_t _y, uint8_t *_cl))
       grd_function_table[GRC_BITMAP+BMT_FLAT8*GRD_FUNCS])(bm, x, y, cl);
 }
 
-void temp_tluc8_ubitmap (grs_bitmap *bm, int x, int y)
+void temp_tluc8_ubitmap (grs_bitmap *bm, int32_t x, int32_t y)
 {
-   ((void (*)(grs_bitmap *_bm,int _x, int _y))
+   ((void (*)(grs_bitmap *_bm,int32_t _x, int32_t _y))
       grd_function_table[GRC_BITMAP+BMT_TLUC8*GRD_FUNCS])(bm, x, y);
 }
 
-int temp_poly (long c, int n, grs_vertex **vpl)
+int32_t temp_poly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=POLY;
    bm.flags=0;
    return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_upoly (long c, int n, grs_vertex **vpl)
+void temp_upoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=POLY;
    bm.flags=0;
    h_umap(&bm,n,vpl,&ti);
 }
 
-int temp_spoly (long c, int n, grs_vertex **vpl)
+int32_t temp_spoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=SPOLY;
    bm.flags=0;
    return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_uspoly (long c, int n, grs_vertex **vpl)
+void temp_uspoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=SPOLY;
    bm.flags=0;
    h_umap(&bm,n,vpl,&ti);
 }
 
-int temp_cpoly (long c, int n, grs_vertex **vpl)
+int32_t temp_cpoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=CPOLY;
    bm.flags=0;
    return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_ucpoly (long c, int n, grs_vertex **vpl)
+void temp_ucpoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=CPOLY;
    bm.flags=0;
    h_umap(&bm,n,vpl,&ti);
 }
 
-int temp_tpoly (long c, int n, grs_vertex **vpl)
+int32_t temp_tpoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=TPOLY;
    bm.flags=0;
    return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_utpoly (long c, int n, grs_vertex **vpl)
+void temp_utpoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=TPOLY;
    bm.flags=0;
    h_umap(&bm,n,vpl,&ti);
 }
 
-int temp_stpoly (long c, int n, grs_vertex **vpl)
+int32_t temp_stpoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=STPOLY;
    bm.flags=0;
    return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_ustpoly (long c, int n, grs_vertex **vpl)
+void temp_ustpoly (int32_t c, int32_t n, grs_vertex **vpl)
 {
    grs_tmap_info ti;
    grs_bitmap bm;
 
    ti.tmap_type=GRC_POLY;
    ti.flags=0;
-   bm.bits=(uchar *)c;
+   bm.bits=(uint8_t *)c;
    bm.type=STPOLY;
    bm.flags=0;
    h_umap(&bm,n,vpl,&ti);
 }
 
-void temp_per_map (grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_per_map (grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -259,7 +259,7 @@ void temp_per_map (grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_per_umap (grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -269,7 +269,7 @@ void temp_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_clut_per_map (grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut)
+void temp_clut_per_map (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *clut)
 {
   if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -280,7 +280,7 @@ void temp_clut_per_map (grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut)
    }
 }
 
-void temp_clut_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut)
+void temp_clut_per_umap (grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *clut)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -291,7 +291,7 @@ void temp_clut_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut)
    }
 }
 
-void temp_lit_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_lit_per_umap (grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -301,7 +301,7 @@ void temp_lit_per_umap (grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_lin_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if ((bm->row==1<<(bm->wlog))||(grd_gc.fill_type==FILL_CLUT)) {
       grs_tmap_info ti;
@@ -314,7 +314,7 @@ void temp_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_lin_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if ((bm->row==1<<(bm->wlog))||(grd_gc.fill_type==FILL_CLUT)) {
       grs_tmap_info ti;
@@ -327,7 +327,7 @@ void temp_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_lit_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_lit_lin_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if ((bm->row==1<<(bm->wlog))||(grd_gc.fill_type==FILL_CLUT)) {
       grs_tmap_info ti;
@@ -337,7 +337,7 @@ void temp_lit_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_lit_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_lit_lin_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if ((bm->row==1<<(bm->wlog))||(grd_gc.fill_type==FILL_CLUT)) {
       grs_tmap_info ti;
@@ -347,7 +347,7 @@ void temp_lit_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_clut_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl)
+void temp_clut_lin_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl)
 {
    grs_tmap_info ti;
 
@@ -360,7 +360,7 @@ void temp_clut_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl)
    h_umap(bm,n,vpl,&ti);
 }
 
-void temp_clut_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl)
+void temp_clut_lin_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl)
 {
    grs_tmap_info ti;
 
@@ -373,7 +373,7 @@ void temp_clut_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl)
    h_map(bm,n,vpl,&ti);
 }
 
-void temp_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_floor_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -383,7 +383,7 @@ void temp_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_clut_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl)
+void temp_clut_floor_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -394,7 +394,7 @@ void temp_clut_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl)
    }
 }
 
-void temp_lit_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_lit_floor_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -404,7 +404,7 @@ void temp_lit_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_wall_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -414,7 +414,7 @@ void temp_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-void temp_clut_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl)
+void temp_clut_wall_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, uint8_t *cl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -425,7 +425,7 @@ void temp_clut_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl)
    }
 }
 
-void temp_lit_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
+void temp_lit_wall_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl)
 {
    if (bm->row==1<<(bm->wlog)) {
       grs_tmap_info ti;
@@ -435,7 +435,7 @@ void temp_lit_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
    }
 }
 
-/* take int _x,_y; fix _u,_v; stuff them into grs_vertex _vertex */
+/* take int32_t _x,_y; fix _u,_v; stuff them into grs_vertex _vertex */
 
 #define make_vertex(_vertex,_x,_y,_u,_v) \
    _vertex.x = fix_make(_x,0), \
@@ -443,7 +443,7 @@ void temp_lit_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl)
    _vertex.u = _u,             \
    _vertex.v = _v
 
-void temp_scale_umap(grs_bitmap *bm, short x, short y, short w, short h)
+void temp_scale_umap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h)
 {
    grs_tmap_info ti;
    grs_vertex *vpl[2];
@@ -459,7 +459,7 @@ void temp_scale_umap(grs_bitmap *bm, short x, short y, short w, short h)
    h_umap(bm,2,vpl,&ti);
 }
 
-void temp_clut_scale_umap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl)
+void temp_clut_scale_umap(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl)
 {
    grs_tmap_info ti;
    grs_vertex *vpl[2];
@@ -476,9 +476,9 @@ void temp_clut_scale_umap(grs_bitmap *bm, short x, short y, short w, short h, uc
    h_umap(bm,2,vpl,&ti);
 }
 
-int gri_scale_clip(grs_vertex *v0, grs_vertex *v1)
+int32_t gri_scale_clip(grs_vertex *v0, grs_vertex *v1)
 {
-   int code;
+   int32_t code;
    fix u_scale,v_scale;
 
    if ((v0->x>=grd_fix_clip.right) || (v1->x<=grd_fix_clip.left) ||
@@ -513,12 +513,12 @@ int gri_scale_clip(grs_vertex *v0, grs_vertex *v1)
    return code;
 }
 
-int temp_scale_map(grs_bitmap *bm, short x, short y, short w, short h)
+int32_t temp_scale_map(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h)
 {
    grs_tmap_info ti;
    grs_vertex *vpl[2];
    grs_vertex v0,v1;
-   int code;
+   int32_t code;
 
    vpl[0]=&v0;
    vpl[1]=&v1;
@@ -534,12 +534,12 @@ int temp_scale_map(grs_bitmap *bm, short x, short y, short w, short h)
    return code;
 }
 
-int temp_clut_scale_map(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl)
+int32_t temp_clut_scale_map(grs_bitmap *bm, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t *cl)
 {
    grs_tmap_info ti;
    grs_vertex *vpl[2];
    grs_vertex v0,v1;
-   int code;
+   int32_t code;
 
    vpl[0]=&v0;
    vpl[1]=&v1;

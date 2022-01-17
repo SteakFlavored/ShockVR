@@ -28,19 +28,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* polygon edges */
-extern void gri_x_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
-extern void gri_ix_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
-extern void gri_rgbx_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
+extern void gri_x_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
+extern void gri_ix_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
+extern void gri_rgbx_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
 
 /* scaler edges */
-extern void gri_scale_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
+extern void gri_scale_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
 
 /* texture mapping edges */
-extern void gri_uvx_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
-extern void gri_uvix_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
-extern void gri_uvwx_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
-extern void gri_uviwx_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
-extern void gri_uvwy_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
-extern void gri_uviwy_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int side);
+extern void gri_uvx_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
+extern void gri_uvix_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
+extern void gri_uvwx_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
+extern void gri_uviwx_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
+extern void gri_uvwy_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
+extern void gri_uviwy_edge(grs_tmap_loop_info *info, grs_vertex **p, grs_vertex **p_prev, int32_t side);
 
 

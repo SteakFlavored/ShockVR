@@ -105,15 +105,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SL_CHANGE(x) ((TNG_slider *)((x)->tng_data->type_data))->change_flag
 
 // Prototypes
-Gadget *gad_slider_create(Gadget *parent, LGRect *dim, int z, int alignment, int increment,
-   int min, int max, TNGStyle *sty, char *name);
+Gadget *gad_slider_create(Gadget *parent, LGRect *dim, int32_t z, int32_t alignment, int32_t increment,
+   int32_t min, int32_t max, TNGStyle *sty, int8_t *name);
 
-Gadget *gad_slider_create_full(Gadget *parent, LGRect *dim, int z, int alignment, int increment,
-   int min, int max, TNGStyle *sty, char *name, Ref res_left, Ref res_right, Ref res_up,
+Gadget *gad_slider_create_full(Gadget *parent, LGRect *dim, int32_t z, int32_t alignment, int32_t increment,
+   int32_t min, int32_t max, TNGStyle *sty, int8_t *name, Ref res_left, Ref res_right, Ref res_up,
    Ref res_down, Ref res_slider);
 
-Gadget *gad_slider_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int alignemnt, int min, int max,
-   int value, int increment, LGPoint size);
+Gadget *gad_slider_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t alignemnt, int32_t min, int32_t max,
+   int32_t value, int32_t increment, LGPoint size);
 
 // Globals
 

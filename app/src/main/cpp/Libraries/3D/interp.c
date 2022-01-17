@@ -85,60 +85,60 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdarg.h>
 
 // prototypes;
-uchar *do_eof(uchar *);
-uchar *do_jnorm(uchar *);
-uchar *do_ldjnorm(uchar *);
-uchar *do_ljnorm(uchar *);
-uchar *do_lnres(uchar *);
-uchar *do_multires(uchar *);
-uchar *do_polyres(uchar *);
-uchar *do_setcolor(uchar *);
-uchar *do_sortnorm(uchar *);
-uchar *do_debug(uchar *);
-uchar *do_setshade(uchar *);
-uchar *do_goursurf(uchar *);
-uchar *do_x_rel(uchar *);
-uchar *do_y_rel(uchar *);
-uchar *do_z_rel(uchar *);
-uchar *do_xy_rel(uchar *);
-uchar *do_xz_rel(uchar *);
-uchar *do_yz_rel(uchar *);
-uchar *do_icall_p(uchar *);
-uchar *do_icall_b(uchar *);
-uchar *do_icall_h(uchar *);
-uchar *do_sfcal(uchar *);
-uchar *do_defres(uchar *);
-uchar *do_defres_i(uchar *);
-uchar *do_getparms(uchar *);
-uchar *do_getparms_i(uchar *);
-uchar *do_gour_p(uchar *);
-uchar *do_gour_vc(uchar *);
-uchar *do_getvcolor(uchar *);
-uchar *do_getvscolor(uchar *);
-uchar *do_rgbshades(uchar *);
-uchar *do_draw_mode(uchar *);
-uchar *do_getpcolor(uchar *);
-uchar *do_getpscolor(uchar *);
-uchar *do_scaleres(uchar *);
-uchar *do_vpnt_p(uchar *);
-uchar *do_vpnt_v(uchar *);
-uchar *do_setuv(uchar *);
-uchar *do_uvlist(uchar *);
-uchar *do_tmap(uchar *);
-uchar *do_dbg(uchar *);
+uint8_t *do_eof(uint8_t *);
+uint8_t *do_jnorm(uint8_t *);
+uint8_t *do_ldjnorm(uint8_t *);
+uint8_t *do_ljnorm(uint8_t *);
+uint8_t *do_lnres(uint8_t *);
+uint8_t *do_multires(uint8_t *);
+uint8_t *do_polyres(uint8_t *);
+uint8_t *do_setcolor(uint8_t *);
+uint8_t *do_sortnorm(uint8_t *);
+uint8_t *do_debug(uint8_t *);
+uint8_t *do_setshade(uint8_t *);
+uint8_t *do_goursurf(uint8_t *);
+uint8_t *do_x_rel(uint8_t *);
+uint8_t *do_y_rel(uint8_t *);
+uint8_t *do_z_rel(uint8_t *);
+uint8_t *do_xy_rel(uint8_t *);
+uint8_t *do_xz_rel(uint8_t *);
+uint8_t *do_yz_rel(uint8_t *);
+uint8_t *do_icall_p(uint8_t *);
+uint8_t *do_icall_b(uint8_t *);
+uint8_t *do_icall_h(uint8_t *);
+uint8_t *do_sfcal(uint8_t *);
+uint8_t *do_defres(uint8_t *);
+uint8_t *do_defres_i(uint8_t *);
+uint8_t *do_getparms(uint8_t *);
+uint8_t *do_getparms_i(uint8_t *);
+uint8_t *do_gour_p(uint8_t *);
+uint8_t *do_gour_vc(uint8_t *);
+uint8_t *do_getvcolor(uint8_t *);
+uint8_t *do_getvscolor(uint8_t *);
+uint8_t *do_rgbshades(uint8_t *);
+uint8_t *do_draw_mode(uint8_t *);
+uint8_t *do_getpcolor(uint8_t *);
+uint8_t *do_getpscolor(uint8_t *);
+uint8_t *do_scaleres(uint8_t *);
+uint8_t *do_vpnt_p(uint8_t *);
+uint8_t *do_vpnt_v(uint8_t *);
+uint8_t *do_setuv(uint8_t *);
+uint8_t *do_uvlist(uint8_t *);
+uint8_t *do_tmap(uint8_t *);
+uint8_t *do_dbg(uint8_t *);
 
-extern int check_and_draw_common(long c,int n_verts,g3s_phandle *p);
-extern int draw_poly_common(long c,int n_verts,g3s_phandle *p);
+extern int32_t check_and_draw_common(int32_t c,int32_t n_verts,g3s_phandle *p);
+extern int32_t draw_poly_common(int32_t c,int32_t n_verts,g3s_phandle *p);
 extern void g3_light_obj(g3s_phandle norm,g3s_phandle pos);
 
-void interpreter_loop(uchar *object);
+void interpreter_loop(uint8_t *object);
 
-void FlipVector(short n, g3s_vector *vec);
-void FlipLong(long *lng);
-void FlipShort(short *sh);
+void FlipVector(int16_t n, g3s_vector *vec);
+void FlipLong(int32_t *lng);
+void FlipShort(int16_t *sh);
 
 // globals
-extern char gour_flag;	       // gour flag for actual polygon drawer
+extern int8_t gour_flag;	       // gour flag for actual polygon drawer
 
 #ifdef   stereo_on
         temp_vector      g3s_vector     <>
@@ -175,25 +175,25 @@ void *opcode_table[n_ops] = {do_eof,do_jnorm,do_lnres,do_multires,do_polyres,do_
 g3s_point *resbuf[N_RES_POINTS];
 g3s_point *poly_buf[100];
 
-uchar	_vcolor_tab[N_VCOLOR_ENTRIES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+uint8_t	_vcolor_tab[N_VCOLOR_ENTRIES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 g3s_point *_vpoint_tab[N_VPOINT_ENTRIES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 grs_bitmap *_vtext_tab[N_VTEXT_ENTRIES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 // ptr to stack parms
-char *parm_ptr;
+int8_t *parm_ptr;
 
 // space for parms to objects
-char	parm_data[PARM_DATA_SIZE];
+int8_t	parm_data[PARM_DATA_SIZE];
 
-char	_itrp_gour_flg = 0;
-char	_itrp_wire_flg = 0;
-char	_itrp_check_flg = 0;
+int8_t	_itrp_gour_flg = 0;
+int8_t	_itrp_wire_flg = 0;
+int8_t	_itrp_check_flg = 0;
 
 
 // space for temp copy of object
-char  obj_space[8000];
+int8_t  obj_space[8000];
 
-// MLA not used, - uchar 	*struct_ptr;
+// MLA not used, - uint8_t 	*struct_ptr;
 
 /*
 // process the next opcode
@@ -218,12 +218,12 @@ call_next	macro
 
 // takes ptr to object in eax. trashes all but ebp
 // this is bullshit, man, takes ptr to object on the freakin' stack!
-void g3_interpret_object(ubyte *object_ptr,...)
+void g3_interpret_object(uint8_t *object_ptr,...)
  {
- 	int		i,scale;
- 	short	size;
+ 	int32_t		i,scale;
+ 	int16_t	size;
 
- 	size = * (short *) (object_ptr-4);
+ 	size = * (int16_t *) (object_ptr-4);
  	size -= 10;	// skip the first 10 bytes
 
  	BlockMove(object_ptr-2,obj_space,size);
@@ -331,8 +331,8 @@ g3_interpret_object_raw:
 	memset(resbuf, 0, N_RES_POINTS*4);
 
 // scale view vector for scale
-	FlipShort((short *) (object_ptr-2));
-	scale = * (short *) (object_ptr-2);
+	FlipShort((int16_t *) (object_ptr-2));
+	scale = * (int16_t *) (object_ptr-2);
 	if (scale)
 	 {
 	 	if (scale>0)
@@ -343,15 +343,15 @@ g3_interpret_object_raw:
 	 	 }
 	 	else
 	 	 {
-	 	 	int		temp;
+	 	 	int32_t		temp;
 
 	 	 	scale = -scale;
 
-	 	 	temp = (((ulong) _view_position.gX)>>16);	// get high 16 bits
+	 	 	temp = (((uint32_t) _view_position.gX)>>16);	// get high 16 bits
 	 	 	if (((temp<<scale) && 0xffff0000)!=0) goto Exit; // overflow
-	 	 	temp = (((ulong) _view_position.gY)>>16);	// get high 16 bits
+	 	 	temp = (((uint32_t) _view_position.gY)>>16);	// get high 16 bits
 	 	 	if (((temp<<scale) && 0xffff0000)!=0) goto Exit; // overflow
-	 	 	temp = (((ulong) _view_position.gZ)>>16);	// get high 16 bits
+	 	 	temp = (((uint32_t) _view_position.gZ)>>16);	// get high 16 bits
 	 	 	if (((temp<<scale) && 0xffff0000)!=0) goto Exit; // overflow
 
 	 	 	_view_position.gX <<= scale;
@@ -379,25 +379,25 @@ Exit:
  }
 
 // interpret the object
-void interpreter_loop(uchar *object)
+void interpreter_loop(uint8_t *object)
  {
  	do
  	 {
- 	 	FlipShort((short *) object);
- 	 	object = ((uchar * (*)(uchar *))opcode_table[* (short *) object])(object);
+ 	 	FlipShort((int16_t *) object);
+ 	 	object = ((uint8_t * (*)(uint8_t *))opcode_table[* (int16_t *) object])(object);
  	 }
  	while (object);
  }
 
 
 // opcodes.  [ebp] points at op on entry
-uchar *do_debug(uchar *opcode)
+uint8_t *do_debug(uint8_t *opcode)
  {
  	return 0;
  }
 
 
-uchar *do_eof(uchar *opcode)	// and return extra level
+uint8_t *do_eof(uint8_t *opcode)	// and return extra level
  {
  	return 0;
  }
@@ -405,38 +405,38 @@ uchar *do_eof(uchar *opcode)	// and return extra level
 // jnorm lbl,px,py,pz,nx,ny,nz
 // v=viewer coords-p
 // if (n*v)<0 then branch to lbl
-uchar *do_jnorm(uchar *opcode)
+uint8_t *do_jnorm(uint8_t *opcode)
  {
- 	FlipShort((short *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+2));
  	FlipVector(2,(g3s_vector *) (opcode+4));
 
  	if (g3_check_normal_facing((g3s_vector *) (opcode+16), (g3s_vector *) (opcode+4)))
  		return opcode+28;	// surface is visible. continue
  	else
- 		return opcode+(* (short *) (opcode+2));	// surface not visible
+ 		return opcode+(* (int16_t *) (opcode+2));	// surface not visible
  }
 
 // lnres pnt0,pnt1
-uchar *do_lnres(uchar *opcode)
+uint8_t *do_lnres(uint8_t *opcode)
  {
- 	FlipShort((short *) (opcode+2));
- 	FlipShort((short *) (opcode+4));
+ 	FlipShort((int16_t *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+4));
 
- 	g3_draw_line(resbuf[* (unsigned short *) (opcode+2)], resbuf[* (unsigned short *) (opcode+4)]);
+ 	g3_draw_line(resbuf[* (uint16_t *) (opcode+2)], resbuf[* (uint16_t *) (opcode+4)]);
  	return opcode+6;
  }
 
-uchar *do_multires(uchar *opcode)
+uint8_t *do_multires(uint8_t *opcode)
  {
-	short	 count;
+	int16_t	 count;
 
- 	FlipShort((short *) (opcode+2));
- 	FlipShort((short *) (opcode+4));
+ 	FlipShort((int16_t *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+4));
 
-	count = * (short *) (opcode+2);
+	count = * (int16_t *) (opcode+2);
  	FlipVector(count,(g3s_vector *) (opcode+6));
 
- 	g3_transform_list(count, (g3s_phandle *) (resbuf+(* (short *) (opcode+4))), (g3s_vector *) (opcode+6));
+ 	g3_transform_list(count, (g3s_phandle *) (resbuf+(* (int16_t *) (opcode+4))), (g3s_vector *) (opcode+6));
  	return opcode+6+(count*12);	// fixup: ebp = esi + ecx*12
  }
 
@@ -444,18 +444,18 @@ uchar *do_multires(uchar *opcode)
 
 // that kid from the wrong side came over my house again, decapitated all my dolls
 //  and if you bore me, you lose your soul to me       - "Gepetto", Belly, _Star_
-uchar *do_scaleres(uchar *opcode)
+uint8_t *do_scaleres(uint8_t *opcode)
  {
  	// MLA - this routine appears to be buggy and can't possibly work, so I'm not doing it yet.
  	DebugStr("\pCall Mark!");
 
-/* 	int					count,scale;
-	long				temp_pnt[3];
+/* 	int32_t					count,scale;
+	int32_t				temp_pnt[3];
  	g3s_phandle	temp_hand;
 
- 	count = * (unsigned short *) (opcode+2);
- 	scale = * (unsigned short *) (opcode+4);
- 	temp_hand = (g3s_phandle) (parm_data+(* (unsigned short *) (opcode+6)));
+ 	count = * (uint16_t *) (opcode+2);
+ 	scale = * (uint16_t *) (opcode+4);
+ 	temp_hand = (g3s_phandle) (parm_data+(* (uint16_t *) (opcode+6)));
 
  	opcode += 8;
  	do
@@ -507,65 +507,65 @@ do_sr_loop:
 
 // these put the address of an old point in the interpreter respnt array
 // note they will get freed when the interpreter punts
-uchar *do_vpnt_p(uchar *opcode)
+uint8_t *do_vpnt_p(uint8_t *opcode)
  {
- 	FlipShort((short *) (opcode+2));
- 	FlipShort((short *) (opcode+4));
+ 	FlipShort((int16_t *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+4));
 
- 	resbuf[* (short *) (opcode+4)] = (g3s_point *) (* (long *) (parm_data + (* (unsigned short *) (opcode+2))));
+ 	resbuf[* (int16_t *) (opcode+4)] = (g3s_point *) (* (int32_t *) (parm_data + (* (uint16_t *) (opcode+2))));
  	return opcode+6;
  }
 
-uchar *do_vpnt_v(uchar *opcode)
+uint8_t *do_vpnt_v(uint8_t *opcode)
  {
- 	FlipShort((short *) (opcode+2));
- 	FlipShort((short *) (opcode+4));
+ 	FlipShort((int16_t *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+4));
 
- 	resbuf[* (short *) (opcode+4)] = _vpoint_tab[(* (unsigned short *) (opcode+2))>>2];
+ 	resbuf[* (int16_t *) (opcode+4)] = _vpoint_tab[(* (uint16_t *) (opcode+2))>>2];
  	return opcode+6;
  }
 
 
-uchar *do_defres(uchar *opcode)
+uint8_t *do_defres(uint8_t *opcode)
  {
- 	FlipShort((short *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+2));
  	FlipVector(1,(g3s_vector *) (opcode+4));
 
- 	resbuf[* (unsigned short *) (opcode+2)] = g3_transform_point((g3s_vector *) (opcode+4));
+ 	resbuf[* (uint16_t *) (opcode+2)] = g3_transform_point((g3s_vector *) (opcode+4));
  	return opcode+16;
  }
 
-uchar *do_defres_i(uchar *opcode)
+uint8_t *do_defres_i(uint8_t *opcode)
  {
  	g3s_phandle temphand;
 
- 	FlipShort((short *) (opcode+2));
- 	FlipShort((short *) (opcode+16));
+ 	FlipShort((int16_t *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+16));
  	FlipVector(1,(g3s_vector *) (opcode+4));
 
  	temphand = g3_transform_point((g3s_vector *) (opcode+4));
- 	resbuf[* (unsigned short *) (opcode+2)] = temphand;
+ 	resbuf[* (uint16_t *) (opcode+2)] = temphand;
 
- 	temphand->i = * (short *) (opcode+16);
+ 	temphand->i = * (int16_t *) (opcode+16);
  	temphand->p3_flags |= PF_I;
 
  	return opcode+18;
  }
 
 // polyres cnt,pnt0,pnt1,...
-uchar *do_polyres(uchar *opcode)
+uint8_t *do_polyres(uint8_t *opcode)
  {
- 	int		count,count2;
+ 	int32_t		count,count2;
 
- 	FlipShort((short *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+2));
 
- 	count2 = count = * (unsigned short *) (opcode+2);
+ 	count2 = count = * (uint16_t *) (opcode+2);
  	opcode += 4;
  	while (--count>=0)
  	 {
- 		FlipShort((short *) (opcode+(count<<1)));
+ 		FlipShort((int16_t *) (opcode+(count<<1)));
 
- 	 	poly_buf[count] = resbuf[* (unsigned short *) (opcode+(count<<1))];
+ 	 	poly_buf[count] = resbuf[* (uint16_t *) (opcode+(count<<1))];
  	 }
 
  	opcode += count2<<1;
@@ -579,63 +579,63 @@ uchar *do_polyres(uchar *opcode)
  	return opcode;
  }
 
-uchar *do_sortnorm(uchar *opcode)
+uint8_t *do_sortnorm(uint8_t *opcode)
  {
  	FlipVector(2,(g3s_vector *) (opcode+2));
- 	FlipShort((short *) (opcode+26));
- 	FlipShort((short *) (opcode+28));
+ 	FlipShort((int16_t *) (opcode+26));
+ 	FlipShort((int16_t *) (opcode+28));
 
  	if (g3_check_normal_facing((g3s_vector *) (opcode+14),(g3s_vector *) (opcode+2)))
  	 {
-		interpreter_loop(opcode + (* (short *) (opcode+26)));
-		interpreter_loop(opcode + (* (short *) (opcode+28)));
+		interpreter_loop(opcode + (* (int16_t *) (opcode+26)));
+		interpreter_loop(opcode + (* (int16_t *) (opcode+28)));
  	 }
  	else
  	 {
-		interpreter_loop(opcode + (* (short *) (opcode+28)));
-		interpreter_loop(opcode + (* (short *) (opcode+26)));
+		interpreter_loop(opcode + (* (int16_t *) (opcode+28)));
+		interpreter_loop(opcode + (* (int16_t *) (opcode+26)));
  	 }
 
 	return opcode+30;
  }
 
-uchar *do_goursurf(uchar *opcode)
+uint8_t *do_goursurf(uint8_t *opcode)
  {
- 	FlipShort((short *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+2));
 
- 	gouraud_base = (* (short *) (opcode+2)) << 8;
+ 	gouraud_base = (* (int16_t *) (opcode+2)) << 8;
  	_itrp_gour_flg = 2;
  	return opcode+4;
  }
 
-uchar *do_gour_p(uchar *opcode)
+uint8_t *do_gour_p(uint8_t *opcode)
  {
- 	FlipShort((short *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+2));
 
- 	gouraud_base = parm_data[(* (short *) (opcode+2))] << 8;
+ 	gouraud_base = parm_data[(* (int16_t *) (opcode+2))] << 8;
  	_itrp_gour_flg = 2;
  	return opcode+4;
  }
 
-uchar *do_gour_vc(uchar *opcode)
+uint8_t *do_gour_vc(uint8_t *opcode)
  {
- 	int	 temp;
+ 	int32_t	 temp;
 
- 	FlipShort((short *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+2));
 
- 	gouraud_base = ((long) _vcolor_tab[* (unsigned short *) (opcode+2)]) << 8;
+ 	gouraud_base = ((int32_t) _vcolor_tab[* (uint16_t *) (opcode+2)]) << 8;
  	_itrp_gour_flg = 2;
  	return opcode+4;
  }
 
 
-uchar *do_draw_mode(uchar *opcode)
+uint8_t *do_draw_mode(uint8_t *opcode)
  {
- 	short 	flags;
+ 	int16_t 	flags;
 
- 	FlipShort((short *) (opcode+2));
+ 	FlipShort((int16_t *) (opcode+2));
 
- 	flags = * (short *) (opcode+2);
+ 	flags = * (int16_t *) (opcode+2);
  	_itrp_wire_flg = flags>>8;
  	flags &= 0x00ff;
  	flags <<= 1;
@@ -646,87 +646,87 @@ uchar *do_draw_mode(uchar *opcode)
  	return opcode+4;
  }
 
-uchar *do_setshade(uchar *opcode)
+uint8_t *do_setshade(uint8_t *opcode)
  {
- 	int					i;
- 	uchar				*new_opcode;
+ 	int32_t					i;
+ 	uint8_t				*new_opcode;
  	g3s_phandle temphand;
 
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
 
- 	i = * (unsigned short *) (opcode+2);	// get number of shades
+ 	i = * (uint16_t *) (opcode+2);	// get number of shades
  	new_opcode = opcode+4+(i<<2);
 
  	while (--i>=0)
  	 {
- 	 	FlipShort((short *) (opcode+4+(i<<2)));
- 	 	FlipShort((short *) (opcode+6+(i<<2)));
+ 	 	FlipShort((int16_t *) (opcode+4+(i<<2)));
+ 	 	FlipShort((int16_t *) (opcode+6+(i<<2)));
 
- 	 	temphand = resbuf[* (unsigned short *) (opcode+4+(i<<2))];	// get point handle
- 	 	temphand->i = * (short *) (opcode+6+(i<<2));
+ 	 	temphand = resbuf[* (uint16_t *) (opcode+4+(i<<2))];	// get point handle
+ 	 	temphand->i = * (int16_t *) (opcode+6+(i<<2));
  	 	temphand->p3_flags |= PF_I;
  	 }
 
  	return new_opcode;
  }
 
-uchar *do_rgbshades(uchar *opcode)
+uint8_t *do_rgbshades(uint8_t *opcode)
  {
- 	uchar 			*new_opcode;
- 	int					i;
+ 	uint8_t 			*new_opcode;
+ 	int32_t					i;
  	g3s_phandle temphand;
 
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
 
- 	i = * (unsigned short *) (opcode+2);	// get number of shades
+ 	i = * (uint16_t *) (opcode+2);	// get number of shades
  	new_opcode = opcode+4;
  	while (--i>=0)
  	 {
-		FlipShort((short *) new_opcode);
-		FlipLong((long *) (new_opcode+2));
+		FlipShort((int16_t *) new_opcode);
+		FlipLong((int32_t *) (new_opcode+2));
 
- 	 	temphand = resbuf[* (unsigned short *) new_opcode];	// get point handle
- 	 	temphand->rgb = * (long *) (new_opcode+2);
+ 	 	temphand = resbuf[* (uint16_t *) new_opcode];	// get point handle
+ 	 	temphand->rgb = * (int32_t *) (new_opcode+2);
  	 	temphand->p3_flags |= PF_RGB;
  	 	new_opcode += 10;
  	 }
  	return new_opcode;
  }
 
-uchar *do_setuv(uchar *opcode)
+uint8_t *do_setuv(uint8_t *opcode)
  {
  	g3s_phandle temphand;
 
-  FlipShort((short *) (opcode+2));
-	FlipLong((long *) (opcode+4));
-	FlipLong((long *) (opcode+8));
+  FlipShort((int16_t *) (opcode+2));
+	FlipLong((int32_t *) (opcode+4));
+	FlipLong((int32_t *) (opcode+8));
 
-	temphand = resbuf[* (unsigned short *) (opcode+2)];	// get point handle
- 	temphand->uv.u = (* (unsigned long *) (opcode+4)) >> 8;
- 	temphand->uv.v = (* (unsigned long *) (opcode+8)) >> 8;
+	temphand = resbuf[* (uint16_t *) (opcode+2)];	// get point handle
+ 	temphand->uv.u = (* (uint32_t *) (opcode+4)) >> 8;
+ 	temphand->uv.v = (* (uint32_t *) (opcode+8)) >> 8;
  	temphand->p3_flags |= PF_U | PF_V;
 
  	return opcode+12;
  }
 
-uchar *do_uvlist(uchar *opcode)
+uint8_t *do_uvlist(uint8_t *opcode)
  {
- 	int					i;
+ 	int32_t					i;
  	g3s_phandle temphand;
 
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
 
- 	i = * (unsigned short *) (opcode+2);	// get number of shades
+ 	i = * (uint16_t *) (opcode+2);	// get number of shades
  	opcode += 4;
  	while (--i>=0)
  	 {
-  	FlipShort((short *) opcode);
-		FlipLong((long *) (opcode+2));
-		FlipLong((long *) (opcode+6));
+  	FlipShort((int16_t *) opcode);
+		FlipLong((int32_t *) (opcode+2));
+		FlipLong((int32_t *) (opcode+6));
 
- 	 	temphand = resbuf[* (unsigned short *) opcode];	// get point handle
-		temphand->uv.u = (* (unsigned long *) (opcode+2)) >> 8;
-		temphand->uv.v = (* (unsigned long *) (opcode+6)) >> 8;
+ 	 	temphand = resbuf[* (uint16_t *) opcode];	// get point handle
+		temphand->uv.u = (* (uint32_t *) (opcode+2)) >> 8;
+		temphand->uv.v = (* (uint32_t *) (opcode+6)) >> 8;
  	 	temphand->p3_flags |= PF_U | PF_V;
  	 	opcode += 10;
  	 }
@@ -736,193 +736,193 @@ uchar *do_uvlist(uchar *opcode)
 
 
 // should we be hacking _itrp_gour_flg?
-uchar *do_setcolor(uchar *opcode)
+uint8_t *do_setcolor(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
 
- 	gr_set_fcolor(* (unsigned short *) (opcode+2));
+ 	gr_set_fcolor(* (uint16_t *) (opcode+2));
  	_itrp_gour_flg = 0;
  	return opcode+4;
  }
 
-uchar *do_getvcolor(uchar *opcode)
+uint8_t *do_getvcolor(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
 
- 	gr_set_fcolor(_vcolor_tab[* (unsigned short *) (opcode+2)]);
+ 	gr_set_fcolor(_vcolor_tab[* (uint16_t *) (opcode+2)]);
  	_itrp_gour_flg = 0;
  	return opcode+4;
  }
 
-uchar *do_getpcolor(uchar *opcode)
+uint8_t *do_getpcolor(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
 
- 	gr_set_fcolor(* (unsigned short *) (parm_data + (* (unsigned short *) (opcode+2))));
+ 	gr_set_fcolor(* (uint16_t *) (parm_data + (* (uint16_t *) (opcode+2))));
  	_itrp_gour_flg = 0;
  	return opcode+4;
  }
 
-uchar *do_getvscolor(uchar *opcode)
+uint8_t *do_getvscolor(uint8_t *opcode)
  {
- 	short		temp;
+ 	int16_t		temp;
 
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
 
- 	temp = (byte) _vcolor_tab[* (unsigned short *) (opcode+2)];
- 	temp |= (* (short *) (opcode+4)) << 8;
+ 	temp = (int8_t) _vcolor_tab[* (uint16_t *) (opcode+2)];
+ 	temp |= (* (int16_t *) (opcode+4)) << 8;
  	gr_set_fcolor(gr_get_light_tab()[temp]);
  	return opcode+6;
  }
 
-uchar *do_getpscolor(uchar *opcode)
+uint8_t *do_getpscolor(uint8_t *opcode)
  {
- 	short		temp;
+ 	int16_t		temp;
 
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
 
- 	temp = (unsigned short) parm_data[* (unsigned short *) (opcode+2)];
+ 	temp = (uint16_t) parm_data[* (uint16_t *) (opcode+2)];
  	temp &= 0x00ff;
- 	temp |= (* (short *) (opcode+4)) << 8;
+ 	temp |= (* (int16_t *) (opcode+4)) << 8;
  	gr_set_fcolor(gr_get_light_tab()[temp]);
  	return opcode+6;
  }
 
 
-uchar *do_x_rel(uchar *opcode)
+uint8_t *do_x_rel(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
-  FlipLong((long *) (opcode+6));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
+  FlipLong((int32_t *) (opcode+6));
 
- 	resbuf[* (short *) (opcode+2)] = g3_copy_add_delta_x(resbuf[* (short *) (opcode+4)], * (fix *) (opcode+6));
+ 	resbuf[* (int16_t *) (opcode+2)] = g3_copy_add_delta_x(resbuf[* (int16_t *) (opcode+4)], * (fix *) (opcode+6));
  	return opcode+10;
  }
 
 
-uchar *do_y_rel(uchar *opcode)
+uint8_t *do_y_rel(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
-  FlipLong((long *) (opcode+6));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
+  FlipLong((int32_t *) (opcode+6));
 
- 	resbuf[* (short *) (opcode+2)] = g3_copy_add_delta_y(resbuf[* (short *) (opcode+4)], * (fix *) (opcode+6));
+ 	resbuf[* (int16_t *) (opcode+2)] = g3_copy_add_delta_y(resbuf[* (int16_t *) (opcode+4)], * (fix *) (opcode+6));
  	return opcode+10;
  }
 
 
-uchar *do_z_rel(uchar *opcode)
+uint8_t *do_z_rel(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
-  FlipLong((long *) (opcode+6));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
+  FlipLong((int32_t *) (opcode+6));
 
- 	resbuf[* (short *) (opcode+2)] = g3_copy_add_delta_z(resbuf[* (short *) (opcode+4)], * (fix *) (opcode+6));
+ 	resbuf[* (int16_t *) (opcode+2)] = g3_copy_add_delta_z(resbuf[* (int16_t *) (opcode+4)], * (fix *) (opcode+6));
  	return opcode+10;
  }
 
 
-uchar *do_xy_rel(uchar *opcode)
+uint8_t *do_xy_rel(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
-  FlipLong((long *) (opcode+6));
-  FlipLong((long *) (opcode+10));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
+  FlipLong((int32_t *) (opcode+6));
+  FlipLong((int32_t *) (opcode+10));
 
- 	resbuf[* (short *) (opcode+2)] = g3_copy_add_delta_xy(resbuf[* (short *) (opcode+4)],
+ 	resbuf[* (int16_t *) (opcode+2)] = g3_copy_add_delta_xy(resbuf[* (int16_t *) (opcode+4)],
  																												* (fix *) (opcode+6), * (fix *) (opcode+10));
  	return opcode+14;
  }
 
 
-uchar *do_xz_rel(uchar *opcode)
+uint8_t *do_xz_rel(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
-  FlipLong((long *) (opcode+6));
-  FlipLong((long *) (opcode+10));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
+  FlipLong((int32_t *) (opcode+6));
+  FlipLong((int32_t *) (opcode+10));
 
- 	resbuf[* (short *) (opcode+2)] = g3_copy_add_delta_xz(resbuf[* (short *) (opcode+4)],
+ 	resbuf[* (int16_t *) (opcode+2)] = g3_copy_add_delta_xz(resbuf[* (int16_t *) (opcode+4)],
  																												* (fix *) (opcode+6), * (fix *) (opcode+10));
  	return opcode+14;
  }
 
-uchar *do_yz_rel(uchar *opcode)
+uint8_t *do_yz_rel(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
-  FlipLong((long *) (opcode+6));
-  FlipLong((long *) (opcode+10));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
+  FlipLong((int32_t *) (opcode+6));
+  FlipLong((int32_t *) (opcode+10));
 
- 	resbuf[* (short *) (opcode+2)] = g3_copy_add_delta_yz(resbuf[* (short *) (opcode+4)],
+ 	resbuf[* (int16_t *) (opcode+2)] = g3_copy_add_delta_yz(resbuf[* (int16_t *) (opcode+4)],
  																												* (fix *) (opcode+6), * (fix *) (opcode+10));
  	return opcode+14;
  }
 
 
-uchar *do_icall_p(uchar *opcode)
+uint8_t *do_icall_p(uint8_t *opcode)
  {
  	FlipVector(1,(g3s_vector *) (opcode+6));
-  FlipShort((short *) (opcode+18));
-  FlipLong((long *) (opcode+2));
+  FlipShort((int16_t *) (opcode+18));
+  FlipLong((int32_t *) (opcode+2));
 
- 	g3_start_object_angles_x((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (unsigned short *) (opcode+18))));
-	interpreter_loop((uchar *) (* (long *) (opcode+2)));
+ 	g3_start_object_angles_x((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (uint16_t *) (opcode+18))));
+	interpreter_loop((uint8_t *) (* (int32_t *) (opcode+2)));
 	g3_end_object();
 
 	return opcode+20;
  }
 
 
-uchar *do_icall_h(uchar *opcode)
+uint8_t *do_icall_h(uint8_t *opcode)
  {
  	FlipVector(1,(g3s_vector *) (opcode+6));
-  FlipShort((short *) (opcode+18));
-  FlipLong((long *) (opcode+2));
+  FlipShort((int16_t *) (opcode+18));
+  FlipLong((int32_t *) (opcode+2));
 
- 	g3_start_object_angles_y((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (unsigned short *) (opcode+18))));
-	interpreter_loop((uchar *) (* (long *) (opcode+2)));
+ 	g3_start_object_angles_y((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (uint16_t *) (opcode+18))));
+	interpreter_loop((uint8_t *) (* (int32_t *) (opcode+2)));
 	g3_end_object();
 
 	return opcode+20;
  }
 
-uchar *do_icall_b(uchar *opcode)
+uint8_t *do_icall_b(uint8_t *opcode)
  {
  	FlipVector(1,(g3s_vector *) (opcode+6));
-  FlipShort((short *) (opcode+18));
-  FlipLong((long *) (opcode+2));
+  FlipShort((int16_t *) (opcode+18));
+  FlipLong((int32_t *) (opcode+2));
 
- 	g3_start_object_angles_z((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (unsigned short *) (opcode+18))));
-	interpreter_loop((uchar *) (* (long *) (opcode+2)));
+ 	g3_start_object_angles_z((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (uint16_t *) (opcode+18))));
+	interpreter_loop((uint8_t *) (* (int32_t *) (opcode+2)));
 	g3_end_object();
 
 	return opcode+20;
  }
 
-uchar *do_sfcal(uchar *opcode)
+uint8_t *do_sfcal(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
 
-	interpreter_loop(opcode + (* (unsigned short *) (opcode+2)));
+	interpreter_loop(opcode + (* (uint16_t *) (opcode+2)));
  	return opcode+4;
  }
 
 // copy parms of stack. takes offset,count
-uchar *do_getparms(uchar *opcode)
+uint8_t *do_getparms(uint8_t *opcode)
  {
- 	long	*src,*dest;
- 	int		count;
+ 	int32_t	*src,*dest;
+ 	int32_t		count;
 
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
-  FlipShort((short *) (opcode+6));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
+  FlipShort((int16_t *) (opcode+6));
 
- 	dest = (long *) (parm_data + (* (unsigned short *) (opcode+2)));
- 	src = (long *) (parm_ptr + (* (unsigned short *) (opcode+4)));
-	count = * (unsigned short *) (opcode+6);
+ 	dest = (int32_t *) (parm_data + (* (uint16_t *) (opcode+2)));
+ 	src = (int32_t *) (parm_ptr + (* (uint16_t *) (opcode+4)));
+	count = * (uint16_t *) (opcode+6);
 	while (count-->0)
 	 *(dest++) = *(src)++;
 
@@ -930,25 +930,25 @@ uchar *do_getparms(uchar *opcode)
  }
 
 // copy parm block. ptr is on stack. takes dest_ofs,src_ptr_ofs,size
-uchar *do_getparms_i(uchar *opcode)
+uint8_t *do_getparms_i(uint8_t *opcode)
  {
- 	long	*src,*dest;
- 	int		count;
+ 	int32_t	*src,*dest;
+ 	int32_t		count;
 
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
-  FlipShort((short *) (opcode+6));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
+  FlipShort((int16_t *) (opcode+6));
 
- 	dest = * (long **) (parm_data + (* (unsigned short *) (opcode+2)));
- 	src = (long *) (parm_ptr + (* (unsigned short *) (opcode+4)));
-	count = * (unsigned short *) (opcode+6);
+ 	dest = * (int32_t **) (parm_data + (* (uint16_t *) (opcode+2)));
+ 	src = (int32_t *) (parm_ptr + (* (uint16_t *) (opcode+4)));
+	count = * (uint16_t *) (opcode+6);
 	while (count-->0)
 	 *(dest++) = *(src)++;
 
 	return opcode+8;
  }
 
-uchar *do_dbg(uchar *opcode)
+uint8_t *do_dbg(uint8_t *opcode)
  {
 #ifdef  _itrp_dbg
         mov     ax, w 4[ebp]    // code
@@ -977,29 +977,29 @@ dbg_nxt1:
 
 
 extern void (*g3_tmap_func)();
-extern int temp_poly (long c, int n, grs_vertex **vpl);
+extern int32_t temp_poly (int32_t c, int32_t n, grs_vertex **vpl);
 
-uchar *do_tmap(uchar *opcode)
+uint8_t *do_tmap(uint8_t *opcode)
  {
- 	int		count,count2;
- 	short	temp;
+ 	int32_t		count,count2;
+ 	int16_t	temp;
 
 
-  FlipShort((short *) (opcode+2));
-  FlipShort((short *) (opcode+4));
+  FlipShort((int16_t *) (opcode+2));
+  FlipShort((int16_t *) (opcode+4));
 
- 	count2 = count = * (unsigned short *) (opcode+4);
+ 	count2 = count = * (uint16_t *) (opcode+4);
  	count--;
  	do
  	 {
- 		FlipShort((short *) (opcode+6+(count<<1)));
- 		temp = * (short *) (opcode+6+(count<<1));
+ 		FlipShort((int16_t *) (opcode+6+(count<<1)));
+ 		temp = * (int16_t *) (opcode+6+(count<<1));
 
  	 	poly_buf[count] = resbuf[temp];
  	 }
  	while (--count>=0);
 
- 	((int (*)(int,g3s_phandle *,grs_bitmap *)) *g3_tmap_func)(count2,poly_buf,_vtext_tab[* (unsigned short *) (opcode+2)]);
+ 	((int32_t (*)(int32_t,g3s_phandle *,grs_bitmap *)) *g3_tmap_func)(count2,poly_buf,_vtext_tab[* (uint16_t *) (opcode+2)]);
 
  	return opcode + 6+ (count2*2);
  }
@@ -1011,9 +1011,9 @@ uchar *do_tmap(uchar *opcode)
 // v=viewer coords-p
 // if (n*v)<0 then branch to lbl
 // does lit version of jnorm, for flat lighting
-uchar *do_ljnorm(uchar *opcode)
+uint8_t *do_ljnorm(uint8_t *opcode)
  {
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
  	FlipVector(2,(g3s_vector *) (opcode+4));
 
  	if (g3_check_normal_facing((g3s_vector *) (opcode+16),(g3s_vector *) (opcode+4)))
@@ -1022,15 +1022,15 @@ uchar *do_ljnorm(uchar *opcode)
  	 	return opcode+28;
  	 }
  	else
- 		return opcode+(* (short *) (opcode+2));	// surface not visible
+ 		return opcode+(* (int16_t *) (opcode+2));	// surface not visible
  }
 
 // light diff not near norm
-uchar *do_ldjnorm(uchar *opcode)
+uint8_t *do_ldjnorm(uint8_t *opcode)
  {
  	fix temp;
 
-  FlipShort((short *) (opcode+2));
+  FlipShort((int16_t *) (opcode+2));
  	FlipVector(2,(g3s_vector *) (opcode+4));
 
  	if (g3_check_normal_facing((g3s_vector *) (opcode+16),(g3s_vector *) (opcode+4)))
@@ -1047,7 +1047,7 @@ uchar *do_ldjnorm(uchar *opcode)
  	 	return opcode+28;
  	 }
  	else
- 		return opcode+(* (short *) (opcode+2));	// surface not visible
+ 		return opcode+(* (int16_t *) (opcode+2));	// surface not visible
  }
 
 
@@ -1081,20 +1081,20 @@ g3_light_check_normal_facing:
         ret
 */
 
-void FlipShort(short *sh)
+void FlipShort(int16_t *sh)
  {
- 	uchar temp;
- 	uchar *src = (uchar *) sh;
+ 	uint8_t temp;
+ 	uint8_t *src = (uint8_t *) sh;
 
  	temp = src[0];
  	src[0] = src[1];
  	src[1] = temp;
  }
 
-void FlipLong(long *lng)
+void FlipLong(int32_t *lng)
  {
- 	short *src = (short *) lng;
- 	short	temp;
+ 	int16_t *src = (int16_t *) lng;
+ 	int16_t	temp;
 
  	temp = src[0];
  	src[0] = src[1];
@@ -1104,12 +1104,12 @@ void FlipLong(long *lng)
  	FlipShort(src+1);
  }
 
-void FlipVector(short n, g3s_vector *vec)
+void FlipVector(int16_t n, g3s_vector *vec)
  {
- 	int		i,j;
+ 	int32_t		i,j;
 
  	for (i=0; i<n; i++, vec++)
  	 	for (j=0; j<3; j++)
- 	 		FlipLong((long *) &vec->xyz[j]);
+ 	 		FlipLong((int32_t *) &vec->xyz[j]);
  }
 

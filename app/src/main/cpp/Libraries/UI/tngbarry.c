@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------
 // PROTOTYPES
 //-------------------------
-errtype tng_buttonarray_move(TNG *ptng, short code);
+errtype tng_buttonarray_move(TNG *ptng, int16_t code);
 bool tng_buttonarray_hscroll_changed(void *ui_data, void *user_data);
 bool tng_buttonarray_vscroll_changed(void *ui_data, void *user_data);
 
@@ -72,11 +72,11 @@ errtype tng_buttonarray_destroy(TNG *ptng)
 }
 
 // Initializes the TNG
-errtype tng_buttonarray_init(void *ui_data, TNG *ptng, TNGStyle *sty, ushort options, LGPoint msize, LGPoint wsize, LGPoint bsize,
-   int num_sel)
+errtype tng_buttonarray_init(void *ui_data, TNG *ptng, TNGStyle *sty, uint16_t options, LGPoint msize, LGPoint wsize, LGPoint bsize,
+   int32_t num_sel)
 {
    TNG_buttonarray *pbatng;
-   int i,j;
+   int32_t i,j;
 
    pbatng = (TNG_buttonarray *)GUI_MALLOC(ptng->ui_data, sizeof(TNG_buttonarray));
 
@@ -143,7 +143,7 @@ errtype tng_buttonarray_init(void *ui_data, TNG *ptng, TNGStyle *sty, ushort opt
 errtype tng_buttonarray_init2(TNG *ptng)
 {
    TNG_buttonarray *pbatng;
-   int id;
+   int32_t id;
    LGPoint sloc, ssize;
 
    ptng->signal(ptng, TNG_SIGNAL_EXPOSE);
@@ -186,13 +186,13 @@ errtype tng_buttonarray_init2(TNG *ptng)
 }
 
 // Note that i & j here are in WINDOW coordinates, NOT matrix coords!
-errtype tng_buttonarray_draw_button(TNG *ptng, int i, int j)
+errtype tng_buttonarray_draw_button(TNG *ptng, int32_t i, int32_t j)
 {
    LGRect brect, isect, r;
    Ref id;
-   int ci,cj;
+   int32_t ci,cj;
    TNGButtonArrayElement el;
-   int diff;
+   int32_t diff;
    TNG_buttonarray *pbatng = TNG_BA(ptng);
    LGPoint loc = TNG_ABSLOC(ptng);
    LGRect clip;
@@ -249,12 +249,12 @@ errtype tng_buttonarray_draw_button(TNG *ptng, int i, int j)
    switch(el.type)
    {
       case COLORED_TYPE:
-         gr_set_fcolor(((int)(el.disp_data)));
+         gr_set_fcolor(((int32_t)(el.disp_data)));
          gr_rect(brect.ul.x,brect.ul.y,brect.lr.x,brect.lr.y);
          break;
       case TEXT_TYPE:
          gr_set_fcolor(ptng->style->textColor);
-         TNG_DRAW_TEXT(ptng, (char *)el.disp_data, brect.ul.x, brect.ul.y);
+         TNG_DRAW_TEXT(ptng, (int8_t *)el.disp_data, brect.ul.x, brect.ul.y);
          break;
       case RESOURCE_TYPE:
          id = *((Ref *)(el.disp_data));
@@ -277,13 +277,13 @@ errtype tng_buttonarray_draw_button(TNG *ptng, int i, int j)
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_buttonarray_2d_draw(TNG *ptng, ushort partmask, LGPoint loc)
+errtype tng_buttonarray_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc)
 {
    TNG_buttonarray *pbatng;
-   int i,j;
+   int32_t i,j;
 
 #ifndef NO_DUMMIES
-   ushort dummy;   dummy = partmask;
+   uint16_t dummy;   dummy = partmask;
 #endif
 
    //Spew(DSRC_UI_Buttonarray, ("TNG Buttonarray 2d Draw at (%d, %d) -- partmask = %x\n",loc.x,loc.y,partmask));
@@ -329,25 +329,25 @@ errtype tng_buttonarray_size(TNG *ptng, LGPoint *ppt)
 }
 
 // Returns the current "value" of the TNG
-int tng_buttonarray_getvalue(TNG *ptng)
+int32_t tng_buttonarray_getvalue(TNG *ptng)
 {
    return(TNG_BA(ptng)->num_selectable);
 }
 
 // React appropriately for receiving the specified cooked key
-bool tng_buttonarray_keycooked(TNG *ptng, ushort key)
+bool tng_buttonarray_keycooked(TNG *ptng, uint16_t key)
 {
-   ushort code = key ^ KB_FLAG_DOWN;
+   uint16_t code = key ^ KB_FLAG_DOWN;
    bool retval = FALSE;
 
    code = key & 0xff;
 //   Spew(DSRC_UI_Buttonarray, ("code = %x\n",code));
 /*
 {
-	char buff[100];
+	int8_t buff[100];
 	sprintf(buff+1, "code = %x\0",code);
 	buff[0] = strlen(buff+1);
-	DebugStr((uchar *)buff);
+	DebugStr((uint8_t *)buff);
 }
 */
    switch(code)
@@ -376,12 +376,12 @@ bool tng_buttonarray_keycooked(TNG *ptng, ushort key)
 }
 
 // React appropriately for receiving the specified mouse button event
-bool tng_buttonarray_mousebutt(TNG *ptng, uchar type, LGPoint loc)
+bool tng_buttonarray_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
    LGPoint curr;
    TNG_buttonarray *pbatng;
-   int i,j;
-   int a,b;
+   int32_t i,j;
+   int32_t a,b;
    bool retval = FALSE;
 
    if (type & TNG_MOUSE_LDOWN)
@@ -426,7 +426,7 @@ bool tng_buttonarray_mousebutt(TNG *ptng, uchar type, LGPoint loc)
 }
 
 // Handle incoming signals
-bool tng_buttonarray_signal(TNG *ptng, ushort signal)
+bool tng_buttonarray_signal(TNG *ptng, uint16_t signal)
 {
    bool retval = FALSE;
    //Spew(DSRC_UI_Buttonarray, ("Buttonarray Received signal: %x\n",signal));
@@ -443,10 +443,10 @@ bool tng_buttonarray_signal(TNG *ptng, ushort signal)
 // Assumes that lsel has been set to the selection-elect
 errtype tng_buttonarray_select(TNG *ptng)
 {
-   int a,b;
-   int i,j;
-   int i2,j2;
-   int totnum = 0;
+   int32_t a,b;
+   int32_t i,j;
+   int32_t i2,j2;
+   int32_t totnum = 0;
 
    a = TNG_BA_LSEL(ptng).x + TNG_BA_OFFSET(ptng).x;
    b = TNG_BA_LSEL(ptng).y + TNG_BA_OFFSET(ptng).y;
@@ -514,7 +514,7 @@ errtype tng_buttonarray_select(TNG *ptng)
 // appropriate kind of scroll key.
 errtype tng_buttonarray_scroll(TNG *ptng)
 {
-   short code;
+   int16_t code;
    TNG *which_bar;
    code = TNG_BA_LASTKEY(ptng);
    which_bar = NULL;
@@ -551,11 +551,11 @@ errtype tng_buttonarray_scroll(TNG *ptng)
    return(OK);
 }
 
-errtype tng_buttonarray_move(TNG *ptng, short code)
+errtype tng_buttonarray_move(TNG *ptng, int16_t code)
 {
    TNG *hbar, *vbar;
-   int a,b;
-   int i,j;
+   int32_t a,b;
+   int32_t i,j;
    hbar = TNG_BA(ptng)->hscroll_tng;
    vbar = TNG_BA(ptng)->vscroll_tng;
    a = TNG_BA_LSEL(ptng).x;
@@ -616,7 +616,7 @@ errtype tng_buttonarray_move(TNG *ptng, short code)
 }
 
 // -----------------------------
-errtype tng_buttonarray_addbutton_at(TNG *ptng, int type, void *disp_data, int coord_x, int coord_y)
+errtype tng_buttonarray_addbutton_at(TNG *ptng, int32_t type, void *disp_data, int32_t coord_x, int32_t coord_y)
 {
    if ((coord_x < 0) || (coord_y < 0))
    {
@@ -629,9 +629,9 @@ errtype tng_buttonarray_addbutton_at(TNG *ptng, int type, void *disp_data, int c
    return(OK);
 }
 
-errtype tng_buttonarray_addbutton(TNG *ptng, int type, void *disp_data)
+errtype tng_buttonarray_addbutton(TNG *ptng, int32_t type, void *disp_data)
 {
-   int i,j;
+   int32_t i,j;
    for (j=0; j<TNG_BA_MSIZE(ptng).y; j++)
    {
       for (i=0; i<TNG_BA_MSIZE(ptng).x; i++)
@@ -647,7 +647,7 @@ errtype tng_buttonarray_addbutton(TNG *ptng, int type, void *disp_data)
    return(ERR_RANGE);
 }
 
-errtype tng_buttonarray_setoffset(TNG *ptng, int offset_x, int offset_y)
+errtype tng_buttonarray_setoffset(TNG *ptng, int32_t offset_x, int32_t offset_y)
 {
    if ((offset_x < 0) || (offset_y < 0))
    {

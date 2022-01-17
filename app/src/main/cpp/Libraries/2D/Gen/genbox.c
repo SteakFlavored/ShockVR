@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 /* draw an unclipped, unfilled rectangle.  does 2 hlines & 2 vlines. */
-void gen_ubox(short left, short top, short right, short bot)
+void gen_ubox(int16_t left, int16_t top, int16_t right, int16_t bot)
 {
    if (left<=(right-2))
       gr_uhline(left, top, right-2);
@@ -46,9 +46,9 @@ void gen_ubox(short left, short top, short right, short bot)
 
 /* draw a clipped, unfilled rectangle.  does 2 clipped hlines and 2 clipped
    vlines.  returns clip code. */
-int gen_box(short left, short top, short right, short bot)
+int32_t gen_box(int16_t left, int16_t top, int16_t right, int16_t bot)
 {
-   int code = CLIP_NONE;
+   int32_t code = CLIP_NONE;
 
    if (left<=(right-2))
       code |= gr_hline(left, top, right-2);

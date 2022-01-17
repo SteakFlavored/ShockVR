@@ -31,14 +31,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------
 //  PROTOTYPES
 //-----------------
-Boolean GetHelpMgr(void);
+bool GetHelpMgr(void);
 pascal void DrawHelp(WindowPtr, int);
 
 //-----------------
 //  GLOBALS
 //-----------------
-int				gCurTopic = 1;
-int				gPictLoaded = -1;
+int32_t				gCurTopic = 1;
+int32_t				gPictLoaded = -1;
 PicHandle		gHelpPictHdl;
 
 
@@ -69,10 +69,10 @@ void AddHelpMenu(void)
 // ------------------------------------------------------------------
 //  Useritem to draw a help pict
 // ------------------------------------------------------------------
-pascal void DrawHelp(WindowPtr dlog, int itemN)
+pascal void DrawHelp(WindowPtr dlog, int32_t itemN)
 {
 	Rect		r,r2;
-	short		itype;
+	int16_t		itype;
 	Handle	hand;
 
 	GetDItem(dlog, itemN, &itype, &hand, &r);
@@ -110,11 +110,11 @@ void ShowShockHelp(void)
 	UserItemUPP 		btnOutlineProcPtr;
 	UserItemUPP		popMenuProcPtr;
 	UserItemUPP		picHelpProcPtr;
-	short					itemhit,itype;
+	int16_t					itemhit,itype;
 	GrafPtr				savePort;
 	Handle				hand;
 	Rect					r;
- 	int					sel;
+ 	int32_t					sel;
 	Point					tempP;
 
 	GetPort(&savePort);
@@ -188,9 +188,9 @@ void ShowShockHelp(void)
 //--------------------------------------------------------------------
 //	  Returns TRUE if the Help Manager is installed.
 //--------------------------------------------------------------------
-Boolean GetHelpMgr(void)
+bool GetHelpMgr(void)
  {
-	long	result;
+	int32_t	result;
 
 	if (!Gestalt(gestaltHelpMgrAttr, &result))
 	 {
@@ -207,9 +207,9 @@ Boolean GetHelpMgr(void)
 // space to it if we are running under System 6
 void PadMenu(MenuHandle menu)
  {
- 	int			temp,i,num,width,largest;
- 	char		str[64];
- 	int			oldFont,oldSize;
+ 	int32_t			temp,i,num,width,largest;
+ 	int8_t		str[64];
+ 	int32_t			oldFont,oldSize;
  	Style		oldStyle;
 
  	if (!HasSystem7)

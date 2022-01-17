@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "GlobalV.h"
 
 //----------------------------------------------------------------------------
-// Function: short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
+// Function: int16_t g3_init(int16_t max_points,int32_t user_x_axis,int32_t user_y_axis,int32_t user_z_axis)
 //
 // Starts up the 3d system, allocating the requested number of points,
 //  installing the divide overflow handler, and setting up the axes
@@ -40,13 +40,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Output:	number actually allocated
 // Side effects:	allocates point array
 //----------------------------------------------------------------------------
-short g3_init(short max_points,int user_x_axis,int user_y_axis,int user_z_axis)
+int16_t g3_init(int16_t max_points,int32_t user_x_axis,int32_t user_y_axis,int32_t user_z_axis)
  {
-  int 	temp_user_y_axis;
- 	long	temp_long;
- 	char	temp_char;
- 	long	allocSize;
-	char 	temp_neg_flags[3]={0,0,0};
+  int32_t 	temp_user_y_axis;
+ 	int32_t	temp_long;
+ 	int8_t	temp_char;
+ 	int32_t	allocSize;
+	int8_t 	temp_neg_flags[3]={0,0,0};
 
 #ifdef stereo_on
 		extn divide_overflow_r3d, proj_div_2
@@ -174,7 +174,7 @@ endif
 
 void g3_start_frame(void)
  {
- 	int				i;
+ 	int32_t				i;
  	g3s_point *pt3;
 
 //get pixel ratio again in case it's changed
@@ -217,9 +217,9 @@ void g3_shutdown(void)
  }
 
 //;does extactly what you would think
-int g3_count_free_points(void)
+int32_t g3_count_free_points(void)
  {
- 	int					i;
+ 	int32_t					i;
  	g3s_point 	*free_p = first_free;
 
  	i=0;
@@ -232,7 +232,7 @@ int g3_count_free_points(void)
  }
 
 // check if all points free. returns number of points lost
-int g3_end_frame(void)
+int32_t g3_end_frame(void)
  {
 #ifdef stereo_on
         mov     _g3d_stereo,0    ; kill stereo for now
@@ -241,9 +241,9 @@ int g3_end_frame(void)
  }
 
 // allocate a list of points
-int g3_alloc_list(int n, g3s_phandle *p)
+int32_t g3_alloc_list(int32_t n, g3s_phandle *p)
  {
- 	int					i;
+ 	int32_t					i;
  	g3s_point 	*cur_ptr;
 
  	if (!first_free) return(0);
@@ -279,9 +279,9 @@ void g3_free_point(g3s_phandle p)      //adds to free list
 
 
 // free the list of points pointed at by esi, count in ecx
-void g3_free_list(int n_points, g3s_phandle *p) 	//adds to free list
+void g3_free_list(int32_t n_points, g3s_phandle *p) 	//adds to free list
  {
- 	int					i;
+ 	int32_t					i;
  	g3s_phandle *gptr;
  	g3s_point 	*tempPtr;
 

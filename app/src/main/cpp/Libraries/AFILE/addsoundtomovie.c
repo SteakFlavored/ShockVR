@@ -40,8 +40,8 @@ void SetInputSpecs(void);
 
 void CreateMySoundTrack(Movie theMovie);
 void CreateSoundDescription(Handle sndHandle, SoundDescriptionHandle	sndDesc,
-							long *sndDataOffset, long *numSamples, long *sndDataSize);
-long GetSndHdrOffset(Handle sndHandle);
+							int32_t *sndDataOffset, int32_t *numSamples, int32_t *sndDataSize);
+int32_t GetSndHdrOffset(Handle sndHandle);
 
 #ifdef ADD_TEXT_TRACK
 void MyCreateTextTrack(Movie theMovie);
@@ -54,10 +54,10 @@ void MyCreateTextTrack(Movie theMovie);
 void main(void)
 {
 	Ptr				p;
-	long				stupid;
+	int32_t				stupid;
 	OSErr			err, result;
 
-	short			sndResNum;
+	int16_t			sndResNum;
 
 	Point			dlgPos = {120,120};
 	StandardFileReply	reply;
@@ -65,7 +65,7 @@ void main(void)
 	FSSpec			outSpec;
 	Str255			name = "\pQT Movie";
 	Rect			r;
-	short			resRefNum;
+	int16_t			resRefNum;
 	Movie			gMovie = 0;			// Our movie, track and media
 
 	printf("\n");
@@ -94,9 +94,9 @@ void main(void)
 	err = OpenMovieFile(&reply.sfFile, &resRefNum, fsRdPerm);
 	if (err == noErr)
 	{
-		short 		movieResID = 0;		// get first movie
+		int16_t 		movieResID = 0;		// get first movie
 		Str255 		movieName;
-		Boolean 		wasChanged;
+		bool 		wasChanged;
 
 		err = NewMovieFromFile(&gMovie, resRefNum, &movieResID,
 						movieName, newMovieActive, &wasChanged);
@@ -172,9 +172,9 @@ void CreateMySoundTrack(Movie theMovie)
 	Media 					theMedia;
 	Handle					sndHandle = nil;
 	SoundDescriptionHandle	sndDesc = nil;
-	long 					sndDataOffset;
-	long 					sndDataSize;
-	long 					numSamples;
+	int32_t 					sndDataOffset;
+	int32_t 					sndDataSize;
+	int32_t 					numSamples;
 	OSErr					err = noErr;
 
 	sndHandle = GetIndResource ('snd ', 1);
@@ -210,14 +210,14 @@ void CreateMySoundTrack(Movie theMovie)
 
 //----------------------------------------------------------------
 void CreateSoundDescription(Handle sndHandle, SoundDescriptionHandle	sndDesc,
-							long *sndDataOffset, long *numSamples, long *sndDataSize)
+							int32_t *sndDataOffset, int32_t *numSamples, int32_t *sndDataSize)
 {
-	long					sndHdrOffset = 0;
-	long					sampleDataOffset;
+	int32_t					sndHdrOffset = 0;
+	int32_t					sampleDataOffset;
 	SoundHeaderPtr 		sndHdrPtr = nil;
-	long					numFrames;
-	long					samplesPerFrame;
-	long					bytesPerFrame;
+	int32_t					numFrames;
+	int32_t					samplesPerFrame;
+	int32_t					bytesPerFrame;
 	SignedByte			sndHState;
 	SoundDescriptionPtr	sndDescPtr;
 
@@ -288,26 +288,26 @@ typedef SndCommand *SndCmdPtr;
 
 typedef struct
 {
-	short 			format;
-	short 			numSynths;
+	int16_t 			format;
+	int16_t 			numSynths;
 } Snd1Header, *Snd1HdrPtr, **Snd1HdrHndl;
 
 typedef struct
 {
-	short 			format;
-	short 			refCount;
+	int16_t 			format;
+	int16_t 			refCount;
 } Snd2Header, *Snd2HdrPtr, **Snd2HdrHndl;
 typedef struct
 {
-	short 			synthID;
-	long 			initOption;
+	int16_t 			synthID;
+	int32_t 			initOption;
 } SynthInfo, *SynthInfoPtr;
 
 
-long GetSndHdrOffset (Handle sndHandle)
+int32_t GetSndHdrOffset (Handle sndHandle)
 {
-	short	howManyCmds;
-	long		sndOffset  = 0;
+	int16_t	howManyCmds;
+	int32_t		sndOffset  = 0;
 	Ptr		sndPtr;
 
 	if (sndHandle == nil) return 0;
@@ -316,7 +316,7 @@ long GetSndHdrOffset (Handle sndHandle)
 
 	if ((*(Snd1HdrPtr)sndPtr).format == firstSoundFormat)
 	{
-		short synths = ((Snd1HdrPtr)sndPtr)->numSynths;
+		int16_t synths = ((Snd1HdrPtr)sndPtr)->numSynths;
 		sndPtr += sizeof(Snd1Header) + (sizeof(SynthInfo) * synths);
 	}
 	else
@@ -324,7 +324,7 @@ long GetSndHdrOffset (Handle sndHandle)
 		sndPtr += sizeof(Snd2Header);
 	}
 
-	howManyCmds = *(short *)sndPtr;
+	howManyCmds = *(int16_t *)sndPtr;
 
 	sndPtr += sizeof(howManyCmds);
 

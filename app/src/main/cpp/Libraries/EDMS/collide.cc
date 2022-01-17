@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Header: n:/project/lib/src/edms/RCS/collide.cc 1.3 1994/04/20 18:44:14 roadkill Exp $
@@ -39,13 +39,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Each <x,y> bin in the grid contains (possibly) object n if
 // data[x][y] & (1 << n) != 0.
 //
-unsigned int	data[ EDMS_DATA_SIZE ][ EDMS_DATA_SIZE ];
+uint32_t	data[ EDMS_DATA_SIZE ][ EDMS_DATA_SIZE ];
 
 
 //	Constants for the fixpoint...
 //	=============================
-const int	collision_max = EDMS_DATA_SIZE - 1;
-extern int  EDMS_integrating;
+const int32_t	collision_max = EDMS_DATA_SIZE - 1;
+extern int32_t  EDMS_integrating;
 
 //////////////////////////////
 //
@@ -53,17 +53,17 @@ extern int  EDMS_integrating;
 // will both call.  When I can check out the appropriate files, they'll turn
 // into macros.
 //
-void generic_write_object (int object, EDMS_Argblock_Pointer state)
+void generic_write_object (int32_t object, EDMS_Argblock_Pointer state)
 {
    extern void	( *EDMS_off_playfield )( physics_handle caller );
 
    Q q_hash_x = hash_scale*state[object][DOF_X][0];
    Q q_hash_y = hash_scale*state[object][DOF_Y][0];
 
-	unsigned int obit = object_bit( object );
+	uint32_t obit = object_bit( object );
 
-   int hash_x = (q_hash_x).to_int();	     		//The floor should be a function
-	int hash_y = (q_hash_y).to_int();	     		//that returns the edges of the ref. squares...
+   int32_t hash_x = (q_hash_x).to_int();	     		//The floor should be a function
+	int32_t hash_y = (q_hash_y).to_int();	     		//that returns the edges of the ref. squares...
 
 	if ((hash_x > 1) && (hash_y > 1) &&
        (hash_x < collision_max) && (hash_y < collision_max ))
@@ -80,21 +80,21 @@ void generic_write_object (int object, EDMS_Argblock_Pointer state)
       write_object_bit (hash_x + 1, hash_y + 1, obit);
 	}
 	else
-   {  
+   {
       //	End of slowness, and inform the world that something stinks in Denmark...
       //	-------------------------------------------------------------------------
 //      mout << "Collide...\n";
       EDMS_off_playfield( on2ph[object] );
-   }						    
+   }
 }
 
-void write_object (int object)
+void write_object (int32_t object)
 {
 //   mout << "Write A\n";
    generic_write_object (object, A);
 }
 
-void state_write_object (int object)
+void state_write_object (int32_t object)
 {
 //   mout << "Write S\n";
    generic_write_object (object, S);
@@ -107,15 +107,15 @@ void state_write_object (int object)
 // And here's a generic function for delete_object.
 //
 
-void generic_delete_object (int object, EDMS_Argblock_Pointer state)
+void generic_delete_object (int32_t object, EDMS_Argblock_Pointer state)
 {
    Q q_hash_x = hash_scale*state[object][DOF_X][0];
    Q q_hash_y = hash_scale*state[object][DOF_Y][0];
 
-	unsigned int obit = object_bit( object );
+	uint32_t obit = object_bit( object );
 
-   int hash_x = (q_hash_x).to_int();	     		//The floor should be a function
-	int hash_y = (q_hash_y).to_int();	     		//that returns the edges of the ref. squares...
+   int32_t hash_x = (q_hash_x).to_int();	     		//The floor should be a function
+	int32_t hash_y = (q_hash_y).to_int();	     		//that returns the edges of the ref. squares...
 
 // AAAAAhhhhhhhhh...
 // mout << "DA" << object << ": (" << hash_x << ", " << hash_y << ")\n";
@@ -148,13 +148,13 @@ void generic_delete_object (int object, EDMS_Argblock_Pointer state)
    }
 }
 
-void delete_object (int object)
+void delete_object (int32_t object)
 {
 //   mout << "Delete A\n";
    generic_delete_object (object, A);
 }
 
-void state_delete_object (int object)
+void state_delete_object (int32_t object)
 {
 //   mout << "Delete S\n";
    generic_delete_object (object, S);
@@ -167,15 +167,15 @@ void state_delete_object (int object)
 // <hx, hy>.  This is a handy way to find out which of the three objects with
 // a given object bit is actually meant.
 
-bool object_check_hash (int object, int hx, int hy)
+bool object_check_hash (int32_t object, int32_t hx, int32_t hy)
 {
    // We use A if we are in the middle of integrating, and the object
    // is not asleep.
 
    EDMS_Argblock_Pointer state = (A_is_active && no_no_not_me[object]) ? A : S;
 
-   int my_hx = (hash_scale * state[object][DOF_X][0]).to_int();
-   int my_hy = (hash_scale * state[object][DOF_Y][0]).to_int();
+   int32_t my_hx = (hash_scale * state[object][DOF_X][0]).to_int();
+   int32_t my_hy = (hash_scale * state[object][DOF_Y][0]).to_int();
 
    return (abs (my_hx - hx) <= 1 && abs (my_hy - hy) <= 1);
 }
@@ -196,7 +196,7 @@ bool object_check_hash (int object, int hx, int hy)
 
 //	Turn it off...
 //	==============
-void reset_collisions( int object )
+void reset_collisions( int32_t object )
 {
    //	Are we really inactivated?
    //	--------------------------
@@ -210,7 +210,7 @@ void reset_collisions( int object )
 
 //	Turn it on...
 //	=============
-void exclude_from_collisions( int guy_1, int guy_2 )
+void exclude_from_collisions( int32_t guy_1, int32_t guy_2 )
 {
 	//	Are we ready?
 	//	-------------
@@ -221,7 +221,7 @@ void exclude_from_collisions( int guy_1, int guy_2 )
 	}
 	I[guy_1][IDOF_COLLIDE] = guy_2;
 	I[guy_2][IDOF_COLLIDE] = guy_1;
-	
+
 	// Viola!
 }
 
@@ -231,12 +231,12 @@ void exclude_from_collisions( int guy_1, int guy_2 )
 //	Read'n'...
 //	==========
 
-unsigned int    test_bitmask; // used to be clean_test_bit
+uint32_t    test_bitmask; // used to be clean_test_bit
 
 
 //	Basically subtract out the bit representing the calling object...
 //	=================================================================
-int are_you_there( int object )
+int32_t are_you_there( int32_t object )
 {
 	return (test_bitmask = data[ (hash_scale*A[object][DOF_X][0]).to_int() ][ (hash_scale*A[object][DOF_Y][0]).to_int() ]);
 }
@@ -249,9 +249,9 @@ int are_you_there( int object )
 #ifdef NOPE
 //	Subtract out the bit representing the calling object, then compare notes...
 //	===========================================================================
-int check_for_hit( int other_object )
+int32_t check_for_hit( int32_t other_object )
 {
-// unsigned int	test_bit = data[ (hash_scale*A[object][DOF_X][0]).to_int() ][ (hash_scale*A[object][DOF_Y][0]).to_int() ];
+// uint32_t	test_bit = data[ (hash_scale*A[object][DOF_X][0]).to_int() ][ (hash_scale*A[object][DOF_Y][0]).to_int() ];
 
 	return 	clean_test_bit & object_bit( other_object );
 
@@ -268,7 +268,7 @@ extern "C" {
 
 void spew_collision_table ()
 {
-   int i, j;
+   int32_t i, j;
 
    for (i = 0; i < collision_max; i++)
    {
@@ -276,7 +276,7 @@ void spew_collision_table ()
       {
          if (data[i][j])
          {
-            int bit, mask;
+            int32_t bit, mask;
 
             for (bit = 0, mask = 1; bit < 32; bit++, mask <<= 1)
             {

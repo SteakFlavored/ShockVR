@@ -43,14 +43,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------
 //  PROTOTYPES
 //-------------------
-bool audiolog_cancel_func(short , ulong , void* );
+bool audiolog_cancel_func(int16_t , uint32_t , void* );
 
 //-------------------
 //  GLOBALS
 //-------------------
-int 		curr_alog = -1;
-//int 		alog_fn = -1;
-uchar 	audiolog_setting = 1;
+int32_t 		curr_alog = -1;
+//int32_t 		alog_fn = -1;
+uint8_t 	audiolog_setting = 1;
 Movie 	alog = NULL;
 
 // this can become RES_alog_email0 once there is one
@@ -61,7 +61,7 @@ Movie 	alog = NULL;
 
 //#define AUDIOLOG_BLOCK_LEN MOVIE_DEFAULT_BLOCKLEN
 //#define AUDIOLOG_BUFFER_SIZE  (64 * 1024)
-//uchar audiolog_buffer[AUDIOLOG_BUFFER_SIZE];
+//uint8_t audiolog_buffer[AUDIOLOG_BUFFER_SIZE];
 
 
 //-------------------------------------------------------------
@@ -80,16 +80,16 @@ errtype audiolog_init()
 //-------------------------------------------------------------
 //  Play an audiolog or bark file.
 //-------------------------------------------------------------
-errtype audiolog_play(int email_id)
+errtype audiolog_play(int32_t email_id)
 {
-	extern uchar	curr_alog_vol;
-	extern char	which_lang;
+	extern uint8_t	curr_alog_vol;
+	extern int8_t	which_lang;
 //	snd_digi_parms *sdp;
-//	int new_alog_fn;
-	char				buff[64];
+//	int32_t new_alog_fn;
+	int8_t				buff[64];
 	FSSpec			fSpec;
 	OSErr			err;
-	short 			movieResFile;
+	int16_t 			movieResFile;
 	Fixed				mr;
 	Size				dummy;
 
@@ -137,9 +137,9 @@ errtype audiolog_play(int email_id)
 	err = OpenMovieFile(&fSpec, &movieResFile, fsRdPerm);
 	if (err == noErr)
 	{
-		short 		movieResID = 0;
+		int16_t 		movieResID = 0;
 		Str255 		movieName;
-		Boolean 		wasChanged;
+		bool 		wasChanged;
 																			// Load the 'moov' resource.
 		err = NewMovieFromFile(&alog, movieResFile, &movieResID,
 						movieName, newMovieActive, &wasChanged);
@@ -195,9 +195,9 @@ errtype audiolog_play(int email_id)
    return(OK);
 }
 
-char secret_pending_hack;
-extern Boolean	gDeadPlayerQuit;
-extern Boolean	gPlayingGame;
+int8_t secret_pending_hack;
+extern bool	gDeadPlayerQuit;
+extern bool	gPlayingGame;
 
 //-------------------------------------------------------------
 //  Stop a current audiolog from playing.
@@ -207,7 +207,7 @@ void audiolog_stop()
 	// double check
 	if (alog != NULL)
 	{
-//		extern uchar curr_vol_lev;
+//		extern uint8_t curr_vol_lev;
 
 		// waste it!
 		//MovieKill(palog);
@@ -241,7 +241,7 @@ void audiolog_stop()
 //-------------------------------------------------------------
 errtype audiolog_loop_callback()
 {
-//   extern uchar curr_vol_lev;
+//   extern uint8_t curr_vol_lev;
 
 	// check on things
 	if (alog != NULL)
@@ -278,7 +278,7 @@ fix GetFixTimer()
 // if email_id is -1, returns whether or not anything is playing
 // if email_id != -1, matches whether or not that specific email_id is playing
 //-------------------------------------------------------------
-bool audiolog_playing(int email_id)
+bool audiolog_playing(int32_t email_id)
 {
 	if (email_id == -1)
 		return(curr_alog != -1);
@@ -289,7 +289,7 @@ bool audiolog_playing(int email_id)
 //-------------------------------------------------------------
 //  Start playing a bark file.
 //-------------------------------------------------------------
-errtype audiolog_bark_play(int bark_id)
+errtype audiolog_bark_play(int32_t bark_id)
 {
 	if (global_fullmap->cyber)
 		return(ERR_NOEFFECT);
@@ -300,7 +300,7 @@ errtype audiolog_bark_play(int bark_id)
 //-------------------------------------------------------------
 //  Stop playing audiolog (in response to a hotkey).
 //-------------------------------------------------------------
-bool audiolog_cancel_func(short , ulong , void* )
+bool audiolog_cancel_func(int16_t , uint32_t , void* )
 {
 	audiolog_stop();
 	return(TRUE);

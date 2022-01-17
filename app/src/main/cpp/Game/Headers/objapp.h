@@ -133,7 +133,7 @@ typedef struct {
 // i hate cpp, no sizeof() in #if, so we have to do this
 #define SIZEOF_AN_OBJREFSTATEINFO 1
 typedef struct {
-	uchar flags;
+	uint8_t flags;
 } ObjRefStateInfo;
 
 #define ObjRefStateBinSetNull(bin) PointSetNull((bin).sq)
@@ -142,15 +142,15 @@ typedef struct {
 // i hate cpp, no sizeof() in #if, so we have to do this
 #define SIZEOF_AN_OBJLOC 8
 typedef struct {
-	ushort x, y;								// high 8 bits: what square      low 8 bits: where within square
-   ubyte z;
-   ubyte p, h, b;
+	uint16_t x, y;								// high 8 bits: what square      low 8 bits: where within square
+   uint8_t z;
+   uint8_t p, h, b;
 } ObjLoc;
 
 #define OBJ_LOC_BIN_X(oloc) ((oloc).x >> 8)
 #define OBJ_LOC_BIN_Y(oloc) ((oloc).y >> 8)
-#define OBJ_LOC_FINE_X(oloc) ((ushort)((oloc).x & 0xFF))
-#define OBJ_LOC_FINE_Y(oloc) ((ushort)((oloc).y & 0xFF))
+#define OBJ_LOC_FINE_X(oloc) ((uint16_t)((oloc).x & 0xFF))
+#define OBJ_LOC_FINE_Y(oloc) ((uint16_t)((oloc).y & 0xFF))
 #ifdef SAFE_FIX
 #define OBJ_LOC_VAL_TO_FIX(value) (fix_make((value >> 8), ((value & 0xFF) << 8)))
 #else
@@ -158,23 +158,23 @@ typedef struct {
 #endif
 
 typedef struct {
-	char ph;
-   byte type;
-   short current_hp;
-   ubyte make_info;                    // maker, as in Zortech MK III laser rifle or whatever
-   ubyte current_frame;                // animdata
-   ubyte time_remainder;               // animdata
-   uchar inst_flags;                   //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
+	int8_t ph;
+   int8_t type;
+   int16_t current_hp;
+   uint8_t make_info;                    // maker, as in Zortech MK III laser rifle or whatever
+   uint8_t current_frame;                // animdata
+   uint8_t time_remainder;               // animdata
+   uint8_t inst_flags;                   //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
 } ObjInfo;
 
 typedef struct {
-	int ph;
-   byte type;
-   short current_hp;
-   ubyte make_info;                    // maker, as in Zortech MK III laser rifle or whatever
-   ubyte current_frame;                // animdata
-   ubyte time_remainder;               // animdata
-   uchar inst_flags;                   //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
+	int32_t ph;
+   int8_t type;
+   int16_t current_hp;
+   uint8_t make_info;                    // maker, as in Zortech MK III laser rifle or whatever
+   uint8_t current_frame;                // animdata
+   uint8_t time_remainder;               // animdata
+   uint8_t inst_flags;                   //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
 } old_ObjInfo;
 
 #ifdef HASH_OBJECTS
@@ -208,11 +208,11 @@ typedef struct {
 // i love cpp with an unholy, inhuman, and altogether pathetic way
 
 #if (SIZEOF_AN_OBJREFSTATEBIN==4)
-#define ObjRefStateBinEqual(bin1,bin2) (*((int *)(&bin1))==*((int *)(&bin2)))
+#define ObjRefStateBinEqual(bin1,bin2) (*((int32_t *)(&bin1))==*((int32_t *)(&bin2)))
 #elif (SIZEOF_AN_OBJREFSTATEBIN==2)
-#define ObjRefStateBinEqual(bin1,bin2) (*((short *)(&bin1))==*((short *)(&bin2)))
+#define ObjRefStateBinEqual(bin1,bin2) (*((int16_t *)(&bin1))==*((int16_t *)(&bin2)))
 #elif (SIZEOF_AN_OBJREFSTATEBIN==1)
-#define ObjRefStateBinEqual(bin1,bin2) (*((char *)(&bin1))==*((char *)(&bin2)))
+#define ObjRefStateBinEqual(bin1,bin2) (*((int8_t *)(&bin1))==*((int8_t *)(&bin2)))
 #else
 #define ObjRefStateBinEqual(bin1,bin2) (!memcmp(&(bin1),&(bin2),sizeof(ObjRefStateBin)))
 #endif
@@ -220,11 +220,11 @@ typedef struct {
 
 #ifndef NO_OBJ_REF_STATE_INFO
 # if (SIZEOF_AN_OBJREFSTATEINFO==4)
-# define ObjRefStateInfoEqual(info1,info2) (*((int *)(&info1))==*((int *)(&info2)))
+# define ObjRefStateInfoEqual(info1,info2) (*((int32_t *)(&info1))==*((int32_t *)(&info2)))
 # elif (SIZEOF_AN_OBJREFSTATEINFO==2)
-# define ObjRefStateInfoEqual(info1,info2) (*((short *)(&info1))==*((short *)(&info2)))
+# define ObjRefStateInfoEqual(info1,info2) (*((int16_t *)(&info1))==*((int16_t *)(&info2)))
 # elif (SIZEOF_AN_OBJREFSTATEINFO==1)
-# define ObjRefStateInfoEqual(info1,info2) (*((char *)(&info1))==*((char *)(&info2)))
+# define ObjRefStateInfoEqual(info1,info2) (*((int8_t *)(&info1))==*((int8_t *)(&info2)))
 # else
 # define ObjRefStateInfoEqual(info1,info2) (!memcmp(&(info1),&(info2),sizeof(ObjRefStateInfo)))
 # endif
@@ -232,11 +232,11 @@ typedef struct {
 #endif
 
 #if (SIZEOF_AN_OBJLOC==4)
-#define ObjLocEqual(bin1, bin2)        (*((int *)(&bin1))==*((int *)(&bin2)))
+#define ObjLocEqual(bin1, bin2)        (*((int32_t *)(&bin1))==*((int32_t *)(&bin2)))
 #elif (SIZEOF_AN_OBJLOC==2)
-#define ObjLocEqual(bin1, bin2)        (*((short *)(&bin1))==*((short *)(&bin2)))
+#define ObjLocEqual(bin1, bin2)        (*((int16_t *)(&bin1))==*((int16_t *)(&bin2)))
 #elif (SIZEOF_AN_OBJLOC==1)
-#define ObjLocEqual(bin1, bin2)        (*((char *)(&bin1))==*((char *)(&bin2)))
+#define ObjLocEqual(bin1, bin2)        (*((int8_t *)(&bin1))==*((int8_t *)(&bin2)))
 #else
 #define ObjLocEqual(bin1, bin2)        (!memcmp(&(bin1),&(bin2),sizeof(ObjLoc)))
 #endif

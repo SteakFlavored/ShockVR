@@ -54,7 +54,7 @@ frc *hack_cam_frcs[MAX_CAMERAS_VISIBLE];
 grs_canvas hack_cam_canvases[MAX_CAMERAS_VISIBLE], static_canvas;
 grs_bitmap *hack_cam_bitmaps[MAX_CAMERAS_VISIBLE], *static_bitmap;
 cams hack_cam;
-char camera_map[NUM_HACK_CAMERAS];
+int8_t camera_map[NUM_HACK_CAMERAS];
 ObjID hack_frc_objs[MAX_CAMERAS_VISIBLE];
 ObjID hack_cam_objs[NUM_HACK_CAMERAS];
 ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
@@ -74,20 +74,20 @@ ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
 #define FRAME_SKIP_MASK 0x03
 #define FRAME_PARITY_SHF 2 // skip every 4 frames when rendering screen images
 
-uchar hack_cameras_needed = 0;
-char curr_hack_cam = 0;
-ulong hack_cam_fr_count = 0;
+uint8_t hack_cameras_needed = 0;
+int8_t curr_hack_cam = 0;
+uint32_t hack_cam_fr_count = 0;
 bool screen_static_drawn = FALSE;
 
 // -----------
 // PROTOTYPES
 //------------
-int hack_camera_draw_callback(grs_canvas*, grs_bitmap*, int, int, int );
+int32_t hack_camera_draw_callback(grs_canvas*, grs_bitmap*, int32_t, int32_t, int32_t );
 void update_cspace_tiles(void);
-void tile_hit(int mx, int my);
+void tile_hit(int32_t mx, int32_t my);
 
 
-int hack_camera_draw_callback(grs_canvas*, grs_bitmap*, int, int, int )
+int32_t hack_camera_draw_callback(grs_canvas*, grs_bitmap*, int32_t, int32_t, int32_t )
 {
 //   gr_push_canvas(&hack_cam_canvases[curr_hack_cam]);
 //   gr_bitmap(bm,0,0);
@@ -95,13 +95,13 @@ int hack_camera_draw_callback(grs_canvas*, grs_bitmap*, int, int, int )
    return(FALSE);
 }
 
-typedef int (*frdraw)(void *dstc, void *dstbm, int x, int y, int flg);
+typedef int32_t (*frdraw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg);
 
 errtype init_hack_cameras()
 {
-   int i;
+   int32_t i;
    grs_canvas *tmp_cnv;
-   uchar *tmp_mem;
+   uint8_t *tmp_mem;
 
    static_bitmap = gr_alloc_bitmap(BMT_FLAT8, 0, STATIC_WIDTH, STATIC_HEIGHT);
    gr_make_canvas(static_bitmap, &static_canvas);
@@ -119,7 +119,7 @@ errtype init_hack_cameras()
 
 //      Warning(("start_mem = %d, BIG_HACKCAM = %d!\n",start_mem,BIG_HACKCAM_THRESHOLD));
 //      Warning(("HACK_CAMERA_WID = %d!\n",HACK_CAMERA_WIDTH));
-      tmp_mem = (uchar *)NewPtr(HACK_CAMERA_WIDTH*HACK_CAMERA_HEIGHT);
+      tmp_mem = (uint8_t *)NewPtr(HACK_CAMERA_WIDTH*HACK_CAMERA_HEIGHT);
       hack_cam_frcs[i] = fr_place_view(FR_NEWVIEW, &hack_cam, tmp_mem, FR_DOUBLEB_MASK|FR_HACKCAM_FLAG,
                                          0, 0, HACK_CAMERA_X, HACK_CAMERA_Y, HACK_CAMERA_WIDTH, HACK_CAMERA_HEIGHT);
       fr_set_callbacks(hack_cam_frcs[i], (frdraw)hack_camera_draw_callback, NULL, NULL);
@@ -143,7 +143,7 @@ errtype init_hack_cameras()
 
 errtype shutdown_hack_cameras()
 {
-   int i;
+   int32_t i;
    for (i=0; i < MAX_CAMERAS_VISIBLE; i++)
    {
       fr_free_view(hack_cam_frcs[i]);
@@ -154,7 +154,7 @@ errtype shutdown_hack_cameras()
 
 errtype do_screen_static()
 {
-   extern void draw_full_static(grs_bitmap *stat_dest, int c_base);
+   extern void draw_full_static(grs_bitmap *stat_dest, int32_t c_base);
    if (!screen_static_drawn)
       draw_full_static(static_bitmap, GRAY_8_BASE);
    return(OK);
@@ -162,7 +162,7 @@ errtype do_screen_static()
 
 errtype render_hack_cameras()
 {
-   int i, count;
+   int32_t i, count;
 
    // efficiency good....
    if (hack_cameras_needed==0) return OK;
@@ -199,16 +199,16 @@ errtype render_hack_cameras()
 // click on a hack-camera-ed screen.  Note that we always relinquish
 // back to the player, if this is insufficient it's easy to store off
 // some of the camera data.
-uchar hack_takeover = 0;
-int hack_eye; // the fierce pirate
+uint8_t hack_takeover = 0;
+int32_t hack_eye; // the fierce pirate
 
-errtype hack_camera_takeover(int hack_cam)
+errtype hack_camera_takeover(int32_t hack_cam)
 {
    LGRect start = {{ -5, -5}, {5,5}};
    extern LGPoint use_cursor_pos;
    LGPoint ucp;
    extern void zoom_rect(LGRect *start, LGRect *end);
-   extern Boolean DoubleSize;
+   extern bool DoubleSize;
    extern LGRect mainview_rect;
    extern LGRect fscrn_rect;
    cams *cam = fr_camera_getdef();
@@ -253,8 +253,8 @@ errtype hack_camera_relinquish()
 
 void update_cspace_tiles(void)
 {
-   int cur_tp, i, j, s, t, x;
-   uchar *tmp_ptr=(uchar *)big_buffer;
+   int32_t cur_tp, i, j, s, t, x;
+   uint8_t *tmp_ptr=(uint8_t *)big_buffer;
    MapElem *mmp;
 
    memset(tmp_ptr,0,64*64);
@@ -304,11 +304,11 @@ void update_cspace_tiles(void)
 #endif
 }
 
-void tile_hit(int mx, int my)
+void tile_hit(int32_t mx, int32_t my)
 {
-   static int lx,ly;
-   static long last_time=0;
-   int dsq=((lx-mx)|(ly-my));
+   static int32_t lx,ly;
+   static int32_t last_time=0;
+   int32_t dsq=((lx-mx)|(ly-my));
    MapElem *mp;
 
    if (dsq||((last_time+(CIT_CYCLE>>2)<*tmd_ticks)))
@@ -334,7 +334,7 @@ errtype render_run(void)
 {
    extern bool view360_render_on;
    extern void view360_render(void);
-   static long last_cspace_update=0;
+   static int32_t last_cspace_update=0;
 
 #ifdef POPUPS_ALLOWED
    if (region_obscured(mainview_region,mainview_region->r) == UNOBSCURED)

@@ -34,22 +34,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scrdat.h"
 
 // prototypes
-void gri_build_blend(uchar *base_addr, int blend_fac);
-int gr_free_blend(void);
-bool gr_init_blend(int log_blend_levels);
+void gri_build_blend(uint8_t *base_addr, int32_t blend_fac);
+int32_t gr_free_blend(void);
+bool gr_init_blend(int32_t log_blend_levels);
 
 
 // points to blend_tabs-1 tables, each 64k
-uchar *grd_blend=NULL;
-uchar *grd_half_blend=NULL;
-int grd_log_blend_levels=0;
+uint8_t *grd_blend=NULL;
+uint8_t *grd_half_blend=NULL;
+int32_t grd_log_blend_levels=0;
 
 // blend fac is 0-256, where 0 is all 0, 256 is all 1
-void gri_build_blend(uchar *base_addr, int blend_fac)
+void gri_build_blend(uint8_t *base_addr, int32_t blend_fac)
 {
-   uchar *c=grd_ipal, *cur_addr=base_addr, cols[2][3];
-   int offs, i, j, k;                  /* offset from ipal for data, loop controls */
-   int blend_bar=GR_BLEND_TABLE_RES-blend_fac;        /* remaining blend frac */
+   uint8_t *c=grd_ipal, *cur_addr=base_addr, cols[2][3];
+   int32_t offs, i, j, k;                  /* offset from ipal for data, loop controls */
+   int32_t blend_bar=GR_BLEND_TABLE_RES-blend_fac;        /* remaining blend frac */
 
    for (i=0; i<256; i++)
    {
@@ -75,7 +75,7 @@ void gri_build_blend(uchar *base_addr, int blend_fac)
 }
 
 /* frees the blending table. returns 0 if ok, nonzero if error. */
-int gr_free_blend(void)
+int32_t gr_free_blend(void)
 {
    if (grd_blend==NULL)
       return 1;
@@ -86,16 +86,16 @@ int gr_free_blend(void)
 }
 
 // at the moment, log_blend_levels = 0 deallocates the blend, ie. runs free_blend
-bool gr_init_blend(int log_blend_levels)
+bool gr_init_blend(int32_t log_blend_levels)
 {
    if (log_blend_levels>0)
    {
-      int fac=GR_BLEND_TABLE_RES>>log_blend_levels;   /* base blend factor*/
-      int tab_cnt=(1<<log_blend_levels)-1, i;         /* number of tables, loop control */
+      int32_t fac=GR_BLEND_TABLE_RES>>log_blend_levels;   /* base blend factor*/
+      int32_t tab_cnt=(1<<log_blend_levels)-1, i;         /* number of tables, loop control */
 
       if (grd_blend!=NULL) if (!gr_free_blend()) return FALSE; /* something went horribly wrong */
-//	   if ((grd_blend=(uchar *) gr_malloc(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return FALSE; /* x 64k tables */
-	   if ((grd_blend=(uchar *) NewPtr(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return FALSE; /* x 64k tables */
+//	   if ((grd_blend=(uint8_t *) gr_malloc(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return FALSE; /* x 64k tables */
+	   if ((grd_blend=(uint8_t *) NewPtr(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return FALSE; /* x 64k tables */
 	   for (i=0; i<tab_cnt; i++)
 	      gri_build_blend(grd_blend+(i*GR_BLEND_TABLE_SIZE),fac*(i+1));
       grd_log_blend_levels=log_blend_levels;

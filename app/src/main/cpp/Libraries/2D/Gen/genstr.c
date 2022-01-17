@@ -59,20 +59,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 
-int gen_font_string (grs_font *f, char *s, short x0, short y0)
+int32_t gen_font_string (grs_font *f, int8_t *s, int16_t x0, int16_t y0)
 {
 	grs_bitmap bm;        /* character bitmap */
-	short *offset_tab;		/* table of character offsets */
-	uchar *char_buf;			/* font pixel data */
-	short offset;				  /* offset of current character */
-	short x, y;					 	/* position of current character */
-	uchar c;						  /* current character */
-	short yok;					  /* current line in t/b clip */
+	int16_t *offset_tab;		/* table of character offsets */
+	uint8_t *char_buf;			/* font pixel data */
+	int16_t offset;				  /* offset of current character */
+	int16_t x, y;					 	/* position of current character */
+	uint8_t c;						  /* current character */
+	int16_t yok;					  /* current line in t/b clip */
 
 	if (x0 > grd_clip.right || y0 > grd_clip.bot)
 	  return CLIP_NONE;
 
-	char_buf = (uchar *)f + f->buf;
+	char_buf = (uint8_t *)f + f->buf;
 	offset_tab = f->off_tab;
 	gr_init_bm (&bm, NULL, (f->id==0xcccc)? BMT_FLAT8: BMT_MONO,
 					BMF_TRANS, 0, f->h);
@@ -90,7 +90,7 @@ int gen_font_string (grs_font *f, char *s, short x0, short y0)
 		 yok = (y >= grd_clip.top && y+f->h <= grd_clip.bot);
 
 		/* line coming into range */
-		while ((c= (uchar)(*s++)) != CHAR_SOFTCR && c != '\n') {
+		while ((c= (uint8_t)(*s++)) != CHAR_SOFTCR && c != '\n') {
 	 		if (c == '\0')
 				return CLIP_NONE;
 			 if (c>f->max || c<f->min || c==CHAR_SOFTSP)

@@ -6,18 +6,18 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Sets up everything needed to manufacture a biped with initial state vector
-//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the 
+//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the
 //	object number, or else a negative error code (see Soliton.CPP for error handling and codes).
 //	============================================================================================
 
@@ -37,15 +37,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //	Prototypes
 //	==========
-void		globalize( int model_number, Q &X, Q &Y, Q &Z );
-extern void	biped_idof( int object );
+void		globalize( int32_t model_number, Q &X, Q &Y, Q &Z );
+extern void	biped_idof( int32_t object );
 
 //	State...
 //	========
 extern EDMS_Argblock_Pointer	A;
 extern Q	S[MAX_OBJ][7][4],
 		I[MAX_OBJ][DOF_MAX];
-extern int	no_no_not_me[MAX_OBJ];
+extern int32_t	no_no_not_me[MAX_OBJ];
 
 //	For rendering...
 //	================
@@ -53,9 +53,9 @@ extern int	no_no_not_me[MAX_OBJ];
 
 //	Functions...
 //	============
-extern void	( *idof_functions[MAX_OBJ] )( int ),
-		( *equation_of_motion[MAX_OBJ][7] )( int ),
-		null_function( int dummy );
+extern void	( *idof_functions[MAX_OBJ] )( int32_t ),
+		( *equation_of_motion[MAX_OBJ][7] )( int32_t ),
+		null_function( int32_t dummy );
 
 extern Q	*utility_pointer[MAX_OBJ];
 
@@ -64,7 +64,7 @@ extern Q	*utility_pointer[MAX_OBJ];
 
 //	Here goes...
 //	============
-int make_biped( Q init_state[6][3], Q params[10], Q skeleton_pointer[] ) {
+int32_t make_biped( Q init_state[6][3], Q params[10], Q skeleton_pointer[] ) {
 
 
 
@@ -77,23 +77,23 @@ extern Q	save_r_w_r[MAX_OBJ][3],
 
 //	Counters...
 //	===========
-extern int	not_yet1[MAX_OBJ],
+extern int32_t	not_yet1[MAX_OBJ],
 		not_yet2[MAX_OBJ],
 		not_yet3[MAX_OBJ];
 
 
-		
-		
+
+
 //	Have some variables...
 //	======================
-int	object_number = -1,						//Three guesses...
+int32_t	object_number = -1,						//Three guesses...
 	error_code = -1;						//Guilty until...
 Q	temp_r[3] = {0,0,0},
 	temp_l[3] = {0,0,0};
 
 //	We need ignorable coordinates...
 //	================================
-extern void null_function( int );
+extern void null_function( int32_t );
 
 
 //	First find out which object we're going to be...
@@ -108,16 +108,16 @@ extern void null_function( int );
 
 //		Now we can create the biped:  first dump the initial state vector...
 //		=====================================================================
-		for ( int coord = 0; coord < 6; coord++ ) {
-		for ( int deriv = 0; deriv < 3;	deriv++ ) {
-		S[object_number][coord][deriv] = 
+		for ( int32_t coord = 0; coord < 6; coord++ ) {
+		for ( int32_t deriv = 0; deriv < 3;	deriv++ ) {
+		S[object_number][coord][deriv] =
 		A[object_number][coord][deriv] = init_state[coord][deriv];	//For collisions...
 		}}
 
 //		Put in the appropriate bipedal parameters...
 //		===========================================
-		for ( int copy = 0; copy < DOF_MAX; copy++ ) I[object_number][copy] = 0;
-		for ( int copy = 0; copy < 10; copy++ ) {
+		for ( int32_t copy = 0; copy < DOF_MAX; copy++ ) I[object_number][copy] = 0;
+		for ( int32_t copy = 0; copy < 10; copy++ ) {
 		I[object_number][copy + 20] = params[copy];
 		}
 		I[object_number][30] = BIPED;		    			//Hey, you are what you eat.
@@ -166,7 +166,7 @@ extern void null_function( int );
 		temp_l[0] =-I[object_number][24];
 		temp_r[1] = temp_l[1] = 0;
 		temp_r[2] = temp_l[2] = -I[object_number][0];
- 
+
 		globalize( object_number, temp_r[0], temp_r[1], temp_r[2] );
 		globalize( object_number, temp_l[0], temp_r[1], temp_r[2] );
 
@@ -197,7 +197,7 @@ extern void null_function( int );
 		save_r_w_r[object_number][0] = I[object_number][3];
 		save_r_w_r[object_number][1] = I[object_number][4];
 		save_r_w_r[object_number][2] = I[object_number][5];
-		
+
 		save_r_w_l[object_number][0] = I[object_number][6];
 		save_r_w_l[object_number][1] = I[object_number][7];
 		save_r_w_l[object_number][2] = I[object_number][8];
@@ -207,7 +207,7 @@ extern void null_function( int );
 
 //		Set up the hacked updates...
 //		============================
-		for ( int coord = 0; coord < MAX_OBJ; coord++ ) {
+		for ( int32_t coord = 0; coord < MAX_OBJ; coord++ ) {
 		not_yet1[coord] = 0;
 		not_yet2[coord] = 0;
 		not_yet3[coord] = 1;
@@ -218,11 +218,11 @@ extern void null_function( int );
 //		=============================================================
 		idof_functions[object_number] = biped_idof;
 
-		equation_of_motion[object_number][0] = 
-		equation_of_motion[object_number][1] = 
-		equation_of_motion[object_number][2] = 
-		equation_of_motion[object_number][3] = 
-		equation_of_motion[object_number][4] = 
+		equation_of_motion[object_number][0] =
+		equation_of_motion[object_number][1] =
+		equation_of_motion[object_number][2] =
+		equation_of_motion[object_number][3] =
+		equation_of_motion[object_number][4] =
 		equation_of_motion[object_number][5] = null_function;
 
 
@@ -234,7 +234,7 @@ extern void null_function( int );
 //		Things seem okay...
 //		===================
 		error_code = object_number;
-	
+
       // Hey, let's make it exist.
       write_object (object_number);
 	}
@@ -250,18 +250,18 @@ extern void null_function( int );
 
 //	Rotation stuff for initialization...
 //	====================================
-void globalize( int object, Q &X, Q &Y, Q &Z ) {
+void globalize( int32_t object, Q &X, Q &Y, Q &Z ) {
 
 Q	x = X,
 	y = Y,
 	z = Z;
 
-static Q 	cos_alpha, 
+static Q 	cos_alpha,
 		cos_beta,
-		cos_gamma, 
-		sin_alpha, 
+		cos_gamma,
+		sin_alpha,
 		sin_beta,
-		sin_gamma; 
+		sin_gamma;
 
 	sincos( -A[object][3][0], &sin_alpha, &cos_alpha );
 	sincos( -A[object][4][0], &sin_beta, &cos_beta );
@@ -277,7 +277,7 @@ static Q 	cos_alpha,
 
 		Y    =     x*( cos_alpha*sin_gamma )
 		     +  y*( cos_beta*cos_gamma + sin_alpha*sin_beta*sin_gamma )
-		     +  z*( cos_beta*sin_alpha*sin_gamma - cos_gamma*sin_beta );		
+		     +  z*( cos_beta*sin_alpha*sin_gamma - cos_gamma*sin_beta );
 
 		Z    = 	x*( -sin_alpha )
 		     +  y*( cos_alpha*sin_beta )

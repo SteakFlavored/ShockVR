@@ -36,26 +36,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Globals
 //--------------------
-Boolean			gGrayOK = false;
-Boolean			gIgnoreGray = false;
+bool			gGrayOK = false;
+bool			gIgnoreGray = false;
 
 Str255			gDimTitle;
-Boolean			gDimmed;
+bool			gDimmed;
 
 MenuHandle	gPopupMenuHdl;
-short				gPopupSel;
-short				gNewGameSel[4];
+int16_t				gPopupSel;
+int16_t				gNewGameSel[4];
 
 
 //------------------------------------------------------------------------------------
 //  Flash a button.
 //------------------------------------------------------------------------------------
-void FlashButton(WindowPtr dlog, short itemN)
+void FlashButton(WindowPtr dlog, int16_t itemN)
 {
-	short		itype;
+	int16_t		itype;
 	Rect		r;
 	Handle	hand;
-	long		temp;
+	int32_t		temp;
 
 	GetDItem(dlog, itemN, &itype, &hand, &r);
 	HiliteControl((ControlHandle)hand, 1);
@@ -66,9 +66,9 @@ void FlashButton(WindowPtr dlog, short itemN)
 //------------------------------------------------------------------------------------
 //  Modal dialog filter proc to handle standard events.  So far, just handle "Esc" key.
 //------------------------------------------------------------------------------------
-pascal Boolean ShockFilterProc(DialogPtr dlog, EventRecord *evt, short *itemHit)
+pascal bool ShockFilterProc(DialogPtr dlog, EventRecord *evt, int16_t *itemHit)
  {
-	char	key;
+	int8_t	key;
 
 	if ((evt->what==keyDown) || (evt->what==autoKey))
 	{
@@ -94,9 +94,9 @@ pascal Boolean ShockFilterProc(DialogPtr dlog, EventRecord *evt, short *itemHit)
 //------------------------------------------------------------------------------------
 //  Modal alert filter proc to handle the "Save prompt" alert.
 //------------------------------------------------------------------------------------
-pascal Boolean ShockAlertFilterProc(DialogPtr dlog, EventRecord *evt, short *itemHit)
+pascal bool ShockAlertFilterProc(DialogPtr dlog, EventRecord *evt, int16_t *itemHit)
  {
-	char	key;
+	int8_t	key;
 
 	if ((evt->what==keyDown) || (evt->what==autoKey))
 	{
@@ -133,9 +133,9 @@ pascal Boolean ShockAlertFilterProc(DialogPtr dlog, EventRecord *evt, short *ite
 //------------------------------------------------------------------------------------
 //  User item to draw a round rectangle around an OK button.
 //------------------------------------------------------------------------------------
-pascal void OKButtonUser(WindowPtr dlog, short itemN)
+pascal void OKButtonUser(WindowPtr dlog, int16_t itemN)
 {
-	short		itype;
+	int16_t		itype;
 	Rect		r;
 	Handle	hand;
 
@@ -152,9 +152,9 @@ pascal void OKButtonUser(WindowPtr dlog, short itemN)
 //------------------------------------------------------------------------------------
 //  User item to draw static text dimmed, if needed.
 //------------------------------------------------------------------------------------
-pascal void DimStaticUser(WindowPtr dlog, short itemN)
+pascal void DimStaticUser(WindowPtr dlog, int16_t itemN)
 {
-	short					itype;
+	int16_t					itype;
 	Rect					r;
 	Handle				hand;
 	RGBColor			rgbBlack = {0, 0, 0};
@@ -175,10 +175,10 @@ pascal void DimStaticUser(WindowPtr dlog, short itemN)
 //------------------------------------------------------------------------------------
 //  User item to draw a popup menu control.
 //------------------------------------------------------------------------------------
-pascal void PopupMenuUser(WindowPtr dlog, short itemN)
+pascal void PopupMenuUser(WindowPtr dlog, int16_t itemN)
 {
 	Rect			r, r2;
-	short			itype;
+	int16_t			itype;
 	Handle		hand;
 	Handle		ArrowRes;
 	BitMap		ArrowIcon;
@@ -237,10 +237,10 @@ pascal void PopupMenuUser(WindowPtr dlog, short itemN)
 //------------------------------------------------------------------------------------
 //  Draw popups for the "New Game" dialog.  This seems so wasteful.
 //------------------------------------------------------------------------------------
-pascal void PopupMenuUserNG(WindowPtr dlog, short itemN)
+pascal void PopupMenuUserNG(WindowPtr dlog, int16_t itemN)
 {
 	Rect			r, r2;
-	short			itype;
+	int16_t			itype;
 	Handle		hand;
 	Handle		ArrowRes;
 	BitMap		ArrowIcon;
@@ -313,9 +313,9 @@ pascal void PopupMenuUserNG(WindowPtr dlog, short itemN)
 //------------------------------------------------------------------------------------
 //  Draw a GroupBox user item.
 //------------------------------------------------------------------------------------
-pascal void GroupBoxUser(WindowPtr dlog, short itemNum)
+pascal void GroupBoxUser(WindowPtr dlog, int16_t itemNum)
 {
-	short		itype;
+	int16_t		itype;
 	Rect		r;
 	Handle	hand;
 
@@ -330,11 +330,11 @@ pascal void GroupBoxUser(WindowPtr dlog, short itemNum)
 //====================================================================================
 //  The following globals and functions are for the Slider dialog control.
 //====================================================================================
-short				gSliderLastPos;
+int16_t				gSliderLastPos;
 Handle			gSliderThumbHdl = nil;		// Handle to small icon suite for the slider
 ShockBitmap	gSliderBack;						// Bitmap containing slider background
 ShockBitmap	gSliderAsm;						// Bitmap for assembling slider before blitting to screen
-Boolean			gSliderDimmed;					// TRUE if the slider should be drawn dimmed (and disabled)
+bool			gSliderDimmed;					// TRUE if the slider should be drawn dimmed (and disabled)
 
 //------------------------------------------------------------------------------------
 //  Allocate all bitmaps and do other initialization for the slider.
@@ -398,9 +398,9 @@ void SetSliderBitmaps(void)
 //------------------------------------------------------------------------------------
 //  Draw the slider user item by blitting the assembly bitmap to the screen.
 //------------------------------------------------------------------------------------
-pascal void DrawSlider(WindowPtr dlog, short itemNum)
+pascal void DrawSlider(WindowPtr dlog, int16_t itemNum)
 {
-	short			itype;
+	int16_t			itype;
 	Rect			itemr, offr;
 	Handle		hand;
 
@@ -416,13 +416,13 @@ pascal void DrawSlider(WindowPtr dlog, short itemNum)
 //------------------------------------------------------------------------------------
 //  Handle the slider tracking.  Return the new slider value (0-100).
 //------------------------------------------------------------------------------------
-short DoSliderTracking(WindowPtr dlog, short itemNum, SliderCallbackProcPtr cb)
+int16_t DoSliderTracking(WindowPtr dlog, int16_t itemNum, SliderCallbackProcPtr cb)
 {
-	short			itype;
+	int16_t			itype;
 	Rect			itemr, offr, r, newr;
 	Handle		hand;
 	Point			mousePt;
-	short			newPos, origPos;
+	int16_t			newPos, origPos;
 	GrafPtr		savePort;
 
 	GetDItem(dlog, itemNum, &itype, &hand, &itemr);

@@ -130,9 +130,9 @@ void LoadCompressedResource(ResDesc *prd, Id id)
 {
 	Handle		mirrorHdl;
 	Ptr			resPtr, expPtr;
-	long			exlen;
-	long			tableSize = 0;
-	ushort		numRefs;
+	int32_t			exlen;
+	int32_t			tableSize = 0;
+	uint16_t		numRefs;
 
 	if (prd->hdl != NULL && *prd->hdl != NULL)	// If everything's still in
 		return;														// memory, there's no need to load.
@@ -162,7 +162,7 @@ void LoadCompressedResource(ResDesc *prd, Id id)
 	// Determine the expanded buffer size.
 	if (prd->flags & RDF_COMPOUND)
 	{
-		numRefs = *(short *)resPtr;
+		numRefs = *(int16_t *)resPtr;
 		tableSize = REFTABLESIZE(numRefs);
 		resPtr += tableSize;
 	}
@@ -212,9 +212,9 @@ void LoadCompressedResource(ResDesc *prd, Id id)
 bool ResRetrieve(Id id, void *buffer)
 {
 	ResDesc *prd;
-//	int fd;
-//	uchar *p;
-//	long size;
+//	int32_t fd;
+//	uint8_t *p;
+//	int32_t size;
 //	RefIndex numRefs;
 
 	//	Check id and file number
@@ -237,11 +237,11 @@ bool ResRetrieve(Id id, void *buffer)
 
 	if (prd->flags & RDF_COMPOUND)
 		{
-		read(fd, p, sizeof(short));
-		numRefs = *(short *)p;
-		p += sizeof(short);
-		read(fd, p, sizeof(long) * (numRefs + 1));
-		p += sizeof(long) * (numRefs + 1);
+		read(fd, p, sizeof(int16_t));
+		numRefs = *(int16_t *)p;
+		p += sizeof(int16_t);
+		read(fd, p, sizeof(int32_t) * (numRefs + 1));
+		p += sizeof(int32_t) * (numRefs + 1);
       size -= REFTABLESIZE(numRefs);
 		}
 

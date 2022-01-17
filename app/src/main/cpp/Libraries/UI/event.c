@@ -38,14 +38,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------
 void event_queue_add(uiEvent* e);
 bool event_queue_next(uiEvent** e);
-bool region_check_opacity(LGRegion* reg, ulong evmask);
+bool region_check_opacity(LGRegion* reg, uint32_t evmask);
 bool event_dispatch_callback(LGRegion* reg, LGRect* r, void* v);
 void ui_set_last_mouse_region(LGRegion* reg,uiMouseEvent* ev);
-uchar ui_try_region(LGRegion* reg, LGPoint pos, uiEvent* ev);
-uchar ui_traverse_point(LGRegion* reg, LGPoint pos, uiEvent* data);
+uint8_t ui_try_region(LGRegion* reg, LGPoint pos, uiEvent* ev);
+uint8_t ui_traverse_point(LGRegion* reg, LGPoint pos, uiEvent* data);
 bool send_event_to_region(LGRegion* r, uiEvent* ev);
 void ui_purge_mouse_events(void);
-void ui_flush_mouse_events(ulong timestamp, LGPoint pos);
+void ui_flush_mouse_events(uint32_t timestamp, LGPoint pos);
 void ui_dispatch_mouse_event(uiMouseEvent* mout);
 void ui_poll_keyboard(void);
 void ui_pop_up_keys(void);
@@ -59,18 +59,18 @@ errtype ui_init_focus_chain(uiSlab* slab);
 
 typedef struct _ui_event_handler
 {
-   ulong typemask;  // Which event types does this handle?
+   uint32_t typemask;  // Which event types does this handle?
      /* handler proc: called when a specific event is received */
    uiHandlerProc proc;
    void *state;  // handler-specific state data
-   int next;     // used for chaining handlers.
+   int32_t next;     // used for chaining handlers.
 } uiEventHandler;
 
 typedef struct _handler_chain
 {
    Array chain;
-   int front;
-   ulong opacity;
+   int32_t front;
+   uint32_t opacity;
 } handler_chain;
 
 
@@ -78,17 +78,17 @@ typedef struct _handler_chain
 #define INITIAL_FOCUSES 5
 #define CHAIN_END -1
 
-ulong uiGlobalEventMask = ALL_EVENTS;
+uint32_t uiGlobalEventMask = ALL_EVENTS;
 
 // ----------------------------
 // HANDLER CHAIN IMPLEMENTATION
 // ----------------------------
 
-errtype uiInstallRegionHandler(LGRegion* r, ulong evmask, uiHandlerProc callback, void* state, int* id)
+errtype uiInstallRegionHandler(LGRegion* r, uint32_t evmask, uiHandlerProc callback, void* state, int32_t* id)
 {
    handler_chain *ch;
    uiEventHandler* eh;
-   int i;
+   int32_t i;
    errtype err;
    // Spew(DSRC_UI_Handlers,("uiInstallRegionhandler(%x,%x,%x,%x,%x)\n",r,evmask,callback,state,id));
    if (callback == NULL || r == NULL || evmask == 0) return ERR_NULL;
@@ -125,12 +125,12 @@ errtype uiInstallRegionHandler(LGRegion* r, ulong evmask, uiHandlerProc callback
    return OK;
 }
 
-errtype uiRemoveRegionHandler(LGRegion* r, int id)
+errtype uiRemoveRegionHandler(LGRegion* r, int32_t id)
 {
    errtype err;
    handler_chain* ch;
    uiEventHandler* handlers;
-   int i;
+   int32_t i;
 
    // Spew(DSRC_UI_Handlers,("uiRemoveRegionHandler(%x,%d)\n",r,id));
    if (r == NULL) return ERR_NULL;
@@ -139,7 +139,7 @@ errtype uiRemoveRegionHandler(LGRegion* r, int id)
    handlers = (uiEventHandler*)(ch->chain.vec);
    if (id == ch->front)
    {
-      int next = handlers[id].next;
+      int32_t next = handlers[id].next;
       err = array_dropelem(&ch->chain,id);
       if (err != OK) return err;
       ch->front = next;
@@ -159,7 +159,7 @@ errtype uiRemoveRegionHandler(LGRegion* r, int id)
 }
 
 
-errtype uiSetRegionHandlerMask(LGRegion* r, int id, int evmask)
+errtype uiSetRegionHandlerMask(LGRegion* r, int32_t id, int32_t evmask)
 {
    handler_chain *ch;
    uiEventHandler* handlers;
@@ -176,9 +176,9 @@ errtype uiSetRegionHandlerMask(LGRegion* r, int id, int evmask)
 // OPACITY
 // -------
 
-ulong uiDefaultRegionOpacity = 0;
+uint32_t uiDefaultRegionOpacity = 0;
 
-ulong uiGetRegionOpacity(LGRegion* reg)
+uint32_t uiGetRegionOpacity(LGRegion* reg)
 {
    handler_chain *ch = (handler_chain*)(reg->handler);
    if (ch == NULL)
@@ -189,7 +189,7 @@ ulong uiGetRegionOpacity(LGRegion* reg)
       return ch->opacity;
 }
 
-errtype uiSetRegionOpacity(LGRegion* reg,ulong mask)
+errtype uiSetRegionOpacity(LGRegion* reg,uint32_t mask)
 {
    handler_chain *ch = (handler_chain*)(reg->handler);
    if (ch == NULL)
@@ -218,8 +218,8 @@ errtype uiSetRegionOpacity(LGRegion* reg,ulong mask)
 typedef struct _focus_link
 {
    LGRegion* reg;
-   ulong evmask;
-   int next;
+   uint32_t evmask;
+   int32_t next;
 } focus_link;
 
 extern uiSlab* uiCurrentSlab;
@@ -233,9 +233,9 @@ extern uiSlab* uiCurrentSlab;
 // ----------------
 
 
-errtype uiGrabSlabFocus(uiSlab* slab, LGRegion* r, ulong evmask)
+errtype uiGrabSlabFocus(uiSlab* slab, LGRegion* r, uint32_t evmask)
 {
-   int i;
+   int32_t i;
    errtype err;
    focus_link* fchain = (focus_link*) slab->fchain.chain.vec;
    // Spew(DSRC_UI_Slab,("uiGrabSlabFocus(%x,%x,%x)\n",slab,r,evmask));
@@ -252,12 +252,12 @@ errtype uiGrabSlabFocus(uiSlab* slab, LGRegion* r, ulong evmask)
 }
 
 
-errtype uiGrabFocus(LGRegion* r, ulong evmask)
+errtype uiGrabFocus(LGRegion* r, uint32_t evmask)
 {
    return uiGrabSlabFocus(uiCurrentSlab,r,evmask);
 }
 
-errtype uiReleaseSlabFocus(uiSlab* slab, LGRegion* r, ulong evmask)
+errtype uiReleaseSlabFocus(uiSlab* slab, LGRegion* r, uint32_t evmask)
 {
    errtype retval = ERR_NOEFFECT;
    focus_link* fchain = (focus_link*)slab->fchain.chain.vec;
@@ -266,12 +266,12 @@ errtype uiReleaseSlabFocus(uiSlab* slab, LGRegion* r, ulong evmask)
    if (r == NULL) return ERR_NULL;
    if (l->reg == r)
    {
-      ulong tmpmask = l->evmask & evmask;
+      uint32_t tmpmask = l->evmask & evmask;
       l->evmask &= ~evmask;
       evmask &= ~tmpmask;
       if (l->evmask == 0)
       {
-         int tmp = slab->fchain.curfocus;
+         int32_t tmp = slab->fchain.curfocus;
          slab->fchain.curfocus = l->next;
          // Spew(DSRC_UI_Slab,("uiReleaseSlabFocus(): CurFocus = %d\n",slab->fchain.curfocus));
          array_dropelem(&slab->fchain.chain,tmp);
@@ -285,12 +285,12 @@ errtype uiReleaseSlabFocus(uiSlab* slab, LGRegion* r, ulong evmask)
       focus_link* thenext = &fchain[l->next];
       if (thenext->reg == r)
       {
-         ulong tmpmask = l->evmask & evmask;
+         uint32_t tmpmask = l->evmask & evmask;
          thenext->evmask &= ~evmask;
          evmask &= ~tmpmask;
          if (thenext->evmask == 0)
          {
-            int tmp = l->next;
+            int32_t tmp = l->next;
             l->next = thenext->next;
             array_dropelem(&slab->fchain.chain,tmp);
          }
@@ -302,7 +302,7 @@ errtype uiReleaseSlabFocus(uiSlab* slab, LGRegion* r, ulong evmask)
    return retval;
 }
 
-errtype uiReleaseFocus(LGRegion* r, ulong evmask)
+errtype uiReleaseFocus(LGRegion* r, uint32_t evmask)
 {
    return uiReleaseSlabFocus(uiCurrentSlab,r,evmask);
 }
@@ -316,19 +316,19 @@ errtype uiReleaseFocus(LGRegion* r, ulong evmask)
 #define DEFAULT_DBLCLICKTIME  0
 #define DEFAULT_DBLCLICKDELAY 0
 
-ushort uiDoubleClickTime = DEFAULT_DBLCLICKTIME;
-ushort uiDoubleClickDelay = DEFAULT_DBLCLICKDELAY;
+uint16_t uiDoubleClickTime = DEFAULT_DBLCLICKTIME;
+uint16_t uiDoubleClickDelay = DEFAULT_DBLCLICKDELAY;
 bool   uiDoubleClicksOn[NUM_MOUSE_BTNS] = { FALSE, FALSE, FALSE } ;
 bool   uiAltDoubleClick = FALSE;
-ushort uiDoubleClickTolerance = 5;
+uint16_t uiDoubleClickTolerance = 5;
 static bool   poll_mouse_motion = FALSE;
 static uiMouseEvent last_down_events[NUM_MOUSE_BTNS];
 static uiMouseEvent last_up_events[NUM_MOUSE_BTNS];
 
 static struct _eventqueue
 {
-   int in, out;
-   int size;
+   int32_t in, out;
+   int32_t size;
    uiEvent* vec;
 } EventQueue;
 
@@ -337,9 +337,9 @@ void event_queue_add(uiEvent* e)
    if ((EventQueue.in + 1)%EventQueue.size == EventQueue.out)
    {
       // Queue is full, grow it.
-      int i;
-      int out = EventQueue.out;
-      int newsize = EventQueue.size * 2;
+      int32_t i;
+      int32_t out = EventQueue.out;
+      int32_t newsize = EventQueue.size * 2;
       uiEvent *newvec = (uiEvent *)NewPtr(sizeof(uiEvent)*newsize);
       for(i = 0; out != EventQueue.in; i++, out = (out+1)%EventQueue.size)
          newvec[i] = EventQueue.vec[out];
@@ -368,7 +368,7 @@ bool event_queue_next(uiEvent** e)
 
 
 // TRUE we are opaque to this mask.
-bool region_check_opacity(LGRegion* reg, ulong evmask)
+bool region_check_opacity(LGRegion* reg, uint32_t evmask)
 {
    return (evmask & uiGetRegionOpacity(reg)) != 0;
 }
@@ -377,16 +377,16 @@ bool event_dispatch_callback(LGRegion* reg, LGRect*, void* v)
 {
    uiEvent* ev = (uiEvent*)v;
    handler_chain *ch = (handler_chain*)(reg->handler);
-   int i,next;
+   int32_t i,next;
    uiEventHandler* handlers = (uiEventHandler*)(ch->chain.vec);
    // Spew(DSRC_UI_Dispatch,("event_dispatch_callback(%x,%x,%x) event type %x\n",reg,r,v,ev->type));
 /*
 if (ev->type == UI_EVENT_KBD_COOKED)
 {
-	char buff[100];
+	int8_t buff[100];
 	sprintf(buff+1, "event_dispatch_callback(%x,%x,%x) event type %x\0",reg,r,v,ev->type);
 	buff[0] = strlen(buff+1);
-	DebugStr((uchar *)buff);
+	DebugStr((uint8_t *)buff);
 }
 */
    if (ch == NULL || handlers ==  NULL)
@@ -418,7 +418,7 @@ LGRegion* uiLastMouseRegion[NUM_MOUSE_BTNS];
 
 void ui_set_last_mouse_region(LGRegion* reg,uiMouseEvent* ev)
 {
-   int i;
+   int32_t i;
    if (ev->type != UI_EVENT_MOUSE)
       return;
    for (i = 0; i < NUM_MOUSE_BTNS; i++)
@@ -431,10 +431,10 @@ void ui_set_last_mouse_region(LGRegion* reg,uiMouseEvent* ev)
    }
 }
 
-uchar ui_try_region(LGRegion* reg, LGPoint pos, uiEvent* ev)
+uint8_t ui_try_region(LGRegion* reg, LGPoint pos, uiEvent* ev)
 {
    LGRect cbr;
-   uchar retval = TRAVERSE_MISS;
+   uint8_t retval = TRAVERSE_MISS;
 
    cbr.ul = pos;
    cbr.lr = pos;
@@ -445,9 +445,9 @@ uchar ui_try_region(LGRegion* reg, LGPoint pos, uiEvent* ev)
    return retval;
 }
 
-uchar ui_traverse_point(LGRegion* reg, LGPoint pos, uiEvent* data)
+uint8_t ui_traverse_point(LGRegion* reg, LGPoint pos, uiEvent* data)
 {
-   uchar retval = TRAVERSE_MISS;
+   uint8_t retval = TRAVERSE_MISS;
    LGPoint rel;
    LGRegion* child;
 
@@ -508,7 +508,7 @@ bool uiDispatchEventToRegion(uiEvent* ev, LGRegion* reg)
 
 bool uiDispatchEvent(uiEvent* ev)
 {
-   int i;
+   int32_t i;
    // Spew(DSRC_UI_Dispatch,("dispatch_event(%x), CurFocus = %d\n",ev,CurFocus));
    if (!(ev->type & uiGlobalEventMask)) return FALSE;
    for (i = CurFocus; i != CHAIN_END; i = FCHAIN[i].next)
@@ -559,7 +559,7 @@ errtype uiQueueEvent(uiEvent* ev)
 
 void ui_purge_mouse_events(void)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_MOUSE_BTNS; i++)
    {
       last_down_events[i].type = UI_EVENT_NULL;
@@ -569,17 +569,17 @@ void ui_purge_mouse_events(void)
    }
 }
 
-void ui_flush_mouse_events(ulong timestamp, LGPoint pos)
+void ui_flush_mouse_events(uint32_t timestamp, LGPoint pos)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_MOUSE_BTNS; i++)
    {
 
       if (uiDoubleClicksOn[i] &&
          last_down_events[i].type != UI_EVENT_NULL)
       {
-         int crit = uiDoubleClickDelay;
-         ulong timediff = timestamp - last_down_events[i].tstamp;
+         int32_t crit = uiDoubleClickDelay;
+         uint32_t timediff = timestamp - last_down_events[i].tstamp;
          LGPoint downpos = last_down_events[i].pos;
          bool out = (abs(pos.x - downpos.x) > uiDoubleClickTolerance ||
                      abs(pos.y - downpos.y) > uiDoubleClickTolerance);
@@ -625,7 +625,7 @@ void ui_flush_mouse_events(ulong timestamp, LGPoint pos)
 
 void ui_dispatch_mouse_event(uiMouseEvent* mout)
 {
-   int i;
+   int32_t i;
    bool eaten = FALSE;
 //   ui_mouse_do_conversion(&(mout->pos.x),&(mout->pos.y),TRUE);
    ui_flush_mouse_events(mout->tstamp,mout->pos);
@@ -676,9 +676,9 @@ void ui_dispatch_mouse_event(uiMouseEvent* mout)
 // KEYBOARD POLLING SETUP
 // ----------------------
 
-uchar* ui_poll_keys = NULL;
+uint8_t* ui_poll_keys = NULL;
 
-errtype uiSetKeyboardPolling(ubyte* codes)
+errtype uiSetKeyboardPolling(uint8_t* codes)
 {
    ui_poll_keys = codes;
    return OK;
@@ -689,11 +689,11 @@ errtype uiSetKeyboardPolling(ubyte* codes)
 // before dispatching an event.
 void ui_poll_keyboard(void)
 {
-	extern uchar	pKbdGetKeys[16];
-	long			*keys = (long *)pKbdGetKeys;
+	extern uint8_t	pKbdGetKeys[16];
+	int32_t			*keys = (int32_t *)pKbdGetKeys;
 	GetKeys((UInt32 *)keys);
 
-	uchar *key;
+	uint8_t *key;
 	for (key = ui_poll_keys; *key != KBC_NONE; key++)
 		if((pKbdGetKeys[*key>>3] >> (*key & 7)) & 1)
 		{
@@ -718,7 +718,7 @@ void ui_pop_up_keys(void)
 /*¥¥¥ serve any purpose now?
    if (ui_poll_keys != NULL)
    {
-      uchar* key;
+      uint8_t* key;
       for (key = ui_poll_keys; *key != KBC_NONE; key++)
       {
          kb_clear_state(*key,KBA_STATE);
@@ -731,12 +731,12 @@ errtype uiMakeMotionEvent(uiMouseEvent* ev)
 {
    // haha, this is the super secret mouse library variable of the
    // current button state.
-   extern short mouseInstantButts;
+   extern int16_t mouseInstantButts;
    mouse_get_xy(&ev->pos.x,&ev->pos.y);
    ev->type = UI_EVENT_MOUSE_MOVE; // must get past event mask
    ev->action = MOUSE_MOTION;
    ev->tstamp = mouse_get_time();
-   ev->buttons = (ubyte)mouseInstantButts;
+   ev->buttons = (uint8_t)mouseInstantButts;
    return OK;
 }
 
@@ -774,7 +774,7 @@ errtype uiPoll(void)
       else result = uiDispatchEvent(ev);
       if (!result && ev->type == UI_EVENT_KBD_RAW)
       {
-         ushort cooked;
+         uint16_t cooked;
          kbs_event kbe;
          kbe.code = ((uiRawKeyEvent*)ev)->scancode;
          kbe.state = ((uiRawKeyEvent*)ev)->action;
@@ -810,7 +810,7 @@ errtype uiPoll(void)
             eaten = uiDispatchEvent((uiEvent*)ev);
             if (!eaten)
             {
-              ushort cooked;
+              uint16_t cooked;
               bool result;
               // Spew(DSRC_UI_Polling,("uiPoll(): cooking keyboard event: <%d,%x>\n",kbe.state,kbe.code));
               err = kb_cook(kbe,&cooked,&result);
@@ -890,7 +890,7 @@ errtype uiFlush(void)
 
    while (kbe.code != KBC_NONE)
    {
-      ushort dummy;
+      uint16_t dummy;
       bool result;
       kb_cook(kbe,&dummy,&result);
       kbe = kb_next();
@@ -908,7 +908,7 @@ bool uiCheckInput(void)
    kbe = kb_next();
    if (kbe.code != KBC_NONE)
    {
-      ushort cooked;
+      uint16_t cooked;
       bool res;
       kb_cook(kbe,&cooked,&res);
       if (kbe.state == KBS_DOWN)
@@ -919,7 +919,7 @@ bool uiCheckInput(void)
    }
    if (mouse_next(&mse) == OK)
    {
-      int i;
+      int32_t i;
       for (i = 0; i < NUM_MOUSE_BTNS; i++)
       {
          if ((mse.type & MOUSE_BTN2DOWN(i) ) != 0)
@@ -937,7 +937,7 @@ bool uiCheckInput(void)
 
 errtype uiInit(uiSlab* slab)
 {
-   int i;
+   int32_t i;
    errtype err;
 
    uiSetCurrentSlab(slab);

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Many games require objects which travel faster than the renderer can possibly draw.  The
 //	stuff in this file handles these things in various ways.  For instance, a laser weapon
@@ -43,28 +43,28 @@ static Q		initial_X[3] = {0,0,0},
 			final_X[3]   = {0,0,0};
 
 
-extern int EDMS_integrating;
+extern int32_t EDMS_integrating;
 
-extern int alarm_clock[MAX_OBJ];
+extern int32_t alarm_clock[MAX_OBJ];
 
-physics_handle	object_check( unsigned int data_word, Q size, Q range, int exclude, int steps, Q &dist);	//Checks for hits...
+physics_handle	object_check( uint32_t data_word, Q size, Q range, int32_t exclude, int32_t steps, Q &dist);	//Checks for hits...
 
 //	Here is the high velocity weapon primitive...
 //	=============================================
-physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q kick, Q knock, Q size, Q range, int exclude, int shooter )
+physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q kick, Q knock, Q size, Q range, int32_t exclude, int32_t shooter )
 {
    extern Q	PELVIS;
-   int		stepper = 0,
+   int32_t		stepper = 0,
       		max_step = ( 2*range / size ).to_int(),		//samples per meter...
       		victim_on = 0,
       		shooter_on = 0,
             object_pointer = 0,
             i = 0;
 
-   unsigned int   must_check_objects[MAX_OBJ];
+   uint32_t   must_check_objects[MAX_OBJ];
 
-   unsigned int	test_data;
-   unsigned int   last_test_data = 0;
+   uint32_t	test_data;
+   uint32_t   last_test_data = 0;
 
    physics_handle	victim = -1,				//It is what is says it is...
    		  return_victim = -1;			//The number actually returned...
@@ -78,7 +78,7 @@ physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q kick, Q knock, Q size, Q ra
 
    //	Reset the object collisions...
    //	==============================
-   int	no_dont_do_it = 0;
+   int32_t	no_dont_do_it = 0;
 
    //	Looks at terrain...
    //	===================
@@ -165,8 +165,8 @@ physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q kick, Q knock, Q size, Q ra
 
          //	Check for object collisions...
          //	==============================
-         int hx = floor( hash_scale*X[0] );
-         int hy = floor( hash_scale*X[1] );
+         int32_t hx = floor( hash_scale*X[0] );
+         int32_t hy = floor( hash_scale*X[1] );
    		test_data = data[ hx ][ hy ];
 
          if (test_data != last_test_data && test_data != 0)
@@ -209,7 +209,7 @@ physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q kick, Q knock, Q size, Q ra
          {
             // We hit someone!
     			return_victim = victim;		//return the right guy!
-		
+
       		victim_on = ph2on[victim];
 
             Q inv_mass = (I[victim_on][30] == ROBOT ? I[victim_on][24] : I[victim_on][36]);
@@ -287,8 +287,8 @@ physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q kick, Q knock, Q size, Q ra
       //	===========================================
    	if ( (stepper == max_step) && (victim == -1) )
       {
-   		X[0] = 
-   		X[1] = 
+   		X[0] =
+   		X[1] =
    		X[2] = END;
 		}
 
@@ -299,7 +299,7 @@ physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q kick, Q knock, Q size, Q ra
       {
          shooter_on = ph2on[shooter];
 			iota_c = I[shooter_on][29]*kick;
-			
+
          if ( I[shooter_on][30] == PELVIS )
          {
             I[shooter_on][8] = D_old[0]*iota_c;
@@ -323,11 +323,11 @@ physics_handle EDMS_cast_projectile( Q *X, Q D[3], Q kick, Q knock, Q size, Q ra
 //	Here, since we know the line segment we're interested in, we check to make sure that we
 //	didn't hit any objects, and return the one we did...
 //	====================================================
-physics_handle	object_check( unsigned int data_word, Q size, Q range, int exclude, int stepper, Q &dist)
+physics_handle	object_check( uint32_t data_word, Q size, Q range, int32_t exclude, int32_t stepper, Q &dist)
 {
    //		General purpose...
    //		==================
-   int		object;
+   int32_t		object;
    physics_handle	victim = -1;
 
    //	For the lines...
@@ -344,7 +344,7 @@ physics_handle	object_check( unsigned int data_word, Q size, Q range, int exclud
       kzdisto = 10000;
 
 
-   ulong bit = 0;                      // which object bit we're checking
+   uint32_t bit = 0;                      // which object bit we're checking
 
    while (data_word != 0)
    {
@@ -366,7 +366,7 @@ physics_handle	object_check( unsigned int data_word, Q size, Q range, int exclud
 
 		         bottom = a*a + b*b + c*c;
 
-		         kill_zone = sqrt( (top_1 + top_2 + top_3) / bottom );		
+		         kill_zone = sqrt( (top_1 + top_2 + top_3) / bottom );
 
 
 		         if ( kill_zone < (I[object][31] + size) )
@@ -377,7 +377,7 @@ physics_handle	object_check( unsigned int data_word, Q size, Q range, int exclud
 
 			         if ( ( kzdist < .5*size*stepper  ) && ( kzdist < kzdisto ) )
                   {
-   			         victim = on2ph[object];                       
+   			         victim = on2ph[object];
    			         kzdisto = kzdist;
                      dist = kzdist - I[object][31];
 
@@ -403,8 +403,8 @@ physics_handle	object_check( unsigned int data_word, Q size, Q range, int exclud
                     cos_alpha = 0;
 
                   Q final_x = 0,
-                    final_y = 0;        
-      
+                    final_y = 0;
+
                   sincos( -S[object][3][0], &sin_alpha, &cos_alpha );
                   final_x = cos_alpha*offset_x + sin_alpha*offset_y;
                   final_y =-sin_alpha*offset_x + cos_alpha*offset_y;
@@ -415,7 +415,7 @@ physics_handle	object_check( unsigned int data_word, Q size, Q range, int exclud
 
                   top_1 = c*(position[1] - initial_X[1]) - b*(position[2] - initial_X[2]);
         	         top_1 *= top_1;
-      
+
         	         top_2 = a*(position[2] - initial_X[2]) - c*(position[0] - initial_X[0]);
                   top_2 *= top_2;
 
@@ -424,7 +424,7 @@ physics_handle	object_check( unsigned int data_word, Q size, Q range, int exclud
 
         	         bottom = a*a + b*b + c*c;
 
-	               kill_zone = sqrt( (top_1 + top_2 + top_3) / bottom );		
+	               kill_zone = sqrt( (top_1 + top_2 + top_3) / bottom );
 
                   if ( kill_zone < ( .75*I[object][22] + size) )
                   {

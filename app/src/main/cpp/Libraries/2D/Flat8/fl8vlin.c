@@ -62,17 +62,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* clut should be in _ns everywhere, it doesn't need its own function */
 
-void gri_flat8_uvline_ns (short x0, short y0, short y1, long c, long parm)
+void gri_flat8_uvline_ns (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-	uchar *p;
-	short  t;
-	int		 grow = grd_bm.row;
+	uint8_t *p;
+	int16_t  t;
+	int32_t		 grow = grd_bm.row;
 
 	if (y0 > y1) {
 	  t = y0; y0 = y1; y1 = t;
 	}
 	if (gr_get_fill_type() ==  FILL_SOLID)
-	 c = (uchar)parm;
+	 c = (uint8_t)parm;
 
 	p = grd_bm.bits + y0*grow + x0;
 	for (; y0<=y1; y0++) {
@@ -81,16 +81,16 @@ void gri_flat8_uvline_ns (short x0, short y0, short y1, long c, long parm)
 	}
 }
 
-void gri_flat8_uvline_clut (short x0, short y0, short y1, long c, long parm)
+void gri_flat8_uvline_clut (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-	uchar *p;
-	short  t;
-	int		 grow = grd_bm.row;
+	uint8_t *p;
+	int16_t  t;
+	int32_t		 grow = grd_bm.row;
 
 	if (y0 > y1) {
 	  t = y0; y0 = y1; y1 = t;
 	}
-	c = (long) (((uchar *) parm) [c]);
+	c = (int32_t) (((uint8_t *) parm) [c]);
 	p = grd_bm.bits + y0*grow + x0;
 	for (; y0<=y1; y0++) {
 	  *p = c;
@@ -98,11 +98,11 @@ void gri_flat8_uvline_clut (short x0, short y0, short y1, long c, long parm)
 	}
 }
 
-void gri_flat8_uvline_xor (short x0, short y0, short y1, long c, long parm)
+void gri_flat8_uvline_xor (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-	uchar *p;
-	short  t;
-	int		 grow = grd_bm.row;
+	uint8_t *p;
+	int16_t  t;
+	int32_t		 grow = grd_bm.row;
 
 	if (y0 > y1) {
 	  t = y0; y0 = y1; y1 = t;
@@ -115,11 +115,11 @@ void gri_flat8_uvline_xor (short x0, short y0, short y1, long c, long parm)
 }
 
 /* punt */
-void gri_flat8_uvline_blend (short x0, short y0, short y1, long c, long parm)
+void gri_flat8_uvline_blend (int16_t x0, int16_t y0, int16_t y1, int32_t c, int32_t parm)
 {
-	uchar *p;
-	short  t;
-	int		 grow = grd_bm.row;
+	uint8_t *p;
+	int16_t  t;
+	int32_t		 grow = grd_bm.row;
 
 	if (y0 > y1) {
 	  t = y0; y0 = y1; y1 = t;

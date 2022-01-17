@@ -51,13 +51,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "str.h"
 
 /* returns the width in pixels of c in the specified font. */
-short gr_font_char_width (grs_font *f, char c)
+int16_t gr_font_char_width (grs_font *f, int8_t c)
 {
-   short *off_tab;            /* character offset table */
-   short offset;              /* offset of current character */
+   int16_t *off_tab;            /* character offset table */
+   int16_t offset;              /* offset of current character */
 
-   if ((uchar)c < f->min || (uchar)c > f->max) return 0;
+   if ((uint8_t)c < f->min || (uint8_t)c > f->max) return 0;
    off_tab = f->off_tab;
-   offset = off_tab[(uchar)c - f->min];
-   return off_tab[(uchar)c - f->min+1]-offset;
+   offset = off_tab[(uint8_t)c - f->min];
+   return off_tab[(uint8_t)c - f->min+1]-offset;
 }

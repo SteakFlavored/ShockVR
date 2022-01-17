@@ -66,38 +66,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* clut should be in _ns everywhere, it doesn't need its own function */
 
-void gri_flat8_uhline_ns (short x0, short y0, short x1, long c, long parm)
+void gri_flat8_uhline_ns (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
 {
-   uchar *p;
-   short  t;
+   uint8_t *p;
+   int16_t  t;
 
    if (x0 > x1) {
       t = x0; x0 = x1; x1 = t;
    }
    if (gr_get_fill_type() ==  FILL_SOLID)
-     c =    (uchar) parm;
+     c =    (uint8_t) parm;
    p = grd_bm.bits + y0*grd_bm.row + x0;
    memset (p, c, x1-x0+1);
  }
 
-void gri_flat8_uhline_clut (short x0, short y0, short x1, long c, long parm)
+void gri_flat8_uhline_clut (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
 {
-   uchar *p;
-   short  t;
+   uint8_t *p;
+   int16_t  t;
 
    if (x0 > x1) {
       t = x0; x0 = x1; x1 = t;
    }
 
-   c = (long) (((uchar *) parm) [c]);
+   c = (int32_t) (((uint8_t *) parm) [c]);
    p = grd_bm.bits + y0*grd_bm.row + x0;
    memset (p, c, x1-x0+1);
  }
 
-void gri_flat8_uhline_xor (short x0, short y0, short x1, long c, long parm)
+void gri_flat8_uhline_xor (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
 {
-   uchar *p;
-   short  t;
+   uint8_t *p;
+   int16_t  t;
 
    if (x0 > x1) {
       t = x0; x0 = x1; x1 = t;
@@ -108,10 +108,10 @@ void gri_flat8_uhline_xor (short x0, short y0, short x1, long c, long parm)
  }
 
 /* punt */
-void gri_flat8_uhline_blend (short x0, short y0, short x1, long c, long parm)
+void gri_flat8_uhline_blend (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
 {
-   uchar *p;
-   short  t;
+   uint8_t *p;
+   int16_t  t;
 
    if (x0 > x1) {
       t = x0; x0 = x1; x1 = t;

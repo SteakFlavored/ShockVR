@@ -51,16 +51,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 bool textures_loaded = FALSE;
 
-#define READ(fd,x) read(fd,(char*)&(x),sizeof(x))
+#define READ(fd,x) read(fd,(int8_t*)&(x),sizeof(x))
 
 Id tmap_ids[NUM_TEXTURE_SIZES] = { TEXTURE_128_ID, TEXTURE_64_ID, TEXTURE_32_ID, TEXTURE_16_ID};
-ushort tmap_sizes[NUM_TEXTURE_SIZES] = { 128, 64, 32, 16 };
+uint16_t tmap_sizes[NUM_TEXTURE_SIZES] = { 128, 64, 32, 16 };
 bool all_textures=TRUE;
 
-extern uchar tmap_big_buffer[];
+extern uint8_t tmap_big_buffer[];
 
 // prototypes
-bool set_animations(short start,short frames, uchar *anim_used);
+bool set_animations(int16_t start,int16_t frames, uint8_t *anim_used);
 errtype load_small_texturemaps(void);
 void setup_tmap_bitmaps(void);
 void free_textures(void);
@@ -71,17 +71,17 @@ errtype texture_crunch_init(void);
 errtype texture_crunch_go(void);
 void load_textures(void);
 
-extern void FlipShort(short *sh);
-extern void FlipLong(long *lng);
+extern void FlipShort(int16_t *sh);
+extern void FlipLong(int32_t *lng);
 
 
 #define SET_ANIM_USED(x) anim_used[(x) >> 3] |= (1 << ((x) & 0x7))
 #define CHECK_ANIM_USED(x) anim_used[(x) >> 3] & (1 << ((x) & 0x7))
 
 #define ACTUAL_SMALL_ANIMS 101
-bool set_animations(short start,short frames, uchar *anim_used)
+bool set_animations(int16_t start,int16_t frames, uint8_t *anim_used)
 {
-   int loop;
+   int32_t loop;
    // Note that NUM_ACTUAL_SMALL_ANIMS contains the actual number of valid
    // animations, BUT anything in the gap between them will get caught by the
    // ResInUse call in load_small_texturemaps
@@ -98,12 +98,12 @@ bool set_animations(short start,short frames, uchar *anim_used)
 errtype load_small_texturemaps(void)
 {
    Id id = TEXTURE_SMALL_ID;
-   char i = 0;
-   extern bool obj_is_display(int triple);
-   int d;
-   char rv=0;
+   int8_t i = 0;
+   extern bool obj_is_display(int32_t triple);
+   int32_t d;
+   int8_t rv=0;
    ObjSpecID osid;
-   uchar anim_used[MAX_SMALL_TMAPS/8];
+   uint8_t anim_used[MAX_SMALL_TMAPS/8];
 
    memset(anim_used, 0, MAX_SMALL_TMAPS/8);
 
@@ -131,9 +131,9 @@ errtype load_small_texturemaps(void)
       {
          d = objSmallstuffs[osid].data2;
          if ((d & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
-            rv = (char) set_animations(d & TPOLY_INDEX_MASK, objSmallstuffs[osid].cosmetic_value, anim_used);
+            rv = (int8_t) set_animations(d & TPOLY_INDEX_MASK, objSmallstuffs[osid].cosmetic_value, anim_used);
          if (((d >> 16) & TPOLY_INDEX_MASK) && ((d & TPOLY_TYPE_MASK) == 0x100))
-            rv |= (char) set_animations((d >> 16) & TPOLY_INDEX_MASK, objSmallstuffs[osid].cosmetic_value, anim_used);
+            rv |= (int8_t) set_animations((d >> 16) & TPOLY_INDEX_MASK, objSmallstuffs[osid].cosmetic_value, anim_used);
 //         if (!rv) mprintf("Small badness for o %x, osid %x, data2 %d\n",objSmallstuffs[osid].id,osid,d);
       }
       osid = objSmallstuffs[osid].next;
@@ -156,13 +156,13 @@ errtype load_small_texturemaps(void)
 // should really do dynamic creation of grs_bitmap *'s for the textures
 // but for now, we'll be lame
 
-extern uchar       tmap_static_mem[];
-extern uchar      *tmap_dynamic_mem=NULL;
+extern uint8_t       tmap_static_mem[];
+extern uint8_t      *tmap_dynamic_mem=NULL;
 
-#define get_tmap_128x128(i) ((uchar *)&tmap_dynamic_mem[i*(128*128)])
-#define get_tmap_64x64(i)   ((uchar *)&tmap_static_mem[i*SIZE_STATIC_TMAP])
-#define get_tmap_32x32(i)   ((uchar *)&tmap_static_mem[(i*SIZE_STATIC_TMAP)+(64*64)])
-#define get_tmap_16x16(i)   ((uchar *)&tmap_static_mem[(i*SIZE_STATIC_TMAP)+(64*64)+(32*32)])
+#define get_tmap_128x128(i) ((uint8_t *)&tmap_dynamic_mem[i*(128*128)])
+#define get_tmap_64x64(i)   ((uint8_t *)&tmap_static_mem[i*SIZE_STATIC_TMAP])
+#define get_tmap_32x32(i)   ((uint8_t *)&tmap_static_mem[(i*SIZE_STATIC_TMAP)+(64*64)])
+#define get_tmap_16x16(i)   ((uint8_t *)&tmap_static_mem[(i*SIZE_STATIC_TMAP)+(64*64)+(32*32)])
 
 // have we built the tables, do we have the extra memory, so on
 static bool tmaps_setup=FALSE;
@@ -171,15 +171,15 @@ static bool tmaps_setup=FALSE;
 static grs_bitmap tmap_bitmaps[NUM_TEXTURE_SIZES];
 void setup_tmap_bitmaps(void)
 {
-   int i;
+   int32_t i;
    for (i=0; i<4; i++)
 	   gr_init_bm(&tmap_bitmaps[i], NULL, BMT_FLAT8, 0, tmap_sizes[i], tmap_sizes[i]);
 }
 
-grs_bitmap *get_texture_map(int idx, int sz)
+grs_bitmap *get_texture_map(int32_t idx, int32_t sz)
 {
-   ushort sz_add[NUM_TEXTURE_SIZES-1]={0,64*64,(64*64)+(32*32)};
-   uchar *bt;
+   uint16_t sz_add[NUM_TEXTURE_SIZES-1]={0,64*64,(64*64)+(32*32)};
+   uint8_t *bt;
 //   mprintf("Getting tmap %d, sz %d\n",idx,sz);
 #ifdef DEMO
    if (sz == 2)
@@ -202,9 +202,9 @@ grs_bitmap *get_texture_map(int idx, int sz)
 void load_textures(void)
 {
    grs_bitmap *cur_bm;
-   int i, n, c;
+   int32_t i, n, c;
    errtype retval = OK;
-   int atext_tmp=1;
+   int32_t atext_tmp=1;
 
    {
       if (start_mem < EXTRA_TMAP_THRESHOLD)
@@ -306,9 +306,9 @@ void free_textures(void)
    tmaps_setup=FALSE;
 }
 
-errtype bitmap_array_unload(int *num_bitmaps, grs_bitmap *arr[])
+errtype bitmap_array_unload(int32_t *num_bitmaps, grs_bitmap *arr[])
 {
-   int i;
+   int32_t i;
 
    if (*num_bitmaps == 0)
       return(ERR_NOEFFECT);
@@ -326,7 +326,7 @@ errtype bitmap_array_unload(int *num_bitmaps, grs_bitmap *arr[])
 
 bool empty_bitmap(grs_bitmap *bmp)
 {
-   uchar *cur=&bmp->bits[0], *targ=cur+(bmp->w*bmp->h);
+   uint8_t *cur=&bmp->bits[0], *targ=cur+(bmp->w*bmp->h);
    while (cur<targ)
       if (*cur++!=0)
          return FALSE;
@@ -336,7 +336,7 @@ bool empty_bitmap(grs_bitmap *bmp)
 errtype Init_Lighting(void)
 {
    Handle	res;
-   int		i;
+   int32_t		i;
 
    // Read in the standard shading table
    res = GetResource('shad',1000);
@@ -345,8 +345,8 @@ errtype Init_Lighting(void)
    ReleaseResource(res);
 
 // MLA- changed this to use resources
-/*   char shad_path[255];
-   int num_shad,fd,i;
+/*   int8_t shad_path[255];
+   int32_t num_shad,fd,i;
 
    // Read in the standard shading table
    if (!DatapathFind(&DataDirPath,SHADING_TABLE_FNAME,shad_path))
@@ -414,7 +414,7 @@ errtype Init_Lighting(void)
 
 errtype load_master_texture_properties(void)
 {
-   int version,i;
+   int32_t version,i;
    Handle res;
 
    texture_properties = (TextureProp *)NewPtr(GAME_TEXTURES * sizeof(TextureProp));
@@ -425,8 +425,8 @@ errtype load_master_texture_properties(void)
    res = GetResource('tprp',1000);
    if (res)
     {
-     FlipLong((long *) (*res));
-     version =  * (int *) (*res);
+     FlipLong((int32_t *) (*res));
+     version =  * (int32_t *) (*res);
      if (version == TEXTPROP_VERSION_NUMBER)
       {
        // copy out the structs, fixing the 11->12 byte size difference
@@ -471,7 +471,7 @@ errtype unload_master_texture_properties(void)
 
 errtype clear_texture_properties(void)
 {
-   int i;
+   int32_t i;
 
    // clear it all
    memset(texture_properties, 0, sizeof (TextureProp) * GAME_TEXTURES);
@@ -491,7 +491,7 @@ errtype clear_texture_properties(void)
 #ifdef TEXTURE_CRUNCH_HACK
 
 #define NUM_CONVERT  93
-short convert_list[NUM_CONVERT][2] = {
+int16_t convert_list[NUM_CONVERT][2] = {
 {0, 144,},
 {3, 115,},
 {9, 8,},
@@ -587,12 +587,12 @@ short convert_list[NUM_CONVERT][2] = {
 {351,350,}
 };
 
-short tmap_convert[GAME_TEXTURES];
-short tmap_crunch[GAME_TEXTURES];
+int16_t tmap_convert[GAME_TEXTURES];
+int16_t tmap_crunch[GAME_TEXTURES];
 
 errtype texture_crunch_init(void)
 {
-   int i,c;
+   int32_t i,c;
    for (i=0; i < GAME_TEXTURES; i++)
       tmap_convert[i] = i;
    for (i=0; i < NUM_CONVERT; i++)
@@ -610,7 +610,7 @@ errtype texture_crunch_init(void)
 
 errtype texture_crunch_go(void)
 {
-   int i;
+   int32_t i;
 
    for (i=0; i < NUM_LOADED_TEXTURES; i++)
    {
@@ -629,11 +629,11 @@ errtype texture_crunch_go(void)
 #define NUM_DEMO_TEXTURES 32
 #pragma disable_message(202)
 bool salvation_list[GAME_TEXTURES];
-bool texture_annihilate_func(short keycode, ulong context, void* data)
+bool texture_annihilate_func(int16_t keycode, uint32_t context, void* data)
 {
-   int fn;
-   int i,c;
-   extern int texture_fnum;
+   int32_t fn;
+   int32_t i,c;
+   extern int32_t texture_fnum;
 
    mprintf("texture_fnum = %d\n",texture_fnum);
    if (texture_fnum == 0)

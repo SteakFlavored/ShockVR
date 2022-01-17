@@ -52,12 +52,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grlin.h"
 
 // prototypes
-int gr_int_line (short x0, short y0, short x1, short y1);
+int32_t gr_int_line (int16_t x0, int16_t y0, int16_t x1, int16_t y1);
 
 
-int gr_int_line (short x0, short y0, short x1, short y1)
+int32_t gr_int_line (int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
-   int r;
+   int32_t r;
    grs_vertex v0, v1;
 
    v0.x = x0;  v0.y = y0;      /* we don't need no stinking type checking */
@@ -68,9 +68,9 @@ int gr_int_line (short x0, short y0, short x1, short y1)
    return r;
 }
 
-int gri_iline_clip_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+int32_t gri_iline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   int r;
+   int32_t r;
    grs_vertex u0, u1;
 
    u0.x = fix_make(v0->x, 32768); u0.y = fix_make(v0->y, 32768);

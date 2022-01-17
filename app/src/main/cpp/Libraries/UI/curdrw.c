@@ -104,10 +104,10 @@ void cursor_draw_callback(mouse_event* e, void* data)
 #define GR_HFLIP_BITMAP_IN_PLACE(x)
 
 static grs_canvas* old_canvas = NULL;
-Boolean	doubleUndraw = FALSE;
+bool	doubleUndraw = FALSE;
 
 //-----------------------------------------------------------
-void bitmap_cursor_drawfunc(int cmd, LGRegion* r, LGCursor* c, LGPoint pos)
+void bitmap_cursor_drawfunc(int32_t cmd, LGRegion* r, LGCursor* c, LGPoint pos)
 {
 	grs_bitmap* bm = (grs_bitmap*)(c->state);
 #ifndef NO_DUMMIES

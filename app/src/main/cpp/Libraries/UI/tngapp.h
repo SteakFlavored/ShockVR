@@ -109,15 +109,15 @@ extern LGPoint tng_absloc(TNG* ptng);
 
 // Macros for creating supported TNGs....
 
-extern Gadget *gad_pushbutton_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int button_type,
+extern Gadget *gad_pushbutton_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t button_type,
    void *display_data, LGPoint size);
 #define TNG_CREATE_PUSHBUTTON(ui_data, loc, pptng, sty, button_type, display_data, size) gad_pushbutton_create_from_tng(ui_data, loc, pptng, sty, button_type, display_data, size)
 
-extern Gadget *gad_slider_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int alignment, int min, int max,
-   int value, int increment, LGPoint size);
+extern Gadget *gad_slider_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max,
+   int32_t value, int32_t increment, LGPoint size);
 #define TNG_CREATE_SLIDER(ui_data, loc, pptng, sty, alignment, min, max, value, increm, size) gad_slider_create_from_tng(ui_data, loc, pptng, sty, alignment, min, max, value, increm, size)
 
-extern Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, ulong options, LGPoint size);
+extern Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, uint32_t options, LGPoint size);
 #define TNG_CREATE_TEXT(ui_data, loc, pptng, sty, options, size)  gad_textgadget_create_from_tng(ui_data, loc, pptng, sty, options, size)
 
 #endif // __TNGAPP_H

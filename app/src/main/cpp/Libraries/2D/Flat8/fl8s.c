@@ -36,23 +36,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grpix.h"
 
 // globals
-long	ADD_DEST_OFF;
-long	ADD_DV_FRAC_OFF;
-long	AND_BM_ROW_OFF;
-long	ADD_SRC_OFF;
-long	SET_REPS_OFF;
-long	SET_OFFSET_OFF;
-long	JMP_LOOP_MIDDLE_OFF;
+int32_t	ADD_DEST_OFF;
+int32_t	ADD_DV_FRAC_OFF;
+int32_t	AND_BM_ROW_OFF;
+int32_t	ADD_SRC_OFF;
+int32_t	SET_REPS_OFF;
+int32_t	SET_OFFSET_OFF;
+int32_t	JMP_LOOP_MIDDLE_OFF;
 
 #define unroll_num 4
 #define unroll_log 2
 
 // externs
-extern int gri_poly_loop (grs_tmap_loop_info *ti);
+extern int32_t gri_poly_loop (grs_tmap_loop_info *ti);
 
 // internal prototypes
-int gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli);
-int gri_scale_umap_loop_68K(grs_tmap_loop_info *tli);
+int32_t gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli);
+int32_t gri_scale_umap_loop_68K(grs_tmap_loop_info *tli);
 
 // This file contains the scalers for both 68K and PowerPC
 // First the routines that are generic to both, then the PowerPC routines, then 68K
@@ -63,15 +63,15 @@ int gri_scale_umap_loop_68K(grs_tmap_loop_info *tli);
 
 // ========================================================================
 // opaque solid polygon scaler
-int gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **vert)
+int32_t gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **vert)
  {
  	info->left_edge_func = (void (*)()) gri_scale_edge;
  	info->right_edge_func = (void (*)()) gr_null;
  	info->bm.hlog = 0;
  	info->bm.bits = info->clut;
  	info->loop_func = (void (*)()) gri_poly_loop;
- 	info->d = ((uchar *) ((long) grd_canvas->bm.row * (long) info->y));
- 	info->d += (long)grd_canvas->bm.bits;
+ 	info->d = ((uint8_t *) ((int32_t) grd_canvas->bm.row * (int32_t) info->y));
+ 	info->d += (int32_t)grd_canvas->bm.bits;
   return(0);
  }
 
@@ -82,7 +82,7 @@ int gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **vert
 
 // ========================================================================
 // transparent solid polygon scaler
-int gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
+int32_t gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
 	tli->bm.hlog=GRL_TRANS|GRL_SOLID;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
@@ -93,7 +93,7 @@ int gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
 
 // ========================================================================
 // transparent bitmap scaler
-int gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
+int32_t gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
 	tli->bm.hlog=GRL_TRANS;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
@@ -104,7 +104,7 @@ int gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
 
 // ========================================================================
 // opaque bitmap scaler
-int gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
+int32_t gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
  {
 	tli->bm.hlog=GRL_OPAQUE;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
@@ -115,7 +115,7 @@ int gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
 
 // ========================================================================
 // transparent clut bitmap scaler
-int gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
+int32_t gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
 	tli->bm.hlog=GRL_TRANS|GRL_CLUT;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
@@ -126,7 +126,7 @@ int gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
 
 // ========================================================================
 // opaque clut bitmap scaler
-int gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
+int32_t gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
 	tli->bm.hlog=GRL_OPAQUE|GRL_CLUT;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
@@ -137,12 +137,12 @@ int gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
 
 // ========================================================================
 // main inside loop for PPC scalers
-int gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli) {
+int32_t gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli) {
    fix u,ul,du;
-   int x;
-   uchar k;
+   int32_t x;
+   uint8_t k;
    fix xl,xr,dx,d;
-   uchar *p_src,*p_dest;
+   uint8_t *p_src,*p_dest;
 
    xl=fix_cint(tli->left.x);
    xr=fix_cint(tli->right.x);
@@ -185,7 +185,7 @@ int gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli) {
          break;
       case GRL_TRANS|GRL_SOLID:
          for (x=xl,u=ul; x<xr; x++) {
-            if (k=p_src[fix_fint(u)]) *p_dest = (uchar )(tli->clut);	// gr_fill_upixel((uchar )(tli->clut),x,tli->y);
+            if (k=p_src[fix_fint(u)]) *p_dest = (uint8_t )(tli->clut);	// gr_fill_upixel((uint8_t )(tli->clut),x,tli->y);
             u+=du;
             p_dest++;
          }
@@ -205,7 +205,7 @@ int gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli) {
 
 // ========================================================================
 // transparent solid polygon scaler
-int gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
+int32_t gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
 	tli->bm.hlog=GRL_TRANS|GRL_SOLID;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
@@ -216,7 +216,7 @@ int gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
 
 // ========================================================================
 // transparent bitmap scaler
-int gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
+int32_t gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
 	tli->bm.hlog=GRL_TRANS;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
@@ -227,7 +227,7 @@ int gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
 
 // ========================================================================
 // opaque bitmap scaler
-int gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
+int32_t gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
  {
 	tli->bm.hlog=GRL_OPAQUE;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
@@ -238,7 +238,7 @@ int gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
 
 // ========================================================================
 // transparent clut bitmap scaler
-int gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
+int32_t gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
 	tli->bm.hlog=GRL_TRANS|GRL_CLUT;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
@@ -249,7 +249,7 @@ int gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
 
 // ========================================================================
 // opaque clut bitmap scaler
-int gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
+int32_t gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
 	tli->bm.hlog=GRL_OPAQUE|GRL_CLUT;
 	tli->loop_func=(void (*)()) gri_scale_umap_loop_68K;
@@ -258,14 +258,14 @@ int gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
  	return(0);
  }
 
-asm void ILoop68k(int count, fix ul, fix du, uchar *p_src, uchar *p_dest, grs_tmap_loop_info *tli);
+asm void ILoop68k(int32_t count, fix ul, fix du, uint8_t *p_src, uint8_t *p_dest, grs_tmap_loop_info *tli);
 
 // ========================================================================
 // main inside loop for 68K scalers
-int gri_scale_umap_loop_68K(grs_tmap_loop_info *tli) {
+int32_t gri_scale_umap_loop_68K(grs_tmap_loop_info *tli) {
    fix u,ul,du;
    fix xl,xr,dx,d;
-   uchar *p_src,*p_dest;
+   uint8_t *p_src,*p_dest;
 
    xl=fix_cint(tli->left.x);
    xr=fix_cint(tli->right.x);
@@ -285,7 +285,7 @@ int gri_scale_umap_loop_68K(grs_tmap_loop_info *tli) {
 
 // ========================================================================
 // 68K inner loop for scalers
-asm void ILoop68k(int count, fix ul, fix du, uchar *p_src, uchar *p_dest, grs_tmap_loop_info *tli)
+asm void ILoop68k(int32_t count, fix ul, fix du, uint8_t *p_src, uint8_t *p_dest, grs_tmap_loop_info *tli)
  {
  	movem.l	d3-d7/a2-a4,-(sp)		// save regs
  	movem.l	36(sp),d0-d2/a0-a2	// get parms

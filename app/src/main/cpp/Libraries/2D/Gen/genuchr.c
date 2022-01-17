@@ -53,21 +53,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* draw an unclipped character c from the current font at (x,y). */
 
-void gen_font_uchar (grs_font *f, char c, short x, short y)
+void gen_font_uchar (grs_font *f, int8_t c, int16_t x, int16_t y)
 {
    grs_bitmap bm;                /* character bitmap */
-   short *off_tab;               /* character offset table */
-   uchar *data_buf;              /* pixel data buffer */
-   short offset;                 /* current character offset */
+   int16_t *off_tab;               /* character offset table */
+   uint8_t *data_buf;              /* pixel data buffer */
+   int16_t offset;                 /* current character offset */
 
    /* range check char, get font table pointers, offset. */
-    if ((uchar)c > f->max || (uchar)c < f->min)
+    if ((uint8_t)c > f->max || (uint8_t)c < f->min)
       return;
-   data_buf = (uchar *)f + f->buf;
+   data_buf = (uint8_t *)f + f->buf;
    off_tab = f->off_tab;
-   offset = off_tab[(uchar)c - f->min];
+   offset = off_tab[(uint8_t)c - f->min];
    gr_init_bm (&bm, NULL, (f->id==0xcccc)? BMT_FLAT8: BMT_MONO,
-               BMF_TRANS, off_tab[(uchar)c - f->min+1]-offset, f->h);
+               BMF_TRANS, off_tab[(uint8_t)c - f->min+1]-offset, f->h);
    bm.row = f->w;
    /* draw the character with no clipping. */
    if (bm.type == BMT_MONO)

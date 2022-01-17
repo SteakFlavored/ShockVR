@@ -73,16 +73,16 @@ bool redraw_paused=FALSE;
 // ----------
 void draw_pause_string(void);
 
-long	pal_frame = 0;
+int32_t	pal_frame = 0;
 
 //------------------------------------------------------------------
 void draw_pause_string(void)
 {
 	LGRect	r;
-	short w,h,nw,nh;
-	extern void ss_scale_string(char *s, short x, short y);
+	int16_t w,h,nw,nh;
+	extern void ss_scale_string(int8_t *s, int16_t x, int16_t y);
 
-	uchar old_over = gr2ss_override;
+	uint8_t old_over = gr2ss_override;
 	gr_set_fcolor(RED_BASE + 4);
 	gr_set_font((grs_font*)ResGet(RES_citadelFont));
 	gr_string_size(get_string(REF_STR_Pause, NULL, 0), &w, &h);
@@ -105,7 +105,7 @@ void game_loop(void)
 	extern bool game_paused;
 	extern void sound_frame_update(void);
 //¥¥¥¥¥¥ temp
-//extern char saveArray[16];
+//extern int8_t saveArray[16];
 //if (memcmp(0, saveArray, 16))
 //	Debugger();
 
@@ -122,7 +122,7 @@ void game_loop(void)
 		if (music_on)
 			loopLine(GL|0x1C,mlimbs_do_ai());
 		if (pal_fx_on)
-			loopLine(GL|0x1E,palette_advance_all_fx(* (long *) 0x16a));	// TickCount()
+			loopLine(GL|0x1E,palette_advance_all_fx(* (int32_t *) 0x16a));	// TickCount()
 	}
 
 	// If we're not paused...
@@ -189,7 +189,7 @@ void game_loop(void)
 		if (pal_fx_on && (++pal_frame == 2))
 		 {
 		 	pal_frame=0;
-			loopLine(GL|0x1F,palette_advance_all_fx(* (long *) 0x16a));	// TickCount()
+			loopLine(GL|0x1F,palette_advance_all_fx(* (int32_t *) 0x16a));	// TickCount()
 		 }
 
 		loopLine(GL|0x20, destroy_destroyed_objects());

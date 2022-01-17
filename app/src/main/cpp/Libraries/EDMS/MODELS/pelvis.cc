@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Pelvis.cc is a destroyed biped.  R.I.P.  Life is pain, and in addition this should make it
 //	less fun to move in the indoor games.  You should probably use the Biped instead unless
@@ -43,9 +43,9 @@ Q       EDMS_CYBER_FLOW1X = 100;
 Q       EDMS_CYBER_FLOW2X = 200;
 Q       EDMS_CYBER_FLOW3X = 270;
 
-int     EDMS_BCD = 0;
-int     EDMS_pelvis_is_climbing = 0;
-int     edms_ss_head_bcd_flags;
+int32_t     EDMS_BCD = 0;
+int32_t     EDMS_pelvis_is_climbing = 0;
+int32_t     edms_ss_head_bcd_flags;
 
 
 fix     hacked_head_bob_1 = fix_make(1,0),
@@ -69,13 +69,13 @@ static Q               	V_ceiling[3],
 extern EDMS_Argblock_Pointer	A;
 extern Q	S[MAX_OBJ][7][4],
 		I[MAX_OBJ][DOF_MAX];
-extern int	no_no_not_me[MAX_OBJ];
+extern int32_t	no_no_not_me[MAX_OBJ];
 
 
 //	Functions...
 //	============
-extern void	( *idof_functions[MAX_OBJ] )( int ),
-		( *equation_of_motion[MAX_OBJ][7] )( int );
+extern void	( *idof_functions[MAX_OBJ] )( int32_t ),
+		( *equation_of_motion[MAX_OBJ][7] )( int32_t );
 
 
 
@@ -131,7 +131,7 @@ Q	bob_arg = 0;
 
 //	Here are the internal degrees of freedom:
 //	=========================================
-void	pelvis_idof( int object ) {
+void	pelvis_idof( int32_t object ) {
 
 // attemp to speed up something
 Q		*i_object = I[object];
@@ -139,13 +139,13 @@ Q		temp_Q;
 
 //      To do the head motion, collisions, and climbing...
 //      --------------------------------------------------
-void    get_head_of_death( int ),
-        get_body_of_death( int ),
-        do_climbing( int object );
+void    get_head_of_death( int32_t ),
+        get_body_of_death( int32_t ),
+        do_climbing( int32_t object );
 
 //	Call me instead of having special code everywhere...
 //	====================================================
-extern void	shall_we_dance( int object, Q& result0, Q& result1, Q& result2 );
+extern void	shall_we_dance( int32_t object, Q& result0, Q& result1, Q& result2 );
 
                 EDMS_pelvis_is_climbing = 0;
 
@@ -165,7 +165,7 @@ extern void	shall_we_dance( int object, Q& result0, Q& result1, Q& result2 );
 		V_floor[2].fix_to( terrain_info.fz );
 
 Q		mag = i_object[18]*i_object[18] + i_object[19]*i_object[19];
-    if ( mag < .1 && abs( V_floor[0] ) < .05*i_object[22] && abs( V_floor[1] ) < .05*i_object[22] ) 
+    if ( mag < .1 && abs( V_floor[0] ) < .05*i_object[22] && abs( V_floor[1] ) < .05*i_object[22] )
      {
       V_floor[1].val = 0;                                 //Turns on SlopeStand(tm)...
 	    V_floor[0].val = 0;
@@ -190,7 +190,7 @@ Q		mag = i_object[18]*i_object[18] + i_object[19]*i_object[19];
       object3.val = fix_div(fix_one.val,checker.val);
       object9.val = fix_make(1,0);			//Are we in the rub???
 		 }
-		else 
+		else
 			checker.val = object9.val = 0;
 
     if ( i_object[10] == 2 ) object9.val = fix_make(1,0);                  //Cyberspace...
@@ -198,7 +198,7 @@ Q		mag = i_object[18]*i_object[18] + i_object[19]*i_object[19];
 		object4.val	= fix_mul(object3.val,object0.val);     				//The primitive V_n...
 		object5.val	= fix_mul(object3.val,object1.val);
 		object6.val	= fix_mul(object3.val,object2.val);
-				
+
 		object7.val = fix_mul(i_object[21].val,
 										( fix_mul(A[object][0][1].val,object4.val)	//Delta_magnitude...
 										+ fix_mul(A[object][1][1].val,object5.val)
@@ -206,12 +206,12 @@ Q		mag = i_object[18]*i_object[18] + i_object[19]*i_object[19];
 
 		object8.val = i_object[20].val;
 
-		if( i_object[10] > 0 ) 
+		if( i_object[10] > 0 )
 		  {
 		  	object7.val = fix_mul(object7.val,fix_make(2,0));
 				object8.val = fix_mul(object8.val,fix_make(2,0));
 			}
-			
+
 		object4.val = fix_mul(object7.val,object4.val);				//Delta...
 		object5.val = fix_mul(object7.val,object5.val);
 		object6.val = fix_mul(object7.val,object6.val);
@@ -233,14 +233,14 @@ Q		bob_speed = sqrt( A[object][0][1]*A[object][0][1] + A[object][1][1]*A[object]
 
 Q		bob_fac = bob_speed*abs(sin(bob_arg));
 
-#define EDMS_HEAD_BOB_HEIGHT 2 
+#define EDMS_HEAD_BOB_HEIGHT 2
 
 		if (bob_fac > EDMS_HEAD_BOB_HEIGHT) bob_fac = EDMS_HEAD_BOB_HEIGHT;
 
 		bob_fac.val = fix_make(EDMS_HEAD_BOB_HEIGHT,0) - fix_mul(0x09999,bob_fac.val);	// 0x9999 = .6
-    
+
     if (i_object[10] > 0) bob_fac = 1;
-   
+
     io18.val = fix_mul(i_object[18].val,bob_fac.val);
     io19.val = fix_mul(i_object[19].val,bob_fac.val);
     io17.val = i_object[17].val;
@@ -254,7 +254,7 @@ Q		bob_fac = bob_speed*abs(sin(bob_arg));
     if ( (V_floor[2].val == 0) && (io17.val > 0)) io17.val = 0;
 
 //		Cyberama...
-//		-----------		                          
+//		-----------
 		if ( (object9.val == 0) && (io17.val >= 0) && (i_object[25].val > 0x08000))	// 0x08000 = .5
    		io18.val = io19.val = io17.val = 0;
 
@@ -285,8 +285,8 @@ Q		bob_fac = bob_speed*abs(sin(bob_arg));
 
 //      The head...
 //      ===========
-int     edms_ss_bcd_flags_save = ss_edms_bcd_flags;                                                     //Save off info for after head call...
-int     edms_ss_param_save = ss_edms_bcd_param;
+int32_t     edms_ss_bcd_flags_save = ss_edms_bcd_flags;                                                     //Save off info for after head call...
+int32_t     edms_ss_param_save = ss_edms_bcd_param;
 
 Q       head_check_x = 0;
 Q       head_check_y = 0;
@@ -305,7 +305,7 @@ Q       head_check_y = 0;
 
 //      The Body...
 //      ===========
-        get_body_of_death( object );        
+        get_body_of_death( object );
 //        io18 *= ( body_kappa[0] == 0 );
 //        io19 *= ( body_kappa[1] == 0 );
 				if (body_kappa[0].val != 0)
@@ -326,19 +326,19 @@ Q       head_check_y = 0;
 				object18.val = 0;
 				if (io17.val > 0 && object9.val > 0)
 					object18.val = fix_mul(fix_make(800,0), (io17.val - A[object][2][1].val));
-				
+
 //            Jump jets...
 //            ------------
         if ( (io17 < 0) && (terrain_info.cz == 0) ) object18 = 800*( - io17 - A[object][2][1] ); 			//Jump jets...
-         
+
 
 //      Climbing overriden with repulsors...
 //      ====================================
-        if ( ss_edms_bcd_flags & SS_BCD_REPUL_ON ) 
+        if ( ss_edms_bcd_flags & SS_BCD_REPUL_ON )
          {
 
-//              Get the speed... 
-Q         repulsor_speed = 21;                                                                                        
+//              Get the speed...
+Q         repulsor_speed = 21;
           if ( (ss_edms_bcd_flags & SS_BCD_REPUL_SPD) == SS_BCD_REPUL_NORM ) repulsor_speed = 7;
 
 //              Assume we're going up, unless...
@@ -350,11 +350,11 @@ Q         repul_height;
 
 
 Q         nearness_or_something = repul_height - A[object][2][0];
-          if ( abs(nearness_or_something) <= .333 ) 
+          if ( abs(nearness_or_something) <= .333 )
             repulsor_speed *= 3 * nearness_or_something;
 
           io17 = repulsor_speed;
-          if ( ( abs(A[object][2][1] - i_object[17]) > .6*i_object[17]) && (terrain_info.cz == 0) && ( repulsor_speed >= 0)) 
+          if ( ( abs(A[object][2][1] - i_object[17]) > .6*i_object[17]) && (terrain_info.cz == 0) && ( repulsor_speed >= 0))
           	io17+=50*i_object[17];
 
         	object18 = i_object[26]*( ( io17 - A[object][2][1] ) + i_object[25] );
@@ -364,19 +364,19 @@ Q         nearness_or_something = repul_height - A[object][2][0];
 
           object9 = 1;
          }
-                         
+
 //      Do climbing...
 //      ==============
         do_climbing( object );
-  
+
 //	Crouch torso bend thang and boogie boogie boogie...
 //	===================================================
-	if ((i_object[7] > 0.0) || (i_object[0] < i_object[6])) 
-		i_object[0] = i_object[6]*(1 - .636*abs(S[object][4][0]));          //Crouch...                                        
-  else 
+	if ((i_object[7] > 0.0) || (i_object[0] < i_object[6]))
+		i_object[0] = i_object[6]*(1 - .636*abs(S[object][4][0]));          //Crouch...
+  else
   	i_object[0] = i_object[6];
 
- 
+
 //	Cyberspace for real...
 //	======================
 Q	drug_addict0 = i_object[23]*A[object][0][1];
@@ -408,15 +408,15 @@ Q	dam2 = object8*object2 - (object18==0)*object6 + head_kappa[2] - head_delta[2]
 
 
 		i_object[14] = abs(dam0) + abs(dam1) + abs(dam2) - 2*i_object[26]*i_object[25];		//Damage??
-		if ( i_object[14] > 0 ) 
+		if ( i_object[14] > 0 )
 			i_object[14] *= i_object[24]*( io17 < .5 );
-    else 
-    	i_object[14] = 0;        
+    else
+    	i_object[14] = 0;
 
 
 //	Is there a projectile hit?
 //	==========================
-	if ( i_object[35] > 0 ) 
+	if ( i_object[35] > 0 )
 	 {
 
 //		Let's not power through the walls anymore...
@@ -444,7 +444,7 @@ Q	dam2 = object8*object2 - (object18==0)*object6 + head_kappa[2] - head_delta[2]
 Q   Head_tau_beta =  -.1*i_object[0]*sin_beta*(  head_kappa[2] - head_delta[2] ),
     Head_tau_gamma = -.1*i_object[0]*sin_gamma*( head_kappa[2] - head_delta[2] );
 
-    if (((V_wall[1] != 0) && (head_check_y == 0)) || ((V_wall[0] != 0) && (head_check_x == 0))) 
+    if (((V_wall[1] != 0) && (head_check_y == 0)) || ((V_wall[0] != 0) && (head_check_x == 0)))
     	i_object[15] = 0;
 
 		T_beta  = -( lp_z*Fmxm )  + i_object[7]       + Head_tau_beta;               			//Actual torques...
@@ -453,14 +453,14 @@ Q   Head_tau_beta =  -.1*i_object[0]*sin_beta*(  head_kappa[2] - head_delta[2] )
 
 //	Kickbacks...
 //	============
-	if( abs(i_object[8]) > 0 ) 
+	if( abs(i_object[8]) > 0 )
 	 {
 		T_beta  -= cos_alpha*i_object[8] + sin_alpha*i_object[9];
 		T_gamma  =-sin_alpha*i_object[8] + cos_alpha*i_object[9];
-		
+
 		object20 -= i_object[8];					//For zero g...
 		object21 -= i_object[9];
-		
+
 		i_object[8] = i_object[9] = 0;
 	 }
 
@@ -484,7 +484,7 @@ Q   Head_tau_beta =  -.1*i_object[0]*sin_beta*(  head_kappa[2] - head_delta[2] )
 
   S[object][5][2] = i_object[27]*( T_gamma
                                   - i_object[1]*A[object][5][0]	  /**(1-.5*(i_object[10]==1))*/
-                                  - .8*i_object[2]*A[object][5][1] /**(1-.5*(i_object[10]==1))*/	  
+                                  - .8*i_object[2]*A[object][5][1] /**(1-.5*(i_object[10]==1))*/
                                   + i_object[15] );
 
 
@@ -497,7 +497,7 @@ Q   Head_tau_beta =  -.1*i_object[0]*sin_beta*(  head_kappa[2] - head_delta[2] )
 
 //      Here we'll get the head information we all want so badly...
 //      ===========================================================
-void    get_head_of_death( int object ) 
+void    get_head_of_death( int32_t object )
  {
 Q		*i_object = I[object];
 Q       vec0,
@@ -518,16 +518,16 @@ Q       sin_alpha = 0,
         cos_alpha = 0;
 
 Q       final_x = 0,
-        final_y = 0;        
-        
-        
+        final_y = 0;
+
+
         sincos( -A[object][3][0], &sin_alpha, &cos_alpha );
         final_x = cos_alpha*offset_x + sin_alpha*offset_y;
         final_y =-sin_alpha*offset_x + cos_alpha*offset_y;
 
 				indoor_terrain( A[object][0][0] + final_x,
                         A[object][1][0] + final_y,
-                        A[object][2][0] + offset_z, 
+                        A[object][2][0] + offset_z,
 												.75*i_object[22],
 												-1 /*on2ph[object]*/ );
 
@@ -547,7 +547,7 @@ Q		mag = i_object[18]*i_object[18] + i_object[19]*i_object[19];
 					      + vec2*vec2 );
 
 
-		if (test > EDMS_DIV_ZERO_TOLERANCE ) 
+		if (test > EDMS_DIV_ZERO_TOLERANCE )
 			mul = fix_one / test;		//To get primitive...
 		else
 			test = mul = 0;
@@ -575,7 +575,7 @@ Q		mag = i_object[18]*i_object[18] + i_object[19]*i_object[19];
 }
 
 
-void get_body_of_death( int object )
+void get_body_of_death( int32_t object )
 {
 Q		*i_object = I[object];
 
@@ -588,7 +588,7 @@ Q       vec0,
         dmag,
         kmag;
 
-Q       half_height = .5*i_object[0]; 
+Q       half_height = .5*i_object[0];
 
 Q       offset_x = half_height*sin( A[object][4][0] ),
         offset_y =-1.5*half_height*sin( A[object][5][0] ),
@@ -598,16 +598,16 @@ Q       sin_alpha = 0,
         cos_alpha = 0;
 
 Q       final_x = 0,
-        final_y = 0;        
-        
-        
+        final_y = 0;
+
+
         sincos( -A[object][3][0], &sin_alpha, &cos_alpha );
         final_x = cos_alpha*offset_x + sin_alpha*offset_y;
         final_y =-sin_alpha*offset_x + cos_alpha*offset_y;
 
 				indoor_terrain( A[object][0][0] + final_x,
                         A[object][1][0] + final_y,
-                        A[object][2][0] + offset_z, 
+                        A[object][2][0] + offset_z,
 												.33*i_object[0],
 												-1 /*on2ph[object]*/ );
 
@@ -645,7 +645,7 @@ Q			mag = i_object[18]*i_object[18] + i_object[19]*i_object[19];
 				mul = fix_one / test;		//To get primitive...
 			else
 				test = mul = 0;
-	
+
 			vv0	= mul*vec0;				//The primitive V_n...
 			vv1	= mul*vec1;
 			vv2	= mul*vec2;
@@ -667,30 +667,30 @@ Q			mag = i_object[18]*i_object[18] + i_object[19]*i_object[19];
             body_kappa[2] =  kmag*vec2;
 
 		}       //Do NOTHING...
- }                                                                 
+ }
 
 
 //      Climbing stuff also removed for speed of compilations...
 //      ========================================================
-void    do_climbing( int object )  
+void    do_climbing( int32_t object )
  {
 Q		*i_object = I[object];
 
-//      Hellishness...                                                    
+//      Hellishness...
 //      ==============
-  if ( (i_object[17] > 0) && ((ss_edms_bcd_flags & SS_BCD_MISC_CLIMB) || (edms_ss_head_bcd_flags & SS_BCD_MISC_CLIMB)) ) 
+  if ( (i_object[17] > 0) && ((ss_edms_bcd_flags & SS_BCD_MISC_CLIMB) || (edms_ss_head_bcd_flags & SS_BCD_MISC_CLIMB)) )
    {
 Q   ass = sqrt( (.05*i_object[18])*i_object[18] + (.05*i_object[19])*i_object[19] );
 Q   ratio = i_object[18]*object0 + i_object[19]*object1;
-    
+
     if ( ratio > 0 ) ass = 0;
 
     EDMS_pelvis_is_climbing = 1;
 
-		if (checker>0) 
+		if (checker>0)
 		 {
       io17 = .02*ass;// + 100*( .2*i_object[22] - V_[floor][2] );
-      if ( (terrain_info.cz != 0) ) 
+      if ( (terrain_info.cz != 0) )
       	io17 = 0;
     	io18 = -.4*i_object[22]*object0*object8/checker + .5*i_object[18];
       io19 = -.4*i_object[22]*object1*object8/checker + .5*i_object[19];
@@ -704,19 +704,19 @@ Q   ratio = i_object[18]*object0 + i_object[19]*object1;
 
 
 
-                                                                                                   
+
 //      AutoClimbing(tm) is for wussies (is superseeded by climbing)...
 //      ===============================================================
   else if ((ss_edms_bcd_flags & SS_BCD_MISC_STAIR) /*&& (i_object[17] == 0) (io17==0) */)
    {
-		if ( ( checker > 0 ) && (abs(i_object[18]) + abs(i_object[19]) > .01 ) ) 
+		if ( ( checker > 0 ) && (abs(i_object[18]) + abs(i_object[19]) > .01 ) )
 		 {
 Q     ratio = (i_object[18]+A[object][0][1])*object0 + (i_object[19]+A[object][1][1])*object1;
-                        
-      if ( ratio <= 0 ) 
+
+      if ( ratio <= 0 )
        {
         io17 = .5;
-			                                   
+
 				io18 = -.3*i_object[22]*object0*object8/checker + .2*i_object[18];
 			  io19 = -.3*i_object[22]*object1*object8/checker + .2*i_object[19];
 
@@ -725,10 +725,10 @@ Q     ratio = (i_object[18]+A[object][0][1])*object0 + (i_object[19]+A[object][1
 //                              ===============
         object18 = 800*(io17>0)*( io17 - A[object][2][1] );
 			}
-		else 
-			{	
+		else
+			{
 				io18 = i_object[18];
-		    io19 = i_object[19]; 
+		    io19 = i_object[19];
 		  }
 		 }
   }
@@ -737,10 +737,10 @@ Q     ratio = (i_object[18]+A[object][0][1])*object0 + (i_object[19]+A[object][1
 
 
 
-                         
+
 //	We might for now want to set some external forces on the pelvis...
 //	==================================================================
-void	pelvis_set_control( int pelvis, Q forward, Q turn, Q sidestep, Q lean, Q jump, int crouch ) 
+void	pelvis_set_control( int32_t pelvis, Q forward, Q turn, Q sidestep, Q lean, Q jump, int32_t crouch )
  {
 const Q         pi_by_two = 1.5707;                                             //Yea, flixpoint...
 
@@ -777,7 +777,7 @@ const Q         pi_by_two = 1.5707;                                             
 //		And finally leaning about...
 //		----------------------------
 	  I[pelvis][15] = .04*lean*I[pelvis][1];				//Exactly the angle!
-                                                             
+
 //		Crouching (overpowers jumping )...
 //		----------------------------------
 		if ( crouch > 0 ) I[pelvis][7] = .20*crouch*I[pelvis][1];
@@ -791,24 +791,24 @@ const Q         pi_by_two = 1.5707;                                             
 
 
 //	Sets up everything needed to manufacture a pelvis with initial state vector
-//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the 
+//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the
 //	object number, or else a negative error code (see Soliton.CPP for error handling and codes).
 //	============================================================================================
-int make_pelvis( Q init_state[6][3], Q params[10] ) 
+int32_t make_pelvis( Q init_state[6][3], Q params[10] )
  {
 //	Have some variables...
 //	======================
-int	object_number = -1,						//Three guesses...
+int32_t	object_number = -1,						//Three guesses...
 	error_code = -1;						//Guilty until...
 
 //	We need ignorable coordinates...
 //	================================
-extern void	null_function( int );
+extern void	null_function( int32_t );
 
 
 //	First find out which object we're going to be...
 //	================================================
-	while ( S[++object_number][0][0] > END );			//Jon's first C trickie... 
+	while ( S[++object_number][0][0] > END );			//Jon's first C trickie...
 
 
 //	Is it an allowed object number?  Are we full? Why are we here? Is there a God?
@@ -818,15 +818,15 @@ extern void	null_function( int );
 
 //		Now we can create the pelvis:  first dump the initial state vector...
 //		=====================================================================
-		for ( int coord = 0; coord < 6; coord++ ) {
-		for ( int deriv = 0; deriv < 3;	deriv++ ) {			//Has alpha now...
-		S[object_number][coord][deriv] = 
+		for ( int32_t coord = 0; coord < 6; coord++ ) {
+		for ( int32_t deriv = 0; deriv < 3;	deriv++ ) {			//Has alpha now...
+		S[object_number][coord][deriv] =
 		A[object_number][coord][deriv] = init_state[coord][deriv];	//For collisions...
 		}}
 
 //		Put in the appropriate pelvis parameters...
 //		===========================================
-		for ( int copy = 0; copy < 10; copy++ ) {
+		for ( int32_t copy = 0; copy < 10; copy++ ) {
 		I[object_number][copy + 20] = params[copy];
 		}
 
@@ -840,7 +840,7 @@ extern void	null_function( int );
                 I[object_number][1] = 20*I[object_number][29];
                 I[object_number][2] = 4*sqrt( I[object_number][29]*I[object_number][1] );
 
-                                       
+
 //		Put in the collision information...
 //		===================================
 		I[object_number][31] = I[object_number][22];
@@ -869,11 +869,11 @@ extern void	null_function( int );
 //		=============================================================
 		idof_functions[object_number] = pelvis_idof;
 
-		equation_of_motion[object_number][0] =				//Nice symmetries, huh. 
-		equation_of_motion[object_number][1] = 
-		equation_of_motion[object_number][2] = 
-		equation_of_motion[object_number][3] = 
-		equation_of_motion[object_number][4] = 		  		
+		equation_of_motion[object_number][0] =				//Nice symmetries, huh.
+		equation_of_motion[object_number][1] =
+		equation_of_motion[object_number][2] =
+		equation_of_motion[object_number][3] =
+		equation_of_motion[object_number][4] =
 		equation_of_motion[object_number][5] = null_function;
 
 
@@ -885,7 +885,7 @@ extern void	null_function( int );
 //		Things seem okay...
 //		===================
 		error_code = object_number;
-	
+
 
 	}
 
@@ -922,14 +922,14 @@ extern void	null_function( int );
 
 void    EDMS_lean_o_meter( physics_handle ph, fix& lean, fix& crouch ) {
 
-        
+
         lean = crouch = 0;
 
 //      Are you for real?
 //      -----------------
         if (ph > -1) {
 
-int             on = ph2on[ph];
+int32_t             on = ph2on[ph];
 
 //              Are you a pelvis...
 //              -------------------

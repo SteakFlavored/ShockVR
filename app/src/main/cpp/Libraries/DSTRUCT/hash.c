@@ -61,51 +61,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Prototypes
 //--------------------
-int hashlog2(int x);
-int expmod(int b, int e, uint m);
-bool is_fermat_prime(uint n, uint numtests);
-static errtype grow(Hashtable* h, int newsize);
+int32_t hashlog2(int32_t x);
+int32_t expmod(int32_t b, int32_t e, uint32_t m);
+bool is_fermat_prime(uint32_t n, uint32_t numtests);
+static errtype grow(Hashtable* h, int32_t newsize);
 
 //--------------------
 //  Internal Functions
 //--------------------
-int hashlog2(int x)
+int32_t hashlog2(int32_t x)
 {
    if (x < 2) return 0;
    return 1+hashlog2(x/2);
 }
 
-int expmod(int b, int e, uint m)
+int32_t expmod(int32_t b, int32_t e, uint32_t m)
 {
    if (e == 0) return 1;
    if (e%2 == 0)
    {
-      int tmp = expmod(b,e/2,m);
+      int32_t tmp = expmod(b,e/2,m);
       return (tmp*tmp)%m;
    }
    else
    {
-      int tmp = expmod(b,e-1,m);
+      int32_t tmp = expmod(b,e-1,m);
       return (b*tmp)%m;
    }
 
 }
 
-bool is_fermat_prime(uint n, uint numtests)
+bool is_fermat_prime(uint32_t n, uint32_t numtests)
 {
-   int i;
+   int32_t i;
    if (n < 3) return FALSE;
    for (i = 0; i < numtests; i++)
    {
-      int a = rand()%(n-2) + 2;
+      int32_t a = rand()%(n-2) + 2;
       if (expmod(a,n,n) != a) return FALSE;
    }
    return TRUE;
 }
 
-errtype hash_init(Hashtable* h, int elemsize, int vecsize, Hashfunc hfunc, Equfunc efunc)
+errtype hash_init(Hashtable* h, int32_t elemsize, int32_t vecsize, Hashfunc hfunc, Equfunc efunc)
 {
-   int i;
+   int32_t i;
 //   Spew(DSRC_DSTRUCT_Hash,("hash_init(%x,%d,%d,%x,%x)\n",h,elemsize,vecsize,hfunc,efunc));
    while(!is_fermat_prime(vecsize,2)) vecsize++;
    h->elemsize = elemsize;
@@ -114,10 +114,10 @@ errtype hash_init(Hashtable* h, int elemsize, int vecsize, Hashfunc hfunc, Equfu
    h->fullness = 0;
    h->hfunc = hfunc;
    h->efunc = efunc;
-   h->statvec = (char*)NewPtr(vecsize);
+   h->statvec = (int8_t*)NewPtr(vecsize);
    if (h->statvec == NULL) return ERR_NOMEM;
    for (i = 0; i < vecsize; i++) h->statvec[i] = HASH_EMPTY;
-   h->vec = (char*)NewPtr(elemsize*vecsize);
+   h->vec = (int8_t*)NewPtr(elemsize*vecsize);
    if (h->vec == NULL) return ERR_NOMEM;
    return OK;
 }
@@ -134,11 +134,11 @@ errtype hash_copy(Hashtable* t, Hashtable* s)
    return OK;
 }
 
-static bool find_elem(Hashtable* h, void* elem, int* idx)
+static bool find_elem(Hashtable* h, void* elem, int32_t* idx)
 {
    bool found = FALSE;
-   int hash = h->hfunc(elem);
-   int index,j;
+   int32_t hash = h->hfunc(elem);
+   int32_t index,j;
    //Spew(DSRC_DSTRUCT_Hash,("find_elem(%x,%x,%x) hash is %d\n",h,elem,idx,hash));
    for (j = 0, index = hash%h->size;  j < h->size && h->statvec[index] != HASH_EMPTY;
          j++,index = (index + (1 << hash%h->sizelog2)) % h->size)
@@ -155,11 +155,11 @@ static bool find_elem(Hashtable* h, void* elem, int* idx)
    return found;
 }
 
-static int find_index(Hashtable* h, void* elem)
+static int32_t find_index(Hashtable* h, void* elem)
 {
-   int hash = h->hfunc(elem);
-   int j;
-   int index;
+   int32_t hash = h->hfunc(elem);
+   int32_t j;
+   int32_t index;
 //   Spew(DSRC_DSTRUCT_Hash,("find_index(%x,%x) hash is %d\n",h,elem,hash));
    for (j = 0, index = hash%h->size;  j < h->size && h->statvec[index] == HASH_FULL;
        j++,index = (index + (1 << hash%h->sizelog2)) % h->size)
@@ -169,13 +169,13 @@ static int find_index(Hashtable* h, void* elem)
    return index;
 }
 
-static errtype grow(Hashtable* h, int newsize)
+static errtype grow(Hashtable* h, int32_t newsize)
 {
-   char* oldvec = h->vec;
-   char* oldstat = h->statvec;
-   char *newvec, *newstat;
-   int oldsize = h->size;
-   int i;
+   int8_t* oldvec = h->vec;
+   int8_t* oldstat = h->statvec;
+   int8_t *newvec, *newstat;
+   int32_t oldsize = h->size;
+   int32_t i;
 //   Spew(DSRC_DSTRUCT_Hash,("grow(%x,%d)\n",h,newsize));
    for (;!is_fermat_prime(newsize,2);newsize++);
    newvec = NewPtr(newsize*h->elemsize);
@@ -206,7 +206,7 @@ static errtype grow(Hashtable* h, int newsize)
 
 errtype hash_set(Hashtable* h, void* elem)
 {
-   int i;
+   int32_t i;
 //   Spew(DSRC_DSTRUCT_Hash,("hash_set(%x,%x)\n",h,elem));
    if (h->fullness*100/h->size > FULLNESS_THRESHHOLD_PERCENT)
       grow(h,h->size*2);
@@ -220,7 +220,7 @@ errtype hash_set(Hashtable* h, void* elem)
 
 errtype hash_insert(Hashtable* h, void* elem)
 {
-   int i;
+   int32_t i;
 //   Spew(DSRC_DSTRUCT_Hash,("hash_insert(%x,%x)\n",h,elem));
    if (h->fullness*100/h->size > FULLNESS_THRESHHOLD_PERCENT)
       grow(h,h->size*2);
@@ -234,7 +234,7 @@ errtype hash_insert(Hashtable* h, void* elem)
 
 errtype hash_delete(Hashtable* h, void* elem)
 {
-   int i;
+   int32_t i;
 //   Spew(DSRC_DSTRUCT_Hash,("hash_delete(%x,%x)\n",h,elem));
    if (find_elem(h,elem,&i))
    {
@@ -247,7 +247,7 @@ errtype hash_delete(Hashtable* h, void* elem)
 
 errtype hash_lookup(Hashtable* h, void* elem, void** result)
 {
-   int i;
+   int32_t i;
 //   Spew(DSRC_DSTRUCT_Hash,("hash_lookup(%x,%x,%x)\n",h,elem,result));
    if (find_elem(h,elem,&i))
    {
@@ -260,7 +260,7 @@ errtype hash_lookup(Hashtable* h, void* elem, void** result)
 
 errtype hash_iter(Hashtable* h, HashIterFunc ifunc, void* data)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < h->size; i++)
       if (h->statvec[i] == HASH_FULL)
          if (ifunc(ELEM(h,i),data))
@@ -268,7 +268,7 @@ errtype hash_iter(Hashtable* h, HashIterFunc ifunc, void* data)
    return OK;
 }
 
-errtype hash_step(Hashtable *h, void **result, int *index)
+errtype hash_step(Hashtable *h, void **result, int32_t *index)
 {
    while ((h->statvec[*index] != HASH_FULL) && (*index < h->size))
       (*index)++;

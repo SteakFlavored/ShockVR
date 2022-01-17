@@ -42,8 +42,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __PAL_H
 #define __PAL_H
 
-extern void gr_set_pal (int start, int n, uchar *pal_data);
-extern void gr_set_gamma_pal (int start, int n, fix gamma);
-extern void gr_get_pal (int start, int n, uchar *pal_data);
+extern void gr_set_pal (int32_t start, int32_t n, uint8_t *pal_data);
+extern void gr_set_gamma_pal (int32_t start, int32_t n, fix gamma);
+extern void gr_get_pal (int32_t start, int32_t n, uint8_t *pal_data);
 
 #endif /* !__PAL_H */

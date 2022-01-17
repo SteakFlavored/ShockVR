@@ -75,9 +75,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Prototypes
 
 // Creates a text gadget of size dim.
-Gadget *gad_text_create(Gadget *parent, LGRect *dim, int z, ulong options, TNGStyle *sty, char *name);
+Gadget *gad_text_create(Gadget *parent, LGRect *dim, int32_t z, uint32_t options, TNGStyle *sty, int8_t *name);
 
-Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, ulong options, LGPoint size);
+Gadget *gad_textgadget_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, uint32_t options, LGPoint size);
 // Globals
 
 #endif // __TEXTGADG_H

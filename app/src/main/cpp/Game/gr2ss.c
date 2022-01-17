@@ -33,11 +33,11 @@ extern bool inp6d_stereo_active;
 #endif
 
 #ifdef SVGA_SUPPORT
-uchar gr2ss_override = OVERRIDE_NONE;
-char convert_type = 0;
-char convert_use_mode = 0;
+uint8_t gr2ss_override = OVERRIDE_NONE;
+int8_t convert_type = 0;
+int8_t convert_use_mode = 0;
 
-char mode_count[MAX_CONVERT_TYPES];
+int8_t mode_count[MAX_CONVERT_TYPES];
 fix convert_x[MAX_CONVERT_TYPES][MAX_USE_MODES];
 fix convert_y[MAX_CONVERT_TYPES][MAX_USE_MODES];
 fix inv_convert_x[MAX_CONVERT_TYPES][MAX_USE_MODES];
@@ -48,12 +48,12 @@ fix inv_convert_y[MAX_CONVERT_TYPES][MAX_USE_MODES];
 #define SVGA_CONV_SCREEN   2
 
 // Internal prototypes
-uchar perform_svga_conversion(uchar mask);
-void ss_scale_string(char *s, short x, short y);
+uint8_t perform_svga_conversion(uint8_t mask);
+void ss_scale_string(int8_t *s, int16_t x, int16_t y);
 void mouse_unconstrain(void);
 
 
-uchar perform_svga_conversion(uchar mask)
+uint8_t perform_svga_conversion(uint8_t mask)
 {
 	extern bool full_game_3d;
 
@@ -79,17 +79,17 @@ uchar perform_svga_conversion(uchar mask)
 // for screen mode coordinates and aspect ratios.
 
 // Note, x and y already converted here!
-void ss_scale_string(char *s, short x, short y)
+void ss_scale_string(int8_t *s, int16_t x, int16_t y)
 {
    // needs to scale still!
    // know about different fonts instead?  That would be better...
    grs_font *ttfont = (grs_font *)ResLock(RES_tinyTechFont);
    grs_font *mlfont = (grs_font *)ResLock(RES_mediumLEDFont);
    grs_font *f = gr_get_font();
-   int c = gr_get_fcolor();
+   int32_t c = gr_get_fcolor();
    Id use_font = ID_NULL;
 #ifdef STEREO_SUPPORT
-   uchar rv = perform_svga_conversion(OVERRIDE_SCALE);
+   uint8_t rv = perform_svga_conversion(OVERRIDE_SCALE);
 #endif
    if (convert_use_mode == 0)
    {
@@ -123,8 +123,8 @@ void ss_scale_string(char *s, short x, short y)
       {
          if (use_font == ID_NULL)
          {
-            short w,h;
-            gr_string_size(s,(short *)&w,(short *)&h);
+            int16_t w,h;
+            gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
             gr_push_canvas(i6d_ss->cf_left);
             gr_set_font(f);
             gr_set_fcolor(c);
@@ -154,8 +154,8 @@ void ss_scale_string(char *s, short x, short y)
 #endif
          if (use_font == ID_NULL)
          {
-            short w,h;
-            gr_string_size(s,(short *)&w,(short *)&h);
+            int16_t w,h;
+            gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
             gr_scale_string(s, x, y,SCONV_X(w),SCONV_Y(h));
          }
          else
@@ -175,15 +175,15 @@ void ss_scale_string(char *s, short x, short y)
    else
    {
       // Attempt to scale it
-      short w,h;
-      gr_string_size(s,(short *)&w,(short *)&h);
+      int16_t w,h;
+      gr_string_size(s,(int16_t *)&w,(int16_t *)&h);
       gr_scale_string(s, x, y,SCONV_X(w),SCONV_Y(h));
    }
 }
 
-void ss_string(char *s, short x, short y)
+void ss_string(int8_t *s, int16_t x, int16_t y)
 {
-   uchar rv;
+   uint8_t rv;
    if (rv = perform_svga_conversion(OVERRIDE_SCALE))
    {
 #ifdef STEREO_SUPPORT
@@ -209,9 +209,9 @@ void ss_string(char *s, short x, short y)
       gr_string(s,x,y);
 }
 
-void ss_bitmap(grs_bitmap *bmp, short x, short y)
+void ss_bitmap(grs_bitmap *bmp, int16_t x, int16_t y)
 {
-   uchar rv;
+   uint8_t rv;
    if (rv = perform_svga_conversion(OVERRIDE_SCALE))
    {
 #ifdef STEREO_SUPPORT
@@ -238,7 +238,7 @@ void ss_bitmap(grs_bitmap *bmp, short x, short y)
       gr_bitmap(bmp, x, y);
 }
 
-void ss_ubitmap(grs_bitmap *bmp, short x, short y)
+void ss_ubitmap(grs_bitmap *bmp, int16_t x, int16_t y)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
       gr_scale_ubitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h));
@@ -246,9 +246,9 @@ void ss_ubitmap(grs_bitmap *bmp, short x, short y)
       gr_ubitmap(bmp, x, y);
 }
 
-void ss_noscale_bitmap(grs_bitmap *bmp, short x, short y)
+void ss_noscale_bitmap(grs_bitmap *bmp, int16_t x, int16_t y)
 {
-   uchar rv;
+   uint8_t rv;
    if (rv = perform_svga_conversion(OVERRIDE_SCALE))    // ?
 #ifdef STEREO_SUPPORT
       if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
@@ -272,7 +272,7 @@ void ss_noscale_bitmap(grs_bitmap *bmp, short x, short y)
       gr_bitmap(bmp, x, y);
 }
 
-void ss_scale_bitmap(grs_bitmap *bmp, short x, short y, short w, short h)
+void ss_scale_bitmap(grs_bitmap *bmp, int16_t x, int16_t y, int16_t w, int16_t h)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
       gr_scale_bitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h));
@@ -280,14 +280,14 @@ void ss_scale_bitmap(grs_bitmap *bmp, short x, short y, short w, short h)
       gr_scale_bitmap(bmp, x, y,w,h);
 }
 
-void ss_rect(short x1, short y1, short x2, short y2)
+void ss_rect(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
-   uchar rv;
+   uint8_t rv;
    if (rv = perform_svga_conversion(OVERRIDE_SCALE))
 #ifdef STEREO_SUPPORT
       if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
       {
-         int c = gr_get_fcolor();
+         int32_t c = gr_get_fcolor();
          gr_push_canvas(i6d_ss->cf_left);
          gr_set_fcolor(c);
          if (convert_use_mode)
@@ -309,14 +309,14 @@ void ss_rect(short x1, short y1, short x2, short y2)
       gr_rect(x1,y1,x2,y2);
 }
 
-void ss_box(short x1, short y1, short x2, short y2)
+void ss_box(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
-   uchar rv;
+   uint8_t rv;
    if (rv = perform_svga_conversion(OVERRIDE_SCALE))
 #ifdef STEREO_SUPPORT
       if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active))
       {
-         int c = gr_get_fcolor();
+         int32_t c = gr_get_fcolor();
          gr_push_canvas(i6d_ss->cf_left);
          gr_set_fcolor(c);
          if (convert_use_mode)
@@ -338,7 +338,7 @@ void ss_box(short x1, short y1, short x2, short y2)
       gr_box(x1,y1,x2,y2);
 }
 
-void ss_safe_set_cliprect(short x1,short y1,short x2,short y2)
+void ss_safe_set_cliprect(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
    if (perform_svga_conversion(OVERRIDE_CLIP))
    {
@@ -349,7 +349,7 @@ void ss_safe_set_cliprect(short x1,short y1,short x2,short y2)
       safe_set_cliprect(x1,y1,x2,y2);
 }
 
-void ss_cset_cliprect(grs_canvas *pcanv, short x, short y, short w, short h)
+void ss_cset_cliprect(grs_canvas *pcanv, int16_t x, int16_t y, int16_t w, int16_t h)
 {
    if (perform_svga_conversion(OVERRIDE_CLIP))
    {
@@ -360,7 +360,7 @@ void ss_cset_cliprect(grs_canvas *pcanv, short x, short y, short w, short h)
       gr_cset_cliprect(pcanv, x, y, w, h);
 }
 
-void ss_int_line(short x1,short y1,short x2,short y2)
+void ss_int_line(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
       gr_int_line(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
@@ -368,11 +368,11 @@ void ss_int_line(short x1,short y1,short x2,short y2)
       gr_int_line(x1,y1,x2,y2);
 }
 
-void ss_thick_int_line(short x1,short y1,short x2,short y2)
+void ss_thick_int_line(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
    {
-      short min_y,max_y,use_y,min_x,max_x,use_x;
+      int16_t min_y,max_y,use_y,min_x,max_x,use_x;
       min_y = SCONV_Y(y1);
       max_y = SCONV_Y(y1+1);
       min_x = SCONV_X(x1);
@@ -386,7 +386,7 @@ void ss_thick_int_line(short x1,short y1,short x2,short y2)
       gr_int_line(x1,y1,x2,y2);
 }
 
-void ss_int_disk(short x1,short y1,short diam)
+void ss_int_disk(int16_t x1,int16_t y1,int16_t diam)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
       gr_int_disk(SCONV_X(x1),SCONV_Y(y1),SCONV_X(diam)>>1);
@@ -398,7 +398,7 @@ void ss_int_disk(short x1,short y1,short diam)
       gr_int_disk(x1,y1,diam>>1);
 }
 
-void ss_vline(short x1,short y1,short y2)
+void ss_vline(int16_t x1,int16_t y1,int16_t y2)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
       gr_vline(SCONV_X(x1),SCONV_Y(y1),SCONV_Y(y2));
@@ -406,7 +406,7 @@ void ss_vline(short x1,short y1,short y2)
       gr_vline(x1,y1,y2);
 }
 
-void ss_hline(short x1,short y1,short x2)
+void ss_hline(int16_t x1,int16_t y1,int16_t x2)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
       gr_hline(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2));
@@ -440,7 +440,7 @@ void ss_thick_fix_line(fix x1,fix y1,fix x2,fix y2)
       gr_fix_line(x1,y1,x2,y2);
 }
 
-void ss_get_bitmap(grs_bitmap *bmp, short x, short y)
+void ss_get_bitmap(grs_bitmap *bmp, int16_t x, int16_t y)
 {
    if (perform_svga_conversion(OVERRIDE_GET_BM))
       gr_get_bitmap(bmp, SCONV_X(x), SCONV_Y(y));
@@ -448,7 +448,7 @@ void ss_get_bitmap(grs_bitmap *bmp, short x, short y)
       gr_get_bitmap(bmp, x, y);
 }
 
-void ss_set_pixel(long color, short x, short y)
+void ss_set_pixel(int32_t color, int16_t x, int16_t y)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
       gr_set_pixel(color, SCONV_X(x), SCONV_Y(y));
@@ -456,7 +456,7 @@ void ss_set_pixel(long color, short x, short y)
       gr_set_pixel(color, x, y);
 }
 
-void ss_set_thick_pixel(long color, short x, short y)
+void ss_set_thick_pixel(int32_t color, int16_t x, int16_t y)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
    {
@@ -468,7 +468,7 @@ void ss_set_thick_pixel(long color, short x, short y)
       gr_set_pixel(color, x, y);
 }
 
-void ss_clut_ubitmap(grs_bitmap *bmp, short x, short y, uchar *cl)
+void ss_clut_ubitmap(grs_bitmap *bmp, int16_t x, int16_t y, uint8_t *cl)
 {
    if (perform_svga_conversion(OVERRIDE_SCALE))
       gr_clut_scale_ubitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h), cl);
@@ -481,16 +481,16 @@ void ss_clut_ubitmap(grs_bitmap *bmp, short x, short y, uchar *cl)
 // Note that the zeroth element of the conversion arrays
 // are used to store the base size, since perform_svga_conversion
 // already filters out calls with use_mode of 0.
-void gr2ss_register_init(char ctype, short init_x, short init_y)
+void gr2ss_register_init(int8_t ctype, int16_t init_x, int16_t init_y)
 {
    convert_x[ctype][0] = fix_make(init_x,0);
    convert_y[ctype][0] = fix_make(init_y,0);
 }
 
 #define WACKY_FIX_COMPENSATION
-void gr2ss_register_mode(char conv_mode, short nx, short ny)
+void gr2ss_register_mode(int8_t conv_mode, int16_t nx, int16_t ny)
 {
-   char m;
+   int8_t m;
    mode_count[conv_mode]++;
    m = mode_count[conv_mode];
    convert_x[conv_mode][m] = fix_div(fix_make(nx,0),convert_x[conv_mode][0]);
@@ -511,18 +511,18 @@ void gr2ss_register_mode(char conv_mode, short nx, short ny)
 #endif
 }
 
-void ss_recompute_zoom(frc *which_frc, short oldm)
+void ss_recompute_zoom(frc *which_frc, int16_t oldm)
 {
    fr_mod_cams(which_frc,FR_NOCAM,
       fix_div(convert_x[convert_type][convert_use_mode],convert_x[convert_type][oldm]));
 }
 
-void ss_point_convert(short *px, short *py, bool down)
+void ss_point_convert(int16_t *px, int16_t *py, bool down)
 {
 #ifdef SVGA_SUPPORT
    if (convert_use_mode != 0)
    {
-      short ox, oy;
+      int16_t ox, oy;
       ox = *px;
       oy = *py;
       if (down)
@@ -540,12 +540,12 @@ void ss_point_convert(short *px, short *py, bool down)
 #endif
 }
 
-short ss_curr_mode_width(void)
+int16_t ss_curr_mode_width(void)
 {
    return(SCONV_X(convert_x[convert_type][0]));
 }
 
-short ss_curr_mode_height(void)
+int16_t ss_curr_mode_height(void)
 {
    return(SCONV_Y(convert_y[convert_type][0]));
 }
@@ -553,14 +553,14 @@ short ss_curr_mode_height(void)
 // Basically, if you are in the secret hack mode 5
 // then MODE_SCONV_X will act as if you are in mode M
 // otherwise it behaves like SCONV_{X,Y}
-short MODE_SCONV_X(short cval, short m)
+int16_t MODE_SCONV_X(int16_t cval, int16_t m)
 {
    if ((!m) || (convert_use_mode != 5))
       return(SCONV_X(cval));
    return(fast_fix_mul_int(fix_make(cval,0), convert_x[convert_type][m]));
 }
 
-short MODE_SCONV_Y(short cval, short m)
+int16_t MODE_SCONV_Y(int16_t cval, int16_t m)
 {
    if ((!m) || (convert_use_mode != 5))
       return(SCONV_Y(cval));
@@ -569,8 +569,8 @@ short MODE_SCONV_Y(short cval, short m)
 
 // This allows us to override the real mode with some
 // fake pretender mode, but only if we are in the magic hack mode 5
-short hack_mode_on;
-void ss_set_hack_mode(short new_m, short *tval)
+int16_t hack_mode_on;
+void ss_set_hack_mode(int16_t new_m, int16_t *tval)
 {
    if ((convert_use_mode != 5) && (!hack_mode_on))
       return;
@@ -589,7 +589,7 @@ void ss_set_hack_mode(short new_m, short *tval)
 
 #endif
 
-void ss_mouse_convert(short *px, short *py, bool down)
+void ss_mouse_convert(int16_t *px, int16_t *py, bool down)
 {
    if (convert_use_mode != 0)
    {
@@ -623,9 +623,9 @@ void ss_mouse_convert(short *px, short *py, bool down)
    }
 }
 
-void ss_mouse_convert_round(short *px, short *py, bool down)
+void ss_mouse_convert_round(int16_t *px, int16_t *py, bool down)
 {
-   short ox,oy;
+   int16_t ox,oy;
 
    if (convert_use_mode != 0)
    {

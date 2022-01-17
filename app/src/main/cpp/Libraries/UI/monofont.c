@@ -26,23 +26,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma require_prototypes off
 
 // monochrome font package
-int mono_c_wid(char c)
+int32_t mono_c_wid(int8_t c)
  { return 1; }
-int mono_s_wid(char *s)
+int32_t mono_s_wid(int8_t *s)
  { return strlen(s); }
-int mono_c_draw(char c, int xpos, int ypos)
+int32_t mono_c_draw(int8_t c, int32_t xpos, int32_t ypos)
  { mput(c,xpos,ypos); return 1; }
-//int mono_s_draw(char *s, int xpos, int ypos)
+//int mono_s_draw(int8_t *s, int32_t xpos, int32_t ypos)
 // { mono_setxy(xpos,ypos); mprint(s); return strlen(s); }
-//int anal_s_draw(char *s, int xpos, int ypos)
-// { int ox,oy; mono_getxy(&ox,&oy); mono_setxy(xpos,ypos); mprint(s); mono_setxy(ox,oy); return strlen(s); }
-int mono_l_clr(int len, int xpos, int ypos)
+//int anal_s_draw(int8_t *s, int32_t xpos, int32_t ypos)
+// { int32_t ox,oy; mono_getxy(&ox,&oy); mono_setxy(xpos,ypos); mprint(s); mono_setxy(ox,oy); return strlen(s); }
+int32_t mono_l_clr(int32_t len, int32_t xpos, int32_t ypos)
  { mono_setxy(xpos,ypos); for (; len>0; len--) mprint(" "); return len; }
-int mono_s_clr(char *s, int xpos, int ypos)
+int32_t mono_s_clr(int8_t *s, int32_t xpos, int32_t ypos)
  { mono_l_clr(strlen(s),xpos,ypos); return strlen(s);}
-int mono_c_clr(char c, int xpos, int ypos)
+int32_t mono_c_clr(int8_t c, int32_t xpos, int32_t ypos)
  { mono_l_clr(1,xpos,ypos); return 1; }
-int mono_cursor(int x, int y)
+int32_t mono_cursor(int32_t x, int32_t y)
  { return mono_setxy(x,y); }
 
 #ifdef nOAF

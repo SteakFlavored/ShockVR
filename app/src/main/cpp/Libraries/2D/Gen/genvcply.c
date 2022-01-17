@@ -44,13 +44,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scrdat.h"
 #include "general.h"
 
-void gen_vox_cpoly(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_bitmap *ht)
+void gen_vox_cpoly(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht)
 {
-   int du,dv,initu,endu,initv,endv;
-   int i,j;
-   int c;
-   long z;
-   int far_ver;
+   int32_t du,dv,initu,endu,initv,endv;
+   int32_t i,j;
+   int32_t c;
+   int32_t z;
+   int32_t far_ver;
 
    /* Test of broadcasting system */
    fix fdxdu,fdydu,fdxdv,fdydv;
@@ -62,10 +62,10 @@ void gen_vox_cpoly(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_
    grs_vertex *vpl[4];
 //   fix vlist[8];
 //   grs_rgb clist[4];
-   int xp[2][80];
-   int yp[2][80];
-   ulong pp[2][80];
-   int currow = 0;
+   int32_t xp[2][80];
+   int32_t yp[2][80];
+   uint32_t pp[2][80];
+   int32_t currow = 0;
 
    vpl[0]=(grs_vertex *)vlist; vpl[1]=(grs_vertex *)(vlist+5);
    vpl[2]=(grs_vertex *)(vlist+10); vpl[3]=(grs_vertex *)(vlist+15);

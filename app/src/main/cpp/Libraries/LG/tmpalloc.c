@@ -50,7 +50,7 @@ MemStack *temp_mem_get_stack(void)
    if ms is NULL, it attempts to allocate a dynamic buffer of size given
    by TEMP_BUF_SIZE.  returns 0 if all is well, nonzero if there is an
    error. */
-int temp_mem_init(MemStack *ms)
+int32_t temp_mem_init(MemStack *ms)
 {
    if (ms==NULL) {
       /* allocate memstack struct and buffer dynamically. */
@@ -77,7 +77,7 @@ int temp_mem_init(MemStack *ms)
 
 /* sets the memstack used by the temporary memory routines to NULL.
    if the buffer was allocated dynamically, it's freed. */
-int temp_mem_uninit(void)
+int32_t temp_mem_uninit(void)
 {
    if (stack_dynamic==TRUE) {
 //      Spew(DSRC_LG_Tempmem,
@@ -91,7 +91,7 @@ int temp_mem_uninit(void)
 }
 
 /* allocate a temporary buffer of size n from temp_mem_stack. */
-void *temp_malloc(long n)
+void *temp_malloc(int32_t n)
 {
    if (temp_mem_stack==NULL)
       if (temp_mem_init(NULL)!=0)
@@ -100,13 +100,13 @@ void *temp_malloc(long n)
 }
 
 /* resize temporary buffer pointed to by p to be new size n. */
-void *temp_realloc(void *p,long n)
+void *temp_realloc(void *p,int32_t n)
 {
    return MemStackRealloc(temp_mem_stack,p,n);
 }
 
 /* free temporary buffer pointed to by p. */
-int temp_free(void *p)
+int32_t temp_free(void *p)
 {
    return MemStackFree(temp_mem_stack,p)==FALSE;
 }
@@ -115,9 +115,9 @@ int temp_free(void *p)
 /* the spewing versions of the temporary memory routines print out
    additional information about the call to the real routine, including
    the file name and line number where the call was made. */
-int temp_spew_mem_init(MemStack *ms,char *file,int line)
+int32_t temp_spew_mem_init(MemStack *ms,int8_t *file,int32_t line)
 {
-   int r;
+   int32_t r;
    r=temp_mem_init(ms);
    Spew(DSRC_LG_Tempmem,
         ("TempMemInit: stack: %p rval: %d (file: %s line: %d)\n",
@@ -125,9 +125,9 @@ int temp_spew_mem_init(MemStack *ms,char *file,int line)
    return r;
 }
 
-int temp_spew_mem_uninit(char *file,int line)
+int32_t temp_spew_mem_uninit(int8_t *file,int32_t line)
 {
-   int r;
+   int32_t r;
 
    r=temp_mem_uninit();
    Spew(DSRC_LG_Tempmem,
@@ -136,7 +136,7 @@ int temp_spew_mem_uninit(char *file,int line)
    return r;
 }
 
-void *temp_spew_malloc(long size,char *file,int line)
+void *temp_spew_malloc(int32_t size,int8_t *file,int32_t line)
 {
    void *p;
    p=temp_malloc(size);
@@ -146,7 +146,7 @@ void *temp_spew_malloc(long size,char *file,int line)
    return p;
 }
 
-void *temp_spew_realloc(void *ptr,long size,char *file,int line)
+void *temp_spew_realloc(void *ptr,int32_t size,int8_t *file,int32_t line)
 {
    void *p;
    p=temp_realloc(ptr,size);
@@ -156,9 +156,9 @@ void *temp_spew_realloc(void *ptr,long size,char *file,int line)
    return p;
 }
 
-int temp_spew_free(void *ptr,char *file,int line)
+int32_t temp_spew_free(void *ptr,int8_t *file,int32_t line)
 {
-   int r;
+   int32_t r;
    r=temp_free(ptr);
 	Spew(DSRC_LG_Tempmem,
         ("TempFree:    p: 0x%x  (file: %s line: %d)\n",

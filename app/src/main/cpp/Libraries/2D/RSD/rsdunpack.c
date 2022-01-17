@@ -34,12 +34,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // PowerPC version
 #define kMinLongLoop 4			// minimum # of bytes to need before using long store loop
 
-uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
+uint8_t *gr_rsd8_unpack(uint8_t *src, uint8_t *dest)
  {
- 	uchar		code,val;
- 	short		count,count2;
- 	ushort	longcode;
- 	ulong		longval, *longdest, *longsrc;
+ 	uint8_t		code,val;
+ 	int16_t		count,count2;
+ 	uint16_t	longcode;
+ 	uint32_t		longval, *longdest, *longsrc;
 
  	do
  	 {
@@ -51,15 +51,15 @@ uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
 
  		 	if (count>=kMinLongLoop)		// if at least kMinLongLoop bytes, do long word stuff
  		 	 {
- 		 	 	longval = val + (((ulong) val)<<8);
+ 		 	 	longval = val + (((uint32_t) val)<<8);
  		 	 	longval += longval<<16;
  		 	 	count2 = count>>2;
  		 	 	count &= 3;
- 		 	 	longdest = (ulong *) dest;
+ 		 	 	longdest = (uint32_t *) dest;
 
  		 	 	while (count2--)
  		 	 	 	*(longdest++) = longval;
- 		 	 	dest = (uchar *) longdest;
+ 		 	 	dest = (uint8_t *) longdest;
  		 	 }
 
  		 	// do rest of bytes
@@ -73,13 +73,13 @@ uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
  		 	 {
  		 	 	count2 = count>>2;
  		 	 	count &= 3;
- 		 	 	longdest = (ulong *) dest;
- 		 	 	longsrc = (ulong *) src;
+ 		 	 	longdest = (uint32_t *) dest;
+ 		 	 	longsrc = (uint32_t *) src;
 
  		 	 	while (count2--)
  		 	 	 	*(longdest++) = *(longsrc++);
- 		 	 	dest = (uchar *) longdest;
- 		 	 	src = (uchar *) longsrc;
+ 		 	 	dest = (uint8_t *) longdest;
+ 		 	 	src = (uint8_t *) longsrc;
  		 	 }
 
  		 	// do rest of bytes
@@ -95,11 +95,11 @@ uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
  		 	 {
  		 	 	count2 = count>>2;
  		 	 	count &= 3;
- 		 	 	longdest = (ulong *) dest;
+ 		 	 	longdest = (uint32_t *) dest;
 
  		 	 	while (count2--)
  		 	 	 	*(longdest++) = longval;
- 		 	 	dest = (uchar *) longdest;
+ 		 	 	dest = (uint8_t *) longdest;
  		 	 }
 
  		 	// do rest of bytes
@@ -108,7 +108,7 @@ uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
  		 }
  		else	// long opcode
  		 {
- 		 	longcode = * (ushort *) src;
+ 		 	longcode = * (uint16_t *) src;
  		 	src += 2L;
 
  		 	if (!longcode) break;		// done?
@@ -121,11 +121,11 @@ uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
 	 		 	 {
 	 		 	 	count2 = count>>2;
 	 		 	 	count &= 3;
-	 		 	 	longdest = (ulong *) dest;
+	 		 	 	longdest = (uint32_t *) dest;
 
 	 		 	 	while (count2--)
 	 		 	 	 	*(longdest++) = longval;
-	 		 	 	dest = (uchar *) longdest;
+	 		 	 	dest = (uint8_t *) longdest;
 	 		 	 }
 
 	 		 	// do rest of bytes
@@ -140,13 +140,13 @@ uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
 	 		 	 {
 	 		 	 	count2 = count>>2;
 	 		 	 	count &= 3;
-	 		 	 	longdest = (ulong *) dest;
-	 		 	 	longsrc = (ulong *) src;
+	 		 	 	longdest = (uint32_t *) dest;
+	 		 	 	longsrc = (uint32_t *) src;
 
 	 		 	 	while (count2--)
 	 		 	 	 	*(longdest++) = *(longsrc++);
-	 		 	 	dest = (uchar *) longdest;
-	 		 	 	src = (uchar *) longsrc;
+	 		 	 	dest = (uint8_t *) longdest;
+	 		 	 	src = (uint8_t *) longsrc;
 	 		 	 }
 
 	 		 	// do rest of bytes
@@ -160,15 +160,15 @@ uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
 
 	 		 	if (count>=kMinLongLoop)		// if at least kMinLongLoop bytes, do long word stuff
 	 		 	 {
-	 		 	 	longval = val + (((ulong) val)<<8);
+	 		 	 	longval = val + (((uint32_t) val)<<8);
 	 		 	 	longval += longval<<16;
 	 		 	 	count2 = count>>2;
 	 		 	 	count &= 3;
-	 		 	 	longdest = (ulong *) dest;
+	 		 	 	longdest = (uint32_t *) dest;
 
 	 		 	 	while (count2--)
 	 		 	 	 	*(longdest++) = longval;
-	 		 	 	dest = (uchar *) longdest;
+	 		 	 	dest = (uint8_t *) longdest;
 	 		 	 }
 
 	 		 	// do rest of bytes
@@ -185,7 +185,7 @@ uchar *gr_rsd8_unpack(uchar *src, uchar *dest)
 #else // !(defined(powerc) || defined(__powerc))
 //----------------------------------------------------------------------------
 // 68K version
-asm uchar *gr_rsd8_unpack(uchar* src, uchar *dst)
+asm uint8_t *gr_rsd8_unpack(uint8_t* src, uint8_t *dst)
  {
  	move.l	4(A7),a0		// get src
  	move.l	8(A7),a1		// get dest

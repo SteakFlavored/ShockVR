@@ -71,9 +71,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Prototypes
 
-extern void init_side_icon(ubyte side_icon, int type, int num);
+extern void init_side_icon(uint8_t side_icon, int32_t type, int32_t num);
 extern void side_icon_expose_all();
-extern void side_icon_expose(ubyte side_icon);
+extern void side_icon_expose(uint8_t side_icon);
 extern void init_all_side_icons();
 void init_side_icon_popups(void);
 extern void screen_init_side_icons(LGRegion* root);

@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MIN_OLH_RADIUS 2
 #define MAX_OLH_RADIUS 5
 
-ubyte olh_radius = MIN_OLH_RADIUS;
+uint8_t olh_radius = MIN_OLH_RADIUS;
 
 #define BOTTOM_MARGIN (SCAN_HGT - 15/SCAN_RATIO)
 #define RIGHT_MARGIN  (OLH_WRAP_WID/SCAN_RATIO)
@@ -60,13 +60,13 @@ void olh_init_single_scan(fauxrend_context **outxt, fauxrend_context *intxt);
 void olh_init_scan(void);
 void olh_free_scan(void);
 void olh_svga_deal(void);
-ushort olh_scan_objs(void);
+uint16_t olh_scan_objs(void);
 
 
 
 void olh_init_single_scan(fauxrend_context **outxt, fauxrend_context *intxt)
 {
-   uchar* mem = ((grs_canvas*)fr_get_canvas(intxt))->bm.bits;
+   uint8_t* mem = ((grs_canvas*)fr_get_canvas(intxt))->bm.bits;
 
    *outxt = (fauxrend_context *)fr_place_view(FR_NEWVIEW,FR_DEFCAM,mem,
 					FR_CURVIEW_STRT|FR_DOUBLEB_MASK|FR_PICKUPM_MASK,
@@ -96,27 +96,27 @@ void olh_svga_deal(void)
    y_mul=fix_div(fix_make(200,0),fix_make(grd_mode_cap.h,0));
 }
 
-extern int last_real_time;
+extern int32_t last_real_time;
 
-ushort olh_scan_objs(void)
+uint16_t olh_scan_objs(void)
 {
-   int xl,yl;
-   int col;
-   int (*fr_ptr_idx)(void)=fr_get_idx;
-   short x,y;
+   int32_t xl,yl;
+   int32_t col;
+   int32_t (*fr_ptr_idx)(void)=fr_get_idx;
+   int16_t x,y;
    struct _obj_scandata
    {
       ObjID obj;
-      int x,y;  // TOTAL x and y coordinates for all samples
-      ushort count;
+      int32_t x,y;  // TOTAL x and y coordinates for all samples
+      uint16_t count;
    } objdata[SCAN_OBJ_LIST];
-   short objcount = 0;
+   int16_t objcount = 0;
 #ifdef SVGA_SUPPORT
    fauxrend_context* fr = olh_full_context;
 #else
    fauxrend_context* fr = (full_game_3d) ? olh_full_context : olh_context;
 #endif
-   ubyte save_radius = _frp.view.radius;
+   uint8_t save_radius = _frp.view.radius;
 
    // Do a monochrome render
 //   olh_replace_view(SCREEN_CONTEXT->xwid/SCAN_RATIO,SCREEN_CONTEXT->ywid/SCAN_RATIO);
@@ -153,13 +153,13 @@ ushort olh_scan_objs(void)
          if (y > BOTTOM_MARGIN
             && x > fr->draw_canvas.bm.w - RIGHT_MARGIN)
             break;
-         col=(int)(*((fr->draw_canvas.bm.bits)+(y*fr->draw_canvas.bm.row)+(x)));
+         col=(int32_t)(*((fr->draw_canvas.bm.bits)+(y*fr->draw_canvas.bm.row)+(x)));
          if ((col>=FR_CUR_OBJ_BASE)&&(col<fr_cur_obj_col))         // if we are actually exactly over an object
          {
             ObjID obj = (ObjID)fr_col_to_obj[col-FR_CUR_OBJ_BASE];
             if (olh_candidate(obj))
             {
-               int i;
+               int32_t i;
                for (i = 0; i < objcount; i++)
                   if (objdata[i].obj == obj)
                   {
@@ -186,13 +186,13 @@ ushort olh_scan_objs(void)
    // now pick the best one.
    if (objcount > 0)
    {
-      int i;
-      uint best_weight = 0;
+      int32_t i;
+      uint32_t best_weight = 0;
       for (i = 0; i < objcount; i++)
       {
          struct _obj_scandata *dat = &objdata[i];
-         LGPoint pos = MakePoint((short)(dat->x/dat->count),(short)(dat->y/dat->count));
-         uint weight =  dat->count * (fr->xwid + fr->ywid)/(abs(2*pos.x - fr->xwid) + abs(2*pos.y - fr->ywid) + 1);
+         LGPoint pos = MakePoint((int16_t)(dat->x/dat->count),(int16_t)(dat->y/dat->count));
+         uint32_t weight =  dat->count * (fr->xwid + fr->ywid)/(abs(2*pos.x - fr->xwid) + abs(2*pos.y - fr->ywid) + 1);
          if (weight > best_weight)
          {
             olh_object.obj = dat->obj;

@@ -34,5 +34,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __CLOSE_H
 #define __CLOSE_H
-extern int gr_close (void);
+extern int32_t gr_close (void);
 #endif /* !__CLOSE_H */

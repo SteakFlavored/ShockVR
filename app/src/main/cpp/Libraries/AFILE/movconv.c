@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "InitMac.h"
 #include "ShockBitmap.h"
 extern Ptr	gScreenAddress;
-extern long	gScreenRowbytes;
+extern int32_t	gScreenRowbytes;
 
 #include <Movies.h>
 #include <ImageCompression.h>
@@ -42,8 +42,8 @@ extern long	gScreenRowbytes;
 
 typedef struct
 {
-	long 	frameNum;
-	short	palID;
+	int32_t 	frameNum;
+	int16_t	palID;
 } PalChange;
 
 //--------------------------
@@ -52,7 +52,7 @@ typedef struct
 //#define ADD_TEXT_TRACK	1
 //#define INSERT_BLANK_PALCHG_FRAME	1
 
-char		gInputMov[] = "INTRO.QTM";
+int8_t		gInputMov[] = "INTRO.QTM";
 FSSpec		gInputPal = { 0, 0, "\pIntro Palettes" };
 FSSpec		gInputSnd = { 0, 0, "\pINTRO/GERMAN" };
 ComponentInstance	ci = nil;
@@ -65,13 +65,13 @@ ComponentInstance	ci = nil;
 
 //  Globals
 WindowPtr		gMainWindow;
-extern short		gMainVRef;
-short			gResNum;
+extern int16_t		gMainVRef;
+int16_t			gResNum;
 Handle			gPalHdl;
-ulong			*gSampleTimes;
-ulong			*gChunkOffsets;
-long				gNumFrames;
-long				gFakeIndex;
+uint32_t			*gSampleTimes;
+uint32_t			*gChunkOffsets;
+int32_t				gNumFrames;
+int32_t				gFakeIndex;
 QT_ChunkInfo chunkInfo[] =
 {
 	QT_CLIP,FALSE,
@@ -110,7 +110,7 @@ TrackType currTrackType;
 void main(void);
 void	 CheckError(OSErr error, Str255 displayString);
 void SetInputSpecs(void);
-void SetPalette(short palID);
+void SetPalette(int16_t palID);
 
 bool QuikReadChunkHdr(FILE *fp, QT_ChunkHdr *phdr);
 QT_ChunkInfo *QuikFindChunkInfo(QT_ChunkHdr *phdr);
@@ -118,8 +118,8 @@ void QuikSkipChunk(FILE *fp, QT_ChunkHdr *phdr);
 
 void CreateMySoundTrack(Movie theMovie);
 void CreateSoundDescription(Handle sndHandle, SoundDescriptionHandle	sndDesc,
-							long *sndDataOffset, long *numSamples, long *sndDataSize);
-long GetSndHdrOffset(Handle sndHandle);
+							int32_t *sndDataOffset, int32_t *numSamples, int32_t *sndDataSize);
+int32_t GetSndHdrOffset(Handle sndHandle);
 
 #ifdef ADD_TEXT_TRACK
 void MyCreateTextTrack(Movie theMovie);
@@ -133,23 +133,23 @@ void main(void)
 {
 	grs_screen 		*screen;
 	Ptr				p;
-	long				stupid;
+	int32_t				stupid;
 	OSErr			err, result;
 
 	FILE 			*fp;
-	uchar 			*dbuff;
-	ulong 			dbuffLen;
+	uint8_t 			*dbuff;
+	uint32_t 			dbuffLen;
 	QT_ChunkHdr 	chunkHdr;
 	QT_ChunkInfo 	*pinfo;
 
-	short			palResNum, sndResNum;
+	int16_t			palResNum, sndResNum;
 	Handle			palChgHdl;
 	PalChange		*pcp;
 
 	Handle			qpalHdl;								// Contains array of palette change times.
-	long				*qpalEntry;							// Pointer to current change.
-	short			numQpalEntries = 0;
-	ulong			qpalCurrTime = 0;
+	int32_t				*qpalEntry;							// Pointer to current change.
+	int16_t			numQpalEntries = 0;
+	uint32_t			qpalCurrTime = 0;
 
 	Point			dlgPos = {120,120};
 	SFReply			sfr;
@@ -158,15 +158,15 @@ void main(void)
 	Rect			movieRect, r;
 	ImageDescription	**imageDescriptionH = 0L;		/* Contains info about the sample	*/
 	ImageSequence	seq;
-	short			resRefNum;
+	int16_t			resRefNum;
 	Movie			gMovie = 0;							/* Our movie, track and media */
 	Track			gTrack;
 	Media			gMedia;
-	long 			maxCompressedFrameSize;			/* Max size of compressed frame		*/
-	long				compressedFrameSize;				/* Size of current compressed frame */
+	int32_t 			maxCompressedFrameSize;			/* Max size of compressed frame		*/
+	int32_t				compressedFrameSize;				/* Size of current compressed frame */
 	Handle			compressedFrameBitsH = 0L;			/* Buffer for the compressed data	*/
 #ifdef INSERT_BLANK_PALCHG_FRAME
-	Boolean 			lastInSeq = FALSE;
+	bool 			lastInSeq = FALSE;
 #endif
 
 	//---------------------
@@ -207,7 +207,7 @@ void main(void)
 		CheckError(1, "\pCan't open the input movie!!");
 
 	dbuffLen = 64000;
-	dbuff = (uchar *)malloc(dbuffLen);
+	dbuff = (uint8_t *)malloc(dbuffLen);
 
 	//----------------------
 	//	Open the input Sound file.
@@ -234,7 +234,7 @@ void main(void)
 	if (!qpalHdl)
 		CheckError(1, "\pCan't allocate palette change times handle!!");
 	HLock(qpalHdl);
-	qpalEntry = (long *)*qpalHdl;
+	qpalEntry = (int32_t *)*qpalHdl;
 
 	*qpalEntry = 0;						// First palette change at 0.
 	qpalEntry++;
@@ -313,7 +313,7 @@ void main(void)
 				if (chunkHdr.length > dbuffLen)
 				{
 					dbuffLen = chunkHdr.length;
-					dbuff = (uchar *)realloc(dbuff, dbuffLen);
+					dbuff = (uint8_t *)realloc(dbuff, dbuffLen);
 				}
 				fread(dbuff, chunkHdr.length - sizeof(QT_ChunkHdr), 1, fp);
 
@@ -322,9 +322,9 @@ void main(void)
 				if (chunkHdr.ctype == QT_STTS)
 				{
 					QTS_STTS	*p = (QTS_STTS *)dbuff;
-					short		i, j, si;
+					int16_t		i, j, si;
 
-					gSampleTimes = (ulong *)NewPtr(1200 * sizeof(ulong));
+					gSampleTimes = (uint32_t *)NewPtr(1200 * sizeof(uint32_t));
 					si = 0;
 					for (i = 0; i < p->numEntries; i++)
 						for (j = 0; j < p->time2samp[i].count; j++)
@@ -337,8 +337,8 @@ void main(void)
 					QTS_STCO 	*p = (QTS_STCO *)dbuff;
 
 					gNumFrames = p->numEntries;
-					gChunkOffsets = (ulong *)NewPtr(p->numEntries * sizeof(ulong));
-					BlockMove(p->offset, gChunkOffsets, p->numEntries * sizeof(ulong));
+					gChunkOffsets = (uint32_t *)NewPtr(p->numEntries * sizeof(uint32_t));
+					BlockMove(p->offset, gChunkOffsets, p->numEntries * sizeof(uint32_t));
 				}
 			}
 			else
@@ -352,19 +352,19 @@ void main(void)
 	//	Show the movie, one frame at a time.
 	//----------------------------
 	{
-		long			f, line;
+		int32_t			f, line;
 		Ptr			frameBuff;
-		uchar		*pp;
+		uint8_t		*pp;
 		Ptr			imgp, scrp;
 		RGBColor	black = {0, 0, 0};
 		RGBColor	white = {0xffff, 0xffff, 0xffff};
-		char		buff[64];
+		int8_t		buff[64];
 		PalChange	*pc;
-		ulong		sampTime;
-		Boolean		subColor;
+		uint32_t		sampTime;
+		bool		subColor;
  		Handle		compHdl;
- 		long			compSize;
- 		short		notSyncFlag;
+ 		int32_t			compSize;
+ 		int16_t		notSyncFlag;
 
 		frameBuff = NewPtr(600 * 300);
 		CheckError(MemError(), "\pCan't allocate a frame buffer for input movie.");
@@ -378,12 +378,12 @@ void main(void)
 
 			// See if there's an 0xFF anywhere in this screen.
 			subColor = FALSE;
-			pp = (uchar *)frameBuff;
-			for (int pix = 0; pix < 600*300; pix++)
+			pp = (uint8_t *)frameBuff;
+			for (int32_t pix = 0; pix < 600*300; pix++)
 			{
 				if (*pp == 0xFF)
 				{
-					*pp = (uchar)gFakeIndex;
+					*pp = (uint8_t)gFakeIndex;
 					subColor = TRUE;
 				}
 				pp++;
@@ -606,8 +606,8 @@ void	 CheckError(OSErr error, Str255 displayString)
 //------------------------------------------------------------------------
 void SetInputSpecs(void)
 {
-	short	vRefNum;
-	long		temp, parID;
+	int16_t	vRefNum;
+	int32_t		temp, parID;
 
  	GetWDInfo(gMainVRef, &vRefNum, &parID, &temp);
 
@@ -621,7 +621,7 @@ void SetInputSpecs(void)
 //------------------------------------------------------------------------
 //  Load in the 'mpal' resource and set it.
 //------------------------------------------------------------------------
-void SetPalette(short palID)
+void SetPalette(int16_t palID)
 {
 	RGBColor	fakecol;
 
@@ -635,7 +635,7 @@ void SetPalette(short palID)
 	}
 	gr_clear(0xFF);
 	HLock(gPalHdl);
-	gr_set_pal(0, 256, (uchar *)*gPalHdl);
+	gr_set_pal(0, 256, (uint8_t *)*gPalHdl);
 
 	fakecol.red = *(*gPalHdl + 765) << 8;
 	fakecol.green = *(*gPalHdl + 766) << 8;
@@ -733,9 +733,9 @@ void CreateMySoundTrack(Movie theMovie)
 	Media 					theMedia;
 	Handle					sndHandle = nil;
 	SoundDescriptionHandle	sndDesc = nil;
-	long 					sndDataOffset;
-	long 					sndDataSize;
-	long 					numSamples;
+	int32_t 					sndDataOffset;
+	int32_t 					sndDataSize;
+	int32_t 					numSamples;
 	OSErr					err = noErr;
 
 	sndHandle = GetIndResource ('snd ', 1);
@@ -771,14 +771,14 @@ void CreateMySoundTrack(Movie theMovie)
 
 //----------------------------------------------------------------
 void CreateSoundDescription(Handle sndHandle, SoundDescriptionHandle	sndDesc,
-							long *sndDataOffset, long *numSamples, long *sndDataSize)
+							int32_t *sndDataOffset, int32_t *numSamples, int32_t *sndDataSize)
 {
-	long					sndHdrOffset = 0;
-	long					sampleDataOffset;
+	int32_t					sndHdrOffset = 0;
+	int32_t					sampleDataOffset;
 	SoundHeaderPtr 		sndHdrPtr = nil;
-	long					numFrames;
-	long					samplesPerFrame;
-	long					bytesPerFrame;
+	int32_t					numFrames;
+	int32_t					samplesPerFrame;
+	int32_t					bytesPerFrame;
 	SignedByte			sndHState;
 	SoundDescriptionPtr	sndDescPtr;
 
@@ -849,26 +849,26 @@ typedef SndCommand *SndCmdPtr;
 
 typedef struct
 {
-	short 			format;
-	short 			numSynths;
+	int16_t 			format;
+	int16_t 			numSynths;
 } Snd1Header, *Snd1HdrPtr, **Snd1HdrHndl;
 
 typedef struct
 {
-	short 			format;
-	short 			refCount;
+	int16_t 			format;
+	int16_t 			refCount;
 } Snd2Header, *Snd2HdrPtr, **Snd2HdrHndl;
 typedef struct
 {
-	short 			synthID;
-	long 			initOption;
+	int16_t 			synthID;
+	int32_t 			initOption;
 } SynthInfo, *SynthInfoPtr;
 
 
-long GetSndHdrOffset (Handle sndHandle)
+int32_t GetSndHdrOffset (Handle sndHandle)
 {
-	short	howManyCmds;
-	long		sndOffset  = 0;
+	int16_t	howManyCmds;
+	int32_t		sndOffset  = 0;
 	Ptr		sndPtr;
 
 	if (sndHandle == nil) return 0;
@@ -877,7 +877,7 @@ long GetSndHdrOffset (Handle sndHandle)
 
 	if ((*(Snd1HdrPtr)sndPtr).format == firstSoundFormat)
 	{
-		short synths = ((Snd1HdrPtr)sndPtr)->numSynths;
+		int16_t synths = ((Snd1HdrPtr)sndPtr)->numSynths;
 		sndPtr += sizeof(Snd1Header) + (sizeof(SynthInfo) * synths);
 	}
 	else
@@ -885,7 +885,7 @@ long GetSndHdrOffset (Handle sndHandle)
 		sndPtr += sizeof(Snd2Header);
 	}
 
-	howManyCmds = *(short *)sndPtr;
+	howManyCmds = *(int16_t *)sndPtr;
 
 	sndPtr += sizeof(howManyCmds);
 
@@ -916,14 +916,14 @@ long GetSndHdrOffset (Handle sndHandle)
 /*	DEATH MOVIE
 
 	// English.
-	char					theText1[] = "They find your body and give it new life.";
-	char					theText2[] = "As a cyborg, you will serve SHODAN well.";
+	int8_t					theText1[] = "They find your body and give it new life.";
+	int8_t					theText2[] = "As a cyborg, you will serve SHODAN well.";
 	// German.
-	char					theText1[] = "Sie finden deine Leiche und geben ihr neues Leben.";
-	char					theText2[] = "Als Cyborg wirst du SHODAN treu dienen.";
+	int8_t					theText1[] = "Sie finden deine Leiche und geben ihr neues Leben.";
+	int8_t					theText2[] = "Als Cyborg wirst du SHODAN treu dienen.";
 	// French.
-	char					theText1[] = "Ils ont trouv ton corps et lui ont redonn la vie.";
-	char					theText2[] = "En tant que cyborgue, tu serviras bien SHODAN.";
+	int8_t					theText1[] = "Ils ont trouv ton corps et lui ont redonn la vie.";
+	int8_t					theText2[] = "En tant que cyborgue, tu serviras bien SHODAN.";
 
 	// Timing - 507 total
 	blank	9
@@ -935,17 +935,17 @@ long GetSndHdrOffset (Handle sndHandle)
 /*	ENDGAME MOVIE
 
 	// English.
-	char					theText1[] = "It's over.";
-	char					theText2[] = "They offered you a nice, boring job at Trioptimum; it never occured to you to take it.";
-	char					theText3[] = "Old habits die hard.";
+	int8_t					theText1[] = "It's over.";
+	int8_t					theText2[] = "They offered you a nice, boring job at Trioptimum; it never occured to you to take it.";
+	int8_t					theText3[] = "Old habits die hard.";
 	// German.
-	char					theText1[] = "Es ist vorbei.";
-	char					theText2[] = "Sie haben dir einen netten Job bei Triop angeboten; es wre dir nie eingefallen, ihr Angebot anzunehmen.";
-	char					theText3[] = "Du kannst es eben einfach nicht lassen.";
+	int8_t					theText1[] = "Es ist vorbei.";
+	int8_t					theText2[] = "Sie haben dir einen netten Job bei Triop angeboten; es wre dir nie eingefallen, ihr Angebot anzunehmen.";
+	int8_t					theText3[] = "Du kannst es eben einfach nicht lassen.";
 	// French.
-	char					theText1[] = "C'est fini.";
-	char					theText2[] = "Ils vous ont offert un bon boulot ennuyeux sur Triop; a ne vous est jamais venu  l'ide de l'accepter.";
-	char					theText3[] = "On a du mal  se dbarasser des mauvaises habitudes.";
+	int8_t					theText1[] = "C'est fini.";
+	int8_t					theText2[] = "Ils vous ont offert un bon boulot ennuyeux sur Triop; a ne vous est jamais venu  l'ide de l'accepter.";
+	int8_t					theText3[] = "On a du mal  se dbarasser des mauvaises habitudes.";
 
 	// Timing - 507 total
 	blank	9
@@ -960,9 +960,9 @@ void MyCreateTextTrack(Movie theMovie)
 	Track 					theTrack;
 	Media 					theMedia;
 	OSErr					err = noErr;
-	char					blankText[] = " ";
-	char					theText1[] = "Ils ont trouv ton corps et lui ont redonn la vie.";
-	char					theText2[] = "En tant que cyborgue, tu serviras bien SHODAN.";
+	int8_t					blankText[] = " ";
+	int8_t					theText1[] = "Ils ont trouv ton corps et lui ont redonn la vie.";
+	int8_t					theText2[] = "En tant que cyborgue, tu serviras bien SHODAN.";
 	RGBColor				black = {0, 0, 0};
 	RGBColor				white = {0xeeee, 0xeeee, 0xeeee};
 	Rect					textBox;

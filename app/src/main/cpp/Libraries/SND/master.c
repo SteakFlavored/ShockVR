@@ -29,14 +29,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "digi.h"
 
-uchar	snd_digi_vol=0x100;
-//uchar          snd_midi_vol=MDI_DEFAULT_VOLUME;
+uint8_t	snd_digi_vol=0x100;
+//uint8_t          snd_midi_vol=MDI_DEFAULT_VOLUME;
 //void cdecl   (*snd_update)(snd_digi_parms *dprm)=NULL;
 void		(*snd_finish)(snd_digi_parms *dprm)=NULL;
 //void cdecl   (*snd_nblock)(snd_digi_parms *dprm)=NULL;
-//void cdecl   (*seq_miditrig)(snd_midi_parms *mprm, int trig_value)=NULL;
-int		snd_error=SND_OK;
-uchar	snd_stereo_reverse=0;
+//void cdecl   (*seq_miditrig)(snd_midi_parms *mprm, int32_t trig_value)=NULL;
+int32_t		snd_error=SND_OK;
+uint8_t	snd_stereo_reverse=0;
 
 pascal void HandleSndCallBack(SndChannelPtr chan, SndCommand *cmd);
 
@@ -54,7 +54,7 @@ void snd_startup(void)
 //---------------------------------------------------------
 //	Set preferences for AIL, path for sound files.
 //---------------------------------------------------------
-void snd_setup(void *d_path, char *prefix)
+void snd_setup(void *d_path, int8_t *prefix)
 {
    AIL_set_preference(DIG_USE_STEREO,YES);
 //   AIL_set_preference(DIG_USE_16_BITS,YES);
@@ -76,7 +76,7 @@ void snd_setup(void *d_path, char *prefix)
 //---------------------------------------------------------
 void snd_shutdown(void)
 {
-	for (int i=0; i < _snd_smp_cnt; i++)
+	for (int32_t i=0; i < _snd_smp_cnt; i++)
 	{
 		SndDisposeChannel(_snd_smp_prm[i].sndChan, TRUE);
 		DisposePtr((Ptr)_snd_smp_prm[i].sndChan);

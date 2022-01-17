@@ -144,13 +144,13 @@ LGCursor* LastCursor = NULL;
 
 
 // A semaphore which tells the mouse interrupt handler that the mouse is hidden
-int MouseLock = 0;
+int32_t MouseLock = 0;
 
 // A protected rectangle stack for mouse hide/show
 #define INITIAL_RECT_STACK   5
 LGRect* HideRect;
-int numhiderects = INITIAL_RECT_STACK;
-int curhiderect = 0;
+int32_t numhiderects = INITIAL_RECT_STACK;
+int32_t curhiderect = 0;
 
 
 // The canvas used by cursors
@@ -159,7 +159,7 @@ grs_canvas* CursorCanvas = &DefaultCursorCanvas;
 
 
 // Number of pixels to move before interrupt handler draws
-int CursorMoveTolerance = 0;
+int32_t CursorMoveTolerance = 0;
 
 
 // ------------------
@@ -185,9 +185,9 @@ void ui_update_cursor(LGPoint pos);
 // ------------------
 
 // KLC - now just allocates a bitmap at the beginning and never actually grows it.
-static errtype grow_save_under(short x, short y)
+static errtype grow_save_under(int16_t x, int16_t y)
 {
-	int sz = MAPSIZE(x,y);
+	int32_t sz = MAPSIZE(x,y);
 	if (SaveUnder.mapsize >= sz) return ERR_NOEFFECT;
 
 	DebugStr("\pSaveUnder needs to be increased!");	//¥¥¥
@@ -383,7 +383,7 @@ errtype ui_init_cursor_stack(uiSlab* slab, LGCursor* default_cursor)
 }
 
 extern void cursor_draw_callback(mouse_event* e, void* data);
-extern void bitmap_cursor_drawfunc(int cmd, LGRegion* r, LGCursor* c, LGPoint pos);
+extern void bitmap_cursor_drawfunc(int32_t cmd, LGRegion* r, LGCursor* c, LGPoint pos);
 
 errtype ui_init_cursors(void)
 {
@@ -391,7 +391,7 @@ errtype ui_init_cursors(void)
    // Spew(DSRC_UI_Cursors ,("ui_init_cursors()\n"));
    // KLC grow_save_under(STARTING_SAVEUNDER_WD,STARTING_SAVEUNDER_HT);
    // KLC - just initalize it to a sizeable bitmap, and leave it that way.
-   SaveUnder.bm.bits = (uchar *)NewPtr(6144);
+   SaveUnder.bm.bits = (uint8_t *)NewPtr(6144);
    SaveUnder.mapsize = 6144;
 
    LastCursor = NULL;
@@ -410,8 +410,8 @@ errtype ui_init_cursors(void)
 
 errtype uiUpdateScreenSize(LGPoint size)
 {
-   short w = size.x;
-   short h = size.y;
+   int16_t w = size.x;
+   int16_t h = size.y;
    if (size.x == UI_DETECT_SCREEN_SIZE.x)
       w = grd_screen_canvas->bm.w;
    if (size.y == UI_DETECT_SCREEN_SIZE.y)

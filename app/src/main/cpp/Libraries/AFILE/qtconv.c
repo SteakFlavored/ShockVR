@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "InitMac.h"
 #include "ShockBitmap.h"
 extern Ptr	gScreenAddress;
-extern long	gScreenRowbytes;
+extern int32_t	gScreenRowbytes;
 
 #include <Movies.h>
 #include <ImageCompression.h>
@@ -43,12 +43,12 @@ extern long	gScreenRowbytes;
 //  Globals
 ComponentInstance	ci = nil;
 WindowPtr		gMainWindow;
-extern short		gMainVRef;
-short			gResNum;
-ulong			*gSampleTimes;
-ulong			*gChunkOffsets;
-long				gNumFrames;
-long				gFakeIndex;
+extern int16_t		gMainVRef;
+int16_t			gResNum;
+uint32_t			*gSampleTimes;
+uint32_t			*gChunkOffsets;
+int32_t				gNumFrames;
+int32_t				gFakeIndex;
 QT_ChunkInfo chunkInfo[] =
 {
 	QT_CLIP,FALSE,
@@ -87,7 +87,7 @@ TrackType currTrackType;
 void main(void);
 void	 CheckError(OSErr error, Str255 displayString);
 void SetInputSpecs(void);
-void SetPalette(short palID);
+void SetPalette(int16_t palID);
 
 /*
 bool QuikReadChunkHdr(FILE *fp, QT_ChunkHdr *phdr);
@@ -112,8 +112,8 @@ void main(void)
 	SFTypeList			typeList;
 
 	FILE 			*fp;
-	uchar 			*dbuff;
-	ulong 			dbuffLen;
+	uint8_t 			*dbuff;
+	uint32_t 			dbuffLen;
 	QT_ChunkHdr 	chunkHdr;
 	QT_ChunkInfo 	*pinfo;
 
@@ -125,7 +125,7 @@ void main(void)
 	Str255			name = "\pQT Movie";
 	Rect			movieRect, r;
 	ImageDescription	**imageDescriptionH = 0L;		// Contains info about the sample
-	short			resRefNum;
+	int16_t			resRefNum;
 	Movie			gMovie = 0;							// Our movie, track and media
 	Track			gTrack;
 	Media			gMedia;
@@ -175,9 +175,9 @@ void main(void)
 			CheckError(1, "\pCan't get movie resource!");
 		DetachResource(movieRsrc);
 
-		short 		movieResID = 0;		// get first movie
+		int16_t 		movieResID = 0;		// get first movie
 		Str255 		movieName;
-		Boolean 		wasChanged;
+		bool 		wasChanged;
 
 		err = NewMovieFromFile(&gMovie, resRefNum, &movieResID,
 						movieName, newMovieActive, &wasChanged);
@@ -204,7 +204,7 @@ void main(void)
 		CheckError(1, "\pCan't open the input movie!!");
 
 	dbuffLen = 64000;
-	dbuff = (uchar *)malloc(dbuffLen);
+	dbuff = (uint8_t *)malloc(dbuffLen);
 
 	//----------------------
 	//	Setup output file.
@@ -258,7 +258,7 @@ void main(void)
 				if (chunkHdr.length > dbuffLen)
 				{
 					dbuffLen = chunkHdr.length;
-					dbuff = (uchar *)realloc(dbuff, dbuffLen);
+					dbuff = (uint8_t *)realloc(dbuff, dbuffLen);
 				}
 				//fread(dbuff, chunkHdr.length - sizeof(QT_ChunkHdr), 1, fp);
 				BlockMove(mp, dbuff, chunkHdr.length - sizeof(QT_ChunkHdr));
@@ -269,9 +269,9 @@ void main(void)
 				if (chunkHdr.ctype == QT_STTS)
 				{
 					QTS_STTS	*p = (QTS_STTS *)dbuff;
-					short		i, j, si;
+					int16_t		i, j, si;
 
-					gSampleTimes = (ulong *)NewPtr(1200 * sizeof(ulong));
+					gSampleTimes = (uint32_t *)NewPtr(1200 * sizeof(uint32_t));
 					si = 0;
 					for (i = 0; i < p->numEntries; i++)
 						for (j = 0; j < p->time2samp[i].count; j++)
@@ -284,8 +284,8 @@ void main(void)
 					QTS_STCO 	*p = (QTS_STCO *)dbuff;
 
 					gNumFrames = p->numEntries;
-					gChunkOffsets = (ulong *)NewPtr(p->numEntries * sizeof(ulong));
-					BlockMove(p->offset, gChunkOffsets, p->numEntries * sizeof(ulong));
+					gChunkOffsets = (uint32_t *)NewPtr(p->numEntries * sizeof(uint32_t));
+					BlockMove(p->offset, gChunkOffsets, p->numEntries * sizeof(uint32_t));
 				}
 			}
 			else
@@ -301,18 +301,18 @@ void main(void)
 	//	Show the movie, one frame at a time.
 	//----------------------------
 	{
-		long			f, line;
+		int32_t			f, line;
 		Ptr			frameBuff;
 		Ptr			imgp, scrp;
 		RGBColor	black = {0, 0, 0};
 		RGBColor	white = {0xffff, 0xffff, 0xffff};
-		char		buff[64];
-		ulong		sampTime;
-		Boolean		subColor;
+		int8_t		buff[64];
+		uint32_t		sampTime;
+		bool		subColor;
  		Handle		compHdl;
- 		long			compSize;
- 		short		notSyncFlag;
- 		uchar		*pp;
+ 		int32_t			compSize;
+ 		int16_t		notSyncFlag;
+ 		uint8_t		*pp;
 
 		frameBuff = NewPtr(movieRect.right * movieRect.bottom);
 		CheckError(MemError(), "\pCan't allocate a frame buffer for input movie.");
@@ -329,8 +329,8 @@ void main(void)
 
 			// See if there's an 0xFF anywhere in this screen.
 			subColor = FALSE;
-			pp = (uchar *)frameBuff;
-			for (int pix = 0; pix < movieRect.right*movieRect.bottom; pix++)
+			pp = (uint8_t *)frameBuff;
+			for (int32_t pix = 0; pix < movieRect.right*movieRect.bottom; pix++)
 			{
 				if (*pp == 0x00)
 				{

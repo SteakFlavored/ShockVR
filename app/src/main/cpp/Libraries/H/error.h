@@ -51,7 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __ERROR_H
 #define __ERROR_H
 
-typedef short errtype;
+typedef int16_t errtype;
 
 #define OK              					((errtype)0)       // Normal execution
 #define ERR_NODEV       			((errtype)1)       // No such device

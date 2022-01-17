@@ -69,33 +69,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MFD_FIXTURE_FLAG 0x8  // class flag for mfd fixtures
 
-extern void mfd_setup_elevator(ushort levmask, ushort reachmask, ushort curlevel, uchar special);
-extern void mfd_setup_keypad(char special);
-extern void save_mfd_slot(int mfd_id);
-extern void restore_mfd_slot(int mfd_id);
-extern short qdata_get(short qdata);
+extern void mfd_setup_elevator(uint16_t levmask, uint16_t reachmask, uint16_t curlevel, uint8_t special);
+extern void mfd_setup_keypad(int8_t special);
+extern void save_mfd_slot(int32_t mfd_id);
+extern void restore_mfd_slot(int32_t mfd_id);
+extern int16_t qdata_get(int16_t qdata);
 errtype accesspanel_trigger(ObjID id);
 
 // -----------
 //  PROTOTYPES
 // -----------
-void zoom_mfd(int mfd);
-int grab_and_zoom_mfd(int mfd_func, int mfd_slot);
-errtype obj_access_fail_message(int stringref, char access_level, char offset);
-bool really_really_locked(int qvar);
-bool use_door(ObjID id, uchar in_inv, ObjID cursor_obj);
+void zoom_mfd(int32_t mfd);
+int32_t grab_and_zoom_mfd(int32_t mfd_func, int32_t mfd_slot);
+errtype obj_access_fail_message(int32_t stringref, int8_t access_level, int8_t offset);
+bool really_really_locked(int32_t qvar);
+bool use_door(ObjID id, uint8_t in_inv, ObjID cursor_obj);
 bool obj_too_smart(ObjID id);
-void container_check(ObjID obj, char* count, ObjID* pidlist);
-char container_extract(ObjID *pidlist, int d1, int d2);
-void container_stuff(ObjID *pidlist, int numobjs, int* d1, int* d2);
-bool is_container(ObjID id, int** d1, int** d2);
+void container_check(ObjID obj, int8_t* count, ObjID* pidlist);
+int8_t container_extract(ObjID *pidlist, int32_t d1, int32_t d2);
+void container_stuff(ObjID *pidlist, int32_t numobjs, int32_t* d1, int32_t* d2);
+bool is_container(ObjID id, int32_t** d1, int32_t** d2);
 bool obj_fixture_zoom(ObjID id, bool in_inv, bool *messagep);
 errtype obj_tractor_beam_func(ObjID id, bool on);
 errtype gear_power_outage();
 void unmulti_anim_callback(ObjID id, void *user_data);
 errtype obj_screen_animate(ObjID id);
-bool obj_keypad_crunch(int p, uchar digits[]);
-errtype keypad_trigger(ObjID id, uchar digits[]);
+bool obj_keypad_crunch(int32_t p, uint8_t digits[]);
+errtype keypad_trigger(ObjID id, uint8_t digits[]);
 bool try_use_epick(ObjID panel, ObjID cursor_obj);
 ObjID door_in_square(ObjLoc* loc, bool usable);
 void regenetron_door_hack();
@@ -109,14 +109,14 @@ bool shameful_obselete_flag;
 #define DOOR_TIME_UNIT 2 // how many time-setting units in a second
 
 
-void zoom_mfd(int mfd)
+void zoom_mfd(int32_t mfd)
 {
    LGRect start = {{ -5, -5}, {5,5}};
    extern LGPoint use_cursor_pos;
    LGPoint ucp;
 
    extern void mfd_zoom_rect(LGRect*,int);
-   extern Boolean DoubleSize;
+   extern bool DoubleSize;
 
    ucp = use_cursor_pos;
    if (!DoubleSize)
@@ -125,17 +125,17 @@ void zoom_mfd(int mfd)
    mfd_zoom_rect(&start,mfd);
 }
 
-int grab_and_zoom_mfd(int mfd_func, int mfd_slot)
+int32_t grab_and_zoom_mfd(int32_t mfd_func, int32_t mfd_slot)
 {
-   int mfd = mfd_grab_func(mfd_func,mfd_slot);
+   int32_t mfd = mfd_grab_func(mfd_func,mfd_slot);
    zoom_mfd(mfd);
    return mfd;
 }
 
 
-errtype obj_access_fail_message(int stringref, char access_level, char offset)
+errtype obj_access_fail_message(int32_t stringref, int8_t access_level, int8_t offset)
 {
-   char temp[40];
+   int8_t temp[40];
    strcpy(temp, get_temp_string(MKREF(RES_accessCards,access_level<<1)));
    strcat(temp, get_string(stringref + offset,NULL,0));
    message_info(temp);
@@ -154,7 +154,7 @@ bool door_moving(ObjID door, bool dir)
 }
 
 #define COMPAR_ESC_ACCESS 0xFF
-extern bool comparator_check(int comparator, ObjID obj, uchar *special_code);
+extern bool comparator_check(int32_t comparator, ObjID obj, uint8_t *special_code);
 
 bool door_locked(ObjID obj)
 {
@@ -164,8 +164,8 @@ bool door_locked(ObjID obj)
    if (objDoors[spec].access_level != COMPAR_ESC_ACCESS &&
       objDoors[spec].access_level != 0)
    {
-      int i;
-      ulong try_combo = 1 << objDoors[spec].access_level;
+      int32_t i;
+      uint32_t try_combo = 1 << objDoors[spec].access_level;
       for (i=0; i < NUM_GENERAL_SLOTS; i++)
       {
          ObjID try_card = player_struct.inventory[i];
@@ -183,8 +183,8 @@ bool door_locked(ObjID obj)
    if (objDoors[spec].locked == 0) return FALSE;
    if(objDoors[spec].access_level==COMPAR_ESC_ACCESS)
    {
-      uchar special;
-      int comp = objTraps[objs[objDoors[spec].locked].specID].comparator;
+      uint8_t special;
+      int32_t comp = objTraps[objs[objDoors[spec].locked].specID].comparator;
       // zorch the failure message out of the comparator before
       // checking.
       comp = comp&(~(0xFF<<24));
@@ -197,7 +197,7 @@ bool door_locked(ObjID obj)
 #ifdef DOOM_EMULATION_MODE
 // questbits for doors that are "broken beyond repair" or such,
 // and should not be openable even in doom emulation mode.
-bool really_really_locked(int qvar)
+bool really_really_locked(int32_t qvar)
 {
    return(qvar==0x5E||qvar==0xE7);
 }
@@ -211,15 +211,15 @@ bool really_really_locked(int qvar)
 //      and should be used by anyone other than the player trying
 //      to use the door.
 //
-bool use_door(ObjID id, uchar in_inv, ObjID)
+bool use_door(ObjID id, uint8_t in_inv, ObjID)
 {
    bool retval = FALSE;
    bool play_fx = FALSE;
    bool use_card = FALSE;
-   int lqb;
+   int32_t lqb;
    DoorSchedEvent new_event;
    ObjID try_card, other;
-   char i;
+   int8_t i;
 
    if ((objDoors[objs[id].specID].access_level != 0)
 #ifdef DOOM_EMULATION_MODE
@@ -228,10 +228,10 @@ bool use_door(ObjID id, uchar in_inv, ObjID)
          )
 #endif
    {
-      int try_combo;
+      int32_t try_combo;
       bool rv;
-      uchar special;
-      int comp;
+      uint8_t special;
+      int32_t comp;
 
       if (objDoors[objs[id].specID].access_level > NUM_ACCESS_CODES)
       {
@@ -296,13 +296,13 @@ access_ok:
        }
        else
        {
-          int closetime;
+          int32_t closetime;
 
           // This string is strangely here rather than above so as to
           // insure that we do no collide with any other messages
           if ((use_card) && (!(in_inv&0x2)))
           {
-            char tempbuf[30], tb2[30];
+            int8_t tempbuf[30], tb2[30];
             get_object_short_name(ID2TRIP(try_card),tempbuf,30);
             strcpy(tempbuf, get_temp_string(MKREF(RES_accessCards,(objDoors[objs[id].specID].access_level)<<1)));
             strcat(tempbuf, " ");
@@ -321,7 +321,7 @@ access_ok:
           if (((closetime = objDoors[objs[id].specID].autoclose_time) > 0)
             && (closetime!=NEVER_AUTOCLOSE_COOKIE))
           {
-            ushort new_code;
+            uint16_t new_code;
             new_event.timestamp = TICKS2TSTAMP(player_struct.game_time + (CIT_CYCLE*closetime)/DOOR_TIME_UNIT);
             new_event.type = DOOR_SCHED_EVENT;
             new_event.door_id = id;
@@ -339,13 +339,13 @@ access_ok:
     }
     else
     {
-       char real_frame = objs[id].info.current_frame;
+       int8_t real_frame = objs[id].info.current_frame;
        add_obj_to_animlist(id, FALSE, TRUE,FALSE,32,NULL,NULL,0);     // play anim backwards
        play_fx = TRUE;
     }
     if (play_fx)
     {
-       int sfx_id;
+       int32_t sfx_id;
        switch(ID2TRIP(id))
        {
           case ACCESS_DOOR_TRIPLE:
@@ -433,7 +433,7 @@ bool obj_too_smart(ObjID id)
    return(FALSE);
 }
 
-void container_check(ObjID obj, char* count, ObjID* pidlist)
+void container_check(ObjID obj, int8_t* count, ObjID* pidlist)
 {
    if (objs[obj].active && !obj_too_smart(obj)) {
       if(USE_MODE(obj)==PICKUP_USE_MODE)
@@ -443,9 +443,9 @@ void container_check(ObjID obj, char* count, ObjID* pidlist)
    }
 }
 
-char container_extract(ObjID *pidlist, int d1, int d2)
+int8_t container_extract(ObjID *pidlist, int32_t d1, int32_t d2)
 {
-   char retval = 0;
+   int8_t retval = 0;
    container_check(d1 & 0xFFFF, &retval, pidlist);
    container_check(d1 >> 16, &retval, pidlist);
    container_check(d2 & 0xFFFF, &retval, pidlist);
@@ -453,9 +453,9 @@ char container_extract(ObjID *pidlist, int d1, int d2)
    return(retval);
 }
 
-void container_stuff(ObjID *pidlist, int numobjs, int* d1, int* d2)
+void container_stuff(ObjID *pidlist, int32_t numobjs, int32_t* d1, int32_t* d2)
 {
-   int i;
+   int32_t i;
    for (i = numobjs; i < MAX_CONTAINER_CONTENTS; i++)
     pidlist[i] = OBJ_NULL;
    i = 0;
@@ -471,7 +471,7 @@ void container_stuff(ObjID *pidlist, int numobjs, int* d1, int* d2)
 // the objects.
 // If we want to make more objects have these properties later, here is
 // the place to add 'em.
-bool is_container(ObjID id, int** d1, int** d2)
+bool is_container(ObjID id, int32_t** d1, int32_t** d2)
 {
    ObjSpecID specid = objs[id].specID;
    bool retval = FALSE;
@@ -519,7 +519,7 @@ bool obj_fixture_zoom(ObjID id, bool in_inv, bool *messagep)
    bool zoom = (objs[id].info.inst_flags & CLASS_INST_FLAG);
    if (zoom && !in_inv)
    {
-      int mfd = grab_and_zoom_mfd(MFD_FIXTURE_FUNC,MFD_INFO_SLOT);
+      int32_t mfd = grab_and_zoom_mfd(MFD_FIXTURE_FUNC,MFD_INFO_SLOT);
       save_mfd_slot(mfd);
       mfd_notify_func(MFD_FIXTURE_FUNC,MFD_INFO_SLOT,TRUE,MFD_ACTIVE,TRUE);
       player_struct.panel_ref = id;
@@ -544,7 +544,7 @@ bool obj_fixture_zoom(ObjID id, bool in_inv, bool *messagep)
 #define BATTERY_ENERGY_BONUS     0x50
 #define TRACBEAM_ENERGY_COST     0x20
 #define TRACBEAM_DIST_MOD        0x20
-extern ubyte pickup_distance_mod;
+extern uint8_t pickup_distance_mod;
 
 errtype obj_tractor_beam_func(ObjID id, bool on)
 {
@@ -578,7 +578,7 @@ errtype gear_power_outage()
    extern errtype obj_tractor_beam_func(ObjID id, bool on);
 
    ObjID obj;
-   char i;
+   int8_t i;
    for (i = 0; i < NUM_GENERAL_SLOTS; i++)
    {
       obj = player_struct.inventory[i];
@@ -601,7 +601,7 @@ errtype gear_power_outage()
 //
 bool try_use_epick(ObjID panel, ObjID cursor_obj)
 {
-   uchar sol;
+   uint8_t sol;
 
    if(cursor_obj!=OBJ_NULL) {
       if(ID2TRIP(cursor_obj)==EPICK_TRIPLE) {
@@ -621,7 +621,7 @@ bool try_use_epick(ObjID panel, ObjID cursor_obj)
 
 #define PLASTIQUE_TIME  10
 extern void remove_general_item(ObjID obj);
-extern Boolean	gKeypadOverride;
+extern bool	gKeypadOverride;
 
 // We return whether or not we used the message line.
 bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
@@ -629,21 +629,21 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
    bool retval = FALSE, rv;
    ObjFixture *pfixt;
    ObjBigstuff *pbigs;
-   char i;
+   int8_t i;
    ObjSpecID osid;
-   uchar special;
+   uint8_t special;
    extern errtype do_random_loot(ObjID corpse);
-   extern char camera_map[NUM_HACK_CAMERAS];
+   extern int8_t camera_map[NUM_HACK_CAMERAS];
    extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
-   extern ubyte next_text_line;
-   extern errtype inventory_draw_new_page(int num);
-   extern void read_email(Id new_base, int num);
-   int *d1,*d2;
+   extern uint8_t next_text_line;
+   extern errtype inventory_draw_new_page(int32_t num);
+   extern void read_email(Id new_base, int32_t num);
+   int32_t *d1,*d2;
 
    // First, the multi-class behavior objects
    if (is_container(id, &d1,&d2))
    {
-      int mfd;
+      int32_t mfd;
       extern bool gump_get_useful(void);
       extern void gump_clear(void);
 
@@ -676,7 +676,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
    if (global_fullmap->cyber)
    {
       bool did_something = FALSE;
-      extern void long_bark(ObjID speaker_id, uchar mug_id, int string_id, ubyte color);
+      extern void long_bark(ObjID speaker_id, uint8_t mug_id, int32_t string_id, uint8_t color);
       switch(ID2TRIP(id))
       {
          case CYBERHEAL_TRIPLE:
@@ -730,11 +730,11 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
 
    switch (objs[id].obclass)
    {
-      extern bool comparator_check(int comparator, ObjID obj, uchar *special_code);
+      extern bool comparator_check(int32_t comparator, ObjID obj, uint8_t *special_code);
       case CLASS_TRAP:
          if (ID2TRIP(id) == MAPNOTE_TRIPLE)
          {
-            char buf[80];
+            int8_t buf[80];
 
             lg_sprintf(buf,"\"%s\"",amap_note_string(id));
             message_info(buf);
@@ -772,7 +772,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                      rv = comparator_check(pfixt->comparator, id, &special);
                   if (rv || (special != 0))
                   {
-                     int mfd = grab_and_zoom_mfd(MFD_ELEV_FUNC,MFD_INFO_SLOT);
+                     int32_t mfd = grab_and_zoom_mfd(MFD_ELEV_FUNC,MFD_INFO_SLOT);
                      // Set our reference...
                      save_mfd_slot(mfd);
 
@@ -803,7 +803,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
 #endif
                else if (rv || (special != 0))
                {
-                  int mfd = grab_and_zoom_mfd(MFD_KEYPAD_FUNC,MFD_INFO_SLOT);
+                  int32_t mfd = grab_and_zoom_mfd(MFD_KEYPAD_FUNC,MFD_INFO_SLOT);
                   // Set our reference...
                   save_mfd_slot(mfd);
 
@@ -830,7 +830,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                rv = comparator_check(pfixt->comparator, id, &special);
                if(rv)
                {
-                  int accessmfd = NUM_MFDS;
+                  int32_t accessmfd = NUM_MFDS;
 
                   if(player_struct.panel_ref!=id) {
                      accessmfd = grab_and_zoom_mfd(mfd_type_accesspanel(id),MFD_INFO_SLOT);
@@ -844,7 +844,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                   }
                   else
                   {
-                     int mfd_id = NUM_MFDS;
+                     int32_t mfd_id = NUM_MFDS;
                      if (mfd_yield_func(mfd_type_accesspanel(id),&mfd_id))
                      {
                         zoom_mfd(mfd_id);
@@ -855,7 +855,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                   // you don't need them.  Only automatically solve the
                   // puzzle if a pick doesn't try to do so for you.
                   if(!try_use_epick(id,cursor_obj)) {
-                     int info;
+                     int32_t info;
 
                      if(player_struct.difficulty[PUZZLE_DIFF_INDEX]==0)
                         mfd_solve_accesspanel(id);
@@ -896,7 +896,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                      chg_set_flg(VITALS_UPDATE);
 
                      // don't let us get energy until some time later
-                     objFixtures[osid].p4 = (int)(player_struct.game_time + (CIT_CYCLE * objFixtures[osid].p2));
+                     objFixtures[osid].p4 = (int32_t)(player_struct.game_time + (CIT_CYCLE * objFixtures[osid].p2));
 
                      string_message_info(REF_STR_Recharge);
                      play_digi_fx_obj(SFX_ENERGY_RECHARGE, 1,id);
@@ -957,7 +957,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                      {
                         if (ID2TRIP(id) == RETSCANNER_TRIPLE)
                         {
-                           int head_count = 0;
+                           int32_t head_count = 0;
                            if (ID2TRIP(cursor_obj) == HEAD_TRIPLE)
                               head_count = objs[cursor_obj].info.current_frame + 1;
                            else if (ID2TRIP(cursor_obj) == HEAD2_TRIPLE)
@@ -999,7 +999,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
                   default:
                   {
                      bool access_okay = FALSE;
-                     int try_combo;
+                     int32_t try_combo;
                      if ((objFixtures[osid].access_level == 0)
 #ifdef DOOM_EMULATION_MODE
                         || (QUESTVAR_GET(MISSION_DIFF_QVAR) < 2)
@@ -1173,7 +1173,7 @@ bool object_use(ObjID id, bool in_inv, ObjID cursor_obj)
             case BIGSCREEN_TRIPLE:
             case SUPERSCREEN_TRIPLE:
             {
-               short v = objBigstuffs[osid].data2 & 0x7F;
+               int16_t v = objBigstuffs[osid].data2 & 0x7F;
                if ((v >= FIRST_CAMERA_TMAP) && (v < FIRST_CAMERA_TMAP + NUM_HACK_CAMERAS))
                {
                   if (camera_map[v-FIRST_CAMERA_TMAP] && hack_cam_objs[v - FIRST_CAMERA_TMAP])
@@ -1238,8 +1238,8 @@ void regenetron_door_hack()
 #define MAX_JANITOR_OBJS   32
 errtype elevator_janitor_run()
 {
-   short x0,x1,y0,y1,x,y;
-   int i, j, obj_count = 0;
+   int16_t x0,x1,y0,y1,x,y;
+   int32_t i, j, obj_count = 0;
    ObjLoc dump_loc, newloc;
    ObjID objlist[MAX_JANITOR_OBJS],id;
    bool dupe;
@@ -1330,8 +1330,8 @@ errtype elevator_janitor_run()
 // Goes through all the objects in the same elevator as the player, and fills objlist with them
 errtype compute_elev_objs(ObjID *objlist)
 {
-   short i,j,x,y;
-   short x0,x1,y0,y1;
+   int16_t i,j,x,y;
+   int16_t x0,x1,y0,y1;
    ObjRefID oref;
    ObjID id;
    MapElem *pme;
@@ -1384,8 +1384,8 @@ errtype compute_elev_objs(ObjID *objlist)
                   ObjLoc newloc;
                   State st;
                   extern void state_to_objloc(State *s, ObjLoc *l);
-                  int ph = objs[id].info.ph;
-                  int *pd1, *pd2;
+                  int32_t ph = objs[id].info.ph;
+                  int32_t *pd1, *pd2;
 
                   // Make sure it is okay to come with us.... first check physics then check
                   // for containerism, and grenadeliness.
@@ -1427,7 +1427,7 @@ errtype compute_elev_objs(ObjID *objlist)
 
 //¥¥¥ uncomment the next 2 lines for playable demo only!!!
 //#define MAC_DEMO
-//extern Boolean	gPlayingGame;
+//extern bool	gPlayingGame;
 //¥¥¥
 
 // Eventually, this code will also go and do some nice level-changing
@@ -1435,10 +1435,10 @@ errtype compute_elev_objs(ObjID *objlist)
 // dest_level is the target level to be teleported to
 // which_panel is an index into the list of "equivalent" panels that each panel keeps around.
 // returns whether or not the elevator actually went anywhere
-bool elevator_use(short dest_level, ubyte which_panel)
+bool elevator_use(int16_t dest_level, uint8_t which_panel)
 {
 #ifdef MAC_DEMO
-//   extern errtype trap_cutscene_func(int p1, int p2, int p3, int p4);
+//   extern errtype trap_cutscene_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
 //   trap_cutscene_func(2,TRUE,0,0);
 	uiHideMouse(NULL);
 	ShowCursor();
@@ -1446,24 +1446,24 @@ bool elevator_use(short dest_level, ubyte which_panel)
 	gPlayingGame = FALSE;								// Hop out of the game loop.
 #else
    errtype retval = TRUE;
-   short xdiff, ydiff, zdiff;
+   int16_t xdiff, ydiff, zdiff;
    ObjLoc panel_loc, newloc;
-   char old_zsh;
-   int new_panel;
+   int8_t old_zsh;
+   int32_t new_panel;
    ObjRefID oref;
    ObjID id;
-   int nuframe;
+   int32_t nuframe;
 #ifdef ELEVATOR_PACKRAT
-   char i;
+   int8_t i;
    ObjLoc temploc;
    ObjID tempid;
    ObjID elev_obj_list[MAX_ELEV_OBJS];
    ObjLoc elev_obj_diffs[MAX_ELEV_OBJS];
-   extern void store_objects(char** buf, ObjID *obj_array, char obj_count);
-   extern void restore_objects(char* buf, ObjID *obj_array, char obj_count);
+   extern void store_objects(int8_t** buf, ObjID *obj_array, int8_t obj_count);
+   extern void restore_objects(int8_t* buf, ObjID *obj_array, int8_t obj_count);
    extern errtype obj_load_art(bool flush_all);
    extern bool robot_antisocial;
-   char *buf;
+   int8_t *buf;
 #endif
    extern void check_panel_ref(bool puntme);
 
@@ -1630,8 +1630,8 @@ bool in_anim_callback = FALSE;
 
 void unmulti_anim_callback(ObjID id, void *user_data)
 {
-   int orig_parm  = (int) user_data;
-   int *pp2, *pp1;
+   int32_t orig_parm  = (int32_t) user_data;
+   int32_t *pp2, *pp1;
 
    if (in_anim_callback || !time_passes)
       return;
@@ -1655,7 +1655,7 @@ void unmulti_anim_callback(ObjID id, void *user_data)
 
 void multi_anim_callback(ObjID id, void *)
 {
-   int *pp2, *pp1;
+   int32_t *pp2, *pp1;
    bool do_swap = FALSE;
 
    if (in_anim_callback || !time_passes)
@@ -1723,11 +1723,11 @@ errtype obj_screen_animate(ObjID id)
 
 #define MAX_KEYPAD_DIGITS  3
 
-bool obj_keypad_crunch(int p, uchar digits[MAX_KEYPAD_DIGITS])
+bool obj_keypad_crunch(int32_t p, uint8_t digits[MAX_KEYPAD_DIGITS])
 {
    bool retval = TRUE;
-   int i;
-   short combo = qdata_get(p & 0xFFFF);
+   int32_t i;
+   int16_t combo = qdata_get(p & 0xFFFF);
    ObjID id = qdata_get(p >> 16);
 
    if (combo == 0)
@@ -1746,10 +1746,10 @@ bool obj_keypad_crunch(int p, uchar digits[MAX_KEYPAD_DIGITS])
    return(retval);
 }
 
-errtype keypad_trigger(ObjID id, uchar digits[MAX_KEYPAD_DIGITS])
+errtype keypad_trigger(ObjID id, uint8_t digits[MAX_KEYPAD_DIGITS])
 {
    ObjSpecID osid = objs[id].specID;
-   char match = -1;
+   int8_t match = -1;
    if ((objs[id].obclass != CLASS_FIXTURE) || (!objs[id].active))
    {
       return(ERR_NOEFFECT);
@@ -1812,14 +1812,14 @@ errtype accesspanel_trigger(ObjID id)
 #define CSPACE_OBJECT_DELAY_TIME    CIT_CYCLE
 
 ObjID last_obj;
-ulong last_obj_time;
+uint32_t last_obj_time;
 
 // Collision with something while in cyberspace
 errtype obj_cspace_collide(ObjID id, ObjID collider)
 {
-   extern errtype collide_objects(ObjID collision, ObjID victim, int bad);
-   char str_buf[60],temp[20];
-   int bigstuff_fake = 0, trip;
+   extern errtype collide_objects(ObjID collision, ObjID victim, int32_t bad);
+   int8_t str_buf[60],temp[20];
+   int32_t bigstuff_fake = 0, trip;
    bool select=FALSE;
 
    if (collider != PLAYER_OBJ)
@@ -1878,7 +1878,7 @@ errtype obj_cspace_collide(ObjID id, ObjID collider)
          if ((bigstuff_fake != 0) || (USE_MODE(id) == PICKUP_USE_MODE && inventory_add_object(id, select)))
          {
             ObjLocState del_loc_state;
-            int version=0;
+            int32_t version=0;
             // yank the object out of the map.
             del_loc_state.obj = id;
             del_loc_state.loc = objs[id].loc;
@@ -1919,7 +1919,7 @@ errtype obj_cspace_collide(ObjID id, ObjID collider)
                version=objSoftwares[objs[id].specID].version;
             }
             if(version && trip==GAMES_TRIPLE) {
-               int game=0;
+               int32_t game=0;
                while((version&1)==0) game++, version=version>>1;
                version=0;
                lg_sprintf(str_buf,"\"%S\" %S",REF_STR_GameName0+game,MKREF(RES_objshortnames,OPTRIP(GAMES_TRIPLE)));

@@ -57,11 +57,11 @@ errtype TNGInit(TNG *ptng, TNGStyle *sty, void *ui_data)
 
 void TNGDrawBase(TNG *ptng, LGPoint coord, LGPoint size)
 {
-	short width,height;
+	int16_t width,height;
 	TNGStyle *pstyle;
 	LGRect rect;
-   ushort flags;
-	int i;
+   uint16_t flags;
+	int32_t i;
 
 //	If bitmap background, draw it
 //	Else if tiled background, draw it
@@ -136,7 +136,7 @@ void TNGDrawBitmapRef(Ref ref, LGPoint pt)
 	LGRect cvRect;
 
 	pfd = (FrameDesc *) RefLock(ref);
-	pfd->bm.bits = (uchar *) (pfd + 1);
+	pfd->bm.bits = (uint8_t *) (pfd + 1);
 
 	bitRect.ul = pt;
 	bitRect.lr.x = bitRect.ul.x + pfd->bm.w;
@@ -161,10 +161,10 @@ void TNGDrawBitmapRef(Ref ref, LGPoint pt)
 void TNGDrawTileMapRef(Ref ref, LGPoint pt)
 {
 	FrameDesc *pfd;
-	short startx;
+	int16_t startx;
 
 	pfd = (FrameDesc *) RefLock(ref);
-	pfd->bm.bits = (uchar *) (pfd + 1);
+	pfd->bm.bits = (uint8_t *) (pfd + 1);
 
 	while ((pt.y + pfd->bm.h) < grd_clip.top)
 		pt.y += pfd->bm.h;
@@ -186,7 +186,7 @@ void TNGDrawTileMapRef(Ref ref, LGPoint pt)
 	RefUnlock(REFID(ref));
 }
 
-errtype TNGDrawText(Id id, char *text, int x, int y)
+errtype TNGDrawText(Id id, int8_t *text, int32_t x, int32_t y)
 {
    gr_set_font((grs_font *)ResLock(id));
    gr_string(text, x, y);
@@ -198,10 +198,10 @@ errtype TNGDrawText(Id id, char *text, int x, int y)
 // Callback Functions
 // --------------------------------------------
 
-errtype tng_install_callback(TNG *ptng, ushort event_type, ushort cond, TNGCallback cbfn, void *user_data, int *pid)
+errtype tng_install_callback(TNG *ptng, uint16_t event_type, uint16_t cond, TNGCallback cbfn, void *user_data, int32_t *pid)
 {
    TNG_CB *tngcb, *curp, *oldp;
-   int oldid = 0;
+   int32_t oldid = 0;
 
    if (ptng == NULL)
    {
@@ -235,7 +235,7 @@ errtype tng_install_callback(TNG *ptng, ushort event_type, ushort cond, TNGCallb
    return (OK);
 }
 
-errtype tng_uninstall_callback(TNG *ptng, int id)
+errtype tng_uninstall_callback(TNG *ptng, int32_t id)
 {
    TNG_CB *curp, *oldp;
 
@@ -266,7 +266,7 @@ errtype tng_uninstall_callback(TNG *ptng, int id)
    return(OK);
 }
 
-bool tng_cb_mousebutt(TNG *ptng, uchar type, LGPoint loc)
+bool tng_cb_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
    TNG_CB *tngcb;
    bool retval = FALSE;
@@ -292,7 +292,7 @@ bool tng_cb_mousebutt(TNG *ptng, uchar type, LGPoint loc)
    return(retval);
 }
 
-bool tng_cb_keycooked(TNG *ptng, ushort key)
+bool tng_cb_keycooked(TNG *ptng, uint16_t key)
 {
    TNG_CB *tngcb;
    bool retval = FALSE;
@@ -317,7 +317,7 @@ bool tng_cb_keycooked(TNG *ptng, ushort key)
    return(retval);
 }
 
-bool tng_cb_signal(TNG *ptng, ushort signal)
+bool tng_cb_signal(TNG *ptng, uint16_t signal)
 {
    TNG_CB *tngcb;
    bool retval = FALSE;
@@ -342,7 +342,7 @@ bool tng_cb_signal(TNG *ptng, ushort signal)
    return(retval);
 }
 
-bool tng_cb_keyscan(TNG *ptng, ushort scan)
+bool tng_cb_keyscan(TNG *ptng, uint16_t scan)
 {
    TNG_CB *tngcb;
    bool retval = FALSE;
@@ -390,10 +390,10 @@ bool tng_cb_mousemove(TNG *ptng, LGPoint loc)
    return(retval);
 }
 
-errtype tng_cb_draw(TNG *ptng, ushort partmask, LGPoint loc)
+errtype tng_cb_draw(TNG *ptng, uint16_t partmask, LGPoint loc)
 {
 #ifndef NO_DUMMIES
-   LGPoint dummy; ushort dummy2; dummy2 = partmask; dummy = loc;
+   LGPoint dummy; uint16_t dummy2; dummy2 = partmask; dummy = loc;
 #endif
    ptng->signal(ptng, TNG_SIGNAL_EXPOSE);
    return(OK);

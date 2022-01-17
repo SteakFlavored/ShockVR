@@ -234,26 +234,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // GLOBALS
 // -------
 
-extern uchar motion_key_scancodes[];  // KBC_NONE terminated scancodes
+extern uint8_t motion_key_scancodes[];  // KBC_NONE terminated scancodes
 
 // ---------
 // INFERNALS
 // ---------
-bool parse_motion_key(ushort keycode, short* cnum, short* cval);
-bool parse_motion_key_cyber(ushort keycode, short* cnum, short* cval);
+bool parse_motion_key(uint16_t keycode, int16_t* cnum, int16_t* cval);
+bool parse_motion_key_cyber(uint16_t keycode, int16_t* cnum, int16_t* cval);
 void init_motion_polling(void);
 void setup_motion_polling(void);
 void process_motion_keys(void);
 bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*);
 
 
-extern void physics_set_relax(int axis, bool relax);
+extern void physics_set_relax(int32_t axis, bool relax);
 
-static byte poll_controls[6];
+static int8_t poll_controls[6];
 
 
 // Hey, this deals with motion keys
-bool parse_motion_key(ushort keycode, short* cnum, short* cval)
+bool parse_motion_key(uint16_t keycode, int16_t* cnum, int16_t* cval)
 {
    *cnum = -1;
    *cval = 0;
@@ -346,7 +346,7 @@ bool parse_motion_key(ushort keycode, short* cnum, short* cval)
 }
 
 
-bool parse_motion_key_cyber(ushort keycode, short* cnum, short* cval)
+bool parse_motion_key_cyber(uint16_t keycode, int16_t* cnum, int16_t* cval)
 {
    keycode &= ~KB_FLAG_2ND;
    *cnum = -1;
@@ -423,7 +423,7 @@ void init_motion_polling(void)
 {
    uiSetKeyboardPolling(motion_key_scancodes);
 /* KLC no longer needed
-   int i,cnt;
+   int32_t i,cnt;
    cnt = 1;
    config_get_value(KBCOUNTRY_CFG,CONFIG_INT_TYPE,&i,&cnt);
    if (cnt > 0)
@@ -442,18 +442,18 @@ void process_motion_keys(void)
 }
 
 
-extern Boolean	gKeypadOverride;
+extern bool	gKeypadOverride;
 
 bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 {
 	uiPollKeyEvent	*ke = (uiPollKeyEvent *)ev;
 
 	// KLC - For Mac version, we'll cook our own, since we have the modifier information.
-	ushort	cooked = ke->scancode | ke->mods;
+	uint16_t	cooked = ke->scancode | ke->mods;
 
-	short cnum,cval;
+	int16_t cnum,cval;
 
-	int	moveOK = TRUE;
+	int32_t	moveOK = TRUE;
 
 /* KLC - this doesn't appear to help any
 	// Check for firing weapon first (if it hasn't fired already).
@@ -495,7 +495,7 @@ bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 // If you want to add a motion key, you MUST PUT ITS SCANCODE HERE
 // or else the key will not get polled.
 
-uchar motion_key_scancodes[] =
+uint8_t motion_key_scancodes[] =
    {
       _Q_     , // q
       _W_     , // w

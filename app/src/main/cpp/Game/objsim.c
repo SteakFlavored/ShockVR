@@ -101,18 +101,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define obj_inv_coor_y(oloc) ((OBJ_LOC_BIN_Y(oloc) << MAP_SH) + (OBJ_LOC_FINE_Y(oloc) >> MAP_MS))
 #define obj_inv_coor_z(oid) (inv_coor(fix_from_obj_height(oid)))
 
-extern void instantiate_robot(int triple, Robot* new_robot);
+extern void instantiate_robot(int32_t triple, Robot* new_robot);
 
-extern char container_extract(ObjID *pidlist, int d1, int d2);
-extern void container_stuff(ObjID *pidlist, int numobjs, int* d1, int* d2);
-extern bool is_container(ObjID id, int** d1, int** d2);
+extern int8_t container_extract(ObjID *pidlist, int32_t d1, int32_t d2);
+extern void container_stuff(ObjID *pidlist, int32_t numobjs, int32_t* d1, int32_t* d2);
+extern bool is_container(ObjID id, int32_t** d1, int32_t** d2);
 
-char clearwithFF = false;
+int8_t clearwithFF = false;
 
 // global symbol for the player camera...
 cams player_cam;
 
-uchar cam_mode = OBJ_PLAYER_CAMERA;
+uint8_t cam_mode = OBJ_PLAYER_CAMERA;
 cams objmode_cam;
 bool  new_cyber_orient=TRUE;
 bool  ocp_settle_the_player=TRUE;
@@ -120,22 +120,22 @@ bool  ocp_settle_the_player=TRUE;
 bool properties_changed = FALSE;
 bool trigger_check = TRUE;
 ObjID physics_handle_id[MAX_OBJ];
-int physics_handle_max=-1;
+int32_t physics_handle_max=-1;
 
 // Internal Prototypes
-errtype ObjClassInit(ObjID id, ObjSpecID specid, int subclass);
+errtype ObjClassInit(ObjID id, ObjSpecID specid, int32_t subclass);
 errtype obj_set_secondary_properties();
 errtype do_ecology_triggers();
-errtype obj_physics_refresh(short x, short y, bool use_floor);
-grs_bitmap *get_text_bitmap_from_string(int d1, char dest_type, char *s, bool scroll, int scroll_index);
-grs_bitmap *get_text_bitmap_obj(ObjID cobjid, char dest_type, char *pscale);
+errtype obj_physics_refresh(int16_t x, int16_t y, bool use_floor);
+grs_bitmap *get_text_bitmap_from_string(int32_t d1, int8_t dest_type, int8_t *s, bool scroll, int32_t scroll_index);
+grs_bitmap *get_text_bitmap_obj(ObjID cobjid, int8_t dest_type, int8_t *pscale);
 grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2, Ref *ref1, Ref *ref2);
-void place_obj_at_objloc(ObjID id, ObjLoc *newloc, ushort xsize, ushort ysize);
-char extract_object_special_color(ObjID id);
-Ref ref_from_critter_data(ObjID oid, int triple, ubyte posture, ubyte frame, ubyte view);
-void spew_contents(ObjID id, int d1, int d2);
+void place_obj_at_objloc(ObjID id, ObjLoc *newloc, uint16_t xsize, uint16_t ysize);
+int8_t extract_object_special_color(ObjID id);
+Ref ref_from_critter_data(ObjID oid, int32_t triple, uint8_t posture, uint8_t frame, uint8_t view);
+void spew_contents(ObjID id, int32_t d1, int32_t d2);
 bool obj_is_useless(ObjID oid);
-bool obj_is_display(int triple);
+bool obj_is_display(int32_t triple);
 errtype obj_settle_func(ObjID id);
 bool death_check(ObjID id, bool* destr);
 
@@ -165,12 +165,12 @@ errtype set_door_data(ObjID id)
 }
 
 #ifdef PLAYTEST
-int extra_object_frames(int triple)
+int32_t extra_object_frames(int32_t triple)
 {
 #ifdef SPEW_ON
-   char temp[100];
+   int8_t temp[100];
 #endif
-   int retval;
+   int32_t retval;
    retval = FRAME_NUM_3D(ObjProps[OPTRIP(triple)].bitmap_3d);
 //   Spew(DSRC_OBJSIM_Editor, ("extra_frames for %x %s",triple, get_object_long_name(triple,temp,100)));
 //   Spew(DSRC_OBJSIM_Editor, ("= %hd (from %hx) OTRIP=%d\n", retval,ObjProps[OPTRIP(triple)].bitmap_3d,OPTRIP(triple)));
@@ -180,23 +180,23 @@ int extra_object_frames(int triple)
 
 Id critter_id_table[NUM_CRITTER];
 
-grs_bitmap *get_text_bitmap(int d1, int d2, char dest_type, bool scroll);
+grs_bitmap *get_text_bitmap(int32_t d1, int32_t d2, int8_t dest_type, bool scroll);
 
 #define NUM_TEXT_BITMAPS   2
-short text_bitmaps_x[NUM_TEXT_BITMAPS] = {128, 64};
-short text_bitmaps_y[NUM_TEXT_BITMAPS] = {32, 64};
-ushort text_bitmap_flags[NUM_TEXT_BITMAPS] = {BMF_TRANS, 0};
+int16_t text_bitmaps_x[NUM_TEXT_BITMAPS] = {128, 64};
+int16_t text_bitmaps_y[NUM_TEXT_BITMAPS] = {32, 64};
+uint16_t text_bitmap_flags[NUM_TEXT_BITMAPS] = {BMF_TRANS, 0};
 Ref text_bitmap_refs[NUM_TEXT_BITMAPS] = { REF_STR_WordZero, REF_STR_ScreenZero };
 
 grs_bitmap *text_bitmap_ptrs[NUM_TEXT_BITMAPS];
 grs_canvas text_canvases[NUM_TEXT_BITMAPS];
 
-int memcount = 0;
+int32_t memcount = 0;
 
 errtype obj_init()
 {
-   uchar c_class, c_subclass;
-   int i,j,count,class_count=0;
+   uint8_t c_class, c_subclass;
+   int32_t i,j,count,class_count=0;
    Id ids;
 
    // Create the word-buffer bitmap
@@ -262,17 +262,17 @@ Id posture_bases[] = {
 
 #define CRITTER_LOADING_PAGE_LIMIT 45000
 
-Ref ref_from_critter_data(ObjID, int triple, ubyte posture, ubyte frame, ubyte view) //, bool *pmirror)
+Ref ref_from_critter_data(ObjID, int32_t triple, uint8_t posture, uint8_t frame, uint8_t view) //, bool *pmirror)
 {
    Ref retval;
-   ubyte v,p;
-   ulong old_ticks;
-   extern ulong last_real_time;
+   uint8_t v,p;
+   uint32_t old_ticks;
+   extern uint32_t last_real_time;
    Id our_id;
    RefTable *prt;
-   char curr_frames;
+   int8_t curr_frames;
    bool load_all_views = TRUE;
-//¥¥¥   extern ulong page_amount;
+//¥¥¥   extern uint32_t page_amount;
 
    // Set mirror pointer
 //   if (pmirror != NULL)
@@ -356,13 +356,13 @@ Ref ref_from_critter_data(ObjID, int triple, ubyte posture, ubyte frame, ubyte v
 #include "MacTune.h"
 
 // deparses the bitmap_3d data field for a tpoly object into the bitmap to be textured onto it
-grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *type, Ref *use_ref)
+grs_bitmap *bitmap_from_tpoly_data(int32_t tpdata, uint8_t *scale, int32_t *index, uint8_t *type, Ref *use_ref)
 {
    extern grs_bitmap *static_bitmap;
-   extern char camera_map[NUM_HACK_CAMERAS];
-   extern char num_customs;
-   short style;
-   int use_index;
+   extern int8_t camera_map[NUM_HACK_CAMERAS];
+   extern int8_t num_customs;
+   int16_t style;
+   int32_t use_index;
    Id useme;
    grs_bitmap	*result;
 
@@ -391,9 +391,9 @@ grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *
      case TPOLY_TYPE_CUSTOM_MAT:
         if ((*index >= FIRST_CAMERA_TMAP) && (*index <= FIRST_CAMERA_TMAP + NUM_HACK_CAMERAS))
          {
-            extern uchar hack_cameras_needed;
+            extern uint8_t hack_cameras_needed;
             extern grs_bitmap *hack_cam_bitmaps[NUM_HACK_CAMERAS];
-            short temp_val = (*index) - FIRST_CAMERA_TMAP;
+            int16_t temp_val = (*index) - FIRST_CAMERA_TMAP;
             hack_cameras_needed |= (1 << temp_val);
             do_screen_static();
             if (camera_map[temp_val])
@@ -408,7 +408,7 @@ grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *
          }
          else if ((*index >= FIRST_AUTOMAP_MAGIC_COOKIE) && (*index <= FIRST_AUTOMAP_MAGIC_COOKIE + NUM_AUTOMAP_MAGIC_COOKIES))
          {
-            extern grs_bitmap *screen_automap_bitmap(char which_amap);
+            extern grs_bitmap *screen_automap_bitmap(int8_t which_amap);
             return(screen_automap_bitmap(*index - FIRST_AUTOMAP_MAGIC_COOKIE));
          }
 
@@ -429,12 +429,12 @@ grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *
          style=3-style;
          if (*index == RANDOM_TEXT_MAGIC_COOKIE)
          {
-            char use_buf[10];
-            int seed;
+            int8_t use_buf[10];
+            int32_t seed;
 
             seed=*tmd_ticks>>7;
             use_index=((seed*9277+7)%14983)%10;
-		  numtostring((long) use_index, use_buf);
+		  numtostring((int32_t) use_index, use_buf);
 		  clearwithFF = true;
             result = get_text_bitmap_from_string(style, 1, use_buf, FALSE, 0);
 		  clearwithFF = false;
@@ -520,7 +520,7 @@ grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *
 // 0 is extending out from one side,
 // 1 is expanding out from center
 // 2 is rising from the floor/descending from the ceiling
-errtype obj_model_hack(ObjID id, uchar *hack_x, uchar *hack_y, uchar *hack_z, uchar *hack_type)
+errtype obj_model_hack(ObjID id, uint8_t *hack_x, uint8_t *hack_y, uint8_t *hack_z, uint8_t *hack_type)
 {
    switch (ID2TRIP(id))
    {
@@ -547,8 +547,8 @@ errtype obj_model_hack(ObjID id, uchar *hack_x, uchar *hack_y, uchar *hack_z, uc
 
 grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2, Ref *ref1, Ref *ref2)
 {
-   int pval;
-   uchar p1,p2,p3,p4,p5;
+   int32_t pval;
+   uint8_t p1,p2,p3,p4,p5;
    grs_bitmap *retval = NULL;
    grs_bitmap *temp_bm = NULL;
 
@@ -723,7 +723,7 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
    return(retval);
 }
 
-char extract_object_special_color(ObjID id)
+int8_t extract_object_special_color(ObjID id)
 {
    switch(objs[id].obclass)
    {
@@ -746,7 +746,7 @@ char extract_object_special_color(ObjID id)
 // Shutdown the object system and free up memory as appropriate
 errtype obj_shutdown()
 {
-	int	i;
+	int32_t	i;
 	extern errtype obj_load_art(bool flush_all);
 
 	// Free the word-buffer bitmap
@@ -761,9 +761,9 @@ errtype obj_shutdown()
 	return(OK);
 }
 
-void spew_contents(ObjID id, int d1, int d2)
+void spew_contents(ObjID id, int32_t d1, int32_t d2)
 {
-	char i, num_objs;
+	int8_t i, num_objs;
 	ObjLoc newloc;
 	ObjID id_list[MAX_CONTAINER_OBJS];
 	num_objs = container_extract(id_list, d1, d2);
@@ -798,7 +798,7 @@ bool obj_is_useless(ObjID oid)
 
 // Creates the basic object, but does not place it into the world
 bool obj_autodelete = TRUE;
-ObjID obj_create_base(int triple)
+ObjID obj_create_base(int32_t triple)
 {
    ObjID new_id;
    ObjSpecID new_specid;
@@ -810,11 +810,11 @@ ObjID obj_create_base(int triple)
       {
          ObjID kill_obj = OBJ_NULL,oid;
          ObjID kill_container = OBJ_NULL;
-         int kill_index, num_objs;
+         int32_t kill_index, num_objs;
          ObjID idlist[NUM_CONTENTS];
          ObjLoc ploc = objs[PLAYER_OBJ].loc;
          ObjLoc killobjloc;
-         int *d1, *d2, content, dist, obclass, maxdist = 0;
+         int32_t *d1, *d2, content, dist, obclass, maxdist = 0;
 
 //         Warning(("ObjAndSpecGrab could not find ObjSpec for this class: %d.\n", TRIP2CL(triple)));
 
@@ -953,7 +953,7 @@ ObjID obj_create_base(int triple)
 ObjID obj_create_clone(ObjID dna)
 {
    ObjID new_obj;
-   ubyte *pspec, *pdef;
+   uint8_t *pspec, *pdef;
    ObjSpecID specid, osi;
    ObjSpecHeader *spec_hdr = &objSpecHeaders[objs[dna].obclass];
 
@@ -971,21 +971,21 @@ ObjID obj_create_clone(ObjID dna)
 
    switch(objs[dna].obclass)
    {
-      case CLASS_GUN: pspec = (ubyte *)&objGuns[specid]; pdef = (ubyte *)&objGuns[osi]; break;
-      case CLASS_AMMO: pspec = (ubyte *)&objAmmos[specid]; pdef = (ubyte *)&objAmmos[osi]; break;
-      case CLASS_PHYSICS: pspec = (ubyte *)&objPhysicss[specid]; pdef = (ubyte *)&objPhysicss[osi]; break;
-      case CLASS_GRENADE: pspec = (ubyte *)&objGrenades[specid]; pdef = (ubyte *)&objGrenades[osi]; break;
-      case CLASS_DRUG: pspec = (ubyte *)&objDrugs[specid]; pdef = (ubyte *)&objDrugs[osi]; break;
-      case CLASS_HARDWARE: pspec = (ubyte *)&objHardwares[specid]; pdef = (ubyte *)&objHardwares[osi]; break;
-      case CLASS_SOFTWARE: pspec = (ubyte *)&objSoftwares[specid]; pdef = (ubyte *)&objSoftwares[osi]; break;
-      case CLASS_BIGSTUFF: pspec = (ubyte *)&objBigstuffs[specid]; pdef = (ubyte *)&objBigstuffs[osi]; break;
-      case CLASS_SMALLSTUFF: pspec = (ubyte *)&objSmallstuffs[specid]; pdef = (ubyte *)&objSmallstuffs[osi]; break;
-      case CLASS_FIXTURE: pspec = (ubyte *)&objFixtures[specid]; pdef = (ubyte *)&objFixtures[osi]; break;
-      case CLASS_DOOR: pspec = (ubyte *)&objDoors[specid]; pdef = (ubyte *)&objDoors[osi]; break;
-      case CLASS_ANIMATING: pspec = (ubyte *)&objAnimatings[specid]; pdef = (ubyte *)&objAnimatings[osi]; break;
-      case CLASS_TRAP: pspec = (ubyte *)&objTraps[specid]; pdef = (ubyte *)&objTraps[osi]; break;
-      case CLASS_CONTAINER: pspec = (ubyte *)&objContainers[specid]; pdef = (ubyte *)&objContainers[osi]; break;
-      case CLASS_CRITTER: pspec = (ubyte *)&objCritters[specid]; pdef = (ubyte *)&objCritters[osi]; break;
+      case CLASS_GUN: pspec = (uint8_t *)&objGuns[specid]; pdef = (uint8_t *)&objGuns[osi]; break;
+      case CLASS_AMMO: pspec = (uint8_t *)&objAmmos[specid]; pdef = (uint8_t *)&objAmmos[osi]; break;
+      case CLASS_PHYSICS: pspec = (uint8_t *)&objPhysicss[specid]; pdef = (uint8_t *)&objPhysicss[osi]; break;
+      case CLASS_GRENADE: pspec = (uint8_t *)&objGrenades[specid]; pdef = (uint8_t *)&objGrenades[osi]; break;
+      case CLASS_DRUG: pspec = (uint8_t *)&objDrugs[specid]; pdef = (uint8_t *)&objDrugs[osi]; break;
+      case CLASS_HARDWARE: pspec = (uint8_t *)&objHardwares[specid]; pdef = (uint8_t *)&objHardwares[osi]; break;
+      case CLASS_SOFTWARE: pspec = (uint8_t *)&objSoftwares[specid]; pdef = (uint8_t *)&objSoftwares[osi]; break;
+      case CLASS_BIGSTUFF: pspec = (uint8_t *)&objBigstuffs[specid]; pdef = (uint8_t *)&objBigstuffs[osi]; break;
+      case CLASS_SMALLSTUFF: pspec = (uint8_t *)&objSmallstuffs[specid]; pdef = (uint8_t *)&objSmallstuffs[osi]; break;
+      case CLASS_FIXTURE: pspec = (uint8_t *)&objFixtures[specid]; pdef = (uint8_t *)&objFixtures[osi]; break;
+      case CLASS_DOOR: pspec = (uint8_t *)&objDoors[specid]; pdef = (uint8_t *)&objDoors[osi]; break;
+      case CLASS_ANIMATING: pspec = (uint8_t *)&objAnimatings[specid]; pdef = (uint8_t *)&objAnimatings[osi]; break;
+      case CLASS_TRAP: pspec = (uint8_t *)&objTraps[specid]; pdef = (uint8_t *)&objTraps[osi]; break;
+      case CLASS_CONTAINER: pspec = (uint8_t *)&objContainers[specid]; pdef = (uint8_t *)&objContainers[osi]; break;
+      case CLASS_CRITTER: pspec = (uint8_t *)&objCritters[specid]; pdef = (uint8_t *)&objCritters[osi]; break;
   }
 
    // copy instance data from default
@@ -1002,11 +1002,11 @@ ObjID obj_create_clone(ObjID dna)
 // specified xsize and ysize in object coordinates.
 #define MAX_PLACE_SIZE  0x100
 
-void place_obj_at_objloc(ObjID id, ObjLoc *newloc, ushort xsize, ushort ysize)
+void place_obj_at_objloc(ObjID id, ObjLoc *newloc, uint16_t xsize, uint16_t ysize)
 {
    ObjLocState newstate;
-   ushort nxl,nxh,nyl,nyh,bx,by,ox,oy;
-   short refcount = 0;
+   uint16_t nxl,nxh,nyl,nyh,bx,by,ox,oy;
+   int16_t refcount = 0;
    ObjRefID refid,origref;
 
    if ((xsize > MAX_PLACE_SIZE) || (ysize > MAX_PLACE_SIZE))
@@ -1077,7 +1077,7 @@ void place_obj_at_objloc(ObjID id, ObjLoc *newloc, ushort xsize, ushort ysize)
 errtype obj_move_to_vel(ObjID id, ObjLoc *newloc, bool phys_tel, fix x_dot, fix y_dot, fix z_dot)
 {
    State  new_state;
-   ushort xsize = 0, ysize = 0;
+   uint16_t xsize = 0, ysize = 0;
    extern cams *_def_cam;
 
 	if (phys_tel && ((ObjProps[OPNUM(id)].physics_model != EDMS_NONE) || (id == PLAYER_OBJ)))
@@ -1121,7 +1121,7 @@ errtype obj_move_to_vel(ObjID id, ObjLoc *newloc, bool phys_tel, fix x_dot, fix 
          case WORDS_TRIPLE:
             {
                grs_bitmap *bmap;
-               char scale;
+               int8_t scale;
                bmap = get_text_bitmap_obj(id, 0, &scale);
 
                // In theory, we take the size of the bitmap, scale it down, then mutliply by 3/4
@@ -1248,9 +1248,9 @@ errtype obj_move_to(ObjID id, ObjLoc *newloc, bool phys_tel)
 // representations
 bool obj_destroy(ObjID id)
 {
-	int retval = -1;
+	int32_t retval = -1;
 	extern void check_panel_ref(bool puntme);
-	short x,y;
+	int16_t x,y;
 	bool  terrain_object = FALSE;
 
 	decrement_shodan_value(id, TRUE);
@@ -1327,7 +1327,7 @@ errtype obj_create_player(ObjLoc *plr_loc)
    pos_list[0]=fix_from_obj_coord(plr_loc->x)>>8;
    pos_list[1]=fix_from_obj_coord(plr_loc->y)>>8;
    pos_list[2]=fix_from_obj_height_val(plr_loc->z)>>8;
-   fr_objslew_go_real_height(NULL, (long *)pos_list);
+   fr_objslew_go_real_height(NULL, (int32_t *)pos_list);
    plr_loc->z=obj_height_from_fix(pos_list[2]<<8);
 
    if ((player_struct.edms_state[0]) && (!global_fullmap->cyber))
@@ -1381,9 +1381,9 @@ errtype obj_create_player(ObjLoc *plr_loc)
 // ## INSERT NEW OBJ PROPS HERE
 //
 
-errtype ObjClassInit(ObjID id, ObjSpecID specid, int subclass)
+errtype ObjClassInit(ObjID id, ObjSpecID specid, int32_t subclass)
 {
-   ubyte *pspec, *pdef;
+   uint8_t *pspec, *pdef;
    ObjSpecHeader *spec_hdr = &objSpecHeaders[objs[id].obclass];
 
    objs[id].subclass = subclass;
@@ -1395,21 +1395,21 @@ errtype ObjClassInit(ObjID id, ObjSpecID specid, int subclass)
    }
    switch(objs[id].obclass)
    {
-      case CLASS_GUN: pspec = (ubyte *)&objGuns[specid]; pdef = (ubyte *)&default_gun; break;
-      case CLASS_AMMO: pspec = (ubyte *)&objAmmos[specid]; pdef = (ubyte *)&default_ammo; break;
-      case CLASS_PHYSICS: pspec = (ubyte *)&objPhysicss[specid]; pdef = (ubyte *)&default_physics; break;
-      case CLASS_GRENADE: pspec = (ubyte *)&objGrenades[specid]; pdef = (ubyte *)&default_grenade; break;
-      case CLASS_DRUG: pspec = (ubyte *)&objDrugs[specid]; pdef = (ubyte *)&default_drug; break;
-      case CLASS_HARDWARE: pspec = (ubyte *)&objHardwares[specid]; pdef = (ubyte *)&default_hardware; break;
-      case CLASS_SOFTWARE: pspec = (ubyte *)&objSoftwares[specid]; pdef = (ubyte *)&default_software; break;
-      case CLASS_BIGSTUFF: pspec = (ubyte *)&objBigstuffs[specid]; pdef = (ubyte *)&default_bigstuff; break;
-      case CLASS_SMALLSTUFF: pspec = (ubyte *)&objSmallstuffs[specid]; pdef = (ubyte *)&default_smallstuff; break;
-      case CLASS_FIXTURE: pspec = (ubyte *)&objFixtures[specid]; pdef = (ubyte *)&default_fixture; break;
-      case CLASS_DOOR: pspec = (ubyte *)&objDoors[specid]; pdef = (ubyte *)&default_door; break;
-      case CLASS_ANIMATING: pspec = (ubyte *)&objAnimatings[specid]; pdef = (ubyte *)&default_animating; break;
-      case CLASS_TRAP: pspec = (ubyte *)&objTraps[specid]; pdef = (ubyte *)&default_trap; break;
-      case CLASS_CONTAINER: pspec = (ubyte *)&objContainers[specid]; pdef = (ubyte *)&default_container; break;
-      case CLASS_CRITTER: pspec = (ubyte *)&objCritters[specid]; pdef = (ubyte *)&default_critter; break;
+      case CLASS_GUN: pspec = (uint8_t *)&objGuns[specid]; pdef = (uint8_t *)&default_gun; break;
+      case CLASS_AMMO: pspec = (uint8_t *)&objAmmos[specid]; pdef = (uint8_t *)&default_ammo; break;
+      case CLASS_PHYSICS: pspec = (uint8_t *)&objPhysicss[specid]; pdef = (uint8_t *)&default_physics; break;
+      case CLASS_GRENADE: pspec = (uint8_t *)&objGrenades[specid]; pdef = (uint8_t *)&default_grenade; break;
+      case CLASS_DRUG: pspec = (uint8_t *)&objDrugs[specid]; pdef = (uint8_t *)&default_drug; break;
+      case CLASS_HARDWARE: pspec = (uint8_t *)&objHardwares[specid]; pdef = (uint8_t *)&default_hardware; break;
+      case CLASS_SOFTWARE: pspec = (uint8_t *)&objSoftwares[specid]; pdef = (uint8_t *)&default_software; break;
+      case CLASS_BIGSTUFF: pspec = (uint8_t *)&objBigstuffs[specid]; pdef = (uint8_t *)&default_bigstuff; break;
+      case CLASS_SMALLSTUFF: pspec = (uint8_t *)&objSmallstuffs[specid]; pdef = (uint8_t *)&default_smallstuff; break;
+      case CLASS_FIXTURE: pspec = (uint8_t *)&objFixtures[specid]; pdef = (uint8_t *)&default_fixture; break;
+      case CLASS_DOOR: pspec = (uint8_t *)&objDoors[specid]; pdef = (uint8_t *)&default_door; break;
+      case CLASS_ANIMATING: pspec = (uint8_t *)&objAnimatings[specid]; pdef = (uint8_t *)&default_animating; break;
+      case CLASS_TRAP: pspec = (uint8_t *)&objTraps[specid]; pdef = (uint8_t *)&default_trap; break;
+      case CLASS_CONTAINER: pspec = (uint8_t *)&objContainers[specid]; pdef = (uint8_t *)&default_container; break;
+      case CLASS_CRITTER: pspec = (uint8_t *)&objCritters[specid]; pdef = (uint8_t *)&default_critter; break;
    }
 
    // copy instance data from default
@@ -1426,8 +1426,8 @@ errtype ObjClassInit(ObjID id, ObjSpecID specid, int subclass)
 errtype obj_load_properties()
 {
 	 Handle	res;
-	 int		version, i, j;
-	 char		*cp;
+	 int32_t		version, i, j;
+	 int8_t		*cp;
 
 	extern void SwapLongBytes(void *pval4);
 	extern void SwapShortBytes(void *pval2);
@@ -1460,7 +1460,7 @@ errtype obj_load_properties()
 	cp = *res;
 
 	// Check to make sure we have the right version.
-	version = *(int *)cp;
+	version = *(int32_t *)cp;
 	cp += 4;
 	SwapLongBytes(&version);
 	if (version != OBJPROP_VERSION_NUMBER)
@@ -1484,21 +1484,21 @@ errtype obj_load_properties()
 	{
 		SpecialGunProp *sgp = &SpecialGunProps[i];
 
-		sgp->damage_modifier = *(short *)cp;
+		sgp->damage_modifier = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&sgp->damage_modifier);
 		sgp->offense_value = *cp++;
-		sgp->damage_type = *(int *)cp;
+		sgp->damage_type = *(int32_t *)cp;
 		cp += 4;
 		SwapLongBytes(&sgp->damage_type);
 		sgp->penetration = *cp++;
 
 		sgp->speed = *cp++;
-		sgp->proj_triple = *(int *)cp;
+		sgp->proj_triple = *(int32_t *)cp;
 		cp += 4;
 		SwapLongBytes(&sgp->proj_triple);
 		sgp->attack_mass = *cp++;
-		sgp->attack_speed = *(short *)cp;
+		sgp->attack_speed = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&sgp->attack_speed);
 	}
@@ -1507,11 +1507,11 @@ errtype obj_load_properties()
 	{
 		HandtohandGunProp *hhgp = &HandtohandGunProps[i];
 
-		hhgp->damage_modifier = *(short *)cp;
+		hhgp->damage_modifier = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&hhgp->damage_modifier);
 		hhgp->offense_value = *cp++;
-		hhgp->damage_type = *(int *)cp;
+		hhgp->damage_type = *(int32_t *)cp;
 		cp += 4;
 		SwapLongBytes(&hhgp->damage_type);
 		hhgp->penetration = *cp++;
@@ -1519,7 +1519,7 @@ errtype obj_load_properties()
 		hhgp->energy_use = *cp++;
 		hhgp->attack_mass = *cp++;
 		hhgp->attack_range = *cp++;
-		hhgp->attack_speed = *(short *)cp;
+		hhgp->attack_speed = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&hhgp->attack_speed);
 	}
@@ -1528,11 +1528,11 @@ errtype obj_load_properties()
 	{
 		BeamGunProp *bgp = &BeamGunProps[i];
 
-		bgp->damage_modifier = *(short *)cp;
+		bgp->damage_modifier = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&bgp->damage_modifier);
 		bgp->offense_value = *cp++;
-		bgp->damage_type = *(int *)cp;
+		bgp->damage_type = *(int32_t *)cp;
 		cp += 4;
 		SwapLongBytes(&bgp->damage_type);
 		bgp->penetration = *cp++;
@@ -1540,7 +1540,7 @@ errtype obj_load_properties()
 		bgp->max_charge = *cp++;
 		bgp->attack_mass = *cp++;
 		bgp->attack_range = *cp++;
-		bgp->attack_speed = *(short *)cp;
+		bgp->attack_speed = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&bgp->attack_speed);
 	}
@@ -1549,22 +1549,22 @@ errtype obj_load_properties()
 	{
 		BeamprojGunProp *bgp = &BeamprojGunProps[i];
 
-		bgp->damage_modifier = *(short *)cp;
+		bgp->damage_modifier = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&bgp->damage_modifier);
 		bgp->offense_value = *cp++;
-		bgp->damage_type = *(int *)cp;
+		bgp->damage_type = *(int32_t *)cp;
 		cp += 4;
 		SwapLongBytes(&bgp->damage_type);
 		bgp->penetration = *cp++;
 
 		bgp->max_charge = *cp++;
 		bgp->attack_mass = *cp++;
-		bgp->attack_speed = *(short *)cp;
+		bgp->attack_speed = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&bgp->attack_speed);
 		bgp->speed = *cp++;
-		bgp->proj_triple = *(int *)cp;
+		bgp->proj_triple = *(int32_t *)cp;
 		cp += 4;
 		SwapLongBytes(&bgp->proj_triple);
 		bgp->flags = *cp++;
@@ -1577,18 +1577,18 @@ errtype obj_load_properties()
 	{
 		AmmoProp *ap = &AmmoProps[i];
 
-		ap->damage_modifier = *(short *)cp;
+		ap->damage_modifier = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&ap->damage_modifier);
 		ap->offense_value = *cp++;
-		ap->damage_type = *(int *)cp;
+		ap->damage_type = *(int32_t *)cp;
 		cp += 4;
 		SwapLongBytes(&ap->damage_type);
 		ap->penetration = *cp++;
 
 		ap->cartridge_size = *cp++;
 		ap->bullet_mass = *cp++;
-		ap->bullet_speed = *(short *)cp;
+		ap->bullet_speed = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&ap->bullet_speed);
 		ap->range = *cp++;
@@ -1655,11 +1655,11 @@ errtype obj_load_properties()
 	{
 		GrenadeProp *gp = &GrenadeProps[i];
 
-		gp->damage_modifier = *(short *)cp;
+		gp->damage_modifier = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&gp->damage_modifier);
 		gp->offense_value = *cp++;
-		gp->damage_type = *(int *)cp;
+		gp->damage_type = *(int32_t *)cp;
 		cp += 4;
 		SwapLongBytes(&gp->damage_type);
 		gp->penetration = *cp++;
@@ -1669,7 +1669,7 @@ errtype obj_load_properties()
 		gp->radius_change = *cp++;
 		gp->damage_change = *cp++;
 		gp->attack_mass = *cp++;
-		gp->flags = *(short *)cp;
+		gp->flags = *(int16_t *)cp;
 		cp += 2;
 		SwapShortBytes(&gp->flags);
 	}
@@ -1844,26 +1844,26 @@ errtype obj_load_properties()
 		crp->intelligence = *cp++;
 		for (j = 0; j < NUM_ALTERNATE_ATTACKS; j++)
 		{
-			crp->attacks[j].damage_type = *(int *)cp; cp += 4;
+			crp->attacks[j].damage_type = *(int32_t *)cp; cp += 4;
 			SwapLongBytes(&crp->attacks[j].damage_type);
-			crp->attacks[j].damage_modifier = *(short *)cp; cp += 2;
+			crp->attacks[j].damage_modifier = *(int16_t *)cp; cp += 2;
 			SwapShortBytes(&crp->attacks[j].damage_modifier);
 			crp->attacks[j].offense_value = *cp++;
 			crp->attacks[j].penetration = *cp++;
 			crp->attacks[j].attack_mass = *cp++;
-			crp->attacks[j].attack_velocity = *(short *)cp; cp += 2;
+			crp->attacks[j].attack_velocity = *(int16_t *)cp; cp += 2;
 			SwapShortBytes(&crp->attacks[j].attack_velocity);
 			crp->attacks[j].accuracy = *cp++;
 			crp->attacks[j].att_range = *cp++;
-			crp->attacks[j].speed = *(int *)cp; cp += 4;
+			crp->attacks[j].speed = *(int32_t *)cp; cp += 4;
 			SwapLongBytes(&crp->attacks[j].speed);
-			crp->attacks[j].slow_proj = *(int *)cp; cp += 4;
+			crp->attacks[j].slow_proj = *(int32_t *)cp; cp += 4;
 			SwapLongBytes(&crp->attacks[j].slow_proj);
 		}
 		crp->perception = *cp++;
 		crp->defense = *cp++;
 		crp->proj_offset = *cp++;
-		crp->flags = *(int *)cp; cp += 4;
+		crp->flags = *(int32_t *)cp; cp += 4;
 		SwapLongBytes(&crp->flags);
 		crp->mirror = *cp++;
 		for (j = 0; j < NUM_CRITTER_POSTURES; j++)
@@ -1874,7 +1874,7 @@ errtype obj_load_properties()
 		crp->hurt_sound = *cp++;
 		crp->death_sound = *cp++;
 		crp->notice_sound = *cp++;
-		crp->corpse = *(int *)cp; cp += 4;
+		crp->corpse = *(int32_t *)cp; cp += 4;
 		SwapLongBytes(&crp->corpse);
 		crp->views = *cp++;
 		crp->alt_perc = *cp++;
@@ -1934,9 +1934,9 @@ errtype obj_load_properties()
 errtype obj_set_secondary_properties()
 {
 	FSSpec		fSpec;
-	char 			i, j;
+	int8_t 			i, j;
 	RefTable 	*prt;
-	int 			fn, fn2;
+	int32_t 			fn, fn2;
 
 	FSMakeFSSpec(gDataVref, gDataDirID, "\pobjart2.rsrc", &fSpec);
 	fn = ResOpenFile(&fSpec);
@@ -1992,11 +1992,11 @@ errtype obj_set_secondary_properties()
 errtype obj_zero_unused(void)
 {
    ObjID id;
-   int cl;
+   int32_t cl;
    ObjSpecID specid;
-   int counters[2][2];
+   int32_t counters[2][2];
 
-   memset(counters,0,4*sizeof(int));
+   memset(counters,0,4*sizeof(int32_t));
    for (cl= CLASS_GUN; cl<NUM_CLASSES; cl++)
    {
       ObjSpecHeader *curHead=&objSpecHeaders[cl]; /* get our special class header data */
@@ -2004,14 +2004,14 @@ errtype obj_zero_unused(void)
       {  /* find the base of our obj and cast it to a ObjSpec common header struct */
     ObjSpec *curSpec=(ObjSpec*)(curHead->data+(curHead->struct_size*specid));
     if (!objs[id=curSpec->bits.id].active)         /* toast all but the Spec part */
-       memset(((char *) curSpec)+sizeof(ObjSpec),0,curHead->struct_size-sizeof(ObjSpec));
+       memset(((int8_t *) curSpec)+sizeof(ObjSpec),0,curHead->struct_size-sizeof(ObjSpec));
     counters[0][objs[id].active?1:0]++;
       }
    }
    for (id = 0; id < NUM_OBJECTS; id++) /* go through all objects, though i bet they are all seen above */
       if (!objs[id].active)             /* and thus we should be able to skip this, i bet */
       {
-    memset(&objs[id].active,0,((uchar *)&objs[id].ref)-((uchar *)&objs[id].active));
+    memset(&objs[id].active,0,((uint8_t *)&objs[id].ref)-((uint8_t *)&objs[id].active));
     memset(&objs[id].loc,0,sizeof(ObjLoc)+sizeof(ObjInfo));
     counters[1][0]++;
       }
@@ -2085,13 +2085,13 @@ Ref obj_cache_ref(ObjID id)
 
 #define  MEDIAN_WORD_SCALE 4
 
-grs_bitmap *get_text_bitmap_from_string(int d1, char dest_type, char *s, bool scroll, int scroll_index)
+grs_bitmap *get_text_bitmap_from_string(int32_t d1, int8_t dest_type, int8_t *s, bool scroll, int32_t scroll_index)
 {
    Id currfont;
-   short w,h,c,x;
-   char sc_count = 0;
-   char size_remaining = text_bitmaps_y[dest_type];
-   char curr_y = 1;
+   int16_t w,h,c,x;
+   int8_t sc_count = 0;
+   int8_t size_remaining = text_bitmaps_y[dest_type];
+   int8_t curr_y = 1;
 
    gr_push_canvas(&text_canvases[dest_type]);
 
@@ -2139,14 +2139,14 @@ grs_bitmap *get_text_bitmap_from_string(int d1, char dest_type, char *s, bool sc
    return(text_bitmap_ptrs[dest_type]);
 }
 
-grs_bitmap *get_text_bitmap(int d1, int d2, char dest_type, bool scroll)
+grs_bitmap *get_text_bitmap(int32_t d1, int32_t d2, int8_t dest_type, bool scroll)
 {
    return(get_text_bitmap_from_string(d1, dest_type, get_temp_string(text_bitmap_refs[dest_type] + d2), scroll, d2));
 }
 
-grs_bitmap *get_text_bitmap_obj(ObjID cobjid, char dest_type, char *pscale)
+grs_bitmap *get_text_bitmap_obj(ObjID cobjid, int8_t dest_type, int8_t *pscale)
 {
-   char sval = (objBigstuffs[objs[cobjid].specID].data1 & 0xF0) >> 4;
+   int8_t sval = (objBigstuffs[objs[cobjid].specID].data1 & 0xF0) >> 4;
    if (sval == 0)
       *pscale = 0;
    else
@@ -2156,7 +2156,7 @@ grs_bitmap *get_text_bitmap_obj(ObjID cobjid, char dest_type, char *pscale)
 
 errtype obj_settle_func(ObjID id)
 {
-   int retval;
+   int32_t retval;
    if (!CHECK_OBJ_PH(id))
       return(OK);
 //   if ((!global_fullmap->cyber) && (id == PLAYER_OBJ))
@@ -2197,7 +2197,7 @@ void diego_teleport_callback(ObjID id, void *)
 
 bool death_check(ObjID id, bool*)
 {
-   extern char damage_sound_fx;
+   extern int8_t damage_sound_fx;
    if(ID2TRIP(id)==DIEGO_TRIPLE && player_struct.level!=DIEGO_DEATH_BATTLE_LEVEL)
    {
       damage_sound_fx = -1;
@@ -2216,13 +2216,13 @@ bool obj_combat_destroy(ObjID id)
 {
    bool retval = TRUE;
    ObjSpecID osid = objs[id].specID;
-   int i,*d1,*d2;
+   int32_t i,*d1,*d2;
    extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
    extern ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
-   extern bool is_container(ObjID id, int** d1, int** d2);
-   extern char container_extract(ObjID *pidlist, int d1, int d2);
+   extern bool is_container(ObjID id, int32_t** d1, int32_t** d2);
+   extern int8_t container_extract(ObjID *pidlist, int32_t d1, int32_t d2);
    extern ObjID damage_sound_id;
-   extern char damage_sound_fx;
+   extern int8_t damage_sound_fx;
 
    // Check to see if we are a camera-surrogate
    // or a hack camera itself
@@ -2340,14 +2340,14 @@ bool obj_combat_destroy(ObjID id)
 errtype obj_floor_func(ObjID id);
 
 #define DEFAULT_AI_WAIT 15
-ObjID object_place(int triple, LGPoint square)
+ObjID object_place(int32_t triple, LGPoint square)
 {
    ObjID new_id;
    ObjLoc loc;
-   short flrh;
+   int16_t flrh;
    errtype retval;
    extern void cit_sleeper_callback(physics_handle caller);
-   int newsize;
+   int32_t newsize;
 
    new_id = obj_create_base(triple);
    if (new_id == OBJ_NULL)
@@ -2390,7 +2390,7 @@ ObjID object_place(int triple, LGPoint square)
    return(new_id);
 }
 
-ushort obj_floor_compute(ObjID id, uchar flrh)
+uint16_t obj_floor_compute(ObjID id, uint8_t flrh)
 {
    fix newsize;
 
@@ -2413,7 +2413,7 @@ ushort obj_floor_compute(ObjID id, uchar flrh)
    return(obj_height_from_fix(fix_from_map_height(flrh) + newsize));
 }
 
-ushort obj_floor_height(ObjID id)
+uint16_t obj_floor_height(ObjID id)
 {
    return(obj_floor_compute(id, me_height_flr(MAP_GET_XY(OBJ_LOC_BIN_X(objs[id].loc),OBJ_LOC_BIN_Y(objs[id].loc)))));
 }
@@ -2434,7 +2434,7 @@ errtype obj_floor_func(ObjID id)
 
 #ifdef PLAYTEST
 #pragma disable_message(202)
-bool global_settle_func(short keycode, ulong context, void* data)
+bool global_settle_func(int16_t keycode, uint32_t context, void* data)
 {
    ObjID oid;
    message_info("settling all objects.");
@@ -2445,7 +2445,7 @@ bool global_settle_func(short keycode, ulong context, void* data)
    return(FALSE);
 }
 
-bool global_floor_func(short keycode, ulong context, void* data)
+bool global_floor_func(int16_t keycode, uint32_t context, void* data)
 {
    ObjID oid;
    message_info("flooring all objects.");
@@ -2456,11 +2456,11 @@ bool global_floor_func(short keycode, ulong context, void* data)
    return(FALSE);
 }
 
-bool check_objsys_func(short keycode, ulong context, void* data)
+bool check_objsys_func(int16_t keycode, uint32_t context, void* data)
 {
-   int i;
-   char buf[64];
-   extern char *get_object_lookname(ObjID id,char use_string[], int sz);
+   int32_t i;
+   int8_t buf[64];
+   extern int8_t *get_object_lookname(ObjID id,int8_t use_string[], int32_t sz);
    Warning(("Checking objsys, looking for bad geninv\n"));
    for (i=0; i < NUM_GENERAL_SLOTS; i++)
    {
@@ -2508,7 +2508,7 @@ bool check_objsys_func(short keycode, ulong context, void* data)
 #endif
 
 #ifdef CRITTER_HP_CONVERT
-static short old_critter_hp[] = {
+static int16_t old_critter_hp[] = {
    25, 325, 400, 160, 200, 65, 60, 300, 150,
    0, 50, 20, 160, 0, 125, 225, 450, 15, 110, 60, 0,
    65, 180, 45, 275, 400, 550, 450,
@@ -2519,16 +2519,16 @@ static short old_critter_hp[] = {
 
 errtype obj_level_munge()
 {
-   short count = 0;
+   int16_t count = 0;
 #ifdef ELDER_DEMON_EXORCISM
    ObjID oid;
    ObjRefID oref;
-   short x,y;
+   int16_t x,y;
    MapElem *pme;
    bool found;
-   char buf[128];
+   int8_t buf[128];
    ObjID exorcism[MAX_EXOR];
-   char exorcise_count = 0;
+   int8_t exorcise_count = 0;
 #endif
 #ifdef REFLOOR_CRATES_HACK
    ObjID oid;
@@ -2542,10 +2542,10 @@ errtype obj_level_munge()
 #endif
 #ifdef NULL_OBJ_OBJREF_HACK
    ObjRefID orefid,nextref,oref2;
-   short x,y;
+   int16_t x,y;
 #endif
 #ifdef ELEVATOR_CHECKERBOARD
-   short x,y;
+   int16_t x,y;
    MapElem *pme;
 
    for (x=0; x < MAP_XSIZE; x++)
@@ -2563,9 +2563,9 @@ errtype obj_level_munge()
 
 #ifdef PARAMETER_DESTRUCTION
 {
-   short x,y;
+   int16_t x,y;
    MapElem* pme;
-   uchar par, chgt, mir, tt;
+   uint8_t par, chgt, mir, tt;
 
    for(x=0;x<MAP_XSIZE;x++) {
       for(y=0;y<MAP_YSIZE;y++) {
@@ -2614,7 +2614,7 @@ errtype obj_level_munge()
       }
       if (!found)
       {
-         extern char *get_object_lookname(ObjID id,char use_string[], int sz);
+         extern int8_t *get_object_lookname(ObjID id,int8_t use_string[], int32_t sz);
          Warning(("HEY, id %x, a %s, may have the taint of Shadow!\n",oid, get_object_lookname(oid,buf,128)));
          Warning(("id %x, ref = %x\n",oid,objs[oid].ref));
          exorcism[exorcise_count++] = oid;
@@ -2704,7 +2704,7 @@ errtype obj_level_munge()
 {
    ObjSpecID osid;
    ObjID id;
-   int z;
+   int32_t z;
 
    osid=objDoors[0].id;
    while(osid != OBJ_SPEC_NULL)
@@ -2757,7 +2757,7 @@ errtype obj_level_munge()
    {
       ObjSpecID osid;
       ObjID id;
-      int hp;
+      int32_t hp;
 
       osid = objCritters[0].id;
       while (osid != OBJ_SPEC_NULL) {
@@ -2778,7 +2778,7 @@ errtype obj_level_munge()
    {
       ObjSpecID osid;
       ObjID id;
-      int hp;
+      int32_t hp;
 
       osid = objCritters[0].id;
       while (osid != OBJ_SPEC_NULL) {
@@ -2826,10 +2826,10 @@ errtype obj_level_munge()
 #endif
 
 #ifdef APPLY_SIZE_DELTA_HACK
-   short size_conv[NUM_OBJECT];
+   int16_t size_conv[NUM_OBJECT];
    FILE *f;
-   short i,sc;
-   char temp1[50];
+   int16_t i,sc;
+   int8_t temp1[50];
    fix old_ht;
    ObjID oid;
 
@@ -2883,7 +2883,7 @@ errtype obj_level_munge()
 #endif
 
 #ifdef LOUD_REFRESH
-void spew_about_stuff(char *txt, ObjID id)
+void spew_about_stuff(int8_t *txt, ObjID id)
 {
    State new_state;
    EDMS_get_state(objs[id].info.ph, &new_state);
@@ -2900,14 +2900,14 @@ void spew_about_stuff(char *txt, ObjID id)
 extern bool robot_antisocial;
 
 #define MAX_MOVE_OBJS   32
-// uchar of height above the ground to refresh within
+// uint8_t of height above the ground to refresh within
 #define REFRESH_HEIGHT  0x10
-errtype obj_physics_refresh(short x, short y, bool use_floor)
+errtype obj_physics_refresh(int16_t x, int16_t y, bool use_floor)
 {
    ObjRefID oref;
    ObjID id;
    State goof;
-   int count = 0,i;
+   int32_t count = 0,i;
    ObjID move_list[MAX_MOVE_OBJS];
 
    oref = me_objref(MAP_GET_XY(x,y));
@@ -2959,7 +2959,7 @@ errtype obj_physics_refresh(short x, short y, bool use_floor)
    return(OK);
 }
 
-errtype obj_physics_refresh_area(short x, short y, bool use_floor)
+errtype obj_physics_refresh_area(int16_t x, int16_t y, bool use_floor)
 {
    ObjsClearDealt();
    obj_physics_refresh(x-1,y,use_floor);
@@ -2969,7 +2969,7 @@ errtype obj_physics_refresh_area(short x, short y, bool use_floor)
    return(obj_physics_refresh(x,y,use_floor));
 }
 
-bool obj_is_display(int triple)
+bool obj_is_display(int32_t triple)
 {
    if (ObjProps[OPTRIP(triple)].render_type == FAUBJ_TEXTPOLY)
       return(TRUE);

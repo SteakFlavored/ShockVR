@@ -86,18 +86,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // INTERNAL PROTOTYPES
 // --------------------
 bool safety_net_wont_you_back_me_up(ObjID oid);
-void add_edms_delete(int ph);
+void add_edms_delete(int32_t ph);
 void edms_delete_go(void);
-void get_phys_state(int ph, State *new_state, ObjID id);
+void get_phys_state(int32_t ph, State *new_state, ObjID id);
 void physics_zero_all_controls(void);
 errtype compare_locs(void);
-void physics_set_relax(int axis, bool relax);
-void relax_axis(int axis);
-errtype collide_objects(ObjID collision, ObjID victim, int bad);
+void physics_set_relax(int32_t axis, bool relax);
+void relax_axis(int32_t axis);
+errtype collide_objects(ObjID collision, ObjID victim, int32_t bad);
 void terrain_object_collide(physics_handle src, ObjID target);
 errtype run_cspace_collisions(ObjID obj, ObjID exclude, ObjID exclude2);
 void state_to_objloc(State *s, ObjLoc *l);
-bool get_phys_info(int ph, fix *list, int cnt);
+bool get_phys_info(int32_t ph, fix *list, int32_t cnt);
 fix ID2radius(ObjID id);
 
 
@@ -126,7 +126,7 @@ Dirac_frame standard_dirac = { STANDARD_MASS, STANDARD_HARDNESS, STANDARD_ROUGHN
                         };
 
 extern ObjID physics_handle_id[];
-extern int   physics_handle_max;
+extern int32_t   physics_handle_max;
 
 #define check_up(num)
 
@@ -136,20 +136,20 @@ cams *motion_cam=NULL;     // what to move, default null is the default camera
 // CONTROLS
 // --------
 
-byte player_controls[CONTROL_BANKS][DEGREES_OF_FREEDOM] =
+int8_t player_controls[CONTROL_BANKS][DEGREES_OF_FREEDOM] =
  { { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 } };
 
-extern errtype (*state_generators[])(ObjID id, int x, int y, ObjLocState *ret);
-long old_ticks;
+extern errtype (*state_generators[])(ObjID id, int32_t x, int32_t y, ObjLocState *ret);
+int32_t old_ticks;
 
 // Collision callback testing....
-void cit_collision_callback(physics_handle C, physics_handle V, int bad, long DATA1, long DATA2, fix location[3]);
+void cit_collision_callback(physics_handle C, physics_handle V, int32_t bad, int32_t DATA1, int32_t DATA2, fix location[3]);
 void cit_awol_callback(physics_handle caller);
 void cit_sleeper_callback(physics_handle caller);
 void cit_autodestruct_callback(physics_handle caller);
 
 // mapping from physics controls to camera controls
-int ctrl2cam[DEGREES_OF_FREEDOM] = { EYE_X, EYE_Y, EYE_Z, EYE_H, EYE_P, EYE_B };
+int32_t ctrl2cam[DEGREES_OF_FREEDOM] = { EYE_X, EYE_Y, EYE_Z, EYE_H, EYE_P, EYE_B };
 
 #define SLEW_SCALE_N 16
 #define SLEW_SCALE_D 100
@@ -157,15 +157,15 @@ int ctrl2cam[DEGREES_OF_FREEDOM] = { EYE_X, EYE_Y, EYE_Z, EYE_H, EYE_P, EYE_B };
 #define MAX_EDMS_DELETE_OBJS  50
 
 #ifdef EDMS_SAFETY_NET
-short safety_fail_oid=-1;
-uchar safety_fail_count=0;
+int16_t safety_fail_oid=-1;
+uint8_t safety_fail_count=0;
 #define SECRET_NET_OUT_P(x,y) (x>0x20)
 #define TOGGLEABLE_SNET
 #endif
 
 bool safety_net_on = TRUE;
-short curr_edms_del = 0;
-short edms_delete_queue[MAX_EDMS_DELETE_OBJS];
+int16_t curr_edms_del = 0;
+int16_t edms_delete_queue[MAX_EDMS_DELETE_OBJS];
 
 
 bool safety_net_wont_you_back_me_up(ObjID oid)
@@ -185,11 +185,11 @@ bool safety_net_wont_you_back_me_up(ObjID oid)
    return TRUE;
 }
 
-void add_edms_delete(int ph)
+void add_edms_delete(int32_t ph)
 {
-   int i=0;
+   int32_t i=0;
    bool bad = FALSE;
-   extern char *get_object_lookname(ObjID id,char use_string[], int sz);
+   extern int8_t *get_object_lookname(ObjID id,int8_t use_string[], int32_t sz);
 
    for (i=0; i < curr_edms_del; i++)
       if (edms_delete_queue[i] == ph)
@@ -209,7 +209,7 @@ void add_edms_delete(int ph)
 
 void edms_delete_go()
 {
-   int i;
+   int32_t i;
    for (i=0; i < curr_edms_del; i++)
    {
       if (edms_delete_queue[i] != -1)
@@ -219,9 +219,9 @@ void edms_delete_go()
    curr_edms_del = 0;
 }
 
-void get_phys_state(int ph, State *new_state, ObjID id)
+void get_phys_state(int32_t ph, State *new_state, ObjID id)
 {
-   char use_mod = EDMS_ROBOT;
+   int8_t use_mod = EDMS_ROBOT;
    if (id != OBJ_NULL)
    {
       use_mod = ObjProps[OPNUM(id)].physics_model;
@@ -252,7 +252,7 @@ void physics_zero_all_controls()
    memset(player_controls,0,sizeof(player_controls));
 }
 
-errtype physics_set_player_controls(int bank, byte xvel, byte yvel, byte zvel, byte xyrot, byte yzrot, byte xzrot)
+errtype physics_set_player_controls(int32_t bank, int8_t xvel, int8_t yvel, int8_t zvel, int8_t xyrot, int8_t yzrot, int8_t xzrot)
 {
    if (xvel != CONTROL_NO_CHANGE)  player_controls[bank][CONTROL_XVEL] = xvel;
    if (yvel != CONTROL_NO_CHANGE)  player_controls[bank][CONTROL_YVEL] = yvel;
@@ -263,22 +263,22 @@ errtype physics_set_player_controls(int bank, byte xvel, byte yvel, byte zvel, b
    return OK;
 }
 
-errtype physics_set_one_control(int bank, int num, byte val)
+errtype physics_set_one_control(int32_t bank, int32_t num, int8_t val)
 {
    if (val != CONTROL_NO_CHANGE)
       player_controls[bank][num] = val;
    return OK;
 }
 
-errtype physics_get_one_control(int bank, int num, byte* val)
+errtype physics_get_one_control(int32_t bank, int32_t num, int8_t* val)
 {
    *val = player_controls[bank][num];
    return OK;
 }
 
-int old_x = -1, old_y = -1, old_lev = -1;
-char old_bits = 0;
-extern uchar decon_count;
+int32_t old_x = -1, old_y = -1, old_lev = -1;
+int8_t old_bits = 0;
+extern uint8_t decon_count;
 extern bool in_deconst;
 extern bool in_peril;
 
@@ -291,10 +291,10 @@ extern bool in_peril;
 
 errtype compare_locs(void)
 {
-   extern void expose_player(byte damage, ubyte type, ushort hlife);
+   extern void expose_player(int8_t damage, uint8_t type, uint16_t hlife);
    extern void check_hazard_regions(MapElem* );
    MapElem *newElem, *oldElem;
-   extern int score_playing;
+   extern int32_t score_playing;
 
    if ((old_x != PLAYER_BIN_X) || (old_y != PLAYER_BIN_Y) || (old_lev != player_struct.level))
    {
@@ -339,12 +339,12 @@ errtype compare_locs(void)
 
 bool control_relax[DEGREES_OF_FREEDOM];
 
-void physics_set_relax(int axis, bool relax)
+void physics_set_relax(int32_t axis, bool relax)
 {
    control_relax[axis] = relax;
 }
 
-void relax_axis(int axis)
+void relax_axis(int32_t axis)
 {
    switch(axis)
    {
@@ -358,7 +358,7 @@ void relax_axis(int axis)
 }
 
 
-static ubyte crouch_controls[NUM_POSTURES] = {0, 6, 10};
+static uint8_t crouch_controls[NUM_POSTURES] = {0, 6, 10};
 
 #define CSPACE_COLLIDE_DIST   0xD0
 #define CSPACE_FAR_COLLIDE_DIST  0x120
@@ -376,7 +376,7 @@ static ubyte crouch_controls[NUM_POSTURES] = {0, 6, 10};
 errtype run_cspace_collisions(ObjID obj, ObjID exclude, ObjID exclude2)
 {
    ObjRefID oref = me_objref(MAP_GET_XY(OBJ_LOC_BIN_X(objs[obj].loc), OBJ_LOC_BIN_Y(objs[obj].loc)));
-   short use_dist;
+   int16_t use_dist;
    while (oref != OBJ_REF_NULL)
    {
       ObjID oid = objRefs[oref].obj;
@@ -416,7 +416,7 @@ errtype run_cspace_collisions(ObjID obj, ObjID exclude, ObjID exclude2)
 #define SKATE_ALPHA_CUTOFF (fix_make(8,0))
 #define MAX_BOOSTER_ALPHA (fix_make(40,0))
 
-extern void physics_set_relax(int axis,bool relax);
+extern void physics_set_relax(int32_t axis,bool relax);
 
 // Takes a physics state and converts it into an Objloc
 // externed in objsim.c
@@ -437,24 +437,24 @@ void state_to_objloc(State *s, ObjLoc *l)
 
 #define CYB_VEL_DELTA 32
 #define CYB_VEL_DELTA2 16
-ubyte old_head=0, old_pitch=0;
-short last_deltap=0, last_deltah=0;
+uint8_t old_head=0, old_pitch=0;
+int16_t last_deltap=0, last_deltah=0;
 
 errtype physics_run(void)
 {
-   int i;
-   extern int avail_memory(int debug_src);
+   int32_t i;
+   extern int32_t avail_memory(int32_t debug_src);
    extern errtype TileMapUpdateCameras(struct _tilemap* );
 
    bool update = FALSE;
-   int deltat = player_struct.deltat;
+   int32_t deltat = player_struct.deltat;
    fix plr_y, plr_z, time_diff;
    fix plr_alpha;
    State new_state;
    bool some_move = FALSE;
-   extern int fire_kickback;
+   extern int32_t fire_kickback;
    extern bool hack_takeover;
-   static long kickback_time=0;        // i bet this static will someday bite our butts, like save/rest mid kickback?
+   static int32_t kickback_time=0;        // i bet this static will someday bite our butts, like save/rest mid kickback?
 #ifdef EDMS_SAFETY_NET
    bool allow_move=TRUE;
 #endif
@@ -465,8 +465,8 @@ errtype physics_run(void)
    // values from each control bank, or zero if all are zero.
    for (i=0; i<DEGREES_OF_FREEDOM; i++)
    {
-      int b, n=0;
-      short control = 0;
+      int32_t b, n=0;
+      int16_t control = 0;
       for (b = 0; b < CONTROL_BANKS; b++)
          if (player_controls[b][i] != 0)
           { control += player_controls[b][i]; n++; }
@@ -487,9 +487,9 @@ errtype physics_run(void)
    update=some_move;    // well, set one of them only once
    if (physics_running && time_passes)
    {
-      int i;
+      int32_t i;
       ObjID oid;
-      int damp;
+      int32_t damp;
       fix plr_side;
       fix plr_lean;
       ObjSpecID   osid;
@@ -521,9 +521,9 @@ errtype physics_run(void)
       }
       else
       {
-         byte leanx = player_struct.leanx;
-         byte ycntl = player_struct.controls[CONTROL_YVEL];
-         short maxlean = (int)(SPRINT_CONTROL_THRESHOLD - abs(ycntl))*CONTROL_MAX_VAL/SPRINT_CONTROL_THRESHOLD;
+         int8_t leanx = player_struct.leanx;
+         int8_t ycntl = player_struct.controls[CONTROL_YVEL];
+         int16_t maxlean = (int32_t)(SPRINT_CONTROL_THRESHOLD - abs(ycntl))*CONTROL_MAX_VAL/SPRINT_CONTROL_THRESHOLD;
          plr_side  = fix_make(player_struct.controls[CONTROL_XVEL],0) / 7 / damp;
          plr_alpha = fix_make(player_struct.controls[CONTROL_XYROT],0) / -5; // / damp;
          if (ycntl <= SPRINT_CONTROL_THRESHOLD)
@@ -531,7 +531,7 @@ errtype physics_run(void)
          else
             plr_y = (ycntl-SPRINT_CONTROL_THRESHOLD)*(MAX_SPRINT-MAX_JOG)/(CONTROL_MAX_VAL - SPRINT_CONTROL_THRESHOLD) + MAX_JOG;
          plr_y /= damp;
-         physics_set_relax(CONTROL_XZROT,abs((short)leanx) > maxlean);
+         physics_set_relax(CONTROL_XZROT,abs((int16_t)leanx) > maxlean);
       }
       if (player_struct.drug_status[DRUG_REFLEX] > 0 && !global_fullmap->cyber)
       {
@@ -579,24 +579,24 @@ errtype physics_run(void)
 
       if (player_struct.controls[CONTROL_XZROT] != 0)
       {
-         short delta = player_struct.controls[CONTROL_XZROT]*MAX_LEAN_RATE/CONTROL_MAX_VAL;
-         int leanx = player_struct.leanx;
+         int16_t delta = player_struct.controls[CONTROL_XZROT]*MAX_LEAN_RATE/CONTROL_MAX_VAL;
+         int32_t leanx = player_struct.leanx;
          leanx = min(CONTROL_MAX_VAL,max(leanx+delta*deltat/CIT_CYCLE,-CONTROL_MAX_VAL));
          player_set_lean(leanx,player_struct.leany);
       }
       if (player_struct.controls[CONTROL_YZROT] != 0)
       {
-         extern int player_get_eye_fixang(void);
-         extern void player_set_eye_fixang(int);
-         int delta = player_struct.controls[CONTROL_YZROT]*MAX_PITCH_RATE/CONTROL_MAX_VAL;
-         int eye = player_get_eye_fixang();
+         extern int32_t player_get_eye_fixang(void);
+         extern void player_set_eye_fixang(int32_t);
+         int32_t delta = player_struct.controls[CONTROL_YZROT]*MAX_PITCH_RATE/CONTROL_MAX_VAL;
+         int32_t eye = player_get_eye_fixang();
          if (player_struct.drug_status[DRUG_REFLEX] > 0 && !global_fullmap->cyber)
             delta <<= 2;
          eye = min(FIXANG_PI/2,max(eye+delta*deltat/CIT_CYCLE,-FIXANG_PI/2));
          player_set_eye_fixang(eye);
       }
 
-      plr_lean = fix_make((int)player_struct.leanx,0)/3;
+      plr_lean = fix_make((int32_t)player_struct.leanx,0)/3;
       if (player_struct.controls[CONTROL_ZVEL] > 0)
       {
          extern void activate_jumpjets(fix* x,fix* y,fix* z);
@@ -682,8 +682,8 @@ errtype physics_run(void)
             state_to_objloc(&new_state, &newloc);
             if ((oid == PLAYER_OBJ) && global_fullmap->cyber)
             {
-               ubyte new_head,new_pitch;//, new_bank;
-               short new_deltah, new_deltap;
+               uint8_t new_head,new_pitch;//, new_bank;
+               int16_t new_deltah, new_deltap;
                State cyber_state;
                extern bool new_cyber_orient;
 
@@ -872,7 +872,7 @@ bool vec_equal(fix* v1,fix *v2)
 #define NORMAL_Y 1
 #define NORMAL_Z 2
 
-int compute_normal_code(pt3d norm)
+int32_t compute_normal_code(pt3d norm)
 {
    if (abs(norm[0]) > abs(norm[1]))
    {
@@ -908,7 +908,7 @@ fix project_onto_facelet(pt3d in, pt3d out, pt3d flet[NUM_POINTS])
 {
    g3s_vector topt;
    fix dp;
-   int i;
+   int32_t i;
    g3s_vector norm = *(g3s_vector*)(flet[NORM_IDX]);
    g3_vec_sub(&topt,(g3s_vector*)in,(g3s_vector*)(flet[0]));
    dp = g3_vec_dotprod(&topt,&norm);
@@ -919,15 +919,15 @@ fix project_onto_facelet(pt3d in, pt3d out, pt3d flet[NUM_POINTS])
    return dp;
 }
 
-int normcode_indices[3][2] = {{ 1,2},{0,2},{0,1}};
+int32_t normcode_indices[3][2] = {{ 1,2},{0,2},{0,1}};
 
 // Takes a point on the plane of a facelet, and computes
 // the distance from the projection to the facelet.  Returns
 // zero if the point projects onto the interior of the facelet.
-fix facelet_distance_sq_4points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
+fix facelet_distance_sq_4points(pt3d pt, pt3d flet[NUM_POINTS], uint8_t normcode)
 {
    fix best_dsq = FIX_MAX;       // minimum distance squared
-   int best_vert = -1;
+   int32_t best_vert = -1;
    fix* best_edge;
    fix* cprod_edge;
    fix  cprod_msq;
@@ -978,10 +978,10 @@ fix facelet_distance_sq_4points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
    PHYS_SPEW(DSRC_PHYSICS_Terrain,("Closest vertex %d\n",best_vert));
    {
       fix a1,a2,b1,b2,p1,p2,c1,c2;
-      int i1,i2;
+      int32_t i1,i2;
       fix d;
-      int nx = (best_vert + 1) & 0x3;
-      int pr = (best_vert + 3) & 0x3;
+      int32_t nx = (best_vert + 1) & 0x3;
+      int32_t pr = (best_vert + 3) & 0x3;
       fix* ep = edgep;
       fix* en = edgen;
       fix* tp = topt;
@@ -1062,11 +1062,11 @@ fix facelet_distance_sq_4points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
 
 #define mod3(x) (((x) > 2) ? (x) - 3 : (x))
 
-fix facelet_distance_sq_3points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
+fix facelet_distance_sq_3points(pt3d pt, pt3d flet[NUM_POINTS], uint8_t normcode)
 {
-   int i;
+   int32_t i;
    fix best_dsq = FIX_MAX;       // minimum distance squared
-   int best_vert = -1;
+   int32_t best_vert = -1;
    fix* best_edge;
    fix* cprod_edge;
    fix  cprod_msq;
@@ -1076,7 +1076,7 @@ fix facelet_distance_sq_3points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
    pt3d topt; // vertex to point;
    for (i = 0; i < 3; i++)
    {
-      int next = mod3(i+1);
+      int32_t next = mod3(i+1);
       pt3d edge; // edge vector
       // build the edge & point vectors
       {
@@ -1107,8 +1107,8 @@ fix facelet_distance_sq_3points(pt3d pt, pt3d flet[NUM_POINTS], uchar normcode)
     {
       fix a1,a2,b1,b2,p1,p2,c1,c2;
       fix d;
-      int nx = (best_vert < 2) ? best_vert + 1 : 0;
-      int pr = (best_vert > 0) ? best_vert - 1 : 2;
+      int32_t nx = (best_vert < 2) ? best_vert + 1 : 0;
+      int32_t pr = (best_vert > 0) ? best_vert - 1 : 2;
       fix* ep = edgep;
       fix* en = edgen;
       fix* tp = topt;
@@ -1268,10 +1268,10 @@ void Terrain(fix fix_x, fix fix_y, fix fix_z, fix rad)
 #ifdef OLD_TERR_FUNC
 extern fix tfunc_rad, tfunc_pt[3];
 extern fix tfunc_sum[3];
-extern int tfunc_cnt[3];
+extern int32_t tfunc_cnt[3];
 extern fix tfunc_norms[3][3];                // floor, wall, ceil
 
-void full_3d_facelet_action(fix (*fleto)[3], int which) // fix (*norm)[3], int *cnt, fix *sum)
+void full_3d_facelet_action(fix (*fleto)[3], int32_t which) // fix (*norm)[3], int32_t *cnt, fix *sum)
 {
    fix proj;
    pt3d projpt;
@@ -1301,7 +1301,7 @@ void full_3d_facelet_action(fix (*fleto)[3], int which) // fix (*norm)[3], int *
 }
 #endif
 
-ubyte param_matters[MAP_TYPES] = { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, } ;
+uint8_t param_matters[MAP_TYPES] = { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, } ;
 #endif  // NOT_YET¥¥¥
 
 errtype physics_init()
@@ -1330,7 +1330,7 @@ errtype physics_init()
 /* KLC - doesn't do anything.
 errtype physics_warmup()
 {
-//   int i;
+//   int32_t i;
 //   for (i=0; i < NUM_WARMUP_ITERATIONS; i++)
 //      EDMS_soliton_vector(EDMS_WARMUP_TIMESTEP);
    return(OK);
@@ -1393,7 +1393,7 @@ errtype apply_gravity_to_one_object(ObjID oid, fix new_grav)
 
 fix ID2radius(ObjID id)
 {
-   int rad = ObjProps[OPNUM(id)].physics_xr;
+   int32_t rad = ObjProps[OPNUM(id)].physics_xr;
    if (rad > 0) return fix_make(rad,0)/PHYSICS_RADIUS_UNIT;
    else return standard_robot.size;
 }
@@ -1405,7 +1405,7 @@ fix ID2radius(ObjID id)
 #define THROW_RAYCAST_MASS  fix_make(0,0x2000)
 #define THROW_RAYCAST_SPEED fix_make(1,0)
 
-bool player_throw_object(ObjID proj_id,  int x, int y, int lastx, int lasty, fix vel)
+bool player_throw_object(ObjID proj_id,  int32_t x, int32_t y, int32_t lastx, int32_t lasty, fix vel)
 {
    LGPoint pos = MakePoint(x,y);
    LGPoint lastpos = MakePoint(lastx,lasty);
@@ -1484,7 +1484,7 @@ bool player_throw_object(ObjID proj_id,  int x, int y, int lastx, int lasty, fix
    return TRUE;
  }
 
-bool get_phys_info(int ph, fix *list, int cnt)
+bool get_phys_info(int32_t ph, fix *list, int32_t cnt)
 {
    ObjID id = physics_handle_id[ph];
    State new_state;
@@ -1513,7 +1513,7 @@ bool get_phys_info(int ph, fix *list, int cnt)
 //-------------------------------------------
 // POSTURE STUFF
 
-errtype player_set_posture(ubyte new_posture)
+errtype player_set_posture(uint8_t new_posture)
 {
    player_struct.posture = new_posture;
    return OK;
@@ -1523,7 +1523,7 @@ errtype player_set_posture(ubyte new_posture)
 // --------------------------------------------
 // LEANING
 
-errtype player_set_lean(byte x, byte y)
+errtype player_set_lean(int8_t x, int8_t y)
 {
    player_struct.leanx = x;
    player_struct.leany = y;
@@ -1538,18 +1538,18 @@ errtype player_set_lean(byte x, byte y)
 
 #define ENERGY_MINE_DRAIN  10
 
-short PULSER_DAMAGE[10] = { 10, 15, 25, 40, 60, 85, 125, 170, 260, 500 };
+int16_t PULSER_DAMAGE[10] = { 10, 15, 25, 40, 60, 85, 125, 170, 260, 500 };
 
 #define NUM_DRILL_LEVELS      5
 #define MAX_DRILL_DAMAGE      725
 #define DRILL_DAMAGE(lev)     (MAX_DRILL_DAMAGE / (NUM_DRILL_LEVELS - (lev)))
 
-ubyte ice_offense_values[] = { 1, 2, 3, 4 };
-ubyte ice_penetration[] = { 5, 5, 10, 15};
-ubyte ice_damage_modifiers[] = { 10, 20, 40, 80};
+uint8_t ice_offense_values[] = { 1, 2, 3, 4 };
+uint8_t ice_penetration[] = { 5, 5, 10, 15};
+uint8_t ice_damage_modifiers[] = { 10, 20, 40, 80};
 
 
-errtype collide_objects(ObjID collision, ObjID victim, int bad)
+errtype collide_objects(ObjID collision, ObjID victim, int32_t bad)
 {
    bool destroy_me = TRUE;
 
@@ -1560,11 +1560,11 @@ errtype collide_objects(ObjID collision, ObjID victim, int bad)
    else if ((objs[collision].obclass == CLASS_PHYSICS) && (objs[collision].subclass == PHYSICS_SUBCLASS_SLOW))
    {
       ObjID owner = objPhysicss[objs[collision].specID].owner;
-      int a = objPhysicss[objs[collision].specID].bullet_triple;
-      int cp_num;
+      int32_t a = objPhysicss[objs[collision].specID].bullet_triple;
+      int32_t cp_num;
       ObjLoc   loc = objs[collision].loc;
       extern ObjID damage_sound_id;
-      extern char damage_sound_fx;
+      extern int8_t damage_sound_fx;
       bool special_proj = FALSE;
 
       // set that we've already collided this time
@@ -1601,8 +1601,8 @@ errtype collide_objects(ObjID collision, ObjID victim, int bad)
             case DRILLSLOW_TRIPLE:
                if (ICE_ICE_BABY(victim))
                {
-                  char soft_lvl = objPhysicss[objs[collision].specID].bullet_triple;
-                  short dmg;
+                  int8_t soft_lvl = objPhysicss[objs[collision].specID].bullet_triple;
+                  int16_t dmg;
 
                   // Damage the ice -- higher level ICEs are tough, but we always
                   // do at least a little tiny bit of damage
@@ -1625,7 +1625,7 @@ errtype collide_objects(ObjID collision, ObjID victim, int bad)
             case CYBERSLOW_TRIPLE:
                if (!(ICE_ICE_BABY(victim)))
                {
-                  char soft_lvl = objPhysicss[objs[collision].specID].bullet_triple;
+                  int8_t soft_lvl = objPhysicss[objs[collision].specID].bullet_triple;
                   simple_damage_object(victim, PULSER_DAMAGE[soft_lvl-1], CYBER_PROJECTILE_TYPE, 0);
                   special_proj = TRUE;
                }
@@ -1633,14 +1633,14 @@ errtype collide_objects(ObjID collision, ObjID victim, int bad)
 #ifdef MANY_CYBERSPACE_WEAPONS
             case DISCSLOW_TRIPLE:
                {
-                  char soft_lvl = objPhysicss[objs[collision].specID].bullet_triple;
+                  int8_t soft_lvl = objPhysicss[objs[collision].specID].bullet_triple;
                   simple_damage_object(victim, disc_damage[soft_lvl-1], CYBER_PROJECTILE_TYPE, 0);
                   special_proj = TRUE;
                }
                break;
             case SPEWSLOW_TRIPLE:
                {
-                  char soft_lvl = objPhysicss[objs[collision].specID].bullet_triple;
+                  int8_t soft_lvl = objPhysicss[objs[collision].specID].bullet_triple;
                   simple_damage_object(victim, cyberspew_damage[soft_lvl-1], CYBER_PROJECTILE_TYPE, 0);
                   special_proj = TRUE;
                }
@@ -1697,7 +1697,7 @@ void terrain_object_collide(physics_handle src, ObjID target)
    collide_objects(target, hit_obj, 0);
 }
 
-void cit_collision_callback(physics_handle C, physics_handle V, int bad, long, long, fix[3] )
+void cit_collision_callback(physics_handle C, physics_handle V, int32_t bad, int32_t, int32_t, fix[3] )
 {
    ObjID    collision;
    ObjID    victim;
@@ -1822,10 +1822,10 @@ errtype assemble_physics_object(ObjID id, State *pnew_state)
 // structure from object properties specified by triple,
 // and level properties.
 
-void instantiate_robot(int triple, Robot* new_robot)
+void instantiate_robot(int32_t triple, Robot* new_robot)
 {
-   int newmass, newsize;
-   short hard,pep;
+   int32_t newmass, newsize;
+   int16_t hard,pep;
 
    *new_robot = standard_robot;
    switch(level_gamedata.gravity)
@@ -1868,10 +1868,10 @@ void instantiate_robot(int triple, Robot* new_robot)
 // structure from object properties specified by triple,
 // and level properties.
 
-void instantiate_pelvis(int triple, Pelvis* new_pelvis)
+void instantiate_pelvis(int32_t triple, Pelvis* new_pelvis)
 {
-   int newmass, newsize;
-   short hard,pep;
+   int32_t newmass, newsize;
+   int16_t hard,pep;
 
    *new_pelvis = standard_pelvis;
    switch(level_gamedata.gravity)
@@ -1910,10 +1910,10 @@ void instantiate_pelvis(int triple, Pelvis* new_pelvis)
 // structure from object properties specified by triple,
 // and level properties.
 
-void instantiate_dirac(int triple, Dirac_frame* new_dirac)
+void instantiate_dirac(int32_t triple, Dirac_frame* new_dirac)
 {
-   int newmass;
-   short hard,rough;
+   int32_t newmass;
+   int16_t hard,rough;
 
    *new_dirac = standard_dirac;
    switch(level_gamedata.gravity)

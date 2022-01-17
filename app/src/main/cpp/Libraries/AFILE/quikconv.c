@@ -43,25 +43,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "quiktime.h"
 
 typedef struct {		// THIS STRUCT MUST MATCH QT_ChunkInfo IN FIRST VARS
-	ulong ctype;
+	uint32_t ctype;
 	bool isleaf;
-	void (*f_convert)(void *data, ulong length, bool read);
+	void (*f_convert)(void *data, uint32_t length, bool read);
 } QT_ChunkInfoAndConvert;
 
-void ConvertELST(void *data, ulong length, bool read);
-void ConvertHDLR(void *data, ulong length, bool read);
-void ConvertMDHD(void *data, ulong length, bool read);
-void ConvertMVHD(void *data, ulong length, bool read);
-void ConvertSMHD(void *data, ulong length, bool read);
-void ConvertSTCO(void *data, ulong length, bool read);
-void ConvertSTSC(void *data, ulong length, bool read);
-void ConvertSTSD(void *data, ulong length, bool read);
-void ConvertSTSH(void *data, ulong length, bool read);
-void ConvertSTSS(void *data, ulong length, bool read);
-void ConvertSTSZ(void *data, ulong length, bool read);
-void ConvertSTTS(void *data, ulong length, bool read);
-void ConvertTKHD(void *data, ulong length, bool read);
-void ConvertVMHD(void *data, ulong length, bool read);
+void ConvertELST(void *data, uint32_t length, bool read);
+void ConvertHDLR(void *data, uint32_t length, bool read);
+void ConvertMDHD(void *data, uint32_t length, bool read);
+void ConvertMVHD(void *data, uint32_t length, bool read);
+void ConvertSMHD(void *data, uint32_t length, bool read);
+void ConvertSTCO(void *data, uint32_t length, bool read);
+void ConvertSTSC(void *data, uint32_t length, bool read);
+void ConvertSTSD(void *data, uint32_t length, bool read);
+void ConvertSTSH(void *data, uint32_t length, bool read);
+void ConvertSTSS(void *data, uint32_t length, bool read);
+void ConvertSTSZ(void *data, uint32_t length, bool read);
+void ConvertSTTS(void *data, uint32_t length, bool read);
+void ConvertTKHD(void *data, uint32_t length, bool read);
+void ConvertVMHD(void *data, uint32_t length, bool read);
 
 QT_ChunkInfoAndConvert chunkInfo[] = {
 	QT_CLIP,FALSE,NULL,
@@ -104,7 +104,7 @@ TrackType currTrackType;
 //
 //	QuikOpenFile() attempts to open a quicktime file for reading.
 
-FILE *QuikOpenFile(char *filename)
+FILE *QuikOpenFile(int8_t *filename)
 {
 	FILE *fp;
 	Fname fname;
@@ -157,7 +157,7 @@ void QuikSkipChunk(FILE *fp, QT_ChunkHdr *phdr)
 //
 //	QuikReadChunk() reads data in chunk.
 
-bool QuikReadChunk(FILE *fp, QT_ChunkHdr *phdr, void *buff, ulong bufflen)
+bool QuikReadChunk(FILE *fp, QT_ChunkHdr *phdr, void *buff, uint32_t bufflen)
 {
 	QT_ChunkInfoAndConvert *pinfo;
 
@@ -190,17 +190,17 @@ void QuikWriteChunkHdr(FILE *fp, QT_ChunkHdr chunkHdr)
 //
 //	QuikWriteChunkLength() writes a chunk length.
 
-void QuikWriteChunkLength(FILE *fp, long length)
+void QuikWriteChunkLength(FILE *fp, int32_t length)
 {
 	Flip4(&length);
-	fwrite(&length, sizeof(long), 1, fp);
+	fwrite(&length, sizeof(int32_t), 1, fp);
 }
 
 //	--------------------------------------------------------------
 //
 //	QuikWriteChunk() writes a chunk.
 
-void QuikWriteChunk(FILE *fp, QT_Ctype ctype, void *data, ulong len)
+void QuikWriteChunk(FILE *fp, QT_Ctype ctype, void *data, uint32_t len)
 {
 	QT_ChunkInfoAndConvert *pinfo;
 	QT_ChunkHdr chunkHdr;
@@ -250,9 +250,9 @@ static QT_ChunkInfoAndConvert *lastInfoPtr = NULL;
 //		CONVERTER ROUTINES
 //	----------------------------------------------------------------
 
-void ConvertELST(void *data, ulong length, bool read)
+void ConvertELST(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_ELST *p = (QTS_ELST *)data;
 
 	if (read)
@@ -267,7 +267,7 @@ void ConvertELST(void *data, ulong length, bool read)
 		Flip4(&p->numEntries);
 }
 
-void ConvertHDLR(void *data, ulong length, bool read)
+void ConvertHDLR(void *data, uint32_t length, bool read)
 {
 	QTS_HDLR *p = (QTS_HDLR *)data;
 
@@ -278,7 +278,7 @@ void ConvertHDLR(void *data, ulong length, bool read)
 	Flip4(&p->compFlagsMask);
 }
 
-void ConvertMDHD(void *data, ulong length, bool read)
+void ConvertMDHD(void *data, uint32_t length, bool read)
 {
 	QTS_MDHD *p = (QTS_MDHD *)data;
 
@@ -290,9 +290,9 @@ void ConvertMDHD(void *data, ulong length, bool read)
 	Flip2(&p->quality);
 }
 
-void ConvertMVHD(void *data, ulong length, bool read)
+void ConvertMVHD(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_MVHD *p = (QTS_MVHD *)data;
 
 	Flip4(&p->createTime);
@@ -312,16 +312,16 @@ void ConvertMVHD(void *data, ulong length, bool read)
 	Flip4(&p->nextTrackId);
 }
 
-void ConvertSMHD(void *data, ulong length, bool read)
+void ConvertSMHD(void *data, uint32_t length, bool read)
 {
 	QTS_SMHD *p = (QTS_SMHD *)data;
 
 	Flip2(&p->balance);
 }
 
-void ConvertSTCO(void *data, ulong length, bool read)
+void ConvertSTCO(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_STCO *p = (QTS_STCO *)data;
 
 	if (read)
@@ -332,9 +332,9 @@ void ConvertSTCO(void *data, ulong length, bool read)
 		Flip4(&p->numEntries);
 }
 
-void ConvertSTSC(void *data, ulong length, bool read)
+void ConvertSTSC(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_STSC *p = (QTS_STSC *)data;
 
 	if (read)
@@ -349,7 +349,7 @@ void ConvertSTSC(void *data, ulong length, bool read)
 		Flip4(&p->numEntries);
 }
 
-void ConvertSTSD(void *data, ulong length, bool read)
+void ConvertSTSD(void *data, uint32_t length, bool read)
 {
 	QTS_STSD *p = (QTS_STSD *)data;
 
@@ -392,9 +392,9 @@ void ConvertSTSD(void *data, ulong length, bool read)
 		}
 }
 
-void ConvertSTSH(void *data, ulong length, bool read)
+void ConvertSTSH(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_STSH *p = (QTS_STSH *)data;
 
 	if (read)
@@ -408,9 +408,9 @@ void ConvertSTSH(void *data, ulong length, bool read)
 		Flip4(&p->numEntries);
 }
 
-void ConvertSTSS(void *data, ulong length, bool read)
+void ConvertSTSS(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_STSS *p = (QTS_STSS *)data;
 
 	if (read)
@@ -421,9 +421,9 @@ void ConvertSTSS(void *data, ulong length, bool read)
 		Flip4(&p->numEntries);
 }
 
-void ConvertSTSZ(void *data, ulong length, bool read)
+void ConvertSTSZ(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_STSZ *p = (QTS_STSZ *)data;
 
 	Flip4(&p->sampSize);
@@ -438,9 +438,9 @@ void ConvertSTSZ(void *data, ulong length, bool read)
 		Flip4(&p->numEntries);
 }
 
-void ConvertSTTS(void *data, ulong length, bool read)
+void ConvertSTTS(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_STTS *p = (QTS_STTS *)data;
 
 	if (read)
@@ -454,9 +454,9 @@ void ConvertSTTS(void *data, ulong length, bool read)
 		Flip4(&p->numEntries);
 }
 
-void ConvertTKHD(void *data, ulong length, bool read)
+void ConvertTKHD(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_TKHD *p = (QTS_TKHD *)data;
 
 	Flip4(&p->createTime);
@@ -472,9 +472,9 @@ void ConvertTKHD(void *data, ulong length, bool read)
 	Flip4(&p->trackHeight);
 }
 
-void ConvertVMHD(void *data, ulong length, bool read)
+void ConvertVMHD(void *data, uint32_t length, bool read)
 {
-	int i;
+	int32_t i;
 	QTS_VMHD *p = (QTS_VMHD *)data;
 
 	Flip2(&p->graphicsMode);
@@ -486,7 +486,7 @@ void ConvertVMHD(void *data, ulong length, bool read)
 //		INTERNAL ROUTINES
 //	----------------------------------------------------------------
 
-void Flip4Func(ulong *pval4)
+void Flip4Func(uint32_t *pval4)
 {
 //¥¥¥ For mac version
 //	*pval4 = MAKE4(*pval4 & 0xFF,
@@ -495,7 +495,7 @@ void Flip4Func(ulong *pval4)
 //		*pval4 >> 24);
 }
 
-void Flip2Func(ushort *pval2)
+void Flip2Func(uint16_t *pval2)
 {
 //¥¥¥ For mac version
 //	*pval2 = ((*pval2 & 0xFF) << 8) | ((*pval2 >> 8) & 0xFF);

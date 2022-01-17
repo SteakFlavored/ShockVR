@@ -62,9 +62,9 @@ typedef struct {
 typedef struct {
    void (*scanline_func)();   /* function to do scanline.   */
    void (*shell_func)();      /* perspective mapping shell. */
-   union {uchar *clut; long fill_parm;};
+   union {uint8_t *clut; int32_t fill_parm;};
    fix scan_slope;
-   int dp;
+   int32_t dp;
    fix alpha_u;
    fix beta_u;
    fix gamma_u;
@@ -77,24 +77,24 @@ typedef struct {
 } grs_per_setup;
 
 typedef struct {
-   uchar *p_dst_final;
-   int p_dst_off;
+   uint8_t *p_dst_final;
+   int32_t p_dst_off;
    union {fix y_fix,x_fix;};
    fix u,du,v,dv,i,di;
    fix u0,v0;
-   union {uchar *clut; long fill_parm;};
+   union {uint8_t *clut; int32_t fill_parm;};
    fix unum,vnum,dunum,dvnum,denom;
    fix dxl,dyl,dtl,dxr,dyr,dtr;
    fix cl,cr;
    fix scan_slope;
-   int dp;
-   union {int yp,xp;};
-   union {int x,y;};
-   union {int xl,yl;};
-   union {int xr,yr;};
-   union {int xr0,yr0;};
-   int u_mask,v_mask,v_shift;
-   int scale;
+   int32_t dp;
+   union {int32_t yp,xp;};
+   union {int32_t x,y;};
+   union {int32_t xl,yl;};
+   union {int32_t xr,yr;};
+   union {int32_t xr0,yr0;};
+   int32_t u_mask,v_mask,v_shift;
+   int32_t scale;
 } grs_per_info;
 
 #endif /* !__PERTYP_H */

@@ -37,9 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 typedef struct {
-   char   handart_frame;
-   char  x_offset;
-   char   y_offset;
+   int8_t   handart_frame;
+   int8_t  x_offset;
+   int8_t   y_offset;
 } handart_frame_info;
 
 #define HANDART_NUM (get_nth_from_triple(MAKETRIP(CLASS_GUN,player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]].type,player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]].subtype)))
@@ -91,7 +91,7 @@ LGPoint pistol_hand_info[NUM_PROJ_GUN][NUM_FRAMES] =
 };
 
 #define NUM_ENERGY_GUN (NUM_GUN-NUM_PROJ_GUN)
-byte energy_hand_info[NUM_ENERGY_GUN][NUM_FRAMES] =
+int8_t energy_hand_info[NUM_ENERGY_GUN][NUM_FRAMES] =
 {
    {21, 25},       // magpulse
    {23, 27},       // rail gun
@@ -107,32 +107,32 @@ byte energy_hand_info[NUM_ENERGY_GUN][NUM_FRAMES] =
 
 #define BOB_TIME (CIT_CYCLE >> 4)
 
-ubyte handart_count = 2;
-ubyte hand_bobbing = HAND_BOB;
-ubyte hand_bobx = HAND_BOBX;
+uint8_t handart_count = 2;
+uint8_t hand_bobbing = HAND_BOB;
+uint8_t hand_bobx = HAND_BOBX;
 bool bob_up = TRUE;
 bool bob_left = TRUE;
-void reset_handart_count(int wpn_num);
+void reset_handart_count(int32_t wpn_num);
 
 
 // -----------------------------------------
 // get_handart()
 //
 
-Ref get_handart(int *x_offset, int *y_offset, short mouse_x, short mouse_y)
+Ref get_handart(int32_t *x_offset, int32_t *y_offset, int16_t mouse_x, int16_t mouse_y)
 {
-   int      view_base_y;
-   short    screen_height;
-   short    factor;
-   short    hand_x, hand_y;
-   ubyte    frame;
-   ubyte    type;
-//   byte     offset=HAND_BOB;
+   int32_t      view_base_y;
+   int16_t    screen_height;
+   int16_t    factor;
+   int16_t    hand_x, hand_y;
+   uint8_t    frame;
+   uint8_t    type;
+//   int8_t     offset=HAND_BOB;
    State    new_state;
 //   RefTable *prt;
 
 #ifdef HANDART_ADJUST
-   extern ubyte hcount;
+   extern uint8_t hcount;
 #endif
 
    switch (player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]].type)
@@ -285,12 +285,12 @@ void notify_draw_handart(void)
    handart_fire = TRUE;
 }
 
-void reset_handart_count(int wpn_num)
+void reset_handart_count(int32_t wpn_num)
 {
   if (player_struct.weapons[wpn_num].type == GUN_SUBCLASS_HANDTOHAND)
    {
-      extern ubyte toggle_hand;
-      ubyte hit = (handart_count &= 0x80);
+      extern uint8_t toggle_hand;
+      uint8_t hit = (handart_count &= 0x80);
       handart_count = (player_struct.weapons[wpn_num].subtype == 0) ? PR24_COUNT : LASER_EPEE_COUNT;
       if (hit)
          handart_count = ((handart_count-2) | 0x80);

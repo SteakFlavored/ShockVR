@@ -72,13 +72,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MAX_FIX_PRECIS 4
 
-static int int_to_str(char *buf, int val);
-static int uint_to_str(char *buf, uint val, int base, char alph);
+static int32_t int_to_str(int8_t *buf, int32_t val);
+static int32_t uint_to_str(int8_t *buf, uint32_t val, int32_t base, int8_t alph);
 
-static char *boolstring[] = {"FALSE","TRUE"};
-static int pten[MAX_FIX_PRECIS+1]={ 1, 10, 100, 1000, 10000 };
+static int8_t *boolstring[] = {"FALSE","TRUE"};
+static int32_t pten[MAX_FIX_PRECIS+1]={ 1, 10, 100, 1000, 10000 };
 
-static char *(*sprintf_str_func)(ulong strnum)=NULL;
+static int8_t *(*sprintf_str_func)(uint32_t strnum)=NULL;
 
 // For small positive integers, just indirect into the big
 // magic array and copy the two bytes you find there.  This
@@ -86,7 +86,7 @@ static char *(*sprintf_str_func)(ulong strnum)=NULL;
 
 #ifdef LGSPF_SMALLINT_OPT
 
-static char digiarray[] = "\
+static int8_t digiarray[] = "\
 00112233445566778899\
 10111213141516171819\
 20212223242526272829\
@@ -119,12 +119,12 @@ typedef enum { SMALL, DEFAULT, BIG } bigness;
 // boolean values, formatting them as "TRUE" or "FALSE".  For those of you
 // who wisely use a string system of some kind, you can refer to a
 // string number with the %S conversion; this requires you install a
-// function mapping string numbers to char *'s using (get ready)
+// function mapping string numbers to int8_t *'s using (get ready)
 // lg_sprintf_install_stringfunc() -- see below.
 
-int lg_sprintf(char *buf, const char *format, ...)
+int32_t lg_sprintf(int8_t *buf, const int8_t *format, ...)
 {
-   int chars;
+   int32_t chars;
    va_list arglist;
 
    va_start(arglist, format);
@@ -139,22 +139,22 @@ int lg_sprintf(char *buf, const char *format, ...)
 // just like vsprintf(), except different from it in just those ways
 // that lg_sprintf() is different from sprintf().  So there.
 
-int lg_vsprintf(char *buf, const char *format, va_list arglist)
+int32_t lg_vsprintf(int8_t *buf, const int8_t *format, va_list arglist)
 {
    fix arg_fix;
    fix24 arg_fix24;
    bool arg_bool;
-   char *arg_str;
-   uint arg_uint;
-   int arg_int;
-   char fix_frac_buf[5];
+   int8_t *arg_str;
+   uint32_t arg_uint;
+   int32_t arg_int;
+   int8_t fix_frac_buf[5];
 
    bool ladjust, altform, pspec, this_is_len;
    bigness big;
-   char pad_char;
-   char src_char;
-   int dest_ind, src_ind, len, int_part, frac_part, mult;
-   int fwid, precis, newchars, fshift, shift_ind, prefix;
+   int8_t pad_char;
+   int8_t src_char;
+   int32_t dest_ind, src_ind, len, int_part, frac_part, mult;
+   int32_t fwid, precis, newchars, fshift, shift_ind, prefix;
    lgsStage stage;
 
    if (buf==NULL) return 0;
@@ -215,14 +215,14 @@ int lg_vsprintf(char *buf, const char *format, va_list arglist)
                break;
             case 'n':
                newchars=fwid=0;
-               *(va_arg(arglist,int*))=dest_ind;
+               *(va_arg(arglist,int32_t*))=dest_ind;
                break;
             case 'i':
             case 'd': // int
                arg_int=va_arg(arglist,int);
 #ifdef LGSPF_SMALLINT_OPT
                if(arg_int>=0 && arg_int<100) {
-                  *((ushort*)buf)=((ushort*)digiarray)[arg_int];
+                  *((uint16_t*)buf)=((uint16_t*)digiarray)[arg_int];
                   newchars=(arg_int<10)?1:2;
                }
                else
@@ -231,13 +231,13 @@ int lg_vsprintf(char *buf, const char *format, va_list arglist)
                   newchars=int_to_str(buf+dest_ind,arg_int);
                }
                break;
-            case 'u': // unsigned int
+            case 'u': // uint32_t
                arg_uint=va_arg(arglist,uint);
                if(big==SMALL)
                   arg_uint &= USHRT_MAX;
 #ifdef LGSPF_SMALLINT_OPT
                if(arg_uint<100) {
-                  *((ushort*)buf)=((ushort*)digiarray)[arg_uint];
+                  *((uint16_t*)buf)=((uint16_t*)digiarray)[arg_uint];
                   newchars=(arg_uint<10)?1:2;
                }
                else
@@ -279,7 +279,7 @@ int lg_vsprintf(char *buf, const char *format, va_list arglist)
                   newchars=uint_to_str(buf+dest_ind,va_arg(arglist,uint),8,0);
                break;
             case 'c': // char
-               buf[dest_ind]=(unsigned char)va_arg(arglist,int);
+               buf[dest_ind]=(uint8_t)va_arg(arglist,int);
                newchars=1;
                break;
             case 'b': // bool
@@ -297,7 +297,7 @@ int lg_vsprintf(char *buf, const char *format, va_list arglist)
                break;
             case 'S': // string number
                if(sprintf_str_func) {
-                  arg_str=sprintf_str_func(va_arg(arglist,ulong));
+                  arg_str=sprintf_str_func(va_arg(arglist,uint32_t));
                   goto string_copy;
                }
                else {
@@ -306,7 +306,7 @@ int lg_vsprintf(char *buf, const char *format, va_list arglist)
                }
                break;
             case 's': // string
-               arg_str=va_arg(arglist,char*);
+               arg_str=va_arg(arglist,int8_t*);
 string_copy:
                if(arg_str) {
                   if(pspec)
@@ -410,11 +410,11 @@ string_copy:
 }
 
 // Install a string system function for use with the %S conversion
-// specifier.  The function in question must take a ulong and return
-// a char* (like the resource system's RefGet(), by some coincidence)
+// specifier.  The function in question must take a uint32_t and return
+// a int8_t* (like the resource system's RefGet(), by some coincidence)
 // and you are responsible for any necessary memory management for the
 // string it returns.
-void lg_sprintf_install_stringfunc(char *(*func)(ulong strnum))
+void lg_sprintf_install_stringfunc(int8_t *(*func)(uint32_t strnum))
 {
    sprintf_str_func=func;
 }
@@ -425,7 +425,7 @@ void lg_sprintf_install_stringfunc(char *(*func)(ulong strnum))
 // ==== static functions follow =======================
 
 // private local functions used for writing integers and uints into
-// strings.  The int version calls the uint version after doing any
+// strings.  The int32_t version calls the uint version after doing any
 // necessary setup for negative numbers.  The uint version does the
 // real work, writing the integer into the string in reverse digit
 // order and then reversing it in place.  The integer version always
@@ -434,9 +434,9 @@ void lg_sprintf_install_stringfunc(char *(*func)(ulong strnum))
 // for base 8 and base 16, using shifts and masks instead of divides
 // and remainders.
 
-static int int_to_str(char *buf, int val)
+static int32_t int_to_str(int8_t *buf, int32_t val)
 {
-   int len;
+   int32_t len;
 
    if(val<0) {
       buf[0]='-';
@@ -463,10 +463,10 @@ static int int_to_str(char *buf, int val)
    return(uint_to_str(buf,(uint)val,10,0));
 }
 
-static int uint_to_str(char *buf, uint val, int base, char alph)
+static int32_t uint_to_str(int8_t *buf, uint32_t val, int32_t base, int8_t alph)
 {
-   int ind, rev;
-   char tmp;
+   int32_t ind, rev;
+   int8_t tmp;
 
    // alph is the first letter of the alphabet: 'a' for lowercace
    // and 'A' for upper.  Subtract 10 to find value to add to

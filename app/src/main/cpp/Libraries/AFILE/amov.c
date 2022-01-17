@@ -62,21 +62,21 @@ typedef struct
 	MovieChunk *pmc;				// ptr to movie chunk array
 	MovieChunk *pcurrChunk;	// current chunk ptr
 	FILE *fpTemp;					// temp file for writing
-	uchar pal[768];         			// space for palette
+	uint8_t pal[768];         			// space for palette
 	bool newPal;            			// new pal flag
 } AmovInfo;
 
 //	Methods
 
-int AmovReadHeader(Afile *paf);
-long AmovReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime);
-int AmovReadFramePal(Afile *paf, Apalette *ppal);
-int AmovReadReset(Afile *paf);
-int AmovReadClose(Afile *paf);
+int32_t AmovReadHeader(Afile *paf);
+int32_t AmovReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime);
+int32_t AmovReadFramePal(Afile *paf, Apalette *ppal);
+int32_t AmovReadReset(Afile *paf);
+int32_t AmovReadClose(Afile *paf);
 
-int AmovWriteBegin(Afile *paf);
-int AmovWriteFrame(Afile *paf, grs_bitmap *pbm, long bmlength, fix time);
-int AmovWriteClose(Afile *paf);
+int32_t AmovWriteBegin(Afile *paf);
+int32_t AmovWriteFrame(Afile *paf, grs_bitmap *pbm, int32_t bmlength, fix time);
+int32_t AmovWriteClose(Afile *paf);
 
 Amethods movMethods = {
 	AmovReadHeader,
@@ -102,7 +102,7 @@ Amethods movMethods = {
 //
 //	AmovReadHeader() reads in movie file header & verifies.
 
-int AmovReadHeader(Afile *paf)
+int32_t AmovReadHeader(Afile *paf)
 {
 	AmovInfo *pmi;
 	MovieChunk *pchunk;
@@ -159,13 +159,13 @@ int AmovReadHeader(Afile *paf)
 	paf->v.numFrames = 0;
 	for (pchunk = pmi->pmc; pchunk->chunkType != MOVIE_CHUNK_END; pchunk++)
 	{
-		uchar	s1, s2;
+		uint8_t	s1, s2;
 
 		// Swap bytes around for the chunk.
-		s1 = *((uchar *)pchunk);
-		s2 = *(((uchar *)pchunk)+2);
-		*(((uchar*)pchunk)+2) = s1;
-		*((uchar*)pchunk) = s2;
+		s1 = *((uint8_t *)pchunk);
+		s2 = *(((uint8_t *)pchunk)+2);
+		*(((uint8_t*)pchunk)+2) = s1;
+		*((uint8_t*)pchunk) = s2;
 		pchunk->offset = SwapLongBytes(pchunk->offset);
 
 		if (pchunk->chunkType == MOVIE_CHUNK_VIDEO)
@@ -190,15 +190,15 @@ int AmovReadHeader(Afile *paf)
 //
 //	AmovReadFrame() reads the next frame.
 
-long AmovReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
+int32_t AmovReadFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
 {
-static uchar *pColorSet;		// ptr to color set table (4x4 codec)
-static uchar *pHuffTabComp;	// ptr to compressed huffman tab (4x4 codec)
-static uchar *pHuffTab;			// ptr to expanded huffman table (4x4 codec)
+static uint8_t *pColorSet;		// ptr to color set table (4x4 codec)
+static uint8_t *pHuffTabComp;	// ptr to compressed huffman tab (4x4 codec)
+static uint8_t *pHuffTab;			// ptr to expanded huffman table (4x4 codec)
 
 	AmovInfo *pmi;
-	long len;
-	uchar *p;
+	int32_t len;
+	uint8_t *p;
 	grs_canvas cv;
 
 	pmi = (AmovInfo *)paf->pspec;
@@ -216,7 +216,7 @@ NEXT_CHUNK:
 			{
 				fseek(paf->fp, pmi->pcurrChunk->offset, SEEK_SET);
 				len = MovieChunkLength(pmi->pcurrChunk);
-				p = (uchar *)malloc(len);
+				p = (uint8_t *)malloc(len);
 				fread(p, len, 1, paf->fp);
 				pbm->type = BMT_FLAT8;
 				pbm->flags = BMF_TRANS;
@@ -243,20 +243,20 @@ NEXT_CHUNK:
 				case MOVIE_FTABLE_COLORSET:
 					if (pColorSet)
 						free(pColorSet);
-					pColorSet = (uchar *)malloc(MovieChunkLength(pmi->pcurrChunk));
+					pColorSet = (uint8_t *)malloc(MovieChunkLength(pmi->pcurrChunk));
 					fread(pColorSet, MovieChunkLength(pmi->pcurrChunk), 1, paf->fp);
 					break;
 
 				case MOVIE_FTABLE_HUFFTAB:
 					{
-					ulong len,*pl;
-					pHuffTabComp = (uchar *)malloc(MovieChunkLength(pmi->pcurrChunk));
+					uint32_t len,*pl;
+					pHuffTabComp = (uint8_t *)malloc(MovieChunkLength(pmi->pcurrChunk));
 					fread(pHuffTabComp, MovieChunkLength(pmi->pcurrChunk), 1, paf->fp);
-					pl = (ulong *) pHuffTabComp;
+					pl = (uint32_t *) pHuffTabComp;
 					len = *pl++;
 					if (pHuffTab)
 						free(pHuffTab);
-					pHuffTab = (uchar *)malloc(len);
+					pHuffTab = (uint8_t *)malloc(len);
 					HuffExpandFlashTables(pHuffTab, len, pl, 3);
 					Draw4x4Reset(pColorSet, pHuffTab);
 					free(pHuffTabComp);
@@ -286,7 +286,7 @@ NEXT_CHUNK:
 //
 //	AmovReadFramePal() reads pal for this frame just read.
 
-int AmovReadFramePal(Afile *paf, Apalette *ppal)
+int32_t AmovReadFramePal(Afile *paf, Apalette *ppal)
 {
 	AmovInfo *pmi = (AmovInfo *)paf->pspec;
 
@@ -308,7 +308,7 @@ int AmovReadFramePal(Afile *paf, Apalette *ppal)
 //
 //	AmovReadReset() resets the movie for reading.
 
-int AmovReadReset(Afile *paf)
+int32_t AmovReadReset(Afile *paf)
 {
 	AmovInfo *pmi = (AmovInfo *)paf->pspec;
 
@@ -321,7 +321,7 @@ int AmovReadReset(Afile *paf)
 //
 //	AmovReadClose() does cleanup and closes file.
 
-int AmovReadClose(Afile *paf)
+int32_t AmovReadClose(Afile *paf)
 {
 	AmovInfo *pmi = (AmovInfo *)paf->pspec;
 
@@ -338,7 +338,7 @@ int AmovReadClose(Afile *paf)
 //
 //	AmovWriteBegin() starts up writer.
 
-int AmovWriteBegin(Afile *paf)
+int32_t AmovWriteBegin(Afile *paf)
 {
 	printf("AmovWriteBegin not implemented yet!\n");
 /*
@@ -377,7 +377,7 @@ int AmovWriteBegin(Afile *paf)
 //
 //	AmovWriteFrame() writes out next frame.
 
-int AmovWriteFrame(Afile *paf, grs_bitmap *pbm, long bmlength, fix time)
+int32_t AmovWriteFrame(Afile *paf, grs_bitmap *pbm, int32_t bmlength, fix time)
 {
 	printf("AmovWriteFrame not implemented yet!\n");
 /*
@@ -424,15 +424,15 @@ int AmovWriteFrame(Afile *paf, grs_bitmap *pbm, long bmlength, fix time)
 //
 //	AmovWriteClose() closes output .mov
 
-int AmovWriteClose(Afile *paf)
+int32_t AmovWriteClose(Afile *paf)
 {
 	printf("AmovWriteClose not implemented yet!\n");
 /*
 	AmovInfo *pmi;
-	long nc,numBlocks,numExtra;
-	int i;
+	int32_t nc,numBlocks,numExtra;
+	int32_t i;
 	MovieChunk *pmc;
-	uchar buff[2048];
+	uint8_t buff[2048];
 
 	pmi = paf->pspec;
 

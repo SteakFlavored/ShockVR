@@ -32,11 +32,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Typedefs
 
 // Prototypes
-errtype load_dynamic_memory(int mask);
-errtype free_dynamic_memory(int mask);
-int avail_memory(int debug_src);
+errtype load_dynamic_memory(int32_t mask);
+errtype free_dynamic_memory(int32_t mask);
+int32_t avail_memory(int32_t debug_src);
 void Memory_Check();
-int slorkatron_memory_check();
+int32_t slorkatron_memory_check();
 
 // If LZW stuff ever gets lots more efficient, may need to raise this up some.
 #define BIG_BUFFER_SIZE (LZW_BUFF_SIZE+3)
@@ -53,11 +53,11 @@ int slorkatron_memory_check();
 
 // Globals
 #ifdef __CYBMEM_SRC
-uchar big_buffer[BIG_BUFFER_SIZE+16384];
-int start_mem;
+uint8_t big_buffer[BIG_BUFFER_SIZE+16384];
+int32_t start_mem;
 #else
-extern uchar big_buffer[BIG_BUFFER_SIZE+16384];
-extern int start_mem;
+extern uint8_t big_buffer[BIG_BUFFER_SIZE+16384];
+extern int32_t start_mem;
 #endif
 
 #endif // __CYBMEM_H

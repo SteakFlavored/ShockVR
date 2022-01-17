@@ -73,7 +73,7 @@ typedef fix Physvec[6];
 // An arg of CONTROL_NO_CHANGE leaves the value unchanged.
 // There are CONTROL_BANKS banks of controls, which roughly average
 // together.
-errtype physics_set_player_controls(int bank, byte xvel,byte yvel, byte zvel, byte xyrot, byte yzrot, byte xzrot);
+errtype physics_set_player_controls(int32_t bank, int8_t xvel,int8_t yvel, int8_t zvel, int8_t xyrot, int8_t yzrot, int8_t xzrot);
 
 // Set a single control, using the defined control numbers
 
@@ -88,8 +88,8 @@ errtype physics_set_player_controls(int bank, byte xvel,byte yvel, byte zvel, by
 #define KEYBD_CONTROL_BANK 1
 #define JOYST_CONTROL_BANK 2
 #define INP6D_CONTROL_BANK 3
-errtype physics_set_one_control(int bank, int num, byte val);
-errtype physics_get_one_control(int bank, int num, byte* val);
+errtype physics_set_one_control(int32_t bank, int32_t num, int8_t val);
+errtype physics_get_one_control(int32_t bank, int32_t num, int8_t* val);
 
 // Run the physics system for one frame
 errtype physics_run(void);
@@ -102,36 +102,36 @@ errtype apply_gravity_to_objects(fix new_grav);
 
 // Take an object, and moves it to a position and velocity relative to the
 // player.  returns true if it finds an appropriate place to put the object.
-bool player_throw_object(ObjID id,  int x, int y, int lastx, int lasty, fix vel);
+bool player_throw_object(ObjID id,  int32_t x, int32_t y, int32_t lastx, int32_t lasty, fix vel);
 
 // Cause the player to assume one of three postures
 #define POSTURE_STAND    0
 #define POSTURE_STOOP    1
 #define POSTURE_PRONE    2
 #define NUM_POSTURES     3
-errtype player_set_posture(ubyte new_posture);
+errtype player_set_posture(uint8_t new_posture);
 
 
 // Lean the player.  Values are in a -100-+100 scale.
 // Hey kids, this don't exist no more.  set your self an
 // XZROT control if you want to lean sideways.
-errtype player_set_lean(byte x, byte y);
+errtype player_set_lean(int8_t x, int8_t y);
 
 // Plant the player's foot, turning directional controls into
 // translational ones.  Unplants foot IFF planted is false
 errtype player_plant_foot(bool planted);
 
 // Set the player's eye position -100 to +100
-void player_set_eye(byte eyecntl);
+void player_set_eye(int8_t eyecntl);
 
 // Build the model given a state and object ID, and assign appropriate
 // data into the object and do appropriate bookkeeping
 errtype assemble_physics_object(ObjID id, State *pnew_state);
 
 // Instantiators
-void instantiate_robot(int triple, Robot* r);
-void instantiate_pelvis(int triple, Pelvis* r);
-void instantiate_dirac(int triple, Dirac_frame* new_dirac);
+void instantiate_robot(int32_t triple, Robot* r);
+void instantiate_pelvis(int32_t triple, Pelvis* r);
+void instantiate_dirac(int32_t triple, Dirac_frame* new_dirac);
 
 errtype apply_gravity_to_one_object(ObjID oid, fix new_grav);
 

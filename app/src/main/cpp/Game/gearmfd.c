@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern bool full_game_3d;
 
 bool gear_active(ObjID obj);
-void mfd_gear_expose(MFD* mfd, ubyte control);
+void mfd_gear_expose(MFD* mfd, uint8_t control);
 bool mfd_gear_handler(MFD *m, uiEvent *e);
 
 // ---------------
@@ -80,23 +80,23 @@ bool gear_active(ObjID obj)
 #define GEAR_BUTTON_Y (MFD_VIEW_HGT - GEAR_BUTTON_H -1)
 
 
-ushort button_bitmaps[] =
+uint16_t button_bitmaps[] =
    {
      0,
-     (ushort)REFINDEX(REF_IMG_Use),
+     (uint16_t)REFINDEX(REF_IMG_Use),
      0,
-     (ushort)REFINDEX(REF_IMG_Use),
-     (ushort)REFINDEX(REF_IMG_Active),
-     (ushort)REFINDEX(REF_IMG_Use),
+     (uint16_t)REFINDEX(REF_IMG_Use),
+     (uint16_t)REFINDEX(REF_IMG_Active),
+     (uint16_t)REFINDEX(REF_IMG_Use),
    };
 
-extern void mfd_item_micro_expose(bool full, int triple);
+extern void mfd_item_micro_expose(bool full, int32_t triple);
 
-void mfd_gear_expose(MFD* mfd, ubyte control)
+void mfd_gear_expose(MFD* mfd, uint8_t control)
 {
-   int active = player_struct.actives[ACTIVE_GENERAL];
+   int32_t active = player_struct.actives[ACTIVE_GENERAL];
    bool full = control & MFD_EXPOSE_FULL;
-   extern void draw_mfd_item_spew(Ref id, int n);
+   extern void draw_mfd_item_spew(Ref id, int32_t n);
    if (control == 0)  // MFD is drawing stuff
    {
       // Do unexpose stuff here.
@@ -129,9 +129,9 @@ void mfd_gear_expose(MFD* mfd, ubyte control)
       }
       else
       {
-         int id = MKREF(RES_mfdSpecial,button_bitmaps[objs[obj].info.type]+(gear_active(obj)?0:1));
-         short wid = res_bm_width(id);
-         short x = (MFD_VIEW_WID - wid)/2;
+         int32_t id = MKREF(RES_mfdSpecial,button_bitmaps[objs[obj].info.type]+(gear_active(obj)?0:1));
+         int16_t wid = res_bm_width(id);
+         int16_t x = (MFD_VIEW_WID - wid)/2;
 
          mfd_item_micro_expose(full,ID2TRIP(obj));
          draw_mfd_item_spew(REF_STR_gearSpew0+objs[obj].info.type,1);
@@ -162,7 +162,7 @@ cleanup_et_return:
 bool mfd_gear_handler(MFD *m, uiEvent *e)
 {
    bool retval = FALSE;
-   int active = player_struct.actives[ACTIVE_GENERAL];
+   int32_t active = player_struct.actives[ACTIVE_GENERAL];
    LGRect r = { {0, GEAR_BUTTON_Y},{MFD_VIEW_WID, GEAR_BUTTON_Y+GEAR_BUTTON_H}};
 
    if ((e->subtype & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)) == 0)
@@ -170,8 +170,8 @@ bool mfd_gear_handler(MFD *m, uiEvent *e)
    if (active >= 0 && active < NUM_GENERAL_SLOTS)
    {
       ObjID obj = player_struct.inventory[active];
-      int id = MKREF(RES_mfdSpecial,button_bitmaps[objs[obj].info.type]+(gear_active(obj)?0:1));
-      short wid = res_bm_width(id);
+      int32_t id = MKREF(RES_mfdSpecial,button_bitmaps[objs[obj].info.type]+(gear_active(obj)?0:1));
+      int16_t wid = res_bm_width(id);
       r.ul.x = (MFD_VIEW_WID - wid)/2;
       r.lr.x = r.ul.x + wid;
       RECT_OFFSETTED_RECT(&r,m->rect.ul,&r);

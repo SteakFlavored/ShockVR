@@ -6,21 +6,21 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Header: r:/prj/lib/src/new_edms/models/RCS/marble.cc 1.7 1994/12/12 13:49:49 dfan Exp $
  */
 
-//	Marble.cpp contains the equations of motion (in regular guy 3+1 space) and the 
+//	Marble.cpp contains the equations of motion (in regular guy 3+1 space) and the
 //	internal degrees of freedom (in arbitrary configuration or phase spaces) for the elastic
 //	marble on the T[x][y][grad] surface. In addition, it contains the creation utility for
 //	the marbles, as required by soliton and its minions. This is the prototype for future
@@ -41,23 +41,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <mout.h>
 #endif
 
-extern void	( *idof_functions[MAX_OBJ] )( int ),
-		( *equation_of_motion[MAX_OBJ][7] )( int ),
-		null_function( int dummy );
+extern void	( *idof_functions[MAX_OBJ] )( int32_t ),
+		( *equation_of_motion[MAX_OBJ][7] )( int32_t ),
+		null_function( int32_t dummy );
 
 static Q		fix_one = 1.,
 			point_five = .5;
 
 //	Collision callback stuff...
 //	---------------------------
-static int		badness;
+static int32_t		badness;
 static physics_handle	C,
 			V;
 static fix		location[3];
 
 //	Callbacks themselves...
 //	-----------------------
-extern void		( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int badness, long DATA1, long DATA2, fix location[3] ),
+extern void		( *EDMS_object_collision )( physics_handle caller, physics_handle victim, int32_t badness, int32_t DATA1, int32_t DATA2, fix location[3] ),
 			( *EDMS_wall_contact )( physics_handle caller );
 
 
@@ -77,7 +77,7 @@ static Q		object0, object1, object2, object3, object4,		//Howzat??
 
 //	Marble (world) z coordinate...
 //	==============================
-void	marble_Z( int object ) {
+void	marble_Z( int32_t object ) {
 
 	S[object][2][2] = I[object][24]*( I[object][3]*I[object][8] )		//Elasticity...
 					- I[object][25];
@@ -89,10 +89,10 @@ void	marble_Z( int object ) {
 
 //	Marble (world) x coordinate...
 //	==============================
-void	marble_X( int object ) {
+void	marble_X( int32_t object ) {
 
 	S[object][0][2] = I[object][24]*( I[object][4]*I[object][8] 		//Elasticity...
-					- I[object][23]*A[object][0][1]		//Drag... 
+					- I[object][23]*A[object][0][1]		//Drag...
 					+ I[object][10]				//Bump...
 					+ I[object][18] );			//Control...
 
@@ -102,9 +102,9 @@ void	marble_X( int object ) {
 
 //	Marble (world) y coordinate...
 //	==============================
-void	marble_Y( int object ) {
+void	marble_Y( int32_t object ) {
 
-	S[object][1][2] = I[object][24]*( I[object][5]*I[object][8]		//Elasticity... 
+	S[object][1][2] = I[object][24]*( I[object][5]*I[object][8]		//Elasticity...
 					- I[object][23]*A[object][1][1]		//Drag...
 					+ I[object][11]				//Bump...
 					+ I[object][19] );			//Control...
@@ -119,14 +119,14 @@ void	marble_Y( int object ) {
 //	Here are the internal degrees of freedom:
 //	=========================================
 
-void	marble_idof( int object )
+void	marble_idof( int32_t object )
 {
    object0 = terrain( A[object][0][0], A[object][1][0], 0 );		//Surface height...
 
 	object1 = terrain( A[object][0][0], A[object][1][0], 1 );		//dzdx...
 	object2 = terrain( A[object][0][0], A[object][1][0], 2 );		//dzdy...
 
-	object3 = fix_one/( sqrt( fix_one + object1*object1 ));			//Cos thetaZ	
+	object3 = fix_one/( sqrt( fix_one + object1*object1 ));			//Cos thetaZ
 	object4 = -object1*object3;						//Sin thetaX
 	object5 = -object2/( sqrt( fix_one + object2*object2 ));		//Sin thetaY
 
@@ -134,7 +134,7 @@ void	marble_idof( int object )
 	object7 = (object6 < I[object][22]);
 	object8 = object7*( -I[object][20]*		  			//Z moment...
 			     ( object6 - I[object][22] )
-			     - I[object][21]*A[object][2][1] );	
+			     - I[object][21]*A[object][2][1] );
 
 
 	object10 = object11 = 0;						//B/C...
@@ -142,9 +142,9 @@ void	marble_idof( int object )
    //	Collision B/C...
    //	================
 
-   ulong mask = are_you_there (object);
-   ulong bit = 0;
-   int other_object;
+   uint32_t mask = are_you_there (object);
+   uint32_t bit = 0;
+   int32_t other_object;
 
    while (mask != 0)
    {
@@ -196,7 +196,7 @@ void	marble_idof( int object )
          		      if (no_no_not_me[other_object] == 0 )
                         collision_wakeup( other_object );
                   }
-               }   
+               }
       		}
    		}
 		}
@@ -220,12 +220,12 @@ void	marble_idof( int object )
 
 
 	S[object][0][2] = I[object][24]*( object4*object8	 		//Elasticity...
-					- object17*A[object][0][1]		//Drag... 
+					- object17*A[object][0][1]		//Drag...
 					+ object10				//Bump...
 					+ object7*I[object][18] );		//Control...
 
 
-	S[object][1][2] = I[object][24]*( object5*object8			//Elasticity... 
+	S[object][1][2] = I[object][24]*( object5*object8			//Elasticity...
 					- object18*A[object][1][1]		//Drag...
 					+ object11				//Bump...
 					+ object7*I[object][19] );		//Control...
@@ -240,7 +240,7 @@ void	marble_idof( int object )
 
 //	We might for now want to set some external forces on the marble...
 //	==================================================================
-void	marble_set_control( int marble, Q X, Q Y, Q Z ) {
+void	marble_set_control( int32_t marble, Q X, Q Y, Q Z ) {
 
 //	These accelerations are normalized, of course...
 //	------------------------------------------------
@@ -248,17 +248,17 @@ void	marble_set_control( int marble, Q X, Q Y, Q Z ) {
 	I[marble][19] = I[marble][26]*Y;
 	I[marble][17] = I[marble][26]*abs( Z );				//Jumping only!
 
-	no_no_not_me[marble] = ( no_no_not_me[marble] || 
+	no_no_not_me[marble] = ( no_no_not_me[marble] ||
 			         ( abs(I[marble][18]) + abs(I[marble][19]) + abs(I[marble][17]) > 0 ) );
 
 }
 
 
 
-int make_marble( Q init_state[6][3], Q params[10] )
+int32_t make_marble( Q init_state[6][3], Q params[10] )
 {
 //	Sets up everything needed to manufacture a marble with initial state vector
-//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the 
+//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the
 //	object number, or else a negative error code (see Soliton.CPP for error handling and codes).
 //	============================================================================================
 
@@ -266,12 +266,12 @@ int make_marble( Q init_state[6][3], Q params[10] )
 
 //	Have some variables...
 //	======================
-   int	object_number = -1,						//Three guesses...
+   int32_t	object_number = -1,						//Three guesses...
       	error_code = -1;						//Guilty until...
 
 //	We need ignorable coordinates...
 //	================================
-   extern void	null_function( int );
+   extern void	null_function( int32_t );
 
 
 
@@ -287,18 +287,18 @@ int make_marble( Q init_state[6][3], Q params[10] )
 
 //		Now we can create the marble:  first dump the initial state vector...
 //		=====================================================================
-		for ( int coord = 0; coord < 6; coord++ )
+		for ( int32_t coord = 0; coord < 6; coord++ )
       {
-   		for ( int deriv = 0; deriv < 3;	deriv++ )
+   		for ( int32_t deriv = 0; deriv < 3;	deriv++ )
          {
-		      S[object_number][coord][deriv] = 
+		      S[object_number][coord][deriv] =
 		      A[object_number][coord][deriv] = init_state[coord][deriv];	//For collisions...
    		}
       }
 
 //		Put in the appropriate marble parameters...
 //		===========================================
-		for ( int copy = 0; copy < 10; copy++ )
+		for ( int32_t copy = 0; copy < 10; copy++ )
       {
    		I[object_number][copy + 20] = params[copy];
 		}
@@ -332,13 +332,13 @@ int make_marble( Q init_state[6][3], Q params[10] )
 		equation_of_motion[object_number][1] = marble_Y;
 		equation_of_motion[object_number][2] = marble_Z;
 		equation_of_motion[object_number][3] = 				//Nice symmetries, huh.
-		equation_of_motion[object_number][4] = 
+		equation_of_motion[object_number][4] =
 		equation_of_motion[object_number][5] = null_function;
 
 //		Things seem okay...
 //		===================
 		error_code = object_number;
-	
+
       // Hey, let's make it exist.
       write_object (object_number);
 	}

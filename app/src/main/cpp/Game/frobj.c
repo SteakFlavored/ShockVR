@@ -52,7 +52,7 @@ bool pick_best_ref(ObjRefID cRef);
 
 bool pick_best_ref(ObjRefID cRef)
 {
-   int bdist, cdist, ldist;
+   int32_t bdist, cdist, ldist;
    ObjRefID curLRef, BRef;
 
    // really, need to sort so SCOOC should do it once we are done with clip + pipe
@@ -66,7 +66,7 @@ bool pick_best_ref(ObjRefID cRef)
    curLRef=objRefs[cRef].nextref;                  // init the examine others loop
    while (curLRef!=cRef)
    {  // this should know to check the map for not actually seen
-      int x,y;
+      int32_t x,y;
       MapElem *mp;
 
       x=objRefs[curLRef].state.bin.sq.x;
@@ -129,7 +129,7 @@ void render_parse_obj(void)
    }
    render_sorted_objs();
 #else
-   ushort curORef;
+   uint16_t curORef;
    curORef=_fdt_mptr->objRef;
    _fr_sdbg(OBJ_TALK,mprintf("Rendering %d at %d %d\n",curORef,_fdt_x,_fdt_y));
    // perhaps draw a box or something
@@ -154,7 +154,7 @@ void facelet_parse_obj(void)
       curORef = objRefs[curORef].next;
    }
 #else
-   ushort curORef;
+   uint16_t curORef;
    curORef=_fdt_mptr->objRef;
    _fr_sdbg(OBJ_TALK,mprintf("Rendering %d at %d %d\n",curORef,_fdt_x,_fdt_y));
    // perhaps draw a box or something

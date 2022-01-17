@@ -37,7 +37,7 @@ grs_canvas		gDoubleSizeOffCanvas;
 //---------------------------------------------------------------------
 //  Allocate the intermediate offscreen buffer for low-res mode in Shock.
 //---------------------------------------------------------------------
-int AllocDoubleBuffer(int w, int h)
+int32_t AllocDoubleBuffer(int32_t w, int32_t h)
 {
 	Size		dummy;
 
@@ -52,7 +52,7 @@ int AllocDoubleBuffer(int w, int h)
 	if (gDoubleSizeOffHdl)													// If successful, make a canvas for it.
 	{
 		HLockHi(gDoubleSizeOffHdl);
-		gr_init_canvas(&gDoubleSizeOffCanvas, (uchar *)*gDoubleSizeOffHdl, BMT_FLAT8, w, h);
+		gr_init_canvas(&gDoubleSizeOffCanvas, (uint8_t *)*gDoubleSizeOffHdl, BMT_FLAT8, w, h);
 		return 1;
 	}
 	else
@@ -88,8 +88,8 @@ void FreeDoubleBuffer(void)
 void Fast_Slot_Copy(grs_bitmap *bm)
    {
    	double 	*src,*dest,doub1,doub2;
-   	int		rows = kFastSlotHigh;
-   	int		src_rowb,dest_rowb;
+   	int32_t		rows = kFastSlotHigh;
+   	int32_t		src_rowb,dest_rowb;
 
    	src = (double *) bm->bits;
    	src_rowb = bm->row>>3;
@@ -247,8 +247,8 @@ asm void Fast_Slot_Copy(grs_bitmap *bm)
 void Fast_FullScreen_Copy(grs_bitmap *bm)
    {
    	double 	*src,*dest,doub1,doub2;
-   	int		rows = 480;
-   	int		src_rowb,dest_rowb;
+   	int32_t		rows = 480;
+   	int32_t		src_rowb,dest_rowb;
 
    	src = (double *) bm->bits;
    	src_rowb = bm->row>>3;
@@ -375,17 +375,17 @@ asm void Fast_FullScreen_Copy(grs_bitmap *bm)
 
 //=================================================================
 // Doubling routines
-extern Boolean SkipLines;
+extern bool SkipLines;
 
 // copy the slot view from offscreen to on, doubling it
 #if (defined(powerc) || defined(__powerc))
 extern "C"
  {
- 	extern void BlitLargeAlign(uchar *draw_buffer, int dstRowBytes, void *dstPtr, long w, long h, long modulus);
- 	extern void BlitLargeAlignSkip(uchar *draw_buffer, int dstRowBytes, void *dstPtr, long w, long h, long modulus);
+ 	extern void BlitLargeAlign(uint8_t *draw_buffer, int32_t dstRowBytes, void *dstPtr, int32_t w, int32_t h, int32_t modulus);
+ 	extern void BlitLargeAlignSkip(uint8_t *draw_buffer, int32_t dstRowBytes, void *dstPtr, int32_t w, int32_t h, int32_t modulus);
  }
 
-void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
+void Fast_Slot_Double(grs_bitmap *bm, int32_t w, int32_t h)
  {
  	if (!SkipLines)
  		BlitLargeAlign(bm->bits, gScreenRowbytes, gScreenAddress + (kFastSlotTop*gScreenRowbytes) + kFastSlotLeft,w,h,bm->row);
@@ -393,7 +393,7 @@ void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
  		BlitLargeAlignSkip(bm->bits, gScreenRowbytes, gScreenAddress + (kFastSlotTop*gScreenRowbytes) + kFastSlotLeft,w,h,bm->row);
  }
 
-void FastSlotDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, long w, long h)
+void FastSlotDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, int32_t w, int32_t h)
 {
 	if (SkipLines)
 	{
@@ -405,7 +405,7 @@ void FastSlotDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, long w, long 
 }
 
 #else
-asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
+asm void Fast_Slot_Double(grs_bitmap *bm, int32_t w, int32_t h)
  {
  	move.l		4(sp),a0
  	movem.l		d3-d7/a2,-(sp)
@@ -509,7 +509,7 @@ asm void Fast_Slot_Double(grs_bitmap *bm, long w, long h)
 // copy the full screen view from offscreen to on
 // hard coded to copy from 0,0 to 640,480 to the screen
 #if (defined(powerc) || defined(__powerc))
-void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
+void Fast_FullScreen_Double(grs_bitmap *bm, int32_t w, int32_t h)
  {
  	if (!SkipLines)
  		BlitLargeAlign(bm->bits, gScreenRowbytes, gScreenAddress,w,h,bm->row);
@@ -517,7 +517,7 @@ void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
  		BlitLargeAlignSkip(bm->bits, gScreenRowbytes, gScreenAddress,w,h,bm->row);
  }
 
-void FastFullscreenDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, long w, long h)
+void FastFullscreenDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, int32_t w, int32_t h)
 {
 	if (SkipLines)
 	{
@@ -529,7 +529,7 @@ void FastFullscreenDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, long w,
 }
 
 #else
-asm void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h)
+asm void Fast_FullScreen_Double(grs_bitmap *bm, int32_t w, int32_t h)
  {
  	move.l		4(sp),a0
  	movem.l		d3-d7/a2,-(sp)

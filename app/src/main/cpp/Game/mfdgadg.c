@@ -154,8 +154,8 @@ typedef struct _mfd_slider
 
 bool mfd_slider_handler(MFD* mfd, uiMouseEvent* ev, MFDhandler* h)
 {
-   short x = mfd->rect.ul.x + h->r.ul.x;
-   short y = mfd->rect.ul.y + h->r.ul.y;
+   int16_t x = mfd->rect.ul.x + h->r.ul.x;
+   int16_t y = mfd->rect.ul.y + h->r.ul.y;
    bool retval = TRUE;
    MFDSlider* sl = (MFDSlider*)(h->data);
    LGPoint pos = ev->pos;

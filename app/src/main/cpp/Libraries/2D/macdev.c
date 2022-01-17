@@ -73,7 +73,7 @@ extern Ptr		gScreenAddress;
 //
 void mac_set_mode(void)
  {
- 	grd_mode_cap.vbase = (uchar *) gScreenAddress;
+ 	grd_mode_cap.vbase = (uint8_t *) gScreenAddress;
  	grd_valloc_mode = 0;
 
  	grd_canvas_table_list[BMT_DEVICE] = flat8_canvas_table;
@@ -85,11 +85,11 @@ void mac_set_mode(void)
 //------------------------------------------------------------------------
 // set the color palette (copy entries into gMainColorHand, then call SetEntries
 // and ResetCTSeed).
-void mac_set_pal (int start, int n, uchar *pal_data)
+void mac_set_pal (int32_t start, int32_t n, uint8_t *pal_data)
  {
  	if (n)	// ignore if count == 0
  	 {
- 	 	short			i;
+ 	 	int16_t			i;
  	 	ColorSpec	*cSpec;
 
  	 	// if we're starting at 0, skip it, we can't change that one
@@ -99,9 +99,9 @@ void mac_set_pal (int start, int n, uchar *pal_data)
  	 	cSpec = &(*gMainColorHand)->ctTable[start];
  	 	for (i=start; i<start+n; i++)
  	 	 {
- 	 	 	cSpec->rgb.red = (ushort) (*(pal_data++)) << 8;
- 	 	 	cSpec->rgb.green = (ushort) (*(pal_data++)) << 8;
- 	 	 	cSpec->rgb.blue = (ushort) (*(pal_data++)) << 8;
+ 	 	 	cSpec->rgb.red = (uint16_t) (*(pal_data++)) << 8;
+ 	 	 	cSpec->rgb.green = (uint16_t) (*(pal_data++)) << 8;
+ 	 	 	cSpec->rgb.blue = (uint16_t) (*(pal_data++)) << 8;
  	 	 	cSpec++;
  	 	 }
 
@@ -112,11 +112,11 @@ void mac_set_pal (int start, int n, uchar *pal_data)
 
 //------------------------------------------------------------------------
 // get the current color palette (copy entries from gMainColorHand)
-void mac_get_pal (int start, int n, uchar *pal_data)
+void mac_get_pal (int32_t start, int32_t n, uint8_t *pal_data)
  {
  	if (n)	// ignore if count == 0
  	 {
- 	 	short			i;
+ 	 	int16_t			i;
  	 	ColorSpec	*cSpec;
 
  	 	cSpec = &(*gMainColorHand)->ctTable[start];
@@ -136,13 +136,13 @@ void mac_get_pal (int start, int n, uchar *pal_data)
 // (if the game uses these calls to remember palettes between changes we may need
 // to implement something here
 //------------------------------------------------------------------------
-int mac_set_state(void *buf,int clear)
+int32_t mac_set_state(void *buf,int32_t clear)
  {
  	return(0);
  }
 
 //------------------------------------------------------------------------
-int mac_get_state(void *buf,int flags)
+int32_t mac_get_state(void *buf,int32_t flags)
  {
  	return(0);
  }
@@ -150,7 +150,7 @@ int mac_get_state(void *buf,int flags)
 // set and get focus don't currently do anything, since its not apparent
 // they have any Mac equivalents
 //------------------------------------------------------------------------
-void mac_set_focus(short x,short y)
+void mac_set_focus(int16_t x,int16_t y)
  {
  }
 

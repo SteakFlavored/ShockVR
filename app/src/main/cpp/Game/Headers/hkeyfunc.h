@@ -134,59 +134,59 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RUBBERBAND_MODE 2
 
 // Prototypes
-bool quit_key_func(short keycode, ulong context, void* data);
-bool really_quit_key_func(short keycode, ulong context, void* data);
-bool change_mode_func(short keycode, ulong context, void* data);
-bool toggle_time_func(short keycode, ulong context, void *data);
-bool do_popup_textmenu(short keycode, ulong context, void* g);
-bool mono_config_func(short keycode, ulong context, void* data);
-bool zoom_func(short keycode, ulong context, void* data);
-bool load_level_func(short keycode, ulong context, void* data);
-bool save_level_func(short keycode, ulong context, void* data);
-bool run_intro_func(short keycode, ulong context, void* data);
-bool toggle_3d_func(short keycode, ulong context, void* data);
-bool texture_selection_func(short keycode, ulong context, void* data);
-bool tilemap_mode_func(short keycode, ulong context, void* data);
-bool draw_mode_func(short keycode, ulong context, void* data);
-bool clear_highlight_func(short keycode, ulong context, void* data);
-bool lighting_func(short keycode, ulong context, void* data);
-bool inp6d_panel_func(short keycode, ulong context, void* data);
-bool render_panel_func(short keycode, ulong context, void* data);
-bool bkpt_me(short keycode, ulong context, void* data);
-bool popup_tilemap_func(short keycode, ulong context, void* data);
-bool editor_options_func(short keycode, ulong context, void* data);
-bool editor_modes_func(short keycode, ulong context, void* data);
-bool misc_menu_func(short keycode, ulong context, void* data);
-bool control_panel_func(short keycode, ulong context, void* data);
-bool do_find_func(short keycode, ulong context, void* data);
-bool stupid_slew_func(short keycode, ulong context, void* data);
-bool zoom_3d_func(short keycode, ulong context, void* data);
-bool menu_close_func(short keycode, ulong context, void* data);
+bool quit_key_func(int16_t keycode, uint32_t context, void* data);
+bool really_quit_key_func(int16_t keycode, uint32_t context, void* data);
+bool change_mode_func(int16_t keycode, uint32_t context, void* data);
+bool toggle_time_func(int16_t keycode, uint32_t context, void *data);
+bool do_popup_textmenu(int16_t keycode, uint32_t context, void* g);
+bool mono_config_func(int16_t keycode, uint32_t context, void* data);
+bool zoom_func(int16_t keycode, uint32_t context, void* data);
+bool load_level_func(int16_t keycode, uint32_t context, void* data);
+bool save_level_func(int16_t keycode, uint32_t context, void* data);
+bool run_intro_func(int16_t keycode, uint32_t context, void* data);
+bool toggle_3d_func(int16_t keycode, uint32_t context, void* data);
+bool texture_selection_func(int16_t keycode, uint32_t context, void* data);
+bool tilemap_mode_func(int16_t keycode, uint32_t context, void* data);
+bool draw_mode_func(int16_t keycode, uint32_t context, void* data);
+bool clear_highlight_func(int16_t keycode, uint32_t context, void* data);
+bool lighting_func(int16_t keycode, uint32_t context, void* data);
+bool inp6d_panel_func(int16_t keycode, uint32_t context, void* data);
+bool render_panel_func(int16_t keycode, uint32_t context, void* data);
+bool bkpt_me(int16_t keycode, uint32_t context, void* data);
+bool popup_tilemap_func(int16_t keycode, uint32_t context, void* data);
+bool editor_options_func(int16_t keycode, uint32_t context, void* data);
+bool editor_modes_func(int16_t keycode, uint32_t context, void* data);
+bool misc_menu_func(int16_t keycode, uint32_t context, void* data);
+bool control_panel_func(int16_t keycode, uint32_t context, void* data);
+bool do_find_func(int16_t keycode, uint32_t context, void* data);
+bool stupid_slew_func(int16_t keycode, uint32_t context, void* data);
+bool zoom_3d_func(int16_t keycode, uint32_t context, void* data);
+bool menu_close_func(int16_t keycode, uint32_t context, void* data);
 void start_music(void);
 void stop_music(void);
-bool toggle_music_func(short, ulong, void*);
-bool mono_clear_func(short keycode, ulong context, void* data);
-bool edit_flags_func(short keycode, ulong context, void* data);
-bool mono_toggle_func(short keycode, ulong context, void* data);
-bool new_level_func(short keycode, ulong context, void* data);
-bool toggle_physics_func(short keycode, ulong context, void* data);
-bool toggle_sfx_func(short keycode, ulong context, void* data);
+bool toggle_music_func(int16_t, uint32_t, void*);
+bool mono_clear_func(int16_t keycode, uint32_t context, void* data);
+bool edit_flags_func(int16_t keycode, uint32_t context, void* data);
+bool mono_toggle_func(int16_t keycode, uint32_t context, void* data);
+bool new_level_func(int16_t keycode, uint32_t context, void* data);
+bool toggle_physics_func(int16_t keycode, uint32_t context, void* data);
+bool toggle_sfx_func(int16_t keycode, uint32_t context, void* data);
 
-bool save_hotkey_func(short, ulong, void *);
-bool pause_game_func(short, ulong, void*);
-bool clear_fullscreen_func(short keycode, ulong context, void* data);
-bool arm_grenade_hotkey(short keycode, ulong context, void* data);
-bool select_grenade_hotkey(short keycode, ulong context, void* data);
-bool select_drug_hotkey(short keycode, ulong context, void* data);
-bool use_drug_hotkey(short keycode, ulong context, void* data);
+bool save_hotkey_func(int16_t, uint32_t, void *);
+bool pause_game_func(int16_t, uint32_t, void*);
+bool clear_fullscreen_func(int16_t keycode, uint32_t context, void* data);
+bool arm_grenade_hotkey(int16_t keycode, uint32_t context, void* data);
+bool select_grenade_hotkey(int16_t keycode, uint32_t context, void* data);
+bool select_drug_hotkey(int16_t keycode, uint32_t context, void* data);
+bool use_drug_hotkey(int16_t keycode, uint32_t context, void* data);
 
-// bool (short keycode, ulong context, void* data);
+// bool (int16_t keycode, uint32_t context, void* data);
 
 // Globals
 #ifdef __HKEYFUNC_SRC
-int current_palette_mode = TERRAIN_MODE;
+int32_t current_palette_mode = TERRAIN_MODE;
 #else
-extern int current_palette_mode;
+extern int32_t current_palette_mode;
 #endif
 
 #endif // __HKEYFUNC_H

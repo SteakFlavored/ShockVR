@@ -47,20 +47,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    value.
  */
 
-int gri_cline_clip (grs_vertex *v0, grs_vertex *v1)
+int32_t gri_cline_clip (grs_vertex *v0, grs_vertex *v1)
 {
-   int r;
+   int32_t r;
    fix x0, y0, x1, y1;
    fix xb0, xb1, yb0, yb1;
-   uchar r0, g0, b0, r1, g1, b1;
+   uint8_t r0, g0, b0, r1, g1, b1;
    fix dr, dg, db;
    fix pixels, pixels_0, pixels_1;
 
    /* transfer out of v0, v1 -- from old gen_clin */
    x0 = v0->x; y0 = v0->y;
-   r0 = (uchar) (v0->u); g0 = (uchar) (v0->v); b0 = (uchar) (v0->w);
+   r0 = (uint8_t) (v0->u); g0 = (uint8_t) (v0->v); b0 = (uint8_t) (v0->w);
    x1 = v1->x; y1 = v1->y;
-   r1 = (uchar) (v1->u); g1 = (uchar) (v1->v); b1 = (uchar) (v1->w);
+   r1 = (uint8_t) (v1->u); g1 = (uint8_t) (v1->v); b1 = (uint8_t) (v1->w);
 
 
    xb0 = x0; xb1 = x1; yb0 = y0; yb1 = y1;

@@ -63,13 +63,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _mouse_event
 {
-   short x;    				// position
-   short y;
-   uchar type; 				// Event mask, bits defined below
-   ulong timestamp;
-   uchar buttons;
-   uchar modifiers;			// Added for Mac version
-   char pad[5];  			// pad to sixteen bytes
+   int16_t x;    				// position
+   int16_t y;
+   uint8_t type; 				// Event mask, bits defined below
+   uint32_t timestamp;
+   uint8_t buttons;
+   uint8_t modifiers;			// Added for Mac version
+   int8_t pad[5];  			// pad to sixteen bytes
 } mouse_event;
 
 #define MOUSE_MOTION    1	// Event mask bits
@@ -82,7 +82,7 @@ typedef struct _mouse_event
 
 
 // Mask of events that are allowed into the queue.
-extern ubyte mouseMask;
+extern uint8_t mouseMask;
 
 // type of mouse interrupt callback func
 typedef void (*mouse_callfunc)(mouse_event* e,void* data);
@@ -97,25 +97,25 @@ typedef void (*mouse_callfunc)(mouse_event* e,void* data);
 #define MOUSE_BTN2UP(num) (1 << (2+ 2*(num)))
 
 // Initialize the mouse, specifying screen size.
-errtype mouse_init(short xsize, short ysize);
+errtype mouse_init(int16_t xsize, int16_t ysize);
 
 // shutdown mouse system
 errtype mouse_shutdown(void);
 
 // Tell the mouse library where to get timestamps from.
-errtype mouse_set_timestamp_register(ulong* tstamp);
+errtype mouse_set_timestamp_register(uint32_t* tstamp);
 
 // Get the current mouse timestamp
-ulong mouse_get_time(void);
+uint32_t mouse_get_time(void);
 
 // Get the mouse position
-errtype mouse_get_xy(short* x, short* y);
+errtype mouse_get_xy(int16_t* x, int16_t* y);
 
 // Set the mouse position
-errtype mouse_put_xy(short x, short y);
+errtype mouse_put_xy(int16_t x, int16_t y);
 
 // Check the state of a mouse button
-errtype mouse_check_btn(short button, bool* result);
+errtype mouse_check_btn(int16_t button, bool* result);
 
 // look at the next mouse event.
 errtype mouse_look_next(mouse_event* result);
@@ -130,26 +130,26 @@ errtype mouse_flush(void);
 errtype mouse_generate(mouse_event e);
 
 // Set up an interrupt callback
-errtype mouse_set_callback(mouse_callfunc f, void* data, int* id);
+errtype mouse_set_callback(mouse_callfunc f, void* data, int32_t* id);
 
 // Remove an interrupt callback
-errtype mouse_unset_callback(int id);
+errtype mouse_unset_callback(int32_t id);
 
 // Constrain the mouse coordinates
-errtype mouse_constrain_xy(short xl, short yl, short xh, short yh);
+errtype mouse_constrain_xy(int16_t xl, int16_t yl, int16_t xh, int16_t yh);
 
 // Set the mouse rate and accelleration threshhold
-errtype mouse_set_rate(short xr, short yr, short thold);
+errtype mouse_set_rate(int16_t xr, int16_t yr, int16_t thold);
 
 // Get the mouse rate and accelleration threshhold
-errtype mouse_get_rate(short* xr, short* yr, short* thold);
+errtype mouse_get_rate(int16_t* xr, int16_t* yr, int16_t* thold);
 
 // Sets the mouse coordinate bounds to (0,0) - (x-1,y-1),
 // and scales the current values of the mouse sensitivity accordingly.
-errtype mouse_set_screensize(short x, short y);
+errtype mouse_set_screensize(int16_t x, int16_t y);
 
 // Find the min and max "virtual" coordinates of the mouse position
-errtype mouse_extremes( short *xmin, short *ymin, short *xmax, short *ymax );
+errtype mouse_extremes( int16_t *xmin, int16_t *ymin, int16_t *xmax, int16_t *ymax );
 
 // Sets mouse handedness (true for left-handed)
 errtype mouse_set_lefty(bool lefty);

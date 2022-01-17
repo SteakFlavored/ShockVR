@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DOOR_CLOSED(id) (objs[(id)].info.current_frame < DOOR_OPEN_FRAME)
 #define DOOR_REALLY_CLOSED(id) (objs[(id)].info.current_frame==0)
 
-#define NEVER_AUTOCLOSE_COOKIE ((ubyte)-1)
+#define NEVER_AUTOCLOSE_COOKIE ((uint8_t)-1)
 
 
 extern bool check_object_dist(ObjID obj1, ObjID obj2, fix crit);

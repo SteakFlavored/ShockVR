@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define APPROX_CIT_CYCLE_HZ   256
 #define APPROX_CIT_CYCLE_SHFT 8
 
-extern volatile long *tmd_ticks;
+extern volatile int32_t *tmd_ticks;
 
 // KLC void cit_increment_ticks ();
 

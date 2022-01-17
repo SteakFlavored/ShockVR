@@ -38,10 +38,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  the elipse drawer should be canvas specific and in the tables, but it would
  *  be better to wait until other 2d.h changes */
 
-void gr_int_uoval (int x0, int y0, int a, int b)
+void gr_int_uoval (int32_t x0, int32_t y0, int32_t a, int32_t b)
 {
-  int x;
-  int y;
+  int32_t x;
+  int32_t y;
 
   fix24 a_sq, b_sq;
   fix24 d1,d2,t1,t2;
@@ -71,8 +71,8 @@ void gr_int_uoval (int x0, int y0, int a, int b)
       x++; y--;
     }
 
-    gr_uhline((short)(x0-x),(short)(y0+y),(short)(x0+x));
-    gr_uhline((short)(x0-x),(short)(y0-y),(short)(x0+x));
+    gr_uhline((int16_t)(x0-x),(int16_t)(y0+y),(int16_t)(x0+x));
+    gr_uhline((int16_t)(x0-x),(int16_t)(y0-y),(int16_t)(x0+x));
 
     t1 = fix24_mul(a_sq,((y<<8)-128));
     t2 = fix24_mul(b_sq,((x+1)<<8));
@@ -99,16 +99,16 @@ void gr_int_uoval (int x0, int y0, int a, int b)
       d2 += t2;
       y--;
     }
-    gr_uhline((short)(x0-x),(short)(y0+y),(short)(x0+x));
-    gr_uhline((short)(x0-x),(short)(y0-y),(short)(x0+x));
+    gr_uhline((int16_t)(x0-x),(int16_t)(y0+y),(int16_t)(x0+x));
+    gr_uhline((int16_t)(x0-x),(int16_t)(y0-y),(int16_t)(x0+x));
   }
 }
 
 
-int gr_int_oval (int x0, int y0, int a, int b)
+int32_t gr_int_oval (int32_t x0, int32_t y0, int32_t a, int32_t b)
 {
-  int x;
-  int y;
+  int32_t x;
+  int32_t y;
 
   fix24 a_sq, b_sq;
   fix24 d1,d2,t1,t2;
@@ -145,8 +145,8 @@ int gr_int_oval (int x0, int y0, int a, int b)
       x++; y--;
     }
 
-    gr_hline((short)(x0-x),(short)(y0-y),(short)(x0+x));
-    gr_hline((short)(x0-x),(short)(y0+y),(short)(x0+x));
+    gr_hline((int16_t)(x0-x),(int16_t)(y0-y),(int16_t)(x0+x));
+    gr_hline((int16_t)(x0-x),(int16_t)(y0+y),(int16_t)(x0+x));
 
     t1 = fix24_mul(a_sq,((y<<8)-128));
     t2 = fix24_mul(b_sq,((x+1)<<8));
@@ -174,8 +174,8 @@ int gr_int_oval (int x0, int y0, int a, int b)
       y--;
     }
 
-    gr_hline((short)(x0-x),(short)(y0-y),(short)(x0+x));
-    gr_hline((short)(x0-x),(short)(y0+y),(short)(x0+x));
+    gr_hline((int16_t)(x0-x),(int16_t)(y0-y),(int16_t)(x0+x));
+    gr_hline((int16_t)(x0-x),(int16_t)(y0+y),(int16_t)(x0+x));
   }
 
   /* could be more specific */

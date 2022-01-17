@@ -88,13 +88,13 @@ Region setup_root_region;
 bool play_intro_anim;
 bool save_game_exists = FALSE;
 bool startup_music;
-int setup_mode;
-int intro_num;
-int diff_sum = 0;
+int32_t setup_mode;
+int32_t intro_num;
+int32_t diff_sum = 0;
 
-extern char which_lang;
+extern int8_t which_lang;
 
-ubyte valid_save;
+uint8_t valid_save;
 
 bool setup_bio_started = FALSE;
 
@@ -217,7 +217,7 @@ errtype journey_newgame_func();
 #define DIFF_TITLE4_RIGHT4       297
 
 #ifdef BIG_ARRAYS_OF_LINEAR_EQUATIONS_TO_CLARIFY_AND_YET_OBFUSCATE_THINGS
-int diff_x[16] = {
+int32_t diff_x[16] = {
    DIFF_TITLE1_LEFT1 + 2,
    DIFF_TITLE1_LEFT2 + 2,
    DIFF_TITLE1_LEFT3 + 2,
@@ -237,7 +237,7 @@ int diff_x[16] = {
 };
 
 // couldnt at the least this have been of 4, and indexed by [idx>>2]
-int diff_y[16] = {
+int32_t diff_y[16] = {
    DIFF_TITLE1_OPT_TOP + 2,
    DIFF_TITLE1_OPT_TOP + 2,
    DIFF_TITLE1_OPT_TOP + 2,
@@ -268,8 +268,8 @@ journey_y[8] = {
    JOURNEY_OPT4_TOP, JOURNEY_OPT4_BOT
 };
 
-errtype draw_difficulty_char(int char_num);
-errtype draw_difficulty_description(int which_cat, int color);
+errtype draw_difficulty_char(int32_t char_num);
+errtype draw_difficulty_description(int32_t which_cat, int32_t color);
 errtype journey_continue_func(bool draw_stuff);
 
 bool setup_sound_on=FALSE;
@@ -280,9 +280,9 @@ bool setup_sound_on=FALSE;
 // -------------------------------------------------------------
 // start_setup_sound()
 //
-char *stp_themes[]={"titloop.xmi","endloop.xmi"};
+int8_t *stp_themes[]={"titloop.xmi","endloop.xmi"};
 
-bool start_setup_sound(int which)
+bool start_setup_sound(int32_t which)
 {
    if ((setup_sound_on)||(!music_on))
       return FALSE;
@@ -314,7 +314,7 @@ void end_setup_sound(void)
 
 errtype compute_new_diff()
 {
-   int i, new_sum =0;
+   int32_t i, new_sum =0;
    for (i=0; i < 4; i++)
       new_sum += player_struct.difficulty[i];
    diff_sum = new_sum;
@@ -326,7 +326,7 @@ errtype compute_new_diff()
 //
 
 #define NUM_DIFF_CATEGORIES   4
-char curr_diff = 0;
+int8_t curr_diff = 0;
 bool start_selected = FALSE;
 
 #define CATEGORY_STRING_BASE  REF_STR_diffCategories
@@ -334,14 +334,14 @@ bool start_selected = FALSE;
 #define DIFF_NAME             REF_STR_diffName
 #define DIFF_START            REF_STR_diffStart
 
-short diff_titles_x[] = { DIFF_TITLE1_X1, DIFF_TITLE2_X1, DIFF_TITLE3_X1,DIFF_TITLE4_X1 };
-short diff_titles_y[] = { DIFF_TITLE1_Y1, DIFF_TITLE2_Y1, DIFF_TITLE3_Y1,DIFF_TITLE4_Y1 };
-char *valid_char_string = "0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
+int16_t diff_titles_x[] = { DIFF_TITLE1_X1, DIFF_TITLE2_X1, DIFF_TITLE3_X1,DIFF_TITLE4_X1 };
+int16_t diff_titles_y[] = { DIFF_TITLE1_Y1, DIFF_TITLE2_Y1, DIFF_TITLE3_Y1,DIFF_TITLE4_Y1 };
+int8_t *valid_char_string = "0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
 
 errtype difficulty_draw(bool full)
 {
    errtype draw_username();
-   int i;
+   int32_t i;
 
    uiHideMouse(NULL);
    if (full)
@@ -385,7 +385,7 @@ errtype difficulty_draw(bool full)
 
 Rect name_rect={{DIFF_NAME_TEXT_X,DIFF_NAME_Y},{DIFF_NAME_X2,DIFF_NAME_Y2}};
 
-errtype draw_username(int color, char *string)
+errtype draw_username(int32_t color, int8_t *string)
 {
    gr_set_fcolor(color);
    uiHideMouse(&name_rect);
@@ -398,7 +398,7 @@ errtype draw_username(int color, char *string)
 
 void flash_username(void)
 {
-   long flash_done;
+   int32_t flash_done;
    uiHideMouse(&name_rect);
    gr_set_fcolor(SELECTED_COLOR-4);
    res_draw_string(RES_citadelFont, DIFF_NAME, DIFF_NAME_X, DIFF_NAME_Y);
@@ -414,9 +414,9 @@ void flash_username(void)
 //
 //
 
-errtype draw_difficulty_line(int which_line)
+errtype draw_difficulty_line(int32_t which_line)
 {
-   int i;
+   int32_t i;
    for (i=0; i < 4; i++)
       draw_difficulty_char((which_line * 4) + i);
    draw_difficulty_description(which_line, NORMAL_ENTRY_COLOR);
@@ -430,7 +430,7 @@ errtype draw_difficulty_line(int which_line)
 #define COMPUTE_DIFF_STRING_X(wcat) (DIFF_X_BASE + (DIFF_W_BASE * (wcat & 1)) - DIFF_STRING_OFFSET_X)
 #define COMPUTE_DIFF_STRING_Y(wcat) (DIFF_OPT_TOP + ((wcat >> 1) * DIFF_OPT_DELTA) - DIFF_STRING_OFFSET_Y)
 
-errtype draw_difficulty_description(int which_cat, int color)
+errtype draw_difficulty_description(int32_t which_cat, int32_t color)
 {
    if (color != -1)
       gr_set_fcolor(color);
@@ -446,9 +446,9 @@ errtype draw_difficulty_description(int which_cat, int color)
 
 // im going to rewrite this to use less memory, if no one minds....
 
-errtype draw_difficulty_char(int char_num)
+errtype draw_difficulty_char(int32_t char_num)
 {
-   char buff[]="X";
+   int8_t buff[]="X";
    uiHideMouse(NULL);
    if (player_struct.difficulty[char_num / 4] == char_num % 4)
       gr_set_fcolor(CURRENT_DIFF_COLOR);
@@ -465,18 +465,18 @@ errtype draw_difficulty_char(int char_num)
 //
 
 #ifdef DEMO
-char curr_setup_line = 1;
+int8_t curr_setup_line = 1;
 #else
-char curr_setup_line = 0;
+int8_t curr_setup_line = 0;
 #endif
 #define SETUP_STRING_BASE  REF_STR_journeyOpts
-short setup_tops[] = { JOURNEY_OPT1_TOP, JOURNEY_OPT2_TOP, JOURNEY_OPT3_TOP, JOURNEY_OPT4_TOP };
+int16_t setup_tops[] = { JOURNEY_OPT1_TOP, JOURNEY_OPT2_TOP, JOURNEY_OPT3_TOP, JOURNEY_OPT4_TOP };
 
 #define NUM_SETUP_LINES 4
 
-errtype journey_draw(char part)
+errtype journey_draw(int8_t part)
 {
-   char i;
+   int8_t i;
 
    uiHideMouse(NULL);
 
@@ -494,7 +494,7 @@ errtype journey_draw(char part)
    {
       if ((part == 0) || (part-1 == i))
       {
-         int col;
+         int32_t col;
          if (i == curr_setup_line)
             col=KEYBOARD_FOCUS_COLOR;
          else
@@ -587,7 +587,7 @@ errtype journey_difficulty_func(bool draw_stuff)
 #define CredColor    (GREEN_BASE+4)
 #define CredResource (RES_credits)
 
-int credits_inp=0;
+int32_t credits_inp=0;
 void *credits_txtscrn;
 
 void journey_credits_func(bool draw_stuff)
@@ -607,7 +607,7 @@ void journey_credits_func(bool draw_stuff)
 
 void journey_credits_done()
 {
-   extern char current_cutscene;
+   extern int8_t current_cutscene;
    if ((current_cutscene != WIN_CUTSCENE)&&(current_cutscene != SECRET_EXIT_TO_DOS_CUTSCENE))
    {
       musicai_shutdown();
@@ -637,12 +637,12 @@ void journey_credits_done()
 #define SG_SLOT_X    79
 #define SG_SLOT_Y    62
 
-char curr_sg = 0;
+int8_t curr_sg = 0;
 
-errtype draw_sg_slot(int slot_num)
+errtype draw_sg_slot(int32_t slot_num)
 {
-   char temp[64];
-   short sz,x,y;
+   int8_t temp[64];
+   int16_t sz,x,y;
 
    uiHideMouse(NULL);
    if (curr_sg == slot_num)
@@ -681,7 +681,7 @@ errtype draw_sg_slot(int slot_num)
 
 errtype draw_savegame_names()
 {
-   int i;
+   int32_t i;
    for (i=0; i < NUM_SAVE_SLOTS; i++)
       draw_sg_slot(i);
    return(OK);
@@ -697,7 +697,7 @@ errtype load_that_thar_game(FSSpec *loadSpec)
 //KLC - not in Mac version   if (valid_save & (1 << which_slot))
 //KLC - not in Mac version   {
       extern bool clear_player_data;
-      extern char curr_vol_lev;
+      extern int8_t curr_vol_lev;
 
 //KLC - not in Mac version      draw_sg_slot(-1);             // highlight the current save game slot with SELECTED_COLOR
 //KLC - have Mac version up at this point      begin_wait();
@@ -752,19 +752,19 @@ errtype journey_continue_func(bool draw_stuff)
 
 
 #define SECRET_MISSION_DIFFICULTY_QB      0xB0
-char diff_qvars[4] = { COMBAT_DIFF_QVAR, MISSION_DIFF_QVAR, PUZZLE_DIFF_QVAR, CYBER_DIFF_QVAR};
+int8_t diff_qvars[4] = { COMBAT_DIFF_QVAR, MISSION_DIFF_QVAR, PUZZLE_DIFF_QVAR, CYBER_DIFF_QVAR};
 
 void go_and_start_the_game_already()
 {
-   char i;
-   extern char curr_vol_lev;
-   extern char curr_sfx_vol;
+   int8_t i;
+   extern int8_t curr_vol_lev;
+   extern int8_t curr_sfx_vol;
    extern bool fullscrn_vitals;
    extern bool fullscrn_icons;
    extern bool map_notes_on;
-   extern uchar audiolog_setting;
+   extern uint8_t audiolog_setting;
 #ifdef AUDIOLOGS
-   extern char curr_alog_vol;
+   extern int8_t curr_alog_vol;
 #endif
    extern bool mouseLefty;
 
@@ -794,11 +794,11 @@ void go_and_start_the_game_already()
    QUESTVAR_SET(FULLSCRN_VITAL_QVAR, fullscrn_vitals);
 //¥¥   QUESTVAR_SET(AMAP_NOTES_QVAR, map_notes_on);
    QUESTVAR_SET(HUDCOLOR_QVAR, hud_color_bank);
-//KLC - this is a global now   QUESTVAR_SET(GAMMACOR_QVAR, (short)((29*FIX_UNIT)/100));
+//KLC - this is a global now   QUESTVAR_SET(GAMMACOR_QVAR, (int16_t)((29*FIX_UNIT)/100));
 //¥¥   QUESTVAR_SET(MOUSEHAND_QVAR, mouseLefty);
    QUESTVAR_SET(DCLICK_QVAR, FIX_UNIT/3);
 //¥¥   {
-//¥¥      extern char hack_digi_channels;
+//¥¥      extern int8_t hack_digi_channels;
 //¥¥      QUESTVAR_SET(DIGI_CHANNELS_QVAR, hack_digi_channels);
 //¥¥   }
    for (i=0; i < 4; i++)
@@ -845,9 +845,9 @@ bool journey_lock = FALSE;
 bool intro_mouse_handler(uiEvent *ev, Region *r, void *user_data)
 {
    uiMouseEvent *mev = (uiMouseEvent *)ev;
-   int which_one = -1;
-   int i = 0;
-   int old_diff;
+   int32_t which_one = -1;
+   int32_t i = 0;
+   int32_t old_diff;
    bool diff_changed;
 #ifndef NO_DUMMIES
    void *dummy;   dummy = user_data;   dummy = r;
@@ -887,8 +887,8 @@ bool intro_mouse_handler(uiEvent *ev, Region *r, void *user_data)
             if ((mev->pos.x >= SG_SLOT_X) && (mev->pos.x <= SG_SLOT_X + SG_SLOT_WD) &&
                 (mev->pos.y >= SG_SLOT_Y) && (mev->pos.y <= SG_SLOT_Y + (NUM_SAVE_SLOTS * SG_SLOT_HT)))
             {
-               char which = (mev->pos.y - SG_SLOT_Y) / SG_SLOT_HT;
-               char old_sg = curr_sg;
+               int8_t which = (mev->pos.y - SG_SLOT_Y) / SG_SLOT_HT;
+               int8_t old_sg = curr_sg;
                curr_sg = which;
                draw_sg_slot(old_sg);
                load_that_thar_game(which);
@@ -931,8 +931,8 @@ bool intro_mouse_handler(uiEvent *ev, Region *r, void *user_data)
 bool intro_key_handler(uiEvent *ev, Region *r, void *user_data)
 {
    uiCookedKeyEvent *kev = (uiCookedKeyEvent *)ev;
-   int code = kev->code & ~(KB_FLAG_DOWN | KB_FLAG_2ND);
-   char old_diff, old_setup_line = curr_setup_line, n=0;
+   int32_t code = kev->code & ~(KB_FLAG_DOWN | KB_FLAG_2ND);
+   int8_t old_diff, old_setup_line = curr_setup_line, n=0;
 
    if (kev->code & KB_FLAG_DOWN)
    {
@@ -1077,8 +1077,8 @@ bool intro_key_handler(uiEvent *ev, Region *r, void *user_data)
 
 errtype load_savegame_names()
 {
-   int i, filenum;
-   char path[256];
+   int32_t i, filenum;
+   int8_t path[256];
    extern Datapath savegame_dpath;
 
    valid_save = 0;
@@ -1102,7 +1102,7 @@ errtype load_savegame_names()
          {
             if (ResInUse(SAVELOAD_VERIFICATION_ID))
             {
-               int verify_cookie;
+               int32_t verify_cookie;
                ResExtract(SAVELOAD_VERIFICATION_ID, &verify_cookie);
                switch (verify_cookie)
                {
@@ -1134,8 +1134,8 @@ errtype load_savegame_names()
 errtype setup_init(void)
 {
 #ifndef GAMEONLY
-   int   data[1];
-   int   cnt;
+   int32_t   data[1];
+   int32_t   cnt;
 #endif
 
    generic_reg_init(TRUE,&setup_root_region,NULL,&setup_slab,intro_key_handler,intro_mouse_handler);
@@ -1169,7 +1169,7 @@ bool start_first_time = TRUE;
 void setup_start()
 {
    extern errtype load_da_palette();
-   int do_i_svg=-1, i_invuln=0;
+   int32_t do_i_svg=-1, i_invuln=0;
 
    // Check to see whether or not to play the intro cut scene
 #ifdef GAMEONLY
@@ -1228,8 +1228,8 @@ void setup_start()
 
    // wacky initial savegame hackiness
 	{
-	   int i = 2;
-	   int dvec[2];
+	   int32_t i = 2;
+	   int32_t dvec[2];
 
       config_get_value(CFG_INIT_SVG,CONFIG_INT_TYPE,dvec,&i);
       if (i>0)
@@ -1274,7 +1274,7 @@ void setup_start()
 
 //#define SAFETY_PUPS_NIECE
 #ifdef SAFETY_PUPS_NIECE
-uchar safety_pups_semaphore=0;
+uint8_t safety_pups_semaphore=0;
 #endif
 
 // -----------------------------------------------

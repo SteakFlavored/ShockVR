@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <_ui.h>
 #include "dbg.h"
 
-Gadget *gad_plain_create(Gadget *parent, LGRect *dim, int z, char *name)
+Gadget *gad_plain_create(Gadget *parent, LGRect *dim, int32_t z, int8_t *name)
 {
    Gadget *retgad;
    LGPoint size;

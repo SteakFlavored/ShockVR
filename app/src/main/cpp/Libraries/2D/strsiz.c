@@ -50,18 +50,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* calculate the width and height of a string in the specified font, and
    return in the given pointers. */
 
-void gr_font_string_size (grs_font *f, char *s, short *w, short *h)
+void gr_font_string_size (grs_font *f, int8_t *s, int16_t *w, int16_t *h)
 {
-   short *offset_tab;         /* table of character offsets */
-   short offset;              /* offset of current character */
-   short w_lin=0;             /* current line's width so far */
-   short w_str=0;             /* width of widest line */
-   short h_str;               /* height of string */
-   uchar c;                   /* current character */
+   int16_t *offset_tab;         /* table of character offsets */
+   int16_t offset;              /* offset of current character */
+   int16_t w_lin=0;             /* current line's width so far */
+   int16_t w_str=0;             /* width of widest line */
+   int16_t h_str;               /* height of string */
+   uint8_t c;                   /* current character */
 
    offset_tab = f->off_tab;
    h_str = f->h;
-   while ((c = (uchar) (*s++)) != '\0') {
+   while ((c = (uint8_t) (*s++)) != '\0') {
       if (c == CHAR_SOFTSP)
          continue;
       if (c=='\n' || c==CHAR_SOFTCR) {

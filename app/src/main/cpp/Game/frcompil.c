@@ -41,10 +41,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "map.h"
 #include "mapflags.h"
 
-void fr_compile_rect(fmp *fmptr, int llx, int lly, int ulx, int uly, bool seen_bits)
+void fr_compile_rect(fmp *fmptr, int32_t llx, int32_t lly, int32_t ulx, int32_t uly, bool seen_bits)
 {
    FullMap *fm = (FullMap *)fmptr;
-   int x,y;
+   int32_t x,y;
    MapElem *mptr;
 
    if (lly>0) lly--; else lly=0;

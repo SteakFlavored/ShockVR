@@ -45,18 +45,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_SHODAN_FAILURES	10
 #define GAME_OVER_HACK			0x6
 
-extern uchar *shodan_bitmask;
+extern uint8_t *shodan_bitmask;
 
 ObjID shodan_avatar_id = OBJ_NULL;
-extern ulong time_until_shodan_avatar;
+extern uint32_t time_until_shodan_avatar;
 
 ObjID cspace_decoy_obj = OBJ_NULL;
 ObjLoc recall_objloc;
 extern void turbo_turnoff(bool visible, bool real);
 extern void decoy_turnoff(bool visible, bool real);
 
-ulong cspace_effect_times[NUM_CS_EFFECTS] = {0,0,0};
-ulong cspace_effect_durations[NUM_CS_EFFECTS] = { CIT_CYCLE * 30, CIT_CYCLE * 15, CIT_CYCLE };
+uint32_t cspace_effect_times[NUM_CS_EFFECTS] = {0,0,0};
+uint32_t cspace_effect_durations[NUM_CS_EFFECTS] = { CIT_CYCLE * 30, CIT_CYCLE * 15, CIT_CYCLE };
 void (*cspace_effect_turnoff[])(bool visible,bool real) = { turbo_turnoff, decoy_turnoff, NULL };
 
 errtype early_exit_cyberspace_stuff();
@@ -72,14 +72,14 @@ errtype check_cspace_death()
          hud_set(HUD_CYBERDANGER);
       else if (player_struct.cspace_hp == 0)
       {
-         extern errtype go_to_different_level(int targlevel);
+         extern errtype go_to_different_level(int32_t targlevel);
 
          // If we're in endgame mode, we lose.
          if (shodan_bitmask != NULL)
          {
-            errtype trap_hack_func(int p1, int p2, int p3, int p4);
+            errtype trap_hack_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4);
             extern void begin_shodan_conquer_fx(bool begin);
-            extern char thresh_fail;
+            extern int8_t thresh_fail;
             if (!cyber_nodie)
             {
                extern errtype mai_player_death();
@@ -124,14 +124,14 @@ MFD_Status status_back[MFD_NUM_REAL_SLOTS];
 extern void hardware_closedown(bool  visible);
 extern void hardware_startup(bool visible);
 
-int old_loop;
+int32_t old_loop;
 
 extern void drug_closedown(bool),drug_startup(bool);
 extern Handle shock_alloc_ipal();		// KLC - Mac style
 
-errtype enter_cyberspace_stuff(char dest_lev)
+errtype enter_cyberspace_stuff(int8_t dest_lev)
 {
-   int i;
+   int32_t i;
    cyber_nodie = FALSE;
    old_loop = _current_loop;
 
@@ -218,7 +218,7 @@ errtype early_exit_cyberspace_stuff()
 
 errtype exit_cyberspace_stuff()
 {
-   int i;
+   int32_t i;
 
    // Blast away the cspace MFD
    mfd_notify_func(MFD_EMPTY_FUNC, MFD_INFO_SLOT, TRUE, MFD_ACTIVE, TRUE);

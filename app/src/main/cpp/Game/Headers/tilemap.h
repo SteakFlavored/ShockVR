@@ -95,7 +95,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tilecam.h"
 
 // Defines
-extern long height_colors[MAP_HEIGHTS];
+extern int32_t height_colors[MAP_HEIGHTS];
 
 #define MAX_HIGHLIGHTS     8
 #define NEW_HIGHLIGHT      8
@@ -125,13 +125,13 @@ typedef struct _tilemap
    LGRegion  reg;
    MapElem *map;
    FullMap *fmap;
-   ushort zoom; // pixels per tile.
+   uint16_t zoom; // pixels per tile.
    LGPoint topleft;
    TileDraw draw;
    bool  showcursor;
    LGPoint cursor;           // Cursor for keyboard input.
-   uchar highlights[MAP_ROWS][MAP_COLS];
-   uchar hilitebits;
+   uint8_t highlights[MAP_ROWS][MAP_COLS];
+   uint8_t hilitebits;
    TileCamera cameras[NUM_CAMERAS];
    bool cameras_used[NUM_CAMERAS];
 }  TileMap;
@@ -143,7 +143,7 @@ typedef struct _tilemap
 typedef struct _tilemap_event
 {
    UIEVFRONT
-   short subtype;
+   int16_t subtype;
    TileMap* tilemap;
    UIEVBACK(sizeof(TileMap*));
 }  TileMapEvent;
@@ -152,8 +152,8 @@ typedef struct _tilemap_event
 
 // Prototypes
 
-errtype TileMapInit(TileMap* t, LGRegion* parent, LGRect* boundingrect, int z,
-                    FullMap* fmap, ushort zoompix,
+errtype TileMapInit(TileMap* t, LGRegion* parent, LGRect* boundingrect, int32_t z,
+                    FullMap* fmap, uint16_t zoompix,
                   LGPoint topleft, TileDraw draw);
 // Initialize a tilemap.
 // Cursor defaults to on and in the top left.
@@ -178,15 +178,15 @@ errtype TileMapSetDraw(TileMap* t, TileDraw draw);
 errtype TileMapGetDraw(TileMap* t, TileDraw* draw);
 // Gets the function used to display mapsquares, and its data
 
-errtype TileMapSetHighlight(TileMap* t, LGPoint square, int hilitenum, bool on);
+errtype TileMapSetHighlight(TileMap* t, LGPoint square, int32_t hilitenum, bool on);
 // Sets the highlighted-ness of the specified square to the value of "on" for
 // highlight number hilitenum.  (there are MAX_HIGHLIGHTS possible hilitenums)
 
-errtype TileMapGetHighlight(TileMap* t, LGPoint square, int hilitenum, bool* on);
+errtype TileMapGetHighlight(TileMap* t, LGPoint square, int32_t hilitenum, bool* on);
 // Gets the highlighted-ness of the specified square for
 // highlight number hilitenum.  (there are MAX_HIGHLIGHTS possible hilitenums)
 
-errtype TileMapHighlight(TileMap* t, int hilitenum, highlight_func func, void* data);
+errtype TileMapHighlight(TileMap* t, int32_t hilitenum, highlight_func func, void* data);
 // Sets the value of hilitenum for each square to the value returned by
 // the specified function when applied to that square.  If func is NULL,
 // clears hilitenum.
@@ -194,14 +194,14 @@ errtype TileMapHighlight(TileMap* t, int hilitenum, highlight_func func, void* d
 errtype TileMapClearHighlights(TileMap* t);
 // Clears ALL highlights for tilemap t.
 
-errtype TileMapFindHighlightNum(TileMap* tm, int* num);
+errtype TileMapFindHighlightNum(TileMap* tm, int32_t* num);
 // finds and allocates a free highlight number.
 
 
-errtype TileMapSetZoom(TileMap* t, ushort zoom);
+errtype TileMapSetZoom(TileMap* t, uint16_t zoom);
 // Changes the zoom factor  for t, redisplaying it.
 
-errtype TileMapGetZoom(TileMap* t,ushort* zoom);
+errtype TileMapGetZoom(TileMap* t,uint16_t* zoom);
 // Gets the zoom facter of t.
 
 bool TileMapSquare2Pixel(TileMap* t, LGPoint in, LGPoint* out);
@@ -241,13 +241,13 @@ errtype TileMapCursorOnOff(TileMap* t, bool onoff);
 errtype TileMapAddCamera(TileMap* t, TileCamera* tc, uint* id);
 // Adds a new camera to the tilemap.  id will have the id number of the camera
 
-errtype TileMapRemoveCamera(TileMap* t, uint id);
+errtype TileMapRemoveCamera(TileMap* t, uint32_t id);
 // Removes the camera with the specified id;
 
-errtype TileMapGetCamera(TileMap* t, TileCamera* tc, uint id);
+errtype TileMapGetCamera(TileMap* t, TileCamera* tc, uint32_t id);
 // Fills in tc with the current data on the camera with the specified id.
 
-errtype TileMapSetCamera(TileMap* t, TileCamera* tc, uint id);
+errtype TileMapSetCamera(TileMap* t, TileCamera* tc, uint32_t id);
 // Sets the data of the camera with the specified id to the contents of tc.
 
 errtype TileMapUpdateCameras(TileMap* t);
@@ -258,14 +258,14 @@ errtype TileMapResize(TileMap* tm, LGPoint newdims);
 // redisplaying the tilemap.
 
 
-errtype TileMapMove(TileMap* tm, LGPoint newloc, int z);
+errtype TileMapMove(TileMap* tm, LGPoint newloc, int32_t z);
 // Moves a tilemap to new coordinates relative to parent,
 // redisplaying the tilemap.
 
-errtype TileMapInstallHandler(TileMap* tm, ulong evmask, uiHandlerProc proc, void* data, int* id);
+errtype TileMapInstallHandler(TileMap* tm, uint32_t evmask, uiHandlerProc proc, void* data, int32_t* id);
 // Installs an event  handler on the tilemap's LGRegion.
 
-errtype TileMapRemoveHandler(TileMap* tm, int id);
+errtype TileMapRemoveHandler(TileMap* tm, int32_t id);
 // removes a previously-installed event handler.
 
 // Globals

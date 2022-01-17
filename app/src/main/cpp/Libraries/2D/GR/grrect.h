@@ -48,11 +48,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grlin.h"
 
 #define gr_clear \
-   ((void (*)(long color))grd_canvas_table[DRAW_CLEAR])
+   ((void (*)(int32_t color))grd_canvas_table[DRAW_CLEAR])
 #define gr_upoint \
-   ((void (*)(short x,short y))grd_canvas_table[DRAW_UPOINT])
+   ((void (*)(int16_t x,int16_t y))grd_canvas_table[DRAW_UPOINT])
 #define gr_point \
-   ((int (*)(short x,short y))grd_canvas_table[DRAW_POINT])
+   ((int32_t (*)(int16_t x,int16_t y))grd_canvas_table[DRAW_POINT])
 
 
 /* The line routines have been removed from the canvas tables */
@@ -64,7 +64,7 @@ do {\
    grd_uhline_fill ((x0), (y0), (x1), gr_get_fcolor(), gr_get_fill_parm()); \
 } while (0)
 
-extern int gen_hline (short x0, short y0, short x1);
+extern int32_t gen_hline (int16_t x0, int16_t y0, int16_t x1);
 
 #define gr_hline gen_hline
 
@@ -75,17 +75,17 @@ do {\
    grd_uvline_fill ((x0), (y0), (y1), gr_get_fcolor(), gr_get_fill_parm()); \
 } while (0)
 
-extern int gen_vline (short x0, short y0, short y1);
+extern int32_t gen_vline (int16_t x0, int16_t y0, int16_t y1);
 
 #define gr_vline gen_vline
 
 
 #define gr_urect \
-   ((void (*)(short x0,short y0,short x1,short y1))grd_canvas_table[DRAW_URECT])
+   ((void (*)(int16_t x0,int16_t y0,int16_t x1,int16_t y1))grd_canvas_table[DRAW_URECT])
 #define gr_rect \
-   ((int  (*)(short x0,short y0,short x1,short y1))grd_canvas_table[DRAW_RECT])
+   ((int32_t  (*)(int16_t x0,int16_t y0,int16_t x1,int16_t y1))grd_canvas_table[DRAW_RECT])
 #define gr_ubox \
-   ((void (*)(short x0,short y0,short x1,short y1))grd_canvas_table[DRAW_UBOX])
+   ((void (*)(int16_t x0,int16_t y0,int16_t x1,int16_t y1))grd_canvas_table[DRAW_UBOX])
 #define gr_box \
-   ((int (*)(short x0,short y0,short x1,short y1))grd_canvas_table[DRAW_BOX])
+   ((int32_t (*)(int16_t x0,int16_t y0,int16_t x1,int16_t y1))grd_canvas_table[DRAW_BOX])
 #endif /* !__GRRECT_H */

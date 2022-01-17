@@ -57,7 +57,7 @@ errtype tng_plain_destroy(TNG *ptng);
 errtype tng_plain_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG
-int tng_plain_getvalue(TNG *ptng);
+int32_t tng_plain_getvalue(TNG *ptng);
 
 // Macros
 #define TNG_PL(ptng) ((TNG_plain *)(ptng->type_data))

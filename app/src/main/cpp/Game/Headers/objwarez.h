@@ -55,7 +55,7 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-	ubyte version;
+	uint8_t version;
 } ObjHardware;
 
 typedef struct {
@@ -69,8 +69,8 @@ typedef struct {
 		ObjSpecID headfree;
 	};
 	ObjSpecID prev;
-	ubyte version;
-	short data_munge;
+	uint8_t version;
+	int16_t data_munge;
 } ObjSoftware;
 
 #define SOFTWARE_SECURITY(specid) ((objSoftwares[(specid)].data_munge & 0xF000) >> 12)
@@ -80,56 +80,56 @@ typedef struct {
 // Class Typedefs
 
 typedef struct DrugProp {
-   ubyte intensity;
-   ubyte delay;
-   ubyte duration;
-   int   effect;
-   int   side_effect;      // should we do a big case statement - therefore this is not needed
-   int   after_effect;
-   short flags;            // cyberspace?
+   uint8_t intensity;
+   uint8_t delay;
+   uint8_t duration;
+   int32_t   effect;
+   int32_t   side_effect;      // should we do a big case statement - therefore this is not needed
+   int32_t   after_effect;
+   int16_t flags;            // cyberspace?
 } DrugProp;
 
 typedef struct HardwareProp {
-   short flags;               // activated, damaged??
+   int16_t flags;               // activated, damaged??
 } HardwareProp;
 
 typedef struct SoftwareProp {
-   short flags;               // none right now.
+   int16_t flags;               // none right now.
 } SoftwareProp;
 
 // Subclass Typedefs
 typedef struct StatsDrugProp {
-   short effectiveness;
-   ubyte sound_effect_num;  // or whatever
-   int   duration;
+   int16_t effectiveness;
+   uint8_t sound_effect_num;  // or whatever
+   int32_t   duration;
 } StatsDrugProp;
 
 typedef struct GoggleHardwareProp {
-   ubyte dummy;
+   uint8_t dummy;
 } GoggleHardwareProp;
 
 typedef struct HardwareHardwareProp {
-   short target_flag;
+   int16_t target_flag;
 } HardwareHardwareProp;
 
 typedef struct OffenseSoftwareProp {
-   ubyte damage;
+   uint8_t damage;
 } OffenseSoftwareProp;
 
 typedef struct DefenseSoftwareProp {
-   ubyte dummy;
+   uint8_t dummy;
 } DefenseSoftwareProp;
 
 typedef struct OneshotSoftwareProp {
-   ubyte dummy;
+   uint8_t dummy;
 } OneshotSoftwareProp;
 
 typedef struct MiscSoftwareProp {
-   ubyte dummy;
+   uint8_t dummy;
 } MiscSoftwareProp;
 
 typedef struct DataSoftwareProp {
-   ubyte dummy;
+   uint8_t dummy;
 } DataSoftwareProp;
 
 // Drug

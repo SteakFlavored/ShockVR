@@ -46,16 +46,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Prototypes
 
 // Loads or saves a game named by fname.
-//KLC - following is Mac version		errtype copy_file(char *src_fname, char *dest_fname);
-errtype copy_file(FSSpec *srcFile, FSSpec *destFile, Boolean saveGameFile);
-//KLC - following is Mac version 		errtype save_game(char *fname, char *comment);
+//KLC - following is Mac version		errtype copy_file(int8_t *src_fname, int8_t *dest_fname);
+errtype copy_file(FSSpec *srcFile, FSSpec *destFile, bool saveGameFile);
+//KLC - following is Mac version 		errtype save_game(int8_t *fname, int8_t *comment);
 errtype save_game(FSSpec *fSpec);
-//KLC - following is Mac version 		errtype load_game(char *fname);
+//KLC - following is Mac version 		errtype load_game(int8_t *fname);
 errtype load_game(FSSpec *loadSpec);
-errtype write_level_to_disk(int idnum, bool flush_mem);
-bool create_initial_game_func(short keycode, ulong context, void* data);
-bool create_level_archive_func(short keycode, ulong context, void* data);
-errtype load_level_from_file(int level_num);
+errtype write_level_to_disk(int32_t idnum, bool flush_mem);
+bool create_initial_game_func(int16_t keycode, uint32_t context, void* data);
+bool create_level_archive_func(int16_t keycode, uint32_t context, void* data);
+errtype load_level_from_file(int32_t level_num);
 void startup_game(bool visible);
 void closedown_game(bool visible);
 

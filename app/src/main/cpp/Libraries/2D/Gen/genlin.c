@@ -80,9 +80,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    drawer with the preferred (v0, v1, fill) interface
  */
 
-int gen_fix_line (fix x0, fix y0, fix x1, fix y1)
+int32_t gen_fix_line (fix x0, fix y0, fix x1, fix y1)
 {
-   int r;
+   int32_t r;
    grs_vertex v0, v1;
 
    v0.x = x0; v0.y = y0;
@@ -93,9 +93,9 @@ int gen_fix_line (fix x0, fix y0, fix x1, fix y1)
    return r;
 }
 
-int gri_line_clip_fill (long c, long parm, grs_vertex *v0, grs_vertex *v1)
+int32_t gri_line_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
 {
-   int r;
+   int32_t r;
    grs_vertex u0, u1;
 
    u0.x = v0->x; u0.y = v0->y;

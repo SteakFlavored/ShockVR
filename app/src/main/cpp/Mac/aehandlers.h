@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void				DoAEInstallation(void);
 OSErr 			RequiredCheck(AppleEvent *theAppleEvent);
-pascal OSErr	HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *reply, long myRefCon);
-pascal OSErr	HandleODOC(AppleEvent *theAppleEvent, AppleEvent *reply, long myRefCon);
-pascal OSErr	HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *reply, long myRefCon);
-pascal OSErr	HandleQUIT(AppleEvent *theAppleEvent, AppleEvent *reply, long myRefCon);
+pascal OSErr	HandleOAPP(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
+pascal OSErr	HandleODOC(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
+pascal OSErr	HandlePDOC(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);
+pascal OSErr	HandleQUIT(AppleEvent *theAppleEvent, AppleEvent *reply, int32_t myRefCon);

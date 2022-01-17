@@ -25,21 +25,21 @@
 ;
 
 	; global variables
-	
+
 	; external functions
-	
+
 	csect
-	
-	
+
+
 ;---------------------------------------------------
-; int opaque_lit_per_hscan_Loop_PPC();  C++ routine
+; int32_t opaque_lit_per_hscan_Loop_PPC();  C++ routine
 ;---------------------------------------------------
 		EXPORT	.opaque_lit_per_hscan_Loop_PPC
 ;		EXPORT	.opaque_lit_per_hscan_Loop_PPC__FillPlPlPPUcPlPilPliiilPUciPUc
-	
+
 	.opaque_lit_per_hscan_Loop_PPC:
 ;	.opaque_lit_per_hscan_Loop_PPC__FillPlPlPPUcPlPilPliiilPUciPUc:
-	
+
 	stmw     r16,-68(SP)
 	lwz      r17,56(SP)
 	lwz      r16,60(SP)
@@ -58,7 +58,7 @@
 	lwz      r30,0(r10)
 
 	mtctr	 r3
-	
+
 Loop:
 	srawi    r11,r29,16
 	sraw     r12,r28,r19
@@ -76,17 +76,17 @@ Loop:
 	addi     r26,r26,1
 	cmpw	 r31,r30
 	stb      r11,0(r12)
-	
+
 	beq+	 Equal
 	add		 r26,r26,r23
-	
+
 Equal:
 	add      r29,r29,r4
 	add      r28,r28,r5
 	add      r27,r27,r17
 
 	bdnz     Loop
-	
+
 	stw      r29,0(r6)
 	stw      r28,0(r7)
 	stw      r25,0(r9)
@@ -95,14 +95,14 @@ Equal:
 	stw      r30,0(r10)
 	lmw      r16,-68(SP)
 	blr
-	
-	
+
+
 ;---------------------------------------------------
-; int opaque_lit_per_vscan_Loop_PPC();  C++ routine
+; int32_t opaque_lit_per_vscan_Loop_PPC();  C++ routine
 ;---------------------------------------------------
 		EXPORT	.opaque_lit_per_vscan_Loop_PPC
 ;		EXPORT	.opaque_lit_per_vscan_Loop_PPC__FillPlPlPPUcPlPilPliiilPUciPUc
-	
+
 	.opaque_lit_per_vscan_Loop_PPC:
 ;	.opaque_lit_per_vscan_Loop_PPC__FillPlPlPPUcPlPilPliiilPUciPUc:
 
@@ -123,7 +123,7 @@ Equal:
 	lwz      r29,0(r8)
 	lwz      r30,0(r10)
 	lis		 r15,-1
-	
+
 	mtctr	 r3
 Loop2:
 	sraw     r12,r27,r19
@@ -140,11 +140,11 @@ Loop2:
 	add      r25,r25,r21
 	srawi    r30,r25,16
 ;	cmpw     r31,r30
-	
+
 ;	beq+     Equal2
 	sub      r12,r31,r30
 	sub      r29,r29,r12
-	
+
 Equal2:
 	add      r29,r29,r23
 	add      r28,r28,r4
@@ -152,7 +152,7 @@ Equal2:
 	add      r26,r26,r17
 
 	bdnz     Loop2
-	
+
 	stw      r28,0(r6)
 	stw      r27,0(r7)
 	stw      r25,0(r9)
@@ -161,5 +161,5 @@ Equal2:
 	stw      r30,0(r10)
 	lmw      r16,-64(SP)
 	blr
-	
+
 

@@ -46,11 +46,11 @@ ShockPrefs		gShockPrefs;
 //--------------------
 //  Externs
 //--------------------
-extern char		which_lang;
+extern int8_t		which_lang;
 extern bool 		sfx_on;
-extern int 			_fr_global_detail;
-extern Boolean	DoubleSize;
-extern Boolean	SkipLines;
+extern int32_t 			_fr_global_detail;
+extern bool	DoubleSize;
+extern bool	SkipLines;
 
 
 //--------------------------------------------------------------------
@@ -85,9 +85,9 @@ OSErr LoadPrefs(ResType resID)
 {
 	OSErr					err;
 	Handle					prefHdl;
-	short						prefVRef;
-	long						prefParID;
-	short						fRef;
+	int16_t						prefVRef;
+	int32_t						prefParID;
+	int16_t						fRef;
 	HParamBlockRec		info;
 
 	err = GetPrefsDir(&prefVRef, &prefParID);
@@ -139,9 +139,9 @@ OSErr SavePrefs(ResType resID)
 {
 	OSErr		err;
 	Handle		prefHdl;
-	short			prefVRef;
-	long			prefParID;
-	short			fRef;
+	int16_t			prefVRef;
+	int32_t			prefParID;
+	int16_t			fRef;
 
 	err = GetPrefsDir(&prefVRef, &prefParID);
 	if (err == noErr)
@@ -172,10 +172,10 @@ OSErr SavePrefs(ResType resID)
 //--------------------------------------------------------------------
 //	  Get a reference to the Preferences folder.
 //--------------------------------------------------------------------
-OSErr GetPrefsDir(short *vRef, long *parID)
+OSErr GetPrefsDir(int16_t *vRef, int32_t *parID)
 {
 	OSErr	err;
-	long		fm;
+	int32_t		fm;
 
 	err = Gestalt(gestaltFindFolderAttr, &fm);
 	err |= (fm & (1 << gestaltFindFolderPresent)) == 0;

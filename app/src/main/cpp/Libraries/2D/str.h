@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: str.h $
  * Revision 1.5  1994/04/09  00:31:21  lmfeeney
  * added new height and wrapping routines, added #defines
- * for compatibility with string and char routines taking
+ * for compatibility with string and int8_t routines taking
  * grs_font * as first arg
  *
  * Revision 1.4  1993/06/02  21:29:21  kaboom
@@ -46,20 +46,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* prototypes for non-table driven string handling routines. */
-extern void gr_font_string_size (grs_font *f, char *s, short *w, short *h);
-extern void gr_font_string_nsize (grs_font *f, char *s, int n, short *w, short *h);
-extern short gr_font_string_width (grs_font *f, char *s);
-extern short gr_font_string_nwidth (grs_font *f, char *s, int n);
-extern short gr_font_string_height (grs_font *f, char *s);
-extern short gr_font_string_nheight (grs_font *f, char *s, int n);
-extern void gr_font_string_uclear (grs_font *f, char *s, short x, short y);
-extern int gr_font_string_clear (grs_font *f, char *s, short x, short y);
-extern short gr_font_char_width (grs_font *f, char c);
-extern void gr_font_char_size (grs_font *f, char c, short *w, short *h);
-extern void gr_font_char_uclear (grs_font *f, char c, short x, short y);
-extern int gr_font_char_clear (grs_font *f, char c, short x, short y);
-extern int gr_font_string_wrap (grs_font *pfont, char *ps, short width);
-extern void gr_font_string_unwrap (char *s);
+extern void gr_font_string_size (grs_font *f, int8_t *s, int16_t *w, int16_t *h);
+extern void gr_font_string_nsize (grs_font *f, int8_t *s, int32_t n, int16_t *w, int16_t *h);
+extern int16_t gr_font_string_width (grs_font *f, int8_t *s);
+extern int16_t gr_font_string_nwidth (grs_font *f, int8_t *s, int32_t n);
+extern int16_t gr_font_string_height (grs_font *f, int8_t *s);
+extern int16_t gr_font_string_nheight (grs_font *f, int8_t *s, int32_t n);
+extern void gr_font_string_uclear (grs_font *f, int8_t *s, int16_t x, int16_t y);
+extern int32_t gr_font_string_clear (grs_font *f, int8_t *s, int16_t x, int16_t y);
+extern int16_t gr_font_char_width (grs_font *f, int8_t c);
+extern void gr_font_char_size (grs_font *f, int8_t c, int16_t *w, int16_t *h);
+extern void gr_font_char_uclear (grs_font *f, int8_t c, int16_t x, int16_t y);
+extern int32_t gr_font_char_clear (grs_font *f, int8_t c, int16_t x, int16_t y);
+extern int32_t gr_font_string_wrap (grs_font *pfont, int8_t *ps, int16_t width);
+extern void gr_font_string_unwrap (int8_t *s);
 
 /* use the current font */
 

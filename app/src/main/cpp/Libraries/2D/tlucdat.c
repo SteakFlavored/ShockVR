@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "LG.h"
 
-uchar *tluc8tab[256];
-uchar *tluc8ltab[256];
-uchar *tluc8stab;
-int tluc8nstab = 0;
+uint8_t *tluc8tab[256];
+uint8_t *tluc8ltab[256];
+uint8_t *tluc8stab;
+int32_t tluc8nstab = 0;

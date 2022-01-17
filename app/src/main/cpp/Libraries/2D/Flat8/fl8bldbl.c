@@ -45,10 +45,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void flat8_flat8_v_double_ubitmap(grs_bitmap *bm)
 {
-   int   i,j,bpv, row, b_row;                      /* loop controls, bottom pixel value */
-   uchar *src=bm->bits, *dst=grd_bm.bits, *src_nxt, *dst_nxt;
-   int   dst_skip=grd_bm.row-bm->w,src_skip=bm->row-bm->w;
-   uchar *local_grd_half_blend;
+   int32_t   i,j,bpv, row, b_row;                      /* loop controls, bottom pixel value */
+   uint8_t *src=bm->bits, *dst=grd_bm.bits, *src_nxt, *dst_nxt;
+   int32_t   dst_skip=grd_bm.row-bm->w,src_skip=bm->row-bm->w;
+   uint8_t *local_grd_half_blend;
 
    local_grd_half_blend = grd_half_blend;
    row = grd_bm.row;
@@ -76,14 +76,14 @@ void flat8_flat8_v_double_ubitmap(grs_bitmap *bm)
 #define LOG_QSB_SIZE 2
 #define D_ROW 8*QSB_SIZE
 
-uchar *grd_last_sub_bm;
-uchar grd_sub_bm_buffer[D_ROW*D_ROW];
+uint8_t *grd_last_sub_bm;
+uint8_t grd_sub_bm_buffer[D_ROW*D_ROW];
 
-void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int u, int v);
-void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int u, int v)
+void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int32_t u, int32_t v);
+void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int32_t u, int32_t v)
 {
-   int i,j,full_h_blend;
-   uchar *src,*dst;
+   int32_t i,j,full_h_blend;
+   uint8_t *src,*dst;
 
    if (grd_log_blend_levels!=2) {
       gr_free_blend();
@@ -121,7 +121,7 @@ void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, i
             dst[0]=dst[1]=dst[2]=dst[3]=src[j];
             dst+=4;
          } else {
-            int k=(src[j+1])|(src[j]<<8);
+            int32_t k=(src[j+1])|(src[j]<<8);
             dst[0]=src[j];
             dst[1]=grd_blend[k];
             dst[2]=grd_blend[k+GR_BLEND_TABLE_SIZE];
@@ -139,7 +139,7 @@ void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, i
    {
       for (j=0; j<4*QSB_SIZE; j++)
       {
-         int k=(dst[j+4*D_ROW])|(dst[j]<<8);
+         int32_t k=(dst[j+4*D_ROW])|(dst[j]<<8);
          dst[j+D_ROW]=grd_blend[k];
          dst[j+2*D_ROW]=grd_blend[k+GR_BLEND_TABLE_SIZE];
          dst[j+3*D_ROW]=grd_blend[k+2*GR_BLEND_TABLE_SIZE];
@@ -178,11 +178,11 @@ void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, i
 #define DSB_SIZE 8
 #define LOG_DSB_SIZE 3
 
-void gri_flat8_hv_double_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int u, int v);
-void gri_flat8_hv_double_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int u, int v)
+void gri_flat8_hv_double_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int32_t u, int32_t v);
+void gri_flat8_hv_double_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int32_t u, int32_t v)
 {
-   int i,j,full_h_blend;
-   uchar *src,*dst;
+   int32_t i,j,full_h_blend;
+   uint8_t *src,*dst;
 
    if (grd_log_blend_levels!=2) {
       gr_free_blend();
@@ -220,7 +220,7 @@ void gri_flat8_hv_double_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int 
             dst[0]=dst[1]=src[j];
             dst+=2;
          } else {
-            int k=(src[j+1])|(src[j]<<8);
+            int32_t k=(src[j+1])|(src[j]<<8);
             dst[0]=src[j];
             dst[1]=grd_half_blend[k];
             dst+=2;
@@ -236,7 +236,7 @@ void gri_flat8_hv_double_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int 
    {
       for (j=0; j<2*DSB_SIZE; j++)
       {
-         int k=(dst[j+2*D_ROW])|(dst[j]<<8);
+         int32_t k=(dst[j+2*D_ROW])|(dst[j]<<8);
          dst[j+D_ROW]=grd_half_blend[k];
       }
       dst+=2*D_ROW;

@@ -33,26 +33,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "pertyp.h"
 
 /* pixel primitives */
-extern void flat8_set_upixel(long color, short x, short y);
-extern void flat8_clut_set_upixel (long color, short x, short y);
-extern void flat8_xor_set_upixel (long color, short x, short y);
-extern void flat8_blend_set_upixel (long color, short x, short y);
-extern void flat8_solid_set_upixel (long color, short x, short y);
+extern void flat8_set_upixel(int32_t color, int16_t x, int16_t y);
+extern void flat8_clut_set_upixel (int32_t color, int16_t x, int16_t y);
+extern void flat8_xor_set_upixel (int32_t color, int16_t x, int16_t y);
+extern void flat8_blend_set_upixel (int32_t color, int16_t x, int16_t y);
+extern void flat8_solid_set_upixel (int32_t color, int16_t x, int16_t y);
 
 /* blit primitives */
 #if (defined(powerc) || defined(__powerc))
-extern void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y);
+extern void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
 #else
-extern asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y);
+extern asm void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
 #endif
 
-extern void flat8_tluc8_ubitmap (grs_bitmap *bm, short x, short y);
-extern int gri_flat8_mask_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten);
-extern void gri_flat8_clut_ubitmap (grs_bitmap *bm, short x, short y, uchar *cl);
-extern int gri_flat8_mask_fill_clut_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten);
-extern void gri_flat8_fill_clut_ubitmap (grs_bitmap *bm, short x, short y);
-extern void gri_flat8_rsd8_ubitmap(grs_bitmap *bm, short x, short y);
-extern int gri_flat8_rsd8_bitmap (grs_bitmap *bm, short x_left, short y_top);
+extern void flat8_tluc8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
+extern int32_t gri_flat8_mask_bitmap(grs_bitmap *bm, int16_t x, int16_t y, grs_stencil *sten);
+extern void gri_flat8_clut_ubitmap (grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl);
+extern int32_t gri_flat8_mask_fill_clut_bitmap(grs_bitmap *bm, int16_t x, int16_t y, grs_stencil *sten);
+extern void gri_flat8_fill_clut_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
+extern void gri_flat8_rsd8_ubitmap(grs_bitmap *bm, int16_t x, int16_t y);
+extern int32_t gri_flat8_rsd8_bitmap (grs_bitmap *bm, int16_t x_left, int16_t y_top);
 
 /* inner loop initializers */
 /* normal fill: */
@@ -102,10 +102,10 @@ extern void gri_trans_clut_per_umap_hscan_init(grs_bitmap *bm, grs_per_setup *ps
 extern void gri_opaque_clut_per_umap_vscan_init(grs_bitmap *bm, grs_per_setup *ps);
 extern void gri_trans_clut_per_umap_vscan_init(grs_bitmap *bm, grs_per_setup *ps);
 
-extern int gri_opaque_scale_umap_init(grs_tmap_loop_info *tli);
-extern int gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert);
-extern int gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli);
-extern int gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli);
+extern int32_t gri_opaque_scale_umap_init(grs_tmap_loop_info *tli);
+extern int32_t gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert);
+extern int32_t gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli);
+extern int32_t gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli);
 
 extern void gri_poly_init (grs_tmap_loop_info *ti);
 extern void gri_spoly_init (grs_tmap_loop_info *ti);
@@ -127,8 +127,8 @@ extern void gri_trans_solid_floor_umap_init(grs_tmap_loop_info *ti);
 extern void gri_trans_solid_wall_umap_init(grs_tmap_loop_info *ti);
 extern void gri_trans_solid_per_umap_hscan_init(grs_bitmap *bm, grs_per_setup *ps);
 extern void gri_trans_solid_per_umap_vscan_init(grs_bitmap *bm, grs_per_setup *ps);
-extern int gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **vert);
-extern int gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert);
+extern int32_t gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **vert);
+extern int32_t gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert);
 
 /* translucent bitmaps */
 extern void gri_tluc8_opaque_lin_umap_init(grs_tmap_loop_info *tli);

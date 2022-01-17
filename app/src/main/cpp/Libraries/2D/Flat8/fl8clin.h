@@ -63,19 +63,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    fix dx, dy;			/* deltas in x and y */
    fix t;                       /* tmp */
 
-   uchar r0, g0, b0, r1, g1, b1; /* rgb values of endpt colors */
+   uint8_t r0, g0, b0, r1, g1, b1; /* rgb values of endpt colors */
    fix r,g,b;			/* current intensities */
    fix dr, dg, db;		/* deltas for each of rgb */
-   long i;			/* color index */
+   int32_t i;			/* color index */
 
-   uchar *p;			/* ptr into canvas */
+   uint8_t *p;			/* ptr into canvas */
 
 
    x0 = v0->x; y0 = v0->y;
    x1 = v1->x; y1 = v1->y;
 
-   r0 = (uchar) (v0->u); g0 = (uchar) (v0->v); b0 = (uchar) (v0->w);
-   r1 = (uchar) (v1->u); g1 = (uchar) (v1->v); b1 = (uchar) (v1->w);
+   r0 = (uint8_t) (v0->u); g0 = (uint8_t) (v0->v); b0 = (uint8_t) (v0->w);
+   r1 = (uint8_t) (v1->u); g1 = (uint8_t) (v1->v); b1 = (uint8_t) (v1->w);
 
    /* set endpoints
       note that this cannot go negative or change octant, since the ==

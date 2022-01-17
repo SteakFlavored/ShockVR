@@ -41,26 +41,26 @@ void gri_trans_per_umap_vscan_init(grs_bitmap *bm, grs_per_setup *ps);
 
 // 68K stuff
 #if !(defined(powerc) || defined(__powerc))
-asm void trans_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_y_fix, int *y_cint);
-asm void trans_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_x_fix, int *x_cint);
+asm void trans_per_hscan_68K_Loop(int32_t dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_y_fix, int32_t *y_cint);
+asm void trans_per_vscan_68K_Loop(int32_t dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_x_fix, int32_t *x_cint);
 
 // 68k globals
-int 	t_l_u_mask,t_l_v_mask,t_l_v_shift;
-uchar *t_bm_bits;
+int32_t 	t_l_u_mask,t_l_v_mask,t_l_v_shift;
+uint8_t *t_bm_bits;
 fix 	t_l_scan_slope;
-int		t_gr_row;
+int32_t		t_gr_row;
 
 #endif
 
 void gri_trans_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-   register int k,y_cint;
-   uchar *p,temp_pix;
+   register int32_t k,y_cint;
+   uint8_t *p,temp_pix;
 
 	 // locals used to speed PPC code
 	 fix	l_u,l_v,l_du,l_dv,l_y_fix,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
-	 int	l_x,l_xl,l_xr,l_xr0,l_u_mask,l_v_mask,l_v_shift;
-	 int	gr_row,temp_y;
-	 uchar *bm_bits;
+	 int32_t	l_x,l_xl,l_xr,l_xr0,l_u_mask,l_v_mask,l_v_shift;
+	 int32_t	gr_row,temp_y;
+	 uint8_t *bm_bits;
 
 	 gr_row = grd_bm.row;
 	 bm_bits = bm->bits;
@@ -108,7 +108,7 @@ void gri_trans_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
       fix test=l_x*l_dyl-y_cint*l_dxl+pi->cl;
       for (;l_x<l_xl;l_x++) {
          if (test<=0) {
-            int k=(l_u>>16)&l_u_mask;
+            int32_t k=(l_u>>16)&l_u_mask;
             k+=(l_v>>l_v_shift)&l_v_mask;
             if (temp_pix=bm_bits[k]) *p=temp_pix;		// gr_fill_upixel(bm_bits[k],l_x,y_cint);
          }
@@ -127,7 +127,7 @@ void gri_trans_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 
 #if (defined(powerc) || defined(__powerc))
    for (;l_x<l_xr0;l_x++) {
-      int k=(l_u>>16)&l_u_mask;
+      int32_t k=(l_u>>16)&l_u_mask;
       k+=(l_v>>l_v_shift)&l_v_mask;
       if (temp_pix=bm_bits[k]) *p=temp_pix;		// gr_fill_upixel(bm_bits[k],l_x,y_cint);
       temp_y = y_cint;
@@ -158,7 +158,7 @@ void gri_trans_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
    		p=grd_bm.bits+l_x+y_cint*grd_bm.row;
       for (;l_x<l_xr;l_x++) {
          if (test>=0) {
-            int k=(l_u>>16)&l_u_mask;
+            int32_t k=(l_u>>16)&l_u_mask;
             k+=(l_v>>l_v_shift)&l_v_mask;
             if (temp_pix=bm_bits[k]) *p=temp_pix;		// gr_fill_upixel(bm_bits[k],l_x,y_cint);
          }
@@ -184,10 +184,10 @@ void gri_trans_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 }
 
 #if !(defined(powerc) || defined(__powerc))
-asm void trans_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_y_fix, int *y_cint)
+asm void trans_per_hscan_68K_Loop(int32_t dx, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_y_fix, int32_t *y_cint)
  {
 /*   for (;l_x<l_xr0;l_x++) {
-      int k=(l_u>>16)&l_u_mask;
+      int32_t k=(l_u>>16)&l_u_mask;
       k+=(l_v>>l_v_shift)&l_v_mask;
       if (temp_pix=bm_bits[k]) *p=temp_pix;		// gr_fill_upixel(bm_bits[k],l_x,y_cint);
       temp_y = y_cint;
@@ -288,14 +288,14 @@ asm void trans_per_hscan_68K_Loop(int dx, fix l_du, fix l_dv, fix *l_u, fix *l_v
 
 
 void gri_trans_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-   register int k,x_cint;
+   register int32_t k,x_cint;
 
 	 // locals used to speed PPC code
 	 fix	l_dxr,l_x_fix,l_u,l_v,l_du,l_dv,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
-	 int	l_yl,l_yr0,l_yr,l_y,l_u_mask,l_v_mask,l_v_shift;
-	 int	gr_row,temp_x;
-	 uchar *bm_bits;
-	 uchar *p,temp_pix;
+	 int32_t	l_yl,l_yr0,l_yr,l_y,l_u_mask,l_v_mask,l_v_shift;
+	 int32_t	gr_row,temp_x;
+	 uint8_t *bm_bits;
+	 uint8_t *p,temp_pix;
 
 	 gr_row = grd_bm.row;
 	 bm_bits = bm->bits;
@@ -343,7 +343,7 @@ void gri_trans_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
       fix test=l_y*l_dxl-x_cint*l_dyl+pi->cl;
       for (;l_y<l_yl;l_y++) {
          if (test<=0) {
-            int k=(l_u>>16)&l_u_mask;
+            int32_t k=(l_u>>16)&l_u_mask;
             k+=(l_v>>l_v_shift)&l_v_mask;
             if (temp_pix=bm_bits[k]) *p=temp_pix;		// gr_fill_upixel(bm_bits[k],x_cint,l_y);
          }
@@ -365,7 +365,7 @@ void gri_trans_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 
 #if (defined(powerc) || defined(__powerc))
    for (;l_y<l_yr0;l_y++) {
-      int k=(l_u>>16)&l_u_mask;
+      int32_t k=(l_u>>16)&l_u_mask;
       k+=(l_v>>l_v_shift)&l_v_mask;
       if (temp_pix=bm_bits[k]) *p=temp_pix;		// gr_fill_upixel(bm_bits[k],x_cint,l_y);
 
@@ -397,7 +397,7 @@ void gri_trans_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
    		p=grd_bm.bits+x_cint+l_y*gr_row;
       for (;l_y<l_yr;l_y++) {
          if (test>=0) {
-            int k=(l_u>>16)&l_u_mask;
+            int32_t k=(l_u>>16)&l_u_mask;
             k+=(l_v>>l_v_shift)&l_v_mask;
             if (temp_pix=bm_bits[k]) *p=temp_pix;		// gr_fill_upixel(bm_bits[k],x_cint,l_y);
          }
@@ -427,10 +427,10 @@ void gri_trans_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 }
 
 #if !(defined(powerc) || defined(__powerc))
-asm void trans_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uchar **p, fix *l_x_fix, int *x_cint)
+asm void trans_per_vscan_68K_Loop(int32_t dy, fix l_du, fix l_dv, fix *l_u, fix *l_v, uint8_t **p, fix *l_x_fix, int32_t *x_cint)
  {
 /*    for (;l_y<l_yr0;l_y++) {
-      int k=(l_u>>16)&l_u_mask;
+      int32_t k=(l_u>>16)&l_u_mask;
       k+=(l_v>>l_v_shift)&l_v_mask;
       *p=bm_bits[k];		// gr_fill_upixel(bm_bits[k],x_cint,l_y);
 
@@ -509,8 +509,8 @@ asm void trans_per_vscan_68K_Loop(int dy, fix l_du, fix l_dv, fix *l_u, fix *l_v
 #endif
 
 
-extern void gri_per_umap_hscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps);
-extern void gri_per_umap_vscan(grs_bitmap *bm, int n, grs_vertex **vpl, grs_per_setup *ps);
+extern void gri_per_umap_hscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps);
+extern void gri_per_umap_vscan(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_per_setup *ps);
 
 void gri_trans_per_umap_hscan_init(grs_bitmap *bm, grs_per_setup *ps) {
    ps->shell_func=(void (*)()) gri_per_umap_hscan;

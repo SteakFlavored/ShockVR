@@ -60,58 +60,58 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern void grind_music_ai();
 
 
-uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
-uchar transition_table[NUM_TRANSITIONS];
-uchar layering_table[NUM_LAYERS][MAX_KEYS];
-uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
+uint8_t track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
+uint8_t transition_table[NUM_TRANSITIONS];
+uint8_t layering_table[NUM_LAYERS][MAX_KEYS];
+uint8_t key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
 
-char peril_bars = 0;
+int8_t peril_bars = 0;
 
-int new_theme = 0;
-int new_x,new_y;
-int old_bore;
-short mai_override = 0;
-uchar cyber_play = 255;
+int32_t new_theme = 0;
+int32_t new_x,new_y;
+int32_t old_bore;
+int16_t mai_override = 0;
+uint8_t cyber_play = 255;
 
-int layer_danger = 0;
-int layer_success = 0;
-int layer_transition = 0;
-int transition_count = 0;
-char tmode_time = 0;
-int actual_score = 0;
-uchar decon_count = 0;
-uchar decon_time = 8;
+int32_t layer_danger = 0;
+int32_t layer_success = 0;
+int32_t layer_transition = 0;
+int32_t transition_count = 0;
+int8_t tmode_time = 0;
+int32_t actual_score = 0;
+uint8_t decon_count = 0;
+uint8_t decon_time = 8;
 bool in_deconst = FALSE, old_deconst = FALSE;
 bool in_peril = FALSE;
 bool just_started = TRUE;
-int score_playing = 0;
-short curr_ramp_time, curr_ramp;
-char curr_prioritize, curr_crossfade;
+int32_t score_playing = 0;
+int16_t curr_ramp_time, curr_ramp;
+int8_t curr_prioritize, curr_crossfade;
 
 void musicai_clear();
-errtype mai_transition(int new_trans);
+errtype mai_transition(int32_t new_trans);
 
-extern errtype make_request(int chunk_num, int piece_ID);
-extern int digifx_volume_shift(short x, short y, short z, short phi, short theta, short basevol);
-extern int digifx_pan_shift(short x, short y, short z, short phi, short theta);
+extern errtype make_request(int32_t chunk_num, int32_t piece_ID);
+extern int32_t digifx_volume_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta, int16_t basevol);
+extern int32_t digifx_pan_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta);
 extern bool mai_semaphor;
 
-uchar park_random = 75;
-uchar park_playing = 0;
-uchar access_random = 45;
+uint8_t park_random = 75;
+uint8_t park_playing = 0;
+uint8_t access_random = 45;
 
-ulong last_damage_sum = 0;
-ulong last_vel_time =0;
+uint32_t last_damage_sum = 0;
+uint32_t last_vel_time =0;
 
 // Damage taken decay & quantity of decay
-int danger_hp_level = 10;
-int danger_damage_level = 40;
-int damage_decay_time = 300;
-int damage_decay_amount = 6;
-int mai_damage_sum = 0;
+int32_t danger_hp_level = 10;
+int32_t danger_damage_level = 40;
+int32_t damage_decay_time = 300;
+int32_t damage_decay_amount = 6;
+int32_t mai_damage_sum = 0;
 
 // How long an attack keeps us in combat music mode
-int mai_combat_length = 1000;
+int32_t mai_combat_length = 1000;
 
 bool bad_digifx = FALSE;
 
@@ -119,19 +119,19 @@ bool bad_digifx = FALSE;
 
 #define SMALL_ROBOT_LAYER  3
 
-char mlimbs_machine = 0;
+int8_t mlimbs_machine = 0;
 
 //------------------
 //  INTERNAL PROTOTYPES
 //------------------
 errtype musicai_shutdown();
 errtype musicai_reset(bool runai);
-int gen_monster(int monster_num);
+int32_t gen_monster(int32_t monster_num);
 
 
 errtype musicai_shutdown()
 {
-   int i;
+   int32_t i;
    for (i=0; i < MLIMBS_MAX_SEQUENCES -1; i++)
       current_request[i].pieceID = 255;
    MacTuneKillCurrentTheme();
@@ -160,7 +160,7 @@ void mlimbs_do_ai()
 //   extern bool mlimbs_semaphore;
    extern errtype check_asynch_ai(bool new_score_ok);
    extern ObjID damage_sound_id;
-   extern char damage_sound_fx;
+   extern int8_t damage_sound_fx;
 
 /*¥¥¥ Is this really necessary?  It's already called twice in fr_rend().
 #ifdef AUDIOLOGS
@@ -215,7 +215,7 @@ void mlimbs_do_ai()
 		if (global_fullmap->cyber)
 		{
 			MapElem 	*pme;
-			int			play_me;
+			int32_t			play_me;
 
 			pme = MAP_GET_XY(PLAYER_BIN_X, PLAYER_BIN_Y);				// Determine music for this
 			if (!me_bits_peril(pme))														// location in cyberspace.
@@ -243,7 +243,7 @@ void mlimbs_do_ai()
 		{
 			if (!global_fullmap->cyber)
 				check_asynch_ai(TRUE);
-			int	pid = current_request[0].pieceID;
+			int32_t	pid = current_request[0].pieceID;
 			if (pid != 255)										// If there is a theme to play,
 			{
 				MacTuneQueueTune(pid);						// Queue it up.
@@ -300,7 +300,7 @@ errtype mai_intro()
    return(OK);
 }
 
-errtype mai_monster_nearby(int monster_type)
+errtype mai_monster_nearby(int32_t monster_type)
 {
    if (music_on)
    {
@@ -365,7 +365,7 @@ errtype mlimbs_AI_init(void)
    return(OK);
 }
 
-errtype mai_transition(int new_trans)
+errtype mai_transition(int32_t new_trans)
 {
    if ((next_mode == TRANSITION_MODE) || (current_mode == TRANSITION_MODE))
       return(ERR_NOEFFECT);
@@ -384,14 +384,14 @@ errtype mai_transition(int new_trans)
    }
 //¥¥¥ temp
 /*
-char	msg[30];
+int8_t	msg[30];
 lg_sprintf(msg, "Transitioning:%d, mode:%d, count:%d", new_trans, next_mode, transition_count);
 message_info(msg);
 */
    return(OK);
 }
 
-int gen_monster(int monster_num)
+int32_t gen_monster(int32_t monster_num)
 {
    if (monster_num < 3)
       return(0);
@@ -400,11 +400,11 @@ int gen_monster(int monster_num)
    return(2);
 }
 
-int ext_rp = -1;
+int32_t ext_rp = -1;
 
 extern struct mlimbs_request_info default_request;
 
-errtype make_request(int chunk_num, int piece_ID)
+errtype make_request(int32_t chunk_num, int32_t piece_ID)
 {
 	current_request[chunk_num] = default_request;
 	current_request[chunk_num].pieceID = piece_ID;
@@ -419,7 +419,7 @@ errtype make_request(int chunk_num, int piece_ID)
 /*
 errtype load_score_from_cfg(FSSpec *specPtr)
 {
-	short  	filenum;
+	int16_t  	filenum;
 	Handle	binHdl;
 	Ptr		p;
 
@@ -446,9 +446,9 @@ errtype load_score_from_cfg(FSSpec *specPtr)
 }
 */
 
-int old_score;
+int32_t old_score;
 
-errtype fade_into_location(int x, int y)
+errtype fade_into_location(int32_t x, int32_t y)
 	{
 	MapElem *pme;
 
@@ -482,20 +482,20 @@ errtype fade_into_location(int x, int y)
 /*KLC - don't need
 errtype blank_theme_data()
 {
-   memset(track_table, 255, NUM_SCORES * SUPERCHUNKS_PER_SCORE * sizeof(uchar));
-   memset(transition_table, 255, NUM_TRANSITIONS * sizeof(uchar));
-   memset(layering_table, 255, NUM_LAYERS * MAX_KEYS * sizeof(uchar));
-   memset(key_table, 255, NUM_LAYERABLE_SUPERCHUNKS * KEY_BAR_RESOLUTION * sizeof(uchar));
+   memset(track_table, 255, NUM_SCORES * SUPERCHUNKS_PER_SCORE * sizeof(uint8_t));
+   memset(transition_table, 255, NUM_TRANSITIONS * sizeof(uint8_t));
+   memset(layering_table, 255, NUM_LAYERS * MAX_KEYS * sizeof(uint8_t));
+   memset(key_table, 255, NUM_LAYERABLE_SUPERCHUNKS * KEY_BAR_RESOLUTION * sizeof(uint8_t));
    return(OK);
 }
 */
 
 //¥¥¥ don't need?     bool voices_4op = FALSE;
 //¥¥¥ don't need?     bool digi_gain = FALSE;
-void load_score_guts(char score_playing)
+void load_score_guts(int8_t score_playing)
 {
-	int 		rv;
-	char 		base[20], temp[30];
+	int32_t 		rv;
+	int8_t 		base[20], temp[30];
 	FSSpec	themeSpec;
 
 	strcpy(base, "Theme");							// Get the theme file name.
@@ -518,11 +518,11 @@ message_info(temp);
 		DebugStr("\pLoad theme failed!");
 }
 
-errtype load_score_for_location(int x, int y)
+errtype load_score_for_location(int32_t x, int32_t y)
 {
    MapElem *pme;
-   char sc;
-   extern char old_bits;
+   int8_t sc;
+   extern int8_t old_bits;
 
    pme = MAP_GET_XY(x,y);
    sc = me_bits_music(pme);
@@ -570,22 +570,22 @@ errtype load_score_for_location(int x, int y)
 #define SFX_BUFFER_SIZE 8192
 //#define SFX_BUFFER_SIZE 4096
 
-static char *dev_suffix[]={"card","irq","dma","io","drq"};
-static char *dev_prefix[]={"midi_","digi_"};
+static int8_t *dev_suffix[]={"card","irq","dma","io","drq"};
+static int8_t *dev_prefix[]={"midi_","digi_"};
 
-short music_get_config(char *pre, char *suf)
+int16_t music_get_config(int8_t *pre, int8_t *suf)
 {
-   int tmp_in, dummy_count=1;
-   char buf[20];
+   int32_t tmp_in, dummy_count=1;
+   int8_t buf[20];
    strcpy(buf,pre);
    strcat(buf,suf);
    if (!config_get_value(buf, CONFIG_INT_TYPE, &tmp_in, &dummy_count))
       return -1;
    else
-      return (short)tmp_in;
+      return (int16_t)tmp_in;
 }
 
-audio_card *fill_audio_card(audio_card *cinf, short *dinf)
+audio_card *fill_audio_card(audio_card *cinf, int16_t *dinf)
 {
    cinf->type=dinf[DEV_CARD];      cinf->dname=NULL;
    cinf->io=dinf[DEV_IO];          cinf->irq=dinf[DEV_IRQ];
@@ -594,15 +594,15 @@ audio_card *fill_audio_card(audio_card *cinf, short *dinf)
 }
 
 #ifdef PLAYTEST
-static char def_sound_path[]="r:\\prj\\cit\\src\\sound";
+static int8_t def_sound_path[]="r:\\prj\\cit\\src\\sound";
 #else
-static char def_sound_path[]="sound";
+static int8_t def_sound_path[]="sound";
 #endif
 
 #ifdef SECRET_SUPPORT
 FILE *secret_fp=NULL;
-char secret_dc_buf[10000];
-volatile char secret_update=FALSE;
+int8_t secret_dc_buf[10000];
+volatile int8_t secret_update=FALSE;
 void secret_closedown(void)
 {
    if (secret_fp!=NULL)
@@ -619,13 +619,13 @@ void secret_closedown(void)
 errtype music_init()
 {
 /*¥¥¥ put in later
-   int i,j;
+   int32_t i,j;
    bool gm=FALSE;
-   short dev_info[DEV_TYPES][DEV_PARMS];
-   char s[64],path[64];
+   int16_t dev_info[DEV_TYPES][DEV_PARMS];
+   int8_t s[64],path[64];
    audio_card card_info;
-   extern uchar curr_sfx_vol;
-   extern char curr_vol_lev;
+   extern uint8_t curr_sfx_vol;
+   extern int8_t curr_vol_lev;
 
 #ifdef SECRET_SUPPORT
    if ((secret_fp=fopen("secret.ddb","wt"))!=NULL)
@@ -718,7 +718,7 @@ errtype music_init()
    {
       #include <conio.h>
       if ((dev_info[MIDI_CARD]==GENMIDI)&&(dev_info[DIGI_CARD]==SOUNDBLASTERPRO2)) {
-         int mod_loc=dev_info[DIGI_IO];      // loc, the io port to send too
+         int32_t mod_loc=dev_info[DIGI_IO];      // loc, the io port to send too
          if (mod_loc==-1) mod_loc=0x220;     // i know much secretness of destruction
          outp(mod_loc+4,0x83);     // such that def io is 220, which AIL wont
          outp(mod_loc+5,0xb);	   // tell me till later, when we init it

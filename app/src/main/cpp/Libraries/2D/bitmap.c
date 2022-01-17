@@ -77,16 +77,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grbm.h"
 #include "grmalloc.h"
 
-extern long		gScreenRowbytes;
+extern int32_t		gScreenRowbytes;
 
 /* initialize a new bitmap structure. set bits, type, flags, w, and h from
    arguments. set align to 0 and calculate row from width depending on what
    type of bitmap. */
-void gr_init_bm (grs_bitmap *bm, uchar *p, uchar type, ushort flags,
-                 short w, short h)
+void gr_init_bm (grs_bitmap *bm, uint8_t *p, uint8_t type, uint16_t flags,
+                 int16_t w, int16_t h)
  {
-	int row;
-  int v;
+	int32_t row;
+  int32_t v;
 
   /* calculate row from type and w. */
   switch (type) {
@@ -116,8 +116,8 @@ void gr_init_bm (grs_bitmap *bm, uchar *p, uchar type, ushort flags,
 /* set up a new bitmap structure to be a subsection of an existing bitmap.
    sbm is source bm, dbm destination. (0,0) of dbm maps to (x,y) of sbm,
    and dbm is w x h in size. */
-void gr_init_sub_bm (grs_bitmap *sbm, grs_bitmap *dbm, short x, short y,
-                     short w, short h)
+void gr_init_sub_bm (grs_bitmap *sbm, grs_bitmap *dbm, int16_t x, int16_t y,
+                     int16_t w, int16_t h)
 {
 	*dbm = *sbm; 	// memcpy (dbm, sbm, sizeof (*sbm));
 	dbm->w = w; dbm->h = h;
@@ -150,14 +150,14 @@ void gr_init_sub_bm (grs_bitmap *sbm, grs_bitmap *dbm, short x, short y,
    the specified type and flags of size w x h.  returns a pointer to the
    new bitmap structure.  the returned pointer can be freed in order to
    free both the structure and data memory. */
-grs_bitmap *gr_alloc_bitmap (uchar type, ushort flags, short w, short h)
+grs_bitmap *gr_alloc_bitmap (uint8_t type, uint16_t flags, int16_t w, int16_t h)
 {
   grs_bitmap tmp_bm;	  /* temporary space for bitmap init */
-	uchar *p;             /* pointer to allocated buffer */
+	uint8_t *p;             /* pointer to allocated buffer */
 
 	gr_init_bitmap(&tmp_bm, NULL, type, flags, w, h);
-//	p=(uchar *)gr_malloc(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
-	p=(uchar *) NewPtr(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
+//	p=(uint8_t *)gr_malloc(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
+	p=(uint8_t *) NewPtr(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
 	if (p)
 	 {
 		tmp_bm.bits = p+sizeof(tmp_bm);

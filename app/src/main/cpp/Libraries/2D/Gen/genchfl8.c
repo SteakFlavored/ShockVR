@@ -47,12 +47,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* draw an unclipped, horizontally flipped flat 8 bitmap to a
    canvas. */
-void gen_clut_hflip_flat8_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl)
+void gen_clut_hflip_flat8_ubitmap(grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
-   short r;                   /* right x coordinate */
-   short b;                   /* bottom y coordinate */
-   short cur_x;               /* current x */
-   uchar *src;                /* pointer into source bitmap */
+   int16_t r;                   /* right x coordinate */
+   int16_t b;                   /* bottom y coordinate */
+   int16_t cur_x;               /* current x */
+   uint8_t *src;                /* pointer into source bitmap */
 
    if (cl == NULL) cl=gr_get_clut();
    r = x+bm->w-1;
@@ -64,14 +64,14 @@ void gen_clut_hflip_flat8_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl)
 }
 
 /* draw a clipped, horizontally flipped flat 8bitmap to a canvas. */
-int gen_clut_hflip_flat8_bitmap (grs_bitmap *bm, short x, short y, uchar *cl)
+int32_t gen_clut_hflip_flat8_bitmap (grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl)
 {
-   short w,h;
-   uchar *p;
-   short r;
-   short b;
-   int extra;
-   int code = CLIP_NONE;
+   int16_t w,h;
+   uint8_t *p;
+   int16_t r;
+   int16_t b;
+   int32_t extra;
+   int32_t code = CLIP_NONE;
 
    r = x+bm->w-1;
    b = y+bm->h-1;

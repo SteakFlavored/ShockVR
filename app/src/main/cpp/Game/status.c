@@ -66,39 +66,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct {
    bool     free;
-   int      *data;
-   uchar    height[MAX_BIO_LENGTH];
-   int      head;
+   int32_t      *data;
+   uint8_t    height[MAX_BIO_LENGTH];
+   int32_t      head;
    bool     tail;
-   uchar    tail_length;
-   uchar    color_length;
-   int      update_time;
-   int      counter;
-   int      max_value;
-   uchar    special;
+   uint8_t    tail_length;
+   uint8_t    color_length;
+   int32_t      update_time;
+   int32_t      counter;
+   int32_t      max_value;
+   uint8_t    special;
    bool     active;
 } bio_data_block;
 
 
 bool gBioInited = FALSE;
 
-//KLC - chg for new art   uchar status_background[(DIFF_BIO_WIDTH+4)*(DIFF_BIO_HEIGHT+2)];
-uchar status_background[(266+4)*(44+2)];
-uchar bio_data_buffer[NUM_BIO_TRACKS * sizeof(bio_data_block)];
+//KLC - chg for new art   uint8_t status_background[(DIFF_BIO_WIDTH+4)*(DIFF_BIO_HEIGHT+2)];
+uint8_t status_background[(266+4)*(44+2)];
+uint8_t bio_data_buffer[NUM_BIO_TRACKS * sizeof(bio_data_block)];
 
 #define FRAME_RATE_SCALE   20
 #define LOOPLINE_SCALE  0x2F
 
 bio_data_block    *bio_data;
 
-int bio_time_id;
+int32_t bio_time_id;
 
-int curr_bio_x, curr_bio_y;
-int curr_bio_w, curr_bio_h;
-short curr_bio_mode;
+int32_t curr_bio_x, curr_bio_y;
+int32_t curr_bio_w, curr_bio_h;
+int16_t curr_bio_mode;
 Ref curr_bio_ref;
 
-static uchar    track_colors[NUM_BIO_TRACKS]
+static uint8_t    track_colors[NUM_BIO_TRACKS]
 = {
       0x66,    // turquoise
       0x57,    // yellow green?
@@ -119,33 +119,33 @@ static grs_canvas bio_canvas;
 grs_bitmap bio_bitmap;
 
 #define BIO_BITMAP_SIZE ((GAMESCR_BIO_X + GAMESCR_BIO_WIDTH) * (GAMESCR_BIO_Y + GAMESCR_BIO_HEIGHT))
-uchar bio_bitmap_bits[BIO_BITMAP_SIZE];
+uint8_t bio_bitmap_bits[BIO_BITMAP_SIZE];
 #endif
 
 // Internal Prototype
 
-bool under_bio(int x);
-void ss_save_under_set_pixel(int color, short i, short j);
-void bio_set_pixel(int color, short x, short y);
-void bio_restore_pixel(grs_bitmap *bmp, short x, short y);
-void bio_vline(int color, int x, int y, int y1);
+bool under_bio(int32_t x);
+void ss_save_under_set_pixel(int32_t color, int16_t i, int16_t j);
+void bio_set_pixel(int32_t color, int16_t x, int16_t y);
+void bio_restore_pixel(grs_bitmap *bmp, int16_t x, int16_t y);
+void bio_vline(int32_t color, int32_t x, int32_t y, int32_t y1);
 void status_bio_update_screenmode();
-bool status_track_free(int track);
-bool status_track_active(int track);
-void status_track_activate(int track, bool active);
-void draw_lower_tracks(int track_number, int location);
+bool status_track_free(int32_t track);
+bool status_track_active(int32_t track);
+void status_track_activate(int32_t track, bool active);
+void draw_lower_tracks(int32_t track_number, int32_t location);
 void gamescr_bio_func(void);
 void diff_bio_func(void);
-void draw_one_location_tracks(int location);
-void draw_bio_height(int track_number, int draw_location);
+void draw_one_location_tracks(int32_t location);
+void draw_bio_height(int32_t track_number, int32_t draw_location);
 errtype clear_bio_tracks(void);
-void clear_tail(int track_number, int delete_location);
-int FIND_OVERLAP(int x, int y);
+void clear_tail(int32_t track_number, int32_t delete_location);
+int32_t FIND_OVERLAP(int32_t x, int32_t y);
 
 void (*bio_funcs[])(void) = {gamescr_bio_func, diff_bio_func};
 
 
-bool under_bio(int x)
+bool under_bio(int32_t x)
 {
       if ( ((x >= 16) && (x <= 22)) ||
 	   ((x >= 69) && (x <= 74)) ||
@@ -157,12 +157,12 @@ bool under_bio(int x)
 }
 
 // ---------------------------------------------------------
-// bio_set_pixel(int color, int x, int y)
+// bio_set_pixel(int32_t color, int32_t x, int32_t y)
 //
 // calls gr_set_pixel as normal, unless the biorhythms is
 // going "under" something
 
-void ss_save_under_set_pixel(int color, short i, short j)
+void ss_save_under_set_pixel(int32_t color, int16_t i, int16_t j)
 {
    extern LGPoint LastCursorPos;
 
@@ -170,7 +170,7 @@ void ss_save_under_set_pixel(int color, short i, short j)
       if ((LastCursorPos.x+SaveUnder.bm.w>i)&&(LastCursorPos.x<=i)) {
          if ((LastCursorPos.y+SaveUnder.bm.h>j)&&(LastCursorPos.y<=j)) {
             grs_bitmap *bm=(grs_bitmap *)(LastCursor->state);
-            int k=(i-LastCursorPos.x)+SaveUnder.bm.row*(j-LastCursorPos.y);
+            int32_t k=(i-LastCursorPos.x)+SaveUnder.bm.row*(j-LastCursorPos.y);
             SaveUnder.bm.bits[k]=color;
             k=(i-LastCursorPos.x)+bm->row*(j-LastCursorPos.y);
             if (bm->bits[k]) {
@@ -183,9 +183,9 @@ void ss_save_under_set_pixel(int color, short i, short j)
 //   mprintf("x:%i, y:%i, w:%i, h:%i\n",LastCursorPos.x,LastCursorPos.y,SaveUnder.bm.w,SaveUnder.bm.h);
 }
 
-void bio_set_pixel(int color, short x, short y)
+void bio_set_pixel(int32_t color, int16_t x, int16_t y)
 {
-   short x0,x1,y0,y1,i,j;
+   int16_t x0,x1,y0,y1,i,j;
 
 //KLC - don't need   if ((curr_bio_mode == DIFF_BIO) && (under_bio(x)))
 //      return;
@@ -204,12 +204,12 @@ void bio_set_pixel(int color, short x, short y)
 // ---------------------------------------------------------
 //  Restore the pixels from the offscreen background bitmap.
 // ---------------------------------------------------------
-void bio_restore_pixel(grs_bitmap *bmp, short x, short y)
+void bio_restore_pixel(grs_bitmap *bmp, int16_t x, int16_t y)
 {
-	int		x0, y0;
-	int		x1, y1;
-	uchar	*pp;
-	int		i, j;
+	int32_t		x0, y0;
+	int32_t		x1, y1;
+	uint8_t	*pp;
+	int32_t		i, j;
 
 	// Determine where x and y really are on the Mac screen.
 	x0 = SCONV_X(x); y0 = SCONV_Y(y);
@@ -229,25 +229,25 @@ void bio_restore_pixel(grs_bitmap *bmp, short x, short y)
 }
 
 // ---------------------------------------------------------
-// bio_vline(int x, int y, int y1)
+// bio_vline(int32_t x, int32_t y, int32_t y1)
 //
 // calls bio_vline as normal, unless the biorhythms is
 // going "under" something
 
-void bio_vline(int color, int x, int y, int y1)
+void bio_vline(int32_t color, int32_t x, int32_t y, int32_t y1)
 {
    if ((curr_bio_mode == DIFF_BIO) && (under_bio(x)))
       return;
 #ifdef SVGA_SUPPORT
    if (convert_use_mode != 0)
    {
-      short x0,x1,i,j;
+      int16_t x0,x1,i,j;
       x0 = SCONV_X(x);
       x1 = SCONV_X(x+1);
       y = SCONV_Y(y);
       y1 = SCONV_Y(y1);
       if (y>y1) {
-         int foo=y;
+         int32_t foo=y;
          y=y1;
          y1=foo;
       }
@@ -259,7 +259,7 @@ void bio_vline(int color, int x, int y, int y1)
 #endif
    {
       if (y>y1) {
-         int foo=y;
+         int32_t foo=y;
          y=y1;
          y1=foo;
       }
@@ -269,24 +269,24 @@ void bio_vline(int color, int x, int y, int y1)
 }
 
 // ---------------------------------------------------------
-// status_bio_set(short bio_mode)
+// status_bio_set(int16_t bio_mode)
 //
 // Tell the biorhythm code which screen we are on
 
-short bios_x[2] = { GAMESCR_BIO_X,  DIFF_BIO_X };
-short bios_y[2] = { GAMESCR_BIO_Y,  DIFF_BIO_Y };
-short bios_w[2] = { GAMESCR_BIO_WIDTH,  DIFF_BIO_WIDTH };
-short bios_h[2] = { GAMESCR_BIO_HEIGHT,  DIFF_BIO_HEIGHT };
+int16_t bios_x[2] = { GAMESCR_BIO_X,  DIFF_BIO_X };
+int16_t bios_y[2] = { GAMESCR_BIO_Y,  DIFF_BIO_Y };
+int16_t bios_w[2] = { GAMESCR_BIO_WIDTH,  DIFF_BIO_WIDTH };
+int16_t bios_h[2] = { GAMESCR_BIO_HEIGHT,  DIFF_BIO_HEIGHT };
 Ref bio_refs[2] = { GAMESCR_BIO_REF, DIFF_BIO_REF };
 
 grs_bitmap bio_background_bitmap;
 
-void status_bio_set(short bio_mode)
+void status_bio_set(int16_t bio_mode)
 {
    FrameDesc *f;
-   int      i;
+   int32_t      i;
 #ifdef SVGA_SUPPORT
-   uchar old_over = gr2ss_override;
+   uint8_t old_over = gr2ss_override;
 #endif
 
    curr_bio_mode = bio_mode;
@@ -313,7 +313,7 @@ void status_bio_set(short bio_mode)
    // let's try to do the right thing!
    bio_background_bitmap.bits = status_background;
 
-   memcpy(bio_background_bitmap.bits,(char *)(f+1),sizeof(char) * f->bm.w * f->bm.h);
+   memcpy(bio_background_bitmap.bits,(int8_t *)(f+1),sizeof(int8_t) * f->bm.w * f->bm.h);
 
    bio_data = (bio_data_block *) bio_data_buffer;
    for (i=0; i<NUM_BIO_TRACKS; i++)
@@ -369,7 +369,7 @@ void status_bio_end(void)
 
 void status_bio_draw(void)
 {
-   int               i;
+   int32_t               i;
 
    // Draw the background map
 //KLC - chg for new art   ss_bitmap(&bio_background_bitmap, STATUS_BIO_X, STATUS_BIO_Y);
@@ -384,17 +384,17 @@ void status_bio_draw(void)
 // -----------------------------------------------
 // Accessors for the "active" field.
 
-bool status_track_free(int track)
+bool status_track_free(int32_t track)
 {
    return bio_data[track].free;
 }
 
-bool status_track_active(int track)
+bool status_track_active(int32_t track)
 {
    return bio_data[track].active;
 }
 
-void status_track_activate(int track, bool active)
+void status_track_activate(int32_t track, bool active)
 {
    bio_data[track].active = active;
 }
@@ -414,11 +414,11 @@ void status_track_activate(int track, bool active)
 // Track the NULL pointer to clear out a track slot.
 //
 
-errtype status_bio_add(int *var, int max_value, int update_time, int track_number, int tail_length, uchar special)
+errtype status_bio_add(int32_t *var, int32_t max_value, int32_t update_time, int32_t track_number, int32_t tail_length, uint8_t special)
 {
    bio_data_block    *new_block;
-   uchar             value;
-   int               var_value;
+   uint8_t             value;
+   int32_t               var_value;
 
    if (var == NULL)     // are we trying to clear out a track slot??
    {
@@ -445,7 +445,7 @@ errtype status_bio_add(int *var, int max_value, int update_time, int track_numbe
       new_block = bio_data + track_number;
       new_block->free = FALSE;
       new_block->data = var;
-      memset(&(new_block->height), INVALID_HEIGHT, sizeof(uchar) * MAX_BIO_LENGTH);
+      memset(&(new_block->height), INVALID_HEIGHT, sizeof(uint8_t) * MAX_BIO_LENGTH);
 
       // We must first check if the variable is greater than max value, if so make it max_value
       var_value = (*var > max_value) ? max_value : *var;
@@ -478,7 +478,7 @@ errtype status_bio_add(int *var, int max_value, int update_time, int track_numbe
 
 errtype clear_bio_tracks()
 {
-   int i;
+   int32_t i;
    for (i=0; i < NUM_BIO_TRACKS; i++)
       status_bio_add(NULL,0,0,i,0,0);
    return(OK);
@@ -487,7 +487,7 @@ errtype clear_bio_tracks()
 extern void change_bio_vars(void);
 
 //#define FIND_OVERLAP(x,y) (((x) - y + STATUS_BIO_LENGTH) % STATUS_BIO_LENGTH)
-int FIND_OVERLAP(int x, int y)
+int32_t FIND_OVERLAP(int32_t x, int32_t y)
 {
    return (((x) - y + STATUS_BIO_LENGTH) % STATUS_BIO_LENGTH);
 }
@@ -519,14 +519,14 @@ void status_bio_synchronous()
 void status_bio_update(void)
 {
 #ifndef TIMING_CALLBACK_OFF
-   uchar             color;
-   int               i;
-   int               j;
+   uint8_t             color;
+   int32_t               i;
+   int32_t               j;
    bio_data_block    *curr_blk;
-   int               the_head;
-   long              color_base;
-   int               draw_location;
-   int               var_value;
+   int32_t               the_head;
+   int32_t              color_base;
+   int32_t               draw_location;
+   int32_t               var_value;
    static grs_canvas* old_canvas;
 
    if (!gBioInited)
@@ -647,16 +647,16 @@ void status_bio_update(void)
 // been set. We do this since we only draw_one_location_tracks
 // calls this function.
 
-void draw_bio_height(int track_number, int draw_location)
+void draw_bio_height(int32_t track_number, int32_t draw_location)
 {
    bio_data_block    *curr_blk;
-   long              color;
-   int      x;
-   int      y;
-   int      y1;
-   uchar    height;
-   int      prevHeight;
-   int      prevSpike;
+   int32_t              color;
+   int32_t      x;
+   int32_t      y;
+   int32_t      y1;
+   uint8_t    height;
+   int32_t      prevHeight;
+   int32_t      prevSpike;
 
    curr_blk = bio_data + track_number;
 
@@ -705,14 +705,14 @@ void draw_bio_height(int track_number, int draw_location)
 //  ground bitmap directly back onto the screen.  bio_restore_pixel() handles
 //  figuring out where to restore from.
 // ----------------------------------------------------------
-void clear_tail(int track_number, int delete_location)
+void clear_tail(int32_t track_number, int32_t delete_location)
 {
 	bio_data_block *curr_blk;
-	int         prevHeight;
-	int         prevLocation;
-	int         height;
-	int         x, y, y1;
-	int         i, delta, base;
+	int32_t         prevHeight;
+	int32_t         prevLocation;
+	int32_t         height;
+	int32_t         x, y, y1;
+	int32_t         i, delta, base;
 
 	curr_blk = bio_data + track_number;
 	prevLocation = FIND_OVERLAP(delete_location, 1);
@@ -756,9 +756,9 @@ void clear_tail(int track_number, int delete_location)
 // the biorhythm
 // use this to draw to preserve ordering of tracks (overlapping)
 
-void draw_one_location_tracks(int location)
+void draw_one_location_tracks(int32_t location)
 {
-   int      i;
+   int32_t      i;
 
    for (i=(NUM_BIO_TRACKS-1); i>=0; i--)
    {
@@ -776,9 +776,9 @@ void draw_one_location_tracks(int location)
 // number given. Saves a little work.
 //
 
-void draw_lower_tracks(int track_number, int location)
+void draw_lower_tracks(int32_t track_number, int32_t location)
 {
-   int      i;
+   int32_t      i;
 
    for (i=track_number;i>=0; i--)
    {
@@ -794,32 +794,32 @@ void draw_lower_tracks(int track_number, int location)
 #define SIN_MAG   20
 
 // Temporary biorhythm variables
-ulong time1 = 0;
-ulong time2 = 0;
-ulong time3 = 0;
-ulong time4 = 0;
-ulong time5 = 0;
-ulong time6 = 0;
-ulong time7 = 0;
-int bio_delta = 1;
-extern int diff_sum;
-extern int curr_ll;
+uint32_t time1 = 0;
+uint32_t time2 = 0;
+uint32_t time3 = 0;
+uint32_t time4 = 0;
+uint32_t time5 = 0;
+uint32_t time6 = 0;
+uint32_t time7 = 0;
+int32_t bio_delta = 1;
+extern int32_t diff_sum;
+extern int32_t curr_ll;
 
 // this simulates the heart beat!
-int test_bio_var = 10;
-int test_bio_var2 = 2;
+int32_t test_bio_var = 10;
+int32_t test_bio_var2 = 2;
 
 // this simulates the sine wave
-int test_bio_var3 = 19;
+int32_t test_bio_var3 = 19;
 
-int bio_energy_var;
+int32_t bio_energy_var;
 fix sinX = 0;
 fix sinChi = 0;
 
 void gamescr_bio_func(void)
 {
-   extern int rad_absorb,bio_absorb;
-   int i;
+   extern int32_t rad_absorb,bio_absorb;
+   int32_t i;
 
    clear_bio_tracks();
 
@@ -828,7 +828,7 @@ void gamescr_bio_func(void)
 
    status_bio_add(&bio_energy_var, MAX_ENERGY, 2, ENERGY_TRACK, 2, 0);
    {
-      short ver = player_struct.hardwarez[CPTRIP(ENV_HARD_TRIPLE)];
+      int16_t ver = player_struct.hardwarez[CPTRIP(ENV_HARD_TRIPLE)];
       if (ver >= 1)
          status_bio_add(&bio_absorb,24,2,BIOHAZARD_TRACK,3,BOTTOMLESS);
       if (ver >= 2)
@@ -851,14 +851,14 @@ void diff_bio_func(void)
    status_bio_add(&test_bio_var2,SIN_MAG, 4, 4, 3, 0);
 }
 
-uchar heart_beat = 0;
-ulong heart_time = 0;
-ulong heart_delay = 5;
+uint8_t heart_beat = 0;
+uint32_t heart_time = 0;
+uint32_t heart_delay = 5;
 bool flatline_heart;
 
-uchar chi_amp=STATUS_CHI_AMP;
+uint8_t chi_amp=STATUS_CHI_AMP;
 
-extern ubyte fatigue_threshold;
+extern uint8_t fatigue_threshold;
 
 #define FATIGUE_RANGE (CONTROL_MAX_VAL - SPRINT_CONTROL_THRESHOLD)
 #define ENERGY_ZERO 50
@@ -866,9 +866,9 @@ extern ubyte fatigue_threshold;
 void change_bio_vars(void)
 {
    // Demo for biorhythm
-   int      fatigue_ratio;
-   int      fatigue_amp;
-   int      chi_per;
+   int32_t      fatigue_ratio;
+   int32_t      fatigue_amp;
+   int32_t      chi_per;
 
    if ((*tmd_ticks - heart_time) > heart_delay)
    {
@@ -877,8 +877,8 @@ void change_bio_vars(void)
       case 0:
 
          {
-            int f = max(0,(player_struct.fatigue - (CIT_CYCLE*fatigue_threshold))/CIT_CYCLE);
-            int heart_ratio = 3400/(f+7);
+            int32_t f = max(0,(player_struct.fatigue - (CIT_CYCLE*fatigue_threshold))/CIT_CYCLE);
+            int32_t heart_ratio = 3400/(f+7);
             if (heart_ratio > 500)
                heart_ratio = 500;
             else if (heart_ratio < 90)
@@ -923,8 +923,8 @@ void change_bio_vars(void)
    }
    // bio_energy_var
    {
-      static ubyte energy_spike = 0;
-      static int last_val = 0;
+      static uint8_t energy_spike = 0;
+      static int32_t last_val = 0;
       if (bio_energy_var != last_val)
          energy_spike = 3;
       if (energy_spike == 0)

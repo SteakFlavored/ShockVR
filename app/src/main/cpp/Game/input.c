@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // lets get this somewhere else so we can get it in the manual or something, and not get warnings..
 #ifdef SPACEBALL_SUPPORT
-static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologies Inc.";
+static int8_t sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologies Inc.";
 #endif
 
 
@@ -119,7 +119,7 @@ extern frc *svga_render_context;
 // DEFINES
 // -------
 
-extern Boolean	DoubleSize;
+extern bool	DoubleSize;
 
 #define CFG_DCLICK_RATE_VAR "dclick_time"
 #define CFG_OOMPHOMETER     "throw_oomph"
@@ -129,9 +129,9 @@ extern Boolean	DoubleSize;
 #define CONTROL(x) (DOWN(x)|KB_FLAG_CTRL)
 #define ALT(x) (DOWN(x)|KB_FLAG_ALT)
 
-ubyte use_distance_mod = 0;
-ubyte pickup_distance_mod = 0;
-ubyte fatigue_threshold = 5;
+uint8_t use_distance_mod = 0;
+uint8_t pickup_distance_mod = 0;
+uint8_t fatigue_threshold = 5;
 
 #define MAX_FATIGUE 10000 // this is stolen from gamesys.c
 #define FATIGUE_COEFF CIT_CYCLE
@@ -145,16 +145,16 @@ ubyte fatigue_threshold = 5;
 #define sqr(x) ((x)*(x))
 
 extern LGRect target_screen_rect;
-extern int fr_get_at_raw(frc *fr, int x, int y, bool again, bool transp);
+extern int32_t fr_get_at_raw(frc *fr, int32_t x, int32_t y, bool again, bool transp);
 
 extern void mouse_unconstrain(void);
 
-char *get_object_lookname(ObjID id,char use_string[], int sz);
+int8_t *get_object_lookname(ObjID id,int8_t use_string[], int32_t sz);
 
 extern uiSlab fullscreen_slab;
 extern uiSlab main_slab;
 
-static ushort mouse_constrain_bits = 0;
+static uint16_t mouse_constrain_bits = 0;
 
 #define FIREKEY_CONSTRAIN_BIT 1
 #define LBUTTON_CONSTRAIN_BIT MOUSE_LDOWN
@@ -165,7 +165,7 @@ typedef struct _3d_mouse_stuff
 {
    bool ldown;
    bool rdown;
-   int  lastsect;
+   int32_t  lastsect;
    LGPoint lastleft;
    LGPoint lastright;
    frc *fr;
@@ -202,31 +202,31 @@ Ref motion_cursor_ids[] =                   {
 LGCursor motion_cursors[NUM_MOTION_CURSORS];
 grs_bitmap motion_cursor_bitmaps[NUM_MOTION_CURSORS];
 
-static uchar posture_keys[NUM_POSTURES] = { 't', 'g', 'b' } ;
+static uint8_t posture_keys[NUM_POSTURES] = { 't', 'g', 'b' } ;
 
-int input_cursor_mode = INPUT_NORMAL_CURSOR;
-int throw_oomph = 5;
+int32_t input_cursor_mode = INPUT_NORMAL_CURSOR;
+int32_t throw_oomph = 5;
 
 bool inp6d_headset=FALSE;
 bool inp6d_stereo=FALSE;
 bool inp6d_doom=FALSE;
 bool inp6d_stereo_active=FALSE;
-int inp6d_stereo_div=fix_make(3,0x4000);        // 3.25 inches apart
+int32_t inp6d_stereo_div=fix_make(3,0x4000);        // 3.25 inches apart
 fix inpJoystickSens=FIX_UNIT;
 
 // checking for game paused
 extern bool game_paused;
 
 #ifdef SVGA_SUPPORT
-extern bool change_svga_mode(short keycode, ulong context, void* data);
+extern bool change_svga_mode(int16_t keycode, uint32_t context, void* data);
 #endif
-extern bool toggle_bool_func(short keycode, ulong context, void* thebool);
+extern bool toggle_bool_func(int16_t keycode, uint32_t context, void* thebool);
 LGPoint use_cursor_pos;
 
 #ifdef RCACHE_TEST
-extern bool res_cache_usage_func(short keycode, ulong context, void* data);
+extern bool res_cache_usage_func(int16_t keycode, uint32_t context, void* data);
 #endif
-//extern bool texture_annihilate_func(short keycode, ulong context, void* data);
+//extern bool texture_annihilate_func(int16_t keycode, uint32_t context, void* data);
 
 // 6d wackiness
 bool inp6d_exists=FALSE;
@@ -235,8 +235,8 @@ void inp6d_chk(void);
 #if defined(VFX1_SUPPORT)||defined(CTM_SUPPORT)
 #include <i6dvideo.h>
 
-static int  tracker_initial_pos[3]={0,0,0};
-bool recenter_headset(short keycode, ulong context, void* data);
+static int32_t  tracker_initial_pos[3]={0,0,0};
+bool recenter_headset(int16_t keycode, uint32_t context, void* data);
 #endif
 
 // globals for doubling headset angular values
@@ -246,24 +246,24 @@ bool  inp6d_bdouble = FALSE;
 
 // and joysticks, heck, why be efficient
 bool joystick_mouse_emul = FALSE;
-uchar joystick_count=0;
-bool recenter_joystick(short keycode, ulong context, void* data);
+uint8_t joystick_count=0;
+bool recenter_joystick(int16_t keycode, uint32_t context, void* data);
 
-bool change_gamma(short keycode, ulong context, void* data);
+bool change_gamma(int16_t keycode, uint32_t context, void* data);
 
 // -------------
 //  PROTOTYPES
 // -------------
 void handle_keyboard_fatigue(void);
 void poll_mouse(void);
-bool posture_hotkey_func(short keycode, ulong context, void* data);
-bool eye_hotkey_func(short keycode, ulong context, int data);
+bool posture_hotkey_func(int16_t keycode, uint32_t context, void* data);
+bool eye_hotkey_func(int16_t keycode, uint32_t context, int32_t data);
 
 void reload_motion_cursors(bool cyber);
 void free_cursor_bitmaps();
 void alloc_cursor_bitmaps(void);
 
-int view3d_mouse_input(LGPoint pos, LGRegion* reg, bool move ,int* lastsect);
+int32_t view3d_mouse_input(LGPoint pos, LGRegion* reg, bool move ,int32_t* lastsect);
 void view3d_dclick(LGPoint pos, frc* fr);
 void look_at_object(ObjID id);
 bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data);
@@ -271,11 +271,11 @@ void view3d_rightbutton_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data
 bool view3d_key_handler(uiCookedKeyEvent* ev, LGRegion* r, void* data);
 void use_object_in_3d(ObjID obj);
 
-bool MacQuitFunc(short keycode, ulong context, void* data);
-bool MacResFunc(short keycode, ulong context, void* data);
-bool MacSkiplinesFunc(short keycode, ulong context, void* data);
-bool MacDetailFunc(short keycode, ulong context, void* data);
-bool MacHelpFunc(short keycode, ulong context, void* data);
+bool MacQuitFunc(int16_t keycode, uint32_t context, void* data);
+bool MacResFunc(int16_t keycode, uint32_t context, void* data);
+bool MacSkiplinesFunc(int16_t keycode, uint32_t context, void* data);
+bool MacDetailFunc(int16_t keycode, uint32_t context, void* data);
+bool MacHelpFunc(int16_t keycode, uint32_t context, void* data);
 
 
 // -------------
@@ -284,18 +284,18 @@ bool MacHelpFunc(short keycode, ulong context, void* data);
 
 void handle_keyboard_fatigue(void)
 {
-   byte cval;
+   int8_t cval;
    physics_get_one_control(KEYBD_CONTROL_BANK,CONTROL_YVEL,&cval);
    if (cval > 0)
    {
-      int f = max(CONTROL_MAX_VAL - PLAYER_FATIGUE,SPRINT_CONTROL_THRESHOLD);
+      int32_t f = max(CONTROL_MAX_VAL - PLAYER_FATIGUE,SPRINT_CONTROL_THRESHOLD);
       if (cval > f)
          physics_set_one_control(KEYBD_CONTROL_BANK,CONTROL_YVEL,f);
    }
    physics_get_one_control(KEYBD_CONTROL_BANK,CONTROL_ZVEL,&cval);
    if (cval > 0)
    {
-      int f = max(MAX_JUMP_CONTROL - PLAYER_FATIGUE,MAX_JUMP_CONTROL/2);
+      int32_t f = max(MAX_JUMP_CONTROL - PLAYER_FATIGUE,MAX_JUMP_CONTROL/2);
       if (cval > f)
          physics_set_one_control(KEYBD_CONTROL_BANK,CONTROL_ZVEL,f);
    }
@@ -306,7 +306,7 @@ void handle_keyboard_fatigue(void)
 //#define CONSTRAIN_TO_FAUXREND
 
 #pragma disable_message(202)
-void view3d_constrain_mouse(LGRegion* view, int mouse_bit)
+void view3d_constrain_mouse(LGRegion* view, int32_t mouse_bit)
 {
    mouse_constrain_bits |= mouse_bit;
    if (mouse_constrain_bits != 0)
@@ -324,7 +324,7 @@ void view3d_constrain_mouse(LGRegion* view, int mouse_bit)
 }
 #pragma enable_message(202)
 
-void view3d_unconstrain_mouse(int mouse_bit)
+void view3d_unconstrain_mouse(int32_t mouse_bit)
 {
    mouse_constrain_bits &= ~mouse_bit;
    if (mouse_constrain_bits == 0)
@@ -469,28 +469,28 @@ void input_chk(void)
 #define icube( x ) ((isqr( x ) * x ) >> 16 )
 #define sign( x ) ( (x) < 0 ? -1 : 1 )
 
-int sb_rot_sens = 21;
-int sb_tran_sens = 13;
-int sb_pitch_sens = 35;
-int sb_float_sens = 1;
-int sb_jump_thresh = 40;
-int sb_jump_sens = 30;
-int sb_pitch_thresh = 5;
-int sb_crouch_thresh = 60;
-int sb_prone_thresh = 90;
+int32_t sb_rot_sens = 21;
+int32_t sb_tran_sens = 13;
+int32_t sb_pitch_sens = 35;
+int32_t sb_float_sens = 1;
+int32_t sb_jump_thresh = 40;
+int32_t sb_jump_sens = 30;
+int32_t sb_pitch_thresh = 5;
+int32_t sb_crouch_thresh = 60;
+int32_t sb_prone_thresh = 90;
 
 // The number of pitch angles (looking up and down ) allowed
 #define NUM_PITCH 10
-int sb_num_pitch = NUM_PITCH;
-int sb_pitch_div = 100 / NUM_PITCH;
-int sb_pitch_angles = FALSE;
+int32_t sb_num_pitch = NUM_PITCH;
+int32_t sb_pitch_div = 100 / NUM_PITCH;
+int32_t sb_pitch_angles = FALSE;
 
 bool sb_major_axis = FALSE;
 
-void FilterSpaceballDataMajorAxis( long *vals )
+void FilterSpaceballDataMajorAxis( int32_t *vals )
 {
-   int i, ind;
-   long max;
+   int32_t i, ind;
+   int32_t max;
 
    max = abs( vals[0] );
    ind = 0;
@@ -509,7 +509,7 @@ void FilterSpaceballDataMajorAxis( long *vals )
    }
 }
 
-void FilterSpaceballDataSimple( long *tx, long *ty, long *tz, long *rx, long *ry, long *rz )
+void FilterSpaceballDataSimple( int32_t *tx, int32_t *ty, int32_t *tz, int32_t *rx, int32_t *ry, int32_t *rz )
 {
    *rx /= sb_pitch_sens;
    *ry /= sb_rot_sens;
@@ -519,7 +519,7 @@ void FilterSpaceballDataSimple( long *tx, long *ty, long *tz, long *rx, long *ry
    *tz /= sb_jump_sens;
 }
 
-void FilterSpaceballDataSquare( long *tx, long *ty, long *tz, long *rx, long *ry, long *rz )
+void FilterSpaceballDataSquare( int32_t *tx, int32_t *ty, int32_t *tz, int32_t *rx, int32_t *ry, int32_t *rz )
 {
 
    *rx = sign( *rx ) * isqr( *rx ) / sb_pitch_sens;
@@ -531,9 +531,9 @@ void FilterSpaceballDataSquare( long *tx, long *ty, long *tz, long *rx, long *ry
 
 }
 
-void FilterSpaceballDataFloating( long *tx, long *ty, long *tz, long *rx, long *ry, long *rz )
+void FilterSpaceballDataFloating( int32_t *tx, int32_t *ty, int32_t *tz, int32_t *rx, int32_t *ry, int32_t *rz )
 {
-   long max;
+   int32_t max;
 
    max = abs( *tx );
 
@@ -581,7 +581,7 @@ void FilterSpaceballDataFloating( long *tx, long *ty, long *tz, long *rx, long *
 #define SB_FILTER_SQUARE 2    // Square the SB data to give emphasis to larger values and de-emphasize low values
 #define SB_FILTER_FLOATING 3  // Floating sensitivity depending upon input from SB
 
-void FilterSpaceballDataOrig( long *tx, long *ty, long *tz, long *rx, long *ry, long *rz )
+void FilterSpaceballDataOrig( int32_t *tx, int32_t *ty, int32_t *tz, int32_t *rx, int32_t *ry, int32_t *rz )
 {
 
    if ( abs( *tx ) > TRA_TOL ) {
@@ -642,9 +642,9 @@ void FilterSpaceballDataOrig( long *tx, long *ty, long *tz, long *rx, long *ry, 
 
 }
 
-static void (*SbFilterFunc)( long *, long *, long *, long *, long *, long * ) = FilterSpaceballDataSquare;
+static void (*SbFilterFunc)( int32_t *, int32_t *, int32_t *, int32_t *, int32_t *, int32_t * ) = FilterSpaceballDataSquare;
 
-void SetSbFilterFunc( int val )
+void SetSbFilterFunc( int32_t val )
 {
 
    switch( val ) {
@@ -670,10 +670,10 @@ void SetSbFilterFunc( int val )
 
 #define JUMP_MULTIPLE 20
 
-sball_jump_filter( int jump_val )
+sball_jump_filter( int32_t jump_val )
 {
-   static int old_val = 0;
-   static int count = 0;
+   static int32_t old_val = 0;
+   static int32_t count = 0;
 
 
 // mprintf( "Jump value %d ", jump_val );
@@ -709,7 +709,7 @@ sball_jump_filter( int jump_val )
    // (the person is letting up on the spaceball) then use the old value
    // as the jump value
    if ( jump_val < old_val ) {
-      int ret;
+      int32_t ret;
 
 //    mprintf( "Less value %d %d\n", old_val, jump_val );
       ret = old_val;
@@ -727,20 +727,20 @@ sball_jump_filter( int jump_val )
 
 #define PITCH_MAX_DELTA 15
 
-int sb_pitch_constant = FALSE;
+int32_t sb_pitch_constant = FALSE;
 
 #define SAMPLE_SIZE 20
 
-int FilterPitch( long *pitch )
+int32_t FilterPitch( int32_t *pitch )
 {
-   long i;
-   static long ring_buf[ SAMPLE_SIZE ];
-   static long ring_index = 0;
+   int32_t i;
+   static int32_t ring_buf[ SAMPLE_SIZE ];
+   static int32_t ring_index = 0;
 
 #if 0
-   static long max_val = 0;
+   static int32_t max_val = 0;
 #endif
-   long accum;
+   int32_t accum;
 
    if ( abs( *pitch ) < sb_pitch_thresh )
       *pitch = 0;
@@ -814,12 +814,12 @@ void sball_chk(void)
 {
    i6s_event *inp6d_in;
    float foo;
-   long vals[6];
+   int32_t vals[6];
 
-   static int count = 0;
-   static int down_doo_be_doo = FALSE;
-   static int did_a_jump = FALSE;
-   static int doing_pitch = FALSE;
+   static int32_t count = 0;
+   static int32_t down_doo_be_doo = FALSE;
+   static int32_t did_a_jump = FALSE;
+   static int32_t doing_pitch = FALSE;
 
    // we'll want to put in code here to check for mouse_button_emulation
 //   if (checking_mouse_button_emulation && <SOME CODE TO CHECK FOR BUTTON PRESS>)
@@ -1000,21 +1000,21 @@ bool main_kb_callback(uiEvent *h, LGRegion *r, void *udata)
 }
 
 
-bool posture_hotkey_func(short keycode, ulong context, void* data)
+bool posture_hotkey_func(int16_t keycode, uint32_t context, void* data)
 {
 #ifndef NO_DUMMIES
-   ulong dummy; dummy = context + keycode;
+   uint32_t dummy; dummy = context + keycode;
 #endif
-   return player_set_posture((ubyte)data) == OK;
+   return player_set_posture((uint8_t)data) == OK;
 }
 
 
-bool eye_hotkey_func(short, ulong , int data)
+bool eye_hotkey_func(int16_t, uint32_t , int32_t data)
 {
-   extern void player_set_eye(byte);
-   extern byte player_get_eye(void);
-   byte eyectl = player_get_eye();
-   int r=1+(player_struct.drug_status[DRUG_REFLEX] > 0 && !global_fullmap->cyber);
+   extern void player_set_eye(int8_t);
+   extern int8_t player_get_eye(void);
+   int8_t eyectl = player_get_eye();
+   int32_t r=1+(player_struct.drug_status[DRUG_REFLEX] > 0 && !global_fullmap->cyber);
 
    if (data == 0)
    {
@@ -1043,7 +1043,7 @@ bool eye_hotkey_func(short, ulong , int data)
 
 #define EYE_POLLING
 #ifndef EYE_POLLING
-static ushort eye_up_keys[] =
+static uint16_t eye_up_keys[] =
    {
       KEY_UP|KB_FLAG_SHIFT,
       KEY_PAD_UP|KB_FLAG_SHIFT,
@@ -1051,9 +1051,9 @@ static ushort eye_up_keys[] =
       'R',
    };
 
-#define NUM_EYE_UP_KEYS (sizeof(eye_up_keys)/sizeof(ushort))
+#define NUM_EYE_UP_KEYS (sizeof(eye_up_keys)/sizeof(uint16_t))
 
-static ushort eye_dn_keys[] =
+static uint16_t eye_dn_keys[] =
    {
       KEY_DOWN|KB_FLAG_SHIFT,
       KEY_PAD_DOWN|KB_FLAG_SHIFT,
@@ -1061,42 +1061,42 @@ static ushort eye_dn_keys[] =
       'V',
    };
 
-#define NUM_EYE_DN_KEYS (sizeof(eye_dn_keys)/sizeof(ushort))
+#define NUM_EYE_DN_KEYS (sizeof(eye_dn_keys)/sizeof(uint16_t))
 #endif // !EYE_POLLING
 
-static ushort eye_lvl_keys[] =
+static uint16_t eye_lvl_keys[] =
    {
       'f',
       'F',
    };
 
-#define NUM_EYE_LVL_KEYS (sizeof(eye_lvl_keys)/sizeof(ushort))
+#define NUM_EYE_LVL_KEYS (sizeof(eye_lvl_keys)/sizeof(uint16_t))
 // -------------------------------------
 // INITIALIZATION
-extern bool reload_weapon_hotkey(short keycode, ulong context, void* data);
+extern bool reload_weapon_hotkey(int16_t keycode, uint32_t context, void* data);
 extern errtype simple_load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid);
-extern bool unpause_game_func(short keycode, ulong context, void* data);
-extern bool saveload_hotkey_func(short keycode, ulong context, void* data);
+extern bool unpause_game_func(int16_t keycode, uint32_t context, void* data);
+extern bool saveload_hotkey_func(int16_t keycode, uint32_t context, void* data);
 #ifdef AUDIOLOGS
-extern bool audiolog_cancel_func(short keycode, ulong context, void* data);
+extern bool audiolog_cancel_func(int16_t keycode, uint32_t context, void* data);
 #endif
-extern bool keyhelp_hotkey_func(short keycode, ulong context, void* data);
-extern bool demo_quit_func(short keycode, ulong context, void* data);
-extern bool hud_color_bank_cycle(short keycode, ulong context, void* data);
+extern bool keyhelp_hotkey_func(int16_t keycode, uint32_t context, void* data);
+extern bool demo_quit_func(int16_t keycode, uint32_t context, void* data);
+extern bool hud_color_bank_cycle(int16_t keycode, uint32_t context, void* data);
 extern void init_side_icon_hotkeys(void);
 extern void init_invent_hotkeys(void);
-extern bool toggle_view_func(short keycode, ulong context, void* data);
-bool toggle_profile(short keycode, ulong context, void* data);
+extern bool toggle_view_func(int16_t keycode, uint32_t context, void* data);
+bool toggle_profile(int16_t keycode, uint32_t context, void* data);
 #ifdef PLAYTEST
-extern bool automap_seen(short keycode, ulong context, void* data);
-extern bool maim_player(short keycode, ulong context, void* data);
-extern bool salt_the_player(short keycode, ulong context, void* data);
-extern bool give_player_hotkey(short keycode, ulong context, void *data);
-extern bool change_clipper(short keycode, ulong context, void *data);
+extern bool automap_seen(int16_t keycode, uint32_t context, void* data);
+extern bool maim_player(int16_t keycode, uint32_t context, void* data);
+extern bool salt_the_player(int16_t keycode, uint32_t context, void* data);
+extern bool give_player_hotkey(int16_t keycode, uint32_t context, void *data);
+extern bool change_clipper(int16_t keycode, uint32_t context, void *data);
 #endif
 #ifndef PLAYTEST
-extern bool version_spew_func(short keycode, ulong context, void* data);
-extern bool location_spew_func(short keycode, ulong context, void* data);
+extern bool version_spew_func(int16_t keycode, uint32_t context, void* data);
+extern bool location_spew_func(int16_t keycode, uint32_t context, void* data);
 #endif
 
 #define ckpoint_input(val) Spew(DSRC_TESTING_Test0,("ii %s @%d\n",val,*tmd_ticks));
@@ -1106,8 +1106,8 @@ extern bool location_spew_func(short keycode, ulong context, void* data);
 
 void reload_motion_cursors(bool cyber)
 {
-   int i;
-   extern short cursor_color_offset;
+   int32_t i;
+   extern int16_t cursor_color_offset;
 
 //KLC   uiHideMouse(NULL);
    if (!cyber)
@@ -1135,7 +1135,7 @@ void reload_motion_cursors(bool cyber)
 
 void free_cursor_bitmaps()
 {
-   int i=0;
+   int32_t i=0;
    for (; i < max(NUM_MOTION_CURSORS,NUM_CYBER_CURSORS); i++)
    {
       grs_bitmap* bm = &motion_cursor_bitmaps[i];
@@ -1146,12 +1146,12 @@ void free_cursor_bitmaps()
 
 void alloc_cursor_bitmaps(void)
 {
-   int i;
-   short w,h;
+   int32_t i;
+   int16_t w,h;
    for (i = 0; i < min(NUM_MOTION_CURSORS,NUM_CYBER_CURSORS); i++)
    {
-      int cybsz;
-      int realsz = 0;
+      int32_t cybsz;
+      int32_t realsz = 0;
       grs_bitmap* bm = &motion_cursor_bitmaps[i];
       w = res_bm_width(CYB_CURS_ID(i));
       h = res_bm_height(CYB_CURS_ID(i));
@@ -1166,12 +1166,12 @@ void alloc_cursor_bitmaps(void)
          realsz = w * h;
       }
 
-      bm->bits = (uchar *)NewPtr(max(cybsz,realsz));
+      bm->bits = (uint8_t *)NewPtr(max(cybsz,realsz));
    }
    for (; i < max(NUM_MOTION_CURSORS,NUM_CYBER_CURSORS); i++)
    {
       grs_bitmap* bm = &motion_cursor_bitmaps[i];
-      int sz =  0;
+      int32_t sz =  0;
       if (REAL_CURS_ID(i) == 0)
       {
          bm->bits=NULL;    // lets check this
@@ -1184,25 +1184,25 @@ void alloc_cursor_bitmaps(void)
 //         ss_point_convert(&w,&h,FALSE);
          sz = w * h;
       }
-      bm->bits = (uchar *)NewPtr(sz);
+      bm->bits = (uint8_t *)NewPtr(sz);
    }
 }
 
 
 #include "frtypes.h"
-extern Boolean	gPlayingGame;
-extern Boolean	DoubleSize;
-extern Boolean	SkipLines;
+extern bool	gPlayingGame;
+extern bool	DoubleSize;
+extern bool	SkipLines;
 extern void change_svga_screen_mode(void);
-Boolean	gShowFrameCounter = FALSE;
-Boolean	gShowMusicGlobals = FALSE;
+bool	gShowFrameCounter = FALSE;
+bool	gShowMusicGlobals = FALSE;
 
-bool MacQuitFunc(short , ulong , void*)
+bool MacQuitFunc(int16_t , uint32_t , void*)
 {
 	if (*tmd_ticks > (gGameSavedTime + (5 * CIT_CYCLE)))		// If the current game needs saving...
 	{
-		short					btn;
-		Boolean				savedOK;
+		int16_t					btn;
+		bool				savedOK;
 		ModalFilterUPP	stdFilterProcPtr;
 
 		uiHideMouse(NULL);								// Setup the environment for doing Mac stuff.
@@ -1254,7 +1254,7 @@ bool MacQuitFunc(short , ulong , void*)
 	return TRUE;
 }
 
-bool MacResFunc(short , ulong , void *)
+bool MacResFunc(int16_t , uint32_t , void *)
 {
  	DoubleSize = !DoubleSize;
 	change_svga_screen_mode();
@@ -1273,7 +1273,7 @@ bool MacResFunc(short , ulong , void *)
 	return TRUE;
 }
 
-bool MacSkiplinesFunc(short , ulong , void *)
+bool MacSkiplinesFunc(int16_t , uint32_t , void *)
 {
 	if (!DoubleSize)							// Skip lines only applies in double-size mode.
 	{
@@ -1286,10 +1286,10 @@ bool MacSkiplinesFunc(short , ulong , void *)
 	return TRUE;
 }
 
-bool MacDetailFunc(short , ulong , void *)
+bool MacDetailFunc(int16_t , uint32_t , void *)
 {
-	char	msg[32];
-	char	detailStr[8];
+	int8_t	msg[32];
+	int8_t	detailStr[8];
 	fauxrend_context *_frc = (fauxrend_context *) svga_render_context;
 
 	if (_frc->detail == 4)								// Adjust for that global detail nonsense.
@@ -1325,7 +1325,7 @@ bool MacDetailFunc(short , ulong , void *)
 /*
 // Temporary function.  Remove for final build
 
-bool temp_FrameCounter_func(short , ulong , void *)
+bool temp_FrameCounter_func(int16_t , uint32_t , void *)
 {
 	gShowFrameCounter = !gShowFrameCounter;
 
@@ -1338,7 +1338,7 @@ bool temp_FrameCounter_func(short , ulong , void *)
 // end temp functions
 */
 
-bool MacHelpFunc(short , ulong , void*)
+bool MacHelpFunc(int16_t , uint32_t , void*)
 {
 	if (music_on)									// Setup the environment for doing Mac stuff.
 		MacTuneKillCurrentTheme();
@@ -1369,9 +1369,9 @@ bool MacHelpFunc(short , ulong , void*)
 void init_input(void)
 {
 	extern void init_motion_polling();
-	int i = 0;
-//KLC	int kbdt, joy_type;
-	int dvec[2];
+	int32_t i = 0;
+//KLC	int32_t kbdt, joy_type;
+	int32_t dvec[2];
 
 	// init keyboard
 //KLC	for (i = 0; i < 0x80; i++)
@@ -1389,7 +1389,7 @@ void init_input(void)
    init_motion_polling();
 
    // init mouse
-//KLC   mouse_set_timestamp_register((ulong*)tmd_ticks);
+//KLC   mouse_set_timestamp_register((uint32_t*)tmd_ticks);
    dvec[0] = 10; //KLC 30;		// default double click deleay;
    dvec[1] = 45; // 175;	// default double click time
    i = 2;
@@ -1583,7 +1583,7 @@ void init_input(void)
                Warning(("Headset video startup failed\n"));
    	      if ((config_get_raw("inp6d_stereo",NULL,0))&&(i6d_device!=I6D_ALLPRO))
             {
-               int cnt=1, rval[1];
+               int32_t cnt=1, rval[1];
 	            if (i6_video(I6VID_STR_START,NULL))
 	               Warning(("Headset stereo startup failed\n"));
                else
@@ -1599,12 +1599,12 @@ void init_input(void)
 	   ckpoint_input("inp6d end");
    } else inp6d_exists=FALSE;
    {
-      int cnt=1, rval[1];
+      int32_t cnt=1, rval[1];
       config_get_value("joystick",CONFIG_INT_TYPE,rval,&cnt);
       if (cnt>0)
       {
-         extern ushort wrap_joy_type;
-         extern ushort high_joy_flags;
+         extern uint16_t wrap_joy_type;
+         extern uint16_t high_joy_flags;
          joy_type=rval[0];
          wrap_joy_type  = joy_type & ~JOY_NO_NGP;
          high_joy_flags = joy_type & JOY_NO_NGP;
@@ -1666,7 +1666,7 @@ void shutdown_input(void)
 // GLOBALS
 // -------
 
-short object_on_cursor = 0;
+int16_t object_on_cursor = 0;
 LGCursor object_cursor;
 
 // ------------------------------------------------------------------------------
@@ -1701,18 +1701,18 @@ bool weapon_button_up = TRUE;
 // view3d_mouse_input sets/unsets physics controls based on mouse position in 3d
 
 // return whether any control was applied
-int view3d_mouse_input(LGPoint pos, LGRegion* reg,bool move,int* lastsect)
+int32_t view3d_mouse_input(LGPoint pos, LGRegion* reg,bool move,int32_t* lastsect)
 {  // do we really recompute these every frame?? couldnt we have a context or something... something, a call to reinit, something
-   static int dougs_goofy_hack=FALSE;
+   static int32_t dougs_goofy_hack=FALSE;
 
-	int cnum = 0;
-   byte xvel = 0;
-   byte yvel = 0;
-   byte xyrot = 0;
+	int32_t cnum = 0;
+   int8_t xvel = 0;
+   int8_t yvel = 0;
+   int8_t xyrot = 0;
    bool thrust = FALSE;
    bool cyber = global_fullmap->cyber && time_passes;
 
-   short   cx, cy, cw, ch, x, y;
+   int16_t   cx, cy, cw, ch, x, y;
 
    if (DoubleSize)
    {
@@ -1800,13 +1800,13 @@ int view3d_mouse_input(LGPoint pos, LGRegion* reg,bool move,int* lastsect)
    {
 	   if (y < -ch)
       {
-         short ycntl = (-ch - y)*CONTROL_MAX_VAL/(cy - ch - reg->abs_y);
+         int16_t ycntl = (-ch - y)*CONTROL_MAX_VAL/(cy - ch - reg->abs_y);
          if (move)
          {
-	         int f = PLAYER_FATIGUE;
+	         int32_t f = PLAYER_FATIGUE;
 	         if (ycntl + f > CONTROL_MAX_VAL)
 	         {  // compute new mouse cursor position
-	            int newy;
+	            int32_t newy;
 	            f = max(CONTROL_MAX_VAL-f,SPRINT_CONTROL_THRESHOLD);
 	            newy = f*(ch+reg->abs_y-cy)/CONTROL_MAX_VAL - ch +cy;
 	            ycntl = (ycntl + f)/2;
@@ -1937,8 +1937,8 @@ void view3d_rightbutton_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data
       if (ev->action & MOUSE_RUP)
       {
          fix vel = throw_oomph*FIX_UNIT;
-         short dropy = DROP_REGION_Y(r);
-         short y = aimpos.y;
+         int16_t dropy = DROP_REGION_Y(r);
+         int16_t y = aimpos.y;
 //         if (convert_use_mode != 0)
 		if (DoubleSize)														// If double sizing, convert the y to 640x480, then
 			dropy = SCONV_Y(dropy) >> 1;								// half it.  The x stays as is.
@@ -1993,12 +1993,12 @@ void use_object_in_3d(ObjID obj)
    bool showname = FALSE;
    extern bool object_use(ObjID id, bool in_inv, ObjID cursor_obj);
    extern ObjID physics_handle_id[MAX_OBJ];
-   int mode = USE_MODE(obj);
-   char buf[80];
+   int32_t mode = USE_MODE(obj);
+   int8_t buf[80];
    Ref usemode=ID_NULL;
-   extern short loved_textures[];
-	extern char* get_texture_name(int,char*,int);
-   extern char* get_texture_use_string(int,char*,int);
+   extern int16_t loved_textures[];
+	extern int8_t* get_texture_name(int32_t,int8_t*,int);
+   extern int8_t* get_texture_use_string(int32_t,int8_t*,int);
 
    if (global_fullmap->cyber)
    {
@@ -2048,7 +2048,7 @@ void use_object_in_3d(ObjID obj)
          return;
       case BRIDGE_TRIPLE:
       {
-         int dat=((objBigstuffs[objs[obj].specID].data1)>>16)&0xFF;
+         int32_t dat=((objBigstuffs[objs[obj].specID].data1)>>16)&0xFF;
          if(dat&0x80) {
             get_texture_name(loved_textures[dat&(~0x80)],buf,80);
             message_info(buf);
@@ -2063,7 +2063,7 @@ void use_object_in_3d(ObjID obj)
    case PICKUP_USE_MODE:
       {
 	      ObjLocState del_loc_state;
-         void grenade_contact(ObjID id, int severity);
+         void grenade_contact(ObjID id, int32_t severity);
 
 	      if (!check_object_dist(obj,PLAYER_OBJ,MAX_PICKUP_DIST))
 	      {
@@ -2119,7 +2119,7 @@ void use_object_in_3d(ObjID obj)
    cantuse:
    default:
       {
-         char use_str[80],buf2[50];
+         int8_t use_str[80],buf2[50];
          lg_sprintf(use_str,get_temp_string(REF_STR_CantUse),get_object_lookname(obj,buf2,50));
          message_info(use_str);
       }
@@ -2143,13 +2143,13 @@ void use_object_in_3d(ObjID obj)
 #define TITLE_IDX       1
 #define SENDER_IDX      2
 
-char *get_object_lookname(ObjID id,char use_string[], int sz)
+int8_t *get_object_lookname(ObjID id,int8_t use_string[], int32_t sz)
 {
-   int ref = -1;
-   int l;
-   int usetrip = ID2TRIP(id);
-   extern short loved_textures[];
-	extern char* get_texture_name(int,char*,int);
+   int32_t ref = -1;
+   int32_t l;
+   int32_t usetrip = ID2TRIP(id);
+   extern int16_t loved_textures[];
+	extern int8_t* get_texture_name(int32_t,int8_t*,int);
 
    strcpy(use_string, "");
 
@@ -2170,8 +2170,8 @@ char *get_object_lookname(ObjID id,char use_string[], int sz)
    case CLASS_SOFTWARE:
       if (objs[id].subclass == SOFTWARE_SUBCLASS_DATA)
       {
-         short cont = objSoftwares[objs[id].specID].data_munge;
-         short num = cont & 0xFF;
+         int16_t cont = objSoftwares[objs[id].specID].data_munge;
+         int16_t num = cont & 0xFF;
          if(global_fullmap->cyber) {
             ref=REF_STR_DataObj;
             break;
@@ -2201,7 +2201,7 @@ char *get_object_lookname(ObjID id,char use_string[], int sz)
                return(use_string);
             case BRIDGE_TRIPLE:
             {
-               int dat=((objBigstuffs[objs[id].specID].data1)>>16)&0xFF;
+               int32_t dat=((objBigstuffs[objs[id].specID].data1)>>16)&0xFF;
                if(dat&0x80) {
                   get_texture_name(loved_textures[dat&(~0x80)],use_string,sz);
                   return(use_string);
@@ -2221,8 +2221,8 @@ char *get_object_lookname(ObjID id,char use_string[], int sz)
       {
          case PERSCARD_TRIPLE:
          {
-            char buf[50];
-            int acc, len;
+            int8_t buf[50];
+            int32_t acc, len;
             acc = objSmallstuffs[objs[id].specID].data1;
 #define PERSONAL_BITS_SHIFT 24
             // get rid of all but personal access bits
@@ -2260,7 +2260,7 @@ char *get_object_lookname(ObjID id,char use_string[], int sz)
       }
    case CLASS_CRITTER:
       {
-         char temp[128];
+         int8_t temp[128];
          Ref mod_refid = -1;
          if (objCritters[objs[id].specID].orders == AI_ORDERS_SLEEP)
             mod_refid = REF_STR_Sleeping;
@@ -2289,7 +2289,7 @@ char *get_object_lookname(ObjID id,char use_string[], int sz)
 
 void look_at_object(ObjID id)
 {
-   char buf[50];
+   int8_t buf[50];
    get_object_lookname(id,buf,sizeof(buf));
    message_info(buf);
 }
@@ -2301,13 +2301,13 @@ void look_at_object(ObjID id)
 // Not a directly-installed mouse handler, called from view3d_mouse_handler
 void view3d_dclick(LGPoint pos, frc* )
 {
-   extern short loved_textures[];
-   extern char* get_texture_use_string(int,char*,int);
+   extern int16_t loved_textures[];
+   extern int8_t* get_texture_use_string(int32_t,int8_t*,int);
    extern bool hack_takeover;
-   short obj_trans, obj;
+   int16_t obj_trans, obj;
    frc *use_frc;
 
-   extern int _fr_glob_flags;
+   extern int32_t _fr_glob_flags;
 
    if (hack_takeover) return;
    switch (input_cursor_mode)
@@ -2334,7 +2334,7 @@ void view3d_dclick(LGPoint pos, frc* )
          {
             obj=fr_get_at_raw(use_frc,pos.x,pos.y,FALSE,TRUE);
          }
-         if ((short)obj < 0)
+         if ((int16_t)obj < 0)
          {
             // Don't display texture look strings in cspace....eventually we should do some cool hack
             // for looking through walls, some sort of cspace fr_get_at or something
@@ -2343,7 +2343,7 @@ void view3d_dclick(LGPoint pos, frc* )
             else
                message_info(get_texture_use_string(loved_textures[~obj],NULL,0));
          }
-         else if ((short)obj > 0)
+         else if ((int16_t)obj > 0)
          {
             use_cursor_pos = pos;
             use_object_in_3d(obj);
@@ -2366,7 +2366,7 @@ bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data)
    bool retval = TRUE;
    LGPoint pt;
    LGPoint evp = ev->pos;
-   extern int _fr_glob_flags;
+   extern int32_t _fr_glob_flags;
 
    pt = evp;
 
@@ -2443,7 +2443,7 @@ bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data)
    {
       ObjID		id;
       frc 			*use_frc;
-      short 		rabsx,rabsy;
+      int16_t 		rabsx,rabsy;
 
       use_frc = svga_render_context;
       rabsx=r->abs_x;
@@ -2452,15 +2452,15 @@ bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data)
          ss_point_convert(&rabsx,&rabsy,FALSE);
 
       id = fr_get_at(use_frc,evp.x-rabsx,evp.y-rabsy,TRUE);
-      if ((short)id > 0)
+      if ((int16_t)id > 0)
       {
 	    look_at_object(id);
       }
-      else if ((short)id < 0)
+      else if ((int16_t)id < 0)
       {
-    	   extern short loved_textures[];
-	      extern char* get_texture_name(int,char*,int);
-         int tnum = loved_textures[~id];
+    	   extern int16_t loved_textures[];
+	      extern int8_t* get_texture_name(int32_t,int8_t*,int);
+         int32_t tnum = loved_textures[~id];
          if (global_fullmap->cyber)
             string_message_info(REF_STR_CybWall);
          else
@@ -2513,7 +2513,7 @@ bool view3d_mouse_handler(uiMouseEvent* ev, LGRegion* r, view3d_data* data)
 
 typedef struct _view3d_kdata
 {
-   int maxctrl;  // max control as affected by fatigue
+   int32_t maxctrl;  // max control as affected by fatigue
 } view3d_kdata;
 
 
@@ -2570,7 +2570,7 @@ void inp6d_chk(void)
 {
 //   static inp6d_raw_event last_swift;
    i6s_event *inp6d_in;
-   int xp, yp, zv, h, p, b;
+   int32_t xp, yp, zv, h, p, b;
 
    // we'll want to put in code here to check for mouse_button_emulation
 //   if (checking_mouse_button_emulation && <SOME CODE TO CHECK FOR BUTTON PRESS>)
@@ -2620,9 +2620,9 @@ void inp6d_chk(void)
 #define ANG_B 1
 #define ANG_H 2
 #if defined(VFX1_SUPPORT)||defined(CTM_SUPPORT)
-short l_angs[3];
+int16_t l_angs[3];
 
-short *set_abs_head(i6s_event *e)
+int16_t *set_abs_head(i6s_event *e)
 {
    if (!inp6d_doom)
    {
@@ -2643,9 +2643,9 @@ short *set_abs_head(i6s_event *e)
 #define XTRA_REGION  (CONTROL_MAX_VAL-BREAK_REGION)
 
 // add a double LGRegion fix...
-short deparse_angle_region(short angle, short min, short mid, short max)
+int16_t deparse_angle_region(int16_t angle, int16_t min, int16_t mid, int16_t max)
 {
-   int sgn;
+   int32_t sgn;
    if (abs(angle)<min) return 0;
    sgn=angle>0?1:-1;
    angle=abs(angle);
@@ -2656,14 +2656,14 @@ short deparse_angle_region(short angle, short min, short mid, short max)
    return sgn*CONTROL_MAX_VAL;
 }
 
-void slam_head(short *angs)
+void slam_head(int16_t *angs)
 {
 #ifdef PLAYTEST
-   static int last_head_h;
+   static int32_t last_head_h;
 #endif
 //   if (global_fullmap->cyber)
 //   {     // secret head joystick dented with the promise of power
-//      short h,p,b;
+//      int16_t h,p,b;
 //      h=deparse_angle_region(angs[ANG_H],0x0400,0x1400,0x2000);
 //      p=deparse_angle_region(angs[ANG_P],0x0400,0x1400,0x2000);
 //      b=deparse_angle_region(angs[ANG_B],0x0300,0x0B00,0x1400);
@@ -2680,7 +2680,7 @@ void slam_head(short *angs)
 #ifdef PLAYTEST
    	else
 	   {
-	      int h_diff=(angs[ANG_H]-last_head_h)/cam_slew_scale[EYE_H];    //   HAQ
+	      int32_t h_diff=(angs[ANG_H]-last_head_h)/cam_slew_scale[EYE_H];    //   HAQ
 	      fr_camera_slewone(NULL,EYE_H,h_diff);
 	      last_head_h=angs[ANG_H];
 	   }
@@ -2695,11 +2695,11 @@ void slam_head(short *angs)
 bool reload_current_weapon(void);
 bool inp_reloaded = FALSE;
 bool inp_sidestep = FALSE;
-int use_but_time = 0;
-int weap_time = 0;
+int32_t use_but_time = 0;
+int32_t weap_time = 0;
 void inp_weapon_button(bool pull)
 {
-   int w = player_struct.actives[ACTIVE_WEAPON];                // check if we need to reload
+   int32_t w = player_struct.actives[ACTIVE_WEAPON];                // check if we need to reload
    bool reloaded = FALSE;
 
    if (object_on_cursor)
@@ -2773,7 +2773,7 @@ void inp_use_sidestep_junk()
 
          if (input_cursor_mode == INPUT_OBJECT_CURSOR)
          {
-            extern void absorb_object_on_cursor(short keycode, ulong context, void* data);
+            extern void absorb_object_on_cursor(int16_t keycode, uint32_t context, void* data);
             absorb_object_on_cursor(0,0,0);
          }
          else
@@ -2802,11 +2802,11 @@ void inp_use_sidestep_junk()
 // total hack lame guess at a vfx1 function...
 void vfx1_chk(void)
 {
-   static uchar last_but;
+   static uint8_t last_but;
 //   static LGPoint targ_loc={160,100};
    i6s_event *inp6d_in;
-   int xp, yp, xp1, xp2, zv;
-   short *angs;
+   int32_t xp, yp, xp1, xp2, zv;
+   int16_t *angs;
 
    if (game_paused) return;
    inp6d_in=i6_poll();
@@ -2831,7 +2831,7 @@ void vfx1_chk(void)
    {
       if (joystick_mouse_emul)
       {
-         extern void joystick_emulate_mouse(int x, int y,uchar bstate,uchar last_bstate);
+         extern void joystick_emulate_mouse(int32_t x, int32_t y,uint8_t bstate,uint8_t last_bstate);
          joystick_emulate_mouse(xp,-yp,inp6d_in->but>>1,last_but>>1);
 		   xp2=xp1=yp=zv=0;
       }
@@ -2913,7 +2913,7 @@ void vfx1_chk(void)
 void ctm_chk(void)
 {
    i6s_event *inp6d_in;
-   short *angs;
+   int16_t *angs;
 
    if (game_paused) return;
    inp6d_in=i6_poll();
@@ -2942,7 +2942,7 @@ void ctm_chk(void)
    {
       // combine the two when in cyberspace
       if (global_fullmap->cyber) {
-         short h,p,b;
+         int16_t h,p,b;
          h = deparse_angle_region(angs[ANG_H],0x0400,0x1400,0x2000);
          p = deparse_angle_region(angs[ANG_P],0x0400,0x1400,0x2000)/2;
          b = deparse_angle_region(angs[ANG_B],0x0300,0x0B00,0x1400);
@@ -2959,7 +2959,7 @@ void ctm_chk(void)
 void swift_chk(void)
 {
    i6s_event *inp6d_in;
-   int our_vals[6], i, tmp;
+   int32_t our_vals[6], i, tmp;
 
    // we'll want to put in code here to check for mouse_button_emulation
 //   if (checking_mouse_button_emulation && <SOME CODE TO CHECK FOR BUTTON PRESS>)
@@ -3015,9 +3015,9 @@ void swift_chk(void)
 // various hacked hotkey functions....
 #pragma disable_message(202)
 #if defined(VFX1_SUPPORT)||defined(CTM_SUPPORT)
-bool recenter_headset(short keycode, ulong context, void* data)
+bool recenter_headset(int16_t keycode, uint32_t context, void* data)
 {
-   long start_time=*tmd_ticks;
+   int32_t start_time=*tmd_ticks;
    i6s_event *inp6d_geth;
    do {
 	   inp6d_geth=i6_poll();
@@ -3034,17 +3034,17 @@ bool recenter_headset(short keycode, ulong context, void* data)
 }
 #endif
 
-bool recenter_joystick(short keycode, ulong context, void* data)
+bool recenter_joystick(int16_t keycode, uint32_t context, void* data)
 {
    joy_center();
    string_message_info(REF_STR_CenterJoyDone);
    return FALSE;
 }
 
-bool change_gamma(short keycode, ulong context, void* data)
+bool change_gamma(int16_t keycode, uint32_t context, void* data)
 {
    static fix cit_gamma=fix_make(1,0);
-   int dir=(int)data;
+   int32_t dir=(int32_t)data;
    if ((dir<0)&&(cit_gamma>fix_make(0,0x6000)))      cit_gamma-=fix_make(0,0x0400);
    else if ((dir>0)&&(cit_gamma<fix_make(1,0x6000))) cit_gamma+=fix_make(0,0x0800);
    else dir=0;
@@ -3073,9 +3073,9 @@ void cyberman_chk(void)
 {
 //   static inp6d_raw_event last_swift;
    i6s_event *inp6d_in;
-   int xp, yp, zv, h, p, b;
+   int32_t xp, yp, zv, h, p, b;
    static bool cyb_mouse_around=TRUE, pchange=FALSE;
-   static int p_vel=0, b_vel=0; // , h_vel=0;
+   static int32_t p_vel=0, b_vel=0; // , h_vel=0;
 
    // we'll want to put in code here to check for mouse_button_emulation
 //   if (checking_mouse_button_emulation && <SOME CODE TO CHECK FOR BUTTON PRESS>)
@@ -3131,9 +3131,9 @@ void cyberman_chk(void)
    zv=inp6d_in->z;
    if (abs(zv)>CYB_TOL) if (zv>CYB_TOL) zv=CYB_Scale(zv-CYB_TOL); else zv=CYB_Scale(zv+CYB_TOL); else zv=0;
 
-   h=-(short)inp6d_in->ry; if (h>ROT_TOL) h=Rot_Scale(h-ROT_TOL); else if (h<-ROT_TOL) h=Rot_Scale(h+ROT_TOL); else h=0;
-   p= (short)inp6d_in->rx; if (p>ROT_TOL) p=Rot_Scale(p-ROT_TOL); else if (p<-ROT_TOL) p=Rot_Scale(p+ROT_TOL); else p=0;
-   b=-(short)inp6d_in->rz; if (b>ROT_TOL) b=Rot_Scale(b-ROT_TOL); else if (b<-ROT_TOL) b=Rot_Scale(b+ROT_TOL); else b=0;
+   h=-(int16_t)inp6d_in->ry; if (h>ROT_TOL) h=Rot_Scale(h-ROT_TOL); else if (h<-ROT_TOL) h=Rot_Scale(h+ROT_TOL); else h=0;
+   p= (int16_t)inp6d_in->rx; if (p>ROT_TOL) p=Rot_Scale(p-ROT_TOL); else if (p<-ROT_TOL) p=Rot_Scale(p+ROT_TOL); else p=0;
+   b=-(int16_t)inp6d_in->rz; if (b>ROT_TOL) b=Rot_Scale(b-ROT_TOL); else if (b<-ROT_TOL) b=Rot_Scale(b+ROT_TOL); else b=0;
 
 #ifdef PLAYTEST
    if (inp6d_dbg)
@@ -3235,7 +3235,7 @@ void cyberman_chk(void)
 #define JOY_Scale(x)     (((x)*JOY_USE_CONTROL_MAX_VAL)/(JOY_MAX_VAL-JOY_TOL))
 #endif
 
-void joystick_emulate_mouse(int x, int y,uchar bstate,uchar last_bstate)
+void joystick_emulate_mouse(int32_t x, int32_t y,uint8_t bstate,uint8_t last_bstate)
 {
    mouse_add_velocity((x)*abs(x)  << (MOUSE_VEL_UNIT_SHF - APPROX_CIT_CYCLE_SHFT-4),
                       -y*abs(y) << (MOUSE_VEL_UNIT_SHF - APPROX_CIT_CYCLE_SHFT-4));
@@ -3245,7 +3245,7 @@ void joystick_emulate_mouse(int x, int y,uchar bstate,uchar last_bstate)
    {
       // sadly, there is no good api to get at this mouse library
       // variable, so we will employ gnosis for now.
-      extern short mouseInstantButts;
+      extern int16_t mouseInstantButts;
       mouse_event me;
 
       ui_mouse_get_xy(&me.x,&me.y);
@@ -3253,7 +3253,7 @@ void joystick_emulate_mouse(int x, int y,uchar bstate,uchar last_bstate)
       ss_point_convert(&me.x,&me.y,FALSE);
 #endif
       me.type = 0;
-      me.buttons = (uchar)mouseInstantButts;
+      me.buttons = (uint8_t)mouseInstantButts;
       if ((bstate&1) != (last_bstate&1))
       {
          me.type |= (bstate&1) ? MOUSE_LDOWN : MOUSE_LUP;
@@ -3278,10 +3278,10 @@ void joystick_emulate_mouse(int x, int y,uchar bstate,uchar last_bstate)
 
 void joystick_chk(void)
 {
-   static uchar last_bstate;
-   int xp, yp, zv=0, h, p, b=0;
-   char pot_vals[4];
-   uchar bstate;
+   static uint8_t last_bstate;
+   int32_t xp, yp, zv=0, h, p, b=0;
+   int8_t pot_vals[4];
+   uint8_t bstate;
 
    // this has to be fixed...
    { static bool once=0; if (!once) { once=1; joy_center(); } }   // i wonder if we can punt this???
@@ -3298,7 +3298,7 @@ void joystick_chk(void)
 
    joy_read_pots(pot_vals);
 
-   yp=-((int)pot_vals[1]);
+   yp=-((int32_t)pot_vals[1]);
 //   mprintf("have %d from %d...",yp,pot_vals[1]);
    if (abs(yp)>JOY_TOL) if (yp>JOY_TOL) yp=JOY_Scale(yp-JOY_TOL); else if (yp<-JOY_TOL) yp=JOY_Scale(yp+JOY_TOL); else yp=0;
    h=pot_vals[0];
@@ -3368,7 +3368,7 @@ void joystick_chk(void)
 #ifdef PLAYTEST
 #include <wsample.h>
 #pragma disable_message(202)
-bool toggle_profile(short keycode, ulong context, void* data)
+bool toggle_profile(int16_t keycode, uint32_t context, void* data)
 {
    static bool UserProf=FALSE;
    if (UserProf)
@@ -3389,7 +3389,7 @@ bool toggle_profile(short keycode, ulong context, void* data)
 
 void install_motion_mouse_handler(LGRegion* r,frc* fr)
 {
-   int	cid;
+   int32_t	cid;
    view3d_data *data = (view3d_data *)NewPtr(sizeof(view3d_data));
    data->ldown = FALSE;
    data->rdown = FALSE;
@@ -3406,7 +3406,7 @@ extern void motion_keycheck_handler(uiEvent*,LGRegion*,void*);
 
 void install_motion_keyboard_handler(LGRegion* r)
 {
-   int cid;
+   int32_t cid;
    uiInstallRegionHandler(r,UI_EVENT_KBD_POLL, (uiHandlerProc)motion_keycheck_handler, NULL, &cid);
 }
 
@@ -3423,7 +3423,7 @@ void pop_cursor_object(void)
 
 extern void push_live_grenade_cursor(ObjID obj);
 
-void push_cursor_object(short obj)
+void push_cursor_object(int16_t obj)
 {
    LGPoint hotspot;
    grs_bitmap *bmp;

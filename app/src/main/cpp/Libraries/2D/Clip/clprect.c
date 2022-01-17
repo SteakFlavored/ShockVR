@@ -48,9 +48,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* clips the top, left, right, and bottom edges of a rectangle to the current
    clip rectangle.  pointers to the values are passed in so the values can be
    modified.  returns the clip code. */
-int gr_clip_rect (short *left, short *top, short *right, short *bot)
+int32_t gr_clip_rect (int16_t *left, int16_t *top, int16_t *right, int16_t *bot)
 {
-   int code = CLIP_NONE;
+   int32_t code = CLIP_NONE;
 
    if (*right<=grd_clip.left || *left>=grd_clip.right ||
        *bot<=grd_clip.top  || *top>=grd_clip.bot)

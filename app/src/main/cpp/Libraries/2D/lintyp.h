@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    cost and needed for rgb and i values.  (ILINES is converted, it does
    fix-pt internally.)
 
-   HLINES and VLINES take an xy interface   (short coord)
+   HLINES and VLINES take an xy interface   (int16_t coord)
 
    For these, these take short args and are used for speed and
    for lots of calulations on the arglements (e.g. menues).
@@ -55,16 +55,16 @@ typedef
    void *grt_uline_fill;
 
 typedef
-   void (*grt_uline_fill_v) (long, long, grs_vertex *, grs_vertex *);
+   void (*grt_uline_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
 
 typedef
-   void (*grt_uline_fill_xy) (short, short, short, long, long);
+   void (*grt_uline_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
 
 typedef
-   void (*grt_wire_poly_uline) (long, long, grs_vertex *, grs_vertex *);
+   void (*grt_wire_poly_uline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
 
 typedef
-   void (*grt_wire_poly_ucline) (long, long, grs_vertex *, grs_vertex *);
+   void (*grt_wire_poly_ucline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
 
 typedef
     grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES];

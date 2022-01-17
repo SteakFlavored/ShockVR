@@ -78,7 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    occurs before grd_gc.fill_type is set, the function table ptrs may get out
    of sync when the interrupt tries to restore the canvas. */
 // implementation of gri_set_fill_globals is in PixFill.c
-extern void gri_set_fill_globals(long *fill_type_ptr, long fill_type,
+extern void gri_set_fill_globals(int32_t *fill_type_ptr, int32_t fill_type,
                           void (***function_table_ptr)(), void (**function_table)(),
                           grt_uline_fill **line_vector_ptr, grt_uline_fill *line_vector);
 /*
@@ -90,7 +90,7 @@ extern void gri_set_fill_globals(long *fill_type_ptr, long fill_type,
 */
 #define gr_set_fill_type(__ft)  \
 do {                            \
-   long fill_type=__ft;         \
+   int32_t fill_type=__ft;         \
    gri_set_fill_globals(&(grd_canvas->gc.fill_type),fill_type,                      \
                         &grd_function_table,(*grd_function_fill_table)[fill_type],  \
                         &grd_uline_fill_vector,(*grd_uline_fill_table)[fill_type]); \
@@ -98,7 +98,7 @@ do {                            \
 #define gr_get_fill_type() (grd_canvas->gc.fill_type)
 
 #define gr_set_fill_parm(parm) \
-   (grd_canvas->gc.fill_parm=(long)(parm))
+   (grd_canvas->gc.fill_parm=(int32_t)(parm))
 #define gr_get_fill_parm() (grd_canvas->gc.fill_parm)
 
 /* macros for setting the clipping region of a specified canvas. */

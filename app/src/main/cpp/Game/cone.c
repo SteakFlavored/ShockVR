@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frflags.h"
 #include "tools.h"
 
-extern uint _fr_curflags;
+extern uint32_t _fr_curflags;
 #define PRINT_PYRAMID
 
 // temp macros
@@ -85,7 +85,7 @@ typedef struct {
 
 // Allocation for the view cone list
 fix view_cone_list[MAX_PTS*2];
-int view_count = 0;
+int32_t view_count = 0;
 g3s_vector main_view_vectors[4];
 
 // wow is this ugly
@@ -93,22 +93,22 @@ extern g3s_vector viewer_position;
 extern g3s_angvec viewer_orientation;
 
 // prototypes
-void reverse_poly_list(int index, fix *new_pts);
-bool clockwise_poly(int index, fix *poly_pts);
-int insert_viewer_position(int index, fix *new_pts, fix_point viewer_point);
-int radius_fix(int index, fix *new_pts, fix_point viewer);
-void intersect_cone_sides(fix *vlist, int n, fix y_min, fix y_max, int v_left, int v_right, int v_max);
+void reverse_poly_list(int32_t index, fix *new_pts);
+bool clockwise_poly(int32_t index, fix *poly_pts);
+int32_t insert_viewer_position(int32_t index, fix *new_pts, fix_point viewer_point);
+int32_t radius_fix(int32_t index, fix *new_pts, fix_point viewer);
+void intersect_cone_sides(fix *vlist, int32_t n, fix y_min, fix y_max, int32_t v_left, int32_t v_right, int32_t v_max);
 
 // -----------------------------------------------------
 // reverse_poly_list()
 //
 // reverses the poly list
 
-void reverse_poly_list(int index, fix *new_pts)
+void reverse_poly_list(int32_t index, fix *new_pts)
 {
    fix   temp_pts[MAX_PTS * 2];
-   int   i;
-   int   n;
+   int32_t   i;
+   int32_t   n;
 
    // Copy over the raw data to the temp list
    memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
@@ -131,7 +131,7 @@ void reverse_poly_list(int index, fix *new_pts)
 //
 // Note: Does not handle points that are really really close together.
 
-bool clockwise_poly(int index, fix *poly_pts)
+bool clockwise_poly(int32_t index, fix *poly_pts)
 {
    fix         temp_pts[MAX_PTS * 2];
    fix_line    poly_line;
@@ -146,7 +146,7 @@ bool clockwise_poly(int index, fix *poly_pts)
    memcpy(temp_pts, poly_pts, sizeof(fix) * 2 * index);
    while (extra_div)
    {
-      int      i;
+      int32_t      i;
 
       extra_div = FALSE;
       for (i=0;i<(index*2); i++)
@@ -200,15 +200,15 @@ bool clockwise_poly(int index, fix *poly_pts)
 //
 // Requires: verticies of polygon to be in clockwise order
 
-int insert_viewer_position(int index, fix *new_pts, fix_point viewer_point)
+int32_t insert_viewer_position(int32_t index, fix *new_pts, fix_point viewer_point)
 {
    fix_line    poly_line;
    fix_point   vpoint;
    fix         temp_pts[MAX_PTS * 2];
    fix         *current_pt;
    fix         cross_prd;
-   int         i;
-   int         insert;
+   int32_t         i;
+   int32_t         insert;
 
    bool        extra_div = TRUE;
    bool        inside = FALSE;
@@ -355,13 +355,13 @@ int insert_viewer_position(int index, fix *new_pts, fix_point viewer_point)
 // Takes the points and a center view point and rearranges the
 // points so they are in order in a circle (counter-clockwise)
 
-int radius_fix(int index, fix *new_pts, fix_point viewer)
+int32_t radius_fix(int32_t index, fix *new_pts, fix_point viewer)
 {
    fix_line    poly_line;
    fix_point   test_pt;
-   int         i, j, k;
-   int         new_index;
-   int         counter;
+   int32_t         i, j, k;
+   int32_t         new_index;
+   int32_t         counter;
    bool        middle;
    bool        second, third;
    fix         x, y, x2, y2;
@@ -594,12 +594,12 @@ int radius_fix(int index, fix *new_pts, fix_point viewer)
 // modifies an array of points to represents the view area in clockwise order
 // *count will have the number of points in the array.
 
-bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int *count, fix radius)
+bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int32_t *count, fix radius)
 {
-   int         i;
+   int32_t         i;
    fix         tx, tz;
    fix         *new_pts;
-   int         index = 0;
+   int32_t         index = 0;
    fix         ratiox, ratioy, ratioz;
    g3s_vector  my_view[4];
    fix         radius_square;
@@ -610,7 +610,7 @@ bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int *count, fix
    fix_point   viewer_point;
    grs_clip    old_clip;
    fix         height = 0;
-//   char        fix_buffer[80];
+//   int8_t        fix_buffer[80];
 
    if (radius <= fix_make(0,0))
    {
@@ -830,13 +830,13 @@ bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int *count, fix
 //
 
 fix   span_lines[8];
-byte  span_index[2];
+int8_t  span_index[2];
 fix   span_intersect[4];
 
-void intersect_cone_sides(fix *vlist, int n, fix y_min, fix y_max, int v_left, int v_right, int v_max)
+void intersect_cone_sides(fix *vlist, int32_t n, fix y_min, fix y_max, int32_t v_left, int32_t v_right, int32_t v_max)
 {
    fix         deltax, deltay;
-   int         s_left, s_right;
+   int32_t         s_left, s_right;
    fix         y;
 
    // get the viewer's position - and take the bottom
@@ -945,14 +945,14 @@ void intersect_cone_sides(fix *vlist, int n, fix y_min, fix y_max, int v_left, i
 
 void simple_cone_clip_pass(void)
 {
-   int      n;
-   int      i;
-   byte     v_min;                     // vertex with smallest y coord
-   byte     v_max;                     // vertex with largest y coord
-   byte     v_left, v_right;           // current left & right vertices
-//   byte     v_prev;                    // previous vertex
-   int      y;                         // current scanline
-   int      y_top;
+   int32_t      n;
+   int32_t      i;
+   int8_t     v_min;                     // vertex with smallest y coord
+   int8_t     v_max;                     // vertex with largest y coord
+   int8_t     v_left, v_right;           // current left & right vertices
+//   int8_t     v_prev;                    // previous vertex
+   int32_t      y;                         // current scanline
+   int32_t      y_top;
    fix      left, right;               // the left and right values on scan line, making sure scan line does not go past end points
    fix      y_min, y_max;              // min & max vertex y coords
    fix      y_left, y_right;           // ending y for left & right edges

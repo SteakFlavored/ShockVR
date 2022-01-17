@@ -56,27 +56,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //	Data types
 
-typedef short fix8;		// 8.8 fixed-point number
-typedef ulong QT_Ctype;	// quicktime chunk type
+typedef int16_t fix8;		// 8.8 fixed-point number
+typedef uint32_t QT_Ctype;	// quicktime chunk type
 
 typedef struct {
-	ulong length;			// chunk length
+	uint32_t length;			// chunk length
 	QT_Ctype ctype;		// chunk type
 } QT_ChunkHdr;
 
 typedef struct {
-	ulong ctype;			// chunk type
+	uint32_t ctype;			// chunk type
 	bool isleaf;			// is leaf chunk, or are there subchunks
 } QT_ChunkInfo;
 
 typedef struct {
-	uchar len;				// pascal strings start with length byte
-	char str[1];			// followed by string
+	uint8_t len;				// pascal strings start with length byte
+	int8_t str[1];			// followed by string
 } PStr;
 
 //	4-char chunk mnemonics
 
-#define MAKE4(c0,c1,c2,c3) ((((ulong)c0)<<24)|(((ulong)c1)<<16)|(((ulong)c2)<<8)|((ulong)c3))
+#define MAKE4(c0,c1,c2,c3) ((((uint32_t)c0)<<24)|(((uint32_t)c1)<<16)|(((uint32_t)c2)<<8)|((uint32_t)c3))
 
 #define QT_CLIP	MAKE4('c','l','i','p')
 #define QT_CRGN	MAKE4('c','r','g','n')
@@ -110,149 +110,149 @@ typedef struct {
 //	Auxiliary structures
 
 //typedef struct {
-//	uchar len;
-//	uchar str[31];
+//	uint8_t len;
+//	uint8_t str[31];
 //} Str31;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong numEntries;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t numEntries;
 } QTS_STSD_Base;
 
 typedef struct {
-	ulong descSize;
-	ulong dataFormat;
-	uchar reserved1[6];
-	short dataRefIndex;
-	short version;
-	short revLevel;
-	ulong vendor;
-	short numChans;
-	short sampSize;
-	short compId;
-	short packetSize;
+	uint32_t descSize;
+	uint32_t dataFormat;
+	uint8_t reserved1[6];
+	int16_t dataRefIndex;
+	int16_t version;
+	int16_t revLevel;
+	uint32_t vendor;
+	int16_t numChans;
+	int16_t sampSize;
+	int16_t compId;
+	int16_t packetSize;
 	fix sampRate;
 } QT_SoundDesc;
 
 typedef struct {
-	ulong descSize;
-	ulong dataFormat;
-	uchar reserved1[6];
-	short dataRefIndex;
-	short version;
-	short revLevel;
-	ulong vendor;
-	ulong temporalQuality;
-	ulong spatialQuality;
-	short width;
-	short height;
+	uint32_t descSize;
+	uint32_t dataFormat;
+	uint8_t reserved1[6];
+	int16_t dataRefIndex;
+	int16_t version;
+	int16_t revLevel;
+	uint32_t vendor;
+	uint32_t temporalQuality;
+	uint32_t spatialQuality;
+	int16_t width;
+	int16_t height;
 	fix hRes;
 	fix vRes;
-	long dataSize;
-	short frameCount;
+	int32_t dataSize;
+	int16_t frameCount;
 	Str31 name;
-	short depth;
-	short clutId;
+	int16_t depth;
+	int16_t clutId;
 } QT_ImageDesc;
 
 typedef struct {
-	ulong descSize;
-	ulong dataFormat;
+	uint32_t descSize;
+	uint32_t dataFormat;
 	// more stuff, but who cares?
 } QT_TextDesc;
 
 typedef struct {
-	ulong trackDuration;
-	long mediaTime;
+	uint32_t trackDuration;
+	int32_t mediaTime;
 	fix mediaRate;
 } QT_EditList;
 
 typedef struct {
-	ulong count;
-	ulong duration;
+	uint32_t count;
+	uint32_t duration;
 } QT_Time2Samp;
 
 typedef struct {
-	ulong firstChunk;
-	ulong sampsPerChunk;
-	ulong sampDescId;
+	uint32_t firstChunk;
+	uint32_t sampsPerChunk;
+	uint32_t sampDescId;
 } QT_Samp2Chunk;
 
 typedef struct {
-	ulong frameDiffSampNum;
-	ulong syncSampNum;
+	uint32_t frameDiffSampNum;
+	uint32_t syncSampNum;
 } QT_ShadowSync;
 
 //	Chunk structures
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong numEntries;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t numEntries;
 	QT_EditList editList[1];
 } QTS_ELST;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong compType;
-	ulong compSubtype;
-	ulong compManufacturer;
-	ulong compFlags;
-	ulong compFlagsMask;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t compType;
+	uint32_t compSubtype;
+	uint32_t compManufacturer;
+	uint32_t compFlags;
+	uint32_t compFlagsMask;
 	PStr compName;
 } QTS_HDLR;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong createTime;
-	ulong modTime;
-	ulong timeScale;
-	ulong duration;
-	short language;
-	short quality;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t createTime;
+	uint32_t modTime;
+	uint32_t timeScale;
+	uint32_t duration;
+	int16_t language;
+	int16_t quality;
 } QTS_MDHD;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong createTime;
-	ulong modTime;
-	ulong timeScale;
-	ulong duration;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t createTime;
+	uint32_t modTime;
+	uint32_t timeScale;
+	uint32_t duration;
 	fix preferredRate;
 	fix8 preferredVol;
-	uchar reserved[10];
+	uint8_t reserved[10];
 	fix matrix[9];
-	ulong previewTime;
-	ulong previewDur;
-	ulong posterTime;
-	ulong selTime;
-	ulong selDur;
-	ulong currTime;
-	ulong nextTrackId;
+	uint32_t previewTime;
+	uint32_t previewDur;
+	uint32_t posterTime;
+	uint32_t selTime;
+	uint32_t selDur;
+	uint32_t currTime;
+	uint32_t nextTrackId;
 } QTS_MVHD;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	short balance;
-	short reserved;
+	uint8_t version;
+	uint8_t flags[3];
+	int16_t balance;
+	int16_t reserved;
 } QTS_SMHD;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong numEntries;
-	ulong offset[1];
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t numEntries;
+	uint32_t offset[1];
 } QTS_STCO;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong numEntries;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t numEntries;
 	QT_Samp2Chunk samp2chunk[1];
 } QTS_STSC;
 
@@ -266,57 +266,57 @@ typedef struct {
 } QTS_STSD;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong numEntries;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t numEntries;
 	QT_ShadowSync shadowSync[1];
 } QTS_STSH;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong numEntries;
-	ulong sample[1];
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t numEntries;
+	uint32_t sample[1];
 } QTS_STSS;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong sampSize;
-	ulong numEntries;
-	ulong sampSizeTab[1];
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t sampSize;
+	uint32_t numEntries;
+	uint32_t sampSizeTab[1];
 } QTS_STSZ;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong numEntries;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t numEntries;
 	QT_Time2Samp time2samp[1];
 } QTS_STTS;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	ulong createTime;
-	ulong modTime;
-	ulong trackId;
-	uchar reserved1[4];
-	ulong duration;
-	uchar reserved2[8];
-	short layer;
-	short altGroup;
+	uint8_t version;
+	uint8_t flags[3];
+	uint32_t createTime;
+	uint32_t modTime;
+	uint32_t trackId;
+	uint8_t reserved1[4];
+	uint32_t duration;
+	uint8_t reserved2[8];
+	int16_t layer;
+	int16_t altGroup;
 	fix8 volume;
-	uchar reserved3[2];
+	uint8_t reserved3[2];
 	fix matrix[9];
 	fix trackWidth;
 	fix trackHeight;
 } QTS_TKHD;
 
 typedef struct {
-	uchar version;
-	uchar flags[3];
-	short graphicsMode;
-	ushort opColor[3];
+	uint8_t version;
+	uint8_t flags[3];
+	int16_t graphicsMode;
+	uint16_t opColor[3];
 } QTS_VMHD;
 
 //	Quicktime movie structures for reading and writing whole movies
@@ -332,16 +332,16 @@ typedef struct {
 	QTS_STSZ *qt_stsz;	// ptr to sample size table (STSZ)
 	QTS_STCO *qt_stco;	//	ptr to chunk->offset table (STCO)
 
-	uchar *palette;		// 256-entry palette or NULL
-	ulong numSamps;		// number of samples
-	uchar *sampBuff;		// sample buffer (if NULL, then in file)
+	uint8_t *palette;		// 256-entry palette or NULL
+	uint32_t numSamps;		// number of samples
+	uint8_t *sampBuff;		// sample buffer (if NULL, then in file)
 	fix *sampTime;			// array of sample->time
-	ulong *sampSize;		// array of sample->size
-	ulong *sampOffset;	// array of sample->fileoffset
-	ulong audioBlockSize;	// # bytes per audio sample block
+	uint32_t *sampSize;		// array of sample->size
+	uint32_t *sampOffset;	// array of sample->fileoffset
+	uint32_t audioBlockSize;	// # bytes per audio sample block
 	TrackType type;		// TRACK_XXX
 //	The following only used when writing movies
-	short numSamplesAlloced;	// # sample entries allocated in buffs
+	int16_t numSamplesAlloced;	// # sample entries allocated in buffs
 	fix *pSampleTime;		// ptr to array of sample times
 } MovieTrack;
 
@@ -359,16 +359,16 @@ typedef struct {
 	MovieTrack track[QTM_MAX_TRACKS];	// here are all my tracks!
 	MovieTrack *pVideoTrack;	// ptr to single video track, or NULL if no video
 	MovieTrack *pAudioTrack;	// ptr to audio track, or NULL if no audio
-	int numTracks;					// number of tracks read into track[] array
-	int numAudioSamplesPerBlock;	// 4K if 11Khz, 8K if 22 Khz
-	ulong compTypeQT;				// type of QuickTime VIDEO compression
-	short frameWidth;				// frame width of video track
-	short frameHeight;			// frame height of video track
-	uchar *pFrameCurr;			// current frame in flat format
-	uchar *pFrameCompQT;			// current frame in compressed format
+	int32_t numTracks;					// number of tracks read into track[] array
+	int32_t numAudioSamplesPerBlock;	// 4K if 11Khz, 8K if 22 Khz
+	uint32_t compTypeQT;				// type of QuickTime VIDEO compression
+	int16_t frameWidth;				// frame width of video track
+	int16_t frameHeight;			// frame height of video track
+	uint8_t *pFrameCurr;			// current frame in flat format
+	uint8_t *pFrameCompQT;			// current frame in compressed format
 //	The following used only when writing movies
-	long offsetStack[QTM_MAX_CHUNK_NESTING];	// stack of lengths to update
-	short indexOffsetStack;		// current index into offset stack
+	int32_t offsetStack[QTM_MAX_CHUNK_NESTING];	// stack of lengths to update
+	int16_t indexOffsetStack;		// current index into offset stack
 	bool depth16;					// convert to 16-bit depth when writing
 } QTM;
 
@@ -377,14 +377,14 @@ typedef struct {
 void QuikReadMovie(QTM *pqtm, FILE *fpi);
 void QuikFreeMovie(QTM *pqtm);
 fix QuikComputeFrameRate(QTM *pqtm);
-void *QuikGetVideoSample(QTM *pqtm, int isample, FILE *fpi, long *plength,
-	uchar *pbmtype, fix *ptime);
-void *QuikGetAudioSample(QTM *pqtm, int isample, long *plength, fix *ptime);
+void *QuikGetVideoSample(QTM *pqtm, int32_t isample, FILE *fpi, int32_t *plength,
+	uint8_t *pbmtype, fix *ptime);
+void *QuikGetAudioSample(QTM *pqtm, int32_t isample, int32_t *plength, fix *ptime);
 
 //	Protoypes: quikwrite.c (writing movie)
 
 void QuikCreateMovie(QTM *pqtm, FILE *fp);
-void QuikSetPal(QTM *pqtm, uchar *pal);
+void QuikSetPal(QTM *pqtm, uint8_t *pal);
 void QuikAddVideoSample(QTM *pqtm, FILE *fp, grs_bitmap *pbm, fix time);
 void QuikWriteMovieAndClose(QTM *pqtm, FILE *fp);
 
@@ -392,24 +392,24 @@ void QuikWriteMovieAndClose(QTM *pqtm, FILE *fp);
 
 //	Prototypes: quikconv.c (reading chunks for inspection/dumping)
 
-FILE *QuikOpenFile(char *filename);
+FILE *QuikOpenFile(int8_t *filename);
 bool QuikReadChunkHdr(FILE *fp, QT_ChunkHdr *phdr);
 void QuikSkipChunk(FILE *fp, QT_ChunkHdr *phdr);
-bool QuikReadChunk(FILE *fp, QT_ChunkHdr *phdr, void *buff, ulong bufflen);
+bool QuikReadChunk(FILE *fp, QT_ChunkHdr *phdr, void *buff, uint32_t bufflen);
 void QuikWriteChunkHdr(FILE *fp, QT_ChunkHdr chunkHdr);
-void QuikWriteChunkLength(FILE *fp, long length);
-void QuikWriteChunk(FILE *fp, QT_Ctype ctype, void *data, ulong len);
+void QuikWriteChunkLength(FILE *fp, int32_t length);
+void QuikWriteChunk(FILE *fp, QT_Ctype ctype, void *data, uint32_t len);
 QT_ChunkInfo *QuikFindChunkInfo(QT_ChunkHdr *phdr);
 
-#define Flip4(v) Flip4Func((ulong *)(v))
-#define Flip2(v) Flip2Func((ushort *)(v))
+#define Flip4(v) Flip4Func((uint32_t *)(v))
+#define Flip2(v) Flip2Func((uint16_t *)(v))
 
-void Flip4Func(ulong *pval4);
-void Flip2Func(ushort *pval2);
+void Flip4Func(uint32_t *pval4);
+void Flip2Func(uint16_t *pval2);
 
 //	Prototypes: quikprnt.c (printing chunks gotten via quikconv.c)
 
-void QuikPrintChunk(QT_ChunkHdr *phdr, void *buff, char *indent);
+void QuikPrintChunk(QT_ChunkHdr *phdr, void *buff, int8_t *indent);
 
 #endif
 

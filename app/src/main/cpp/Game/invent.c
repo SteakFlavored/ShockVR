@@ -185,7 +185,7 @@ typedef enum {
 #define Flashing(state) ((state) >= BttnFlashOff && (state) <= BttnFlashOn)
 
 // mapping from button states to colors
-ubyte _bttn_state2color[] = {
+uint8_t _bttn_state2color[] = {
                               INVENT_BTTN_EMPTY,
                               INVENT_BTTN_EMPTY,
                               INVENT_BTTN_SELECT,
@@ -232,75 +232,75 @@ typedef enum
 
 typedef struct _quantity_state
 {
-   ushort num;    // item number
-   ubyte exist;  // do we have it;
-   ubyte quant;  // quantity
-   byte pad;
+   uint16_t num;    // item number
+   uint8_t exist;  // do we have it;
+   uint8_t quant;  // quantity
+   int8_t pad;
 } quantity_state;
 
 // Get the correct color for an item, given its rank in the list.
-typedef uchar (*color_func)(void* dp, int num);
+typedef uint8_t (*color_func)(void* dp, int32_t num);
 
 // Get the string name of an item, given its rank in the
 // list.
-typedef char* (*name_func)(void* dp, int num, char* buf);
+typedef int8_t* (*name_func)(void* dp, int32_t num, int8_t* buf);
 
 // Get the string quantity of an item, given its rank in the
 // list,and its actual quantity.
-typedef char* (*quant_string_func)(struct _inventory_display_list* dp, int num, int quant, char* buf);
+typedef int8_t* (*quant_string_func)(struct _inventory_display_list* dp, int32_t num, int32_t quant, int8_t* buf);
 
 // Draw a display
 typedef void (*draw_func)(struct _inventory_display_list *dp);
 
 // Select an item given its rank in the list
-typedef bool (*select_func)(struct _inventory_display_list *dp, int itemnum);
+typedef bool (*select_func)(struct _inventory_display_list *dp, int32_t itemnum);
 
 // Use an item given its rank in the list.
-typedef bool (*use_func)(struct _inventory_display_list *dp, int itemnum);
+typedef bool (*use_func)(struct _inventory_display_list *dp, int32_t itemnum);
 
 // Add an object to a list
-typedef ubyte (*add_func)(struct _inventory_display_list *dp, int itemnum, ObjID* obj,bool select);
+typedef uint8_t (*add_func)(struct _inventory_display_list *dp, int32_t itemnum, ObjID* obj,bool select);
 
 // Remove and object from a list
-typedef void (*drop_func)(struct _inventory_display_list *dp, int itemnum);
+typedef void (*drop_func)(struct _inventory_display_list *dp, int32_t itemnum);
 
 typedef struct _inventory_display_list
 {
-   ushort pgnum;             // Page number this display is on
-   short relnum;            // Relative page number for this list.
-   short left, right;       // Left and right pixel edge
-   short top;               // Top pixel margin
-   ubyte titlecolor;        // Title color.  Duh.
-   ubyte listcolor;         // color for list items. if greater than 239,
+   uint16_t pgnum;             // Page number this display is on
+   int16_t relnum;            // Relative page number for this list.
+   int16_t left, right;       // Left and right pixel edge
+   int16_t top;               // Top pixel margin
+   uint8_t titlecolor;        // Title color.  Duh.
+   uint8_t listcolor;         // color for list items. if greater than 239,
                             // it's a color func.
-   ushort first;             // first list item to start at.
-   ushort pgsize;            // Number of items in each list page
-   ushort listlen;           // Number of total list items
-   int titlenum;            // String number of title.
-   int activenum;           // index into player_struct.actives
-   int offset;              // offset of quantities into player struct
-   int mfdtype;             // inventory time for set_inventory_mfd
+   uint16_t first;             // first list item to start at.
+   uint16_t pgsize;            // Number of items in each list page
+   uint16_t listlen;           // Number of total list items
+   int32_t titlenum;            // String number of title.
+   int32_t activenum;           // index into player_struct.actives
+   int32_t offset;              // offset of quantities into player struct
+   int32_t mfdtype;             // inventory time for set_inventory_mfd
    name_func name;          // given a type number, give us the name
    quant_string_func quant; // Given an item number, give us the quantity string
    draw_func draw;          // draw this inv_display
    select_func select;      // select a row
    use_func use;            // use a row
-   int add_classes;         // Classes of objects that this list represents
+   int32_t add_classes;         // Classes of objects that this list represents
    add_func add;            // function to add an object to this list.
    drop_func drop;          // remove an object from a row.
-   int basetrip;            // triple of item number zero.
-   int (*toidx)(int);       // convert from a triple to an index  (NOT USED)
+   int32_t basetrip;            // triple of item number zero.
+   int32_t (*toidx)(int32_t);       // convert from a triple to an index  (NOT USED)
    // state data
-   uchar dummy;             // used to be known_active
+   uint8_t dummy;             // used to be known_active
    quantity_state* lines;   // lines of state data
 } inv_display;
 
-int known_actives[NUM_ACTIVES];
+int32_t known_actives[NUM_ACTIVES];
 
 #define NULL_PAGE 0xFFFF
 extern inv_display inv_display_list[];
 
-extern uchar email_color_func(void* dp, int num);
+extern uint8_t email_color_func(void* dp, int32_t num);
 
 color_func color_func_list[] = { email_color_func };
 #define EMAIL_COLOR_FUNC 240
@@ -311,11 +311,11 @@ color_func color_func_list[] = { email_color_func };
 
 // The current inventory "page"
 
-short inventory_page = 0;
+int16_t inventory_page = 0;
 bool show_all_actives=FALSE;
 
 // The last page we drew
-short inv_last_page = INV_BLANK_PAGE;
+int16_t inv_last_page = INV_BLANK_PAGE;
 
 LGRegion *inventory_region;
 extern LGRegion *inventory_region_game, *inventory_region_full;
@@ -325,9 +325,9 @@ LGRegion** all_inventory_regions[]={&inventory_region_game, &inventory_region_fu
 
 static struct _weapon_list_state
 {
-   ubyte active;
+   uint8_t active;
    weapon_slot slots[WEAPON_PAGES*WEAPONS_PER_PAGE];
-   ubyte ammo_available[WEAPON_PAGES*WEAPONS_PER_PAGE];
+   uint8_t ammo_available[WEAPON_PAGES*WEAPONS_PER_PAGE];
 }  weapon_list;
 
 quantity_state generic_lines[48];
@@ -374,8 +374,8 @@ LGCursor      invent_bttn_cursor;
 grs_bitmap  invent_bttn_bitmap;
 #endif
 
-static char* cursor_strings[NUM_PAGE_BUTTONS];
-static char cursor_string_buf[128];
+static int8_t* cursor_strings[NUM_PAGE_BUTTONS];
+static int8_t cursor_string_buf[128];
 
 #define BUTTON_PANEL_Y (INVENTORY_PANEL_Y + INVENTORY_PANEL_HEIGHT)
 
@@ -387,74 +387,74 @@ static char cursor_string_buf[128];
 //  Internal Prototypes
 // ---------------------
 void draw_page_buttons(bool full);
-ubyte add_to_some_page(ObjID obj,bool select);
+uint8_t add_to_some_page(ObjID obj,bool select);
 void push_inventory_cursors(LGCursor* newcurs);
 void pop_inventory_cursors(void);
-void draw_inventory_string(char* s, int x, int y, bool clear);
-void clear_inventory_region(short x1,short y1,short x2,short y2);
-void draw_quant_line(char* name, char* quant, long color, bool active, short left, short right, short y);
+void draw_inventory_string(int8_t* s, int32_t x, int32_t y, bool clear);
+void clear_inventory_region(int16_t x1,int16_t y1,int16_t x2,int16_t y2);
+void draw_quant_line(int8_t* name, int8_t* quant, int32_t color, bool active, int16_t left, int16_t right, int16_t y);
 void draw_quant_list(inv_display* dp, bool newpage);
-void set_current_active(int activenum);
-int get_item_at_pixrow(inv_display *dp, int row);
-char* weapon_name_func(void*, int num, char* buf);
-char* weapon_quant_func(int num, char* buf);
+void set_current_active(int32_t activenum);
+int32_t get_item_at_pixrow(inv_display *dp, int32_t row);
+int8_t* weapon_name_func(void*, int32_t num, int8_t* buf);
+int8_t* weapon_quant_func(int32_t num, int8_t* buf);
 void draw_weapons_list(inv_display *dp);
-bool inventory_select_weapon(inv_display* dp, int w);
-bool weapon_use_func(inv_display* dp, int w);
-ubyte weapons_add_func(inv_display* dp, int row, ObjID* objP,bool select);
-void weapon_drop_func(inv_display* dp, int itemnum);
-ubyte generic_add_func(inv_display* dp, int row, ObjID* idP,bool select);
-void generic_drop_func(inv_display* dp, int row);
-char* null_name_func(inv_display* dp, int n, char* buf);
-static char* grenade_name_func(void* vdp, int n, char* buf);
+bool inventory_select_weapon(inv_display* dp, int32_t w);
+bool weapon_use_func(inv_display* dp, int32_t w);
+uint8_t weapons_add_func(inv_display* dp, int32_t row, ObjID* objP,bool select);
+void weapon_drop_func(inv_display* dp, int32_t itemnum);
+uint8_t generic_add_func(inv_display* dp, int32_t row, ObjID* idP,bool select);
+void generic_drop_func(inv_display* dp, int32_t row);
+int8_t* null_name_func(inv_display* dp, int32_t n, int8_t* buf);
+static int8_t* grenade_name_func(void* vdp, int32_t n, int8_t* buf);
 void push_live_grenade_cursor(ObjID obj);
-bool grenade_use_func(inv_display* dp, int row);
-ubyte grenade_add_func(inv_display* dp, int row, ObjID* idP, bool select);
-char* drug_name_func(inv_display* dp, int n, char* buf);
-bool drug_use_func(inv_display* dp, int row);
-char* ammo_name_func(void* , int n, char* buf);
-void hardware_add_specials(int n, int ver);
-ubyte ware_add_func(inv_display* dp, int, ObjID* idP,bool select);
-void ware_drop_func(inv_display* dp, int row);
-char* null_quant_func(inv_display*, int, int, char* buf);
+bool grenade_use_func(inv_display* dp, int32_t row);
+uint8_t grenade_add_func(inv_display* dp, int32_t row, ObjID* idP, bool select);
+int8_t* drug_name_func(inv_display* dp, int32_t n, int8_t* buf);
+bool drug_use_func(inv_display* dp, int32_t row);
+int8_t* ammo_name_func(void* , int32_t n, int8_t* buf);
+void hardware_add_specials(int32_t n, int32_t ver);
+uint8_t ware_add_func(inv_display* dp, int32_t, ObjID* idP,bool select);
+void ware_drop_func(inv_display* dp, int32_t row);
+int8_t* null_quant_func(inv_display*, int32_t, int32_t, int8_t* buf);
 void draw_general_list(inv_display *dp);
-bool general_use_func(inv_display* dp, int row);
-ubyte inv_empty_trash(void);
-ubyte add_access_card(inv_display* dp, ObjID* idP,bool select);
-ubyte general_add_func(inv_display* dp, int row, ObjID* idP,bool select);
+bool general_use_func(inv_display* dp, int32_t row);
+uint8_t inv_empty_trash(void);
+uint8_t add_access_card(inv_display* dp, ObjID* idP,bool select);
+uint8_t general_add_func(inv_display* dp, int32_t row, ObjID* idP,bool select);
 void remove_general_item(ObjID obj);
-void general_drop_func(inv_display*, int row);
-bool inv_select_general(inv_display* dp, int w);
+void general_drop_func(inv_display*, int32_t row);
+bool inv_select_general(inv_display* dp, int32_t w);
 void email_more_draw(inv_display *dp);
 bool email_more_use(inv_display* dp, int);
-bool email_use_func(inv_display* dp, int row);
-void email_select_func(inv_display* dp, int row);
-void add_email_datamunge(short mung,bool select);
-ubyte email_add_func(inv_display*, int, ObjID* idP,bool select);
-void email_drop_func(inv_display*, int );
-char* log_name_func(void*, int num, char* buf);
-bool log_use_func(inv_display* dp, int row);
-void inventory_draw_page(int pgnum);
+bool email_use_func(inv_display* dp, int32_t row);
+void email_select_func(inv_display* dp, int32_t row);
+void add_email_datamunge(int16_t mung,bool select);
+uint8_t email_add_func(inv_display*, int32_t, ObjID* idP,bool select);
+void email_drop_func(inv_display*, int32_t );
+int8_t* log_name_func(void*, int32_t num, int8_t* buf);
+bool log_use_func(inv_display* dp, int32_t row);
+void inventory_draw_page(int32_t pgnum);
 void draw_page_button_panel();
-bool do_selection(inv_display* dp, int row);
-void add_object_on_cursor(inv_display* dp, int row);
-bool inventory_handle_leftbutton(uiEvent* ev, inv_display* dp, int row);
-bool inventory_handle_rightbutton(uiEvent* ev, LGRegion* reg, inv_display* dp, int row);
+bool do_selection(inv_display* dp, int32_t row);
+void add_object_on_cursor(inv_display* dp, int32_t row);
+bool inventory_handle_leftbutton(uiEvent* ev, inv_display* dp, int32_t row);
+bool inventory_handle_rightbutton(uiEvent* ev, LGRegion* reg, inv_display* dp, int32_t row);
 bool inventory_mouse_handler(uiEvent* ev, LGRegion* r, void*);
 bool pagebutton_mouse_handler(uiMouseEvent* ev, LGRegion* r, void*);
-bool invent_hotkey_func(ushort, ulong, int data);
-bool cycle_weapons_func(ushort, ulong, int data);
+bool invent_hotkey_func(uint16_t, uint32_t, int32_t data);
+bool cycle_weapons_func(uint16_t, uint32_t, int32_t data);
 void init_invent_hotkeys(void);
 void invent_language_change(void);
 errtype inventory_update_screen_mode();
 void inv_change_fullscreen(bool on);
 void inv_update_fullscreen(bool full);
-void super_drop_func(int dispnum, int row);
-void super_use_func(int dispnum, int row);
-void gen_log_displays(int pgnum);
-void absorb_object_on_cursor(short, ulong, void*);
-bool gen_inv_page(int pgnum, int *i, inv_display** dp);
-bool gen_inv_displays(int *i, inv_display** dp);
+void super_drop_func(int32_t dispnum, int32_t row);
+void super_use_func(int32_t dispnum, int32_t row);
+void gen_log_displays(int32_t pgnum);
+void absorb_object_on_cursor(int16_t, uint32_t, void*);
+bool gen_inv_page(int32_t pgnum, int32_t *i, inv_display** dp);
+bool gen_inv_displays(int32_t *i, inv_display** dp);
 
 
 
@@ -468,7 +468,7 @@ bool gen_inv_displays(int *i, inv_display** dp);
 
 void push_inventory_cursors(LGCursor* newcurs)
 {
-   int i;
+   int32_t i;
 
    for(i=0;i<NUM_INVENT_REGIONS;i++) {
       uiPushRegionCursor(*(all_inventory_regions[i]),newcurs);
@@ -477,7 +477,7 @@ void push_inventory_cursors(LGCursor* newcurs)
 
 void pop_inventory_cursors(void)
 {
-   int i;
+   int32_t i;
 
    for(i=0;i<NUM_INVENT_REGIONS;i++) {
       uiPopRegionCursor(*(all_inventory_regions[i]));
@@ -486,10 +486,10 @@ void pop_inventory_cursors(void)
 
 
 // draw a string in relative coordinates
-void draw_inventory_string(char* s, int x, int y, bool clear)
+void draw_inventory_string(int8_t* s, int32_t x, int32_t y, bool clear)
 {
-   short w,h;
-   short a,b,c,d;
+   int16_t w,h;
+   int16_t a,b,c,d;
 
    gr_string_size(s,&w,&h);
    if (w <= 0 || h <= 0 || strlen(s) == 0) return;
@@ -514,7 +514,7 @@ void draw_inventory_string(char* s, int x, int y, bool clear)
    }
    else
    {
-      long oldcolor = gr_get_fcolor();
+      int32_t oldcolor = gr_get_fcolor();
       if (clear)
       {
          gr_set_fcolor(0);
@@ -526,10 +526,10 @@ void draw_inventory_string(char* s, int x, int y, bool clear)
    RESTORE_CLIP(a,b,c,d);
 }
 
-void clear_inventory_region(short x1,short y1,short x2,short y2)
+void clear_inventory_region(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
    LGRect r;
-   short a,b,c,d;
+   int16_t a,b,c,d;
 
    if (!full_game_3d)
    {
@@ -552,9 +552,9 @@ void clear_inventory_region(short x1,short y1,short x2,short y2)
 }
 
 // Draw a single line of the weapons list
-void draw_quant_line(char* name, char* quant, long color, bool active, short left, short right, short y)
+void draw_quant_line(int8_t* name, int8_t* quant, int32_t color, bool active, int16_t left, int16_t right, int16_t y)
 {
-   short	ht, wd;
+   int16_t	ht, wd;
 
    gr_string_size(name, &wd, &ht);
    wd = gr_string_width(quant);
@@ -570,14 +570,14 @@ void draw_quant_line(char* name, char* quant, long color, bool active, short lef
 
 void draw_quant_list(inv_display* dp, bool newpage)
 {
-   int wtype;
-   int cnt;
-   int y, i;
-   char buf[BUFSZ];
-   ubyte *quant = (ubyte*)&player_struct + dp->offset;
-   ubyte *exist = quant;
-   int active = (dp->activenum == NULL_ACTIVE) ? -1 : player_struct.actives[dp->activenum];
-   int known_active = (dp->activenum == NULL_ACTIVE) ? -1 : known_actives[dp->activenum];
+   int32_t wtype;
+   int32_t cnt;
+   int32_t y, i;
+   int8_t buf[BUFSZ];
+   uint8_t *quant = (uint8_t*)&player_struct + dp->offset;
+   uint8_t *exist = quant;
+   int32_t active = (dp->activenum == NULL_ACTIVE) ? -1 : player_struct.actives[dp->activenum];
+   int32_t known_active = (dp->activenum == NULL_ACTIVE) ? -1 : known_actives[dp->activenum];
    quantity_state* line = dp->lines + dp->relnum*dp->pgsize;
 
    // Hey, what if we don't have our active item anymore...
@@ -627,10 +627,10 @@ void draw_quant_list(inv_display* dp, bool newpage)
          line->exist = exist[wtype];
          if (changed)
          {
-            char buf[BUFSZ] =  "";
-            char buf2[BUFSZ] = "";
+            int8_t buf[BUFSZ] =  "";
+            int8_t buf2[BUFSZ] = "";
             bool is_active = wtype == active && curractive;
-            uchar col;
+            uint8_t col;
 
             if (dp->name != NULL)
                dp->name(dp,wtype,buf);
@@ -648,21 +648,21 @@ void draw_quant_list(inv_display* dp, bool newpage)
 }
 
 
-void set_current_active(int activenum)
+void set_current_active(int32_t activenum)
 {
-   int old = player_struct.current_active;
+   int32_t old = player_struct.current_active;
    known_actives[old] = -1;
    player_struct.current_active = activenum;
    known_actives[activenum] = -1;
 }
 
 // Get the item at a particular pixel y
-int get_item_at_pixrow(inv_display *dp, int row)
+int32_t get_item_at_pixrow(inv_display *dp, int32_t row)
 {
-   int linenum = dp->relnum*dp->pgsize;
-   int ipanel_y;
-   int y_step;
-   int r1,r2;
+   int32_t linenum = dp->relnum*dp->pgsize;
+   int32_t ipanel_y;
+   int32_t y_step;
+   int32_t r1,r2;
 
 #ifdef STEREO_SUPPORT
    if (convert_use_mode == 5)
@@ -707,18 +707,18 @@ int get_item_at_pixrow(inv_display *dp, int row)
 #define WEAP_CLASSES (1 << CLASS_GUN)
 #define WEAP_TRIP    MAKETRIP(CLASS_GUN,0,0)
 
-char* weapon_name_func(void *, int num, char* buf)
+int8_t* weapon_name_func(void *, int32_t num, int8_t* buf)
 {
    weapon_slot* ws = &player_struct.weapons[num];
    get_weapon_name(ws->type,ws->subtype,buf);
    return buf;
 }
 
-char* weapon_quant_func(int num, char* buf)
+int8_t* weapon_quant_func(int32_t num, int8_t* buf)
 {
-   int triple, num_ammo_types, ammo_subclass;
-   ubyte ammo_types[3];
-   int i = 0;
+   int32_t triple, num_ammo_types, ammo_subclass;
+   uint8_t ammo_types[3];
+   int32_t i = 0;
    weapon_slot* ws = &player_struct.weapons[num];
    bool energy = is_energy_weapon(ws->type);
 
@@ -730,7 +730,7 @@ char* weapon_quant_func(int num, char* buf)
 
    if ((!energy) && (ws->type != GUN_SUBCLASS_BEAMPROJ))
    {
-      int ammo = ws->ammo;
+      int32_t ammo = ws->ammo;
       if (ws->ammo_type == EMPTY_WEAPON_SLOT)
       {
          ammo=0;
@@ -766,9 +766,9 @@ char* weapon_quant_func(int num, char* buf)
 void draw_weapons_list(inv_display *dp)
 {
    bool newpage = inv_last_page != inventory_page;
-   char buf[BUFSZ];
-   int i,s;
-   short y;
+   int8_t buf[BUFSZ];
+   int32_t i,s;
+   int16_t y;
    gr_set_font((grs_font*)ResLock(WEAPONS_FONT));
 
    if (newpage)
@@ -783,8 +783,8 @@ void draw_weapons_list(inv_display *dp)
    y = TOP_MARGIN + Y_STEP;
    for (i = 0; i < WEAPONS_PER_PAGE && s < NUM_WEAPON_SLOTS; i++,s++,y+=Y_STEP)
    {
-      int num_ammo_types, dummy1;
-      ubyte dummy2[3];
+      int32_t num_ammo_types, dummy1;
+      uint8_t dummy2[3];
       bool avail;
       bool newactive = weapon_list.active != player_struct.actives[ACTIVE_WEAPON];
       bool changed;
@@ -801,8 +801,8 @@ void draw_weapons_list(inv_display *dp)
       if (!changed) continue;
       if (weapon_list.slots[s].type != EMPTY_WEAPON_SLOT)
       {
-         char name[BUFSZ];
-         char quant[BUFSZ];
+         int8_t name[BUFSZ];
+         int8_t quant[BUFSZ];
          weapon_name_func(dp,s,name);
          weapon_quant_func(s,quant);
          draw_quant_line(name,quant,dp->listcolor,s == player_struct.actives[ACTIVE_WEAPON],WEAPON_X,AMMO_X,y);
@@ -814,10 +814,10 @@ void draw_weapons_list(inv_display *dp)
 }
 
 
-bool inventory_select_weapon(inv_display* dp, int w)
+bool inventory_select_weapon(inv_display* dp, int32_t w)
 {
    bool retval = FALSE;
-   int aw = player_struct.actives[ACTIVE_WEAPON];
+   int32_t aw = player_struct.actives[ACTIVE_WEAPON];
 #ifndef NO_DUMMIES
    inv_display* newdisp; newdisp = dp;
 #endif // NO_DUMMIES
@@ -840,7 +840,7 @@ out:
    return retval;
 }
 
-bool weapon_use_func(inv_display* dp, int w)
+bool weapon_use_func(inv_display* dp, int32_t w)
 {
    if (player_struct.weapons[w].type == EMPTY_WEAPON_SLOT) return FALSE;
    inventory_select_weapon(dp,w);
@@ -848,9 +848,9 @@ bool weapon_use_func(inv_display* dp, int w)
    return TRUE;
 }
 
-ubyte weapons_add_func(inv_display* dp, int row, ObjID* objP,bool select)
+uint8_t weapons_add_func(inv_display* dp, int32_t row, ObjID* objP,bool select)
 {
-   ubyte retval = ADD_REJECT;
+   uint8_t retval = ADD_REJECT;
    ObjID obj = *objP;
    weapon_slot* ws;
    weapon_slot tmp;
@@ -908,12 +908,12 @@ ubyte weapons_add_func(inv_display* dp, int row, ObjID* objP,bool select)
    return retval;
 }
 
-void weapon_drop_func(inv_display* dp, int itemnum)
+void weapon_drop_func(inv_display* dp, int32_t itemnum)
 {
    weapon_slot *ws;
    ObjID obj;
    ObjSpecID spec;
-   int it;
+   int32_t it;
 
    if (itemnum < 0 || itemnum >= dp->listlen) return;
    ws = &player_struct.weapons[itemnum];
@@ -951,13 +951,13 @@ void weapon_drop_func(inv_display* dp, int itemnum)
 // -------------
 // GENERIC FUNCS
 // -------------
-extern int nth_after_triple(int,uchar);
+extern int32_t nth_after_triple(int32_t,uint8_t);
 
 
-static char* generic_name_func(void* vdp, int num, char* buf)
+static int8_t* generic_name_func(void* vdp, int32_t num, int8_t* buf)
 {
-   int trip = nth_after_triple(((inv_display *)vdp)->basetrip,num);
-   get_object_short_name(trip,buf,BUFSZ);
+   int32_t trip = nth_after_triple(((inv_display *)vdp)->basetrip,num);
+   get_object_int16_t_name(trip,buf,BUFSZ);
    return buf;
 }
 
@@ -970,19 +970,19 @@ static void generic_draw_list(inv_display *dp)
    ResUnlock(ITEM_FONT);
 }
 
-ubyte generic_add_func(inv_display* dp, int row, ObjID* idP,bool select)
+uint8_t generic_add_func(inv_display* dp, int32_t row, ObjID* idP,bool select)
 {
    ObjID id = *idP;
-   int trip = ID2TRIP(id);
-   int n = OPTRIP(trip) - OPTRIP(dp->basetrip);
-   int obclass = objs[id].obclass;
+   int32_t trip = ID2TRIP(id);
+   int32_t n = OPTRIP(trip) - OPTRIP(dp->basetrip);
+   int32_t obclass = objs[id].obclass;
 #ifndef NO_DUMMIES
-   int guf; guf = row;
+   int32_t guf; guf = row;
 #endif // NO_DUMMIES
    play_digi_fx(SFX_INVENT_ADD, 1);
    if (n >= 0 && n < dp->listlen)
    {
-      ubyte* quants = (ubyte *)&player_struct + dp->offset;
+      uint8_t* quants = (uint8_t *)&player_struct + dp->offset;
       quants[n]++;
       if (dp->activenum != NULL_ACTIVE)
       {
@@ -1006,14 +1006,14 @@ ubyte generic_add_func(inv_display* dp, int row, ObjID* idP,bool select)
    return ADD_REJECT;
 }
 
-void generic_drop_func(inv_display* dp, int row)
+void generic_drop_func(inv_display* dp, int32_t row)
 {
-   int itemnum = dp->lines[row].num;
+   int32_t itemnum = dp->lines[row].num;
    ObjID obj;
-   int triple;
-   ubyte* quant;
+   int32_t triple;
+   uint8_t* quant;
    if (itemnum < 0 || itemnum >= dp->listlen) return;
-   quant = (ubyte *)&player_struct + dp->offset;
+   quant = (uint8_t *)&player_struct + dp->offset;
    if (quant[itemnum] == 0) return;
    quant[itemnum]--;
    triple = nth_after_triple(dp->basetrip,itemnum);
@@ -1031,21 +1031,21 @@ void generic_drop_func(inv_display* dp, int row)
    INVENT_CHANGED;
 }
 
-static char* generic_quant_func(inv_display* dp, int n, int q, char* buf)
+static int8_t* generic_quant_func(inv_display* dp, int32_t n, int32_t q, int8_t* buf)
 {
 #ifndef NO_DUMMIES
-   int dummy ;
-   dummy = n + (int)dp;
+   int32_t dummy ;
+   dummy = n + (int32_t)dp;
 #endif //NO_DUMMIES
  //  itoa(q,buf,10);
    numtostring(q, buf);
    return buf;
 }
 
-char* null_name_func(inv_display* dp, int n, char* buf)
+int8_t* null_name_func(inv_display* dp, int32_t n, int8_t* buf)
 {
 #ifndef NO_DUMMIES
-   int goof; goof = (int)dp + n;
+   int32_t goof; goof = (int32_t)dp + n;
 #endif // NO_DUMMIES
    *buf = '\0';
    return buf;
@@ -1058,7 +1058,7 @@ char* null_name_func(inv_display* dp, int n, char* buf)
 #define GREN_CLASSES (1 << CLASS_GRENADE)
 #define GREN_TRIP    MAKETRIP(CLASS_GRENADE,0,0)
 
-static char* grenade_name_func(void *, int n, char* buf)
+static int8_t* grenade_name_func(void *, int32_t n, int8_t* buf)
 {
    return get_grenade_name(n,buf);
 }
@@ -1068,23 +1068,23 @@ extern uiSlab main_slab;
 
 grs_bitmap grenade_bmap;
 #ifdef SVGA_SUPPORT
-char grenade_bmap_buffer[8700];
+int8_t grenade_bmap_buffer[8700];
 #else
-char grenade_bmap_buffer[700];
+int8_t grenade_bmap_buffer[700];
 #endif
 
 void push_live_grenade_cursor(ObjID obj)
 {
-   short w,h;
+   int16_t w,h;
    extern LGCursor object_cursor;
-   char live_string[22];
+   int8_t live_string[22];
 #ifdef CURSOR_BACKUPS
    extern grs_bitmap backup_object_cursor;
-   extern uchar *backup[NUM_BACKUP_BITS];
+   extern uint8_t *backup[NUM_BACKUP_BITS];
 #endif
 #ifdef SVGA_SUPPORT
-   uchar old_over = gr2ss_override;
-   short temp;
+   uint8_t old_over = gr2ss_override;
+   int16_t temp;
 #endif
    grs_canvas cursor_canvas;
    LGPoint hotspot;
@@ -1118,8 +1118,8 @@ void push_live_grenade_cursor(ObjID obj)
    if (sizeof(grenade_bmap_buffer) < grenade_bmap.w*grenade_bmap.h)
       critical_error(0x3006);
 
-   gr_init_bitmap(&grenade_bmap,(uchar *)bits,grenade_bmap.type,grenade_bmap.flags,grenade_bmap.w,grenade_bmap.h);
-   gr_init_canvas(&cursor_canvas,(uchar *)bits,BMT_FLAT8,grenade_bmap.w,grenade_bmap.h);
+   gr_init_bitmap(&grenade_bmap,(uint8_t *)bits,grenade_bmap.type,grenade_bmap.flags,grenade_bmap.w,grenade_bmap.h);
+   gr_init_canvas(&cursor_canvas,(uint8_t *)bits,BMT_FLAT8,grenade_bmap.w,grenade_bmap.h);
    gr_push_canvas(&cursor_canvas);
    gr_set_font((grs_font*)ResGet(ITEM_FONT));
    gr_clear(0);
@@ -1168,15 +1168,15 @@ void push_live_grenade_cursor(ObjID obj)
    input_cursor_mode = INPUT_OBJECT_CURSOR;
 }
 
-bool grenade_use_func(inv_display* dp, int row)
+bool grenade_use_func(inv_display* dp, int32_t row)
 {
-   int itemnum = dp->lines[row].num;
+   int32_t itemnum = dp->lines[row].num;
    ObjID obj;
-   int triple;
-   ubyte* quant;
+   int32_t triple;
+   uint8_t* quant;
    ObjSpecID spec;
    if (itemnum < 0 || itemnum >= dp->listlen) return(FALSE);
-   quant = (ubyte *)&player_struct + dp->offset;
+   quant = (uint8_t *)&player_struct + dp->offset;
    if (quant[itemnum] == 0) return(FALSE);
    quant[itemnum]--;
    triple = nth_after_triple(dp->basetrip,itemnum);
@@ -1197,9 +1197,9 @@ bool grenade_use_func(inv_display* dp, int row)
    return(TRUE);
 }
 
-ubyte grenade_add_func(inv_display* dp, int row, ObjID* idP, bool select)
+uint8_t grenade_add_func(inv_display* dp, int32_t row, ObjID* idP, bool select)
 {
-   extern errtype string_message_info(int strnum);
+   extern errtype string_message_info(int32_t strnum);
    ObjSpecID sid = objs[*idP].specID;
    play_digi_fx(SFX_INVENT_ADD, 1);
    if (objGrenades[sid].flags & GREN_ACTIVE_FLAG)
@@ -1216,7 +1216,7 @@ ubyte grenade_add_func(inv_display* dp, int row, ObjID* idP, bool select)
 #define DRUG_CLASSES (1 << CLASS_DRUG)
 #define DRUG_TRIP MAKETRIP(CLASS_DRUG,0,0)
 
-char* drug_name_func(inv_display* dp, int n, char* buf)
+int8_t* drug_name_func(inv_display* dp, int32_t n, int8_t* buf)
 {
 #ifndef NO_DUMMIES
    inv_display* dummy; dummy = dp;
@@ -1225,10 +1225,10 @@ char* drug_name_func(inv_display* dp, int n, char* buf)
 }
 
 
-bool drug_use_func(inv_display* dp, int row)
+bool drug_use_func(inv_display* dp, int32_t row)
 {
    bool retval = FALSE;
-   int n = dp->lines[row].num;
+   int32_t n = dp->lines[row].num;
    if (n < dp->listlen)
    {
       drug_use(n);
@@ -1246,14 +1246,14 @@ bool drug_use_func(inv_display* dp, int row)
 #define AMMO_CLASSES (1 << CLASS_AMMO)
 #define AMMO_TRIP    MAKETRIP(CLASS_AMMO,0,0)
 
-char* ammo_name_func(void* , int n, char* buf)
+int8_t* ammo_name_func(void* , int32_t n, int8_t* buf)
 {
-   int triple;
+   int32_t triple;
 
    buf[0] = AMMO_TYPE_LETTER(n);
    buf[1] = ' ';
    triple = get_triple_from_class_nth_item(CLASS_AMMO,n);
-   get_object_short_name(triple,buf+2,31);
+   get_object_int16_t_name(triple,buf+2,31);
    return buf;
 }
 
@@ -1266,9 +1266,9 @@ char* ammo_name_func(void* , int n, char* buf)
 #define HARDWARE_PAGES 2
 
 
-static char* ware_name_func(void* vdp,int n, char* buf)
+static int8_t* ware_name_func(void* vdp,int32_t n, int8_t* buf)
 {
-   int type;
+   int32_t type;
    switch(((inv_display *)vdp)->activenum)
    {
    case ACTIVE_HARDWARE:
@@ -1288,10 +1288,10 @@ static char* ware_name_func(void* vdp,int n, char* buf)
    return NULL;
 }
 
-static bool ware_use_func(inv_display* dp,int row)
+static bool ware_use_func(inv_display* dp,int32_t row)
 {
-   int waretype;
-   int t = dp->lines[row].num;
+   int32_t waretype;
+   int32_t t = dp->lines[row].num;
    if (t >= dp->listlen) return FALSE;
    switch(dp->activenum)
    {
@@ -1313,7 +1313,7 @@ static bool ware_use_func(inv_display* dp,int row)
 }
 
 
-void hardware_add_specials(int n, int ver)
+void hardware_add_specials(int32_t n, int32_t ver)
 {
    extern WARE HardWare[NUM_HARDWAREZ];
    extern void gamescr_bio_func(void);
@@ -1322,7 +1322,7 @@ void hardware_add_specials(int n, int ver)
    case HARDWARE_AUTOMAP:
       mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, TRUE, MFD_ACTIVE, TRUE);
       {
-         int i;
+         int32_t i;
          for (i=0; i<NUM_O_AMAP; i++)
             amap_version_set(i,player_struct.hardwarez[HARDWARE_AUTOMAP]);
       }
@@ -1332,9 +1332,9 @@ void hardware_add_specials(int n, int ver)
       break;
    case HARDWARE_SHIELD:
    {
-      extern int energy_cost(int warenum);
+      extern int32_t energy_cost(int32_t warenum);
       extern void shield_set_absorb(void);
-      int ener=0;
+      int32_t ener=0;
       if(WareActive(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]))
          ener=energy_cost(CPTRIP(SHIELD_HARD_TRIPLE));
       SHIELD_SETTING_SET(player_struct.hardwarez_status[n],ver-1);
@@ -1363,20 +1363,20 @@ void hardware_add_specials(int n, int ver)
    }
    if (HardWare[n].sideicon != SI_NONE)
    {
-      extern void zoom_to_side_icon(LGPoint from, int icon);
+      extern void zoom_to_side_icon(LGPoint from, int32_t icon);
       LGPoint from;
       ui_mouse_get_xy(&from.x,&from.y);
       zoom_to_side_icon(from,HardWare[n].sideicon);
    }
 }
 
-ubyte ware_add_func(inv_display* dp, int, ObjID* idP,bool select)
+uint8_t ware_add_func(inv_display* dp, int32_t, ObjID* idP,bool select)
 {
    ObjID id = *idP;
-   int trip = ID2TRIP(id);
+   int32_t trip = ID2TRIP(id);
    bool oneshot;
    bool bigstuff_fake=FALSE;
-   int n;
+   int32_t n;
    extern bool shameful_obselete_flag;
 
    if (global_fullmap->cyber && (objs[id].obclass == CLASS_BIGSTUFF))
@@ -1390,8 +1390,8 @@ ubyte ware_add_func(inv_display* dp, int, ObjID* idP,bool select)
       return ADD_REJECT;
    if (n >= 0 && n < dp->listlen)
    {
-      ubyte ver;
-      ubyte* quants = (ubyte *)&player_struct + dp->offset;
+      uint8_t ver;
+      uint8_t* quants = (uint8_t *)&player_struct + dp->offset;
       if (bigstuff_fake)
          ver = objBigstuffs[objs[id].specID].cosmetic_value;
       else
@@ -1436,14 +1436,14 @@ ubyte ware_add_func(inv_display* dp, int, ObjID* idP,bool select)
 void ware_drop_func(inv_display*, int)
 {
 #ifndef GAMEONLY
-   int itemnum = dp->lines[row].num;
+   int32_t itemnum = dp->lines[row].num;
    ObjID obj;
-   int triple;
+   int32_t triple;
    bool oneshot;
-   ubyte* quant;
-   extern int nth_after_triple(int,uchar);
+   uint8_t* quant;
+   extern int32_t nth_after_triple(int32_t,uint8_t);
    if (itemnum < 0 || itemnum >= dp->listlen) return;
-   quant = (ubyte *)&player_struct + dp->offset;
+   quant = (uint8_t *)&player_struct + dp->offset;
    if (quant[itemnum] == 0) return;
    triple = nth_after_triple(dp->basetrip,itemnum);
    oneshot = TRIP2CL(triple) == CLASS_SOFTWARE && TRIP2SC(triple) == SOFTWARE_SUBCLASS_ONESHOT;
@@ -1485,7 +1485,7 @@ void ware_drop_func(inv_display*, int)
 }
 
 
-char* null_quant_func(inv_display*, int, int, char* buf)
+int8_t* null_quant_func(inv_display*, int32_t, int32_t, int8_t* buf)
 {
    *buf = '\0';
    return buf;
@@ -1506,9 +1506,9 @@ char* null_quant_func(inv_display*, int, int, char* buf)
 #define VERSION_PREFIX (get_temp_string(REF_STR_VersionPrefix)[0])
 
 // QUANTS *******************************
-static char* soft_quant_func(inv_display*, int, int q, char* buf)
+static int8_t* soft_quant_func(inv_display*, int32_t, int32_t q, int8_t* buf)
 {
-   int l=1;
+   int32_t l=1;
    buf[0] = VERSION_PREFIX;
    if (q<10)
       buf[l++]=q+'0';
@@ -1522,10 +1522,10 @@ static char* soft_quant_func(inv_display*, int, int q, char* buf)
 #define CTRON_WD 10
 
 #ifdef COMPUTRONS
-char* computron_quant_func(inv_display* dp, int n, int q, char* buf)
+int8_t* computron_quant_func(inv_display* dp, int32_t n, int32_t q, int8_t* buf)
 {
 #ifdef REALLY_DO_COMPUTRONS
-   ubyte exists, ctrons;
+   uint8_t exists, ctrons;
 
    switch (dp->mfdtype)
    {
@@ -1566,11 +1566,11 @@ static ObjID general_lines[NUM_GENERAL_SLOTS];
 void draw_general_list(inv_display *dp)
 {
    bool newpage = inv_last_page != inventory_page;
-   char buf[BUFSZ];
-   int i,s;
-   short y;
-   ubyte active =  player_struct.actives[dp->activenum];
-   ubyte known_active = known_actives[dp->activenum];
+   int8_t buf[BUFSZ];
+   int32_t i,s;
+   int16_t y;
+   uint8_t active =  player_struct.actives[dp->activenum];
+   uint8_t known_active = known_actives[dp->activenum];
    bool newactive = known_active != active;
 
    gr_set_font((grs_font*)ResLock(ITEM_FONT));
@@ -1593,9 +1593,9 @@ void draw_general_list(inv_display *dp)
       if (!changed) continue;
       if (general_lines[s] != OBJ_NULL)
       {
-         ulong color = dp->listcolor;
-         char name[BUFSZ];
-         get_object_short_name(ID2TRIP(general_lines[s]),name,BUFSZ);
+         uint32_t color = dp->listcolor;
+         int8_t name[BUFSZ];
+         get_object_int16_t_name(ID2TRIP(general_lines[s]),name,BUFSZ);
          if (!(ObjProps[OPNUM(general_lines[s])].flags & INVENTORY_GENERAL))
             color = GARBAGE_COLOR;
          draw_quant_line(name,"",color,s == active && curractive,dp->left,dp->right,y);
@@ -1606,7 +1606,7 @@ void draw_general_list(inv_display *dp)
 }
 
 
-bool general_use_func(inv_display* dp, int row)
+bool general_use_func(inv_display* dp, int32_t row)
 {
    ObjID id = player_struct.inventory[row];
    extern errtype object_use(ObjID id, bool in_inv, ObjID cursor_obj);
@@ -1629,12 +1629,12 @@ bool general_use_func(inv_display* dp, int row)
    return TRUE;
 }
 
-ubyte inv_empty_trash(void)
+uint8_t inv_empty_trash(void)
 {
    bool found = FALSE;
-   ubyte non_trash = 0;
-   ubyte trash;
-   ubyte last_trash = NUM_GENERAL_SLOTS;
+   uint8_t non_trash = 0;
+   uint8_t trash;
+   uint8_t last_trash = NUM_GENERAL_SLOTS;
    // find the first trash object
    for (trash = 0; trash < NUM_GENERAL_SLOTS; trash++)
    {
@@ -1683,10 +1683,10 @@ ubyte inv_empty_trash(void)
    return last_trash;
 }
 
-ubyte add_access_card(inv_display* dp, ObjID* idP,bool select)
+uint8_t add_access_card(inv_display* dp, ObjID* idP,bool select)
 {
-   ubyte retval = ADD_NOEFFECT;
-   int i,d1,old_d1,gain;
+   uint8_t retval = ADD_NOEFFECT;
+   int32_t i,d1,old_d1,gain;
    ObjID cards;
    for (i = 0; i < dp->listlen; i++)
    {
@@ -1724,8 +1724,8 @@ ubyte add_access_card(inv_display* dp, ObjID* idP,bool select)
       string_message_info(REF_STR_AccessCardNoGain);
    else
    {
-      char gainbuf[80], bitname[16];
-      int l,bitgot;
+      int8_t gainbuf[80], bitname[16];
+      int32_t l,bitgot;
 
       get_string(REF_STR_AccessCardNewGain,gainbuf,80);
       l=strlen(gainbuf);
@@ -1753,7 +1753,7 @@ ubyte add_access_card(inv_display* dp, ObjID* idP,bool select)
    return retval;
 }
 
-ubyte general_add_func(inv_display* dp, int row, ObjID* idP,bool select)
+uint8_t general_add_func(inv_display* dp, int32_t row, ObjID* idP,bool select)
 {
    play_digi_fx(SFX_INVENT_ADD, 1);
    if ((objs[*idP].obclass == CLASS_SMALLSTUFF) &&
@@ -1794,8 +1794,8 @@ ubyte general_add_func(inv_display* dp, int row, ObjID* idP,bool select)
 void remove_general_item(ObjID obj)
 {
    extern errtype obj_tractor_beam_func(ObjID id, bool on);
-   int row;
-   int i;
+   int32_t row;
+   int32_t i;
 
    for (row = 0; row < NUM_GENERAL_SLOTS; row++)
       if (player_struct.inventory[row] == obj)
@@ -1821,7 +1821,7 @@ void remove_general_item(ObjID obj)
 }
 
 
-void general_drop_func(inv_display*, int row)
+void general_drop_func(inv_display*, int32_t row)
 {
    ObjID obj = player_struct.inventory[row];
    if (obj != OBJ_NULL && ID2TRIP(obj) != GENCARDS_TRIPLE) // don't let us drop access cards.
@@ -1832,7 +1832,7 @@ void general_drop_func(inv_display*, int row)
    }
 }
 
-bool inv_select_general(inv_display* dp, int w)
+bool inv_select_general(inv_display* dp, int32_t w)
 {
    bool retval = FALSE;
    if (player_struct.inventory[w] == OBJ_NULL)
@@ -1849,12 +1849,12 @@ out:
 // EMAIL
 // -----
 
-errtype inventory_draw_new_page(int pgnum);
+errtype inventory_draw_new_page(int32_t pgnum);
 #define EMAIL_TRIP 0 // MAKETRIP(CLASS_SOFTWARE,SOFTWARE_SUBCLASS_EMAIL,0)
 
 #define FIRST_DATA (NUM_EMAIL - NUM_DATA)
 
-extern char* email_name_func(void* dp, int num, char* buf);
+extern int8_t* email_name_func(void* dp, int32_t num, int8_t* buf);
 
 #define MORE_COLOR SELECTED_ITEM_COLOR
 
@@ -1866,15 +1866,15 @@ void email_more_draw(inv_display *dp)
 
    if (dp->relnum % 2 == 1)
    {
-      int i;
-      int count = 0;
+      int32_t i;
+      int32_t count = 0;
       for (i = 0; i < NUM_EMAIL_PROPER; i++)
          if (player_struct.email[i])
             count++;
       if (count > (dp->relnum+1)*dp->pgsize)
       {
-         short y = dp->top+Y_STEP;
-         char buf[50];
+         int16_t y = dp->top+Y_STEP;
+         int8_t buf[50];
          get_string(REF_STR_EmailMoreRight,buf,sizeof(buf));
          draw_quant_line("",buf,MORE_COLOR,FALSE,dp->left,dp->right,y);
          email_morebuttons[1] = TRUE;
@@ -1883,8 +1883,8 @@ void email_more_draw(inv_display *dp)
    }
    else if (dp->relnum != 0)
    {
-      short y = dp->top + Y_STEP;
-      char buf[50];
+      int16_t y = dp->top + Y_STEP;
+      int8_t buf[50];
       get_string(REF_STR_EmailMoreLeft,buf,sizeof(buf));
       draw_quant_line(buf,"",MORE_COLOR,FALSE,dp->left,dp->right,y);
       email_morebuttons[0] = TRUE;
@@ -1899,7 +1899,7 @@ bool email_more_use(inv_display* dp, int)
    bool retval = FALSE;
    if (dp->relnum != 0 && email_morebuttons[dp->relnum % 2])
    {
-      int newpage = (dp->relnum % 2 == 0) ? inventory_page - 1 : inventory_page + 1;
+      int32_t newpage = (dp->relnum % 2 == 0) ? inventory_page - 1 : inventory_page + 1;
       inventory_page = newpage;
       INVENT_CHANGED;
       retval = TRUE;
@@ -1911,11 +1911,11 @@ bool email_more_use(inv_display* dp, int)
 #define EMAIL_BASE_ID   RES_email0
 #define TITLE_IDX       1
 
-bool email_use_func(inv_display* dp, int row)
+bool email_use_func(inv_display* dp, int32_t row)
 {
    extern void read_email(Id,int);
    bool retval = FALSE;
-   int n = dp->lines[row].num;
+   int32_t n = dp->lines[row].num;
 
    if (n < dp->listlen)
    {
@@ -1925,11 +1925,11 @@ bool email_use_func(inv_display* dp, int row)
    return retval;
 }
 
-extern void select_email(int num, bool scr_update);
+extern void select_email(int32_t num, bool scr_update);
 
-void email_select_func(inv_display* dp, int row)
+void email_select_func(inv_display* dp, int32_t row)
 {
-   int n = dp->lines[row].num;
+   int32_t n = dp->lines[row].num;
    if (n < dp->listlen)
    {
       play_digi_fx(SFX_INVENT_SELECT,1);
@@ -1939,14 +1939,14 @@ void email_select_func(inv_display* dp, int row)
 
 
 
-void add_email_datamunge(short mung,bool select)
+void add_email_datamunge(int16_t mung,bool select)
 {
-   extern void set_email_flags(int n);
+   extern void set_email_flags(int32_t n);
 
-   int n;
+   int32_t n;
    bool flash_email = TRUE;
-   ubyte ver;
-   extern short last_email_taken;
+   uint8_t ver;
+   extern int16_t last_email_taken;
 
    n = mung & 0xFF;
    ver = mung >> 8;
@@ -1957,7 +1957,7 @@ void add_email_datamunge(short mung,bool select)
       break;
    case LOG_VER:
       {
-         int lev;
+         int32_t lev;
          lev = n /LOGS_PER_LEVEL;
          n = NUM_EMAIL_PROPER + n;
          if (player_struct.email[n] == 0)
@@ -1982,7 +1982,7 @@ void add_email_datamunge(short mung,bool select)
    select_email(n,select);
 }
 
-ubyte email_add_func(inv_display*, int, ObjID* idP,bool select)
+uint8_t email_add_func(inv_display*, int32_t, ObjID* idP,bool select)
 {
    play_digi_fx(SFX_INVENT_ADD, 1);
    if (ID2TRIP(*idP) != EMAIL1_TRIPLE && ID2TRIP(*idP) != TEXT1_TRIPLE) return ADD_REJECT;
@@ -1991,7 +1991,7 @@ ubyte email_add_func(inv_display*, int, ObjID* idP,bool select)
 }
 
 
-void email_drop_func(inv_display*, int )
+void email_drop_func(inv_display*, int32_t )
 {
    // For now, do nothing.
 }
@@ -2005,16 +2005,16 @@ void email_drop_func(inv_display*, int )
 
 #define FIRST_LOG_PAGE 20
 
-char* log_name_func(void*, int num, char* buf)
+int8_t* log_name_func(void*, int32_t num, int8_t* buf)
 {
    return get_string(REF_STR_LogName0+num,buf,BUFSZ);
 }
 
 
-bool log_use_func(inv_display* dp, int row)
+bool log_use_func(inv_display* dp, int32_t row)
 {
    bool retval = FALSE;
-   int n = dp->lines[row].num;
+   int32_t n = dp->lines[row].num;
    if (n < dp->listlen)
    {
       inventory_draw_new_page(FIRST_LOG_PAGE+n);
@@ -2028,9 +2028,9 @@ bool log_use_func(inv_display* dp, int row)
 // INTERNALS
 // ---------
 
-void inventory_draw_page(int pgnum)
+void inventory_draw_page(int32_t pgnum)
 {
-   int i;
+   int32_t i;
    inv_display* dpy;
 
    for (i = 0; gen_inv_page(pgnum,&i,&dpy); i++)
@@ -2042,13 +2042,13 @@ void inventory_draw_page(int pgnum)
       known_actives[i] = player_struct.actives[i];
 }
 
-ubyte add_to_some_page(ObjID obj,bool select)
+uint8_t add_to_some_page(ObjID obj,bool select)
 {
    inv_display* dpy;
-   int i;
+   int32_t i;
    for (i = 0; gen_inv_displays(&i,&dpy); i++)
    {
-      ubyte pop;
+      uint8_t pop;
       if (global_fullmap->cyber && (objs[obj].obclass == CLASS_BIGSTUFF))
       {
          if (!(dpy->add_classes & (1 << CLASS_SOFTWARE))) continue;
@@ -2092,9 +2092,9 @@ void draw_page_button_panel()
 void draw_page_buttons(bool full)
 {
    LGRect r,hider;
-   int i;
-   short x;
-   uchar old_over = gr2ss_override;
+   int32_t i;
+   int16_t x;
+   uint8_t old_over = gr2ss_override;
 
    gr_push_canvas(ppage_canvas);
    if (full_game_3d)
@@ -2114,7 +2114,7 @@ void draw_page_buttons(bool full)
    for (x = FIRST_BTTN_X, i =0; i < NUM_PAGE_BUTTONS; i++, x +=BUTTON_X_STEP)
    {
       invent_bttn_state newstate = page_button_state[i];
-      ulong clr;
+      uint32_t clr;
       bool active = i == inventory_page;
 
       if (newstate == BttnDummy) continue;
@@ -2126,7 +2126,7 @@ void draw_page_buttons(bool full)
          bool flashon = (player_struct.game_time / INVENT_BTTN_FLASH_TIME) %2 ;
          if (flashon != FlashOn(newstate))
          {
-            newstate = (invent_bttn_state)((char)newstate - 1);
+            newstate = (invent_bttn_state)((int8_t)newstate - 1);
             if (newstate == BttnFlashOff)
                newstate = BttnOff;
          }
@@ -2196,7 +2196,7 @@ errtype inventory_clear(void)
 
 errtype inventory_full_redraw()
 {
-   int i;
+   int32_t i;
    inv_last_page = -1;
    for (i = 0; i < NUM_PAGE_BUTTONS; i++)
       old_button_state[i] = BttnDummy;
@@ -2207,8 +2207,8 @@ errtype inventory_draw(void)
 {
    bool full = inventory_page != inv_last_page;
 #ifdef SVGA_SUPPORT
-   uchar old_over;
-   short temp;
+   uint8_t old_over;
+   int16_t temp;
 #endif
    if (inventory_page < 0) return OK;
    gr_push_canvas(&inv_canvas);
@@ -2237,7 +2237,7 @@ errtype inventory_draw(void)
    return(OK);
 }
 
-errtype inventory_draw_new_page(int pgnum)
+errtype inventory_draw_new_page(int32_t pgnum)
 {
    inv_last_page = -1;
    inventory_page = pgnum;
@@ -2258,7 +2258,7 @@ errtype inventory_draw_new_page(int pgnum)
 
 bool inventory_add_object(ObjID obj,bool select)
 {
-   ubyte result = add_to_some_page(obj,select);
+   uint8_t result = add_to_some_page(obj,select);
    return (result != ADD_FAIL) && (result != ADD_REJECT) && (result != ADD_NOROOM);
 }
 
@@ -2267,10 +2267,10 @@ bool inventory_add_object(ObjID obj,bool select)
 // EVENTHANDLER
 // ------------
 
-bool do_selection(inv_display* dp, int row)
+bool do_selection(inv_display* dp, int32_t row)
 {
    bool retval = FALSE;
-   int w = dp->lines[row].num;
+   int32_t w = dp->lines[row].num;
    if (w >= dp->listlen) goto out;
    if (dp->activenum == NULL_ACTIVE) goto out;
    player_struct.actives[dp->activenum] = w;
@@ -2281,10 +2281,10 @@ out:
    return retval;
 }
 
-void add_object_on_cursor(inv_display* dp, int row)
+void add_object_on_cursor(inv_display* dp, int32_t row)
 {
 	ObjID obj = object_on_cursor;
-	ubyte pop = ADD_REJECT;
+	uint8_t pop = ADD_REJECT;
 	if (dp != NULL)
 		pop = (dp->add_classes & (1 << TRIP2CL(ID2TRIP(object_on_cursor)))) ? ADD_POP : ADD_REJECT;
 	if (pop != ADD_REJECT && dp->add != NULL)
@@ -2309,7 +2309,7 @@ void add_object_on_cursor(inv_display* dp, int row)
 		string_message_info(REF_STR_InvReject);
 }
 
-bool inventory_handle_leftbutton(uiEvent* ev, inv_display* dp, int row)
+bool inventory_handle_leftbutton(uiEvent* ev, inv_display* dp, int32_t row)
 {
    bool retval = FALSE;
 #ifndef NO_DUMMIES
@@ -2335,9 +2335,9 @@ bool inventory_handle_leftbutton(uiEvent* ev, inv_display* dp, int row)
 
 static bool invpanel_focus = FALSE;
 
-bool inventory_handle_rightbutton(uiEvent* ev, LGRegion* reg, inv_display* dp, int row)
+bool inventory_handle_rightbutton(uiEvent* ev, LGRegion* reg, inv_display* dp, int32_t row)
 {
-   static int lastrow = 0;
+   static int32_t lastrow = 0;
    static inv_display* lastdp = NULL;
 
    bool retval = FALSE;
@@ -2379,8 +2379,8 @@ bool inventory_handle_rightbutton(uiEvent* ev, LGRegion* reg, inv_display* dp, i
       bool cyber = TRIP2CL(dp->basetrip) == CLASS_SOFTWARE;
       if (cyber != global_fullmap->cyber)
       {
-         extern errtype string_message_info(int);
-         int str = cyber ? REF_STR_InvCybFailSoft : REF_STR_InvCybFailHard;
+         extern errtype string_message_info(int32_t);
+         int32_t str = cyber ? REF_STR_InvCybFailSoft : REF_STR_InvCybFailHard;
          string_message_info(str);
       }
       else if (dp->drop != NULL)
@@ -2400,13 +2400,13 @@ bool inventory_mouse_handler(uiEvent* ev, LGRegion* r, void*)
 {
    bool retval = FALSE;
    uiMouseEvent *mev = (uiMouseEvent*) ev;
-   int relx;
+   int32_t relx;
    inv_display* dp = NULL;
-   int i;
-   int row = -1;
+   int32_t i;
+   int32_t row = -1;
    extern bool game_paused;
 #ifdef SVGA_SUPPORT
-   short temp;
+   int16_t temp;
 #endif
    if (game_paused)
       return(TRUE);
@@ -2442,9 +2442,9 @@ bool inventory_mouse_handler(uiEvent* ev, LGRegion* r, void*)
          if (input_cursor_mode != INPUT_OBJECT_CURSOR)
          {
             bool found = FALSE;
-            short rel_y;
-            short x,y;
-            short smx,smy;
+            int16_t rel_y;
+            int16_t x,y;
+            int16_t smx,smy;
 #ifdef STEREO_SUPPORT
             if (convert_use_mode == 5)
             {
@@ -2474,7 +2474,7 @@ bool inventory_mouse_handler(uiEvent* ev, LGRegion* r, void*)
             for (x = relx-smx; !found && x <= relx + smx; x++)
                for (y = rel_y - smy; !found && y <= rel_y + smy; y++)
                {
-                  short usex,usey;
+                  int16_t usex,usey;
                   usex = x;
                   usey = y;
 #ifdef SVGA_SUPPORT
@@ -2528,11 +2528,11 @@ bool inventory_mouse_handler(uiEvent* ev, LGRegion* r, void*)
 
 
 
-int last_invent_cnum = -1; // last cursor num set for region
+int32_t last_invent_cnum = -1; // last cursor num set for region
 bool pagebutton_mouse_handler(uiMouseEvent* ev, LGRegion* r, void*)
 {
    LGPoint pos = ev->pos;
-   int cnum;
+   int32_t cnum;
 
    if (full_game_3d
       && (ev->buttons & (1 << MOUSE_LBUTTON)) != 0
@@ -2588,8 +2588,8 @@ bool pagebutton_mouse_handler(uiMouseEvent* ev, LGRegion* r, void*)
 
    if (ev->action & MOUSE_LDOWN)
    {
-      int i = cnum;
-      short x = FIRST_BTTN_X + i*BUTTON_X_STEP;
+      int32_t i = cnum;
+      int16_t x = FIRST_BTTN_X + i*BUTTON_X_STEP;
          if (pos.x >= x && pos.x < x + INVENT_BTTN_WD
             && page_button_state[i] != BttnDummy)
          {
@@ -2625,7 +2625,7 @@ bool pagebutton_mouse_handler(uiMouseEvent* ev, LGRegion* r, void*)
 #define EMPTY_PAGE(i) (page_button_state[i] == BttnDummy)
 
 
-bool invent_hotkey_func(ushort, ulong, int data)
+bool invent_hotkey_func(uint16_t, uint32_t, int32_t data)
 {
    if (inventory_page < 0)
       inventory_page = MAX_HOTKEY_PAGES;
@@ -2664,14 +2664,14 @@ bool invent_hotkey_func(ushort, ulong, int data)
    return TRUE;
 }
 
-bool cycle_weapons_func(ushort, ulong, int data)
+bool cycle_weapons_func(uint16_t, uint32_t, int32_t data)
 {
    if (global_fullmap->cyber)
    {
-      int ac = player_struct.actives[ACTIVE_COMBAT_SOFT];
-      int bound1 = (data>0) ? NUM_COMBAT_SOFTS : -1;
-      int bound2 = (data>0) ? 0 : NUM_COMBAT_SOFTS-1;
-      int i;
+      int32_t ac = player_struct.actives[ACTIVE_COMBAT_SOFT];
+      int32_t bound1 = (data>0) ? NUM_COMBAT_SOFTS : -1;
+      int32_t bound2 = (data>0) ? 0 : NUM_COMBAT_SOFTS-1;
+      int32_t i;
       for(i = ac+data; i != bound1; i+=data)
          if (player_struct.softs.combat[i] != 0)
             goto got_soft;
@@ -2684,7 +2684,7 @@ got_soft:
    }
    else
    {
-      int aw = player_struct.actives[ACTIVE_WEAPON];
+      int32_t aw = player_struct.actives[ACTIVE_WEAPON];
 
       aw+=data;
       if (aw >= NUM_WEAPON_SLOTS || player_struct.weapons[aw].type == EMPTY_WEAPON_SLOT)
@@ -2730,17 +2730,17 @@ LGRegion* create_invent_region(LGRegion* root, LGRegion **pbuttons, LGRegion **p
 {
    static bool done_init = FALSE;
    extern void add_email_handler(LGRegion* r);
-   int id;
+   int32_t id;
    LGRect invrect;
    LGRegion* invreg = (LGRegion *)NewPtr(sizeof(LGRegion));
    LGRegion* pagereg = (LGRegion *)NewPtr(sizeof(LGRegion));
    FrameDesc* f;
 #ifdef OLD_BUTTON_CURSORS
    LGPoint pt;
-   int i;
+   int32_t i;
 #endif
 #ifdef CURSOR_BACKUPS
-   extern uchar *backup[NUM_BACKUP_BITS];
+   extern uint8_t *backup[NUM_BACKUP_BITS];
    extern grs_bitmap backup_invent_bttn_cursors[NUM_PAGE_BTTNS];
 #endif
 
@@ -2785,8 +2785,8 @@ LGRegion* create_invent_region(LGRegion* root, LGRegion **pbuttons, LGRegion **p
 
       // This background is going to get used by the 360 ware
       // in fullscreen mode, so we need extra bits
-//KLC      inv_backgnd.bits = (uchar *)NewPtr(MAX_INV_FULL_WD(INV_FULL_WD) * MAX_INV_FULL_HT(grd_cap->h - GAME_MESSAGE_Y));
-      inv_backgnd.bits = (uchar *)NewPtr(290 * 136);					// KLC - I just happen to know what these are.
+//KLC      inv_backgnd.bits = (uint8_t *)NewPtr(MAX_INV_FULL_WD(INV_FULL_WD) * MAX_INV_FULL_HT(grd_cap->h - GAME_MESSAGE_Y));
+      inv_backgnd.bits = (uint8_t *)NewPtr(290 * 136);					// KLC - I just happen to know what these are.
       memcpy(inv_backgnd.bits,(f+1),f->bm.w * f->bm.h);
       ResUnlock(RES_gamescrGfx);
       ResUnlock(RES_gamescrGfx);
@@ -2797,7 +2797,7 @@ LGRegion* create_invent_region(LGRegion* root, LGRegion **pbuttons, LGRegion **p
       gr_init_canvas(&inv_view360_canvas,inv_backgnd.bits, BMT_FLAT8, INV_FULL_WD, INV_FULL_HT);
       gr_init_sub_canvas(grd_scr_canv,&inv_gamepage_canvas,INVENTORY_PANEL_X,BUTTON_PANEL_Y,INVENTORY_PANEL_WIDTH,grd_cap->h - BUTTON_PANEL_Y);
 
-      uchar *p = (uchar *)NewPtr(292 * 10);											// This canvas holds an off-screen image of the
+      uint8_t *p = (uint8_t *)NewPtr(292 * 10);											// This canvas holds an off-screen image of the
       gr_init_canvas(&inv_fullpage_canvas, p, BMT_FLAT8, 292, 10);			// inventory buttons.
       gr_push_canvas(&inv_fullpage_canvas);
       gr_clear(0);
@@ -2862,7 +2862,7 @@ void inv_change_fullscreen(bool on)
    }
    else
    {
-      int i;
+      int32_t i;
       pinv_canvas = &inv_norm_canvas;
       ppage_canvas = &inv_gamepage_canvas;
       for (i = 0; i < NUM_PAGE_BUTTONS; i++)
@@ -2878,7 +2878,7 @@ void inv_change_fullscreen(bool on)
 void inv_update_fullscreen(bool full)
 {
    grs_bitmap* bm;
-   short a,b,c,d;
+   int16_t a,b,c,d;
    STORE_CLIP(a,b,c,d);
    if (full)
    {
@@ -2943,7 +2943,7 @@ void inv_update_fullscreen(bool full)
 // THE DISPLAY LIST ARRAY
 // ----------------------
 
-#define FIELD_OFFSET(fld)  (int)&(((Player*) 0)->fld)
+#define FIELD_OFFSET(fld)  (int32_t)&(((Player*) 0)->fld)
 
 
 inv_display inv_display_list[] =
@@ -3125,19 +3125,19 @@ inv_display inv_display_list[] =
 
 #define DUMMY_LOG_INDEX (NUM_INV_DISPLAYS- 3)
 
-void super_drop_func(int dispnum, int row)
+void super_drop_func(int32_t dispnum, int32_t row)
 {
    inv_display* dp=&(inv_display_list[dispnum]);
    dp->drop(dp,row);
 }
 
-void super_use_func(int dispnum, int row)
+void super_use_func(int32_t dispnum, int32_t row)
 {
    inv_display* dp=&(inv_display_list[dispnum]);
    dp->use(dp,row);
 }
 
-void gen_log_displays(int pgnum)
+void gen_log_displays(int32_t pgnum)
 {
    inv_display* dp = &inv_display_list[DUMMY_LOG_INDEX];
    pgnum -= FIRST_LOG_PAGE;
@@ -3160,7 +3160,7 @@ void gen_log_displays(int pgnum)
 
 
 
-bool gen_inv_page(int pgnum, int *i, inv_display** dp)
+bool gen_inv_page(int32_t pgnum, int32_t *i, inv_display** dp)
 {
    if (*i == 0)
       gen_log_displays(pgnum);
@@ -3179,7 +3179,7 @@ bool gen_inv_page(int pgnum, int *i, inv_display** dp)
 #define LOG_PAGE_SHF 8
 
 
-bool gen_inv_displays(int *i, inv_display** dp)
+bool gen_inv_displays(int32_t *i, inv_display** dp)
 {
    if (*i == 0)
       gen_log_displays(inventory_page);
@@ -3193,7 +3193,7 @@ bool gen_inv_displays(int *i, inv_display** dp)
 }
 
 
-void absorb_object_on_cursor(short, ulong, void*)
+void absorb_object_on_cursor(int16_t, uint32_t, void*)
 {
    if(object_on_cursor==NULL) return;
 

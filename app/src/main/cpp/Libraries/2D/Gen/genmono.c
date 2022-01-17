@@ -59,13 +59,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    independence and slowness. draws 1's in the source bitmap as currently
    set foreground, and 0's are bacground if opaque, or not drawn if trans-
    parent. */
-void gen_mono_ubitmap (grs_bitmap *bm, short x, short y)
+void gen_mono_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   short w, h;                         /* working width and height */
-   short dst_x;                        /* destination x */
-   int bit;                            /* bit from 0-7 in source byte */
-   uchar *p_row;                       /* pointer to current row of bitmap */
-   uchar *p;                           /* pointer to source byte */
+   int16_t w, h;                         /* working width and height */
+   int16_t dst_x;                        /* destination x */
+   int32_t bit;                            /* bit from 0-7 in source byte */
+   uint8_t *p_row;                       /* pointer to current row of bitmap */
+   uint8_t *p;                           /* pointer to source byte */
 
    h = bm->h;
    p_row = bm->bits;
@@ -129,12 +129,12 @@ void gen_mono_ubitmap (grs_bitmap *bm, short x, short y)
 }
 
 /* clip monochrome bitmap against cliprect and jump to unclipped drawer. */
-int gen_mono_bitmap (grs_bitmap *bm, short x, short y)
+int32_t gen_mono_bitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   short w,h;
-   uchar align;
-   uchar *p;
-   int code = CLIP_NONE;
+   int16_t w,h;
+   uint8_t align;
+   uint8_t *p;
+   int32_t code = CLIP_NONE;
 
    /* save stuff that clipping changes. */
    w = bm->w; h = bm->h; align = bm->align; p = bm->bits;

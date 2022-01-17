@@ -36,14 +36,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Prototypes
 //--------------------
-int TrackTitleButton(int btn);
+int32_t TrackTitleButton(int32_t btn);
 
 //--------------------
 //  Globals
 //--------------------
 PixMapHandle 	gScreenPixMap;
 CTabHandle			gMainColorHand;
-Boolean				gChangedColors = false;
+bool				gChangedColors = false;
 ShockBitmap		gMainOffScreen;
 
 
@@ -81,7 +81,7 @@ void ResetCTSeed(void)
 //------------------------------------------------------------------------------------
 //		Save the screen pixmap's ctSeed before a suspend.
 //------------------------------------------------------------------------------------
-long oldctSeed;
+int32_t oldctSeed;
 void RememberSeed(void)
 {
 	oldctSeed =	(*(*gScreenPixMap)->pmTable)->ctSeed;
@@ -105,7 +105,7 @@ void FixPalette(void)
 //------------------------------------------------------------------------------------
 // 	Setup a new ShockBitmap structure.
 //------------------------------------------------------------------------------------
-void NewShockBitmap(ShockBitmap *theMap, short width, short height, Boolean color)
+void NewShockBitmap(ShockBitmap *theMap, int16_t width, int16_t height, bool color)
 {
 	GrafPtr 			savePort;
 	PixMapPtr		pmaptr;
@@ -125,14 +125,14 @@ void NewShockBitmap(ShockBitmap *theMap, short width, short height, Boolean colo
 
 		pmaptr = *(theMap->CPort.portPixMap);
 		theMap->Address = StripAddress(pmaptr->baseAddr);
-		theMap->RowBytes = (long)(pmaptr->rowBytes & 0x7FFF);
+		theMap->RowBytes = (int32_t)(pmaptr->rowBytes & 0x7FFF);
 		theMap->bits = (GrafPtr) &theMap->CPort;
 	}
 	else																					// setup B&W maps
 	{
 		theMap->BWBits.bounds = theMap->bounds;
 		theMap->BWBits.rowBytes = ((width+15) >> 4)<<1; 		// round to even
-		theMap->BWBits.baseAddr = NewPtr(((long) height * (long) theMap->BWBits.rowBytes));
+		theMap->BWBits.baseAddr = NewPtr(((int32_t) height * (int32_t) theMap->BWBits.rowBytes));
 		FailNIL(theMap->BWBits.baseAddr);
 
 		theMap->BWBits.baseAddr = StripAddress(theMap->BWBits.baseAddr);
@@ -147,7 +147,7 @@ void NewShockBitmap(ShockBitmap *theMap, short width, short height, Boolean colo
 		EraseRect(&theMap->bounds);
 
 		theMap->Address = theMap->BWBits.baseAddr;
-		theMap->RowBytes = (long) theMap->BWBits.rowBytes;
+		theMap->RowBytes = (int32_t) theMap->BWBits.rowBytes;
 		theMap->bits = (GrafPtr) &theMap->BWPort;
 	}
 
@@ -176,12 +176,12 @@ void FreeShockBitmap(ShockBitmap *theMap)
 // 	Code to build an offscreen pixmap (8bit) of a given size, using the current pStd clut
 //		store pixmap in ColorBack cGrafPort.
 //------------------------------------------------------------------------------------
-Handle Build8PixMap(CGrafPtr theCGrafPtr, short width, short height)
+Handle Build8PixMap(CGrafPtr theCGrafPtr, int16_t width, int16_t height)
 {
 	Rect        			bRect;
 	PixMapHandle		pmap;
 	PixMapPtr			pmaptr;
-	long         			bytes;
+	int32_t         			bytes;
 	Handle				hand;
 
 	SetRect(&bRect, 0, 0, width, height);
@@ -197,14 +197,14 @@ Handle Build8PixMap(CGrafPtr theCGrafPtr, short width, short height)
 	pmaptr->bounds=bRect;
 
 	pmaptr->rowBytes = ((width+1)>>1)<<1;
-	bytes = (long) height * (long)pmaptr->rowBytes;
+	bytes = (int32_t) height * (int32_t)pmaptr->rowBytes;
 	pmaptr->rowBytes |= 0x8000;
 
 	hand = NewHandle(bytes + 32);
 	FailNIL((Ptr) hand);
 	MoveHHi(hand);
 	HLock(hand);
-	pmaptr->baseAddr = (Ptr)((unsigned long)(*hand+31) & 0xFFFFFFE0);
+	pmaptr->baseAddr = (Ptr)((uint32_t)(*hand+31) & 0xFFFFFFE0);
 
 	pmaptr->pmTable = gMainColorHand;
 
@@ -220,7 +220,7 @@ Handle Build8PixMap(CGrafPtr theCGrafPtr, short width, short height)
 //------------------------------------------------------------------------------------
 //		Draw a pict into a ShockBitmap structure
 //------------------------------------------------------------------------------------
-void LoadPictShockBitmap(ShockBitmap *theMap, short PictID)
+void LoadPictShockBitmap(ShockBitmap *theMap, int16_t PictID)
 {
 	PicHandle 	pic;
 	Rect			r;
@@ -246,9 +246,9 @@ void LoadPictShockBitmap(ShockBitmap *theMap, short PictID)
 //------------------------------------------------------------------------------------
 // 	Return the main monitor's current screen depth.
 //------------------------------------------------------------------------------------
-short CurScreenDepth(void)
+int16_t CurScreenDepth(void)
 {
-	short					depth;
+	int16_t					depth;
 	GDHandle     		devhandle;
 	PixMapHandle 	pmhan;
 
@@ -266,7 +266,7 @@ short CurScreenDepth(void)
 //------------------------------------------------------------------------------------
 void CheckBitDepth(void)
 {
- 	short		newDepth;
+ 	int16_t		newDepth;
 
 	if (gInForeground)
 	{
@@ -375,9 +375,9 @@ void SetupTitleScreen(void)
 //  Handle clicking in title screen buttons.  Returns:
 //  	0 - New Game,   1 - Open Game,   2 - Play Intro,  3 - Quit,   -1 - No button
 //------------------------------------------------------------------------------------
-int DoShockTitleButtons(Point mousePt)
+int32_t DoShockTitleButtons(Point mousePt)
 {
-	for (int i = 0; i < 4; i++)
+	for (int32_t i = 0; i < 4; i++)
 	{
 		if (PtInRect(mousePt, &pBtnRect[i]))
 			return (TrackTitleButton(i));
@@ -388,12 +388,12 @@ int DoShockTitleButtons(Point mousePt)
 //------------------------------------------------------------------------------------
 //  Handle mouse tracking for the button.  Returns button if clicked, -1 if not.
 //------------------------------------------------------------------------------------
-int TrackTitleButton(int btn)
+int32_t TrackTitleButton(int32_t btn)
 {
 	PicHandle	phNorm, phClick;
 	Point			currPt;
-	Boolean		oldState = TRUE;
-	Boolean		newState;
+	bool		oldState = TRUE;
+	bool		newState;
 	Rect			r = pBtnRect[btn];
 
 	// Get handles to the regular and pressed buttons.

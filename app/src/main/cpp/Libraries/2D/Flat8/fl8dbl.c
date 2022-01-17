@@ -31,12 +31,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "blndat.h"
 
 #if !(defined(powerc) || defined(__powerc))
-asm void Handle_Smooth_H_Asm(int	endh, int endv, long srcAdd, long dstAdd,
-															uchar *src, uchar *dst, uchar *local_grd_half_blend);
-asm void Handle_Smooth_HV_Asm(int tempH, int tempW, int temp,
-															uchar	*shvd_read_row1, uchar *shvd_write,
-															uchar *shvd_read_row2, uchar *shvd_read_blend,
-															uchar *dstPtr);
+asm void Handle_Smooth_H_Asm(int32_t	endh, int32_t endv, int32_t srcAdd, int32_t dstAdd,
+															uint8_t *src, uint8_t *dst, uint8_t *local_grd_half_blend);
+asm void Handle_Smooth_HV_Asm(int32_t tempH, int32_t tempW, int32_t temp,
+															uint8_t	*shvd_read_row1, uint8_t *shvd_write,
+															uint8_t *shvd_read_row2, uint8_t *shvd_read_blend,
+															uint8_t *dstPtr);
 #endif
 
 // ------------------------------------------------------------------------
@@ -46,10 +46,10 @@ asm void Handle_Smooth_HV_Asm(int tempH, int tempW, int temp,
 void flat8_flat8_h_double_ubitmap(grs_bitmap *bm)
  {
 DebugStr("\pcall mark");
-/* 	int		h,v,endh,endv;
- 	uchar *src=bm->bits, *dst=grd_bm.bits;
- 	long	srcAdd,dstAdd;
- 	uchar	temp;
+/* 	int32_t		h,v,endh,endv;
+ 	uint8_t *src=bm->bits, *dst=grd_bm.bits;
+ 	int32_t	srcAdd,dstAdd;
+ 	uint8_t	temp;
 
  	srcAdd = bm->row-bm->w;
  	dstAdd = grd_bm.row - (bm->w<<1);
@@ -74,11 +74,11 @@ DebugStr("\pcall mark");
 // ========================================================================
 void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb)
  {
- 	int			h,v,endh,endv;
- 	uchar	 *src=srcb->bits, *dst=dstb->bits;
- 	long		srcAdd,dstAdd;
-	ushort	curpix,tempshort;
-	uchar 	*local_grd_half_blend;
+ 	int32_t			h,v,endh,endv;
+ 	uint8_t	 *src=srcb->bits, *dst=dstb->bits;
+ 	int32_t		srcAdd,dstAdd;
+	uint16_t	curpix,tempshort;
+	uint8_t 	*local_grd_half_blend;
 
 	local_grd_half_blend = grd_half_blend;
  	if (!local_grd_half_blend) return;
@@ -91,13 +91,13 @@ void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb)
 #if defined(powerc) || defined(__powerc)
  	for (v=0; v<endv; v++)
  	 {
- 	 	curpix = * (short *) src;
+ 	 	curpix = * (int16_t *) src;
  	 	src+=2;
  	 	for (h=0; h<endh; h++)
  	 	 {
  	 	 	tempshort = curpix & 0xff00;
  	 	 	tempshort |= local_grd_half_blend[curpix];
- 	 	 	* (ushort *) dst = tempshort;
+ 	 	 	* (uint16_t *) dst = tempshort;
  	 	 	dst += 2;
  	 	 	curpix = (curpix<<8) | *(src++);
  	 	 }
@@ -116,8 +116,8 @@ void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb)
  }
 
 #if !(defined(powerc) || defined(__powerc))
-asm void Handle_Smooth_H_Asm(int	endh, int endv, long srcAdd, long dstAdd,
-															uchar *src, uchar *dst, uchar *local_grd_half_blend)
+asm void Handle_Smooth_H_Asm(int32_t	endh, int32_t endv, int32_t srcAdd, int32_t dstAdd,
+															uint8_t *src, uint8_t *dst, uint8_t *local_grd_half_blend)
  {
  	movem.l	d2-d7/a2-a4,-(sp)
 
@@ -131,7 +131,7 @@ asm void Handle_Smooth_H_Asm(int	endh, int endv, long srcAdd, long dstAdd,
  	moveq		#0,d0
 
 @OLoop:
-	move.w	(a0)+,d0							// curpix = * (short *) src;  src+=2;
+	move.w	(a0)+,d0							// curpix = * (int16_t *) src;  src+=2;
 	move.w	d7,d2		// restore h
 @ILoop:
 	move.w	d0,d1
@@ -162,10 +162,10 @@ asm void Handle_Smooth_H_Asm(int	endh, int endv, long srcAdd, long dstAdd,
 // src = eax, dest = edx
 void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst)
  {
- 	int	 		tempH, tempW, temp, savetemp;
- 	uchar		*srcPtr,*dstPtr;
- 	uchar		*shvd_read_row1, *shvd_write, *shvd_read_row2, *shvd_read_blend;
- 	ushort	tempc;
+ 	int32_t	 		tempH, tempW, temp, savetemp;
+ 	uint8_t		*srcPtr,*dstPtr;
+ 	uint8_t		*shvd_read_row1, *shvd_write, *shvd_read_row2, *shvd_read_blend;
+ 	uint16_t	tempc;
 
 
  	dst->row <<= 1;
@@ -193,7 +193,7 @@ void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst)
 		do
 		 {
 		 	tempc = shvd_read_row1[temp];
-		 	tempc |= ((ushort) shvd_read_row2[temp]) << 8;
+		 	tempc |= ((uint16_t) shvd_read_row2[temp]) << 8;
 		 	temp++;
 
 		 	shvd_write[temp] = shvd_read_blend[tempc];
@@ -227,10 +227,10 @@ void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst)
  }
 
 #if !(defined(powerc) || defined(__powerc))
-asm void Handle_Smooth_HV_Asm(int tempH, int tempW, int temp,
-															uchar	*shvd_read_row1, uchar *shvd_write,
-															uchar *shvd_read_row2, uchar *shvd_read_blend,
-															uchar *dstPtr)
+asm void Handle_Smooth_HV_Asm(int32_t tempH, int32_t tempW, int32_t temp,
+															uint8_t	*shvd_read_row1, uint8_t *shvd_write,
+															uint8_t *shvd_read_row2, uint8_t *shvd_read_blend,
+															uint8_t *dstPtr)
  {
  	movem.l	d2-d7/a2-a4,-(sp)
  	movem.l	40(sp),d2-d4/a0-a4	// load up parms

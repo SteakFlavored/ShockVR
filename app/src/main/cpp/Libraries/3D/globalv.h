@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // point allocation vars
 
 extern g3s_point	*point_list;   //   dd      0       ;ptr to point buffer
-extern short			n_points;      //   dw      0       ;num points allocated
+extern int16_t			n_points;      //   dw      0       ;num points allocated
 extern g3s_point 	*first_free;   //   dd      0       ;ptr to first free pnt
 
 extern g3s_matrix	unscaled_matrix; // g3s_matrix <>   ;unscaled & unadjusted
@@ -70,14 +70,14 @@ extern g3s_vector	_wtoo_position;		//  g3s_vector <>
 
 extern fix 				pixel_ratio;    		//  fix     ?       ;copy from 2d drv_cap
 
-extern long				window_width;  		//  dd      ?
-extern long				window_height; 		//  dd      ?
+extern int32_t				window_width;  		//  dd      ?
+extern int32_t				window_height; 		//  dd      ?
 
-extern long				ww2;  							//  dd      ?       ;one-half widht,height
-extern long				wh2; 							//  dd      ?       ;..for texture mapper
+extern int32_t				ww2;  							//  dd      ?       ;one-half widht,height
+extern int32_t				wh2; 							//  dd      ?       ;..for texture mapper
 
-extern long				_scrw; 						//  dd      ?       ;need to do double-word mul
-extern long				_scrh;  						//	dd      ?
+extern int32_t				_scrw; 						//  dd      ?       ;need to do double-word mul
+extern int32_t				_scrh;  						//	dd      ?
 
 extern fix					_biasx;  					//	fix     ?
 extern fix					_biasy; 						// fix     ?
@@ -86,24 +86,24 @@ extern g3s_vector	_matrix_scale;  		//  <>   ;how the columns are scaled
 extern g3s_vector	horizon_vector; 		//  <>   ;info for drawing the horizon
 
 //this tables tells you many bits to shift to get zero
-extern uchar shift_table[];
-extern long			up_axis;			// dd      ?
+extern uint8_t shift_table[];
+extern int32_t			up_axis;			// dd      ?
 
 //which axis is our x,y,z?
-extern long			axis_x;			//  dd      ?
-extern long			axis_z;			//  dd      ?
-extern long			axis_y;			//  dd      ?
+extern int32_t			axis_x;			//  dd      ?
+extern int32_t			axis_z;			//  dd      ?
+extern int32_t			axis_y;			//  dd      ?
 
 //offset into matrix of axis which is x,y,z
-extern long			axis_x_ofs;			//      dd      ?
-extern long			axis_z_ofs;			//      dd      ?
-extern long			axis_y_ofs;			//      dd      ?
+extern int32_t			axis_x_ofs;			//      dd      ?
+extern int32_t			axis_z_ofs;			//      dd      ?
+extern int32_t			axis_y_ofs;			//      dd      ?
 
-extern char			axis_swap_flag; 	// 			db      ?
-extern char			axis_neg_flag;   //			db      ?
+extern int8_t			axis_swap_flag; 	// 			db      ?
+extern int8_t			axis_neg_flag;   //			db      ?
 
 // Lighting globals
-extern char 			_g3d_light_type;		// db      0       ; The lighting type, see above
+extern int8_t 			_g3d_light_type;		// db      0       ; The lighting type, see above
 
 extern fix				_g3d_amb_light;  				// fix    0       ; amount of ambient light
 extern fix				_g3d_diff_light; 	// fix    10000h  ; intensity of light source
@@ -124,19 +124,19 @@ extern fix					_g3d_ldotv;  				//  fix     ?       ; light vector dotted with v
 extern fix					_g3d_sdotl;    			//  fix     ?       ; surface vector dotted with light vector (for diffuse and spec)
 extern fix					_g3d_sdotv;    			//  fix     ?       ; surface vector dotted with view vector (ostensibly jnorm)
 
-extern long				_g3d_light_tab;		//  dd      0       ; lighting table with 32 or 24 entries.  Should go from black to white,
+extern int32_t				_g3d_light_tab;		//  dd      0       ; lighting table with 32 or 24 entries.  Should go from black to white,
 
 
 // stereo globals, read em and weep
 extern fix				_g3d_eyesep_raw;       //  fix     0     ;raw 3d sep between eyes
 extern fix				_g3d_eyesep;           //  fix     0     ;scaled eye sep between eyes
-extern long				_g3d_stereo_base;      //   dd     0     ;stereo point offset, default zero, means non
-extern long				_g3d_stereo_list;      //   dd     0     ;start of stereo point list, makes it easy to detect
-extern char				_g3d_stereo;           //   db     0     ;stereo this frame
-extern long				_g3d_rt_canv;          //   dd     0     ;pointer to right eye canvas
-extern long				_g3d_rt_canv_bits;     //   dd     0     ;pointer to bits of rt canvas
-extern long				_g3d_lt_canv_bits;     //   dd     0     ;pointer to bits of lt canvas
-extern long				_g3d_stereo_tmp[14];     //   dd     14 dup (?) ;temporary point list
+extern int32_t				_g3d_stereo_base;      //   dd     0     ;stereo point offset, default zero, means non
+extern int32_t				_g3d_stereo_list;      //   dd     0     ;start of stereo point list, makes it easy to detect
+extern int8_t				_g3d_stereo;           //   db     0     ;stereo this frame
+extern int32_t				_g3d_rt_canv;          //   dd     0     ;pointer to right eye canvas
+extern int32_t				_g3d_rt_canv_bits;     //   dd     0     ;pointer to bits of rt canvas
+extern int32_t				_g3d_lt_canv_bits;     //   dd     0     ;pointer to bits of lt canvas
+extern int32_t				_g3d_stereo_tmp[14];     //   dd     14 dup (?) ;temporary point list
 
 
 //palette base for gouraud-shaded polys

@@ -42,9 +42,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------
 //  PROTOTYPES
 //------------
-errtype find_path(char path_id);
-short tile_height(MapElem *pme, char dir, bool floor);
-uchar pf_obj_height(MapElem *pme, uchar old_z);
+errtype find_path(int8_t path_id);
+int16_t tile_height(MapElem *pme, int8_t dir, bool floor);
+uint8_t pf_obj_height(MapElem *pme, uint8_t old_z);
 
 
 // So, the paradigm is that a given creature makes a pathfind request
@@ -56,7 +56,7 @@ uchar pf_obj_height(MapElem *pme, uchar old_z);
 // There are MAX_PATHS available paths, so if lots of things are already pathfinding
 // then new requests cannot be made.
 
-// Which char is it?
+// Which int8_t is it?
 #define HIGH_STEP(stepnum) ((stepnum) >> 2)
 #define LOW_STEP(stepnum) ((stepnum) & 0x3)
 #define PATH_CHAR(pathid,stepnum) (paths[(pathid)].moves[HIGH_STEP(stepnum)])
@@ -72,9 +72,9 @@ uchar pf_obj_height(MapElem *pme, uchar old_z);
 
 // Note that a dest_z of 0 means to ignore that whole concept
 // dest_z and start_z are in objLoc height coordinates, since that is the easiest API
-char request_pathfind(LGPoint source, LGPoint dest, uchar dest_z, uchar start_z, bool priority)
+int8_t request_pathfind(LGPoint source, LGPoint dest, uint8_t dest_z, uint8_t start_z, bool priority)
 {
-   char i = 0;
+   int8_t i = 0;
 
    // Find the first available path number
    while ((i < MAX_PATHS) && (used_paths & (1 << i)))
@@ -116,9 +116,9 @@ char request_pathfind(LGPoint source, LGPoint dest, uchar dest_z, uchar start_z,
 // Unlike next_step_on_path, this procedure does not affect the paths array at all,
 // although it does modify it's pt parameter.
 // Returns direction of that next step
-char compute_next_step(char path_id, LGPoint *pt, char step_num)
+int8_t compute_next_step(int8_t path_id, LGPoint *pt, int8_t step_num)
 {
-   char movecode = -22;
+   int8_t movecode = -22;
    if (step_num == -1)
       step_num = paths[path_id].curr_step;
    if (step_num != -1)
@@ -144,9 +144,9 @@ char compute_next_step(char path_id, LGPoint *pt, char step_num)
 // backwards along the path, but I won't write that until it seems
 // needed.
 // Returns the direction one travels in to get to this next step
-char next_step_on_path(char path_id, LGPoint *next, char *steps_left)
+int8_t next_step_on_path(int8_t path_id, LGPoint *next, int8_t *steps_left)
 {
-   char retval;
+   int8_t retval;
    *next = paths[path_id].source;
    retval = compute_next_step(path_id, next, -1);  // -1 for "use path data"
    paths[path_id].source = *next;
@@ -167,10 +167,10 @@ char next_step_on_path(char path_id, LGPoint *next, char *steps_left)
 // Checks whether or not we have skipped ahead to some square within LOOKAHEAD_STEPS
 // of the "current" location for the specified path.  If so, jumps the path to that point and
 // returns TRUE.
-bool check_path_cutting(LGPoint new_sq, char path_id)
+bool check_path_cutting(LGPoint new_sq, int8_t path_id)
 {
    LGPoint pt;
-   char count;
+   int8_t count;
    // Hey, first check if we've finished the darn path...
    if ((path_id == -1) || (paths[path_id].num_steps == 0))
       return(FALSE);
@@ -201,13 +201,13 @@ bool check_path_cutting(LGPoint new_sq, char path_id)
 
 #define PATHFIND_INTERVAL  (CIT_CYCLE >> 2)
 
-// We could probably save a ulong by just doing this strictly on
+// We could probably save a uint32_t by just doing this strictly on
 // the clock rather than actually doing it right.
-ulong last_pathfind_time =0;
+uint32_t last_pathfind_time =0;
 // priority means only check priority requests, but always check
 errtype check_requests(bool priority_only)
 {
-   char i;
+   int8_t i;
    // Don't bother checking unless it has been at least N ticks,
    if (priority_only || (player_struct.game_time > last_pathfind_time))
    {
@@ -232,7 +232,7 @@ errtype check_requests(bool priority_only)
 }
 
 
-errtype delete_path(char path_id)
+errtype delete_path(int8_t path_id)
 {
    // To delete, just mark the path as unused and zero out its data
    if ((path_id < 0) || (path_id >= MAX_PATHS))
@@ -255,7 +255,7 @@ errtype reset_pathfinding()
 // THE ACTUAL GRUNGY PART
 
 // spt is a "point" which only has 8 bits each for x & y.
-typedef short spt;
+typedef int16_t spt;
 #define SPT_X(s)   ((s) & 0xFF)
 #define SPT_Y(s)   ((s) >> 8)
 #define SPT_X_SET(s,newx) ((s) = ((s) & 0xFF00) | (newx))
@@ -302,28 +302,28 @@ typedef short spt;
 #define PFE_USED_SET(ppfe,d) (*(ppfe) = (*(ppfe) & ~PFE_USE_MASK) | ((d) << PFE_USE_SHIFT))
 
 // Hmm, I think this will work.... pathfind_buffer is a big chunk
-// of memory, and we want to access it like a big array of uchars...
-#define PFE_GET_XY(x,y) ((uchar *)pathfind_buffer + x + (y * MAP_XSIZE))
+// of memory, and we want to access it like a big array of uint8_ts...
+#define PFE_GET_XY(x,y) ((uint8_t *)pathfind_buffer + x + (y * MAP_XSIZE))
 
 // l1 and l2 are two lists of spts, and expand_into_list gets
 // pointed to whichever is the current actual expand_into_list (the
 // other being prepped to be the expand_into_list next time).
 #define EXPAND_LIST_SIZE   64
 spt *expand_into_list, *expand_from_list, *exp_l1, *exp_l2;
-char expand_count;
-uchar *pathfind_buffer;
+int8_t expand_count;
+uint8_t *pathfind_buffer;
 
 
-bool map_connectivity(spt sq1, spt sq2, char dir, uchar flr1, uchar *new_z, uchar dest_z);
-bool expand_one_square(spt sq, char path_id);
-bool expand_fill_list(char path_id);
+bool map_connectivity(spt sq1, spt sq2, int8_t dir, uint8_t flr1, uint8_t *new_z, uint8_t dest_z);
+bool expand_one_square(spt sq, int8_t path_id);
+bool expand_fill_list(int8_t path_id);
 
 
 // Returns the height at the edge of the tile pme, in the direction dir
 // Return value is in map units!
-short tile_height(MapElem *pme, char dir, bool floor)
+int16_t tile_height(MapElem *pme, int8_t dir, bool floor)
 {
-   uchar retval;
+   uint8_t retval;
    if (floor)
       retval = me_height_flr(pme);
    else
@@ -390,7 +390,7 @@ short tile_height(MapElem *pme, char dir, bool floor)
 
 #define CRITTERS_OPEN_UNLOCKED_DOORS
 
-bool pf_check_doors(MapElem *pme, char dir, ObjID *open_door)
+bool pf_check_doors(MapElem *pme, int8_t dir, ObjID *open_door)
 {
    ObjRefID curr;
    ObjID id, which_obj = OBJ_NULL;
@@ -442,7 +442,7 @@ bool pf_check_doors(MapElem *pme, char dir, ObjID *open_door)
 
 // Returns whether or not the two squares can be freely traveled
 // between with respect to door-like objects in the squares.
-bool pf_obj_doors(MapElem *pme1, MapElem *pme2, char dir, ObjID *open_door)
+bool pf_obj_doors(MapElem *pme1, MapElem *pme2, int8_t dir, ObjID *open_door)
 {
    bool retval;
 //   Warning(("Top of pf_obj_door!\n"));
@@ -466,11 +466,11 @@ bool pf_obj_doors(MapElem *pme1, MapElem *pme2, char dir, ObjID *open_door)
 // maybe that is worth a specific hack...
 
 // old_z is almost certainly in PFEZ units, as is the return value
-uchar pf_obj_height(MapElem *pme, uchar )
+uint8_t pf_obj_height(MapElem *pme, uint8_t )
 {
    ObjRefID curr;
    ObjID id;
-   uchar retval = MAPZ_TO_PFEZ(me_height_flr(pme));
+   uint8_t retval = MAPZ_TO_PFEZ(me_height_flr(pme));
 
    curr = me_objref(pme);
 //   Spew(DSRC_AI_Pathfind, ("pf_o_ht: initial retval = %x\n",retval));
@@ -517,11 +517,11 @@ uchar pf_obj_height(MapElem *pme, uchar )
 #define PF_CLIMB  1
 
 // flr1, new_z, and dest are all in PFE Z units
-bool map_connectivity(spt sq1, spt sq2, char dir, uchar flr1, uchar *new_z, uchar )
+bool map_connectivity(spt sq1, spt sq2, int8_t dir, uint8_t flr1, uint8_t *new_z, uint8_t )
 {
    MapElem *pme1, *pme2;
    ObjID temp;
-   short flr2,ceil2;
+   int16_t flr2,ceil2;
    bool retval;
 
    pme1 = MAP_GET_XY(SPT_X(sq1),SPT_Y(sq1));
@@ -557,11 +557,11 @@ bool map_connectivity(spt sq1, spt sq2, char dir, uchar flr1, uchar *new_z, ucha
 // that point to places that other expansions have been to or
 // that we can't reach.
 // Returns whether or not we reached the destination.
-bool expand_one_square(spt sq, char path_id)
+bool expand_one_square(spt sq, int8_t path_id)
 {
    spt newsq, dest = PT2SPT(paths[path_id].dest);
-   char i;
-   uchar *ppfe, *ppfe2;
+   int8_t i;
+   uint8_t *ppfe, *ppfe2;
 
    ppfe2 = PFE_GET_XY(SPT_X(sq),SPT_Y(sq));
 //   Spew(DSRC_AI_Pathfind, ("expanding %x\n",sq));
@@ -578,7 +578,7 @@ bool expand_one_square(spt sq, char path_id)
       ppfe = PFE_GET_XY(SPT_X(newsq),SPT_Y(newsq));
       if (!PFE_USED(ppfe)) // dont bother if we can already get there
       {
-         uchar new_z, dest_z=0;
+         uint8_t new_z, dest_z=0;
          if (newsq == dest)
             dest_z = OBJZ_TO_PFEZ(paths[path_id].dest_z);
          if (map_connectivity(sq,newsq,i,PFE_Z(ppfe2), &new_z, dest_z))
@@ -604,10 +604,10 @@ bool expand_one_square(spt sq, char path_id)
 // Go through the list of last-iteration's reached squares, and
 // generate a new list of places to go to.
 // Returns whether or not we reached the destination.
-bool expand_fill_list(char path_id)
+bool expand_fill_list(int8_t path_id)
 {
    spt s;
-   char i;
+   int8_t i;
    bool done = FALSE;
    expand_count = 0;
    CLEARSPTLIST(expand_into_list,EXPAND_LIST_SIZE);
@@ -648,21 +648,21 @@ bool expand_fill_list(char path_id)
 
 // use big_buffer rather than being le memory hog
 #define PATHFIND_WITH_BIG_BUFFER
-errtype find_path(char path_id)
+errtype find_path(int8_t path_id)
 {
    bool done = FALSE;
-   char i,j,step_count=0;
-   uchar *ppfe;
+   int8_t i,j,step_count=0;
+   uint8_t *ppfe;
 
    // Malloc our expand lists & the buffer
    exp_l1 = (spt *)big_buffer;
    exp_l2 = (spt *)(big_buffer + (sizeof(spt) * EXPAND_LIST_SIZE));
-   pathfind_buffer = (uchar *)(big_buffer + (sizeof(spt) * 2 * EXPAND_LIST_SIZE));
+   pathfind_buffer = (uint8_t *)(big_buffer + (sizeof(spt) * 2 * EXPAND_LIST_SIZE));
 
    // Clear the lists
    CLEARSPTLIST(exp_l1,EXPAND_LIST_SIZE);
    CLEARSPTLIST(exp_l2,EXPAND_LIST_SIZE);
-   memset(pathfind_buffer, 0, MAP_XSIZE * MAP_YSIZE * sizeof(uchar));
+   memset(pathfind_buffer, 0, MAP_XSIZE * MAP_YSIZE * sizeof(uint8_t));
 #ifdef REALLY_SLOW_PATHFIND_CLEARING
    for (i=0; i < MAP_XSIZE; i++)
    {

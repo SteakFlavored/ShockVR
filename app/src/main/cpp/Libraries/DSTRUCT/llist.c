@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include "memall.h"
 
 void LlistGrowList(LlistHead *plh);
-void LlistInitNodeBlock(LlistHead *plh, llist *pNodeBlock, ushort blockSize);
+void LlistInitNodeBlock(LlistHead *plh, llist *pNodeBlock, uint16_t blockSize);
 
 //	---------------------------------------------------------
 //		LLIST ROUTINES
@@ -52,7 +52,7 @@ void LlistInitNodeBlock(LlistHead *plh, llist *pNodeBlock, ushort blockSize);
 //		nodeSize         = size of each list node, including embedded _llist
 //		numNodesPerBlock = # nodes to allocate in each Malloc() block
 
-void LlistInit(LlistHead *plh, ushort nodeSize, short numNodesPerBlock)
+void LlistInit(LlistHead *plh, uint16_t nodeSize, int16_t numNodesPerBlock)
 {
 //	Initialize basic part of linked list header
 
@@ -140,7 +140,7 @@ void *LlistAddTail(LlistHead *plh)
 //
 //	returns: ptr to list node, with pnext,pprev,prior already filled in
 
-void *LlistAddQueue(LlistHead *plh, short prior)
+void *LlistAddQueue(LlistHead *plh, int16_t prior)
 {
 	queue *plq;
 
@@ -175,7 +175,7 @@ void *LlistAddQueue(LlistHead *plh, short prior)
 //	returns: TRUE if item was actually moved in list, false if newprior
 //		didn't cause it to switch places with other nodes.
 
-bool LlistMoveQueue(LlistHead *plh, void *pnode, short newprior)
+bool LlistMoveQueue(LlistHead *plh, void *pnode, int16_t newprior)
 {
 	((queue *) pnode)->priority = newprior;
 	return(llist_move_queue((llist_head *)plh, (queue *)pnode));
@@ -210,7 +210,7 @@ void LlistFree(LlistHead *plh, void *pnode)
 void LlistFreeAll(LlistHead *plh)
 {
 	llist *pnb;
-	ushort blockSize;
+	uint16_t blockSize;
 
 //	Init head & tail ptrs, zero num nodes
 
@@ -266,7 +266,7 @@ void LlistDestroy(LlistHead *plh)
 
 void LlistGrowList(LlistHead *plh)
 {
-	ushort blockSize;
+	uint16_t blockSize;
 	llist *pNewStore;
 
 //	Allocate new storage block
@@ -292,14 +292,14 @@ void LlistGrowList(LlistHead *plh)
 //		pNodeBlock = ptr to node block to initialize
 //		blockSize  = size of the block
 
-void LlistInitNodeBlock(LlistHead *plh, llist *pNodeBlock, ushort blockSize)
+void LlistInitNodeBlock(LlistHead *plh, llist *pNodeBlock, uint16_t blockSize)
 {
 	llist *pll;
 
 	plh->pfree = pNodeBlock + 1;	// point free to just past links
 	for (pll = plh->pfree;
-		pll < (llist *) (((char *) plh->pfree) + (blockSize - plh->nodeSize));
-		pll = (llist *) (((char *) pll) + plh->nodeSize))
-			pll->pnext = (llist *) (((char *) pll) + plh->nodeSize);
+		pll < (llist *) (((int8_t *) plh->pfree) + (blockSize - plh->nodeSize));
+		pll = (llist *) (((int8_t *) pll) + plh->nodeSize))
+			pll->pnext = (llist *) (((int8_t *) pll) + plh->nodeSize);
 	pll->pnext = NULL;
 }

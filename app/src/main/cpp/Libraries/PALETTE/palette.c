@@ -45,17 +45,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 PAL_TABLE_ENTRY *Palette_Effects_Table = NULL;
-short Palette_Effects_Table_Size = 0;
+int16_t Palette_Effects_Table_Size = 0;
 
 fix   Shadow_Fixed_Cmap[768];    // r,g,b for each entry in colormap
 fix   Delta_Cmap[768];           // r,g,b delta shifts for same
-uchar local_smap[768];
+uint8_t local_smap[768];
 
-short timestamps_per_step;       // How many ts units = 1 palette step
-long  last_timestamp = 0L;
-short num_active_effects = 0;
+int16_t timestamps_per_step;       // How many ts units = 1 palette step
+int32_t  last_timestamp = 0L;
+int16_t num_active_effects = 0;
 
-byte num_installed_shifts = 0;
+int8_t num_installed_shifts = 0;
 
 #ifndef REAL_PAL_SWAP_SHAD
 // should really do a warning here for so people to understand a problem, she has happened
@@ -89,12 +89,12 @@ byte num_installed_shifts = 0;
  *   routine take care of the execution.
  */
 
-void palette_advance_all_fx(long timestamp)
+void palette_advance_all_fx(int32_t timestamp)
 {
-   static int	ts_remainder = 0;
-   int         	i, time_diff;
-   short		c1, c2, t;
-   int         	steps_to_do;
+   static int32_t	ts_remainder = 0;
+   int32_t         	i, time_diff;
+   int16_t		c1, c2, t;
+   int32_t         	steps_to_do;
    div_t 		result;
 
    // Figure out how many steps of work need to be done
@@ -102,7 +102,7 @@ void palette_advance_all_fx(long timestamp)
 
    if (timestamps_per_step <= 0) return; // dont do a div by 0
 
-   time_diff = (int) (timestamp - last_timestamp);
+   time_diff = (int32_t) (timestamp - last_timestamp);
    last_timestamp = timestamp;
 
    result = div(time_diff, timestamps_per_step);
@@ -136,22 +136,22 @@ void palette_advance_all_fx(long timestamp)
 		}
 	}
 	if (Palette_Effects_Table[0].effect == CBANK)
-		gr_set_pal((int)c1, (int)(c2 - c1 +1), &local_smap[c1*3]);
+		gr_set_pal((int32_t)c1, (int32_t)(c2 - c1 +1), &local_smap[c1*3]);
 }
 
-uchar c_off_stack[3];
+uint8_t c_off_stack[3];
 
-void palette_advance_effect(byte id, int steps)
+void palette_advance_effect(int8_t id, int32_t steps)
 {
-   short e1, en, er;
-   short i, j;
+   int16_t e1, en, er;
+   int16_t i, j;
    fix x;
    div_t dv;
-   uchar *t, *v;
-   short m, n;
-//   uchar c[3];
-   int add_to_color, add_to_delay, a;
-   short s1, sn, sr;
+   uint8_t *t, *v;
+   int16_t m, n;
+//   uint8_t c[3];
+   int32_t add_to_color, add_to_delay, a;
+   int16_t s1, sn, sr;
 
    if (Palette_Effects_Table[id].mode == STEADY) steps = 1;
 
@@ -167,7 +167,7 @@ void palette_advance_effect(byte id, int steps)
    // The quotient will tell us how many colors to increment,
    //   the modulus how many delay elements to add.
 
-   dv = div(steps, (int) (Palette_Effects_Table[id].dsteps + 1));
+   dv = div(steps, (int32_t) (Palette_Effects_Table[id].dsteps + 1));
 
    add_to_color = dv.quot;
    add_to_delay = dv.rem;
@@ -205,7 +205,7 @@ void palette_advance_effect(byte id, int steps)
 
          if ((Palette_Effects_Table[id].curr_stage == -1) &&
              (&grd_pal[e1*3] != &t[e1*3])) {
-            gr_set_pal((int)e1, (int)er, &t[e1*3]);
+            gr_set_pal((int32_t)e1, (int32_t)er, &t[e1*3]);
             Palette_Effects_Table[id].curr_stage = 0;
          }
 
@@ -219,7 +219,7 @@ void palette_advance_effect(byte id, int steps)
          if (Palette_Effects_Table[id].curr_stage >=
              Palette_Effects_Table[id].stages)
          {
-            gr_set_pal((int) e1, (int) er, &v[e1*3]);
+            gr_set_pal((int32_t) e1, (int32_t) er, &v[e1*3]);
             palette_remove_effect(id);
          }
 
@@ -241,9 +241,9 @@ void palette_advance_effect(byte id, int steps)
                Shadow_Fixed_Cmap[3*i+1] += fix_mul(x,Delta_Cmap[3*j+1]);
                Shadow_Fixed_Cmap[3*i+2] += fix_mul(x,Delta_Cmap[3*j+2]);
 
-               local_smap[i*3] = (uchar) fix_rint(Shadow_Fixed_Cmap[3*i]);
-               local_smap[i*3+1] = (uchar) fix_rint(Shadow_Fixed_Cmap[3*i+1]);
-               local_smap[i*3+2] = (uchar) fix_rint(Shadow_Fixed_Cmap[3*i+2]);
+               local_smap[i*3] = (uint8_t) fix_rint(Shadow_Fixed_Cmap[3*i]);
+               local_smap[i*3+1] = (uint8_t) fix_rint(Shadow_Fixed_Cmap[3*i+1]);
+               local_smap[i*3+2] = (uint8_t) fix_rint(Shadow_Fixed_Cmap[3*i+2]);
             }
          }
 
@@ -269,7 +269,7 @@ void palette_advance_effect(byte id, int steps)
 
          if (m < 0) break;            // Rare initial case w/fast frame rate
 
-         gr_set_pal((int) n, 1, &t[3*m]);
+         gr_set_pal((int32_t) n, 1, &t[3*m]);
 
          Shadow_Fixed_Cmap[3*n]   = fix_make(t[3*m],0);
          Shadow_Fixed_Cmap[3*n+1] = fix_make(t[3*m+1],0);
@@ -281,15 +281,15 @@ void palette_advance_effect(byte id, int steps)
 
          a = add_to_color;
 
-         // Shift the colormap by using a uchar *shadowmap:
+         // Shift the colormap by using a uint8_t *shadowmap:
          //   Write from a->end of colormap to start of shadowmap,
          //   then finish shadowmap with 0->a.  Then copy the whole
          //   thing back.
 
-         gr_get_pal((int) e1+a, (int) er-a, &local_smap[e1*3]);
-         gr_get_pal((int) e1, (int) a, &local_smap[(e1+er-a)*3]);
+         gr_get_pal((int32_t) e1+a, (int32_t) er-a, &local_smap[e1*3]);
+         gr_get_pal((int32_t) e1, (int32_t) a, &local_smap[(e1+er-a)*3]);
 
-// KLC         gr_set_pal((int) e1, (int) er, &local_smap[e1*3]);
+// KLC         gr_set_pal((int32_t) e1, (int32_t) er, &local_smap[e1*3]);
 // Now does it once after checking all CBANK effects.
 
          // NOT ONLY THE COLORMAP must be swapped: the delta and
@@ -300,7 +300,7 @@ void palette_advance_effect(byte id, int steps)
          //   cycling bank's palette segment worth.  (huh?)
 
          if (num_installed_shifts == 0) break;
-         else if (num_installed_shifts != 1) palette_swap_shadow((int)e1, (int)er, (int)a);
+         else if (num_installed_shifts != 1) palette_swap_shadow((int32_t)e1, (int32_t)er, (int32_t)a);
 
          else {
 
@@ -311,11 +311,11 @@ void palette_advance_effect(byte id, int steps)
             sn = Palette_Effects_Table[i].entry_n;
             sr = sn - s1 + 1;
 
-            if ((s1 >= e1) && (sn <= en)) palette_swap_shadow((int)s1, (int)sr, (int)a);
-            else if (s1 > e1) palette_swap_shadow((int)s1, (int)(en - s1 + 1), (int)a);
-            else if (sn < en) palette_swap_shadow((int)e1, (int)(sn - e1 + 1), (int)a);
+            if ((s1 >= e1) && (sn <= en)) palette_swap_shadow((int32_t)s1, (int32_t)sr, (int32_t)a);
+            else if (s1 > e1) palette_swap_shadow((int32_t)s1, (int32_t)(en - s1 + 1), (int32_t)a);
+            else if (sn < en) palette_swap_shadow((int32_t)e1, (int32_t)(sn - e1 + 1), (int32_t)a);
 
-            else palette_swap_shadow((int)e1, (int)er, (int)a);
+            else palette_swap_shadow((int32_t)e1, (int32_t)er, (int32_t)a);
          }
 
          break;
@@ -340,11 +340,11 @@ void palette_advance_effect(byte id, int steps)
  * in this library)
  */
 
-byte palette_install_effect(PAL_TYPE type, PAL_MODE mode,
-                            short b1, short b2, short b3, short b4,
-                            uchar *ptr1, uchar *ptr2)
+int8_t palette_install_effect(PAL_TYPE type, PAL_MODE mode,
+                            int16_t b1, int16_t b2, int16_t b3, int16_t b4,
+                            uint8_t *ptr1, uint8_t *ptr2)
 {
-   byte i;
+   int8_t i;
 
    // Find an available slot for installation?
 
@@ -413,7 +413,7 @@ byte palette_install_effect(PAL_TYPE type, PAL_MODE mode,
 
 }
 
-errtype palette_remove_effect(byte id)
+errtype palette_remove_effect(int8_t id)
 {
    if (Palette_Effects_Table[id].status == EMPTY) return ERR_NOEFFECT;
 
@@ -438,7 +438,7 @@ errtype palette_remove_effect(byte id)
  * timestamp to the time of unfreezing.
  */
 
-errtype palette_freeze_effect(byte id)
+errtype palette_freeze_effect(int8_t id)
 {
    if (Palette_Effects_Table[id].status == EMPTY)  return ERR_RANGE;
    if (Palette_Effects_Table[id].status == FROZEN) return ERR_NOEFFECT;
@@ -449,7 +449,7 @@ errtype palette_freeze_effect(byte id)
    return OK;
 }
 
-errtype palette_unfreeze_effect(byte id)
+errtype palette_unfreeze_effect(int8_t id)
 {
    if (Palette_Effects_Table[id].status == EMPTY)  return ERR_RANGE;
    if (Palette_Effects_Table[id].status != FROZEN) return ERR_NOEFFECT;
@@ -468,12 +468,12 @@ errtype palette_unfreeze_effect(byte id)
  * lets you change its delay (but only for cycling effects!)
  */
 
-PAL_STATUS palette_query_effect(byte id)
+PAL_STATUS palette_query_effect(int8_t id)
 {
    return Palette_Effects_Table[id].status;
 }
 
-void palette_change_delay(byte id, short delay)
+void palette_change_delay(int8_t id, int16_t delay)
 {
    if (Palette_Effects_Table[id].status != EMPTY)
       Palette_Effects_Table[id].dsteps = delay;
@@ -490,21 +490,21 @@ void palette_change_delay(byte id, short delay)
  * DESCRIPTION: (2) Shutdown frees malloc'd memory.
  */
 
-void palette_set_rate(short ts)
+void palette_set_rate(int16_t ts)
 {
    timestamps_per_step = ts;
 }
 
-void palette_initialize(short tbl_size)
+void palette_initialize(int16_t tbl_size)
 {
-   int i;
+   int32_t i;
 
    Palette_Effects_Table_Size = tbl_size;
 
    // Malloc the table
 
    Palette_Effects_Table = (PAL_TABLE_ENTRY *)
-      NewPtr((int) tbl_size * sizeof(PAL_TABLE_ENTRY));
+      NewPtr((int32_t) tbl_size * sizeof(PAL_TABLE_ENTRY));
 //¥¥¥No error check here
 
    // Initialize Table
@@ -543,10 +543,10 @@ void palette_shutdown()
  * shift effects!
  */
 
-void palette_init_smap(short first, short last, uchar *from, uchar *to,
-                       short num_steps)
+void palette_init_smap(int16_t first, int16_t last, uint8_t *from, uint8_t *to,
+                       int16_t num_steps)
 {
-   int i, j;
+   int32_t i, j;
    fix x0, x1, x2, y;
 
    for (i = first; i <= last; i++) {
@@ -580,12 +580,12 @@ void palette_init_smap(short first, short last, uchar *from, uchar *to,
  */
 
 #ifdef REAL_PAL_SWAP_SHAD
-void palette_swap_shadow(int s, int n, int d)
+void palette_swap_shadow(int32_t s, int32_t n, int32_t d)
 {
    // used to be static, too big, what to do, what to do.... what to do...
    fix Shadow_smap[768];
    fix Shadow_dmap[768];
-   int i;
+   int32_t i;
 
    // Copy the originals to the shadow maps
 

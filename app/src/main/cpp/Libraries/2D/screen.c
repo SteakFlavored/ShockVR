@@ -57,18 +57,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* allocate enoguh video memory for a screen of the specified size.  then set
    up the screen structure describing this screen and the 2 system canvases
    for drawing on it.  return a pointer to the new screen structure. */
-grs_screen *gr_alloc_screen (short w, short h)
+grs_screen *gr_alloc_screen (int16_t w, int16_t h)
  {
 	grs_screen *s=0L;
   grs_canvas *c;
-  uchar *p;
-  uchar *b;
+  uint8_t *p;
+  uint8_t *b;
 
   /* get memory for screen structure itself and 2 system canvases,
         and video ram for the screen itself. */
-  if ((p=(uchar *)NewPtr (sizeof (*s)+2*sizeof (*c))) == NULL)	// was gr_malloc
+  if ((p=(uint8_t *)NewPtr (sizeof (*s)+2*sizeof (*c))) == NULL)	// was gr_malloc
      goto bailout2;
-  if ((b = valloc (w, h)) == (uchar *)-1)
+  if ((b = valloc (w, h)) == (uint8_t *)-1)
   	goto bailout1;
 
   /* set up bitmap. */

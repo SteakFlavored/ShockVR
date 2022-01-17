@@ -104,11 +104,11 @@ enum {
 
 /* function prototypes for bitmap routines. */
 extern void gr_init_bitmap
-   (grs_bitmap *bm, uchar *p, uchar type, ushort flags, short w, short h);
+   (grs_bitmap *bm, uint8_t *p, uint8_t type, uint16_t flags, int16_t w, int16_t h);
 extern void gr_init_sub_bitmap
-   (grs_bitmap *sbm, grs_bitmap *dbm, short x, short y, short w, short h);
+   (grs_bitmap *sbm, grs_bitmap *dbm, int16_t x, int16_t y, int16_t w, int16_t h);
 extern grs_bitmap *gr_alloc_bitmap
-   (uchar type, ushort flags, short w, short h);
+   (uint8_t type, uint16_t flags, int16_t w, int16_t h);
 
 /* compatibility defines. */
 #define gr_init_bm gr_init_bitmap

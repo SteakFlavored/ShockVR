@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Here is the FF grenade/missile(maybe) model, DEATH.  What fun.  It is becoming
 //	increasingly evident that the path to true glory is multiple parameter sets.
@@ -37,9 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //	Functions...
 //	------------
-extern void	( *idof_functions[MAX_OBJ] )( int ),
-		( *equation_of_motion[MAX_OBJ][7] )( int ),
-		null_function( int dummy );
+extern void	( *idof_functions[MAX_OBJ] )( int32_t ),
+		( *equation_of_motion[MAX_OBJ][7] )( int32_t ),
+		null_function( int32_t dummy );
 
 //	Much better...
 //	--------------
@@ -53,8 +53,8 @@ Q	object12,
  	object13;
 
 //		For collisions...
-//		-----------------	
-int     	C,
+//		-----------------
+int32_t     	C,
 	        V,
         	other_object;
 static fix	location[3];
@@ -77,7 +77,7 @@ Q		ground_round = 0,
 
 //	Here are the internal degrees of freedom...
 //	===========================================
-void deadly_idof( int object )
+void deadly_idof( int32_t object )
 {
    //	Now deal with the quaternion (2nd order) stuff...
    //	=================================================
@@ -121,8 +121,8 @@ void deadly_idof( int object )
 		EDMS_autodestruct( on2ph[object] );
 	}
 
-   ulong mask = are_you_there (object);
-   ulong bit = 0;
+   uint32_t mask = are_you_there (object);
+   uint32_t bit = 0;
 
    while (mask != 0)
    {
@@ -169,7 +169,7 @@ void deadly_idof( int object )
                      // Wakeup...
                      // =========
 //	   	            if (no_no_not_me[other_object] == 0 ) collision_wakeup( other_object );
-                  }                
+                  }
          		}
             }
    		}
@@ -219,22 +219,22 @@ void deadly_idof( int object )
 
 
 //	Sets up everything needed to manufacture hot death with initial state vector
-//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the 
+//	init_state[][] and EDMS motion parameters params[] into soliton. Returns the
 //	object number, or else a negative error code (see Soliton.CPP for error handling and codes).
 //	============================================================================================
-int make_death( Q init_state[6][3], Q params[10] ) {
+int32_t make_death( Q init_state[6][3], Q params[10] ) {
 
 
 //	Have some variables...
 //	======================
-int	object_number = -1,						//Three guesses...
+int32_t	object_number = -1,						//Three guesses...
 	error_code = -1;						//Guilty until...
 
 //	We need ignorable coordinates...
 //	================================
-extern void null_function( int );
+extern void null_function( int32_t );
 
-int     coord = 0,
+int32_t     coord = 0,
         deriv = 0;
 
 Q       sin_alpha = 0,
@@ -261,7 +261,7 @@ Q       sin_alpha = 0,
 //		=====================================================================
 		for ( coord = 0; coord < 3; coord++ ) {
 		for ( deriv = 0; deriv < 2; deriv++ ) {
-		S[object_number][coord][deriv] = 
+		S[object_number][coord][deriv] =
 		A[object_number][coord][deriv] = init_state[coord][deriv];	//For collisions...
 		}}
 
@@ -272,16 +272,16 @@ Q       sin_alpha = 0,
 
 //		Zeros...
 //		--------
-                sincos( .5*init_state[3][0], &sin_alpha, &cos_alpha );                
-                sincos( .5*init_state[4][0], &sin_beta,  &cos_beta  );                
-                sincos( .5*init_state[5][0], &sin_gamma, &cos_gamma );                
-                
+                sincos( .5*init_state[3][0], &sin_alpha, &cos_alpha );
+                sincos( .5*init_state[4][0], &sin_beta,  &cos_beta  );
+                sincos( .5*init_state[5][0], &sin_gamma, &cos_gamma );
+
 //		S[object_number][3][0] = A[object_number][3][0] =
 //		                cos_gamma*cos_alpha*cos_beta + sin_gamma*sin_alpha*sin_beta;
-                        
+
 //		S[object_number][4][0] = A[object_number][4][0] =
 //		                cos_gamma*cos_alpha*sin_beta - sin_gamma*sin_alpha*cos_beta;
-                
+
 //		S[object_number][5][0] = A[object_number][5][0] =
 //		                cos_gamma*sin_alpha*cos_beta + sin_gamma*cos_alpha*sin_beta;
 
@@ -305,7 +305,7 @@ Q       sin_alpha = 0,
 //		S[object_number][6][1] =  .5*( S[object_number][3][0]*init_state[5][1]
 //					     + S[object_number][4][0]*init_state[3][1]
 //					     - S[object_number][5][0]*init_state[4][1]  );
-		
+
 
 //		To be sure...
 //		=============
@@ -316,7 +316,7 @@ Q       sin_alpha = 0,
 
 //		Put in the appropriate deadly parameters...
 //		===========================================
-		for ( int copy = 0; copy < 10; copy++ ) {
+		for ( int32_t copy = 0; copy < 10; copy++ ) {
 		I[object_number][copy + 20] = params[copy];
 		}
 		I[object_number][30] = DEATH;	    			//Hey, you are what you eat.
@@ -325,12 +325,12 @@ Q       sin_alpha = 0,
 //		=============================================================
 		idof_functions[object_number] = deadly_idof;
 
-		equation_of_motion[object_number][0] = 
-		equation_of_motion[object_number][1] = 
-		equation_of_motion[object_number][2] = 
+		equation_of_motion[object_number][0] =
+		equation_of_motion[object_number][1] =
+		equation_of_motion[object_number][2] =
 		equation_of_motion[object_number][3] =          		//Nice symmetries, huh.
-		equation_of_motion[object_number][4] = 
-		equation_of_motion[object_number][5] = 
+		equation_of_motion[object_number][4] =
+		equation_of_motion[object_number][5] =
 		equation_of_motion[object_number][6] = null_function;
 
 
@@ -348,12 +348,12 @@ Q       sin_alpha = 0,
 //		Wake me up...
 //		=============
 		no_no_not_me[object_number] = 1;
-               
+
 
 //		Things seem okay...
 //		===================
 		error_code = object_number;
-	
+
 
 	}
 

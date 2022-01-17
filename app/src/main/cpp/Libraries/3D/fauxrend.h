@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct {
    grs_canvas *draw_canvas;
    bool       double_buffer;
-   int        xtop, ytop;
+   int32_t        xtop, ytop;
    fix        viewer_zoom;
 } fauxrend_context;
 
@@ -35,18 +35,18 @@ typedef struct {
 void fauxrend(fauxrend_context *fr);
 void fauxrend_set_context(fauxrend_context *frc);
 void fauxrend_free_context(fauxrend_context *frc);
-fauxrend_context *fauxrend_place_3d(fauxrend_context *fr, bool db_buf, char axis, int fov, int xc, int yc, int wid, int hgt);
+fauxrend_context *fauxrend_place_3d(fauxrend_context *fr, bool db_buf, int8_t axis, int32_t fov, int32_t xc, int32_t yc, int32_t wid, int32_t hgt);
 void fauxrend_zoom(fauxrend_context *fr, fix mod_fac);
 void fauxrend_setup_3d(void);
 void fauxrend_close_3d(void);
-void fauxrend_clear_3d(fauxrend_context *fr, int clear_color);
+void fauxrend_clear_3d(fauxrend_context *fr, int32_t clear_color);
 
 void frame_check(void);
 
-//void eyepos_set(long x, long y, long z, long h, long p, long b);
-void eyepos_tele_to(int x, int y);
-void eyepos_setone(int which, int val);
-void eyepos_moveone(int which, int how);
+//void eyepos_set(int32_t x, int32_t y, int32_t z, int32_t h, int32_t p, int32_t b);
+void eyepos_tele_to(int32_t x, int32_t y);
+void eyepos_setone(int32_t which, int32_t val);
+void eyepos_moveone(int32_t which, int32_t how);
 void eyepos_init(void);
 
 #define MAP_SC 256
@@ -62,12 +62,12 @@ void eyepos_init(void);
 #define EYE_B 5
 
 #ifdef __FAUXREND_SRC
-long eye[6] = {0,0,0,0,0,0};
-long eye_scale[6]={1,1,1,128,128,128};
+int32_t eye[6] = {0,0,0,0,0,0};
+int32_t eye_scale[6]={1,1,1,128,128,128};
 #else
-extern long eye[6];
-extern long eye_scale[6];
-extern char eye_slew;
+extern int32_t eye[6];
+extern int32_t eye_scale[6];
+extern int8_t eye_slew;
 #endif
 
 // axis setup for the zany extra math-o-tron 3d

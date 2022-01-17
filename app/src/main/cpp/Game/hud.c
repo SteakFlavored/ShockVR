@@ -63,8 +63,8 @@ LGRect target_screen_rect;
 // ---------------
 #define RED_CYCLING_COLOR  0x7
 
-ubyte hud_color_bank = 0;
-ubyte hud_colors[HUD_COLOR_BANKS][HUD_COLORS_PER_BANK] =
+uint8_t hud_color_bank = 0;
+uint8_t hud_colors[HUD_COLOR_BANKS][HUD_COLORS_PER_BANK] =
 {
    { WHITE, RED_BASE + 3, GREEN_BASE, 0x41, RED_CYCLING_COLOR },
    { 0x38, GREEN_BASE, 0x41,  WHITE, RED_CYCLING_COLOR },
@@ -88,27 +88,27 @@ ubyte hud_colors[HUD_COLOR_BANKS][HUD_COLORS_PER_BANK] =
 
 typedef struct _hudline
 {
-   int strid;           // String ID to load string from if null.
-   ubyte color;         // what color should it be?
-   ulong mask;          // when should I draw?
-   char hudvar_id;      // hud variable to display
-   short x;             // coords to display at, default ordering if 0
-   short y;             // ditto
-   ubyte text;          // What text should I have?
-   ulong time;          // how long should I stay around? (0 = forever)
+   int32_t strid;           // String ID to load string from if null.
+   uint8_t color;         // what color should it be?
+   uint32_t mask;          // when should I draw?
+   int8_t hudvar_id;      // hud variable to display
+   int16_t x;             // coords to display at, default ordering if 0
+   int16_t y;             // ditto
+   uint8_t text;          // What text should I have?
+   uint32_t time;          // how long should I stay around? (0 = forever)
 } HudLine;
 
 
 #define HUD_STRING_SIZE 48
 #define NUM_HUDLINE_BUFFERS 6
-char hudline_text[NUM_HUDLINE_BUFFERS][HUD_STRING_SIZE+1];
+int8_t hudline_text[NUM_HUDLINE_BUFFERS][HUD_STRING_SIZE+1];
 
 #define X_MARGIN  10
 #define Y_MARGIN 7
 #define Y_STEP 7
 #define HUDLINE_HAS_TEXT(line) ((line)->text != 0)
 #define HUDLINE_TEXT(line)     (((line)->text)-1)
-#define HUDLINE_SET_TEXT(line,num)  ((line)->text = (ubyte)((num)+1))
+#define HUDLINE_SET_TEXT(line,num)  ((line)->text = (uint8_t)((num)+1))
 #define HUDLINE_X_CENTER -1
 
 
@@ -141,17 +141,17 @@ HudLine hud_lines[] =
 
 #define HUDLINE_BUFFER(i) (hudline_text[HUDLINE_TEXT(&hud_lines[i])])
 
-extern Boolean	DoubleSize;
+extern bool	DoubleSize;
 
 
 // --------------
 //  PROTOTYPES
 // --------------
-bool hud_color_bank_cycle(short keycode, ulong context, void* data);
-void hud_free_line(int i);
-void hud_delete_line(int i);
+bool hud_color_bank_cycle(int16_t keycode, uint32_t context, void* data);
+void hud_free_line(int32_t i);
+void hud_delete_line(int32_t i);
 void compute_hud_var(HudLine* hl);
-void hud_update_lines(short x, short* y, short xwid, short ywid);
+void hud_update_lines(int16_t x, int16_t* y, int16_t xwid, int16_t ywid);
 void hud_shutdown_lines(void);
 
 
@@ -159,13 +159,13 @@ void hud_shutdown_lines(void);
 // --------------
 //  FUNCTIONS
 // --------------
-bool hud_color_bank_cycle(short , ulong , void* )
+bool hud_color_bank_cycle(int16_t , uint32_t , void* )
 {
    hud_color_bank=(hud_color_bank+1)%HUD_COLOR_BANKS;
    return TRUE;
 }
 
-void hud_free_line(int i)
+void hud_free_line(int32_t i)
 {
    if (HUDLINE_HAS_TEXT(&hud_lines[i]))
    {
@@ -174,7 +174,7 @@ void hud_free_line(int i)
    }
 }
 
-void hud_delete_line(int i)
+void hud_delete_line(int32_t i)
 {
    hud_free_line(i);
    hud_lines[i].mask = 0;
@@ -182,13 +182,13 @@ void hud_delete_line(int i)
 
 void compute_hud_var(HudLine* hl)
 {
-   extern short shield_absorb_perc;
-   extern ulong time_until_shodan_avatar;
-   extern void second_format(int sec_remain, char *s);
+   extern int16_t shield_absorb_perc;
+   extern uint32_t time_until_shodan_avatar;
+   extern void second_format(int32_t sec_remain, int8_t *s);
 
-   char* text = hudline_text[HUDLINE_TEXT(hl)];
-   int len = strlen(text);
-   char* s = text + len;
+   int8_t* text = hudline_text[HUDLINE_TEXT(hl)];
+   int32_t len = strlen(text);
+   int8_t* s = text + len;
 
    switch (hl->hudvar_id)
    {
@@ -198,7 +198,7 @@ void compute_hud_var(HudLine* hl)
          break;
       case 2:
          {
-            short use_perc = min(shield_absorb_perc, 95);
+            int16_t use_perc = min(shield_absorb_perc, 95);
             numtostring(use_perc, s);
             strcat(s, " %");
          }
@@ -219,20 +219,20 @@ void compute_hud_var(HudLine* hl)
          break;
       case 5: // message line hud.
          {
-            extern char last_message[];
+            extern int8_t last_message[];
             strncpy(s,last_message,HUD_STRING_SIZE);
             break;
          }
       case 6: // game time remaining hud
       {
-         int secs=(MISSION_3_TICKS-player_struct.game_time)/CIT_CYCLE;
+         int32_t secs=(MISSION_3_TICKS-player_struct.game_time)/CIT_CYCLE;
          if(secs<0) secs=0;
          second_format(secs, s);
          break;
       }
       case 7: // energy usage hud
       {
-         extern short enviro_edrain_rate;
+         extern int16_t enviro_edrain_rate;
          numtostring(player_struct.energy_spend+enviro_edrain_rate,s);
          len+=strlen(s); s+=strlen(s);
          get_string(REF_STR_EnergyUnit,s,HUD_STRING_SIZE-len);
@@ -240,14 +240,14 @@ void compute_hud_var(HudLine* hl)
       }
       case 8: // enviro suit absorption
       {
-         extern short enviro_edrain_rate,enviro_absorb_rate;
+         extern int16_t enviro_edrain_rate,enviro_absorb_rate;
          lg_sprintf(s,get_temp_string(REF_STR_EnviroAbsorb),enviro_absorb_rate);
          len += strlen(s);
          break;
       }
      case 9: // enviro suit energy drain
       {
-         extern short enviro_edrain_rate,enviro_absorb_rate;
+         extern int16_t enviro_edrain_rate,enviro_absorb_rate;
          lg_sprintf(s,get_temp_string(REF_STR_EnviroDrain),enviro_edrain_rate);
          len += strlen(s);
          break;
@@ -258,7 +258,7 @@ void compute_hud_var(HudLine* hl)
       case 19:
       case 23:
          {
-            int lvl = player_struct.hit_points_lost[hl->hudvar_id - 16] >> 1;
+            int32_t lvl = player_struct.hit_points_lost[hl->hudvar_id - 16] >> 1;
             numtostring(lvl,s);
             len += strlen(s); s+= strlen(s);
             get_string(REF_STR_ExposureUnit,s,HUD_STRING_SIZE - len);
@@ -266,11 +266,11 @@ void compute_hud_var(HudLine* hl)
    }
 }
 
-void hud_update_lines(short x, short* y, short , short )
+void hud_update_lines(int16_t x, int16_t* y, int16_t , int16_t )
 {
-   int i;
-   short use_x, use_y;
-   extern void strip_newlines(char* buf);
+   int32_t i;
+   int16_t use_x, use_y;
+   extern void strip_newlines(int8_t* buf);
 
    for (i = 0; i < HUD_LINES; i++)
       if (hud_lines[i].mask & player_struct.hud_modes)
@@ -284,7 +284,7 @@ void hud_update_lines(short x, short* y, short , short )
          gr_set_fcolor(hud_colors[hud_color_bank][hud_lines[i].color]);
          if (!HUDLINE_HAS_TEXT(&hud_lines[i]))
          {
-            int j;
+            int32_t j;
             if (hud_lines[i].strid == 0)
             {
                hud_delete_line(i);
@@ -334,7 +334,7 @@ void hud_update_lines(short x, short* y, short , short )
          }
 #ifdef STEREO_SUPPORT
          {
-            short temp;
+            int16_t temp;
             if (convert_use_mode == 5)
                use_x = 12;
             ss_set_hack_mode(2,&temp);
@@ -352,7 +352,7 @@ void hud_update_lines(short x, short* y, short , short )
 // -----------------------------------------
 // HUD COMPASS
 
-void hud_update_compass(short* y,short xmin, short xwid);
+void hud_update_compass(int16_t* y,int16_t xmin, int16_t xwid);
 
 #define HUD_COMPASS_ARC    (80*256/360)
 #define HALF_COMPASS_ARC   (40*256/360)
@@ -361,21 +361,21 @@ void hud_update_compass(short* y,short xmin, short xwid);
 #define COMPASS_TICKSCALE  4
 #define COMPASS_COLOR 2
 
-void hud_update_compass(short* y,short xmin, short xwid)
+void hud_update_compass(int16_t* y,int16_t xmin, int16_t xwid)
 {
-   short ang, betw;
-   ubyte ver = player_struct.hardwarez[CPTRIP(NAV_HARD_TRIPLE)];
-   ubyte pang = objs[player_struct.rep].loc.h - HALF_COMPASS_ARC;
+   int16_t ang, betw;
+   uint8_t ver = player_struct.hardwarez[CPTRIP(NAV_HARD_TRIPLE)];
+   uint8_t pang = objs[player_struct.rep].loc.h - HALF_COMPASS_ARC;
    gr_set_fcolor(hud_colors[hud_color_bank][COMPASS_COLOR]);
    for (ang = 0; ang <= 255; ang+=HUD_COMPASS_STEP)
    {
-      ubyte adj = ang-pang;
-      short x = (int)adj*xwid/HUD_COMPASS_ARC;
-      short w,h;
+      uint8_t adj = ang-pang;
+      int16_t x = (int32_t)adj*xwid/HUD_COMPASS_ARC;
+      int16_t w,h;
       if (x >= xwid) continue;
       if (ang%HUD_COMPASS_OCT == 0) // draw an octant string
       {
-         char  s[4];
+         int8_t  s[4];
          get_string(REF_STR_DirectionAbbrev+ang/HUD_COMPASS_OCT, s, 4);
          gr_string_size(s,&w,&h);
          gr_set_fcolor(hud_colors[hud_color_bank][COMPASS_COLOR]);
@@ -402,8 +402,8 @@ void hud_update_compass(short* y,short xmin, short xwid)
 
 static struct _damage_report
 {
-   short damage;
-   ulong tstamp;
+   int16_t damage;
+   uint32_t tstamp;
    ObjID id;
 } hud_critters[4];
 
@@ -413,16 +413,16 @@ static struct _damage_report
 
 #define TARG_EFF_VERSION   3
 
-void hud_report_damage(ObjID target, byte dmglvl);
-void draw_target_box(short xl,short yl,short xh,short yh);
+void hud_report_damage(ObjID target, int8_t dmglvl);
+void draw_target_box(int16_t xl,int16_t yl,int16_t xh,int16_t yh);
 void update_damage_report(struct _hudobj_data* dat,bool reverse);
 
 
-void hud_report_damage(ObjID target, byte dmglvl)
+void hud_report_damage(ObjID target, int8_t dmglvl)
 {
-   short i, best = 0;
-   ulong best_tstamp = 0xFFFFFFFF;
-   ubyte ver = player_struct.hardwarez[CPTRIP(TARG_GOG_TRIPLE)];
+   int16_t i, best = 0;
+   uint32_t best_tstamp = 0xFFFFFFFF;
+   uint8_t ver = player_struct.hardwarez[CPTRIP(TARG_GOG_TRIPLE)];
    if ((dmglvl != DAMAGE_NONE)
       && (dmglvl != DAMAGE_INEFFECTIVE)      // ineffective flag - minman
       && (dmglvl != DAMAGE_STUN)
@@ -453,7 +453,7 @@ void hud_report_damage(ObjID target, byte dmglvl)
    hud_critters[best].damage = dmglvl;
 }
 
-void draw_target_box(short xl,short yl,short xh,short yh)
+void draw_target_box(int16_t xl,int16_t yl,int16_t xh,int16_t yh)
 {
 	if (DoubleSize)
 	{
@@ -462,8 +462,8 @@ void draw_target_box(short xl,short yl,short xh,short yh)
 		xh *= 2;
 		yh *= 2;
 	}
-   short w = (xh-xl)/5;
-   short h = (yh-yl)/5;
+   int16_t w = (xh-xl)/5;
+   int16_t h = (yh-yl)/5;
    gr_vline(xl,yl,yl+h);
    gr_hline(xl,yl,xl+w);
    gr_vline(xl,yh,yh-h);
@@ -476,15 +476,15 @@ void draw_target_box(short xl,short yl,short xh,short yh)
 
 void update_damage_report(struct _hudobj_data* dat,bool reverse)
 {
-   short i;
+   int16_t i;
    for (i = 0; i < NUM_HUD_CRITTERS; i++)
    {
       if (dat->id == hud_critters[i].id)
       {
-         short w,h;
-         short x,y;
+         int16_t w,h;
+         int16_t x,y;
 
-         char buf[80];
+         int8_t buf[80];
          struct _damage_report* rpt = &hud_critters[i];
          if (player_struct.game_time - rpt->tstamp > TSTAMP_CUTOFF)
          {
@@ -549,18 +549,18 @@ void update_damage_report(struct _hudobj_data* dat,bool reverse)
 
 #define NUM_TARG_FRAMES 5
 
-ubyte targ_frame = NUM_TARG_FRAMES;
+uint8_t targ_frame = NUM_TARG_FRAMES;
 
 #define TARG_COLOR 2
 
-void hud_do_objs(short xtop, short ytop, short xwid, short ywid, bool reverse);
+void hud_do_objs(int16_t xtop, int16_t ytop, int16_t xwid, int16_t ywid, bool reverse);
 
 
-void hud_do_objs(short xtop, short ytop, short , short , bool reverse)
+void hud_do_objs(int16_t xtop, int16_t ytop, int16_t , int16_t , bool reverse)
 {
-   int i;
+   int32_t i;
    extern ObjID beam_effect_id;
-//KLC   short a,b,c,d;
+//KLC   int16_t a,b,c,d;
 //KLC   STORE_CLIP(a,b,c,d);
    PointSetNull(target_screen_rect.ul);
    gr_set_fcolor(hud_colors[hud_color_bank][TARG_COLOR]);
@@ -577,8 +577,8 @@ void hud_do_objs(short xtop, short ytop, short , short , bool reverse)
       if (dat->id == OBJ_NULL) continue;
       if (dat->id == player_struct.curr_target)
       {
-         short w = (dat->xh-dat->xl)/5;
-         short h = (dat->yh-dat->yl)/5;
+         int16_t w = (dat->xh-dat->xl)/5;
+         int16_t h = (dat->yh-dat->yl)/5;
          draw_target_box(dat->xl-targ_frame*w,dat->yl-targ_frame*h,
             dat->xh+targ_frame*w,dat->yh+targ_frame*h);
          if (targ_frame > 0) targ_frame--;
@@ -606,22 +606,22 @@ errtype hud_update(bool, frc* context)
    extern bool fullscrn_vitals;
    extern bool fullscrn_icons;
    fauxrend_context *fc = (fauxrend_context*)context;
-   short y = Y_MARGIN;
-   short x = X_MARGIN;
-   short xwid = fc->xwid;
-//KLC   short a,b,c,d;
+   int16_t y = Y_MARGIN;
+   int16_t x = X_MARGIN;
+   int16_t xwid = fc->xwid;
+//KLC   int16_t a,b,c,d;
 //KLC   STORE_CLIP(a,b,c,d);
 //KLC   safe_set_cliprect(0,0,fc->xwid,fc->ywid);
    gr_set_font((grs_font*)ResLock(RES_tinyTechFont));
 
 /* TEMP		This is where we display the frame counter, if it is on.
-extern Boolean	gShowFrameCounter;
+extern bool	gShowFrameCounter;
 if (gShowFrameCounter)
 {
-static long		numFrames = 0;
-static long		nextTime = 0;
-static char		msg[64] = "\0\0\0";
-int	x, y;
+static int32_t		numFrames = 0;
+static int32_t		nextTime = 0;
+static int8_t		msg[64] = "\0\0\0";
+int32_t	x, y;
 
 if (nextTime == 0)
 	nextTime = *tmd_ticks + 560;		// Update every 2 seconds
@@ -676,16 +676,16 @@ if (msg[0])
 }
 
 
-errtype hud_set(ulong hud_modes)
+errtype hud_set(uint32_t hud_modes)
 {
    player_struct.hud_modes |= hud_modes;
 
    return(OK);
 }
 
-errtype hud_unset(ulong hud_modes)
+errtype hud_unset(uint32_t hud_modes)
 {
-   int i;
+   int32_t i;
    player_struct.hud_modes &= ~hud_modes;
 
    // Clear any times associated
@@ -699,9 +699,9 @@ errtype hud_unset(ulong hud_modes)
    return(OK);
 }
 
-errtype hud_set_time(ulong hud_modes, ulong ticks)
+errtype hud_set_time(uint32_t hud_modes, uint32_t ticks)
 {
-   int i;
+   int32_t i;
    hud_set(hud_modes);
    for (i=0; i < HUD_LINES; i++)
    {
@@ -716,7 +716,7 @@ errtype hud_set_time(ulong hud_modes, ulong ticks)
 
 void hud_shutdown_lines(void)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < HUD_LINES; i++)
    {
       if (hud_lines[i].time > 0)

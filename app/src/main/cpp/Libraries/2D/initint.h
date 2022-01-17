@@ -37,5 +37,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __INITINT_H
 #define __INITINT_H
-extern int gri_init (void);
+extern int32_t gri_init (void);
 #endif /* !__INITINT_H */

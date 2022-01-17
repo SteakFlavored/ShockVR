@@ -71,7 +71,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Typedefs
 typedef struct {
-   int type;
+   int32_t type;
    void *disp_data;
 } TNGButtonArrayElement;
 
@@ -86,10 +86,10 @@ typedef struct {
    TNG *tng_data;
    LGPoint bsize, msize, wsize, scroll_size;
    LGPoint size, offset, lsel;
-   ubyte spacing;
-   int num_selectable;
-   short lastkey;
-   ushort options;
+   uint8_t spacing;
+   int32_t num_selectable;
+   int16_t lastkey;
+   uint16_t options;
    TNGButtonArrayElement *matrix;
    bool *selected;
    TNG *hscroll_tng, *vscroll_tng;
@@ -117,7 +117,7 @@ typedef struct {
 // Initializes the TNG
 // Note that both of these must be called!
 // _init is called before the UI deals appropriately, _init2 is called afterwards.
-errtype tng_buttonarray_init(void *ui_data, TNG *ptng, TNGStyle *sty, ushort options, LGPoint msize, LGPoint wsize, LGPoint bsize, int num_sel);
+errtype tng_buttonarray_init(void *ui_data, TNG *ptng, TNGStyle *sty, uint16_t options, LGPoint msize, LGPoint wsize, LGPoint bsize, int32_t num_sel);
 errtype tng_buttonarray_init2(TNG *ptng);
 
 // Deallocate all memory used by the TNG
@@ -125,31 +125,31 @@ errtype tng_buttonarray_destroy(TNG *ptng);
 
 // Draw the specified parts (may be all) of trdinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_buttonarray_2d_draw(TNG *ptng, ushort partmask, LGPoint loc);
+errtype tng_buttonarray_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc);
 
 // Fill in ppt with the size of the TNG
 errtype tng_buttonarray_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG
-int tng_buttonarray_getvalue(TNG *ptng);
+int32_t tng_buttonarray_getvalue(TNG *ptng);
 
 // React appropriately for receiving the specified cooked key
-bool tng_buttonarray_keycooked(TNG *ptng, ushort key);
+bool tng_buttonarray_keycooked(TNG *ptng, uint16_t key);
 
 // React appropriately for receiving the specified mouse button event
-bool tng_buttonarray_mousebutt(TNG *ptng, uchar type, LGPoint loc);
+bool tng_buttonarray_mousebutt(TNG *ptng, uint8_t type, LGPoint loc);
 
 // Handle incoming signals
-bool tng_buttonarray_signal(TNG *ptng, ushort signal);
+bool tng_buttonarray_signal(TNG *ptng, uint16_t signal);
 
 errtype tng_buttonarray_select(TNG *ptng);
 errtype tng_buttonarray_scroll(TNG *ptng);
-errtype tng_buttonarray_addbutton_at(TNG *ptng, int type, void *disp_data, int coord_x, int coord_y);
-errtype tng_buttonarray_addbutton(TNG *ptng, int type, void *disp_data);
-errtype tng_buttonarray_setoffset(TNG *ptng, int offset_x, int offset_y);
+errtype tng_buttonarray_addbutton_at(TNG *ptng, int32_t type, void *disp_data, int32_t coord_x, int32_t coord_y);
+errtype tng_buttonarray_addbutton(TNG *ptng, int32_t type, void *disp_data);
+errtype tng_buttonarray_setoffset(TNG *ptng, int32_t offset_x, int32_t offset_y);
 
 // Draws button i,j of the buttonarray pointed to by ptng.
-errtype tng_buttonarray_draw_button(TNG *ptng, int i, int j);
+errtype tng_buttonarray_draw_button(TNG *ptng, int32_t i, int32_t j);
 
 // Macros
 #define TNG_BA(ptng) ((TNG_buttonarray *)(ptng->type_data))

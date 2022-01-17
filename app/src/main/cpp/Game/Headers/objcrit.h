@@ -44,21 +44,21 @@ typedef struct {
 	};
 	ObjSpecID prev;
    fix des_heading, des_speed, urgency;
-   short wait_frames;
-   ushort flags;
-   ulong attack_count;     // can attack when game time reaches this
-   ubyte ai_mode;
-   ubyte mood;
-   ubyte orders;
-   ubyte current_posture;
-   char x1;
-   char y1;
-   char dest_x;                        // Current destination coordinates
-   char dest_y;
-   char pf_x;       // where we are currently pathfinding to (what our current step is)
-   char pf_y;
-   char path_id;    // what pathfinding track we are on
-   char path_tries; // how many frames have we been trying to get to the
+   int16_t wait_frames;
+   uint16_t flags;
+   uint32_t attack_count;     // can attack when game time reaches this
+   uint8_t ai_mode;
+   uint8_t mood;
+   uint8_t orders;
+   uint8_t current_posture;
+   int8_t x1;
+   int8_t y1;
+   int8_t dest_x;                        // Current destination coordinates
+   int8_t dest_y;
+   int8_t pf_x;       // where we are currently pathfinding to (what our current step is)
+   int8_t pf_y;
+   int8_t path_id;    // what pathfinding track we are on
+   int8_t path_tries; // how many frames have we been trying to get to the
                     // next step on our pathfinding?
    ObjID loot1, loot2;                 // Some loot to get when we destroy critter
    // Note: Num frames is gotten from object properties
@@ -77,21 +77,21 @@ typedef struct {
 	};
 	ObjSpecID prev;
    fix des_heading, des_speed, urgency;
-   short wait_frames;
-   short base_time_interval;
-   ulong attack_count;     // can attack when game time reaches this
-   ubyte ai_mode;
-   ubyte mood;
-   ubyte orders;
-   ubyte current_posture;
-   char x1;
-   char y1;
-   char dest_x;                        // Current destination coordinate
-   char dest_y;
-   char old_x;    // the bin we were in prior to being in this bin
-   char old_y;
-   char last_x;   // the bin we were in last ai cycle
-   char last_y;
+   int16_t wait_frames;
+   int16_t base_time_interval;
+   uint32_t attack_count;     // can attack when game time reaches this
+   uint8_t ai_mode;
+   uint8_t mood;
+   uint8_t orders;
+   uint8_t current_posture;
+   int8_t x1;
+   int8_t y1;
+   int8_t dest_x;                        // Current destination coordinate
+   int8_t dest_y;
+   int8_t old_x;    // the bin we were in prior to being in this bin
+   int8_t old_y;
+   int8_t last_x;   // the bin we were in last ai cycle
+   int8_t last_y;
    ObjID loot1, loot2;                 // Some loot to get when we destroy critter
    // Note: Num frames is gotten from object properties
 } oldObjCritter;
@@ -102,73 +102,73 @@ typedef struct {
 #define NUM_CRITTER_POSTURES          8
 
 typedef struct _CritterAttack {
-   int   damage_type;
-   short damage_modifier;
-   ubyte offense_value;
-   ubyte penetration;
-   ubyte attack_mass;
-   short attack_velocity;
-   ubyte accuracy;
-   ubyte att_range;
-   int speed;              // Wait this long between attacks .. in game_time units
-   int slow_proj;          // what, if any, slow projectile we fire
+   int32_t   damage_type;
+   int16_t damage_modifier;
+   uint8_t offense_value;
+   uint8_t penetration;
+   uint8_t attack_mass;
+   int16_t attack_velocity;
+   uint8_t accuracy;
+   uint8_t att_range;
+   int32_t speed;              // Wait this long between attacks .. in game_time units
+   int32_t slow_proj;          // what, if any, slow projectile we fire
 } CritterAttack;
 
 #define NUM_ALTERNATE_ATTACKS 2
 #define MAX_CRITTER_VIEWS     8
 
 typedef struct CritterProp {
-   ubyte intelligence;
+   uint8_t intelligence;
    CritterAttack attacks[NUM_ALTERNATE_ATTACKS];
-   ubyte perception;        // each ai interval that player is seeable, this is percent of detection
-   ubyte defense;
-   ubyte proj_offset;      // slow projectile offset (y)
-//   int speed;
-   int   flags;            // flying??, shield??, fixed point?, does it move??
+   uint8_t perception;        // each ai interval that player is seeable, this is percent of detection
+   uint8_t defense;
+   uint8_t proj_offset;      // slow projectile offset (y)
+//   int32_t speed;
+   int32_t   flags;            // flying??, shield??, fixed point?, does it move??
    bool mirror;            // should it's views be mirrored?
-   ubyte frames[NUM_CRITTER_POSTURES];           // number of animation frames.
-   ubyte anim_speed;
-   ubyte attack_sound;     // play this when attacking.  -1 for no sound.
-   ubyte near_sound;       // play when creature is nearby
-   ubyte hurt_sound;       // play when damaged a large percentage
-   ubyte death_sound;      // play when dying
-   ubyte notice_sound;     // play when it notices the player
-   int corpse;             // object triple of thing to put here when we die.
-   ubyte views;            // number of views for multi-view postures
-   ubyte alt_perc;         // percentage of using alternate attack
-   ubyte disrupt_perc;     // chance of being disrupted if hit while attacking
-   ubyte treasure_type;    // what kind of loot this critter carries.
-   ubyte hit_effect;       // what kind of class of hit effects should we do
-   ubyte fire_frame;       // what frame do we fire on
+   uint8_t frames[NUM_CRITTER_POSTURES];           // number of animation frames.
+   uint8_t anim_speed;
+   uint8_t attack_sound;     // play this when attacking.  -1 for no sound.
+   uint8_t near_sound;       // play when creature is nearby
+   uint8_t hurt_sound;       // play when damaged a large percentage
+   uint8_t death_sound;      // play when dying
+   uint8_t notice_sound;     // play when it notices the player
+   int32_t corpse;             // object triple of thing to put here when we die.
+   uint8_t views;            // number of views for multi-view postures
+   uint8_t alt_perc;         // percentage of using alternate attack
+   uint8_t disrupt_perc;     // chance of being disrupted if hit while attacking
+   uint8_t treasure_type;    // what kind of loot this critter carries.
+   uint8_t hit_effect;       // what kind of class of hit effects should we do
+   uint8_t fire_frame;       // what frame do we fire on
 } CritterProp;
 
 // ------------------
 // Subclass typedefs
 
 typedef struct MutantCritterProp {
-   ubyte dummy;
+   uint8_t dummy;
 } MutantCritterProp;
 
 typedef struct RobotCritterProp {
-   ubyte backup_weapon;
-   ubyte metal_thickness;
+   uint8_t backup_weapon;
+   uint8_t metal_thickness;
 } RobotCritterProp;
 
 typedef struct CyborgCritterProp {
-   short shield_energy;
+   int16_t shield_energy;
 } CyborgCritterProp;
 
 #define NUM_VCOLORS  3
 typedef struct CyberCritterProp {
-   uchar vcolors[NUM_VCOLORS];
-   uchar alt_vcolors[NUM_VCOLORS];
+   uint8_t vcolors[NUM_VCOLORS];
+   uint8_t alt_vcolors[NUM_VCOLORS];
 } CyberCritterProp;
 
 #define EMPTY_STRUCTS
 
 typedef struct RobobabeCritterProp {
 #ifdef EMPTY_STRUCTS
-   ubyte dummy;
+   uint8_t dummy;
 #endif
 } RobobabeCritterProp;
 

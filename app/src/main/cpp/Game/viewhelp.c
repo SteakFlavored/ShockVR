@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------
 //  PROTOTYPES
 // ----------
-void mfd_viewhelp_expose(MFD* mfd, ubyte control);
+void mfd_viewhelp_expose(MFD* mfd, uint8_t control);
 bool mfd_viewhelp_button_handler(MFD* m, LGPoint bttn, uiEvent* ev, void* data);
 bool mfd_viewhelp_color_handler(MFD*, LGPoint bttn, uiEvent* ev, void*);
 errtype install_color_handler(MFD_Func* f);
@@ -111,7 +111,7 @@ struct _field_data
 {
    bool* var;
    bool fullscrn;
-   int qvar;
+   int32_t qvar;
 } checkbox_fields []  =
 {
    { &fullscrn_vitals, TRUE, FULLSCRN_VITAL_QVAR },
@@ -121,7 +121,7 @@ struct _field_data
 
 #define NUM_CHECKBOX_FIELDS (sizeof(checkbox_fields)/sizeof(struct _field_data))
 
-void mfd_viewhelp_expose(MFD* mfd, ubyte control)
+void mfd_viewhelp_expose(MFD* mfd, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
@@ -130,8 +130,8 @@ void mfd_viewhelp_expose(MFD* mfd, ubyte control)
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
    {
-      int i;
-      ubyte bits = 0;
+      int32_t i;
+      uint8_t bits = 0;
       // clear update rects
       mfd_clear_rects();
       // set up canvas
@@ -158,10 +158,10 @@ void mfd_viewhelp_expose(MFD* mfd, ubyte control)
       {
          for (i = 0; i < NUM_CHECKBOX_FIELDS ; i++)
          {
-            ubyte clr = ITEM_COLOR;
-            short w,h;
-            char buf[50];
-            short x,y;
+            uint8_t clr = ITEM_COLOR;
+            int16_t w,h;
+            int8_t buf[50];
+            int16_t x,y;
 
             x = LEFT_MARGIN;
             y = TOP_MARGIN + BARRY_HGT*i/NUM_CHECKBOX_FIELDS;
@@ -183,7 +183,7 @@ void mfd_viewhelp_expose(MFD* mfd, ubyte control)
          mfd_draw_string(get_temp_string(REF_STR_HudColorsTitle),COLORS_X, COLOR_TITLE_Y, ITEM_COLOR, TRUE);
          for (i = 0; i < HUD_COLOR_BANKS; i++)
          {
-            short x = COLORS_X + (COLORS_WID-COLORS_BWID)*i/(HUD_COLOR_BANKS-1);
+            int16_t x = COLORS_X + (COLORS_WID-COLORS_BWID)*i/(HUD_COLOR_BANKS-1);
             gr_set_fcolor(hud_colors[i][2]);
             ss_rect(x,COLORS_Y,x + COLORS_BWID, COLORS_Y + COLORS_BHGT);
             gr_set_fcolor(hud_colors[i][0]);
@@ -221,8 +221,8 @@ void mfd_viewhelp_expose(MFD* mfd, ubyte control)
 
 bool mfd_viewhelp_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
 {
-   int track = -1;
-   int i = bttn.y;
+   int32_t track = -1;
+   int32_t i = bttn.y;
    if (!(ev->subtype & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)))
       return FALSE;
    *checkbox_fields[i].var = !*checkbox_fields[i].var;

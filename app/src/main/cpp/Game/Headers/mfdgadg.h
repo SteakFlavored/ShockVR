@@ -86,7 +86,7 @@ errtype MFDBttnArrayResize(MFDhandler* h, LGRect* r, LGPoint bdims, LGPoint bsiz
 
 // A slider is a linear "analog" control.
 
-typedef bool (*MFDSliderCallback)(MFD* mfd, short val, uiEvent* ev, void *data);
+typedef bool (*MFDSliderCallback)(MFD* mfd, int16_t val, uiEvent* ev, void *data);
 
 errtype MFDSliderInit(MFDhandler* h, LGRect* r, MFDSliderCallback cb, void* data);
 // Create a (horizontal) slider in a particular sub-rect of the MFD.

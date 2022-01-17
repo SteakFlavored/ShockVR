@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	--------------------------------------------------------
 //  For Mac version, use Resource Manager to add the resource to indicated res file.
 
-void ResMake(Id id, void *ptr, long size, uchar type, short filenum, uchar flags)
+void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int16_t filenum, uint8_t flags)
 {
 	Handle		resHdl;
 	ResDesc 	*prd;
@@ -119,10 +119,10 @@ void ResMake(Id id, void *ptr, long size, uchar type, short filenum, uchar flags
 //		filenum = file number
 //		flags   = flags (RDF_XXX, RDF_COMPOUND automatically added)
 
-void ResMakeCompound(Id id, uchar type, short filenum, uchar flags)
+void ResMakeCompound(Id id, uint8_t type, int16_t filenum, uint8_t flags)
 {
 	RefTable *prt;
-	long sizeTable;
+	int32_t sizeTable;
 
 	//	Build empty compound resource in allocated memory
 
@@ -149,12 +149,12 @@ void ResMakeCompound(Id id, uchar type, short filenum, uchar flags)
 //  For Mac version:  Change references from 'ptr' to 'hdl'.  Use Mac memory allocating
 //  routines.
 
-void ResAddRef(Ref ref, void *pitem, long itemSize)
+void ResAddRef(Ref ref, void *pitem, int32_t itemSize)
 {
 	ResDesc *prd;
 	RefTable *prt;
 	RefIndex index,i;
-	long sizeItemOffsets,oldSize,sizeDiff, hdlSize;
+	int32_t sizeItemOffsets,oldSize,sizeDiff, hdlSize;
 
 	//	Error check
 
@@ -242,7 +242,7 @@ void ResAddRef(Ref ref, void *pitem, long itemSize)
 
 		// Extend resource for new offset(s) and data item
 
-		sizeItemOffsets = sizeof(long) * ((index + 1) - prt->numRefs);
+		sizeItemOffsets = sizeof(int32_t) * ((index + 1) - prt->numRefs);
 
 		hdlSize += sizeItemOffsets + itemSize;
 		HUnlock(prd->hdl);

@@ -110,12 +110,12 @@ typedef struct {
 	Id font;						// text font id
 	Ref bitmapRef;			// bitmapped backdrop (or NULL)
    LGPoint frobsize;      		// size of non-resource frobs
-	uchar backColor;			// background color (if bitmapRef == backColor == 0,
+	uint8_t backColor;			// background color (if bitmapRef == backColor == 0,
 									// viewport is transparent)
-	uchar textColor;			// text color
-	uchar altBackColor;		// alternate background color for some gadgets
-	uchar altTextColor;		// alternate text color for some gadgets
-	uchar bordColor[4];	// if TNG_BEVEL, u.l. & l.r. bevel colors
+	uint8_t textColor;			// text color
+	uint8_t altBackColor;		// alternate background color for some gadgets
+	uint8_t altTextColor;		// alternate text color for some gadgets
+	uint8_t bordColor[4];	// if TNG_BEVEL, u.l. & l.r. bevel colors
 									//	(1st pair normal, 2nd pair focus)
 									//	if TNG_FATBORDER, 4-pixel border using these cols
 } TNGStyle;
@@ -140,9 +140,9 @@ typedef bool (*TNGCallback)(void *ui_data, void *user_data);
 typedef struct _TNG_CB {
    struct _TNG_CB *next_cb;
    void *user_data;
-   ushort event_type;
-   ushort condition;
-   int id;
+   uint16_t event_type;
+   uint16_t condition;
+   int32_t id;
    TNGCallback cb;
 } TNG_CB;
 
@@ -152,12 +152,12 @@ typedef struct _TNG {
    void *cb_data;
    TNGStyle *style;
    TNG_CB *pcb;
-   ushort flags;
-   errtype (*draw_func)(struct _TNG *ptng, ushort partmask, LGPoint loc);
-   bool (*mousebutt)(struct _TNG *ptng, uchar type, LGPoint rel);
-   bool (*keycooked)(struct _TNG *ptng, ushort key);
-   bool (*signal)(struct _TNG *ptng, ushort signal);
-   bool (*keyscan)(struct _TNG *ptng, ushort scan);
+   uint16_t flags;
+   errtype (*draw_func)(struct _TNG *ptng, uint16_t partmask, LGPoint loc);
+   bool (*mousebutt)(struct _TNG *ptng, uint8_t type, LGPoint rel);
+   bool (*keycooked)(struct _TNG *ptng, uint16_t key);
+   bool (*signal)(struct _TNG *ptng, uint16_t signal);
+   bool (*keyscan)(struct _TNG *ptng, uint16_t scan);
    bool (*mousemove)(struct _TNG *ptng, LGPoint loc);
 } TNG;
 
@@ -196,16 +196,16 @@ void TNGDrawBase(TNG *ptng, LGPoint coord, LGPoint size);
 errtype TNGInit(TNG *ptng, TNGStyle *sty, void *ui_data);
 void TNGDrawBitmapRef(Ref ref, LGPoint pt);
 void TNGDrawTileMapRef(Ref ref, LGPoint pt);
-errtype TNGDrawText(Id id, char *text, int x, int y);
+errtype TNGDrawText(Id id, int8_t *text, int32_t x, int32_t y);
 
-errtype tng_install_callback(TNG *ptng, ushort event_type, ushort cond, TNGCallback cbfn, void *user_data, int *pid);
-errtype tng_uninstall_callback(TNG *ptng, int id);
-bool tng_cb_mousebutt(TNG *ptng, uchar type, LGPoint loc);
-bool tng_cb_keycooked(TNG *ptng, ushort key);
-bool tng_cb_signal(TNG *ptng, ushort signal);
-bool tng_cb_keyscan(TNG *ptng, ushort scan);
+errtype tng_install_callback(TNG *ptng, uint16_t event_type, uint16_t cond, TNGCallback cbfn, void *user_data, int32_t *pid);
+errtype tng_uninstall_callback(TNG *ptng, int32_t id);
+bool tng_cb_mousebutt(TNG *ptng, uint8_t type, LGPoint loc);
+bool tng_cb_keycooked(TNG *ptng, uint16_t key);
+bool tng_cb_signal(TNG *ptng, uint16_t signal);
+bool tng_cb_keyscan(TNG *ptng, uint16_t scan);
 bool tng_cb_mousemove(TNG *ptng, LGPoint loc);
-errtype tng_cb_draw(TNG *ptng, ushort partmask, LGPoint loc);
+errtype tng_cb_draw(TNG *ptng, uint16_t partmask, LGPoint loc);
 
 // Macros
 #define TNG_STYLE(x) (x)->tng_data->style

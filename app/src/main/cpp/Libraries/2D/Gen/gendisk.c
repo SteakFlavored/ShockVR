@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * This leads to some ugly rounding, but the circles are good enough.
  */
 
-void gen_int_udisk (short x0, short y0, short r)
+void gen_int_udisk (int16_t x0, int16_t y0, int16_t r)
 {
   fix a, b, ratio;
 
@@ -66,9 +66,9 @@ void gen_int_udisk (short x0, short y0, short r)
 }
 
 /* this really should return a clip code */
-void gen_int_disk (short x0, short y0, short r)
+void gen_int_disk (int16_t x0, int16_t y0, int16_t r)
 {
-  int c;
+  int32_t c;
 
   fix a, b, ratio;
 

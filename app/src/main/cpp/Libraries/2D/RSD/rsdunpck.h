@@ -43,14 +43,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //ÊMLA - removed so we have the prototypes
 // #ifndef _RSDCVT_C
-extern uchar *grd_unpack_buf;
-extern int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm);
+extern uint8_t *grd_unpack_buf;
+extern int32_t gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm);
 // #endif
 
 #if defined(powerc) || defined(__powerc)
-uchar *gr_rsd8_unpack(uchar* src, uchar *dst);
+uint8_t *gr_rsd8_unpack(uint8_t* src, uint8_t *dst);
 #else
-asm uchar *gr_rsd8_unpack(uchar* src, uchar *dst);
+asm uint8_t *gr_rsd8_unpack(uint8_t* src, uint8_t *dst);
 #endif
 //#pragma aux gr_rsd8_unpack parm [esi] [edi] value [edi] modify [eax ecx edx esi edi]
 

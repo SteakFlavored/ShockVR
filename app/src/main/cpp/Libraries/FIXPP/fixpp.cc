@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Header: r:/prj/lib/src/fixpp/RCS/fixpp.cc 1.28 1994/08/30 11:32:42 jak Exp $
@@ -50,9 +50,9 @@ void touch( Fixpoint& a )
 // the address of the string.
 // ===========================================================
 
-char *bitdump( Fixpoint & a )
+int8_t *bitdump( Fixpoint & a )
 {
-   static char string[30];
+   static int8_t string[30];
 
    sprintf( string, "[%#lx]", a.val );
 
@@ -63,18 +63,18 @@ char *bitdump( Fixpoint & a )
 #endif /* FIXDEBUG */
 
 // Moved here from header file - KC
-Fixpoint rawConstruct( long l )
+Fixpoint rawConstruct( int32_t l )
 {
 	Fixpoint f;
 	f.val = l;
 	return f;
 }
-#define f2Fixpoint(x) (rawConstruct( (long)((x)*SHIFTMULTIPLIER) ))
+#define f2Fixpoint(x) (rawConstruct( (int32_t)((x)*SHIFTMULTIPLIER) ))
 
 
 Fixpoint Fixpoint_one_over_two_pi = f2Fixpoint(0.159154943);
 Fixpoint Fixpoint_two_pi          = f2Fixpoint(6.283185306);
-  
+
 
 
 
@@ -82,7 +82,7 @@ Fixpoint Fixpoint_two_pi          = f2Fixpoint(6.283185306);
 
 bool  Fixpoint::click_bool = 1;
 
-ulong Fixpoint::constructor_void     = 0,
+uint32_t Fixpoint::constructor_void     = 0,
       Fixpoint::constructor_Fixpoint = 0,
       Fixpoint::constructor_int      = 0,
       Fixpoint::constructor_uint     = 0,
@@ -90,27 +90,27 @@ ulong Fixpoint::constructor_void     = 0,
       Fixpoint::constructor_ulint    = 0,
       Fixpoint::constructor_double   = 0;
 
-ulong Fixpoint::ass_Fixpoint = 0,
+uint32_t Fixpoint::ass_Fixpoint = 0,
       Fixpoint::ass_int      = 0,
       Fixpoint::ass_lint     = 0,
       Fixpoint::ass_uint     = 0,
       Fixpoint::ass_ulint    = 0,
       Fixpoint::ass_double   = 0;
 
-ulong Fixpoint::binary_add = 0,
+uint32_t Fixpoint::binary_add = 0,
       Fixpoint::binary_div = 0,
       Fixpoint::binary_sub = 0,
       Fixpoint::binary_mul = 0;
 
-ulong Fixpoint::add_eq = 0,
+uint32_t Fixpoint::add_eq = 0,
       Fixpoint::sub_eq = 0,
       Fixpoint::mul_eq = 0,
       Fixpoint::div_eq = 0;
 
-ulong Fixpoint::unary_minus = 0,
+uint32_t Fixpoint::unary_minus = 0,
       Fixpoint::unary_plus  = 0;
 
-ulong Fixpoint::cond_l   = 0,
+uint32_t Fixpoint::cond_l   = 0,
       Fixpoint::cond_g   = 0,
       Fixpoint::cond_le  = 0,
       Fixpoint::cond_ge  = 0,
@@ -130,10 +130,10 @@ void Fixpoint::report( ostream& os )
    os << "Constructor   double: " << constructor_double   << '\n' ;
 
    os << "Assign to Fixpoint:   " << ass_Fixpoint << '\n';
-   os << "Assign to int:        " << ass_int      << '\n'; 
-   os << "Assign to uint:       " << ass_uint     << '\n'; 
-   os << "Assign to lint:       " << ass_lint     << '\n'; 
-   os << "Assign to ulint:      " << ass_ulint    << '\n'; 
+   os << "Assign to int:        " << ass_int      << '\n';
+   os << "Assign to uint:       " << ass_uint     << '\n';
+   os << "Assign to lint:       " << ass_lint     << '\n';
+   os << "Assign to ulint:      " << ass_ulint    << '\n';
    os << "Assign to double:     " << ass_double   << '\n';
 
    os << "Binary Add:           " << binary_add << '\n';

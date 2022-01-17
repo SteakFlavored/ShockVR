@@ -39,16 +39,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "icanvas.h"
 
 #define gr_clut_hflip_ubitmap(bm,x,y,cl) \
-   ((void (*)(grs_bitmap *_bm,short _x,short _y,uchar *_cl)) \
+   ((void (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,uint8_t *_cl)) \
    grd_canvas_table[CLUT_HFLIP_DEVICE_UBITMAP+2*((bm)->type)])(bm,x,y,cl)
 #define gr_clut_hflip_bitmap(bm,x,y,cl) \
-   ((void (*)(grs_bitmap *_bm,short _x,short _y,uchar *_cl)) \
+   ((void (*)(grs_bitmap *_bm,int16_t _x,int16_t _y,uint8_t *_cl)) \
    grd_canvas_table[CLUT_HFLIP_DEVICE_BITMAP+2*((bm)->type)])(bm,x,y,cl)
 
 #define gr_clut_hflip_flat8_ubitmap \
-   ((void (*)(grs_bitmap *bm,short x,short y,uchar *cl)) \
+   ((void (*)(grs_bitmap *bm,int16_t x,int16_t y,uint8_t *cl)) \
    grd_canvas_table[CLUT_HFLIP_FLAT8_UBITMAP])
 #define gr_clut_hflip_flat8_bitmap \
-   ((void (*)(grs_bitmap *bm,short x,short y,uchar *cl)) \
+   ((void (*)(grs_bitmap *bm,int16_t x,int16_t y,uint8_t *cl)) \
    grd_canvas_table[CLUT_HFLIP_FLAT8_BITMAP])
 #endif /* !__GRCLHBM_H */

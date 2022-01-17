@@ -32,7 +32,7 @@
 
 
 	csect
-	
+
 #========================================================================
 #	Multiplication routines
 #========================================================================
@@ -41,7 +41,7 @@
 ; fix fix_mul_asm(fix a, fix b)
 ;---------------------------------------
 		EXPORT	.fix_mul_asm
-	
+
 	.fix_mul_asm:
 		mulhw	r5,r3,r4				; int part into r5
 		mullw	r3,r3,r4				; fract part into r3
@@ -54,7 +54,7 @@
 ; fix24 fix24_mul_asm(fix24 a, fix24 b)
 ;---------------------------------------
 	EXPORT	.fix24_mul_asm
-	
+
 	.fix24_mul_asm:
 		mulhw	r5,r3,r4				; int part into r5
 		mullw	r3,r3,r4				; fract part into r3
@@ -67,7 +67,7 @@
 ; fix fix_mul_3_3_3_asm (fix a, fix b)
 ;---------------------------------------
 	EXPORT	.fix_mul_3_3_3_asm
-	
+
 	.fix_mul_3_3_3_asm:
 		mulhw	r5,r3,r4				; int part into r5
 		mullw	r3,r3,r4				; fract part into r3
@@ -80,7 +80,7 @@
 ; fix fix_mul_3_32_16_asm (fix a, fix b)
 ;---------------------------------------
 	EXPORT	.fix_mul_3_32_16_asm
-	
+
 	.fix_mul_3_32_16_asm:
 		mulhw	r5,r3,r4				; int part into r5
 		mullw	r3,r3,r4				; fract part into r3
@@ -93,7 +93,7 @@
 ; fix fix_mul_3_16_20_asm (fix a, fix b)
 ;---------------------------------------
 	EXPORT	.fix_mul_3_16_20_asm
-	
+
 	.fix_mul_3_16_20_asm:
 		mulhw	r5,r3,r4				; int part into r5
 		srawi	r3,r5,1					; shift w/sign 1 to right
@@ -103,7 +103,7 @@
 ; fix fix_mul_16_32_20_asm (fix a, fix b)
 ;---------------------------------------
 	EXPORT	.fix_mul_16_32_20_asm
-	
+
 	.fix_mul_16_32_20_asm:
 		mulhw	r5,r3,r4				; int part into r5
 		mullw	r3,r3,r4				; fract part into r3
@@ -116,7 +116,7 @@
 ; fix fast_fix_mul_int_asm (fix a, fix b);
 ;---------------------------------------
 	EXPORT	.fast_fix_mul_int_asm
-	
+
 	.fast_fix_mul_int_asm:
 		mulhw	r3,r3,r4				; return hi word of multiply
 		blr
@@ -124,9 +124,9 @@
 ;---------------------------------------
 ; fix fix_mul_asm_safe(fix a, fix b)
 ;---------------------------------------
-; checks for -1 return when it should really be 0 
+; checks for -1 return when it should really be 0
 		EXPORT	.fix_mul_asm_safe
-	
+
 	.fix_mul_asm_safe:
 		mullw	r6,r3,r4				; fract part into r3
 		mulhw	r5,r3,r4				; int part into r5
@@ -136,14 +136,14 @@
 										; upper half of r3
 		cmpi	0,r3,-1					; is result -1?
 		beq-	MaybeBadNum
-NumOK:	
+NumOK:
 		blr
 
 MaybeBadNum:
 		beq		1,NumOK
 		li		r3,0
 		blr
-		
+
 #========================================================================
 #	Division routine
 #========================================================================
@@ -152,10 +152,10 @@ MaybeBadNum:
 #	fix fix_div_asm(fix a, fix b);
 #
 #	On entry, this routine takes the following parameters:
-#		r3 - 	operand a (fixed point, frac, or long format)
-#		r4 -	operand b (fixed point, frac, or long format)
+#		r3 - 	operand a (fixed point, frac, or int32_t format)
+#		r4 -	operand b (fixed point, frac, or int32_t format)
 #	On exit:
-#		r3 -	fixed point, frac, or long quotient
+#		r3 -	fixed point, frac, or int32_t quotient
 #
 #	Within the routine, r0 and r5-r9 are used as scratch registers.
 #	Condition register fields cr0 and cr1 are also used.
@@ -198,12 +198,12 @@ FixDivDoIt:
 	cmpwi	1,rNumH,0			# check sign of numerator
 	crxor	bQuotNeg,bDenNeg,bNumNeg
 								# calculate sign of result, put it into bit 4
-	bf		bDenNeg,FixDivCheckNumer 	
+	bf		bDenNeg,FixDivCheckNumer
 								# check sign of denominator
 	neg		rDen,rDen			# make denominator positive if it was negative
 
 FixDivCheckNumer:
-	bf		bNumNeg,FixDiv64Common	
+	bf		bNumNeg,FixDiv64Common
 								# continue if numerator is positive
 	subfc	rNumL,rNumL,r0		# negate denominator, carrying as appropriate
 	subfe	rNumH,rNumH,r0
@@ -217,10 +217,10 @@ FixDiv64Common:
 	rlwnm	rNumH,rNumH,rTemp1,0,31
 	slw		rNumL,rNumL,rTemp1
 	xor		rNumH,rNumH,rNumL
-	
+
 	bge-	FixDivOverflow		# branch if overflow
 
-	srwi	rTemp2,rDen,16		
+	srwi	rTemp2,rDen,16
 	divwu	rTemp3,rNumH,rTemp2	# perform 32-bit by 16-bit division
 	mullw	rTemp2,rTemp3,rTemp2
 	subf	rNumH,rTemp2,rNumH	# calculate remainder
@@ -261,7 +261,7 @@ FixDiv64CorrectLow:
 
 FixDiv64Done:
 	addco.	r3,rNumL,r0
-	bt		bQuotNeg,FixDiv64QuotientNeg	
+	bt		bQuotNeg,FixDiv64QuotientNeg
 							# see if we need to negate answer
 	blt-	FixDivOverflow	# check for overflow case
 	blr						# return to caller
@@ -308,7 +308,7 @@ PosNum:
 	srawi	rNumH,r3,24			# mask off high word of fixed number and sign-extend
 	rlwinm	rNumL,r3,8,0,23		# mask off low word of fixed number
 	beq		0,FixDivByZero		# branch if divide by zero
-	
+
 	b		FixDivDoIt			# otherwise, do the divide
 
 
@@ -319,22 +319,22 @@ PosNum:
 # -----------------------------------------
 # fix fix_mul_div_asm(fix a, fix b, fix c)
 #
-#	Computes (a * b) / c, preserving the 
+#	Computes (a * b) / c, preserving the
 #	48-bit intermediate result.
 # -----------------------------------------
 	EXPORT	.fix_mul_div_asm
-	
+
 	.fix_mul_div_asm:
 		cmpwi	0,r5,0				# check for divide by zero
 		beq		0,FixDivByZero		# branch if divide by zero
-		
+
 		mr		r0,r5				# save denominator
 		mulhw	r5,r3,r4			# int part into r5
 		mullw	r6,r3,r4			# fract part into r6
 		mr		r4,r0				# put denominator into r4
 		li		r0,0				# create a handy copy of zero
 		b		FixDivDoIt
-		
+
 
 
 #========================================================================
@@ -342,7 +342,7 @@ PosNum:
 #========================================================================
 
 #	wide *AsmWideAdd(wide *target, wide *source);
-#	
+#
 #	On entry, this routine takes the following parameters:
 #		r3 - 	pointer to target
 #		r4 -	pointer to source
@@ -370,11 +370,11 @@ rBL:		EQU		r9
 	adde	rAH,rAH,rBH		# add high words with carry
 	stw		rAH,0(r3)		# store high word of result
 	blr						# return to caller
-	
 
-	
+
+
 #	wide *AsmWideSub(wide *A, wide *B);
-#	
+#
 #	On entry, this routine takes the following parameters:
 #		r3 - 	pointer to A
 #		r4 -	pointer to B
@@ -398,8 +398,8 @@ rBL:		EQU		r9
 	blr						# return to caller
 
 
-#	wide *AsmWideMultiply(long multiplicand, long multiplier, wide *target);
-#	
+#	wide *AsmWideMultiply(int32_t multiplicand, int32_t multiplier, wide *target);
+#
 #	On entry, this routine takes the following parameters:
 #		r3 - 	operand A
 #		r4 -	operand B
@@ -422,18 +422,18 @@ rBL:		EQU		r9
 
 
 # -----------------------------------------
-# long AsmWideDivide(long hi, long lo, long divisor)
+# int32_t AsmWideDivide(int32_t hi, int32_t lo, int32_t divisor)
 #
-#	Divides a wide number (hi:lo) by the divisor. 
-#	Returns long result in r3.
+#	Divides a wide number (hi:lo) by the divisor.
+#	Returns int32_t result in r3.
 # -----------------------------------------
 	EXPORT	.AsmWideDivide
-	
+
 	.AsmWideDivide:
 		li		r0,0				# create a handy copy of zero
 		cmpwi	0,r5,0				# check for divide by zero
 		beq		0,FixDivByZero		# branch if divisor is zero
-		
+
 		mr		r7,r5				# save divisor for now
 		mr		r5,r3				# put hi into r5
 		mr		r6,r4				# put lo into r6

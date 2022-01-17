@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern ObjID terrain_hit_obj;
 extern ObjID terrain_hit_exclusion;
 
-static int _n_o_rad;
+static int32_t _n_o_rad;
 static Obj *_n_fr_cobj;
 
 void terrain_object_collide(physics_handle src, ObjID target);
@@ -66,14 +66,14 @@ void terrain_object_collide(physics_handle src, ObjID target);
 // Internal Prototypes
 fix *localize_object(fix *ax_pt);
 bool _axial_relativize(fix *src_pts, fix *targ_pts, bool vec);
-bool setup_cube_face(fix ndist, fix xp, fix yp, fix xhlf, fix yhlf, int nrm_cmp);
-bool _face_parm_cube(fix *cntr, int x, int y, int z);
+bool setup_cube_face(fix ndist, fix xp, fix yp, fix xhlf, fix yhlf, int32_t nrm_cmp);
+bool _face_parm_cube(fix *cntr, int32_t x, int32_t y, int32_t z);
 void _face_secret_repulsor_hack(void);
 void facelet_obj(ObjID cobjid);
 
 
 // should these become static or pass around, or make relativize a #define
-static void _1d_relativize(fixang a_v, fix *plst, fix *tpts, uchar t1, uchar t2, uchar t3)
+static void _1d_relativize(fixang a_v, fix *plst, fix *tpts, uint8_t t1, uint8_t t2, uint8_t t3)
 {
    fix s,c;
    fix_fastsincos(a_v,&s,&c);
@@ -138,11 +138,11 @@ bool _axial_relativize(fix *src_pts, fix *targ_pts, bool vec) // (fixang l_h, fi
    return TRUE;
 }
 
-bool setup_cube_face(fix ndist, fix xp, fix yp, fix xhlf, fix yhlf, int nrm_cmp)
+bool setup_cube_face(fix ndist, fix xp, fix yp, fix xhlf, fix yhlf, int32_t nrm_cmp)
 {
    fix unit_norm[3];
    fix l_pt[3], walls[4][2], nrm[3];
-   int flg=SS_BCD_PRIM_MULTI|TF_FLG_BOX_FULL;
+   int32_t flg=SS_BCD_PRIM_MULTI|TF_FLG_BOX_FULL;
 
    walls[0][0]=-xhlf; walls[0][1]= yhlf;
    walls[1][0]= xhlf; walls[1][1]= yhlf;
@@ -166,7 +166,7 @@ bool setup_cube_face(fix ndist, fix xp, fix yp, fix xhlf, fix yhlf, int nrm_cmp)
 
 //#define MIN_SIZE 0x0500
 #define MIN_SIZE 0x0050
-bool _face_parm_cube(fix *cntr, int x, int y, int z)
+bool _face_parm_cube(fix *cntr, int32_t x, int32_t y, int32_t z)
 {
    bool rv=FALSE;
 //   mprintf("FDPC: o %x %x %x ph %x %x %x, at %x %x %x, size %x %x %x, rad %x\n",
@@ -191,9 +191,9 @@ bool _face_parm_cube(fix *cntr, int x, int y, int z)
 
 void _face_secret_repulsor_hack(void)
 {
-   extern bool comparator_check(int comparator, ObjID obj, uchar *special_code);
-   int comparator = objTraps[_n_fr_cobj->specID].comparator, r_prm, flg, r_top, r_bot;
-   uchar special;
+   extern bool comparator_check(int32_t comparator, ObjID obj, uint8_t *special_code);
+   int32_t comparator = objTraps[_n_fr_cobj->specID].comparator, r_prm, flg, r_top, r_bot;
+   uint8_t special;
 
    if (tf_ph==-1) return;                                            // dont fuck with bullets or L-O-Sight
    if ((tf_loc_pt[0]<0)||(tf_loc_pt[1]<0)||                          // if we are not in the main square for
@@ -219,9 +219,9 @@ void _face_secret_repulsor_hack(void)
 
 void facelet_obj(ObjID cobjid)
 {
-   short objtrip;
-   int obj_type=FAUBJ_UNKNOWN;
-   char scale = 0;
+   int16_t objtrip;
+   int32_t obj_type=FAUBJ_UNKNOWN;
+   int8_t scale = 0;
    bool tfimp = FALSE;
 
    // This should do something to distinguish between wall-like terrain and complex terrain

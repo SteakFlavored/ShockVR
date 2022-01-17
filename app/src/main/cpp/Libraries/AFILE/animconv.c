@@ -63,11 +63,11 @@ void main(void)
 {
 	grs_screen 	*screen;
 	static grs_bitmap bm;
-	char infile[64],outfile[64];
-	long len;
-	int iarg;
-	int iframe,numFrames;
-	int outWidth,outHeight;
+	int8_t infile[64],outfile[64];
+	int32_t len;
+	int32_t iarg;
+	int32_t iframe,numFrames;
+	int32_t outWidth,outHeight;
 	bool depth16;
 	fix tFrame;
 	grs_bitmap bmscale;
@@ -146,7 +146,7 @@ void main(void)
 		outWidth = afi.v.width;
 	if (outWidth)
 		{
-		gr_init_bitmap(&bmscale, (uchar *)malloc(outWidth * outHeight), BMT_FLAT8, 0,
+		gr_init_bitmap(&bmscale, (uint8_t *)malloc(outWidth * outHeight), BMT_FLAT8, 0,
 			outWidth, outHeight);
 		gr_make_canvas(&bmscale, &cvscale);
 		}

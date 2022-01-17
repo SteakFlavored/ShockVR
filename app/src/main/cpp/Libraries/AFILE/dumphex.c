@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "movie.h"
 
-long SwapLongBytes(long in);
-short SwapShortBytes(short in);
+int32_t SwapLongBytes(int32_t in);
+int16_t SwapShortBytes(int16_t in);
 
 MovieHeader mh;
 
@@ -38,30 +38,30 @@ MovieHeader mh;
 
 void main(void)
 {
-static char *chunkNames[] = {
+static int8_t *chunkNames[] = {
    "END  ","VIDEO","AUDIO","TEXT ","PAL  ","TABLE","?????","?????"};
-static char *bmTypeNames[] = {
+static int8_t *bmTypeNames[] = {
    "DEVICE","MONO","FLAT8","FLAT24","RSD8","TLUC8","SPAN","GEN",
 	"","","","","","","","4X4",
 };
-static char *palNames[] = {
+static int8_t *palNames[] = {
 	"SET","BLACK","???","???","???","???","???","???",
 };
-static char *tableNames[] = {
+static int8_t *tableNames[] = {
 	"COLORSET","HUFFTAB","???","???","???","???","???","???",
 	"???","???","???","???","???","???","???","???",
 };
 
 	FILE *fpi;
-	int iarg;
+	int32_t iarg;
 	bool dumpChunkHdrs;
-	long length;
+	int32_t length;
 	MovieChunk *pmc,*pmcBase;
-	char infile[128];
-	char buff[128];
+	int8_t infile[128];
+	int8_t buff[128];
 
-	short	outResNum;
-	short	resID = 128;
+	int16_t	outResNum;
+	int16_t	resID = 128;
 
 	dumpChunkHdrs = TRUE;
 
@@ -175,13 +175,13 @@ static char *tableNames[] = {
       	pmcBase = pmc;
 		while (TRUE)
 		{
-			uchar	s1, s2;
+			uint8_t	s1, s2;
 
 			// Swap bytes around.
-			s1 = *((uchar *)pmc);
-			s2 = *(((uchar *)pmc)+2);
-			*(((uchar*)pmc)+2) = s1;
-			*((uchar*)pmc) = s2;
+			s1 = *((uint8_t *)pmc);
+			s2 = *(((uint8_t *)pmc)+2);
+			*(((uint8_t*)pmc)+2) = s1;
+			*((uint8_t*)pmc) = s2;
  			pmc->offset = SwapLongBytes(pmc->offset);
 
 			// Print info for each chunk type.
@@ -197,7 +197,7 @@ static char *tableNames[] = {
 					printf("\n");
   /*
 					MovieTextItem *mti;
-					ulong tag;
+					uint32_t tag;
 
 					fseek(fpi, pmc->offset, SEEK_SET);
 					fread(buff, sizeof(buff), 1, fpi);
@@ -206,7 +206,7 @@ static char *tableNames[] = {
  					mti->offset = SwapLongBytes(mti->offset);
 					printf("[Text] %c%c%c%c: %s\n",
 						tag >> 24, (tag >> 16) & 0xFF, (tag >> 8) & 0xFF, tag & 0xFF,
-						(char *)mti + mti->offset);
+						(int8_t *)mti + mti->offset);
 */
 				}
             }
@@ -230,20 +230,20 @@ static char *tableNames[] = {
 
 
 //	---------------------------------------------------------
-long SwapLongBytes(long in)
+int32_t SwapLongBytes(int32_t in)
 {
-	long	out;
-	*(uchar*)&out = *(((uchar *)&in)+3);
-	*(((uchar*)&out)+1) = *(((uchar *)&in)+2);
-	*(((uchar*)&out)+2) = *(((uchar *)&in)+1);
-	*(((uchar*)&out)+3) = *(uchar *)&in;
+	int32_t	out;
+	*(uint8_t*)&out = *(((uint8_t *)&in)+3);
+	*(((uint8_t*)&out)+1) = *(((uint8_t *)&in)+2);
+	*(((uint8_t*)&out)+2) = *(((uint8_t *)&in)+1);
+	*(((uint8_t*)&out)+3) = *(uint8_t *)&in;
 	return(out);
 }
 
-short SwapShortBytes(short in)
+int16_t SwapShortBytes(int16_t in)
 {
-	short out;
-	*(uchar*)&out = *(((uchar *)&in)+1);
-	*(((uchar*)&out)+1) = *(uchar *)&in;
+	int16_t out;
+	*(uint8_t*)&out = *(((uint8_t *)&in)+1);
+	*(((uint8_t*)&out)+1) = *(uint8_t *)&in;
 	return(out);
 }

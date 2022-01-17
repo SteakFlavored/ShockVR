@@ -39,5 +39,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 extern bool view360_active_contexts[NUM_360_CONTEXTS]; // which contexts should actually draw
-extern uchar view360_context_views[NUM_360_CONTEXTS];  // which view is being shown by a given context
+extern uint8_t view360_context_views[NUM_360_CONTEXTS];  // which view is being shown by a given context
 

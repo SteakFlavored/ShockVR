@@ -36,13 +36,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scrdat.h"
 
 // prototypes
-int gri_cpoly_loop (grs_tmap_loop_info *ti);
+int32_t gri_cpoly_loop (grs_tmap_loop_info *ti);
 void gri_cpoly_init (grs_tmap_loop_info *ti);
 void gri_clut_cpoly_init (grs_tmap_loop_info *ti);
 
-int gri_cpoly_loop (grs_tmap_loop_info *ti)
+int32_t gri_cpoly_loop (grs_tmap_loop_info *ti)
 {
-   int x,d;
+   int32_t x,d;
    fix dx,frac;
    fix r,g,b,dr,dg,db;
 
@@ -67,7 +67,7 @@ int gri_cpoly_loop (grs_tmap_loop_info *ti)
          case GRL_OPAQUE:
             for (x=fix_cint(ti->left.x); x<fix_cint(ti->right.x); x++)
             {
-               int j=gr_index_rgb(r,g,b);
+               int32_t j=gr_index_rgb(r,g,b);
                ti->d[x]=grd_ipal[j];
                r+=dr, g+=dg, b+=db;
             }
@@ -75,7 +75,7 @@ int gri_cpoly_loop (grs_tmap_loop_info *ti)
          case GRL_CLUT:
             for (x=fix_cint(ti->left.x); x<fix_cint(ti->right.x); x++)
             {
-               int j=gr_index_rgb(r,g,b);
+               int32_t j=gr_index_rgb(r,g,b);
                ti->d[x]=ti->clut[grd_ipal[j]];
                r+=dr, g+=dg, b+=db;
             }

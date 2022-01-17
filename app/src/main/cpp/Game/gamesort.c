@@ -51,9 +51,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern void show_obj(ObjID curO);
 
 // Internal Prototypes
-void sort_section(int low, int hi);
-void score_objs(int o_num);
-int do_part_sort(int ptype, int lo, int hi, int ploc);
+void sort_section(int32_t low, int32_t hi);
+void score_objs(int32_t o_num);
+int32_t do_part_sort(int32_t ptype, int32_t lo, int32_t hi, int32_t ploc);
 void partition_sort(void);
 void render_sorted_objs(void);
 
@@ -76,15 +76,15 @@ void render_sorted_objs(void);
 ObjID no_render_obj=-1;
 
 static ObjID    sq_Refs[MAX_SORTED_REFS];
-static uint     score_list[MAX_SORTED_REFS];        // at first holds obj_type8.objtrip24, then objscore24.exp1.partition2.refidx5
+static uint32_t     score_list[MAX_SORTED_REFS];        // at first holds obj_type8.objtrip24, then objscore24.exp1.partition2.refidx5
                                                     // thus we can sort it w/o losing the refidx, which looks up in sqrefs
-static ushort   partition_loc[MAX_SORTED_REFS];     // for the partitions
+static uint16_t   partition_loc[MAX_SORTED_REFS];     // for the partitions
 
-static uchar    partition_type;
-static uchar    partition_cnt;
+static uint8_t    partition_type;
+static uint8_t    partition_cnt;
 
-static uint     cur_obj_num, draw_last_cnt;
-static uint     osort_zc, osort_yc, osort_xc;			// KLC - changed order for our compiler (it puts them in reverse order)
+static uint32_t     cur_obj_num, draw_last_cnt;
+static uint32_t     osort_zc, osort_yc, osort_xc;			// KLC - changed order for our compiler (it puts them in reverse order)
 
 // set up data space,
 void render_sort_start(void)
@@ -95,10 +95,10 @@ void render_sort_start(void)
    osort_zc=fr_camera_last[2]>>(16-SLOPE_SHIFT-3);    // oh yea
 }
 
-void sort_section(int low, int hi)
+void sort_section(int32_t low, int32_t hi)
 {
-	int iloop, oloop;
-	uint tmp;
+	int32_t iloop, oloop;
+	uint32_t tmp;
 
 	for (oloop=hi-1; oloop>=low; oloop--)
 		for (iloop=low; iloop<=oloop; iloop++)
@@ -110,13 +110,13 @@ void sort_section(int low, int hi)
 			}
 }
 
-void score_objs(int o_num)
+void score_objs(int32_t o_num)
 {
    ObjID cobjid;
-   short objtrip;
+   int16_t objtrip;
    Obj *_os_cobj;
-   extern uchar cam_mode;
-   int partition=PRT_NONE, obj_type, our_score;
+   extern uint8_t cam_mode;
+   int32_t partition=PRT_NONE, obj_type, our_score;
 
    cobjid=sq_Refs[o_num];
    obj_type=score_list[o_num]>>24;
@@ -164,13 +164,13 @@ void score_objs(int o_num)
    }
    else if (partition<0)
    {
-      int tmp=our_score|o_num;
+      int32_t tmp=our_score|o_num;
       if (draw_last_cnt!=o_num)
       {
 	      our_score=score_list[draw_last_cnt];
          if (our_score&PRT_MASK)
          {
-            int i=0;
+            int32_t i=0;
             while (i<partition_cnt)
                if (partition_loc[i]==draw_last_cnt)
                 { partition_loc[i]=o_num; break; }
@@ -200,11 +200,11 @@ void score_objs(int o_num)
       case 2: tval=ob->loc.z; break; \
    }
 
-int do_part_sort(int ptype, int lo, int hi, int ploc)
+int32_t do_part_sort(int32_t ptype, int32_t lo, int32_t hi, int32_t ploc)
 {
    Obj *cur_obj, *part_obj;
-   int  cur_val,  part_val, pdir, cam_val, near_f, loidx, hiidx;
-	int  ptptr[2], ptdelta[2], tmpstore=-1, mloc;
+   int32_t  cur_val,  part_val, pdir, cam_val, near_f, loidx, hiidx;
+	int32_t  ptptr[2], ptdelta[2], tmpstore=-1, mloc;
 
    part_obj=&objs[sq_Refs[ploc]];
    pdir=(ptype==PRT_VERT)?2:(part_obj->loc.h&0x40)?0:1;
@@ -252,7 +252,7 @@ int do_part_sort(int ptype, int lo, int hi, int ploc)
       }
 
       {
-         int tmpptr=score_list[ptptr[0]];
+         int32_t tmpptr=score_list[ptptr[0]];
          score_list[ptptr[0]]=score_list[ptptr[1]];
          score_list[ptptr[1]]=tmpptr;
          ptptr[0]+=ptdelta[0];      // now move on in
@@ -275,7 +275,7 @@ void partition_sort(void)
 ;//KLC      Warning(("Dual partitions\n"));
    else
    {
-      int mloc;
+      int32_t mloc;
 #ifdef COW_COW
       if (cur_obj_num==partition_loc[0])
          sort_section(draw_last_cnt,cur_obj_num-1);
@@ -295,8 +295,8 @@ void partition_sort(void)
 // for now, just do oscore straight...
 void render_sorted_objs(void)
 {
-   extern int _fdt_x, _fdt_y;
-   int i;
+   extern int32_t _fdt_x, _fdt_y;
+   int32_t i;
    partition_cnt=partition_type=draw_last_cnt=0;
    if (cur_obj_num>1)
    {
@@ -316,8 +316,8 @@ void render_sorted_objs(void)
 
 void sort_show_obj(ObjID cobjid)
 {
-   short objtrip;
-   int obj_type;
+   int16_t objtrip;
+   int32_t obj_type;
 
    if (cur_obj_num>=MAX_SORTED_REFS) return;
    if (cobjid==no_render_obj) return;

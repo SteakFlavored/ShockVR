@@ -31,27 +31,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef GR_TEMP_USE_MEMSTACK
 #define GRD_TEMP_SIZE 16384
-uchar grd_temp_buf[GRD_TEMP_SIZE];
-uchar *grd_temp_p = grd_temp_buf;
+uint8_t grd_temp_buf[GRD_TEMP_SIZE];
+uint8_t *grd_temp_p = grd_temp_buf;
 
-void *gr_alloc_temp (int n)
+void *gr_alloc_temp (int32_t n)
 {
    void *p;
 
-   if (grd_temp_p+n+sizeof(int) >= grd_temp_buf+GRD_TEMP_SIZE)
+   if (grd_temp_p+n+sizeof(int32_t) >= grd_temp_buf+GRD_TEMP_SIZE)
       return NULL;
-   *((int *)grd_temp_p) = n;
-   p = grd_temp_p+sizeof (int);
-   grd_temp_p += n+sizeof (int);
+   *((int32_t *)grd_temp_p) = n;
+   p = grd_temp_p+sizeof (int32_t);
+   grd_temp_p += n+sizeof (int32_t);
 
    return p;
 }
 
 void gr_free_temp (void *p)
 {
-   int n;
+   int32_t n;
 
-   n = *((int *)p-1);
-   grd_temp_p -= n+sizeof (int);
+   n = *((int32_t *)p-1);
+   grd_temp_p -= n+sizeof (int32_t);
 }
 #endif /* !GR_TEMP_USE_MEMSTACK */

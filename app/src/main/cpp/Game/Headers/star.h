@@ -38,31 +38,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // to a fix, since sts_vecs are normalized they can
 // be this size
 typedef struct {
-   short x,y,z;
+   int16_t x,y,z;
 } sts_vec;
 
-extern   int std_size;
+extern   int32_t std_size;
 
 // sets global pointers in the star library
 // to the number of stars, their positions, their colors
-void star_set(int n,sts_vec *vlist,uchar *clist);
+void star_set(int32_t n,sts_vec *vlist,uint8_t *clist);
 
 // allocates the necessary space for stars using alloc
 // returns neg 1 if problem
-int star_alloc(int n);
+int32_t star_alloc(int32_t n);
 
 // frees star space using free
 void star_free(void);
 
 // stuffs random vectors and colors into the set areas
 // randomly assigning a color range to them
-void star_rand(uchar col,uchar range);
+void star_rand(uint8_t col,uint8_t range);
 
 // render a starry polygon
-void star_poly(int n,g3s_phandle *vp);
+void star_poly(int32_t n,g3s_phandle *vp);
 
 // render a starry polygon
-void star_empty(int n,g3s_phandle *vp);
+void star_empty(int32_t n,g3s_phandle *vp);
 
 // Render to an empty sky, you'll have
 // to blacken it for us to color 0

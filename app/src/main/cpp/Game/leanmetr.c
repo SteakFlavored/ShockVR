@@ -87,14 +87,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define BMAPS_PER_POSTURE 3
 
 extern bool full_game_3d;
-extern void physics_set_relax(int axis, bool relax);
+extern void physics_set_relax(int32_t axis, bool relax);
 
-static ubyte discrete_eye_height[DISCRETE_EYE_POSITIONS] =
+static uint8_t discrete_eye_height[DISCRETE_EYE_POSITIONS] =
       {   3,
           10,
           18,
       };
-ubyte hires_eye_height[DISCRETE_EYE_POSITIONS] =
+uint8_t hires_eye_height[DISCRETE_EYE_POSITIONS] =
       {   8,
           26,
           45,
@@ -119,8 +119,8 @@ LGRegion* current_meter_region = &slot_meter_region;
 #define PICK_METER_REGION(full)  ((full)? &fullscrn_meter_region : &slot_meter_region)
 
 
-ushort lean_bmap_res = 0;
-ushort shield_bmap_res = 0;
+uint16_t lean_bmap_res = 0;
+uint16_t shield_bmap_res = 0;
 
 #define lean_bmap_id(i) (MKREF(lean_bmap_res,i))
 #define eye_bmap_r(i) (get_bitmap_from_ref(REF_IMG_bmEyeIconR+(i)))
@@ -137,20 +137,20 @@ bool eye_fine_mode = FALSE;
 // PROTOTYPES
 // ---------
 void set_base_lean_bmap(bool shield);
-fix compute_filter_weight(ulong deltat);
-fix apply_weighted_filter(fix input, fix state, ulong deltat);
+fix compute_filter_weight(uint32_t deltat);
+fix apply_weighted_filter(fix input, fix state, uint32_t deltat);
 void slam_posture_meter_state(void);
 fix velocity_crouch_filter(fix crouch);
-void lean_icon(LGPoint* pos, grs_bitmap** icon, int* inum);
+void lean_icon(LGPoint* pos, grs_bitmap** icon, int32_t* inum);
 void player_reset_eye(void);
-byte player_get_eye(void);
-void player_set_eye_fixang(int ang);
-int player_get_eye_fixang(void);
+int8_t player_get_eye(void);
+void player_set_eye_fixang(int32_t ang);
+int32_t player_get_eye_fixang(void);
 bool eye_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *);
 bool lean_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *);
 void init_posture_meters(LGRegion* root, bool fullscreen);
 void update_lean_meter(bool force);
-void draw_eye_bitmap(grs_bitmap *eye_bmap, LGPoint pos, int lasty);
+void draw_eye_bitmap(grs_bitmap *eye_bmap, LGPoint pos, int32_t lasty);
 void update_eye_meter(bool force);
 void update_meters(bool force);
 void zoom_to_lean_meter(void);
@@ -163,8 +163,8 @@ void zoom_to_lean_meter(void);
 
 void set_base_lean_bmap(bool shield)
 {
-	int		v;
-	ushort	baseRes;
+	int32_t		v;
+	uint16_t	baseRes;
 
 	// Set the lean bitmaps resource.
 
@@ -229,9 +229,9 @@ void set_base_lean_bmap(bool shield)
 
 
 #ifdef BIASED_CAPACITOR
-fix compute_filter_weight(ulong deltat)
+fix compute_filter_weight(uint32_t deltat)
 {
-   int rate = POSTURE_FILTER_RATE;
+   int32_t rate = POSTURE_FILTER_RATE;
    fix bias = FIX_UNIT*CONTROL_MAX_VAL/(CONTROL_MAX_VAL + 3*abs(player_struct.controls[CONTROL_YVEL]));
    fix weight = fix_make(deltat,0)*rate >> APPROX_CIT_CYCLE_SHFT;
    Spew(DSRC_USER_I_Lean,("posture filter weight = %q, bias = %q\n",weight,bias));
@@ -239,9 +239,9 @@ fix compute_filter_weight(ulong deltat)
    return weight;
 }
 #else
-fix compute_filter_weight(ulong deltat)
+fix compute_filter_weight(uint32_t deltat)
 {
-   int rate = POSTURE_FILTER_RATE;
+   int32_t rate = POSTURE_FILTER_RATE;
    fix weight = fix_make(deltat,0)*rate >> APPROX_CIT_CYCLE_SHFT;
 
    return weight;
@@ -249,7 +249,7 @@ fix compute_filter_weight(ulong deltat)
 #endif
 
 
-fix apply_weighted_filter(fix input, fix state, ulong deltat)
+fix apply_weighted_filter(fix input, fix state, uint32_t deltat)
 {
    fix weight = compute_filter_weight(deltat);
    return fix_div(fix_mul(weight,input) + state,weight + FIX_UNIT);
@@ -260,7 +260,7 @@ fix apply_weighted_filter(fix input, fix state, ulong deltat)
 #define  INTENDED_HGT (PLAYER_HGT*(NUM_POSTURES-player_struct.posture-1)/(NUM_POSTURES-1))
 
 
-#define STORE_STATE(fval) (player_struct.lean_filter_state = (ushort)((fval) > FIX_UNIT ? FIX_UNIT-1 : fix_frac(fval)))
+#define STORE_STATE(fval) (player_struct.lean_filter_state = (uint16_t)((fval) > FIX_UNIT ? FIX_UNIT-1 : fix_frac(fval)))
 #define GET_STATE (fix_make(0,player_struct.lean_filter_state));
 
 #define SLAM_DURATION (CIT_CYCLE/2)
@@ -273,7 +273,7 @@ void slam_posture_meter_state(void)
 
 fix velocity_crouch_filter(fix crouch)
 {
-   ubyte posture = player_struct.posture+1;
+   uint8_t posture = player_struct.posture+1;
    fix hgt = INTENDED_HGT;
    fix vel = posture*FIX_UNIT*(abs(player_struct.controls[CONTROL_YVEL]
                        +abs(player_struct.controls[CONTROL_ZVEL] )))/(2*CONTROL_MAX_VAL);
@@ -281,10 +281,10 @@ fix velocity_crouch_filter(fix crouch)
 }
 
 
-void lean_icon(LGPoint* pos, grs_bitmap** icon, int* inum)
+void lean_icon(LGPoint* pos, grs_bitmap** icon, int32_t* inum)
 {
-	int		posture ,leanx;
-	uchar	*bp;
+	int32_t		posture ,leanx;
+	uint8_t	*bp;
 
 	// Determine the posture and lean amount for the player currently.
 	if (!global_fullmap->cyber)
@@ -311,12 +311,12 @@ void lean_icon(LGPoint* pos, grs_bitmap** icon, int* inum)
 	*inum = posture*BMAPS_PER_POSTURE + ((100 - leanx)*BMAPS_PER_POSTURE/201);
 
 	// Get a pointer to the corresponding lean bitmap.
-	bp = (uchar *)ResPtr(lean_bmap_res);
+	bp = (uint8_t *)ResPtr(lean_bmap_res);
 	if (bp)
 	{
 		RefTable	*prt = (RefTable *)bp;
-		FrameDesc	*f = (FrameDesc *)(((uchar *)prt) + (prt->offset[*inum]));
-		f->bm.bits = (uchar *)(f + 1);
+		FrameDesc	*f = (FrameDesc *)(((uint8_t *)prt) + (prt->offset[*inum]));
+		f->bm.bits = (uint8_t *)(f + 1);
 		*icon = &(f->bm);
 	}
 	else
@@ -332,9 +332,9 @@ void lean_icon(LGPoint* pos, grs_bitmap** icon, int* inum)
 
 static void undraw_meter_area(LGRect* r)
 {
-	short a,b,c,d;
-	char	saveMode;
-	int	x,y;
+	int16_t a,b,c,d;
+	int8_t	saveMode;
+	int32_t	x,y;
 
 	STORE_CLIP(a,b,c,d);
 	safe_set_cliprect(r->ul.x,r->ul.y,r->lr.x,r->lr.y);
@@ -356,9 +356,9 @@ void player_reset_eye(void)
    player_struct.eye_pos = eye_mods[1] = 0;
 }
 
-void player_set_eye(byte eyecntl)
+void player_set_eye(int8_t eyecntl)
 {
-   int theta = MAX_EYE_ANGLE*eyecntl/CONTROL_MAX_VAL;
+   int32_t theta = MAX_EYE_ANGLE*eyecntl/CONTROL_MAX_VAL;
    player_struct.eye_pos = theta;
 
    if (theta < 0)
@@ -366,17 +366,17 @@ void player_set_eye(byte eyecntl)
    eye_mods[1] = theta;
 }
 
-byte player_get_eye(void)
+int8_t player_get_eye(void)
 {
-   int theta = eye_mods[1];
+   int32_t theta = eye_mods[1];
    if (theta > FIXANG_PI)
       theta -= 2*FIXANG_PI;
-   return (byte)(theta*CONTROL_MAX_VAL/MAX_EYE_ANGLE);
+   return (int8_t)(theta*CONTROL_MAX_VAL/MAX_EYE_ANGLE);
 }
 
-void player_set_eye_fixang(int ang)
+void player_set_eye_fixang(int32_t ang)
 {
-   int theta = ang;
+   int32_t theta = ang;
    if (abs(ang) > MAX_EYE_ANGLE)
       theta = (ang < 0) ? -MAX_EYE_ANGLE : MAX_EYE_ANGLE;
    player_struct.eye_pos = theta;
@@ -385,9 +385,9 @@ void player_set_eye_fixang(int ang)
    eye_mods[1] = theta;
 }
 
-int player_get_eye_fixang(void)
+int32_t player_get_eye_fixang(void)
 {
-   int theta = eye_mods[1];
+   int32_t theta = eye_mods[1];
    if (theta > FIXANG_PI)
       theta -= 2*FIXANG_PI;
    return theta;
@@ -395,8 +395,8 @@ int player_get_eye_fixang(void)
 
 bool eye_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
 {
-   short x = ev->pos.x - r->abs_x;
-   short y = ev->pos.y - r->abs_y;
+   int16_t x = ev->pos.x - r->abs_x;
+   int16_t y = ev->pos.y - r->abs_y;
    extern bool hack_takeover;
    if (hack_takeover || global_fullmap->cyber) return FALSE;
    if (x < 0 || x >= EYEMETER_W) return FALSE;
@@ -404,7 +404,7 @@ bool eye_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
    if (!eye_fine_mode) y = discrete_eye_height[y*DISCRETE_EYE_POSITIONS/EYEMETER_H];
    if (ev->buttons & (1 << MOUSE_LBUTTON))
    {
-      int theta;
+      int32_t theta;
       if ((ev->action & MOUSE_LDOWN) == 0
          && uiLastMouseRegion[MOUSE_LBUTTON] != r)
             return FALSE;
@@ -424,13 +424,13 @@ bool eye_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
 
 bool lean_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
 {
-   short x = ev->pos.x - r->abs_x - LEANOMETER_XOFF;
-   short y = ev->pos.y - r->abs_y - LEANOMETER_YOFF;
+   int16_t x = ev->pos.x - r->abs_x - LEANOMETER_XOFF;
+   int16_t y = ev->pos.y - r->abs_y - LEANOMETER_YOFF;
    if (x < 0 || x >= LEANOMETER_W || global_fullmap->cyber) return FALSE;
    if (ev->buttons & (1 << MOUSE_LBUTTON))
    {
-      short posture = y*3/LEANOMETER_H;
-      short xlean = x*220/(LEANOMETER_W-1)-110;
+      int16_t posture = y*3/LEANOMETER_H;
+      int16_t xlean = x*220/(LEANOMETER_W-1)-110;
       if ((ev->action & MOUSE_LDOWN) == 0
          && uiLastMouseRegion[MOUSE_LBUTTON] != r)
             return FALSE;
@@ -459,7 +459,7 @@ bool lean_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
 void init_posture_meters(LGRegion* root, bool fullscreen)
 {
    LGRegion* reg = PICK_METER_REGION(fullscreen);
-   int id;
+   int32_t id;
    LGRect r = { { 0, 0},
       {LEANOMETER_W + LEANOMETER_XOFF, EYEMETER_H} };
    errtype err;
@@ -483,19 +483,19 @@ void init_posture_meters(LGRegion* root, bool fullscreen)
 void update_lean_meter(bool force)
 {
 	static bool 		 last_shield = FALSE;
-	static uchar	 last_shieldstr = 0;
-	static int		 last_lean_icon = -1;
+	static uint8_t	 last_shieldstr = 0;
+	static int32_t		 last_lean_icon = -1;
 	static LGPoint	 last_lean_pos = { -1, -1};
 
 	LGRect			r;
 	LGPoint			pos;
-	short				a,b,c,d;
+	int16_t				a,b,c,d;
 	grs_bitmap	*icon;
-	int				inum;
+	int32_t				inum;
 	bool				shield = WareActive(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]) != 0;
-//	int				shieldstr = SHIELD_SETTING(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]);
-	int				shieldstr;
-	char				saveMode;
+//	int32_t				shieldstr = SHIELD_SETTING(player_struct.hardwarez_status[CPTRIP(SHIELD_HARD_TRIPLE)]);
+	int32_t				shieldstr;
+	int8_t				saveMode;
 	bool				saveBio;
 
 //	if(player_struct.hardwarez[CPTRIP(SHIELD_HARD_TRIPLE)]==SHIELD_VERSIONS)
@@ -540,17 +540,17 @@ void update_lean_meter(bool force)
 
 	if (shield)
 	{
-		uchar			*bp;
+		uint8_t			*bp;
 		grs_bitmap	*sbm;
 		LGPoint			offset;
 
 		// Get a pointer to the corresponding lean bitmap.
-		bp = (uchar *)ResPtr(shield_bmap_res);
+		bp = (uint8_t *)ResPtr(shield_bmap_res);
 		if (bp)
 		{
 			RefTable	*prt = (RefTable *)bp;
-			FrameDesc	*f = (FrameDesc *)(((uchar *)prt) + (prt->offset[inum]));
-			f->bm.bits = (uchar *)(f + 1);
+			FrameDesc	*f = (FrameDesc *)(((uint8_t *)prt) + (prt->offset[inum]));
+			f->bm.bits = (uint8_t *)(f + 1);
 			sbm = &(f->bm);
 		}
 		else
@@ -573,10 +573,10 @@ void update_lean_meter(bool force)
 }
 
 
-void draw_eye_bitmap(grs_bitmap *eye_bmap, LGPoint pos, int lasty)
+void draw_eye_bitmap(grs_bitmap *eye_bmap, LGPoint pos, int32_t lasty)
 {
 	LGRect	r;
-	char		saveMode;
+	int8_t		saveMode;
 
 	current_meter_region = PICK_METER_REGION(full_game_3d);
 	pos.x += SCONV_X(EYEMETER_X());
@@ -603,15 +603,15 @@ void draw_eye_bitmap(grs_bitmap *eye_bmap, LGPoint pos, int lasty)
 
 void update_eye_meter(bool force)
 {
-   static short last_y = 0;
-   static short last_ly = 0;
+   static int16_t last_y = 0;
+   static int16_t last_ly = 0;
    static bool last_mode = FALSE;
 
-   short a,b,c,d;
+   int16_t a,b,c,d;
    fix pos = eye_mods[1];
-   int yang = pos%(2*FIXANG_PI);
-   short y;
-   short lefty;
+   int32_t yang = pos%(2*FIXANG_PI);
+   int16_t y;
+   int16_t lefty;
    grs_bitmap *eye_rbmap = eye_bmap_r(!eye_fine_mode);
    grs_bitmap *eye_lbmap = eye_bmap_l( eye_fine_mode);
    bool	saveBio;
@@ -664,7 +664,7 @@ void update_meters(bool force)
 void zoom_to_lean_meter(void)
 {
    extern void zoom_rect(LGRect*,LGRect*);
-   extern Boolean DoubleSize;
+   extern bool DoubleSize;
 
    LGPoint pos;
    LGRect start = { { -5,-5}, {+5,+5}};

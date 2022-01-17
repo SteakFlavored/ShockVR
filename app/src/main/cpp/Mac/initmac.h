@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct
 {
 	TMTask			task;							// The actual TimeManager task structure
-	long				*ticksPtr;					// Pointer to the ticks
+	int32_t				*ticksPtr;					// Pointer to the ticks
 }
 ShockTask, *ShockTaskPtr;
 extern ShockTask	pShockTicksTask;
@@ -47,13 +47,13 @@ extern ShockTask	pShockTicksTask;
 //--------------------
 void InitMac(void);
 void FailNIL(void *);
-Handle GetResourceFail(long id, short num);
+Handle GetResourceFail(int32_t id, int16_t num);
 void CheckConfig(void);
-void ErrorDie(short stringnum);
+void ErrorDie(int16_t stringnum);
 void CleanupAndExit(void);
 void SetupWindows(WindowPtr *mainWind);
-void SetUpMenus(MenuHandle *theMenus, short numMenus);
-void StringAlert(short stringnum);
+void SetUpMenus(MenuHandle *theMenus, int16_t numMenus);
+void StringAlert(int16_t stringnum);
 void GetFolders(void);
 void InstallShockTimers(void);
 void RemoveShockTimers(void);

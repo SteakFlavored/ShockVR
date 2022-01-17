@@ -61,11 +61,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------------
 //  PROTOTYPES
 // -------------
-void right_justify_num(char *num, int dlen);
+void right_justify_num(int8_t *num, int32_t dlen);
 bool iter_eligible_targets(ObjSpecID *sid);
 void select_closest_target(void);
 void toggle_current_target_backwards(void);
-void mfd_targetware_expose(MFD* mfd, ubyte control);
+void mfd_targetware_expose(MFD* mfd, uint8_t control);
 bool mfd_targetware_handler(MFD *m, uiEvent *e);
 
 
@@ -94,7 +94,7 @@ bool mfd_targetware_handler(MFD *m, uiEvent *e);
 
 
 extern bool full_game_3d;
-extern int mfd_bmap_id(int triple);
+extern int32_t mfd_bmap_id(int32_t triple);
 
 #define PAGEBUTT_W 8
 #define PAGEBUTT_H 11
@@ -106,11 +106,11 @@ extern int mfd_bmap_id(int triple);
 #define LAST_MOOD(mfd)   (player_struct.mfd_func_data[MFD_TARGET_FUNC][mfd+2])
 #define LAST_STATUS(mfd) (player_struct.mfd_func_data[MFD_TARGET_FUNC][mfd+4])
 
-void right_justify_num(char *num, int dlen)
+void right_justify_num(int8_t *num, int32_t dlen)
 {
-   int   len  = strlen(num);
-   int   i;
-   int   delta;
+   int32_t   len  = strlen(num);
+   int32_t   i;
+   int32_t   delta;
 
    if (len >= dlen)
       return;
@@ -128,9 +128,9 @@ void right_justify_num(char *num, int dlen)
 // mfd_target_expose()
 //
 
-void mfd_target_expose(MFD *m, ubyte control)
+void mfd_target_expose(MFD *m, uint8_t control)
 {
-   int version = player_struct.hardwarez[CPTRIP(TARG_GOG_TRIPLE)];
+   int32_t version = player_struct.hardwarez[CPTRIP(TARG_GOG_TRIPLE)];
    bool full = control & MFD_EXPOSE_FULL;
    ObjSpecID target = objs[player_struct.curr_target].specID;
 
@@ -158,8 +158,8 @@ void mfd_target_expose(MFD *m, ubyte control)
 
       if (full && target == OBJ_SPEC_NULL)
       {
-         char buf[80];
-         short w,h;
+         int8_t buf[80];
+         int16_t w,h;
          draw_res_bm(MKREF(RES_mfdArtOverlays,MFD_ART_TRIOP), 0, 0);
          gr_set_font((grs_font*)ResLock(TARGET_FONT));
          get_string((version > 0) ? REF_STR_NoTarget : REF_STR_NoTargetWare,buf,sizeof(buf));
@@ -193,12 +193,12 @@ void mfd_target_expose(MFD *m, ubyte control)
       else
       {
          LGPoint siz;
-         short x;
-         short y;
-         int triple = ID2TRIP(objCritters[target].id);
-         char buf[TBUFSIZ];
-         int dmg;
-         int id = mfd_bmap_id(triple);
+         int16_t x;
+         int16_t y;
+         int32_t triple = ID2TRIP(objCritters[target].id);
+         int8_t buf[TBUFSIZ];
+         int32_t dmg;
+         int32_t id = mfd_bmap_id(triple);
 
          // Aha! Herein lies the meat of the targeting display.
 
@@ -219,8 +219,8 @@ void mfd_target_expose(MFD *m, ubyte control)
 
          mfd_string_shadow = MFD_SHADOW_ALWAYS;
          {
-            int len,sc;
-            char small_buf[15];
+            int32_t len,sc;
+            int8_t small_buf[15];
 
             /// Draw target id.
             sc=objs[player_struct.curr_target].subclass;
@@ -270,12 +270,12 @@ void mfd_target_expose(MFD *m, ubyte control)
          // draw target range
          {
             LGRect r;
-            short x = TEXT_RIGHT_X;
-            short lx;
-            char rstr[10];
+            int16_t x = TEXT_RIGHT_X;
+            int16_t lx;
+            int8_t rstr[10];
             ObjLoc loc = objs[player_struct.curr_target].loc;
             ObjLoc ploc = objs[PLAYER_OBJ].loc;
-            long mapdist;
+            int32_t mapdist;
             fix dist;
 
             mapdist = long_fast_pyth_dist(loc.x - ploc.x,loc.y - ploc.y);
@@ -309,8 +309,8 @@ void mfd_target_expose(MFD *m, ubyte control)
          // Draw the target's mood
          if (version >= 2)
          {
-            ubyte clr = TEXT_COLOR;
-            ubyte mood = objCritters[target].mood;
+            uint8_t clr = TEXT_COLOR;
+            uint8_t mood = objCritters[target].mood;
             if (full || mood != LAST_MOOD(m->id))
             {
                // check if critter is asleep - only order we care about
@@ -365,7 +365,7 @@ void mfd_target_expose(MFD *m, ubyte control)
 // ==============================================
 
 #define NUM_TARG_FRAMES 5
-extern ubyte targ_frame;
+extern uint8_t targ_frame;
 
 void select_current_target(ObjID id, bool force_mfd)
 {
@@ -383,7 +383,7 @@ void select_current_target(ObjID id, bool force_mfd)
    targ_frame = NUM_TARG_FRAMES;
    if (force_mfd)
    {
-      int m = NUM_MFDS;
+      int32_t m = NUM_MFDS;
       if(id != OBJ_NULL && !mfd_yield_func(MFD_TARGET_FUNC,&m)) {
          use_ware(WARE_HARD,HARDWARE_TARGET);
          mfd_yield_func(MFD_TARGET_FUNC,&m);
@@ -420,7 +420,7 @@ bool iter_eligible_targets(ObjSpecID *sid)
    {
       ObjID oid = objCritters[*sid].id;
       ObjLoc loc = objs[oid].loc;
-      int dsq = sqr(OBJ_LOC_BIN_X(loc) - plr.x) +
+      int32_t dsq = sqr(OBJ_LOC_BIN_X(loc) - plr.x) +
                 sqr(OBJ_LOC_BIN_Y(loc) - plr.y);
 
       // you cannot target yourself - well - not this game....
@@ -453,14 +453,14 @@ void select_closest_target(void)
    LGPoint plr;
    ObjSpecID sid = OBJ_SPEC_NULL;
    ObjID bestid = OBJ_NULL;
-   uint bestdist = 0xFFFFFFFF;
+   uint32_t bestdist = 0xFFFFFFFF;
    plr.x = OBJ_LOC_BIN_X(ploc);
    plr.y = OBJ_LOC_BIN_Y(ploc);
    while(iter_eligible_targets(&sid))
    {
       ObjID oid = objCritters[sid].id;
       ObjLoc loc = objs[oid].loc;
-      int dsq = sqr(OBJ_LOC_BIN_X(loc) - plr.x) +
+      int32_t dsq = sqr(OBJ_LOC_BIN_X(loc) - plr.x) +
                 sqr(OBJ_LOC_BIN_Y(loc) - plr.y);
       if (dsq < bestdist)
       {
@@ -586,14 +586,14 @@ bool mfd_target_handler(MFD *m, uiEvent *e)
 //                 THE TARGET WARE ITEM MFD
 // ----------------------------------------------------------
 
-extern void mfd_item_micro_hires_expose(bool full, int triple);
-extern void draw_mfd_item_spew(Ref id, int n);
+extern void mfd_item_micro_hires_expose(bool full, int32_t triple);
+extern void draw_mfd_item_spew(Ref id, int32_t n);
 #define STRINGS_PER_WARE (REF_STR_wareSpew1 - REF_STR_wareSpew0)
 
-void mfd_targetware_expose(MFD* mfd, ubyte control)
+void mfd_targetware_expose(MFD* mfd, uint8_t control)
 {
-   uchar n = CPTRIP(TARG_GOG_TRIPLE);
-   uchar v = player_struct.hardwarez[n];
+   uint8_t n = CPTRIP(TARG_GOG_TRIPLE);
+   uint8_t v = player_struct.hardwarez[n];
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0) return;
    gr_push_canvas(pmfd_canvas);

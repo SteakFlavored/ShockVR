@@ -81,33 +81,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // externed for others in frintern
 MapElem *fr_map_base;
-int fr_map_x,fr_map_y,fr_map_z;
-uchar *x_span_lists;
-uchar *cone_span_list;
+int32_t fr_map_x,fr_map_y,fr_map_z;
+uint8_t *x_span_lists;
+uint8_t *cone_span_list;
 
-int _fr_x_cen, _fr_y_cen;                   /* center tile for eye */
+int32_t _fr_x_cen, _fr_y_cen;                   /* center tile for eye */
 
 // static bool cyber_on;
 
 /*
-static uchar hack_off;
+static uint8_t hack_off;
 */
 
 #ifdef _FR_TILEMAP
-static int tile_x, tile_y;             /* tilemap x,y */
+static int32_t tile_x, tile_y;             /* tilemap x,y */
 #endif
 
 #ifdef PIPE_POINTUP
 // set_point_parms
-int (*set_point_parms)(g3s_phandle phd, int trans_off, int flrciel, int hgt);
+int32_t (*set_point_parms)(g3s_phandle phd, int32_t trans_off, int32_t flrciel, int32_t hgt);
 // actual point parm thingies
-int set_cspace_color(g3s_phandle phd, int trans_off, int flrciel, int hgt);
-int set_texture_i(g3s_phandle phd, int trans_off, int flrciel, int hgt);
-int set_null_vrtx(g3s_phandle phd, int trans_off, int flrciel, int hgt);
+int32_t set_cspace_color(g3s_phandle phd, int32_t trans_off, int32_t flrciel, int32_t hgt);
+int32_t set_texture_i(g3s_phandle phd, int32_t trans_off, int32_t flrciel, int32_t hgt);
+int32_t set_null_vrtx(g3s_phandle phd, int32_t trans_off, int32_t flrciel, int32_t hgt);
 #endif
 
 // see header file for defines/layout graph
-uchar quad_code_to_mask_2[]=
+uint8_t quad_code_to_mask_2[]=
 {
    FMK_NW|FMK_EW|FMK_WW,
    FMK_NW|FMK_WW,
@@ -124,23 +124,23 @@ uchar quad_code_to_mask_2[]=
    FMK_EW|FMK_WW|FMK_SW|FMK_NW
 };
 
-static char  diag_moves[4][2]={{1,1},{1,-1},{-1,-1},{-1,1}};
-static short diag_map_moves[4]={0xdead,0xbeef,0xdead,0xbeef};
-static char  diag_stupid[4][2]={{0,1},{1,0},{0,-1},{-1,0}};
-static char  diag_dirsets[4][2]={{2,1},{3,2},{0,3},{1,0}};
+static int8_t  diag_moves[4][2]={{1,1},{1,-1},{-1,-1},{-1,1}};
+static int16_t diag_map_moves[4]={0xdead,0xbeef,0xdead,0xbeef};
+static int8_t  diag_stupid[4][2]={{0,1},{1,0},{0,-1},{-1,0}};
+static int8_t  diag_dirsets[4][2]={{2,1},{3,2},{0,3},{1,0}};
 
 // Protoypes
-void _fr_init_slopes(int zshf);
+void _fr_init_slopes(int32_t zshf);
 void do_seen_pass(void);
-void draw_dir_dir(int dir, int st, int len);
-int fr_pipe_go_3(void);
+void draw_dir_dir(int32_t dir, int32_t st, int32_t len);
+int32_t fr_pipe_go_3(void);
 
 
 // the triangle is parm*n, 1<<z*n, 1, so we solve for n for each parm 0-31 and then get x,y
 // ie. n^2=1/(((1<<z)^2)+(parm^2))
-void _fr_init_slopes(int zshf)
+void _fr_init_slopes(int32_t zshf)
 {
-   int loop;
+   int32_t loop;
    fix parm, lvl, n, tmp;
    extern fix outer_wall[3][4][2];
 
@@ -168,9 +168,9 @@ void _fr_init_slopes(int zshf)
 /* called by fr_compile_restart when size changes
  * this knows size of world and stuff like that
  */
-int fr_pipe_resize(int x, int y, int z, void *mptr)
+int32_t fr_pipe_resize(int32_t x, int32_t y, int32_t z, void *mptr)
 {
-   int i;
+   int32_t i;
    extern fix tf_diag_walls[4][2];
    fr_map_y=y;
    csp_trans_add[1]=wall_adds[0]=fr_map_x=x;
@@ -187,7 +187,7 @@ int fr_pipe_resize(int x, int y, int z, void *mptr)
 }
 
 // currently all pipe memory is static, so this is easy
-int fr_pipe_freemem(void)
+int32_t fr_pipe_freemem(void)
 {
    _fr_ret;
 }
@@ -196,7 +196,7 @@ int fr_pipe_freemem(void)
  * also sets up the globals used in the clippers
  */
 //#pragma disable_message(202)
-int fr_pipe_start(int /*rad*/)
+int32_t fr_pipe_start(int32_t /*rad*/)
 {
    _fr_x_cen=coor(EYE_X)>>(8+MAP_SH);
    _fr_y_cen=coor(EYE_Y)>>(8+MAP_SH);
@@ -223,7 +223,7 @@ int fr_pipe_start(int /*rad*/)
 //#pragma enable_message(202)
 
 /* cleanup any memory or variable space used by the pipeline */
-int fr_pipe_end(void)
+int32_t fr_pipe_end(void)
 {
    fr_terr_frame_end();
    fr_clip_frame_end();
@@ -236,11 +236,11 @@ int fr_pipe_end(void)
 //    oh you stupid thing, speaking of course as your dear departed
 //    oh you stupid thing, it wasnt me that you outsmarted
 //    oh you stupid thing, stopping it all before it even started
-extern void dumb_hack_for_now(int x, int y);
+extern void dumb_hack_for_now(int32_t x, int32_t y);
 #define SEEN_SIZE 1
 void do_seen_pass(void)
 {
-   int lx,ly,tx,ty,x;
+   int32_t lx,ly,tx,ty,x;
    MapElem *cur_mpt, *base_mpt;
    lx=_fr_x_cen-SEEN_SIZE; tx=lx+(SEEN_SIZE<<1); if (lx<0) lx=0; if (tx>=MAP_XSIZE) tx=MAP_XSIZE-1;
    ly=_fr_y_cen-SEEN_SIZE; ty=ly+(SEEN_SIZE<<1); if (ly<0) ly=0; if (ty>=MAP_YSIZE) ty=MAP_YSIZE-1;
@@ -255,9 +255,9 @@ void do_seen_pass(void)
  * new diamond scan pipeline, eh?
  * direction codes are 1 NE, 2 SE, 3 SW, 4 NW
  */
-void draw_dir_dir(int dir, int st, int len)
+void draw_dir_dir(int32_t dir, int32_t st, int32_t len)
 {
-   short dmm=diag_map_moves[dir], dmx=diag_moves[dir][0], dmy=diag_moves[dir][1];
+   int16_t dmm=diag_map_moves[dir], dmx=diag_moves[dir][0], dmy=diag_moves[dir][1];
    if (st!=0)
    {
       _fdt_mptr+=dmm*st;
@@ -278,7 +278,7 @@ void draw_dir_dir(int dir, int st, int len)
    }
 }
 
-extern ushort frpipe_dist; // furtherest walking distance away
+extern uint16_t frpipe_dist; // furtherest walking distance away
 
 #define Q_N 0
 #define Q_E 1
@@ -286,17 +286,17 @@ extern ushort frpipe_dist; // furtherest walking distance away
 #define Q_W 3
 #define QoL(a,b,c,d) {Q_##a##,Q_##b##,Q_##c##,Q_##d##}
 
-uchar quad_order_lists[8][4]=
+uint8_t quad_order_lists[8][4]=
 {
    QoL(S,W,E,N),QoL(W,S,N,E),QoL(W,N,S,E),QoL(N,W,E,S),
    QoL(N,E,W,S),QoL(E,N,S,W),QoL(E,S,N,W),QoL(S,E,W,N)
 };
 
-int fr_pipe_go_3(void)
+int32_t fr_pipe_go_3(void)
 {
-   int i, j, p_dir;  // p_dir is how many per diagonal element
-   uchar *loc_code_ptr, *quad_order;
-   short clip_len[4]; // , clip_contrib[4];
+   int32_t i, j, p_dir;  // p_dir is how many per diagonal element
+   uint8_t *loc_code_ptr, *quad_order;
+   int16_t clip_len[4]; // , clip_contrib[4];
    MapElem *endcaps[4], *center=MAP_GET_XY(_fr_x_cen,_fr_y_cen);
 
 //   mprintf("\npipedist %d center %x %x\n",frpipe_dist,_fr_x_cen,_fr_y_cen);
@@ -305,8 +305,8 @@ int fr_pipe_go_3(void)
 	   do_seen_pass();
 
    // use clip len as temp for delta within the square
-   clip_len[0]=(short)((fr_camera_last[0]&0xffff)-0x8000);
-   clip_len[1]=(short)((fr_camera_last[1]&0xffff)-0x8000);
+   clip_len[0]=(int16_t)((fr_camera_last[0]&0xffff)-0x8000);
+   clip_len[1]=(int16_t)((fr_camera_last[1]&0xffff)-0x8000);
 
    if (abs(clip_len[1])>abs(clip_len[0]))
       if (clip_len[0]>0) if (clip_len[1]>0) p_dir=0; else p_dir=3;
@@ -338,7 +338,7 @@ int fr_pipe_go_3(void)
          {
             if (me_subclip(_fdt_mptr)!=SUBCLIP_OUT_OF_CONE)
             {
-	            _fdt_mask=(int)*loc_code_ptr;      // the endcap
+	            _fdt_mask=(int32_t)*loc_code_ptr;      // the endcap
 	            dumb_hack_for_now(_fdt_x,_fdt_y);
 	            fr_draw_tile();
             }
@@ -346,7 +346,7 @@ int fr_pipe_go_3(void)
          if (clip_len[j]<p_dir)
          {
 	         loc_code_ptr++; // go to the right fork...
-	         _fdt_mask=(int)*loc_code_ptr;
+	         _fdt_mask=(int32_t)*loc_code_ptr;
 	         draw_dir_dir(diag_dirsets[j][0],1,p_dir-1);
 
             // for now just hard restore these three, get cooler later
@@ -355,7 +355,7 @@ int fr_pipe_go_3(void)
             _fdt_mptr=endcaps[j];
 
 	         loc_code_ptr++; // and then the left fork
-	         _fdt_mask=(int)*loc_code_ptr;
+	         _fdt_mask=(int32_t)*loc_code_ptr;
 	         draw_dir_dir(diag_dirsets[j][1],1,p_dir-1);
          }
          clip_len[j]--;
@@ -363,7 +363,7 @@ int fr_pipe_go_3(void)
       }
       if ((_fdt_dist&1)==0)    // do the perfect diagonal
       {
-         int d_dist=_fdt_dist>>1;
+         int32_t d_dist=_fdt_dist>>1;
 //         mprintf("Gonna try diagonals, uh-huh dist %d dd %d\n",_fdt_dist,d_dist);
          for (i=0; i<4; i++)
          {                     // go through each quadrant, dealing
@@ -388,7 +388,7 @@ int fr_pipe_go_3(void)
 
    if (me_subclip(center)!=SUBCLIP_OUT_OF_CONE)
    {
-	 	_fdt_mask=(int)quad_code_to_mask_2[QUAD2_CENTER];
+	 	_fdt_mask=(int32_t)quad_code_to_mask_2[QUAD2_CENTER];
       _fdt_x=_fr_x_cen; _fdt_y=_fr_y_cen; _fdt_mptr=center;
       dumb_hack_for_now(_fdt_x,_fdt_y);
    	fr_draw_tile();

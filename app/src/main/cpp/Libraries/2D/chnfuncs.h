@@ -50,6 +50,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern grs_func_chain *gr_current_chain;
 extern void (*chn_canvas_table[])();
 extern void (**chn_primitives[])();
-extern int gr_current_primitive;
+extern int32_t gr_current_primitive;
 
 #endif

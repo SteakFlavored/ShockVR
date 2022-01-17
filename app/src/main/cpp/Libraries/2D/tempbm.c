@@ -24,15 +24,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "general.h"
 
 
-void temp_flat8_ubitmap (grs_bitmap *bm, int x, int y)
+void temp_flat8_ubitmap (grs_bitmap *bm, int32_t x, int32_t y)
 {
-   ((void (*)(grs_bitmap *_bm,int _x, int _y))
+   ((void (*)(grs_bitmap *_bm,int32_t _x, int32_t _y))
       grd_function_table[GRC_BITMAP+BMT_FLAT8*GRD_FUNCS])(bm, x, y);
 }
 
-void temp_flat8_bitmap (grs_bitmap *bm, int x, int y)
+void temp_flat8_bitmap (grs_bitmap *bm, int32_t x, int32_t y)
 {
-   ((void (*)(grs_bitmap *_bm,int _x, int _y, grs_stencil *_sten))
+   ((void (*)(grs_bitmap *_bm,int32_t _x, int32_t _y, grs_stencil *_sten))
       grd_function_table[GRC_STENCIL_BITMAP+BMT_FLAT8*GRD_FUNCS])(bm, x, y, grd_clip.sten);
 }
 

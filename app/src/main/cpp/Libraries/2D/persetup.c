@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include "mprintf.h"
 
 // prototypes
-int gri_per_umap_setup (int n, grs_vertex **vplist, grs_per_setup *ps);
+int32_t gri_per_umap_setup (int32_t n, grs_vertex **vplist, grs_per_setup *ps);
 
 grs_per_context *grd_per_context=NULL;  /* perspective mapping context */
 struct {
@@ -48,16 +48,16 @@ struct {
    fix u0,v0;
 } grd_pc_point;
 
-int gri_per_umap_setup (int n, grs_vertex **vplist, grs_per_setup *ps)
+int32_t gri_per_umap_setup (int32_t n, grs_vertex **vplist, grs_per_setup *ps)
 {
    fix a,b,c0,cz,z_min,aos,bos;
    fix z_max,y_min,y_max,x_min,x_max;
    fix wux,wuy,wuz,wvx,wvy,wvz;
    grs_point3d *l3d,*pl3d,*l3d0,*l3d1,*l3d2;
    grs_vertex *vp,**pvp,*vpl0,*vpl1,*vpl2,*vpl_z_max,*vpl_z_min;
-   int i;
+   int32_t i;
    fix delta_min;
-   int scale;
+   int32_t scale;
 
    scale = (grd_bm.w>grd_bm.h) ? grd_bm.w:grd_bm.h;
    l3d = (grs_point3d *)gr_alloc_temp(n*sizeof(grs_point3d));
@@ -103,7 +103,7 @@ between pairs.
    {
       fix maxsd, minsd, sd;
       grs_vertex *v1,*v2,*v3;
-      short j,k,i0=0,i1=1,i2=2;
+      int16_t j,k,i0=0,i1=1,i2=2;
 
       maxsd=0;
       for (v1=vplist[i=0]; i<n; v1=vplist[++i]) {

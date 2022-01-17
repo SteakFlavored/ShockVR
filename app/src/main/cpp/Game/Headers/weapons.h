@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PROJ_PRESERVE_HIT           0x04
 #define PROJ_PRESERVE_PROJ_HIT      0x08
 
-// extern char ammo_type_letters[];
+// extern int8_t ammo_type_letters[];
 #define AMMO_TYPE_LETTER(l) (get_temp_string(REF_STR_AmmoTypeLetters)[l])
 #define is_energy_weapon(wtype) (wtype == GUN_SUBCLASS_BEAM)
 #define is_handtohand_weapon(wtype) (wtype == GUN_SUBCLASS_HANDTOHAND)
@@ -70,21 +70,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define get_shield_rate(X) (player_struct.shield_absorb_rate)
 
 #ifdef __WEAPONS_SRC
-ubyte handart_show = 0;
-ubyte handart_remainder = 0;
+uint8_t handart_show = 0;
+uint8_t handart_remainder = 0;
 bool handart_fire = FALSE;
 #else
-extern ubyte handart_show;
-extern ubyte handart_remainder;
+extern uint8_t handart_show;
+extern uint8_t handart_remainder;
 extern bool handart_fire;
 //extern handart_frame_info handart_info[NUM_HANDART_ANIM][HANDART_FRAMES];
-extern ubyte weapon_to_handart[NUM_GUN];
+extern uint8_t weapon_to_handart[NUM_GUN];
 #endif
 
 // Prototypes
 // Get the name of a weapon, given its type and subtype
-char* get_weapon_name(int type, int subtype, char* buf);
-char* get_weapon_long_name(int type, int subtype, char *buf);
+int8_t* get_weapon_name(int32_t type, int32_t subtype, int8_t* buf);
+int8_t* get_weapon_long_name(int32_t type, int32_t subtype, int8_t *buf);
 
 // Get the fire rate of a weapon, given its type and subtype
 #define weapon_fire_rate(WTYPE, SUBTYPE) (GunProps[CPTRIP(MAKETRIP(CLASS_GUN, WTYPE, SUBTYPE))].fire_rate)
@@ -99,28 +99,28 @@ bool fire_player_weapon(LGPoint *pos,LGRegion *r,bool pull);
 
 // Set the maximum charge on a beam weapon.  index is into player_struct.weapons,
 // max_charge can't be higher than 100
-void set_beam_weapon_max_charge(ubyte index, ubyte max_charge);
+void set_beam_weapon_max_charge(uint8_t index, uint8_t max_charge);
 
-void get_available_ammo_type(int type, int subtype, int *num_ammo_types, ubyte *bitflag, int *ammo_subclass);
-bool change_ammo_type(ubyte ammo_type);
+void get_available_ammo_type(int32_t type, int32_t subtype, int32_t *num_ammo_types, uint8_t *bitflag, int32_t *ammo_subclass);
+bool change_ammo_type(uint8_t ammo_type);
 
 // change_weapon() - changes the current selected weapon
-void change_selected_weapon(int new_weapon);
+void change_selected_weapon(int32_t new_weapon);
 
 // Called at a constant factor to blow off heat on energy weapons
 void cool_off_beam_weapons();
 
 // This routine is used to jerk the cursor around, as a result of
 // poor accuracy, or ammo recoil
-void randomize_cursor_pos(LGPoint *cpos, LGRegion *r, ubyte percentage);
+void randomize_cursor_pos(LGPoint *cpos, LGRegion *r, uint8_t percentage);
 
 // drain energy from central reservior, returns how much was actually drained
-ubyte drain_energy(ubyte desired_energy);
+uint8_t drain_energy(uint8_t desired_energy);
 
 // return triple of currently-selected weapon, or -1 for none such.
-int current_weapon_trip(void);
+int32_t current_weapon_trip(void);
 
-bool gun_takes_ammo(int guntrip, int ammotrip);
+bool gun_takes_ammo(int32_t guntrip, int32_t ammotrip);
 
 // Globals
 

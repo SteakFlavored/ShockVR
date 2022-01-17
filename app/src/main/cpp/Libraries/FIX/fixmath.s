@@ -35,7 +35,7 @@
 #		r3 -	fixed point product
 #
 #	Within the routine, r5 and r6 are used as scratch registers.
-#	
+#
 #	NOTE: this function will be fastest if the smaller of the
 #	two numbers is passed as the second argument. In some
 #	cases, some of the processors will short-cut the operation
@@ -56,10 +56,10 @@
 #	Fixed AsmFixedDiv(Fixed a, Fixed b);
 #
 #	On entry, this routine takes the following parameters:
-#		r3 - 	operand a (fixed point, frac, or long format)
-#		r4 -	operand b (fixed point, frac, or long format)
+#		r3 - 	operand a (fixed point, frac, or int32_t format)
+#		r4 -	operand b (fixed point, frac, or int32_t format)
 #	On exit:
-#		r3 -	fixed point, frac, or long quotient
+#		r3 -	fixed point, frac, or int32_t quotient
 #
 #	Within the routine, r0 and r5-r9 are used as scratch registers.
 #	Condition register fields cr0 and cr1 are also used.
@@ -99,12 +99,12 @@ bQuotNeg:	EQU		4+3
 	cmpwi	1,rNumH,0			# check sign of numerator
 	crxor	bQuotNeg,bDenNeg,bNumNeg
 								# calculate sign of result, put it into bit 4
-	bf		bDenNeg,FixDivCheckNumer 	
+	bf		bDenNeg,FixDivCheckNumer
 								# check sign of denominator
 	neg		rDen,rDen			# make denominator positive if it was negative
 
 FixDivCheckNumer:
-	bf		bNumNeg,FixDiv64Common	
+	bf		bNumNeg,FixDiv64Common
 								# continue if numerator is positive
 	subfc	rNumL,rNumL,r0		# negate denominator, carrying as appropriate
 	subfe	rNumH,rNumH,r0
@@ -118,10 +118,10 @@ FixDiv64Common:
 	rlwnm	rNumH,rNumH,rTemp1,0,31
 	slw		rNumL,rNumL,rTemp1
 	xor		rNumH,rNumH,rNumL
-	
+
 	bge-	FixDivOverflow		# branch if overflow
 
-	srwi	rTemp2,rDen,16		
+	srwi	rTemp2,rDen,16
 	divwu	rTemp3,rNumH,rTemp2	# perform 32-bit by 16-bit division
 	mullw	rTemp2,rTemp3,rTemp2
 	subf	rNumH,rTemp2,rNumH	# calculate remainder
@@ -162,7 +162,7 @@ FixDiv64CorrectLow:
 
 FixDiv64Done:
 	addco.	r3,rNumL,r0
-	bt		bQuotNeg,FixDiv64QuotientNeg	
+	bt		bQuotNeg,FixDiv64QuotientNeg
 							# see if we need to negate answer
 	blt-	FixDivOverflow	# check for overflow case
 	blr						# return to caller
@@ -191,7 +191,7 @@ FixDivByZero:
 
 
 #	wide *AsmWideAdd(wide *target, wide *source);
-#	
+#
 #	On entry, this routine takes the following parameters:
 #		r3 - 	pointer to target
 #		r4 -	pointer to source
@@ -219,10 +219,10 @@ rBL:		EQU		r9
 	adde	rAH,rAH,rBH		# add high words with carry
 	stw		rAH,0(r3)		# store high word of result
 	blr						# return to caller
-	
-	
-#	wide *AsmWideMultiply(long multiplicand, long multiplier, wide *target);
-#	
+
+
+#	wide *AsmWideMultiply(int32_t multiplicand, int32_t multiplier, wide *target);
+#
 #	On entry, this routine takes the following parameters:
 #		r3 - 	operand A
 #		r4 -	operand B
@@ -242,4 +242,4 @@ rBL:		EQU		r9
 	mr		r3,r5			# move return parameter into place
 	stw		r7,0(r5)		# store low word of result
 	blr						# return to caller
-	
+

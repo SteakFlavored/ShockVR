@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Globals
 //--------------------
-extern short		gCurrTest;
+extern int16_t		gCurrTest;
 
 //--------------------
 //  Prototypes
@@ -46,9 +46,9 @@ void DoTestBrowseFonts(void);
 void DoTestLoadPalette(void);
 void DoTestMoveKeys(void);
 void DoTestMouse(void);
-void DoPlayMovie(short cmd);
-void DoPlayCutScene(short cmd);
-void DoPlayAudioLog(short cmd);
-void DoLoadLevelMap(short cmd);
-void DoZoomCurrMap(short cmd);
+void DoPlayMovie(int16_t cmd);
+void DoPlayCutScene(int16_t cmd);
+void DoPlayAudioLog(int16_t cmd);
+void DoLoadLevelMap(int16_t cmd);
+void DoZoomCurrMap(int16_t cmd);
 void RenderTest(void);

@@ -54,19 +54,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NUM_VMAIL 6
 //KLC #define INTRO_VMAIL (NUM_VMAIL+1)
 
-byte current_vmail = -1;
+int8_t current_vmail = -1;
 extern LGCursor   vmail_cursor;
 
 // --------------------------------------------------------------------
 //
 // play_vmail()
 //
-errtype play_vmail(byte vmail_no)
+errtype play_vmail(int8_t vmail_no)
 {
 	extern bool game_paused;
 	extern bool citadel_check_input(void);
 	extern void email_page_exit(void);
-	extern short old_invent_page;
+	extern int16_t old_invent_page;
 
 	// make sure we don't have a current vmail, and we're given a valid vmail num
 	if ((current_vmail != -1) || (vmail_no < 0) || (vmail_no >= NUM_VMAIL))
@@ -82,7 +82,7 @@ errtype play_vmail(byte vmail_no)
 
 	// Play the appropriate V-Mail.
 	{
-		uchar savep[768];
+		uint8_t savep[768];
 		FSSpec	fSpec;
 
    		gr_get_pal(0, 256, savep);
@@ -164,7 +164,7 @@ Ref vmail_res[NUM_VMAIL] = {
    RES_explode1
 };
 
-ubyte vmail_len[NUM_VMAIL] = {
+uint8_t vmail_len[NUM_VMAIL] = {
    1, // shield
    1, // grove
    1, // bridge
@@ -185,7 +185,7 @@ grs_bitmap *vmail_background = NULL;
 extern bool uiCheckInput(void);
 
 #pragma disable_message(202)
-void vmail_intro(Rect *area, ubyte flags)
+void vmail_intro(Rect *area, uint8_t flags)
 {
    if (flags & BEFORE_ANIM_BITMAP)
    {
@@ -241,9 +241,9 @@ void vmail_start_anim_end(ActAnim *paa, AnimCode ancode, AnimCodeData *pdata)
 errtype play_vmail_intro(bool use_texture_buffer)
 {
    Point animloc = {VINTRO_X, VINTRO_Y};
-   uchar *p, *useBuffer;
-   int bsize;
-   short w,h;
+   uint8_t *p, *useBuffer;
+   int32_t bsize;
+   int16_t w,h;
 
    main_anim = AnimPlayRegion(REF_ANIM_vintro, mainview_region, animloc, 0, vmail_intro);
    if (main_anim == NULL)
@@ -309,16 +309,16 @@ errtype play_vmail_intro(bool use_texture_buffer)
 //
 
 #pragma disable_message(202)
-errtype play_vmail(byte vmail_no)
+errtype play_vmail(int8_t vmail_no)
 {
    Point    animloc = {VINTRO_X, VINTRO_Y};
    errtype  intro_error;
-   int      vmail_animfile_num = 0;
+   int32_t      vmail_animfile_num = 0;
    bool     early_exit = FALSE;
    bool     preload_animation= TRUE;
    bool     use_texture_buffer = FALSE;
-   int      len = vmail_len[vmail_no];
-   int      i;
+   int32_t      len = vmail_len[vmail_no];
+   int32_t      i;
    MemStat  data;
 
    // let's extern
@@ -331,7 +331,7 @@ errtype play_vmail(byte vmail_no)
    extern bool checking_mouse_button_emulation;
    extern bool citadel_check_input(void);
    extern void email_page_exit(void);
-   extern short old_invent_page;
+   extern int16_t old_invent_page;
 
    // make sure we don't have a current vmail, and we're given a valid vmail num
    if ((current_vmail != -1) || (vmail_no < 0) || (vmail_no >= NUM_VMAIL))
@@ -393,7 +393,7 @@ errtype play_vmail(byte vmail_no)
          // in memory
          if (cant_preload_all)
          {
-            int   j;
+            int32_t   j;
             preload_animation = FALSE;
             for (j=0; j<i;j++)
             {
@@ -534,11 +534,11 @@ errtype play_vmail(byte vmail_no)
 }
 #pragma enable_message(202)
 
-byte test_vmail = 0;
+int8_t test_vmail = 0;
 #pragma disable_message(202)
-bool shield_test_func(short keycode, ulong context, void* data)
+bool shield_test_func(int16_t keycode, uint32_t context, void* data)
 {
-   int   i;
+   int32_t   i;
    vmail_wait_for_input = FALSE;
    for (i=0;i<5; i++)
    {
@@ -552,7 +552,7 @@ bool shield_test_func(short keycode, ulong context, void* data)
 
 #ifdef PLAYTEST
 #pragma disable_message(202)
-bool shield_off_func(short keycode, ulong context, void* data)
+bool shield_off_func(int16_t keycode, uint32_t context, void* data)
 {
    return(TRUE);
 }

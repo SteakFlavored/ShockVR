@@ -56,14 +56,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg.h"
 
 #if (defined(powerc) || defined(__powerc))
-void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
+void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-	uchar 	*m_src;
-	uchar 	*m_dst;
-	int 		w = bm->w;
-	int 		h = bm->h;
-	int 		i;
-	int			brow,grow;
+	uint8_t 	*m_src;
+	uint8_t 	*m_dst;
+	int32_t 		w = bm->w;
+	int32_t 		h = bm->h;
+	int32_t 		i;
+	int32_t			brow,grow;
 
 
 	brow = bm->row;
@@ -90,7 +90,7 @@ void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 
 #else
 // 68k version
-asm void flat8_flat8_ubitmap (grs_bitmap *bm, short x, short y)
+asm void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
  {
  	move.l	4(sp),a0				// get bm
  	move.w	8(sp),d1				// get x

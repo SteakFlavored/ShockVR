@@ -33,21 +33,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //  GLOBALS
 //-----------------
 bool		mlimbs_on = FALSE;
-char		mlimbs_status = 0;
+int8_t		mlimbs_status = 0;
 
 struct	mlimbs_request_info current_request[MLIMBS_MAX_SEQUENCES - 1]; // Request information
 
-ulong		mlimbs_counter = 0;
-long		mlimbs_error;
+uint32_t		mlimbs_counter = 0;
+int32_t		mlimbs_error;
 bool		mlimbs_semaphore = FALSE;
 
 Handle			gHeaderHdl, gTuneHdl, gOfsHdl;			// Holds the tune-related data for the current theme file.
-long				*gOffsets;										// Array of offsets for the beginning of each tune.
+int32_t				*gOffsets;										// Array of offsets for the beginning of each tune.
 TunePlayer	gPlayer;										// The Tune Player.
-Boolean			gTuneDone;										// True when a sequence has finished playing (set by CB proc).
-Boolean			gReadyToQueue;								// True when it's time to queue up a new sequence.
-int				gOverlayTime;								// Amount of time (in millisecs) to wait for overlays.
-int				gQueueTime;									// Amount of time (in millisecs) to wait to queue next tune.
+bool			gTuneDone;										// True when a sequence has finished playing (set by CB proc).
+bool			gReadyToQueue;								// True when it's time to queue up a new sequence.
+int32_t				gOverlayTime;								// Amount of time (in millisecs) to wait for overlays.
+int32_t				gQueueTime;									// Amount of time (in millisecs) to wait to queue next tune.
 
 TuneCallBackUPP	gTuneCBProc;							// Pointer to tune-finished callback proc.
 
@@ -58,7 +58,7 @@ TimerUPP		gCalcTuneProcPtr;							// UPP for the 6-second time manager tune dete
 //-------------------
 //  INTERNAL PROTOTYPES
 //-------------------
-pascal void TuneEndCB(const TuneStatus *status, long refCon);
+pascal void TuneEndCB(const TuneStatus *status, int32_t refCon);
 
 
 //---------------------------------------------------------------
@@ -79,7 +79,7 @@ pascal void CalcTuneProc(void)
 {
 #ifndef __powerc
 	CalcTuneTaskPtr	tmTaskPtr = GetCalcTuneTask();			// get address of task record
-	long					curA5 = SetA5(tmTaskPtr->appA5);		// save and set value of A5
+	int32_t					curA5 = SetA5(tmTaskPtr->appA5);		// save and set value of A5
 #endif
 
 	gReadyToQueue = TRUE;								// It's time to queue up another tune.
@@ -94,7 +94,7 @@ pascal void CalcTuneProc(void)
 //------------------------------------------------------------------------------
 //  Initializes the MacTune system.
 //------------------------------------------------------------------------------
-int MacTuneInit(void)
+int32_t MacTuneInit(void)
 {
 	if (mlimbs_status != 0)								// If already inited, return
 		return 0;
@@ -162,7 +162,7 @@ void MacTuneShutdown(void)
 //--------------------------------------------------------------------------
 //	Call-back routine.  Get's called when tune is finished.
 //--------------------------------------------------------------------------
-pascal void TuneEndCB(const TuneStatus *, long)
+pascal void TuneEndCB(const TuneStatus *, int32_t)
 {
 	gTuneDone = TRUE;
 }
@@ -171,16 +171,16 @@ pascal void TuneEndCB(const TuneStatus *, long)
 //  Loads all resources associated with a theme file.  Stops and purges and currently loaded theme.  Returns
 //  a 1 if successful, < 0 if an error.
 //------------------------------------------------------------------------------
-int MacTuneLoadTheme(FSSpec *themeSpec, int themeID)
+int32_t MacTuneLoadTheme(FSSpec *themeSpec, int32_t themeID)
 {
-	short  	filenum;
+	int16_t  	filenum;
 	Handle	binHdl;
 	Ptr		p;
 
-	extern uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
-	extern uchar transition_table[NUM_TRANSITIONS];
-	extern uchar layering_table[NUM_LAYERS][MAX_KEYS];
-	extern uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
+	extern uint8_t track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
+	extern uint8_t transition_table[NUM_TRANSITIONS];
+	extern uint8_t layering_table[NUM_LAYERS][MAX_KEYS];
+	extern uint8_t key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
 
 	if (mlimbs_status == 0)											// Only do this if MacTune is inited.
 		return (-1);
@@ -210,9 +210,9 @@ Debugger();	//¥¥¥
 	p += NUM_LAYERS * MAX_KEYS;
 	BlockMoveData(p, key_table, NUM_LAYERABLE_SUPERCHUNKS * KEY_BAR_RESOLUTION);
 	p += NUM_LAYERABLE_SUPERCHUNKS * KEY_BAR_RESOLUTION;
-	gOverlayTime = *(int *)p;
+	gOverlayTime = *(int32_t *)p;
 	p += 4;
-	gQueueTime = *(int *)p;
+	gQueueTime = *(int32_t *)p;
 	HUnlock(binHdl);
 	ReleaseResource(binHdl);
 
@@ -246,11 +246,11 @@ Debugger();	//¥¥¥
 	CloseResFile(filenum);
 
 	// Set the tune header (load instruments, etc, can take a second or two).
-	TuneSetHeader(gPlayer, (unsigned long *)*gHeaderHdl);
+	TuneSetHeader(gPlayer, (uint32_t *)*gHeaderHdl);
 	TunePreroll(gPlayer);
 
 	// Setup the tune offset pointer.
-	gOffsets = (long *)*gOfsHdl;
+	gOffsets = (int32_t *)*gOfsHdl;
 
 	// Initialize our playtime globals.
 	gTuneDone = FALSE;
@@ -271,7 +271,7 @@ void MacTuneStartCurrentTheme(void)
 {
 	if (mlimbs_status && gTuneHdl)					// If MacTune is inited and there is a theme loaded,
 	{
-		int	pid = current_request[0].pieceID;
+		int32_t	pid = current_request[0].pieceID;
 		if (pid != 255)										// If there is a tune requested,
 		{
 			MacTunePlayTune(pid);						// play it right now.
@@ -334,7 +334,7 @@ void MacTunePurgeCurrentTheme()
 		DebugStr("\pError:  Could not open a tune player.");		//¥¥¥ Handle this!
 
 	// Clear our the current request array.
-	for (int i = 0; i < MLIMBS_MAX_SEQUENCES -1; i++)
+	for (int32_t i = 0; i < MLIMBS_MAX_SEQUENCES -1; i++)
 	{
 		current_request[i].pieceID = 255;
 	}
@@ -344,14 +344,14 @@ void MacTunePurgeCurrentTheme()
 //------------------------------------------------------------------------------
 //  Play a tune right now (prime the TM task).  Usually this is called when music is first started.
 //------------------------------------------------------------------------------
-void MacTunePlayTune(int tune)
+void MacTunePlayTune(int32_t tune)
 {
 if (tune == 255 || tune == -1)
 	DebugStr("\pEep Eep Invalid tune!");  //¥¥¥
 
 	if (gOffsets[tune] != -1)							// If there really is a tune there, play it now.
 	{
-		TuneQueue(gPlayer, (unsigned long *)(*gTuneHdl + gOffsets[tune]), 0x10000,
+		TuneQueue(gPlayer, (uint32_t *)(*gTuneHdl + gOffsets[tune]), 0x10000,
 						0, 0x7FFFFFFF, kTuneStartNow, gTuneCBProc, 0);
 		PrimeTime((QElemPtr)&gCalcTuneTask, gOverlayTime + gQueueTime);
 //¥¥¥ temp
@@ -367,7 +367,7 @@ if (tune == 255 || tune == -1)
 //------------------------------------------------------------------------------
 //  Add a tune to the tune queue.
 //------------------------------------------------------------------------------
-void MacTuneQueueTune(int tune)
+void MacTuneQueueTune(int32_t tune)
 {
 if (tune == 255 || tune == -1)
 	DebugStr("\pEep Eep Invalid tune!");  //¥¥¥
@@ -377,7 +377,7 @@ if (tune == 255 || tune == -1)
 		TuneStatus	tpStatus;
 		TuneGetStatus(gPlayer, &tpStatus);		// We'll need this later.
 
-		TuneQueue(gPlayer, (unsigned long *)(*gTuneHdl + gOffsets[tune]), 0x10000,
+		TuneQueue(gPlayer, (uint32_t *)(*gTuneHdl + gOffsets[tune]), 0x10000,
 						0, 0x7FFFFFFF, 0, gTuneCBProc, 0);
 
 		// Normally we don't prime it yet; we want to wait until the currently playing tune finishes.

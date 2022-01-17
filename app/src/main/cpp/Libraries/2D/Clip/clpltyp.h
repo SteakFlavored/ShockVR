@@ -32,10 +32,10 @@ typedef
    void *grt_line_clip_fill;
 
 typedef
-   int (*grt_line_clip_fill_v) (long, long, grs_vertex *, grs_vertex *);
+   int32_t (*grt_line_clip_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
 
 typedef
-   int (*grt_line_clip_fill_xy) (short, short, short, long, long);
+   int32_t (*grt_line_clip_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
 
 extern grt_line_clip_fill *grd_line_clip_fill_vector;
 

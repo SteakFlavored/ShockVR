@@ -54,8 +54,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frparams.h"
 #include "frflags.h"
 
-int fr_pipe_go_2(void);
-int fr_pipe_go_3(void);
+int32_t fr_pipe_go_2(void);
+int32_t fr_pipe_go_3(void);
 
 // for synchronous update...
 #ifdef AUDIOLOGS
@@ -64,10 +64,10 @@ extern errtype audiolog_loop_callback();
 
 extern "C"
 {
-  void ClearCache (unsigned char* theAddress, unsigned long numBlocks);
+  void ClearCache (uint8_t* theAddress, uint32_t numBlocks);
 }
 
-int fr_rend(frc *view)
+int32_t fr_rend(frc *view)
 {
    fr_prepare_view(view);              /* init _fr, load flags, so on */
    if (!fr_start_view()) return -1;    /* broken broken - but what to really return */
@@ -76,7 +76,7 @@ int fr_rend(frc *view)
    else
    {                                   /* actually do the 3d thang */
       extern bool _g3d_enable_blend;
-      extern Boolean DoubleSize;
+      extern bool DoubleSize;
       bool save_blend_flag;
 
       if ((_fr_curflags&FR_PICKUPM_MASK) || DoubleSize) {

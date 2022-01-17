@@ -61,7 +61,7 @@ grs_mode_info grd_mode_info[GRD_MODES] = {
 };
 
 // code from SMODE.ASM
-int gr_set_mode (int mode, int clear)
+int32_t gr_set_mode (int32_t mode, int32_t clear)
  {
 	gr_set_screen_mode(mode, clear);		// try to set graphics mode.
 	gr_init_device(&grd_info);					// try to initialize device if pointer isn't NULL

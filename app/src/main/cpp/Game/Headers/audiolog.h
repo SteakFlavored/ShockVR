@@ -24,10 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 extern errtype audiolog_init();
-extern errtype audiolog_play(int email_id);
-extern errtype audiolog_bark_play(int bark_id);
+extern errtype audiolog_play(int32_t email_id);
+extern errtype audiolog_bark_play(int32_t bark_id);
 extern void    audiolog_stop();
 extern errtype audiolog_loop_callback();
-extern bool    audiolog_playing(int email_id);
+extern bool    audiolog_playing(int32_t email_id);
 
-extern uchar   audiolog_setting;
+extern uint8_t   audiolog_setting;

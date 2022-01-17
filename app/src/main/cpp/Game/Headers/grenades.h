@@ -46,23 +46,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct
 {
-   ushort   timestamp;
-   ushort   type;
+   uint16_t   timestamp;
+   uint16_t   type;
    ObjID    gren_id;
-   ubyte    unique_id;
-   ubyte    filler;
+   uint8_t    unique_id;
+   uint8_t    filler;
 } GrenSchedEvent;
 
 typedef struct
 {
    fix      radius;
    fix      radius_change;
-   int      damage_mod;
-   int      damage_change;
-   int      dtype;
+   int32_t      damage_mod;
+   int32_t      damage_change;
+   int32_t      dtype;
    fix      knock_mass;
-   ubyte    offense;
-   ubyte    penet;
+   uint8_t    offense;
+   uint8_t    penet;
 } ExplosionData;
 
 #define SMALL_GAME_EXPL    0
@@ -76,7 +76,7 @@ extern ExplosionData game_explosions[GAME_EXPLS];
 // Prototypes
 
 // Get the name for a particular grenade type.
-char* get_grenade_name(int gtype, char* buf);
+int8_t* get_grenade_name(int32_t gtype, int8_t* buf);
 
 // this will activate the grenade - also set the timing stuff if it's a timing grenade
 // give it the SpecID of the grenade
@@ -84,15 +84,15 @@ void activate_grenade(ObjSpecID osid);
 
 // do_explosion()
 // will explode the grenade with id, and it'll show a special effect if arg is TRUE
-void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionData *attack_data);
+void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, ExplosionData *attack_data);
 
-//void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, fix radius, fix radius_change, int damage_mod, int damage_change, int dtype, fix knock_mass, fix knock_speed, ubyte offense,ubyte penet);/
+//void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, fix radius, fix radius_change, int32_t damage_mod, int32_t damage_change, int32_t dtype, fix knock_mass, fix knock_speed, uint8_t offense,uint8_t penet);/
 //void do_explosion(ObjID id, bool special_effect);
 
 void do_grenade_explosion(ObjID id, bool special_effect);
 
 void grenade_stopped(ObjID id);
-void grenade_contact(ObjID id, int severity);
+void grenade_contact(ObjID id, int32_t severity);
 
 #define GRENADE_COLOR WHITE
 

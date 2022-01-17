@@ -87,59 +87,59 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAP_SCHEDULE_GAMETIME 0
 #define NUM_MAP_SCHEDULES     1
 
-#define MAP_VERSION_NUMBER ((int)11)
+#define MAP_VERSION_NUMBER ((int32_t)11)
 // so we auto convert from it
 #define OLD_MAP
-#define OLD_MAP_VERSION_NUMBER ((int)10)
+#define OLD_MAP_VERSION_NUMBER ((int32_t)10)
 
-// probably should kick it up to 16 bytes, expand one of the bitfields to three uchars instead
+// probably should kick it up to 16 bytes, expand one of the bitfields to three uint8_ts instead
 typedef struct _map_element {
 //   struct _bitfields
 //   {
-//      ushort tiletype:6;
-//      ushort flr_height:5;
-//      ushort ceil_height:5;
+//      uint16_t tiletype:6;
+//      uint16_t flr_height:5;
+//      uint16_t ceil_height:5;
 //   };
-   uchar tiletype;         // 2 free bits
-   uchar flr_rotnhgt;      // 1 free bit
-   uchar ceil_rotnhgt;     // 1 free bit
-   uchar param;
-   short objRef;
+   uint8_t tiletype;         // 2 free bits
+   uint8_t flr_rotnhgt;      // 1 free bit
+   uint8_t ceil_rotnhgt;     // 1 free bit
+   uint8_t param;
+   int16_t objRef;
 //   struct _lighting
 //   {
-//      uchar floor:4;
-//      uchar ceil:4;
+//      uint8_t floor:4;
+//      uint8_t ceil:4;
 //   } templight;
-   ushort tmap_ccolor;
+   uint16_t tmap_ccolor;
 //   union _space
 //      {
 //         struct _tmaps
 //         {
-//            ushort floor:5;
-//            ushort ceil:5;
-//            ushort wall:6;
+//            uint16_t floor:5;
+//            uint16_t ceil:5;
+//            uint16_t wall:6;
 //         } real;
 //         struct _cybcolors
 //         {
-//            uchar floor;
-//            uchar ceil;
+//            uint8_t floor;
+//            uint8_t ceil;
 //         } cyber;
 //      } space;
-   uchar flag4;			// KLC swapped around
-   uchar flag3;
-   uchar flag2;
-   uchar flag1;      // rename these, perhaps
-//   ulong flags;
-   uchar sub_clip;
-   uchar clearsolid;
-   uchar flick_qclip;
-   uchar templight;
+   uint8_t flag4;			// KLC swapped around
+   uint8_t flag3;
+   uint8_t flag2;
+   uint8_t flag1;      // rename these, perhaps
+//   uint32_t flags;
+   uint8_t sub_clip;
+   uint8_t clearsolid;
+   uint8_t flick_qclip;
+   uint8_t templight;
 //   struct _render_info {
-//      uchar sub_clip;
-//      uchar clear;
-//      uchar rotflr:2;
-//      uchar rotceil:2;
-//      uchar flicker:4;
+//      uint8_t sub_clip;
+//      uint8_t clear;
+//      uint8_t rotflr:2;
+//      uint8_t rotceil:2;
+//      uint8_t flicker:4;
 //   } rinfo;
 } MapElem;
 
@@ -148,47 +148,47 @@ typedef struct _map_element {
 typedef struct _omap_element {
    struct _bitfields
    {
-      ushort tiletype:6;
-      ushort flr_height:5;
-      ushort ceil_height:5;
+      uint16_t tiletype:6;
+      uint16_t flr_height:5;
+      uint16_t ceil_height:5;
    };
-   uchar param;
+   uint8_t param;
    struct _lighting
    {
-      uchar floor:4;
-      uchar ceil:4;
+      uint8_t floor:4;
+      uint8_t ceil:4;
    } templight;
    union _space
       {
          struct _tmaps
          {
-            ushort floor:5;
-            ushort ceil:5;
-            ushort wall:6;
+            uint16_t floor:5;
+            uint16_t ceil:5;
+            uint16_t wall:6;
          } real;
          struct _cybcolors
          {
-            uchar floor;
-            uchar ceil;
+            uint8_t floor;
+            uint8_t ceil;
          } cyber;
       } space;
-   ulong flags;
-   short objRef;
+   uint32_t flags;
+   int16_t objRef;
    struct _render_info {
-      uchar sub_clip;
-      uchar clear;
-      uchar rotflr:2;
-      uchar rotceil:2;
-      uchar flicker:4;
+      uint8_t sub_clip;
+      uint8_t clear;
+      uint8_t rotflr:2;
+      uint8_t rotceil:2;
+      uint8_t flicker:4;
    } rinfo;
 } oMapElem;
 
 typedef struct {
-   int x_size, y_size;
-   int x_shft, y_shft, z_shft;
+   int32_t x_size, y_size;
+   int32_t x_shft, y_shft, z_shft;
    oMapElem *map;
    bool cyber;
-   int x_scale, y_scale, z_scale;
+   int32_t x_scale, y_scale, z_scale;
    Schedule sched[NUM_MAP_SCHEDULES];
 } oFullMap;
 
@@ -215,11 +215,11 @@ typedef struct {
 #endif
 
 typedef struct {
-   int x_size, y_size;
-   int x_shft, y_shft, z_shft;
+   int32_t x_size, y_size;
+   int32_t x_shft, y_shft, z_shft;
    MapElem *map;
    bool cyber;
-   int x_scale, y_scale, z_scale;
+   int32_t x_scale, y_scale, z_scale;
    Schedule sched[NUM_MAP_SCHEDULES];
 } FullMap;
 
@@ -250,11 +250,11 @@ typedef struct {
 #define _me_tmap_wall_x(me_ptr)          _me_normal_x(me_ptr,tmap_ccolor,MAP_TM_WALL)
 #define _me_tmap_wall(me_ptr)            _me_normal_n(me_ptr,tmap_ccolor,MAP_TM_WALL)
 #define _me_tmap(me_ptr,idx)             (((idx) == TMAP_FLR) ? me_tmap_flr(me_ptr) : (((idx) == TMAP_CEIL) ? me_tmap_ceil(me_ptr) : me_tmap_wall(me_ptr)))
-#define _me_cybcolor_flr(me_ptr)       (*((uchar *)(&((me_ptr)->tmap_ccolor))))
-#define _me_cybcolor_ceil(me_ptr)      (*((uchar *)(&((me_ptr)->tmap_ccolor))+1))
+#define _me_cybcolor_flr(me_ptr)       (*((uint8_t *)(&((me_ptr)->tmap_ccolor))))
+#define _me_cybcolor_ceil(me_ptr)      (*((uint8_t *)(&((me_ptr)->tmap_ccolor))+1))
 
 // note this returns a long of form f4f3f2f1, so flag4 is most significant, as it were
-#define _me_flags(me_ptr)              (*((ulong *)(&((me_ptr)->flag4))))		// KLC changed
+#define _me_flags(me_ptr)              (*((uint32_t *)(&((me_ptr)->flag4))))		// KLC changed
 #define _me_flag1(me_ptr)                ((me_ptr)->flag1)
 #define _me_flag2(me_ptr)                ((me_ptr)->flag2)
 #define _me_flag3(me_ptr)                ((me_ptr)->flag3)
@@ -343,7 +343,7 @@ extern MapElem *global_map;
 extern FullMap *global_fullmap;
 #endif
 
-FullMap *map_create(int xshf, int yshf,int zshf,bool cyb);
+FullMap *map_create(int32_t xshf, int32_t yshf,int32_t zshf,bool cyb);
 bool map_set_default(FullMap *fmap);
 void map_init(void);
 void map_free(void);
@@ -407,7 +407,7 @@ void map_free(void);
 #define fix_from_obj_height_val(hval) (ACK)
 #define fix_from_obj_angle(byteval)   ((255 - fix_make(byteval,0)) / 64)
 #else
-#define obj_coord_from_fix(fixval)    ((int)fixval>>8)
+#define obj_coord_from_fix(fixval)    ((int32_t)fixval>>8)
 #define obj_height_from_fix(fixval)   (fixval>>(8+SLOPE_SHIFT_D))
 #define obj_angle_from_fix(fixval)    (fix_int(fix_div((fixval), fix_2pi) * 255))
 #define obj_angle_from_fixang(fixval) (fix_div((fixval), FIXANG_PI) >> 9)
@@ -418,7 +418,7 @@ void map_free(void);
 #endif
 
 #define fix_inv2pi                    (fix_make(0,10430))
-#define obj_angle_from_phys(fixinrad) (64-(((ushort)fix_div(fixinrad,fix_2pi))>>8))
+#define obj_angle_from_phys(fixinrad) (64-(((uint16_t)fix_div(fixinrad,fix_2pi))>>8))
 #define phys_angle_from_obj(citang)   (fix_mul((64-citang)<<16,fix_2pi)>>8)
 #define phys_angle_from_fixang(fang) (fixang_to_fixrad(FIXANG_PI/2 - (fang))
 #define fixang_from_phys_angle(fixdingus) (FIXANG_PI/2 - fixrad_to_fixang(fixdingus))

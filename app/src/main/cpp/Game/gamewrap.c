@@ -74,10 +74,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SCHEDULE_BASE_ID 590
 
 
-extern long old_ticks;
-extern char saveload_string[30];
+extern int32_t old_ticks;
+extern int8_t saveload_string[30];
 extern bool display_saveload_checkpoints;
-extern ulong obj_check_time;
+extern uint32_t obj_check_time;
 extern bool mlimbs_on;
 
 //-------------------
@@ -89,12 +89,12 @@ errtype interpret_qvars(void);
 
 #define OldResIdFromLevel(level) (OLD_SAVE_GAME_ID_BASE+(level*2)+2)
 
-errtype copy_file(FSSpec *srcFile, FSSpec *destFile, Boolean saveGameFile)
+errtype copy_file(FSSpec *srcFile, FSSpec *destFile, bool saveGameFile)
 {
 	OSErr	err;
 	FInfo		fi;
-	short		destRefNum, srcRefNum;
-	long 		size, count;
+	int16_t		destRefNum, srcRefNum;
+	int32_t 		size, count;
 	errtype	retv=OK;
 
 	// If the output file is already there, delete it first.
@@ -183,7 +183,7 @@ void check_save_game_wackiness(void)
 {
    // for now, the only thing we have heard of is a bridge in general inventory
    // so lets make sure geninv has only geninvable stuff
-   int i;
+   int32_t i;
    ObjID cur_test;
    for (i=0; i<NUM_GENERAL_SLOTS; i++)
    {
@@ -202,15 +202,15 @@ void check_save_game_wackiness(void)
 
 #endif //NOT_YET
 
-extern int flush_resource_cache();
+extern int32_t flush_resource_cache();
 
 errtype save_game(FSSpec *saveSpec)
 {
 	FSSpec		currSpec;
-	int 			filenum;
+	int32_t 			filenum;
 	State 			player_state;
 	errtype 		retval;
-	int 			idx = SAVE_GAME_ID_BASE;
+	int32_t 			idx = SAVE_GAME_ID_BASE;
 
    //KLC - this does nothing now.		check_save_game_wackiness();
    //¥¥¥ Why is this done???			closedown_game(FALSE);
@@ -292,9 +292,9 @@ errtype save_game(FSSpec *saveSpec)
 
 errtype load_game_schedules(void)
 {
-   extern int compare_events(void*, void*);
-   char* oldvec;
-   int idx = SCHEDULE_BASE_ID;
+   extern int32_t compare_events(void*, void*);
+   int8_t* oldvec;
+   int32_t idx = SCHEDULE_BASE_ID;
 
    oldvec = game_seconds_schedule.queue.vec;
    ResExtract(idx++, (void *)&game_seconds_schedule);
@@ -306,23 +306,23 @@ errtype load_game_schedules(void)
 
 errtype interpret_qvars(void)
 {
-   extern void recompute_music_level(ushort var);
-   extern void recompute_digifx_level(ushort var);
+   extern void recompute_music_level(uint16_t var);
+   extern void recompute_digifx_level(uint16_t var);
 #ifdef AUDIOLOGS
-   extern void recompute_audiolog_level(ushort var);
+   extern void recompute_audiolog_level(uint16_t var);
 #endif
 #ifdef SVGA_SUPPORT
-   extern short mode_id;
+   extern int16_t mode_id;
 #endif
-   extern void digichan_dealfunc(short val);
-   extern void dclick_dealfunc(ushort var);
-   extern void joysens_dealfunc(ushort var);
-   extern void language_change(uchar lang);
+   extern void digichan_dealfunc(int16_t val);
+   extern void dclick_dealfunc(uint16_t var);
+   extern void joysens_dealfunc(uint16_t var);
+   extern void language_change(uint8_t lang);
    extern errtype load_da_palette();
    extern bool fullscrn_vitals;
    extern bool fullscrn_icons;
    extern bool map_notes_on;
-   extern uchar audiolog_setting;
+   extern uint8_t audiolog_setting;
 
 //KLC - don't do this here - it's a global now.   load_da_palette();
 /*¥¥¥ later
@@ -359,14 +359,14 @@ errtype interpret_qvars(void)
 
 errtype load_game(FSSpec *loadSpec)
 {
-   int 			filenum;
+   int32_t 			filenum;
    ObjID 		old_plr;
    bool 		bad_save = FALSE;
-   char 		orig_lvl;
+   int8_t 		orig_lvl;
    FSSpec	currSpec;
-   extern errtype change_detail_level(byte new_level);
-   extern void player_set_eye_fixang(int ang);
-   extern uint dynmem_mask;
+   extern errtype change_detail_level(int8_t new_level);
+   extern void player_set_eye_fixang(int32_t ang);
+   extern uint32_t dynmem_mask;
 
    closedown_game(TRUE);
 //KLC - don't do this here   stop_music();
@@ -435,7 +435,7 @@ errtype load_game(FSSpec *loadSpec)
 }
 
 
-errtype load_level_from_file(int level_num)
+errtype load_level_from_file(int32_t level_num)
 {
 	errtype	retval;
 	FSSpec	fSpec;
@@ -462,10 +462,10 @@ errtype load_level_from_file(int level_num)
 void check_and_update_initial(void)
 {
    extern Datapath savegame_dpath;
-   char archive_fname[128];
-   char dpath_fn[50];
-   char* tmp;
-	extern char real_archive_fn[20];
+   int8_t archive_fname[128];
+   int8_t dpath_fn[50];
+   int8_t* tmp;
+	extern int8_t real_archive_fn[20];
    if (!DatapathFind(&savegame_dpath, CURRENT_GAME_FNAME, archive_fname))
    {
       tmp=getenv("CITHOME");
@@ -484,16 +484,16 @@ void check_and_update_initial(void)
 #endif //NOT_YET ¥¥¥
 
 
-bool create_initial_game_func(short , ulong , void* )
+bool create_initial_game_func(int16_t , uint32_t , void* )
 {
 	FSSpec	archiveSpec, currSpec;
 	OSErr	err;
 
-	int i;
-	extern int actual_score;
-	byte plrdiff[4];
-	char tmpname[sizeof(player_struct.name)];
-	short plr_obj;
+	int32_t i;
+	extern int32_t actual_score;
+	int8_t plrdiff[4];
+	int8_t tmpname[sizeof(player_struct.name)];
+	int16_t plr_obj;
 	extern errtype do_level_entry_triggers();
 
 	free_dynamic_memory(DYNMEM_ALL);
@@ -586,7 +586,7 @@ bool create_initial_game_func(short , ulong , void* )
    return(FALSE);
 }
 
-errtype write_level_to_disk(int idnum, bool flush_mem)
+errtype write_level_to_disk(int32_t idnum, bool flush_mem)
 {
 	FSSpec	currSpec;
 

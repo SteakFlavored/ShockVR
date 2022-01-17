@@ -41,11 +41,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // v25 - v26 : smaller objinfo structs, to save some memory
 // v26 - v27 : the incredible shrinking objinfo continues, this time as physhandles lose 3
 //             bytes without dieting or exercise.
-#define OBJECT_VERSION_NUMBER  ((int)27)
+#define OBJECT_VERSION_NUMBER  ((int32_t)27)
 
 // v39 - v40 : eliminated bitmap_2d
 // v40 - v41 : explosions have a frame_explode - and got rid of useless combat data
-// v41 - v42 : oops - damage for attacks should be an int not a ubyte.....
+// v41 - v42 : oops - damage for attacks should be an int32_t not a uint8_t.....
 // v42 - v43 : hey - critters throw grenades
 // v43 - v44 : slow projectiles have a light flag now
 // v44  - v45: critters with slow projectile attacks have y offsets

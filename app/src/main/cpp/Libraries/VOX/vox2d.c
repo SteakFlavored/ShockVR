@@ -59,36 +59,36 @@ extern fix *zdydz;
 // maximum depth allocated for mult tables
 // used for bounds checking in debug version
 #ifdef DBG_ON
-extern int vxd_maxd;
+extern int32_t vxd_maxd;
 #endif
 
 void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz,
-			  int near_ver,vxs_vox *vx,int dotw,int doth,bool clip);
+			  int32_t near_ver,vxs_vox *vx,int32_t dotw,int32_t doth,bool clip);
 
 // We calculate fdxdu (where uv goes across bitmap)
 // and xy goes across screen
 // x,y seem to be nearest vertex coordinates
 // dz is the amount
 void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz,
-			  int near_ver,vxs_vox *vx,int dotw,int doth,bool clip)
+			  int32_t near_ver,vxs_vox *vx,int32_t dotw,int32_t doth,bool clip)
 {
-   int du,dv,initu,endu,initv,endv;
-   int i,j;
-   int c;
-   int crow,hrow;
-   int dcrow,dhrow;
-   ubyte *crow2,*hrow2;
-   long z;
-   int far_ver;
+   int32_t du,dv,initu,endu,initv,endv;
+   int32_t i,j;
+   int32_t c;
+   int32_t crow,hrow;
+   int32_t dcrow,dhrow;
+   uint8_t *crow2,*hrow2;
+   int32_t z;
+   int32_t far_ver;
    grs_bitmap *col;
    grs_bitmap *ht;
-   int (* rect) (short x1,short y1,short x2,short y2);
+   int32_t (* rect) (int16_t x1,int16_t y1,int16_t x2,int16_t y2);
    fix xp,yp;
    fix oldcurx;
    fix oldcury;
    fix curx,cury;
    #ifdef DBG_ON
-   short xl,yt,xr,yb;
+   int16_t xl,yt,xr,yb;
    #endif
 
    col = vx->col;
@@ -97,7 +97,7 @@ void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, 
    if (clip)
       rect = gr_rect;
    else
-      rect = (int (*)(short, short, short, short)) gr_urect;
+      rect = (int32_t (*)(int16_t, int16_t, int16_t, int16_t)) gr_urect;
 
    far_ver = (near_ver+2)%4;
 
@@ -169,7 +169,7 @@ void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, 
 
             #ifdef DBG_ON
             if ((z>=vxd_maxd) || (z<0) ) {
-               mprintf("voxel object depth (%d,%d)=%d\n",i,j,(char)z);
+               mprintf("voxel object depth (%d,%d)=%d\n",i,j,(int8_t)z);
                mprintf("out of bounds [0,%d]\n",vxd_maxd);
                mprintf("color map at %ld  htmap at %ld\n\n",col,ht);
                return;

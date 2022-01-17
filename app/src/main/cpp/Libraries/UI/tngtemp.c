@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <HEADER.h>
 
 // Initializes the TNG
-errtype tng_GADGET_NAME_init(void *ui_data, TNG *ptng, TNGStyle *sty, int alignment, int min, int max, int value, int increm, LGPoint size)
+errtype tng_GADGET_NAME_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max, int32_t value, int32_t increm, LGPoint size)
 {
 }
 
@@ -30,7 +30,7 @@ errtype tng_GADGET_NAME_destroy(TNG *ptng)
 
 // Draw the specified parts (may be all) of the TNG at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_GADGET_NAME_2d_draw(TNG *ptng, ushort partmask, LGPoint loc)
+errtype tng_GADGET_NAME_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc)
 {
 }
 
@@ -40,22 +40,22 @@ errtype tng_GADGET_NAME_size(TNG *ptng, LGPoint *ppt)
 }
 
 // Returns the current "value" of the TNG
-int tng_GADGET_NAME_getvalue(TNG *ptng)
+int32_t tng_GADGET_NAME_getvalue(TNG *ptng)
 {
 }
 
 // React appropriately for receiving the specified cooked key
-bool tng_GADGET_NAME_keycooked(TNG *ptng, ushort key)
+bool tng_GADGET_NAME_keycooked(TNG *ptng, uint16_t key)
 {
 }
 
 // React appropriately for receiving the specified mouse button event
-bool tng_GADGET_NAME_mousebutt(TNG *ptng, uchar type, LGPoint loc)
+bool tng_GADGET_NAME_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
 }
 
 // Handle incoming signals
-bool tng_GADGET_NAME_signal(TNG *ptng, ushort signal)
+bool tng_GADGET_NAME_signal(TNG *ptng, uint16_t signal)
 {
 }
 

@@ -30,8 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __SNDCALL_SRC
 
 #define MAX_UNLOCK 32
-int rulock_list[MAX_UNLOCK];
-int rulock_ptr=0;
+int32_t rulock_list[MAX_UNLOCK];
+int32_t rulock_ptr=0;
 
 void sound_frame_update(void);
 
@@ -57,7 +57,7 @@ void digifx_EOS_callback(snd_digi_parms *sdp)
 
 void sound_frame_update(void)
 {
-	int			i;
+	int32_t			i;
 	SCStatus	stat;
 	snd_digi_parms *sdp;
 	extern bool set_sample_pan_gain(snd_digi_parms *sdp);

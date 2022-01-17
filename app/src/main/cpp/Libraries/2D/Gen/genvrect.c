@@ -47,21 +47,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    ht is the height map, 0 means at the surface of the bounding box, positive goes in
    dotw and doth are the height and width of the rectangles to use at each point */
 
-void gen_vox_rect(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_bitmap *ht,int dotw,int doth)
+void gen_vox_rect(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht,int32_t dotw,int32_t doth)
 {
-   int du,dv,initu,endu,initv,endv;
-   int i,j;
-   int c;
-   long z;
-   int far_ver;
+   int32_t du,dv,initu,endu,initv,endv;
+   int32_t i,j;
+   int32_t c;
+   int32_t z;
+   int32_t far_ver;
 
    /* Test of broadcasting system */
    fix fdxdu,fdydu,fdxdv,fdydv;
    fix fcurx,fcury;
-   long fxp,fyp;
-   long fdxdz,fdydz;
-   long oldcurx;
-   long oldcury;
+   int32_t fxp,fyp;
+   int32_t fdxdz,fdydz;
+   int32_t oldcurx;
+   int32_t oldcury;
 
    far_ver = (near_ver+2)%4;
 

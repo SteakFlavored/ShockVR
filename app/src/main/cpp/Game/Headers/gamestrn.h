@@ -64,14 +64,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Prototypes
 void init_strings(void);
-char* get_string(int num,char* buf,int bufsize);
-char* get_object_short_name(int triple,char* buf,int bufsize);
-char* get_object_long_name(int triple,char* buf,int bufsize);
-char* get_alloc_string(int num);
-char* get_temp_string(int num);
+int8_t* get_string(int32_t num,int8_t* buf,int32_t bufsize);
+int8_t* get_object_short_name(int32_t triple,int8_t* buf,int32_t bufsize);
+int8_t* get_object_long_name(int32_t triple,int8_t* buf,int32_t bufsize);
+int8_t* get_alloc_string(int32_t num);
+int8_t* get_temp_string(int32_t num);
 void shutdown_strings(void);
-char* get_texture_name(int abs_texture,char* buf, int bufsiz);
-char* get_texture_use_string(int abs_texture, char* buf, int bufsiz);
+int8_t* get_texture_name(int32_t abs_texture,int8_t* buf, int32_t bufsiz);
+int8_t* get_texture_use_string(int32_t abs_texture, int8_t* buf, int32_t bufsiz);
 
 // Globals
 

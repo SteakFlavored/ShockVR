@@ -55,22 +55,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CAM_ARGS_CNT    3
 
 typedef struct {
-   uchar  type;                 // camera type code
-   ushort obj_id;               // current obj_id, or null if abs used
+   uint8_t  type;                 // camera type code
+   uint16_t obj_id;               // current obj_id, or null if abs used
    fix    coor[CAM_COOR_CNT];   // current abs pos
    fix    args[CAM_ARGS_CNT];   // args interpreted based on type
 } cams;
 
-bool    fr_camera_create (cams *cam, int camtype, void *arg1, void *arg2);
-uchar   fr_camera_modtype(cams *cam, uchar type_on, uchar type_off);
-int     fr_camera_update (cams *cam, void *arg1, int whicharg, void *arg2);
-void    fr_camera_slewone(cams *cam, int which, int how);
-void    fr_camera_setone (cams *cam, int which, int newCam);
+bool    fr_camera_create (cams *cam, int32_t camtype, void *arg1, void *arg2);
+uint8_t   fr_camera_modtype(cams *cam, uint8_t type_on, uint8_t type_off);
+int32_t     fr_camera_update (cams *cam, void *arg1, int32_t whicharg, void *arg2);
+void    fr_camera_slewone(cams *cam, int32_t which, int32_t how);
+void    fr_camera_setone (cams *cam, int32_t which, int32_t newCam);
 fix    *fr_camera_getpos (cams *cam);
-void    fr_camera_slewcam(cams *cam, int which, int how);
+void    fr_camera_slewcam(cams *cam, int32_t which, int32_t how);
 cams   *fr_camera_getdef (void);
 void    fr_camera_setdef (cams *cam);
-void    fr_camera_getobjloc (int oid, fix *store);
+void    fr_camera_getobjloc (int32_t oid, fix *store);
 
 
 #ifndef __FRCAMERA_SRC

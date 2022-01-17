@@ -93,7 +93,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //	Type names can be found thru this array (array kept in res.c)
 
-extern char *resTypeNames[NUM_RESTYPENAMES];
+extern int8_t *resTypeNames[NUM_RESTYPENAMES];
 extern ResType resMacTypes[NUM_RESTYPENAMES];		// Table of Mac resID's - KC
 
 #endif

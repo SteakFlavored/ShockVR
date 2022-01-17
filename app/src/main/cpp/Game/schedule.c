@@ -63,12 +63,12 @@ height_semaphor h_sems[NUM_HEIGHT_SEMAPHORS];
 // ---------
 // INTERNALS
 // ---------
-int expand_tstamp(ushort s);
-int compare_tstamps(ushort t1, ushort t2);
-int compare_events(void* e1, void* e2);
+int32_t expand_tstamp(uint16_t s);
+int32_t compare_tstamps(uint16_t t1, uint16_t t2);
+int32_t compare_events(void* e1, void* e2);
 
-bool register_h_event(uchar x, uchar y, bool floor, char* sem, char* key, bool no_sfx);
-void unregister_h_event(char sem);
+bool register_h_event(uint8_t x, uint8_t y, bool floor, int8_t* sem, int8_t* key, bool no_sfx);
+void unregister_h_event(int8_t sem);
 
 void null_event_handler(Schedule* s, SchedEvent* ev);
 void trap_event_handler(Schedule* s, SchedEvent *ev);
@@ -93,10 +93,10 @@ void reset_schedules(void);
 
 #define MAX_USHORT (0xFFFF)
 
-int expand_tstamp(ushort s)
+int32_t expand_tstamp(uint16_t s)
 {
-   int gametime = TICKS2TSTAMP(player_struct.game_time);
-   int stamp = s;
+   int32_t gametime = TICKS2TSTAMP(player_struct.game_time);
+   int32_t stamp = s;
    if (stamp   <= gametime - (MAX_USHORT/2))
       stamp += MAX_USHORT;
    else if (stamp >= gametime + (MAX_USHORT/2))
@@ -104,12 +104,12 @@ int expand_tstamp(ushort s)
    return stamp;
 }
 
-int compare_tstamps(ushort t1, ushort t2)
+int32_t compare_tstamps(uint16_t t1, uint16_t t2)
 {
    return expand_tstamp(t1) - expand_tstamp(t2);
 }
 
-int compare_events(void* e1, void* e2)
+int32_t compare_events(void* e1, void* e2)
 {
    return compare_tstamps(((SchedEvent *)e1)->timestamp, ((SchedEvent *)e2)->timestamp);
 }
@@ -120,9 +120,9 @@ int compare_events(void* e1, void* e2)
 // SUPPORT FUNCTIONS
 // -----------------
 
-bool register_h_event(uchar x, uchar y, bool floor, char* sem, char* key, bool no_sfx)
+bool register_h_event(uint8_t x, uint8_t y, bool floor, int8_t* sem, int8_t* key, bool no_sfx)
 {
-   int i,fr;
+   int32_t i,fr;
 
    fr=-1;
    for(i=0;i<NUM_HEIGHT_SEMAPHORS;i++) {
@@ -176,7 +176,7 @@ bool register_h_event(uchar x, uchar y, bool floor, char* sem, char* key, bool n
    }
 }
 
-void unregister_h_event(char sem)
+void unregister_h_event(int8_t sem)
 {
    if(sem<0 || sem>=NUM_HEIGHT_SEMAPHORS) return;
    h_sems[sem].inuse--;
@@ -210,9 +210,9 @@ void height_event_handler(Schedule*, SchedEvent *ev)
    MapElem *pme;
    HeightSchedEvent hse = *(HeightSchedEvent *)ev;
    extern void rendedit_process_tilemap(FullMap* map,LGRect* r,bool newMap);
-   short x,y;
+   int16_t x,y;
    LGRect bounds;
-   char ht, sign=(hse.steps_remaining>0)?1:-1;
+   int8_t ht, sign=(hse.steps_remaining>0)?1:-1;
 
    // has someone else claimed this square?
    if(h_sems[hse.semaphor].key!=hse.key)
@@ -287,8 +287,8 @@ void height_event_handler(Schedule*, SchedEvent *ev)
 void door_event_handler(Schedule*,SchedEvent *ev)
 {
    ObjID    id;
-   short old_dest;
-   ushort code, curr_code;
+   int16_t old_dest;
+   uint16_t code, curr_code;
    extern bool door_moving(ObjID id,bool dir);
 
    id = ((DoorSchedEvent *) ev)->door_id;
@@ -313,7 +313,7 @@ void door_event_handler(Schedule*,SchedEvent *ev)
       ObjID ground0, p3obj;
       ObjLoc blastLoc;
       ExplosionData* kaboom;
-      extern short fr_sfx_time;
+      extern int16_t fr_sfx_time;
 
       // An earth-shattering kaboom.
       // turn the panel into a destroyed one
@@ -357,7 +357,7 @@ void door_event_handler(Schedule*,SchedEvent *ev)
 void grenade_event_handler(Schedule*,SchedEvent *ev)
 {
    ObjID    id;
-   ubyte    unique_id;
+   uint8_t    unique_id;
 
    id = ((GrenSchedEvent *) ev)->gren_id;
 
@@ -382,10 +382,10 @@ void explosion_event_handler(Schedule*, SchedEvent *)
 
 void exposure_event_handler(Schedule* s,SchedEvent* ev)
 {
-   extern void expose_player(byte damage, ubyte type, ushort tsecs);
+   extern void expose_player(int8_t damage, uint8_t type, uint16_t tsecs);
    SchedExposeData *xd = (SchedExposeData*)&ev->data;
-   int count = xd->count;
-   int damage = xd->damage;
+   int32_t count = xd->count;
+   int32_t damage = xd->damage;
    if (damage < 0)
       damage = (damage - 1)/2;
    else damage = (damage + 1)/2;
@@ -396,7 +396,7 @@ void exposure_event_handler(Schedule* s,SchedEvent* ev)
    {
       SchedEvent copy;
       xd->damage -= damage;
-      xd->count = (ubyte)count;
+      xd->count = (uint8_t)count;
       copy = *ev;
       copy.timestamp += xd->tsecs;
       schedule_event(s,&copy);
@@ -421,9 +421,9 @@ void light_event_handler(Schedule*, SchedEvent *)
 
 void bark_event_handler(Schedule*, SchedEvent *)
 {
-   ubyte mfd_id;
+   uint8_t mfd_id;
    void check_panel_ref(bool puntme);
-   ubyte mfd_get_func(ubyte mfd_id,ubyte s);
+   uint8_t mfd_get_func(uint8_t mfd_id,uint8_t s);
 
    // timeout bark, if it's still there at all.
    for(mfd_id=0;mfd_id<NUM_MFDS;mfd_id++) {
@@ -436,7 +436,7 @@ void bark_event_handler(Schedule*, SchedEvent *)
 
 void email_event_handler(Schedule*, SchedEvent* ev)
 {
-   extern void add_email_datamunge(short mung, bool select);
+   extern void add_email_datamunge(int16_t mung, bool select);
    EmailSchedEvent *e = (EmailSchedEvent*)ev;
    add_email_datamunge(e->datamunge,TRUE);
 }
@@ -467,9 +467,9 @@ static SchedHandler sched_handlers[] =
 // EXTERNALS
 // ---------
 
-static ushort current_tstamp = 0;
+static uint16_t current_tstamp = 0;
 
-errtype schedule_init(Schedule* s, int size, bool grow)
+errtype schedule_init(Schedule* s, int32_t size, bool grow)
 {
    return pqueue_init(&s->queue,size,sizeof(SchedEvent),compare_events,grow);
 }
@@ -504,13 +504,13 @@ errtype schedule_reset(Schedule* s)
 
 void reset_schedules(void)
 {
-   int i;
+   int32_t i;
    for (i = 0; i < NUM_MAP_SCHEDULES; i++)
       schedule_reset(&global_fullmap->sched[i]);
    schedule_reset(&game_seconds_schedule);
 }
 
-errtype schedule_run(Schedule* s, ushort time)
+errtype schedule_run(Schedule* s, uint16_t time)
 {
    SchedEvent ev;
    errtype err;
@@ -535,11 +535,11 @@ void run_schedules(void)
 }
 
 /*¥¥¥
-bool schedule_test_hotkey(short keycode, ulong context, void* data)
+bool schedule_test_hotkey(int16_t keycode, uint32_t context, void* data)
 {
    SchedEvent e;
 #ifndef NO_DUMMIES
-   int dummy; dummy = keycode + context + (int)data;
+   int32_t dummy; dummy = keycode + context + (int32_t)data;
 #endif
    e.timestamp = player_struct.game_time/CIT_CYCLE + 100;
    e.type = 0;

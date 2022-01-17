@@ -63,12 +63,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct _array
 {
-   int elemsize;  // How big is each array element
-   int vecsize;   // How many elements in the vector
-   int fullness;  // How many elements are used.
-   int freehead;  // index to head of the free list.
-   int *freevec;  // free list
-   char *vec;     // the actual vector;
+   int32_t elemsize;  // How big is each array element
+   int32_t vecsize;   // How many elements in the vector
+   int32_t fullness;  // How many elements are used.
+   int32_t freehead;  // index to head of the free list.
+   int32_t *freevec;  // free list
+   int8_t *vec;     // the actual vector;
 } Array;
 
 
@@ -76,15 +76,15 @@ typedef struct _array
 
 
 // Initialize an array.  Fill in the structure, allocate the vector and free list.
-errtype array_init(Array* toinit, int elemsize, int vecsize);
+errtype array_init(Array* toinit, int32_t elemsize, int32_t vecsize);
 
 // Find a place for a new element of the array, extending the array if necessary.
 // returns the new index in *index
-errtype array_newelem(Array* a, int* index);
+errtype array_newelem(Array* a, int32_t* index);
 
 // Mark an element as unused and eligible for recycling by a subsequent
 // array_newelem call.
-errtype array_dropelem(Array* a, int index);
+errtype array_dropelem(Array* a, int32_t index);
 
 // Destroy an array, deallocating its vec and freevec
 errtype array_destroy(Array* a);

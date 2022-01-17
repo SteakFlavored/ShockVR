@@ -90,39 +90,39 @@ static void   _fr_init_vecwork(void);
 static void    clear_clip_bits(void);
 
 // for the subtile clipper
-ushort  sc_reg[NUM_SUBCLIP][SC_VEC_COUNT];
-ushort *cur_sc_ptr;
-uint    cur_sc_reg;
+uint16_t  sc_reg[NUM_SUBCLIP][SC_VEC_COUNT];
+uint16_t *cur_sc_ptr;
+uint32_t    cur_sc_reg;
 
 // Prototypes
-void _fr_sclip_line(MapElem *sp_base, int len, int val);
-void _fr_sclip_line_check_solid(MapElem *sp_base, int len, int val);
+void _fr_sclip_line(MapElem *sp_base, int32_t len, int32_t val);
+void _fr_sclip_line_check_solid(MapElem *sp_base, int32_t len, int32_t val);
 void fr_span_parse(void);
 void span_fixup(void);
-int fr_clip_show_all(void);
+int32_t fr_clip_show_all(void);
 bool _fr_move_ccv_x(struct _nVecWork *nvp);
-void _fr_move_along_dcode(int dircode);
+void _fr_move_along_dcode(int32_t dircode);
 
 
 #ifndef MAP_RESIZING
-static uchar real_x_spans[(1<<DEFAULT_YSHF)*SPAN_MEM];
-static uchar real_cone_spans[(1<<DEFAULT_YSHF)*2];
+static uint8_t real_x_spans[(1<<DEFAULT_YSHF)*SPAN_MEM];
+static uint8_t real_cone_spans[(1<<DEFAULT_YSHF)*2];
 #endif
 
-int fr_clip_freemem(void)
+int32_t fr_clip_freemem(void)
 {
    if (x_span_lists!=NULL) DisposePtr((Ptr)x_span_lists);
    _fr_ret;
 }
 
-int fr_clip_resize(int ,int )				// x, y
+int32_t fr_clip_resize(int32_t ,int32_t )				// x, y
 {
-   int i;
+   int32_t i;
 #ifdef MAP_RESIZING
    if (x_span_lists!=NULL) Free(x_span_lists);
    if (cone_span_list!=NULL) Free(cone_span_list);
-   x_span_lists=(uchar *)Malloc(y*SPAN_MEM*sizeof(uchar));
-   cone_span_list=(uchar *)Malloc(y*2*sizeof(uchar));
+   x_span_lists=(uint8_t *)Malloc(y*SPAN_MEM*sizeof(uint8_t));
+   cone_span_list=(uint8_t *)Malloc(y*2*sizeof(uint8_t));
 #else
    x_span_lists=&real_x_spans[0];
    cone_span_list=&real_cone_spans[0];
@@ -135,18 +135,18 @@ int fr_clip_resize(int ,int )				// x, y
    _fr_ret;
 }
 
-int fr_clip_frame_start(void)
+int32_t fr_clip_frame_start(void)
 {
 // setup real span lists
 // setup real obj stack
 //   _fr_init_vecwork();
    // hmm... is this really necessary????
-   memset(cone_span_list,0xff,fr_map_y*2*sizeof(uchar));
+   memset(cone_span_list,0xff,fr_map_y*2*sizeof(uint8_t));
    _fr_sdbg(SANITY,_fr_init_vecwork());   // hey, why not?
    _fr_ret;
 }
 
-int fr_clip_frame_end(void)
+int32_t fr_clip_frame_end(void)
 {
 #ifndef CLEAR_AS_WE_GO
    clear_clip_bits();
@@ -156,9 +156,9 @@ int fr_clip_frame_end(void)
 
 // cradle every word the falls
 // into the arms of failure
-void store_x_span(int y, int lx, int rx)
+void store_x_span(int32_t y, int32_t lx, int32_t rx)
 {
-   int c_span;
+   int32_t c_span;
 
    c_span= span_count(y)++;
    if (c_span>=MAX_SPANS)
@@ -184,14 +184,14 @@ void store_x_span(int y, int lx, int rx)
 #endif // _FR_TILEMAP
 }
 
-void _fr_sclip_line(MapElem *sp_base, int len, int val)
+void _fr_sclip_line(MapElem *sp_base, int32_t len, int32_t val)
 {
    _fr_sdbg(SPAN_PARSE,mprintf("yep, at %x, len %x, val %x\n",sp_base,len,val));
    for (;len>0; len--, sp_base++)
       me_subclip(sp_base)=val;
 }
 
-void _fr_sclip_line_check_solid(MapElem *sp_base, int len, int val)
+void _fr_sclip_line_check_solid(MapElem *sp_base, int32_t len, int32_t val)
 {
    _fr_sdbg(SPAN_PARSE,mprintf("yep, at %x, len %x, val %x\n",sp_base,len,val));
    for (;len>0; len--, sp_base++)
@@ -204,12 +204,12 @@ void _fr_sclip_line_check_solid(MapElem *sp_base, int len, int val)
 
 // compute bounding box as well
 extern MapElem *fr_map_base;
-ushort frpipe_dist;
+uint16_t frpipe_dist;
 void fr_span_parse(void)
 {
-   int y, dist;
+   int32_t y, dist;
    MapElem *cur_span=fr_map_base;
-   uchar *cur_span_cnt=&(span_count(0)), *cur_cone_span=&cone_span_list[0];
+   uint8_t *cur_span_cnt=&(span_count(0)), *cur_cone_span=&cone_span_list[0];
 
    frpipe_dist=0;
    for (y=0; y<fr_map_y; y++, cur_span+=fr_map_x, cur_span_cnt+=(1<<SPAN_SHIFT), cur_cone_span+=2)
@@ -223,7 +223,7 @@ void fr_span_parse(void)
 	      }
 	      else
 	      {  // first merge wacky scenes....
-            int cur_l, cur_r, span_id=0, off_l;
+            int32_t cur_l, cur_r, span_id=0, off_l;
             _fr_sdbg(SPAN_PARSE,for (cur_l=0; cur_l<*cur_span_cnt; cur_l++) mprintf("at %x MultiSpan %d from %x to %x\n",y,cur_l,span_left(y,cur_l),span_right(y,cur_l)));
             cur_l=span_left(y,0); cur_r=span_right(y,0); off_l=*cur_cone_span;
             while (++span_id<(*cur_span_cnt))
@@ -280,7 +280,7 @@ void span_fixup(void)
 #if _fr_defdbg(VECSPEW)
    if (_fr_dbgflg_chk(VECSPEW))
 	{
-	   int i,j,lc;
+	   int32_t i,j,lc;
 	   mprintf("At %d %d\n",_fr_x_cen,_fr_y_cen);
 	   for (i=0, lc= -1; i<fr_map_y; i++)
 	   {
@@ -303,13 +303,13 @@ void span_fixup(void)
 }
 
 #define STAY_ON_MAP
-void cone_span_set(int y,int l,int r)
+void cone_span_set(int32_t y,int32_t l,int32_t r)
  { cone_span_list[y+y]=l; cone_span_list[y+y+1]=r; }
 
 #ifndef CLEAR_AS_WE_GO
 static void clear_clip_bits(void)
 {
-   int i,j;
+   int32_t i,j;
    MapElem *mbptr=MAP_MAP, *mptr;
    for (i=0; i<fr_map_y; i++, mbptr+=fr_map_x)
       if (cone_span_left(i)!=0xff)
@@ -320,7 +320,7 @@ static void clear_clip_bits(void)
 
 static void set_clip_bits(void)
 {
-   int i;
+   int32_t i;
    MapElem *mbptr=MAP_MAP, *mptr, *rptr;
    for (i=0; i<fr_map_y; i++, mbptr+=fr_map_x)
       if (cone_span_left(i)!=0xff)
@@ -336,7 +336,7 @@ void set_full_cone(void)
 
 // satan got her tongue
 // now, it's undone
-int fr_clip_cone(void)
+int32_t fr_clip_cone(void)
 {
    simple_cone_clip_pass();
 //   _fr_ndbg(NO_CONE,simple_cone_clip_pass());
@@ -346,7 +346,7 @@ int fr_clip_cone(void)
 #if _fr_defdbg(VECSPEW)
    if (_fr_dbgflg_chk(VECSPEW))
 	{
-	   int i,lc;
+	   int32_t i,lc;
 	   mprintf("Cone from %d %d\n",_fr_x_cen,_fr_y_cen);
 	   for (i=0, lc= -1; i<fr_map_y; i++)
 	   {
@@ -375,12 +375,12 @@ int fr_clip_cone(void)
 }
 
 // these two are a little unstoked at the moment
-int fr_clip_show_all(void)
+int32_t fr_clip_show_all(void)
 {
    MapElem *cur_span=fr_map_base;
 #ifndef REALLY_ALL
-   uchar *cur_cone_span=&cone_span_left(0);
-   int i, dist;
+   uint8_t *cur_cone_span=&cone_span_left(0);
+   int32_t i, dist;
    for (i=0; i<fr_map_y; i++, cur_span+=fr_map_x, cur_cone_span+=2)
       if ((*cur_cone_span)!=0xff)
       {
@@ -395,7 +395,7 @@ int fr_clip_show_all(void)
             frpipe_dist=dist+abs(*(cur_cone_span-1)-_fr_x_cen);
       }
 #else
-   int y;
+   int32_t y;
    for (y=0; y<fr_map_y; y++)
    {
 #ifndef CLEAR_AS_WE_GO
@@ -414,19 +414,19 @@ typedef struct {
    fix loc[3];          // current location of vector
    fix deltas[3];       // current steps for vector
    MapElem *mptr;       // current map pointer
-   uchar flags;         // inuse, LR, pointer to self
-   uchar nxtv;          // for now, points to next
+   uint8_t flags;         // inuse, LR, pointer to self
+   uint8_t nxtv;          // for now, points to next
    fix oldx;            // x at last y crossing
    fix len;             // current vector length
 } FrClipVec;
 
 struct _nVecWork {
    fix remx;            // how far to go in x
-   short mapstep[2];    // how to move in map when going by x, y
-   uchar inface[2];     // inface for x and y
+   int16_t mapstep[2];    // how to move in map when going by x, y
+   uint8_t inface[2];     // inface for x and y
    fix stepy;           // how far to go in y for a remx
-   uchar move_x;        // do we move in x?
-   uchar dircode;       // so we can get back out
+   uint8_t move_x;        // do we move in x?
+   uint8_t dircode;       // so we can get back out
 };
 
 #define nVW_XDIR 2
@@ -441,8 +441,8 @@ struct _nVecWork {
 #define _fixn1 (-fix_make(1,0))
 static fix locstep[4][2]={{_fixn1,_fixn1},{_fixn1,_fixp1},{_fixp1,_fixn1},{_fixp1,_fixp1}};
 static fix edgestep[4][2]={{0,0},{0,_fixp1-1},{_fixp1-1,0},{_fixp1-1,_fixp1-1}};
-static char rmmod[4]={-1,-1,1,1};             /* mod to rem to get to next full square */
-static short new_del_mapstep[2]={-32,32};     /* wants to be wall_adds[2] and then wall_adds[0] */
+static int8_t rmmod[4]={-1,-1,1,1};             /* mod to rem to get to next full square */
+static int16_t new_del_mapstep[2]={-32,32};     /* wants to be wall_adds[2] and then wall_adds[0] */
 static MapElem *eye_mptr;
 
 #define FRVECSELF  0x3F
@@ -458,7 +458,7 @@ static MapElem *eye_mptr;
 #define MAX_CLIP_VEC 16
 static FrClipVec allclipv[MAX_CLIP_VEC];
 static FrClipVec *ccv;
-static char vechead=0, ffreevec=0, lastvec=-1, endvec=MAX_CLIP_VEC-1;
+static int8_t vechead=0, ffreevec=0, lastvec=-1, endvec=MAX_CLIP_VEC-1;
 
 struct _nVecWork _nVP[4]=
 {
@@ -474,9 +474,9 @@ struct _nVecWork _nVP[4]=
  (cv)->deltas[0]=ray[0]; (cv)->deltas[1]=ray[1]; (cv)->deltas[2]=ray[2]
 
 // More prototypes
-bool _fr_skip_solid_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step);
-bool _fr_skip_space_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step);
-bool _fr_skip_solid_left_n_back(FrClipVec *cv, fix min_loc, int y_map_step);
+bool _fr_skip_solid_right_n_back(FrClipVec *cv, fix max_loc, int32_t y_map_step);
+bool _fr_skip_space_right_n_back(FrClipVec *cv, fix max_loc, int32_t y_map_step);
+bool _fr_skip_solid_left_n_back(FrClipVec *cv, fix min_loc, int32_t y_map_step);
 void _fr_del_compute(FrClipVec *v1, FrClipVec *v2);
 void _fr_spawn_check_one(FrClipVec *lv, FrClipVec *rv, bool northward);
 bool _fr_move_new_dels(FrClipVec *lv, FrClipVec *rv, bool northward);
@@ -500,7 +500,7 @@ static void _fr_rebuild_nVecWork(void)
 
 static void _fr_init_vecwork(void)
 {
-   int i;
+   int32_t i;
    for (i=0; i<MAX_CLIP_VEC; i++)      // point at self and next
     { allclipv[i].flags=i; allclipv[i].nxtv=(i+1)&(MAX_CLIP_VEC-1); }
    vechead=0; ffreevec=0; lastvec=-1; endvec=MAX_CLIP_VEC-1;
@@ -509,15 +509,15 @@ static void _fr_init_vecwork(void)
 #if _fr_defdbg(VECSPEW)
 void print_nvp(struct _nVecWork *nvp)
 {
-   static char *nvm_str[4]={"nxny","nxpy","pxny","pxpy"};
-   static char ifc_str[4]={'n','e','s','w'};
+   static int8_t *nvm_str[4]={"nxny","nxpy","pxny","pxpy"};
+   static int8_t ifc_str[4]={'n','e','s','w'};
    mprintf(" _nVP xrem %x stepy %x. move_x %d std %s %c%c %d %d\n",
       nvp->remx,nvp->stepy,nvp->move_x,
       nvm_str[nvp->dircode],ifc_str[nvp->inface[0]],ifc_str[nvp->inface[1]],
       nvp->mapstep[0],nvp->mapstep[1]);
 }
 
-void print_fcv(FrClipVec *_ccv, int dim)
+void print_fcv(FrClipVec *_ccv, int32_t dim)
 {
    if (dim==3)
 	   mprintf(" _ccv @(%x,%x,%x),d(%x,%x,%x)..",
@@ -532,27 +532,27 @@ void print_fcv(FrClipVec *_ccv, int dim)
 #define print_fcv(a,b)
 #endif
 
-static uchar *_face_curedge, *_face_nxtedge;
-static uchar  _face_curmask,  _face_nxtmask;
-static uchar  _face_topmask,  _face_botmask;
+static uint8_t *_face_curedge, *_face_nxtedge;
+static uint8_t  _face_curmask,  _face_nxtmask;
+static uint8_t  _face_topmask,  _face_botmask;
 
 //#define out_of_cone (me_bits_seen_p(mp)==0)
 #define out_of_cone(mp) (me_subclip(mp)==SUBCLIP_OUT_OF_CONE)
 
 // indexed by (vecside)+(dircode<<2)+xdir/ydir, with do nothings for second at Y
-static uchar  _sclip_major_mask[9][2]=
+static uint8_t  _sclip_major_mask[9][2]=
 {
  {FMK_SW,FMK_EW},{FMK_SW,FMK_WW},{FMK_NW,FMK_EW},{FMK_NW,FMK_WW},
  {FMK_NW,FMK_WW},{FMK_NW,FMK_EW},{FMK_SW,FMK_WW},{FMK_SW,FMK_EW},{0,0}
 };
 
-static uchar  _sclip_door_mask[9][2]=
+static uint8_t  _sclip_door_mask[9][2]=
 {
  {FMK_INT_NW,FMK_INT_EW},{FMK_INT_NW,FMK_INT_WW},{FMK_INT_SW,FMK_INT_EW},{FMK_INT_SW,FMK_INT_WW},
  {FMK_INT_SW,FMK_INT_WW},{FMK_INT_SW,FMK_INT_EW},{FMK_INT_NW,FMK_INT_WW},{FMK_INT_NW,FMK_INT_EW},{0,0}
 };
 
-static uchar *_sclip_mask, *_sclip_door;
+static uint8_t *_sclip_mask, *_sclip_door;
 
 // assumes ccv is us
 // moves until next y span is hit, i guess
@@ -560,13 +560,13 @@ static uchar *_sclip_mask, *_sclip_door;
 // strip the gloss from a beauty queen
 bool _fr_move_ccv_x(struct _nVecWork *nvp)
 {
-   int tt, oflow;
+   int32_t tt, oflow;
    bool move_in_y=TRUE, move_in_x=TRUE;
 
    // should be saving off texture cuts some day!!
    ccv->loc[1]+=nvp->stepy;
    tt=me_tiletype(ccv->mptr);
-   if (fr_obj_block(ccv->mptr,_sclip_door,(int *)ccv->loc)||
+   if (fr_obj_block(ccv->mptr,_sclip_door,(int32_t *)ccv->loc)||
        ((_face_curedge[tt<<2]==0xff)||(me_clearsolid(ccv->mptr)&_face_curmask)))
    {  // these really have to get wacky and learn about partial obscuration
       move_in_x=move_in_y=FALSE;
@@ -609,7 +609,7 @@ bool _fr_move_ccv_x(struct _nVecWork *nvp)
 	      // can we leave the square there?
 	      tt=me_tiletype(ccv->mptr);
 	      // no matter what, we can get out of ourselves?
-         if (fr_obj_block(ccv->mptr,_sclip_door,(int *)ccv->loc)||
+         if (fr_obj_block(ccv->mptr,_sclip_door,(int32_t *)ccv->loc)||
              ((_face_curedge[tt<<2]==0xff)||(me_clearsolid(ccv->mptr)&_face_curmask)))
          {  // these really have to get wacky and learn about partial obscuration
 	         move_in_x=move_in_y=FALSE;
@@ -651,7 +651,7 @@ bool _fr_move_ccv_x(struct _nVecWork *nvp)
    //   if not, backup pointers if appropriate, return FALSE
 }
 
-void _fr_move_along_dcode(int dircode)
+void _fr_move_along_dcode(int32_t dircode)
 {
    bool move_in_y=TRUE;
    struct _nVecWork *nvp=&_nVP[dircode];
@@ -746,7 +746,7 @@ void _fr_move_along_dcode(int dircode)
 
 #define _fr_move_along_hn_p(x)  _fr_move_along_dcode(((ccv->deltas[0]>0)?nVW_XDIR:0)+x)
 
-static uchar *_face_topedge, *_face_botedge;
+static uint8_t *_face_topedge, *_face_botedge;
 
 // partial tiles? who knows when
 
@@ -770,7 +770,7 @@ static uchar *_face_topedge, *_face_botedge;
              ((me_clearsolid((cv->mptr+y_map_step))&_face_botmask)==0))
 
 // note how pretty this looks till you look at the is_solid macro
-bool _fr_skip_solid_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step)
+bool _fr_skip_solid_right_n_back(FrClipVec *cv, fix max_loc, int32_t y_map_step)
 {
    if (is_solid())
    {
@@ -783,7 +783,7 @@ bool _fr_skip_solid_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step)
    return (cv->loc[0]>=max_loc);
 }
 
-bool _fr_skip_space_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step)
+bool _fr_skip_space_right_n_back(FrClipVec *cv, fix max_loc, int32_t y_map_step)
 {
    if (is_space())
    {
@@ -796,7 +796,7 @@ bool _fr_skip_space_right_n_back(FrClipVec *cv, fix max_loc, int y_map_step)
    return (cv->loc[0]>=max_loc);
 }
 
-bool _fr_skip_solid_left_n_back(FrClipVec *cv, fix min_loc, int y_map_step)
+bool _fr_skip_solid_left_n_back(FrClipVec *cv, fix min_loc, int32_t y_map_step)
 {
    if (is_solid())
    {
@@ -827,8 +827,8 @@ void _fr_del_compute(FrClipVec *v1, FrClipVec *v2)
 void _fr_spawn_check_one(FrClipVec *lv, FrClipVec *rv, bool northward)
 {
    FrClipVec *tmpr, *tmpl;
-   short cur_mapstep=new_del_mapstep[northward];
-   int nxts;
+   int16_t cur_mapstep=new_del_mapstep[northward];
+   int32_t nxts;
 
    while (1)                     // really, run till we find the right edge
    {
@@ -874,7 +874,7 @@ void _fr_spawn_check_one(FrClipVec *lv, FrClipVec *rv, bool northward)
 // i just want to go the beach
 bool _fr_move_new_dels(FrClipVec *lv, FrClipVec *rv, bool northward)
 {
-	int lm, rm;
+	int32_t lm, rm;
 
 	lm=min(lv->oldx,lv->loc[0]);
    rm=max(rv->oldx,rv->loc[0]);
@@ -903,7 +903,7 @@ bool _fr_move_new_dels(FrClipVec *lv, FrClipVec *rv, bool northward)
 // you were always so lost in the dark
 void _fr_kill_pair(FrClipVec *lv,FrClipVec *rv)
 {
-   int lft_self=lv->flags&FRVECSELF, lft_pt=vechead;
+   int32_t lft_self=lv->flags&FRVECSELF, lft_pt=vechead;
 // should sanity check for too many vectors here and in spawn code
    if (vechead==lft_self)
    {
@@ -933,7 +933,7 @@ void _fr_kill_pair(FrClipVec *lv,FrClipVec *rv)
 bool _fr_setup_first_pair(bool headnorth)
 {
    fix org[3], ray[3];
-   int flags;
+   int32_t flags;
 
    _fr_sdbg(VECSPEW,mprintf("setup_first_pair: note vh %d ff %d\n",vechead,ffreevec));
 #define FULL_360_VECTORS
@@ -1011,7 +1011,7 @@ bool _fr_setup_first_pair(bool headnorth)
 #if _fr_defdbg(VECTRACK)
 void _fr_show_veclist(void)
 {
-   int i, cv;
+   int32_t i, cv;
    mprintf("Vec(ff%d): ",ffreevec);
    for (i=0, cv=vechead; i<MAX_CLIP_VEC; i++,cv=allclipv[cv].nxtv)
       mprintf("%1.1X%c%c ",cv,(allclipv[cv].flags&FRVECUSE)?'U':'x',(allclipv[cv].flags&FRVECL)?'L':'R');
@@ -1023,10 +1023,10 @@ void _fr_show_veclist(void)
 
 // stains on the carpet and stains on the memory
 // and both of us know, how the end always is
-int fr_clip_tile(void)
+int32_t fr_clip_tile(void)
 {
    FrClipVec *_v1,*_v2;
-   int northward, nxtvec;
+   int32_t northward, nxtvec;
    // also have to do exact correct reverse order, so obj_stack works, so go north first, then south
    // sadly, new render order invalidates this
 

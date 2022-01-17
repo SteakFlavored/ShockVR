@@ -57,7 +57,7 @@ extern grs_sys_info grd_info;
 extern grs_drvcap *grd_cap;
 extern grs_drvcap grd_mode_cap;
 extern void (**grd_driver_list[])();
-extern int grd_mode;
+extern int32_t grd_mode;
 
 /* support old-syle dr_ naming for now. */
 #define grd_scr_canv grd_screen_canvas

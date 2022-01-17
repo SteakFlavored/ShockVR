@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Globals
 //--------------------------
 snd_digi_parms	_snd_smp_prm[SND_MAX_SAMPLES];
-int					_snd_smp_cnt;
+int32_t					_snd_smp_cnt;
 SndCallBackUPP  gDigiCallBackProcPtr;
 
 //--------------------------
@@ -43,10 +43,10 @@ SndChannelPtr CreateSndChannel(void);
 //---------------------------------------------------------
 // For Mac version:  Allocate all sound channels here.
 //---------------------------------------------------------
-int snd_start_digital(void)
+int32_t snd_start_digital(void)
 {
 	SndChannelPtr	scPtr;
-	int					i;
+	int32_t					i;
 
 	for (i = 0; i < SND_MAX_SAMPLES; i++)
 	{
@@ -63,14 +63,14 @@ int snd_start_digital(void)
 
 // Not needed for Mac version.
 /*
-int snd_set_digital_channels(int chan_cnt)
+int32_t snd_set_digital_channels(int32_t chan_cnt)
 {
    _digi_top;
    if (chan_cnt>SND_MAX_SAMPLES)
       return SND_NOT_SUPPORTED;
    if (_snd_smp_cnt>chan_cnt)
    {  // have to lower allocation
-      int i;
+      int32_t i;
       for (i=_snd_smp_cnt-1; (i>=chan_cnt); i--)
          switch (AIL_sample_status(_snd_smp_hnd[i]))
          {
@@ -101,7 +101,7 @@ int snd_set_digital_channels(int chan_cnt)
 }
 */
 
-int snd_stop_digital(void)
+int32_t snd_stop_digital(void)
 {
    snd_kill_all_samples();
 //   AIL_uninstall_DIG_driver(snd_digi);

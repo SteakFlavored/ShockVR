@@ -51,23 +51,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "3d.h"
 //#include <mprintf.h>
 
-//void vmap_rgbg(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_bitmap *ht);
-//void vmap_poly(fix x[4],fix y[4],fix dz[3],int near_ver,grs_bitmap *col,grs_bitmap *ht);
-void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz, int near_ver,vxs_vox *vx,int dotw,int doth,bool clip);
+//void vmap_rgbg(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht);
+//void vmap_poly(fix x[4],fix y[4],fix dz[3],int32_t near_ver,grs_bitmap *col,grs_bitmap *ht);
+void vmap_dot(fix x0, fix y0, fix dxdu, fix dydu, fix dxdv, fix dydv, fix dxdz, fix dydz, int32_t near_ver,vxs_vox *vx,int32_t dotw,int32_t doth,bool clip);
 
 // The four vertices of every face
-//static int faces[6][4] = { {0,1,5,4},{1,2,6,5},{2,3,7,6}
+//static int32_t faces[6][4] = { {0,1,5,4},{1,2,6,5},{2,3,7,6}
 //                   ,{3,0,4,7},{3,2,1,0},{4,5,6,7}};
 
 // The dz direction of every face
-//static int dzs[6][3] = { {0,0,1},{-1,0,0},{0,0,-1},{1,0,0},{0,1,0},{0,-1,0} };
+//static int32_t dzs[6][3] = { {0,0,1},{-1,0,0},{0,0,-1},{1,0,0},{0,1,0},{0,-1,0} };
 
 // The coordinates of every vertex
-// static int ver[8][3] = { {-1,-1,-1},{1,-1,-1},{1,-1,1},{-1,-1,1}
+// static int32_t ver[8][3] = { {-1,-1,-1},{1,-1,-1},{1,-1,1},{-1,-1,1}
 //                      ,{-1,1,-1},{1,1,-1},{1,1,1},{-1,1,1} };
 
 // gives which visible faces for dominant vertex
-// static int corners[8][3] = { {0,3,4}, {0,1,4}, {1,2,4}, {2,3,4}
+// static int32_t corners[8][3] = { {0,3,4}, {0,1,4}, {1,2,4}, {2,3,4}
 //                     ,{3,0,5}, {0,1,5}, {1,2,5}, {2,3,5} };
 
 
@@ -80,11 +80,11 @@ void vx_render(vxs_vox *vx)
 {
    fix a,b;
    //int f;
-   int near_ver;   //which vertex is nearest
+   int32_t near_ver;   //which vertex is nearest
    g3s_vector p[4];
    g3s_phandle tmp[4];
-   int i;
-   int psx,psy;
+   int32_t i;
+   int32_t psx,psy;
    fix maxdx;
    fix maxdy;
    bool clip;
@@ -92,7 +92,7 @@ void vx_render(vxs_vox *vx)
    fix min_z;
 
 
-   // static int f=0;
+   // static int32_t f=0;
 
    #ifdef BBOX
    // for debugging

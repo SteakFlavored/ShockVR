@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 //	returns: TRUE if rectangles intersect, FALSE if disjoint.
 
-int RectTestSect(LGRect *pr1, LGRect *pr2)
+int32_t RectTestSect(LGRect *pr1, LGRect *pr2)
 {
 	return(RECT_TEST_SECT(pr1,pr2));
 }
@@ -62,7 +62,7 @@ int RectTestSect(LGRect *pr1, LGRect *pr2)
 //	returns: TRUE IF rectangles intersect, FALSE if disjoint (in this
 //		case, *prsect is undefined)
 
-int RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect)
+int32_t RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect)
 {
 	if (!RECT_TEST_SECT(pr1, pr2))
 		return(FALSE);
@@ -97,7 +97,7 @@ void RectUnion(LGRect *pr1, LGRect *pr2, LGRect *prunion)
 //
 //	returns: TRUE if *pr1 encloses *pr2, FALSE otherwise
 
-int RectEncloses(LGRect *pr1, LGRect *pr2)
+int32_t RectEncloses(LGRect *pr1, LGRect *pr2)
 {
 	return(RECT_ENCLOSES(pr1, pr2));
 }
@@ -111,7 +111,7 @@ int RectEncloses(LGRect *pr1, LGRect *pr2)
 //
 //	returns: TRUE if point is within rectangle, FALSE if outside
 
-int RectTestPt(LGRect *prect, LGPoint pt)
+int32_t RectTestPt(LGRect *prect, LGPoint pt)
 {
 	return(RECT_TEST_PT(prect, pt));
 }
@@ -158,9 +158,9 @@ void RectOffsettedRect(LGRect *pr, LGPoint delta, LGRect *proff)
 //	thus set to 0 if point is inside rect, although a cheaper test can be
 //	done (via RectTestPt()).
 
-int RectClipCode(LGRect *prect, LGPoint pt)
+int32_t RectClipCode(LGRect *prect, LGPoint pt)
 {
-	short flag;
+	int16_t flag;
 
 	flag = 0;
 	if (pt.x < prect->ul.x)
@@ -176,7 +176,7 @@ int RectClipCode(LGRect *prect, LGPoint pt)
 }
 
 //	---------------------------------------------------------
-LGPoint MakePoint(short x, short y)
+LGPoint MakePoint(int16_t x, int16_t y)
 {
 	LGPoint	pt;
 

@@ -42,11 +42,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MEDGE_BOWTIE_CASE        0x1000
 #define MEDGE_INTERNAL_CROSSING  0x2000
 
-int get_edge_code(void *mp, int edge);
-char *map_get_edge(void *mp, int edge, int ceil_p);
+int32_t get_edge_code(void *mp, int32_t edge);
+int8_t *map_get_edge(void *mp, int32_t edge, int32_t ceil_p);
 
 #ifndef __FRTERR_SRC
 // left val, right val, "sum" val
-extern char edge_vals[3];
+extern int8_t edge_vals[3];
 #endif
 

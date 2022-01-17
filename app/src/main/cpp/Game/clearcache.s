@@ -20,7 +20,7 @@
 #
 #	Date updated:	6/26/95
 #
-#	void ClearCache (unsigned char* theAddress, unsigned long numBlocks);
+#	void ClearCache (uint8_t* theAddress, uint32_t numBlocks);
 #
 #	Call this routine to either clear a cacheable block of memory
 #	that is aligned, or before filling a block of memory that is

@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	One time only, FF appearance...
 //	===============================
@@ -54,7 +54,7 @@ extern "C" {
 
 
 //	This one uses the Freefall raycaster
-//	
+//
 physics_handle	EDMS_FF_beam_weapon_new(    fix X[3],
 					fix D[3],
 					fix speed,
@@ -63,15 +63,15 @@ physics_handle	EDMS_FF_beam_weapon_new(    fix X[3],
 					fix range,
 					physics_handle exclude,
 					physics_handle shooter,
-					long &g_info,
-					long &w_info,
+					int32_t &g_info,
+					int32_t &w_info,
 					bool &hit )
 {
 
 //	Return me, baby...
 //	------------------
 physics_handle	ph = -1;
-int	EXCLUDE = 0;
+int32_t	EXCLUDE = 0;
 
 Q      	DD[3];
 
@@ -80,7 +80,7 @@ Q	Speed,
 	Size,
 	Range;
 
-Q	*XX = (Q*)&X[0];	
+Q	*XX = (Q*)&X[0];
 
 	DD[0].fix_to( D[0] );
 	DD[1].fix_to( D[1] );
@@ -128,15 +128,15 @@ physics_handle	EDMS_FF_beam_weapon(    fix X[3],
 					fix range,
 					physics_handle exclude,
 					physics_handle shooter,
-					long &g_info,
-					long &w_info,
+					int32_t &g_info,
+					int32_t &w_info,
 					bool &hit )
 {
 
 //	Return me, baby...
 //	------------------
 physics_handle	ph = -1;
-int	EXCLUDE = 0;
+int32_t	EXCLUDE = 0;
 
 Q      	DD[3];
 
@@ -145,7 +145,7 @@ Q	Speed,
 	Size,
 	Range;
 
-Q	*XX = (Q*)&X[0];	
+Q	*XX = (Q*)&X[0];
 
 	DD[0].fix_to( D[0] );
 	DD[1].fix_to( D[1] );

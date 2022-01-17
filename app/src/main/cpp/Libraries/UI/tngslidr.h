@@ -64,9 +64,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef struct {
    TNG *tng_data;
    LGPoint size;
-   int alignment;
-   int min, max;
-   int value, increm;
+   int32_t alignment;
+   int32_t min, max;
+   int32_t value, increm;
    bool dragging;
    Ref left_id, right_id, up_id, down_id;
    Ref slider_id;
@@ -88,10 +88,10 @@ typedef struct {
 // Prototypes
 
 // Initializes the TNG slider
-errtype tng_slider_init(void *ui_data, TNG *ptng, TNGStyle *sty, int alignment, int min, int max, int value, int increm, LGPoint size);
+errtype tng_slider_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max, int32_t value, int32_t increm, LGPoint size);
 
 // Initializes the TNG slider
-errtype tng_slider_full_init(void *ui_data, TNG *ptng, TNGStyle *sty, int alignment, int min, int max, int value, int increm, LGPoint size,
+errtype tng_slider_full_init(void *ui_data, TNG *ptng, TNGStyle *sty, int32_t alignment, int32_t min, int32_t max, int32_t value, int32_t increm, LGPoint size,
    Ref left_id, Ref right_id, Ref up_id, Ref down_id, Ref slider_id);
 
 // Deallocate all memory used by the TNG slider
@@ -99,29 +99,29 @@ errtype tng_slider_destroy(TNG *ptng);
 
 // Draw the specified parts (may be all) of the TNG slider at screen coordinates loc
 // assumes all appropriate setup has already been done!
-errtype tng_slider_2d_draw(TNG *ptng, ushort partmask, LGPoint loc);
+errtype tng_slider_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc);
 
 // Fill in ppt with the size of the TNG slider
 errtype tng_slider_size(TNG *ptng, LGPoint *ppt);
 
 // Returns the current "value" of the TNG slider
-int tng_slider_getvalue(TNG *ptng);
+int32_t tng_slider_getvalue(TNG *ptng);
 
 // React appropriately for receiving the specified cooked key
-bool tng_slider_keycooked(TNG *ptng, ushort key);
+bool tng_slider_keycooked(TNG *ptng, uint16_t key);
 
 // React appropriately for receiving the specified mouse button event
-bool tng_slider_mousebutt(TNG *ptng, uchar type, LGPoint loc);
+bool tng_slider_mousebutt(TNG *ptng, uint8_t type, LGPoint loc);
 
 // React to a click at the given location
 bool tng_slider_apply_click(TNG *ptng, LGPoint loc);
 
 // Handle incoming signals
-bool tng_slider_signal(TNG *ptng, ushort signal);
+bool tng_slider_signal(TNG *ptng, uint16_t signal);
 
 bool tng_slider_increm(TNG_slider *ptng);
 bool tng_slider_decrem(TNG_slider *ptng);
-errtype tng_slider_set(TNG_slider *ptng, int perc);
+errtype tng_slider_set(TNG_slider *ptng, int32_t perc);
 
 // Macros
 #define TNG_SL(ptng) ((TNG_slider *)ptng->type_data)

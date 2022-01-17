@@ -44,13 +44,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define CANVAS_STACKSIZE 16
 grs_canvas *grd_canvas_stack[CANVAS_STACKSIZE];
-int grd_canvas_stackp = 0;
+int32_t grd_canvas_stackp = 0;
 
 /* set current canvas to c. select driver_func from type of bitmap
    attached to canvas. */
 void gr_set_canvas (grs_canvas *c)
 {
-   int i;
+   int32_t i;
 
    if (c == NULL)
       return;
@@ -74,7 +74,7 @@ void gr_set_canvas (grs_canvas *c)
 
 /* push current canvas onto canvas stack and make passed in canvas active.
    returns 0 if stack is ok, -1 if there is an overflow. */
-int gr_push_canvas (grs_canvas *c)
+int32_t gr_push_canvas (grs_canvas *c)
 {
    if (grd_canvas_stackp >= CANVAS_STACKSIZE)
       return -1;
@@ -98,7 +98,7 @@ grs_canvas *gr_pop_canvas (void)
 #pragma scheduling off
 #pragma global_optimizer off
 
-void gr_init_canvas (grs_canvas *c, uchar *p, int type, short w, short h)
+void gr_init_canvas (grs_canvas *c, uint8_t *p, int32_t type, int16_t w, int16_t h)
 {
 #ifdef GR_DOUBLE_CANVAS
    if (type==BMT_FLAT8_DOUBLE) {
@@ -119,8 +119,8 @@ void gr_init_canvas (grs_canvas *c, uchar *p, int type, short w, short h)
 #pragma scheduling reset
 #pragma global_optimizer reset
 
-void gr_init_sub_canvas (grs_canvas *sc, grs_canvas *dc, short x, short y,
-                         short w, short h)
+void gr_init_sub_canvas (grs_canvas *sc, grs_canvas *dc, int16_t x, int16_t y,
+                         int16_t w, int16_t h)
 {
    gr_init_sub_bm (&sc->bm, &dc->bm, x, y, w, h);
    gr_init_gc (dc);
@@ -133,17 +133,17 @@ void gr_make_canvas (grs_bitmap *bm, grs_canvas *c)
    gr_init_canvas (c, bm->bits, bm->type, bm->w, bm->h);
 }
 
-grs_canvas *gr_alloc_canvas (int type, short w, short h)
+grs_canvas *gr_alloc_canvas (int32_t type, int16_t w, int16_t h)
 {
    grs_canvas *c;
-   uchar *p;
+   uint8_t *p;
 
    if ((c=(grs_canvas *)NewPtr (sizeof (*c))) == NULL)	// was Malloc
       return NULL;
    if (type == BMT_DEVICE)
       p = valloc (w,h);
    else
-      p = (uchar *)NewPtr (w*h);// was Malloc
+      p = (uint8_t *)NewPtr (w*h);// was Malloc
    gr_init_canvas (c, p, type, w, h);
 
    return c;
@@ -158,8 +158,8 @@ void gr_free_canvas (grs_canvas *c)
    DisposePtr ((Ptr) c);	// was gr_free
 }
 
-grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, short x, short y,
-   short w, short h)
+grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, int16_t x, int16_t y,
+   int16_t w, int16_t h)
 {
    grs_canvas *c_new;
 

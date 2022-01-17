@@ -45,22 +45,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rsdunpck.h"
 #include "lg.h"
 
-uchar *grd_unpack_buf=NULL;
+uint8_t *grd_unpack_buf=NULL;
 
 /*************************************************/
 /* Puts 0's in place of skips and pads with 0's. */
 /* i.e., grd_unpack_buf is entirely overwritten. */
 /*************************************************/
-int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
+int32_t gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
 {
-   short x_right,y_bot;                /* opposite edges of bitmap */
-   short x,y;                          /* current position */
-   int over_run;                       /* unwritten right edge */
-   uchar *p_dst;
-   uchar *rsd_src;                     /* rsd source buffer */
-   short rsd_code;                     /* last rsd opcode */
-   short rsd_count;                    /* count for last opcode */
-   short op_count;                     /* operational count */
+   int16_t x_right,y_bot;                /* opposite edges of bitmap */
+   int16_t x,y;                          /* current position */
+   int32_t over_run;                       /* unwritten right edge */
+   uint8_t *p_dst;
+   uint8_t *rsd_src;                     /* rsd source buffer */
+   int16_t rsd_code;                     /* last rsd opcode */
+   int16_t rsd_count;                    /* count for last opcode */
+   int16_t op_count;                     /* operational count */
 
    if (grd_unpack_buf==NULL) return GR_UNPACK_RSD8_NOBUF;
    if (sbm->type != BMT_RSD8) return GR_UNPACK_RSD8_NOTRSD;

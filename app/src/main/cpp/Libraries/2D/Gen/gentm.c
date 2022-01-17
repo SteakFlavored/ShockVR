@@ -49,13 +49,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef void (*tm_init_type)(grs_tmap_loop_info *, grs_vertex **);
 typedef void (*edge_type)(grs_tmap_loop_info *, grs_vertex **, grs_vertex **, int);
 
-void h_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
+void h_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti)
 {
    grs_vertex **p_left;          /* current left & right vertices */
    grs_vertex **p_right;
-   ulong y_min, y_max;           /* min & max vertex y coords */
+   uint32_t y_min, y_max;           /* min & max vertex y coords */
    fix w_min,w_max;
-   int y,y_limit;                /* current screen coordinates */
+   int32_t y,y_limit;                /* current screen coordinates */
    void (*tm_init)(grs_tmap_loop_info *, grs_vertex **);
    fix *old_w = NULL;
    grs_tmap_loop_info info;      /* values for inner loop routine */
@@ -70,7 +70,7 @@ void h_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
 
 
    if (grd_gc.fill_type!=FILL_NORM)
-      info.clut=(uchar *)grd_gc.fill_parm;
+      info.clut=(uint8_t *)grd_gc.fill_parm;
    else if (ti->flags&TMF_CLUT)
       if ((info.clut=ti->clut)==NULL)
          info.clut=gr_get_clut();
@@ -84,7 +84,7 @@ void h_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
 // moved this code from the #define in PolyInt.h because the compiler couldn't handle it
 do {
    grs_vertex **pvp;
-   int y;
+   int32_t y;
    p_left = vpl;
    y_min = fix_cint(vpl[0]->y);
    y_max = fix_cint(vpl[0]->y);
@@ -120,7 +120,7 @@ do {
          for (i=0;i<n;i++) old_w[i]=vpl[i]->w;
       }
       /* fix w's so w=w_min+dw*(y-y0) for all vertices. */
-      info.dw=dw=(w_max-w_min)/((long )(y_max-y_min));
+      info.dw=dw=(w_max-w_min)/((int32_t )(y_max-y_min));
       info.w=w_min+fix_mul(dw,fix_ceil(y0)-y0);
       for (; pvp<vpl+n; ++pvp)
          (*pvp)->w=w_min+fix_mul((*pvp)->y - y0,dw);
@@ -154,25 +154,25 @@ do {
          poly_do_right_edge(p_right,prev,y_right,y_prev,y,vpl,n);
          ((edge_type) info.right_edge_func) (&info,p_right,&prev,TMS_RIGHT);
       }
-      y_limit=ulong_min(info.right.y,info.left.y);
+      y_limit=min(info.right.y,info.left.y);
       info.n=y_limit-y;
 
-      if (((int (*)(grs_tmap_loop_info *))(info.loop_func))(&info)) break;
+      if (((int32_t (*)(grs_tmap_loop_info *))(info.loop_func))(&info)) break;
       y=y_limit;
    }
    if (info.vtab)
       gr_free_temp(info.vtab);
    if (old_w) {
-      int i;
+      int32_t i;
       for (i=0;i<n;i++) vpl[i]->w=old_w[i];
       gr_free_temp(old_w);
    }
 }
 
-int h_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
+int32_t h_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti)
 {
    grs_vertex **cpl;          /* clipped vertices */
-   int m;                     /* number of clipped vertices */
+   int32_t m;                     /* number of clipped vertices */
 
    cpl = NULL;
    m = gr_clip_poly(n,4,vpl,&cpl);
@@ -185,12 +185,12 @@ int h_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
 
 typedef void (*tm_init_type2)(grs_tmap_loop_info *);
 
-void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
+void v_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti)
 {
    grs_vertex **p_top;              /* current top & bot vertices */
    grs_vertex **p_bot;
-   ulong x_min, x_max;              /* min & max vertex x coords */
-   int x,x_limit;                   /* current screen coordinates */
+   uint32_t x_min, x_max;              /* min & max vertex x coords */
+   int32_t x,x_limit;                   /* current screen coordinates */
    fix w_min,w_max;
    fix *old_w = NULL;               /* list of old w values from vpl */
    grs_tmap_loop_info info;         /* values for inner loop routine */
@@ -204,7 +204,7 @@ void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
    info.n+=ti->tmap_type+GRD_FUNCS*bm->type;
 
    if (grd_gc.fill_type!=FILL_NORM)
-      info.clut=(uchar *)grd_gc.fill_parm;
+      info.clut=(uint8_t *)grd_gc.fill_parm;
    else if (ti->flags&TMF_CLUT)
       if ((info.clut=ti->clut)==NULL)
          info.clut=gr_get_clut();
@@ -230,7 +230,7 @@ void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
          for (i=0;i<n;i++) old_w[i]=vpl[i]->w;
       }
       /* fix w's so w=w0+dw*(x-x0) for all vertices. */
-      info.dw=dw=(w_max-w_min)/((long )(x_max-x_min));
+      info.dw=dw=(w_max-w_min)/((int32_t )(x_max-x_min));
       info.w=w_min+fix_mul(dw,fix_ceil(x0)-x0);
       for (; pvp<vpl+n; ++pvp)
          (*pvp)->w=w_min+fix_mul((*pvp)->x - x0,dw);
@@ -264,25 +264,25 @@ void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
          poly_do_bot_edge(p_bot,prev,x_bot,x_prev,x,vpl,n);
          ((edge_type) info.bot_edge_func) (&info,p_bot,&prev,TMS_RIGHT);
       }
-      x_limit=ulong_min(info.bot.x,info.top.x);
+      x_limit=min(info.bot.x,info.top.x);
       info.n=x_limit-x;
 
-      if (((int (*)(grs_tmap_loop_info *))(info.loop_func))(&info)) break;
+      if (((int32_t (*)(grs_tmap_loop_info *))(info.loop_func))(&info)) break;
       x=x_limit;
    }
    if (info.vtab)
       gr_free_temp(info.vtab);
    if (old_w) {
-      int i;
+      int32_t i;
       for (i=0;i<n;i++) vpl[i]->w=old_w[i];
       gr_free_temp(old_w);
    }
 }
 
-int v_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti)
+int32_t v_map(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti)
 {
    grs_vertex **cpl;          /* clipped vertices */
-   int m;                     /* number of clipped vertices */
+   int32_t m;                     /* number of clipped vertices */
 
    cpl = NULL;
    m = gr_clip_poly(n,4,vpl,&cpl);

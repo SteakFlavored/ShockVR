@@ -26,24 +26,24 @@
 
 	; global variables
 	import grd_canvas
-	
+
 	; external functions
 	import .fix_div_asm
 	import .fix_mul_asm
 	import .fix_mul_asm_safe
-	
+
 	toc
 		tc grd_canvas[TC], grd_canvas
 
 	csect
-	
-	
+
+
 ;---------------------------------------------------
-; int HandleFloorLitLoop_PPC();  C++ routine
+; int32_t HandleFloorLitLoop_PPC();  C++ routine
 ;---------------------------------------------------
 		EXPORT	.HandleFloorLoop_PPC
 ;		EXPORT	.HandleFloorLoop_PPC__FP18grs_tmap_loop_infolllllllUcUlPUcPUc
-	
+
 	.HandleFloorLoop_PPC:
 ;	.HandleFloorLoop_PPC__FP18grs_tmap_loop_infolllllllUcUlPUcPUc:
 		mflr     r0
@@ -70,7 +70,7 @@
 
 		lwz      r15,28(r18)	; left.x
 		lwz      r12,64(r18)	; right.x
-		
+
 OuterLoop:
 		addis    r3,r15,1
 		subi     r3,r3,1
@@ -80,53 +80,53 @@ OuterLoop:
 		clrrwi   r4,r4,16
 		sub.     r20,r4,r3
 		ble      CheckDMinus
-		
+
 		; calc d
 		addis    r6,r15,1
 		subi     r6,r6,1
 		clrrwi   r6,r6,16
 		sub      r20,r6,r15
-		
+
 		; calc di,du,dv
 		lis      r3,256
 		mr       r4,r16
 		bl       .fix_div_asm
 		mr       r28,r3
-		
+
 		mr       r3,r27
 		mr       r4,r28
 		bl       .fix_mul_asm_safe
 		addi     r3,r3,255
 		srawi    r27,r3,8
-		
+
 		srawi    r28,r28,8
 		mr       r3,r25
 		mr       r4,r28
 		bl       .fix_mul_asm_safe
 		mr       r25,r3
-		
+
 		mr       r3,r26
 		mr       r4,r28
 		bl       .fix_mul_asm_safe
 		mr       r26,r3
-		
-		
+
+
 		; calc u,v,i
 		mr       r3,r25
 		mr       r4,r20
 		bl       .fix_mul_asm
 		add      r29,r29,r3
-		
+
 		mr       r3,r26
 		mr       r4,r20
 		bl       .fix_mul_asm
 		add      r30,r30,r3
-		
+
 		mr       r3,r27
 		mr       r4,r20
 		bl       .fix_mul_asm
 		add      r31,r31,r3
-		
+
 		; calc x
 		addis    r11,r15,1
 		addis    r4,r12,1
@@ -179,14 +179,14 @@ CopyLoop:
 		lbzx     r5,r5,r6
 		add      r31,r31,r27
 		stbu     r5,1(r19)
-		bdnz	 CopyLoop	
+		bdnz	 CopyLoop
 
 LoopSkip:
 		lwz      r10,100(r18)
 		lwz      r11,24(r18)
 		add      r11,r11,r10
 		stw      r11,24(r18)		; tli->w+=tli->dw
-		
+
 		; calc new u,v,i, du,dv,di
 		lis      r3,1
 		lwz      r4,24(r18)
@@ -248,15 +248,15 @@ LoopSkip:
 		addi	 r31,r31,256
 Skip2:
 
-		
+
 		; update left.x & right.x
 		lwz      r5,48(r18)
 		add      r15,r15,r5
 		lwz      r7,84(r18)
 		add      r12,r12,r7
-		
+
 		sub      r16,r12,r15	; calc new dx
-		
+
 		lwz      r11,4(r18)
 		addi     r11,r11,1
 		stw      r11,4(r18)		; tli->y++
@@ -287,11 +287,11 @@ CheckDMinus:
 
 
 ;---------------------------------------------------
-; int HandleFloorClutLoop_PPC();  C++ routine
+; int32_t HandleFloorClutLoop_PPC();  C++ routine
 ;---------------------------------------------------
 		EXPORT	.HandleFloorClutLoop_PPC
 ;		EXPORT	.HandleFloorClutLoop_PPC__FP18grs_tmap_loop_infolllllUcUlPUcPUc
-	
+
 	.HandleFloorClutLoop_PPC:
 ;	.HandleFloorClutLoop_PPC__FP18grs_tmap_loop_infolllllUcUlPUcPUc:
 		mflr     r0
@@ -311,7 +311,7 @@ CheckDMinus:
 		lwz      r19,grd_canvas[TC](RTOC)
 		lwz      r16,28(r31)
 		lwz      r17,64(r31)
-	
+
 C_OuterLoop:
 		addis    r3,r16,1
 		addis    r4,r17,1
@@ -321,7 +321,7 @@ C_OuterLoop:
 		clrrwi   r4,r4,16
 		sub.     r30,r4,r3
 		ble      C_CheckDMinus
-		
+
 		addis    r6,r16,1
 		subi     r6,r6,1
 		clrrwi   r6,r6,16
@@ -330,27 +330,27 @@ C_OuterLoop:
 		mr       r4,r18
 		bl       .fix_div_asm
 		mr       r24,r3
-		
+
 		mr       r3,r26
 		mr       r4,r24
 		bl       .fix_mul_asm_safe
 		mr       r26,r3
-		
+
 		mr       r3,r27
 		mr       r4,r24
 		bl       .fix_mul_asm_safe
 		mr       r27,r3
-		
+
 		mr       r3,r26
 		mr       r4,r30
 		bl       .fix_mul_asm
 		add      r28,r28,r3
-		
+
 		mr       r3,r27
 		mr       r4,r30
 		bl       .fix_mul_asm
 		add      r29,r29,r3
-		
+
 		addis    r7,r16,1
 		subi     r7,r7,1
 		srawi    r7,r7,16
@@ -360,7 +360,7 @@ C_OuterLoop:
 		srawi    r8,r8,16
 #		extsh    r8,r8
 		sub      r30,r8,r7
-		
+
 		lwz      r9,0(r19)
 		lwz      r10,0(r19)
 		lwz      r9,0(r9)
@@ -375,11 +375,11 @@ C_OuterLoop:
 		add      r10,r10,r12
 		add      r25,r9,r10
 		addi     r25,r25,-1
-	
+
 		beq-	 C_LoopSkip
 		mtctr	 r30
-		
-C_InnerLoop:		
+
+C_InnerLoop:
 		srawi    r3,r28,16
 		srawi    r4,r29,16
 		clrlwi   r5,r20,24
@@ -392,7 +392,7 @@ C_InnerLoop:
 		lbzx     r3,r23,r3
 		stb      r3,0(r25)
 		bdnz      C_InnerLoop
-		
+
 C_LoopSkip:
 		lwz      r7,100(r31)
 		lwz      r4,24(r31)
@@ -401,7 +401,7 @@ C_LoopSkip:
 		stw      r4,24(r31)
 		bl       .fix_div_asm
 		mr       r24,r3
-		
+
 		lwz      r9,52(r31)
 		lwz      r3,36(r31)
 		add      r3,r3,r9
@@ -409,7 +409,7 @@ C_LoopSkip:
 		stw      r3,36(r31)
 		bl       .fix_mul_asm_safe
 		mr       r28,r3
-		
+
 		lwz      r11,88(r31)
 		lwz      r3,72(r31)
 		add      r3,r3,r11
@@ -417,7 +417,7 @@ C_LoopSkip:
 		stw      r3,72(r31)
 		bl       .fix_mul_asm_safe
 		sub      r26,r3,r28
-		
+
 		lwz      r4,56(r31)
 		lwz      r3,40(r31)
 		add      r3,r3,r4
@@ -425,7 +425,7 @@ C_LoopSkip:
 		stw      r3,40(r31)
 		bl       .fix_mul_asm_safe
 		mr       r29,r3
-		
+
 		lwz      r6,92(r31)
 		lwz      r3,76(r31)
 		add      r3,r3,r6
@@ -433,7 +433,7 @@ C_LoopSkip:
 		stw      r3,76(r31)
 		bl       .fix_mul_asm_safe
 		sub      r27,r3,r29
-		
+
 		lwz      r8,48(r31)
 		add      r16,r16,r8
 		lwz      r10,84(r31)
@@ -447,11 +447,11 @@ C_LoopSkip:
 		addi     r4,r4,1
 		stw      r4,4(r31)
 		bgt+     C_OuterLoop
-		
+
 		li       r3,0
 		stw      r16,28(r31)
 		stw      r17,64(r31)
-		
+
 C_Done:
 		lwz      r0,120(SP)
 		addi     SP,SP,112

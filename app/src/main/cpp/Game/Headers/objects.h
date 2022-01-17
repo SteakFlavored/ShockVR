@@ -44,19 +44,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // field for physical state while a building would more likely want at
 // least four.  They do share the same data structure, but may interpret it
 // differently.
-typedef uchar ObjSubClass;
+typedef uint8_t ObjSubClass;
 
 // An object is ID'd by its position in the Obj array.  For all of these
 // arrays, 0 is a null object, and the zeroth element of the array is
 // reserved for storing special information.
 
-typedef short ObjID;
+typedef int16_t ObjID;
 #define OBJ_NULL 0		// null object
 
-typedef short ObjRefID;
+typedef int16_t ObjRefID;
 #define OBJ_REF_NULL 0
 
-typedef short ObjSpecID;
+typedef int16_t ObjSpecID;
 #define OBJ_SPEC_NULL 0
 
 // Now that we have some basic typedef's, we include the application-specific ones.
@@ -116,9 +116,9 @@ typedef struct old_Obj {
 
 // The header for an array of class-specific data
 typedef struct ObjSpecHeader {
-	uchar size;									// size of array
-	uchar struct_size;						// size of each element
-	char *data;									// pointer to array of class-specific data
+	uint8_t size;									// size of array
+	uint8_t struct_size;						// size of each element
+	int8_t *data;									// pointer to array of class-specific data
 } ObjSpecHeader;
 
 // The common part of any class-specific structure.  You can cast any class-specific
@@ -131,7 +131,7 @@ typedef struct ObjSpecHeader {
 typedef struct ObjSpec {
 	union {
 		struct {
-			ushort tile : 1;					// look in tiled array?
+			uint16_t tile : 1;					// look in tiled array?
 			ObjID id : 15;						// ID in master list
 		} bits;
 		ObjSpecID headused;
@@ -188,7 +188,7 @@ extern ObjRef objRefs[NUM_REF_OBJECTS];
 //
 // Routines to make it easy to deal with objects only once
 
-extern uchar objsDealt[NUM_OBJECTS/8];
+extern uint8_t objsDealt[NUM_OBJECTS/8];
 
 #define ObjsClearDealt() do {memset (objsDealt, 0, NUM_OBJECTS/8);} while (0)
 #define ObjSetDealt(x) do {objsDealt[(x) >> 3] |= (1 << ((x) & 7));} while (0)
@@ -217,7 +217,7 @@ typedef struct ObjLocState {
 extern ObjLocState objLocStates[MAX_OBJS_CHANGING];
 
 // numObjLocStates contains the number of entries of objLocStates that are valid.
-extern uchar numObjLocStates;
+extern uint8_t numObjLocStates;
 
 //////////////////////////////
 //
@@ -233,7 +233,7 @@ extern uchar numObjLocStates;
 
 #ifdef HASH_OBJECTS
 
-typedef short ObjHashElemID;
+typedef int16_t ObjHashElemID;
 
 typedef struct ObjHashElem {
   ObjRefID ref;

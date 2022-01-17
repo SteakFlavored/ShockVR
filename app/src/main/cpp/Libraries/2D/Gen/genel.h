@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    would be a 2d.h re-compile
  */
 
-extern void gr_int_uelipse (int, int, int, int);
-extern int gr_int_elipse (int, int, int, int);
+extern void gr_int_uelipse (int32_t, int32_t, int32_t, int);
+extern int32_t gr_int_elipse (int32_t, int32_t, int32_t, int);
 
 

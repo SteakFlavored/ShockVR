@@ -43,9 +43,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    value.
  */
 
-int gri_sline_clip (grs_vertex *v0, grs_vertex *v1)
+int32_t gri_sline_clip (grs_vertex *v0, grs_vertex *v1)
 {
-   int r;
+   int32_t r;
 
    fix x0, y0, x1, y1;
    fix xb0, xb1, yb0, yb1;

@@ -35,29 +35,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __SOLITON_SRC
 //#ifdef __cplusplus
 //extern "C" {
-//extern int EDMS_pfrm;    // for debugging stupidity
+//extern int32_t EDMS_pfrm;    // for debugging stupidity
 //}
 //#else
-extern int EDMS_pfrm;    // for debugging stupidity
+extern int32_t EDMS_pfrm;    // for debugging stupidity
 //#endif
 #else
 //extern "C" {
-int EDMS_pfrm=0;
+int32_t EDMS_pfrm=0;
 //}
 #endif
 #endif
 
 #ifdef ROBOT_DO_SL
-#define rob_sl_at(l,x) (*((uchar *)(0xB0000+(l*2)))=x)
-#define rob_sl(x)      (*((uchar *)(0xB0000+158))=x)
+#define rob_sl_at(l,x) (*((uint8_t *)(0xB0000+(l*2)))=x)
+#define rob_sl(x)      (*((uint8_t *)(0xB0000+158))=x)
 #else
 #define rob_sl_at(l,x)
 #define rob_sl(x)
 #endif
 
 #ifdef SOLITON_DO_SL
-#define sol_sl_at(l,x) (*((uchar *)(0xB0000+(l*2)))=x)
-#define sol_sl(x)      (*((uchar *)(0xB0000+158))=x)
+#define sol_sl_at(l,x) (*((uint8_t *)(0xB0000+(l*2)))=x)
+#define sol_sl(x)      (*((uint8_t *)(0xB0000+158))=x)
 #else
 #define sol_sl_at(l,x)
 #define sol_sl(x)

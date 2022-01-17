@@ -89,16 +89,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Prototypes
 
-char* get_drug_name(int type, char* buf);
-void drug_use(int type);
-void drug_wear_off(int type);
-void drug_effect(int type);
+int8_t* get_drug_name(int32_t type, int8_t* buf);
+void drug_use(int32_t type);
+void drug_wear_off(int32_t type);
+void drug_effect(int32_t type);
 void drugs_update();
 void drugs_init();
 void drug_startup(bool visible);
 void drug_closedown(bool visible);
-int drug2triple(int type);
-int triple2drug(int triple);
+int32_t drug2triple(int32_t type);
+int32_t triple2drug(int32_t triple);
 
 // Globals
 

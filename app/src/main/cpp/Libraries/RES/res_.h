@@ -58,8 +58,8 @@ bool ResRetrieve(Id id, void *buffer);
 /*
 //	Resource paging (resmem.c)
 
-void *ResDefaultPager(long size);
-extern void *(*f_pager)(long size);
+void *ResDefaultPager(int32_t size);
+extern void *(*f_pager)(int32_t size);
 extern Id idBeingLoaded;
 #define RES_PAGER(size) (*f_pager)(size)
 */
@@ -109,12 +109,12 @@ void ResGrowResDescTable(Id id);
 #ifdef DBG_ON
 
 typedef struct {
-	ulong numGets;				// # ResGet()'s or RefGet()'s
-	ulong numLocks;			// # ResLock()'s or RefLock()'s
-	ushort numExtracts;		// # ResExtract()'s or RefExtract()'s
-	ushort numLoads;			// # ResLoad()'s
-	ushort numOverwrites;	// # times resource overwritten by one in new file
-	ushort numPageouts;		// # times paged out of ram
+	uint32_t numGets;				// # ResGet()'s or RefGet()'s
+	uint32_t numLocks;			// # ResLock()'s or RefLock()'s
+	uint16_t numExtracts;		// # ResExtract()'s or RefExtract()'s
+	uint16_t numLoads;			// # ResLoad()'s
+	uint16_t numOverwrites;	// # times resource overwritten by one in new file
+	uint16_t numPageouts;		// # times paged out of ram
 } ResCumStat;
 
 extern ResCumStat *pCumStatId;						// ptr to cumulative stats by id
@@ -131,9 +131,9 @@ extern ResCumStat cumStatType[NUM_RESTYPENAMES]; // table of cum. stats by type
 	})
 
 typedef struct {
-	ushort numPageouts;			// # times ResPageOut() called
-	ulong totSizeNeeded;			// total # bytes asked for across calls
-	ulong totSizeGotten;			// total # bytes paged out across calls
+	uint16_t numPageouts;			// # times ResPageOut() called
+	uint32_t totSizeNeeded;			// total # bytes asked for across calls
+	uint32_t totSizeGotten;			// total # bytes paged out across calls
 } ResPageStats;
 
 extern ResPageStats resPageStats;	// paging statistics

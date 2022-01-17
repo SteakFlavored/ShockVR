@@ -47,10 +47,10 @@ void g3_top_intersect(void);
 void g3_right_intersect(void);
 void g3_bottom_intersect(void);
 void g3_back_intersect(void);
-// void project_point(g3s_point *src[],int n);
+// void project_point(g3s_point *src[],int32_t n);
 
 static g3s_point tbuff[20];
-static int tnum;
+static int32_t tnum;
 //static fix _d = 65536/18;
 static fix _d = 1;
 static fix _a,_b,_c;
@@ -59,15 +59,15 @@ static g3s_point *_tmp;
 static g3s_point *s;          // start of line segment
 static g3s_point *e;          // end of line segment
 
-int g3_clip_line(g3s_point *src[],g3s_point *dest[])
+int32_t g3_clip_line(g3s_point *src[],g3s_point *dest[])
 {
-   int i,j;
-   byte cc;
-   byte ca;
+   int32_t i,j;
+   int8_t cc;
+   int8_t ca;
    // assume 10 points max
    g3s_point *tmp0[10];
    g3s_point *tmp1[10];
-   int b;               // current destination buffer
+   int32_t b;               // current destination buffer
    g3s_point **tmps;    // pointer to the tmp buffer
    g3s_point **tmpd;    // pointer to dest buffer
 
@@ -266,14 +266,14 @@ int g3_clip_line(g3s_point *src[],g3s_point *dest[])
    return CLIP_NONE;
 }
 
-int g3_clip_polygon(int n,g3s_point *src[],g3s_point *dest[])
+int32_t g3_clip_polygon(int32_t n,g3s_point *src[],g3s_point *dest[])
 {
-   int i,j,k;
-   byte cc;
+   int32_t i,j,k;
+   int8_t cc;
    // assume 10 points max
    g3s_point *tmp0[10];
    g3s_point *tmp1[10];
-   int b;               // current destination buffer
+   int32_t b;               // current destination buffer
    g3s_point **tmps;    // pointer to the tmp buffer
    g3s_point **tmpd;    // pointer to dest buffer
 
@@ -588,11 +588,11 @@ void g3_bottom_intersect(void)
 }
 
 /*
-void project_point(g3s_point *src[],int n)
+void project_point(g3s_point *src[],int32_t n)
 {
    g3s_point *p;
-   ubyte c;
-   int i;
+   uint8_t c;
+   int32_t i;
 
    for (i=0;i<n;i++) {
       c = 0;

@@ -55,12 +55,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* unclipped flat8 bitmap capture.  reads data from the current canvas at
    (x,y) into the bitmap described by bm.  the destination bitmap is always
    completely filled. */
-void gen_get_flat8_ubitmap (grs_bitmap *bm, short x, short y)
+void gen_get_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   uchar *dst  = bm->bits;
-   short right = x+bm->w;
-   short bot   = y+bm->h;
-   short cur_x;
+   uint8_t *dst  = bm->bits;
+   int16_t right = x+bm->w;
+   int16_t bot   = y+bm->h;
+   int16_t cur_x;
 
    gr_push_state();
    if (bm->flags & BMF_TRANS) {
@@ -81,12 +81,12 @@ void gen_get_flat8_ubitmap (grs_bitmap *bm, short x, short y)
 /* clipped flat8 bitmap capture.  reads from the current canvas at (x,y)
    into bm, clipping against the canvas.  any section of the destination
    bitmap that was clipped is not written to. */
-int gen_get_flat8_bitmap (grs_bitmap *bm, short x, short y)
+int32_t gen_get_flat8_bitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-   short w,h;
-   uchar *p;
-   int extra;
-   int code = CLIP_NONE;
+   int16_t w,h;
+   uint8_t *p;
+   int32_t extra;
+   int32_t code = CLIP_NONE;
 
    /* save stuff that clipping changes. */
    w = bm->w; h = bm->h; p = bm->bits;

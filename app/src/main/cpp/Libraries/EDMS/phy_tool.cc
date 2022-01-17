@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //	Here is a box of tools for making physics easier for the programmer...
 //	===================================================
@@ -46,10 +46,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	INTERNAL STUFF
 //	==============
 
-void snobby_soliton_lite( Q timestep, int object );
+void snobby_soliton_lite( Q timestep, int32_t object );
 
-extern void	( *idof_functions[MAX_OBJ] )( int ),		//Pointers to the appropriate places...
-		( *equation_of_motion[MAX_OBJ][7] )( int );	//The integer is the object number...
+extern void	( *idof_functions[MAX_OBJ] )( int32_t ),		//Pointers to the appropriate places...
+		( *equation_of_motion[MAX_OBJ][7] )( int32_t );	//The integer is the object number...
 
 
 //	Courtesy of C++ and inline fixpoint and such...
@@ -62,17 +62,17 @@ static Q	one_sixth = .1666666666667,			//Overboard?
 
 //	Here is a routine that should help in the placement of EDMS objects.  3D+ only!
 //	===============================================================================
-int settle_object( int object )
+int32_t settle_object( int32_t object )
 {
-   int	return_value = -1;					//Failure...
+   int32_t	return_value = -1;					//Failure...
 
    Q	nrg = 1000.,
    	nrg_min = .1,
    	pass_time = .01;					//Not meta-stable!
 
-   int	count = 0,
+   int32_t	count = 0,
 	max_count = 1000;
-   	
+
    //	First, are you for real?
    //	------------------------
 	if ( S[object][0][0] > END )
@@ -89,11 +89,11 @@ int settle_object( int object )
              + S[object][DOF_Z][1]*S[object][DOF_Z][1];			//Forget the others...
 
       	count += 1;
-   	}	
+   	}
 
       //	Did we diverge?
       //	---------------
-     	if ( count < max_count ) return_value = 1;		//Success! 
+     	if ( count < max_count ) return_value = 1;		//Success!
 
 //	Yes, you were for real...
 //	-------------------------
@@ -107,10 +107,10 @@ int settle_object( int object )
 
 //	Here is a version of soliton_lite which runs on only one object.  This should be useful for
 //	settling objects at level starts, placing things exactly on the ground, etc...
-//	============================================================================== 
-void snobby_soliton_lite( Q timestep, int object )
+//	==============================================================================
+void snobby_soliton_lite( Q timestep, int32_t object )
 {
-	int	coord = 0;
+	int32_t	coord = 0;
 
 	//	Copy the state vector initially into the argument vector...
 	//	===========================================================
@@ -154,7 +154,7 @@ void snobby_soliton_lite( Q timestep, int object )
 	{
       S[object][coord][0] = S[object][coord][0] + timestep*S[object][coord][1]
 					               + point_five*( timestep*timestep*k[0][object][coord] );
-                              
+
       S[object][coord][1] = S[object][coord][1] + point_five*( k[0][object][coord]
 					               + k[1][object][coord] );
 
@@ -166,10 +166,10 @@ void snobby_soliton_lite( Q timestep, int object )
 
 //      Here is a tool that Marc LeBlanc has requested...
 //      =================================================
-void    mprint_state( int /*object*/ )
+void    mprint_state( int32_t /*object*/ )
 {
 /*
-   int coord = 0,
+   int32_t coord = 0,
        deriv = 0;
 
    if ( S[object][0][0] > END )          //Are you for real?
@@ -188,9 +188,9 @@ void    mprint_state( int /*object*/ )
 
 //	Here is an inventory of everything in the system...
 //	===================================================
-void	inventory_and_statistics( int show_sleepers )
+void	inventory_and_statistics( int32_t show_sleepers )
 {
-   int	object = 0;
+   int32_t	object = 0;
 
 	for ( object = 0; object < MAX_OBJ && S[object][0][0] > END;  object++ )
    {
@@ -205,7 +205,7 @@ void	inventory_and_statistics( int show_sleepers )
 //   		mout << "Physics handle: " << on2ph[object] << " is a " << I[object][IDOF_MODEL]
 //   		     << " at   X:" << S[object][DOF_X][0] << "   Y:" << S[object][DOF_Y][0] << "   Z:" << S[object][DOF_Z][0]
 //   		     << " Sleep: ";
-                
+
 //         if ( no_no_not_me[object] == 0 ) mout << "Y";
 //         else mout << "N";
 
@@ -225,21 +225,21 @@ void	inventory_and_statistics( int show_sleepers )
 //	This is EDMS' sanity checker.  Call it to see what's wrong.  Problems
 //	will return a nonzero result...
 //	===============================
-int	sanity_check( void )
+int32_t	sanity_check( void )
 {
    //	The idof functions...
    //	=====================
-   // extern void	biped_idof( int ),
-   //		marble_idof( int ),
-   //		robot_idof( int ),
-   //		pelvis_idof( int ),
-   //		deadly_idof( int );
+   // extern void	biped_idof( int32_t ),
+   //		marble_idof( int32_t ),
+   //		robot_idof( int32_t ),
+   //		pelvis_idof( int32_t ),
+   //		deadly_idof( int32_t );
 
 
    //		Have some variables...
    //		----------------------
 
-   int object = 0,
+   int32_t object = 0,
 		 coord = 0,
 		 dof = 0,
 		 object_number = 0;
@@ -257,7 +257,7 @@ int	sanity_check( void )
 
 //		Here's the return value...
 //		--------------------------
-int		return_value = 0;		//Innocent until...
+int32_t		return_value = 0;		//Innocent until...
 
 
 
@@ -354,7 +354,7 @@ int		return_value = 0;		//Innocent until...
 
 //	Get the Euler angles we need from the stuff in the state...
 //	===========================================================
-void	EDMS_get_Euler_angles( Q &alpha, Q &beta, Q &gamma, int object )
+void	EDMS_get_Euler_angles( Q &alpha, Q &beta, Q &gamma, int32_t object )
 {
    Q	e0, e1, e2, e3;
 

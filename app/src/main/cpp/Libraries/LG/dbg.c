@@ -76,7 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 //		SOURCE - Debug code or a spew message has a "source", which is a
 //				combination of a bank and one or more slots.  These are packed
-//				into a 32-bit ulong (high 5 bits bank, low 27 bits are slot
+//				into a 32-bit uint32_t (high 5 bits bank, low 27 bits are slot
 //				bits).  A source represents a logical "anding" of the slots.
 //				In our 2D bank example, suppose we assigned another slot to
 //				"massive detail".  We might then do some polygon reporting
@@ -432,7 +432,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //  message displays in an Alert box; if for test programs, it just comes out as
 //  a printf.
 //--------------------------------------------------------
-void DoWarningMsg(char *msg)
+void DoWarningMsg(int8_t *msg)
 {
 #ifdef SHOCK_GAME
 	Str255	message;
@@ -456,23 +456,23 @@ void DoWarningMsg(char *msg)
 
 DbgBank dbgBank[NUM_DBG_BANKS];
 DbgLogFile dbgLogFile[NUM_DBG_LOGFILES];
-char dbgLogPath[128] = ".\\";
+int8_t dbgLogPath[128] = ".\\";
 
 #endif
 
 #ifdef SPEW_ON
-static ulong spewSrc;
+static uint32_t spewSrc;
 #endif
 
-static void (*dbg_f_report_user)(int errType, char *msg) = NULL;
+static void (*dbg_f_report_user)(int32_t errType, int8_t *msg) = NULL;
 
-int (*f_getch)() = getch;
+int32_t (*f_getch)() = getch;
 
-int errErrCode;
+int32_t errErrCode;
 
-extern char *pExitMsg;
+extern int8_t *pExitMsg;
 
-void DbgHandleC(int reportType, ulong src, char *fmt, __va_list __arg);
+void DbgHandleC(int32_t reportType, uint32_t src, int8_t *fmt, __va_list __arg);
 
 //	----------------------------------------------------------
 //		REPORTING ROUTINES
@@ -483,7 +483,7 @@ void DbgHandleC(int reportType, ulong src, char *fmt, __va_list __arg);
 //		ecode = error code to exit with
 //		msg   = message
 
-void DbgReportError(int ecode, char *msg, ...)
+void DbgReportError(int32_t ecode, int8_t *msg, ...)
 {
 	va_list ap;
 
@@ -499,7 +499,7 @@ void DbgReportError(int ecode, char *msg, ...)
 //
 //		msg = message
 
-void DbgReportWarnUser(char *msg, ...)
+void DbgReportWarnUser(int8_t *msg, ...)
 {
 	va_list ap;
 
@@ -516,7 +516,7 @@ void DbgReportWarnUser(char *msg, ...)
 //
 //		msg = message
 
-void DbgReportWarning(char *msg, ...)
+void DbgReportWarning(int8_t *msg, ...)
 {
 	va_list ap;
 
@@ -538,9 +538,9 @@ void DbgReportWarning(char *msg, ...)
 //
 //	Returns: TRUE if should do spew, FALSE if not
 
-bool DbgSpewTest(ulong src)
+bool DbgSpewTest(uint32_t src)
 {
-	int bank;
+	int32_t bank;
 
 	bank = DBGBANK(src);
 	if (((dbgBank[bank].gate[DG_MONO] & src) != (src & DBG_SLOT_MASK)) &&
@@ -557,7 +557,7 @@ bool DbgSpewTest(ulong src)
 //
 //		msg = message
 
-void DbgDoSpew(char *msg, ...)
+void DbgDoSpew(int8_t *msg, ...)
 {
 	va_list ap;
 
@@ -572,13 +572,13 @@ void DbgDoSpew(char *msg, ...)
 //		KEYBOARD ROUTINE
 //	------------------------------------------------------------
 //
-//	DbgGetKey() gets char from keyboard.
+//	DbgGetKey() gets int8_t from keyboard.
 //
 //	Returns: key
 
-int DbgGetKey()
+int32_t DbgGetKey()
 {
-	int c;
+	int32_t c;
 
 //	Get key
 
@@ -615,7 +615,7 @@ int DbgGetKey()
 //
 //		f_report_user = report routine, taking report type & msg args
 
-void DbgSetReportRoutine(void (*f_report_user)(int reportType, char *msg))
+void DbgSetReportRoutine(void (*f_report_user)(int32_t reportType, int8_t *msg))
 {
 	dbg_f_report_user = f_report_user;
 }
@@ -629,9 +629,9 @@ void DbgSetReportRoutine(void (*f_report_user)(int reportType, char *msg))
 //		bank     = bank
 //		namelist = ptr to array of slot names, 27 in length of NULL-term
 
-void DbgSetSlotNames(int bank, char **namelist)
+void DbgSetSlotNames(int32_t bank, int8_t **namelist)
 {
-	int slot;
+	int32_t slot;
 
 	for (slot = 0; slot < NUM_DBG_SLOTS; slot++)
 		{
@@ -650,7 +650,7 @@ void DbgSetSlotNames(int bank, char **namelist)
 //		slot = slot
 //		name = slot name
 
-void DbgSetSlotName(int bank, int slot, char *name)
+void DbgSetSlotName(int32_t bank, int32_t slot, int8_t *name)
 {
 	DbgBank *pbank;
 
@@ -659,10 +659,10 @@ void DbgSetSlotName(int bank, int slot, char *name)
 	pbank = &dbgBank[bank];
 	if (pbank->ppBankSlotNames == NULL)
 		{
-		pbank->ppBankSlotNames = Malloc(NUM_DBG_SLOTS * (sizeof(char *)));
+		pbank->ppBankSlotNames = Malloc(NUM_DBG_SLOTS * (sizeof(int8_t *)));
 		if (pbank->ppBankSlotNames == NULL)
 			return;
-		memset(pbank->ppBankSlotNames, 0, NUM_DBG_SLOTS * sizeof(char *));
+		memset(pbank->ppBankSlotNames, 0, NUM_DBG_SLOTS * sizeof(int8_t *));
 		}
 
 //	If this slot already has a name, get rid of it
@@ -687,9 +687,9 @@ void DbgSetSlotName(int bank, int slot, char *name)
 //
 //	Returns: bank number 0-31 or -1 if not found
 
-int DbgFindBankName(char *name)
+int32_t DbgFindBankName(int8_t *name)
 {
-	int bank;
+	int32_t bank;
 
 	for (bank = 0; bank < NUM_DBG_BANKS; bank++)
 		{
@@ -708,10 +708,10 @@ int DbgFindBankName(char *name)
 //
 //	Returns: slot number 0-26 or -1 if not found
 
-int DbgFindSlotName(int bank, char *name)
+int32_t DbgFindSlotName(int32_t bank, int8_t *name)
 {
-	char **ppslotname;
-	int slot;
+	int8_t **ppslotname;
+	int32_t slot;
 
 //	If slot names unallocated, not here
 
@@ -737,9 +737,9 @@ int DbgFindSlotName(int bank, char *name)
 //
 //		path = ptr to path string
 
-void DbgSetLogPath(char *path)
+void DbgSetLogPath(int8_t *path)
 {
-	int bank,slot;
+	int32_t bank,slot;
 
 //	Set new path
 
@@ -768,10 +768,10 @@ void DbgSetLogPath(char *path)
 //
 //	Returns: TRUE if file opened successfully, FALSE if not
 
-bool DbgSetLogFile(ulong src, char *name)
+bool DbgSetLogFile(uint32_t src, int8_t *name)
 {
-	int index,slot;
-	uchar *pfi;
+	int32_t index,slot;
+	uint8_t *pfi;
 	DbgLogFile *pdlf;
 
 //	Look at current entries in these slots, reducing files' ref counts
@@ -856,12 +856,12 @@ INSERT_INDEX:
 //
 //		index = file index
 
-bool DbgOpenLogFile(int index)
+bool DbgOpenLogFile(int32_t index)
 {
 	DbgLogFile *pdlf;
 	DbgBank *pbank;
-	int bank,slot,len;
-	char fname[128];
+	int32_t bank,slot,len;
+	int8_t fname[128];
 
 //	Construct name from path & filename
 
@@ -931,12 +931,12 @@ void DbgCloseLogFiles()
 
 #pragma off(unreferenced);
 
-void DbgHandle(int reportType, ulong src, char *buff)
+void DbgHandle(int32_t reportType, uint32_t src, int8_t *buff)
 {
 static bool exiting = FALSE;
-	int slot,fileIndex;
-	uchar *pfi;
-	ulong didLogFile;
+	int32_t slot,fileIndex;
+	uint8_t *pfi;
+	uint32_t didLogFile;
 
 //	If user warning & user routine, call it
 
@@ -998,11 +998,11 @@ static bool exiting = FALSE;
 		}
 }
 
-char *dbgTags[] = {"","WARNING: ","WARN USER: ","ERROR: "};
-void DbgHandleC(int reportType, ulong src, char *fmt, __va_list __arg)
+int8_t *dbgTags[] = {"","WARNING: ","WARN USER: ","ERROR: "};
+void DbgHandleC(int32_t reportType, uint32_t src, int8_t *fmt, __va_list __arg)
 {
 	__va_list myarg;
-	char buff[1024];
+	int8_t buff[1024];
 
 //	Format message into buffer
 

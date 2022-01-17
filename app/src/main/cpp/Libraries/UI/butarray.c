@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "kbcook.h"
 #include "2dres.h"
 
-Gadget *gad_buttonarray_create(Gadget *parent, LGPoint coord, int z, int msize_x, int msize_y, int window_x, int window_y,
-   int bsize_x, int bsize_y, int num_sel, ushort options, TNGStyle *sty, char *name)
+Gadget *gad_buttonarray_create(Gadget *parent, LGPoint coord, int32_t z, int32_t msize_x, int32_t msize_y, int32_t window_x, int32_t window_y,
+   int32_t bsize_x, int32_t bsize_y, int32_t num_sel, uint16_t options, TNGStyle *sty, int8_t *name)
 {
    Gadget *retgad;
    LGRect dim;
@@ -59,17 +59,17 @@ Gadget *gad_buttonarray_create(Gadget *parent, LGPoint coord, int z, int msize_x
    return (retgad);
 }
 
-errtype gad_buttonarray_addbutton_at(Gadget *g, int type, void *disp_data, int coord_x, int coord_y)
+errtype gad_buttonarray_addbutton_at(Gadget *g, int32_t type, void *disp_data, int32_t coord_x, int32_t coord_y)
 {
    return(tng_buttonarray_addbutton_at(g->tng_data, type, disp_data, coord_x, coord_y));
 }
 
-errtype gad_buttonarray_addbutton(Gadget *g, int type, void *disp_data)
+errtype gad_buttonarray_addbutton(Gadget *g, int32_t type, void *disp_data)
 {
    return(tng_buttonarray_addbutton(g->tng_data, type, disp_data));
 }
 
-errtype gad_buttonarray_setoffset(Gadget *g, int offset_x, int offset_y)
+errtype gad_buttonarray_setoffset(Gadget *g, int32_t offset_x, int32_t offset_y)
 {
    return(tng_buttonarray_setoffset(g->tng_data, offset_x, offset_y));
 }

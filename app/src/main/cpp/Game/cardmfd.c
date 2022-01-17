@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cybstrng.h"
 #include "gr2ss.h"
 
-void mfd_accesscard_expose(MFD* mfd, ubyte control);
+void mfd_accesscard_expose(MFD* mfd, uint8_t control);
 
 // ============================================================
 //                   ACCESS CARD MFD
@@ -61,10 +61,10 @@ void mfd_accesscard_expose(MFD* mfd, ubyte control);
 #define LEFT_X 2
 #define RIGHT_X (MFD_VIEW_WID - 2)
 #define CODES_WID (RIGHT_X - LEFT_X + 1)
-#define LAST_BITS(mfd) (*(ulong*)&(player_struct.mfd_func_data[MFD_CARD_FUNC][mfd*sizeof(int)]))
+#define LAST_BITS(mfd) (*(uint32_t*)&(player_struct.mfd_func_data[MFD_CARD_FUNC][mfd*sizeof(int32_t)]))
 #define ITEM_COLOR 0x5A
 
-void mfd_accesscard_expose(MFD* mfd, ubyte control)
+void mfd_accesscard_expose(MFD* mfd, uint8_t control)
 {
    bool full = control & MFD_EXPOSE_FULL;
    if (control == 0)  // MFD is drawing stuff
@@ -73,10 +73,10 @@ void mfd_accesscard_expose(MFD* mfd, ubyte control)
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
    {
-      extern int mfd_bmap_id(int);
-      int i;
-      ulong lastbits = LAST_BITS(mfd->id);
-      ulong bits = 0;
+      extern int32_t mfd_bmap_id(int32_t);
+      int32_t i;
+      uint32_t lastbits = LAST_BITS(mfd->id);
+      uint32_t bits = 0;
       // clear update rects
       mfd_clear_rects();
       // set up canvas
@@ -110,13 +110,13 @@ void mfd_accesscard_expose(MFD* mfd, ubyte control)
       // Lets see what access codes we have.
       if (full)
       {
-         short x = LEFT_X;
-         short y = DISPLAY_TOP_MARGIN;
-         short w,h;
+         int16_t x = LEFT_X;
+         int16_t y = DISPLAY_TOP_MARGIN;
+         int16_t w,h;
          bool old_wrap = mfd_string_wrap;
-         char buf[256] = "";
-         char *s = buf;
-         for (i = 1; i <= sizeof(ulong)*8; i++)
+         int8_t buf[256] = "";
+         int8_t *s = buf;
+         for (i = 1; i <= sizeof(uint32_t)*8; i++)
          {
             if (bits & (1 << i))
             {

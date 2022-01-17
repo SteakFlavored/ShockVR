@@ -81,13 +81,13 @@ extern Fixpoint Fixpoint_one_over_two_pi;
 class Fixpoint
 {
 
-friend Fixpoint rawConstruct( long );
+friend Fixpoint rawConstruct( int32_t );
 
 public:
 
    // The data is stored here.
    // ========================
-   long int val;
+   int32_t int32_t val;
 
 
 
@@ -97,8 +97,8 @@ public:
    // What?  Me not secure?  I'm no fascist.
    // =========================================================
 
-   ulong bits( void );
-   void setbits( ulong);
+   uint32_t bits( void );
+   void setbits( uint32_t);
 
 
 
@@ -113,13 +113,13 @@ public:
 
    Fixpoint( const Fixpoint & );
 
-   Fixpoint( int );
+   Fixpoint( int32_t );
 
-   Fixpoint( unsigned int );
+   Fixpoint( uint32_t );
 
-   Fixpoint( long int );
+   Fixpoint( int32_t int32_t );
 
-   Fixpoint( unsigned long int );
+   Fixpoint( uint32_t );
 
    Fixpoint( double );
 
@@ -131,9 +131,9 @@ public:
 
    float to_float( void ) const;
 
-   long int to_lint( void ) const;
+   int32_t int32_t to_lint( void ) const;
 
-   int to_int( void ) const;
+   int32_t to_int( void ) const;
 
    fix to_fix( void ) const;
 
@@ -171,9 +171,9 @@ public:
    Fixpoint& operator/=( Fixpoint );
 
 
-   Fixpoint& operator<<=(unsigned int);
+   Fixpoint& operator<<=(uint32_t);
 
-   Fixpoint& operator>>=(unsigned int);
+   Fixpoint& operator>>=(uint32_t);
 
 
    Fixpoint operator-( void ) const ;
@@ -181,40 +181,40 @@ public:
    Fixpoint operator+( void ) const ;
 
 
-   int operator<  ( const Fixpoint & ) const ;
+   int32_t operator<  ( const Fixpoint & ) const ;
 
-   int operator>  ( const Fixpoint & ) const ;
+   int32_t operator>  ( const Fixpoint & ) const ;
 
-   int operator<= ( const Fixpoint & fp2 ) const ;
+   int32_t operator<= ( const Fixpoint & fp2 ) const ;
 
-   int operator>= ( const Fixpoint & fp2 ) const ;
+   int32_t operator>= ( const Fixpoint & fp2 ) const ;
 
-   int operator== ( const Fixpoint & fp2 ) const ;
+   int32_t operator== ( const Fixpoint & fp2 ) const ;
 
-   int operator!= ( const Fixpoint & fp2 ) const ;
+   int32_t operator!= ( const Fixpoint & fp2 ) const ;
 
    // Signed shifts
    // =============
 
-   void shift(int);
-   Fixpoint shifted(int) const;
+   void shift(int32_t);
+   Fixpoint shifted(int32_t) const;
 
 
    // Fast comparisons with zero (maybe... perhaps Q(0) isn't so slow after all)
    // (and a trip down memory lane for FORTRAN-ites)
    // ====================================
 
-   int gt_zero() const;
+   int32_t gt_zero() const;
 
-   int ge_zero() const;
+   int32_t ge_zero() const;
 
-   int eq_zero() const;
+   int32_t eq_zero() const;
 
-   int ne_zero() const;
+   int32_t ne_zero() const;
 
-   int le_zero() const;
+   int32_t le_zero() const;
 
-   int lt_zero() const;
+   int32_t lt_zero() const;
 
 
 
@@ -224,7 +224,7 @@ public:
 
    friend inline Fixpoint  sqrt( Fixpoint );
    friend inline Fixpoint  exp( Fixpoint );
-   friend inline int floor( Fixpoint );
+   friend inline int32_t floor( Fixpoint );
    friend inline Fixpoint   sin( Fixpoint );
    friend inline Fixpoint   cos( Fixpoint );
    friend inline Fixpoint   tan( Fixpoint );
@@ -247,7 +247,7 @@ public:
 
 #ifdef FIXDEBUG
 
-   friend char *bitdump( Fixpoint & );
+   friend int8_t *bitdump( Fixpoint & );
 
 
    // Reporting.
@@ -255,7 +255,7 @@ public:
 
    static bool click_bool;
 
-   static ulong constructor_void,
+   static uint32_t constructor_void,
                 constructor_Fixpoint,
                 constructor_int,
                 constructor_uint,
@@ -263,27 +263,27 @@ public:
                 constructor_ulint,
                 constructor_double;
 
-   static ulong ass_Fixpoint,
+   static uint32_t ass_Fixpoint,
                 ass_int,
                 ass_uint,
                 ass_lint,
                 ass_ulint,
                 ass_double;
 
-   static ulong binary_add,
+   static uint32_t binary_add,
                 binary_sub,
                 binary_mul,
                 binary_div;
 
-   static ulong add_eq,
+   static uint32_t add_eq,
                 sub_eq,
                 mul_eq,
                 div_eq;
 
-   static ulong unary_minus,
+   static uint32_t unary_minus,
                 unary_plus ;
 
-   static ulong cond_l,
+   static uint32_t cond_l,
                 cond_g,
                 cond_le,
                 cond_ge,
@@ -305,8 +305,8 @@ public:
 // Constructors
 // ============
 
-inline ulong Fixpoint::bits( void ) { return (ulong)val; }
-inline void Fixpoint::setbits( ulong ul ) { val = ul; }
+inline uint32_t Fixpoint::bits( void ) { return (uint32_t)val; }
+inline void Fixpoint::setbits( uint32_t ul ) { val = ul; }
 
 inline Fixpoint::Fixpoint()
 { CLICK( constructor_void ); }                      // Hey, why not define our own....
@@ -314,23 +314,23 @@ inline Fixpoint::Fixpoint()
 inline Fixpoint::Fixpoint( const Fixpoint & fp )
 { CLICK( constructor_Fixpoint ); val = fp.val; }
 
-inline Fixpoint::Fixpoint( int i )
+inline Fixpoint::Fixpoint( int32_t i )
 { CLICK( constructor_int ); val = i<<SHIFTUP; }
 
-inline Fixpoint::Fixpoint( unsigned int i )
+inline Fixpoint::Fixpoint( uint32_t i )
 { CLICK( constructor_uint ); val = i<<SHIFTUP; }
 
-inline Fixpoint::Fixpoint( long int i )
+inline Fixpoint::Fixpoint( int32_t int32_t i )
 { CLICK( constructor_lint ); val = i<<SHIFTUP; }
 
-inline Fixpoint::Fixpoint( unsigned long int i )
+inline Fixpoint::Fixpoint( uint32_t i )
 { CLICK( constructor_ulint ); val = i<<SHIFTUP; }
 
 inline Fixpoint::Fixpoint( double d )
-{ CLICK( constructor_double); val = (long int)(d * SHIFTMULTIPLIER); }
+{ CLICK( constructor_double); val = (int32_t int)(d * SHIFTMULTIPLIER); }
 
 
-//inline Fixpoint rawConstruct( long l ) ¥¥¥ Removed inline.  Put code in fixpp.cc
+//inline Fixpoint rawConstruct( int32_t l ) ¥¥¥ Removed inline.  Put code in fixpp.cc
 
 
 
@@ -376,7 +376,7 @@ inline Fixpoint& Fixpoint::operator-=(Fixpoint fp2 )
 }
 
 /*
-long int _fix_do_mult( long int val1, long int val2 );
+int32_t int32_t _fix_do_mult( int32_t int32_t val1, int32_t int32_t val2 );
 #pragma aux _fix_do_mult =    \
    "imul    edx"              \
    "shrd    eax,edx,16"       \
@@ -399,7 +399,7 @@ inline Fixpoint& Fixpoint::operator*=(Fixpoint fp2 )
 }
 
 /*
-long int _fix_do_div( long int val1, long int val2 );
+int32_t int32_t _fix_do_div( int32_t int32_t val1, int32_t int32_t val2 );
 #pragma aux _fix_do_div =     \
    "mov     edx,eax"          \
    "sar     edx,16"           \
@@ -425,12 +425,12 @@ inline Fixpoint& Fixpoint::operator/=(Fixpoint fp2 )
 
 
 
-inline Fixpoint& Fixpoint::operator<<=(unsigned int n)
+inline Fixpoint& Fixpoint::operator<<=(uint32_t n)
 {  val<<=n;
    return *this;
 }
 
-inline Fixpoint& Fixpoint::operator>>=(unsigned int n)
+inline Fixpoint& Fixpoint::operator>>=(uint32_t n)
 {  val>>=n;
    return *this;
 }
@@ -500,24 +500,24 @@ inline Fixpoint Fixpoint::operator+( void ) const
    return *this;
 }
 
-inline void Fixpoint::shift(int n)
+inline void Fixpoint::shift(int32_t n)
 {  if (n>0) val<<=n;
    else if (n<0) val>>=(-n);
 }
 
-inline Fixpoint Fixpoint::shifted(int n) const
+inline Fixpoint Fixpoint::shifted(int32_t n) const
 {  Fixpoint r(*this);
    if (n>0) r.val<<=n;
    else if (n<0) r.val>>=(-n);
    return r;
 }
 
-inline Fixpoint operator<<(Fixpoint p,unsigned int n)
+inline Fixpoint operator<<(Fixpoint p,uint32_t n)
 {  p.val<<=n;
    return p;
 }
 
-inline Fixpoint operator>>(Fixpoint p,unsigned int n)
+inline Fixpoint operator>>(Fixpoint p,uint32_t n)
 {  p.val>>=n;
    return p;
 }
@@ -535,11 +535,11 @@ inline double Fixpoint::to_double( void ) const
 inline float Fixpoint::to_float( void ) const
 { return ((float) val) / SHIFTMULTIPLIER; }
 
-inline long int Fixpoint::to_lint( void ) const
+inline int32_t int32_t Fixpoint::to_lint( void ) const
 { return val >> SHIFTUP; }
 
-inline int Fixpoint::to_int( void ) const
-{ return (int) (val >> SHIFTUP); }
+inline int32_t Fixpoint::to_int( void ) const
+{ return (int32_t) (val >> SHIFTUP); }
 
 inline fix Fixpoint::to_fix( void ) const
 { return (fix) val; }
@@ -551,7 +551,7 @@ inline fixang Fixpoint::to_fixang( void ) const
    // for temp, 360 degrees = 1.0.
    // The lower 16 bits of the internal rep is the fixang.
 
-   return (ushort)temp.val;
+   return (uint16_t)temp.val;
 }
 
 
@@ -560,7 +560,7 @@ inline void Fixpoint::fix_to( fix f ) { val = f; }
 
 inline void Fixpoint::fixang_to( fixang f )
 {
-   val = ((long)(short)(f-1))+1;
+   val = ((int32_t)(int16_t)(f-1))+1;
    *this *= Fixpoint_two_pi;
 }
 
@@ -579,7 +579,7 @@ inline void Fixpoint::fixang_to( fixang f )
 //   <   //
 //       //
 ///////////
-inline int Fixpoint::operator< ( const Fixpoint & fp2 ) const
+inline int32_t Fixpoint::operator< ( const Fixpoint & fp2 ) const
 {
    CLICK( cond_l );
 
@@ -595,7 +595,7 @@ inline int Fixpoint::operator< ( const Fixpoint & fp2 ) const
 //   >   //
 //       //
 ///////////
-inline int Fixpoint::operator> ( const Fixpoint & fp2 ) const
+inline int32_t Fixpoint::operator> ( const Fixpoint & fp2 ) const
 {
    CLICK( cond_g );
 
@@ -611,7 +611,7 @@ inline int Fixpoint::operator> ( const Fixpoint & fp2 ) const
 //   <=   //
 //        //
 ////////////
-inline int Fixpoint::operator<= ( const Fixpoint & fp2 ) const
+inline int32_t Fixpoint::operator<= ( const Fixpoint & fp2 ) const
 {
    CLICK( cond_le );
 
@@ -626,7 +626,7 @@ inline int Fixpoint::operator<= ( const Fixpoint & fp2 ) const
 //   >=   //
 //        //
 ////////////
-inline int Fixpoint::operator>= ( const Fixpoint & fp2 ) const
+inline int32_t Fixpoint::operator>= ( const Fixpoint & fp2 ) const
 {
    CLICK( cond_ge );
 
@@ -640,7 +640,7 @@ inline int Fixpoint::operator>= ( const Fixpoint & fp2 ) const
 //   ==   //
 //        //
 ////////////
-inline int Fixpoint::operator== ( const Fixpoint & fp2 ) const
+inline int32_t Fixpoint::operator== ( const Fixpoint & fp2 ) const
 {
    CLICK( cond_eq );
 
@@ -655,7 +655,7 @@ inline int Fixpoint::operator== ( const Fixpoint & fp2 ) const
 //   !=   //
 //        //
 ////////////
-inline int Fixpoint::operator!= ( const Fixpoint & fp2 ) const
+inline int32_t Fixpoint::operator!= ( const Fixpoint & fp2 ) const
 {
    CLICK( cond_neq );
 
@@ -669,27 +669,27 @@ inline int Fixpoint::operator!= ( const Fixpoint & fp2 ) const
 //
 // ======================================
 
-inline int Fixpoint::gt_zero() const
+inline int32_t Fixpoint::gt_zero() const
 {  return (val>0);
 }
 
-inline int Fixpoint::ge_zero() const
+inline int32_t Fixpoint::ge_zero() const
 {  return (val>=0);
 }
 
-inline int Fixpoint::eq_zero() const
+inline int32_t Fixpoint::eq_zero() const
 {  return (val==0);
 }
 
-inline int Fixpoint::ne_zero() const
+inline int32_t Fixpoint::ne_zero() const
 {  return (val!=0);
 }
 
-inline int Fixpoint::le_zero() const
+inline int32_t Fixpoint::le_zero() const
 {  return (val<=0);
 }
 
-inline int Fixpoint::lt_zero() const
+inline int32_t Fixpoint::lt_zero() const
 {  return (val<0);
 }
 
@@ -705,42 +705,42 @@ inline int Fixpoint::lt_zero() const
 
 
 
-inline Fixpoint operator* ( int i, Fixpoint fp ) { return Fixpoint(i) * fp ; }
-inline Fixpoint operator* ( unsigned int i, Fixpoint fp ) { return Fixpoint(i) * fp ; }
-inline Fixpoint operator* ( long int i, Fixpoint fp ) { return Fixpoint(i) * fp ; }
-inline Fixpoint operator* ( unsigned long int i, Fixpoint fp ) { return Fixpoint(i) * fp ; }
+inline Fixpoint operator* ( int32_t i, Fixpoint fp ) { return Fixpoint(i) * fp ; }
+inline Fixpoint operator* ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) * fp ; }
+inline Fixpoint operator* ( int32_t int32_t i, Fixpoint fp ) { return Fixpoint(i) * fp ; }
+inline Fixpoint operator* ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) * fp ; }
 //inline Fixpoint operator* ( double d, Fixpoint fp ) { return Fixpoint(d) * fp ; }
 inline Fixpoint& operator* (const double& d, const Fixpoint& fp)
 {
 	Fixpoint c;
-	c.val = fix_mul((long int)(d * SHIFTMULTIPLIER), fp.val);
+	c.val = fix_mul((int32_t int)(d * SHIFTMULTIPLIER), fp.val);
 	return c;
 }
 
-//inline Fixpoint operator- ( int i, Fixpoint fp ) { return Fixpoint(i) - fp ; }
-//inline Fixpoint operator- ( unsigned int i, Fixpoint fp ) { return Fixpoint(i) - fp ; }
-//inline Fixpoint operator- ( long int i, Fixpoint fp ) { return Fixpoint(i) - fp ; }
-//inline Fixpoint operator- ( unsigned long int i, Fixpoint fp ) { return Fixpoint(i) - fp ; }
+//inline Fixpoint operator- ( int32_t i, Fixpoint fp ) { return Fixpoint(i) - fp ; }
+//inline Fixpoint operator- ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) - fp ; }
+//inline Fixpoint operator- ( int32_t int32_t i, Fixpoint fp ) { return Fixpoint(i) - fp ; }
+//inline Fixpoint operator- ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) - fp ; }
 //inline Fixpoint operator- ( double d, Fixpoint fp ) { return Fixpoint(d) - fp ; }
-inline Fixpoint& operator- ( const int& i, const Fixpoint& fp )
+inline Fixpoint& operator- ( const int32_t& i, const Fixpoint& fp )
 {
 	Fixpoint c;
 	c.val = (i << SHIFTUP) - fp.val;
 	return c;
 }
-inline Fixpoint& operator- ( const unsigned int& i, const Fixpoint& fp )
+inline Fixpoint& operator- ( const uint32_t& i, const Fixpoint& fp )
 {
 	Fixpoint c;
 	c.val = (i << SHIFTUP) - fp.val;
 	return c;
 }
-inline Fixpoint& operator- ( const long int& i, const Fixpoint& fp )
+inline Fixpoint& operator- ( const int32_t& i, const Fixpoint& fp )
 {
 	Fixpoint c;
 	c.val = (i << SHIFTUP) - fp.val;
 	return c;
 }
-inline Fixpoint& operator- ( const unsigned long int& i, const Fixpoint& fp )
+inline Fixpoint& operator- ( const uint32_t& i, const Fixpoint& fp )
 {
 	Fixpoint c;
 	c.val = (i << SHIFTUP) - fp.val;
@@ -749,29 +749,29 @@ inline Fixpoint& operator- ( const unsigned long int& i, const Fixpoint& fp )
 inline Fixpoint& operator- (const double& d, const Fixpoint& fp)
 {
 	Fixpoint c;
-	c.val = (long int)(d * SHIFTMULTIPLIER) - fp.val;
+	c.val = (int32_t int)(d * SHIFTMULTIPLIER) - fp.val;
 	return c;
 }
 
-inline Fixpoint operator+ ( int i, Fixpoint fp ) { return Fixpoint(i) + fp ; }
-inline Fixpoint operator+ ( unsigned int i, Fixpoint fp ) { return Fixpoint(i) + fp ; }
-inline Fixpoint operator+ ( long int i, Fixpoint fp ) { return Fixpoint(i) + fp ; }
-inline Fixpoint operator+ ( unsigned long int i, Fixpoint fp ) { return Fixpoint(i) + fp ; }
+inline Fixpoint operator+ ( int32_t i, Fixpoint fp ) { return Fixpoint(i) + fp ; }
+inline Fixpoint operator+ ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) + fp ; }
+inline Fixpoint operator+ ( int32_t int32_t i, Fixpoint fp ) { return Fixpoint(i) + fp ; }
+inline Fixpoint operator+ ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) + fp ; }
 inline Fixpoint operator+ ( double d, Fixpoint fp ) { return Fixpoint(d) + fp ; }
 
-inline Fixpoint operator/ ( int i, Fixpoint fp ) { return Fixpoint(i) / fp ; }
-inline Fixpoint operator/ ( unsigned int i, Fixpoint fp ) { return Fixpoint(i) / fp ; }
-inline Fixpoint operator/ ( long int i, Fixpoint fp ) { return Fixpoint(i) / fp ; }
-inline Fixpoint operator/ ( unsigned long int i, Fixpoint fp ) { return Fixpoint(i) / fp ; }
+inline Fixpoint operator/ ( int32_t i, Fixpoint fp ) { return Fixpoint(i) / fp ; }
+inline Fixpoint operator/ ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) / fp ; }
+inline Fixpoint operator/ ( int32_t int32_t i, Fixpoint fp ) { return Fixpoint(i) / fp ; }
+inline Fixpoint operator/ ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) / fp ; }
 inline Fixpoint operator/ ( double d, Fixpoint fp ) { return Fixpoint(d) / fp ; }
 
 
 #ifdef BADMIX
 
-inline Fixpoint operator*= ( int i, Fixpoint fp ) { return Fixpoint(i) *= fp ; }
-inline Fixpoint operator*= ( unsigned int i, Fixpoint fp ) { return Fixpoint(i) *= fp ; }
-inline Fixpoint operator*= ( long int i, Fixpoint fp ) { return Fixpoint(i) *= fp ; }
-inline Fixpoint operator*= ( unsigned long int i, Fixpoint fp ) { return Fixpoint(i) *= fp ; }
+inline Fixpoint operator*= ( int32_t i, Fixpoint fp ) { return Fixpoint(i) *= fp ; }
+inline Fixpoint operator*= ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) *= fp ; }
+inline Fixpoint operator*= ( int32_t int32_t i, Fixpoint fp ) { return Fixpoint(i) *= fp ; }
+inline Fixpoint operator*= ( uint32_t i, Fixpoint fp ) { return Fixpoint(i) *= fp ; }
 inline Fixpoint operator*= ( double d, Fixpoint fp ) { return Fixpoint(d) *= fp ; }
 
 #endif
@@ -831,7 +831,7 @@ inline istream& operator >> ( istream & is, Fixpoint &fp )
 // ====================================================
 
 /*
-int _fix_do_mul_div(int a,int b,int c);
+int32_t _fix_do_mul_div(int32_t a,int32_t b,int32_t c);
 #pragma aux _fix_do_mul_div = \
    "imul edx" \
    "idiv ebx" \
@@ -862,7 +862,7 @@ inline Fixpoint exp(Fixpoint a)
    return ans;
 }
 
-inline int floor( Fixpoint a )
+inline int32_t floor( Fixpoint a )
 {
    return a.val >> SHIFTUP;
 }

@@ -172,8 +172,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ome_light_ceil_set(me_ptr,v)   ((me_ptr)->flags = (((me_ptr)->flags & ~OLD_MAP_C_LIGHT_MASK) | ((v) << OLD_MAP_C_LIGHT_SHF)))
 
 // hmm something like this perhaps
-//#define ome_light_flr(me_ptr)      ( (((uchar *)&(ome_flags(me_ptr)))+1) & 0x0f )
-//#define ome_light_ceil(me_ptr)     ( (((uchar *)&(ome_flags(me_ptr)))+1) & 0xf0 )
+//#define ome_light_flr(me_ptr)      ( (((uint8_t *)&(ome_flags(me_ptr)))+1) & 0x0f )
+//#define ome_light_ceil(me_ptr)     ( (((uint8_t *)&(ome_flags(me_ptr)))+1) & 0xf0 )
 
 #define ome_bits_rend_set(me_ptr,v)     (ome_flags_set(me_ptr,(ome_flags(me_ptr) & ~OLD_MAP_REND_MASK) | ((v) << OLD_MAP_REND_SHF)  ))
 #define ome_bits_music_set(me_ptr,v)    (ome_flags_set(me_ptr,(ome_flags(me_ptr) & ~OLD_MAP_MUSIC_MASK) | ((v) << OLD_MAP_MUSIC_SHF)  ))

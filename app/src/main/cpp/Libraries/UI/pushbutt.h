@@ -80,9 +80,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Prototypes
 
 // Creates a pushbutton, which can display stuff and respond to basic events.
-Gadget *gad_pushbutton_create(Gadget *parent, LGRect *dim, int z, int type, void *disp_data, TNGStyle *sty, char *name);
+Gadget *gad_pushbutton_create(Gadget *parent, LGRect *dim, int32_t z, int32_t type, void *disp_data, TNGStyle *sty, int8_t *name);
 
-Gadget *gad_pushbutton_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int button_type, void *display_data, LGPoint size);
+Gadget *gad_pushbutton_create_from_tng(void *ui_data, LGPoint loc, TNG **pptng, TNGStyle *sty, int32_t button_type, void *display_data, LGPoint size);
 
 // Globals
 

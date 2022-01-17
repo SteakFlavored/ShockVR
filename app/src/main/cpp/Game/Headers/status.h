@@ -196,7 +196,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Draw the background for the biorhythm thing
 
-void status_bio_set(short bio_mode);
+void status_bio_set(int16_t bio_mode);
 void status_bio_init(void);
 void status_bio_start(void);
 void status_bio_end(void);
@@ -207,7 +207,7 @@ extern void status_vitals_init();
 // Add a variable to be tracked by the biorhythm monitor.
 // Track the NULL pointer to clear out a track slot.
 // special - parameters to set characteristics of track (not in use currently - for future use cause we're powerful)
-errtype status_bio_add(int *var, int max_value, int update_time, int track_number, int tail_length, uchar special);
+errtype status_bio_add(int32_t *var, int32_t max_value, int32_t update_time, int32_t track_number, int32_t tail_length, uint8_t special);
 
 // Draw the biorhythm quasi-persistent thing.  Keep track of
 // previous draws to do clever incremental strategies.
@@ -220,7 +220,7 @@ errtype status_vitals_update(bool Full_Redraw);
 // Globals
 
 extern bool flatline_heart;
-extern uchar chi_amp;
+extern uint8_t chi_amp;
 
 #endif //__STATUS_H
 

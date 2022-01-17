@@ -57,12 +57,12 @@ void init_input(void);
 void install_motion_mouse_handler(LGRegion* r,frc* fr);
 void install_motion_keyboard_handler(LGRegion* r);
 void pop_cursor_object(void);
-void push_cursor_object(short id);
+void push_cursor_object(int16_t id);
 void reset_input_system(void);
 
 // -------
 // GLOBALS
 // ------
-extern int input_cursor_mode;
-extern short object_on_cursor;
+extern int32_t input_cursor_mode;
+extern int16_t object_on_cursor;
 #endif

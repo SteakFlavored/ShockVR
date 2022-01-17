@@ -32,16 +32,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define FONT_IS_MONO(fontptr) ((fontptr)->id != 0xCCCC)
 
-void draw_shadowed_string(char* s, short x, short y,bool shadow);
+void draw_shadowed_string(int8_t* s, int16_t x, int16_t y,bool shadow);
 
 
 #ifdef BROKEN_SAFE_CLIPRECT
 #define safe_set_cliprect(a,b,c,d) \
    do { \
-        short _safe_x = a; \
-        short _safe_y = b; \
-        short _safe_p = c; \
-        short _safe_q = d; \
+        int16_t _safe_x = a; \
+        int16_t _safe_y = b; \
+        int16_t _safe_p = c; \
+        int16_t _safe_q = d; \
         gr_safe_set_cliprect(_safe_x,_safe_y,_safe_p,_safe_q); \
       } while(0)
 #else

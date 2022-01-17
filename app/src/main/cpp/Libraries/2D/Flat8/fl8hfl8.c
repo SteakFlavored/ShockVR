@@ -42,15 +42,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* draw an unclipped, horizontally flipped flat 8 bitmap to a flat 8
    canvas. */
-void flat8_hflip_flat8_ubitmap (grs_bitmap *bm, short x, short y)
+void flat8_hflip_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y)
 {
-	short w;                   /* bitmap width */
-	short h;                   /* height */
-	uchar *src;                /* pointer into source bitmap */
-	uchar *dst;                /* pointer into canvas memory */
-	ushort	brow = bm->row;
-	ushort	grow = grd_bm.row;
-	short	bw = bm->w;
+	int16_t w;                   /* bitmap width */
+	int16_t h;                   /* height */
+	uint8_t *src;                /* pointer into source bitmap */
+	uint8_t *dst;                /* pointer into canvas memory */
+	uint16_t	brow = bm->row;
+	uint16_t	grow = grd_bm.row;
+	int16_t	bw = bm->w;
 
 	h = bm->h;
 	src = bm->bits;

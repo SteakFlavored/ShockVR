@@ -59,7 +59,7 @@ LGPoint			popup_hotspots[NUM_POPUPS] = 	// in 0-16 dimension-independent units
 
 void init_popups(void)
 {
-	for (int i = 0; i < NUM_POPUPS; i++)
+	for (int32_t i = 0; i < NUM_POPUPS; i++)
 	{
 		Ref id = MKREF(RES_popups,i);
 		FrameDesc* f = (FrameDesc *)RefGet(id);
@@ -72,24 +72,24 @@ void init_popups(void)
 }
 
 
-void make_popup_cursor(LGCursor* c, grs_bitmap* bm, char* s, uint tmplt,bool allocate, LGPoint offset)
+void make_popup_cursor(LGCursor* c, grs_bitmap* bm, int8_t* s, uint32_t tmplt,bool allocate, LGPoint offset)
 {
 	LGRect* r = &popup_rects[tmplt];
 	grs_bitmap* pbm = &popup_bitmaps[tmplt];
 	grs_canvas gc;
-	short x,y,w,h;
+	int16_t x,y,w,h;
 	LGPoint p,ph;
-	uchar old_over = gr2ss_override;
-	uchar *bptr;
-	uchar* bits = bm->bits;
-	extern void ss_scale_string(char *s, short x, short y);
+	uint8_t old_over = gr2ss_override;
+	uint8_t *bptr;
+	uint8_t* bits = bm->bits;
+	extern void ss_scale_string(int8_t *s, int16_t x, int16_t y);
 
 	MouseLock++;
 	*bm = *pbm;
 
 	if (allocate)
 	{
-		bptr = (uchar *)NewPtr(bm->w*bm->h);
+		bptr = (uint8_t *)NewPtr(bm->w*bm->h);
 		if (bptr == NULL)
 			critical_error(CRITERR_MEM|4);
 	}
@@ -121,13 +121,13 @@ void make_popup_cursor(LGCursor* c, grs_bitmap* bm, char* s, uint tmplt,bool all
 	MouseLock--;
 }
 
-void load_string_array(Ref first, char* arry[], char buf[], int bufsz, int n)
+void load_string_array(Ref first, int8_t* arry[], int8_t buf[], int32_t bufsz, int32_t n)
 {
-   int off = 0;
-   int i;
+   int32_t off = 0;
+   int32_t i;
    for (i = 0; i < n; i++)
    {
-      short sz = bufsz - off;
+      int16_t sz = bufsz - off;
       get_string(first+i,buf+off,sz);
       arry[i] = buf + off;
       off += strlen(buf+off) +1;
@@ -136,21 +136,21 @@ void load_string_array(Ref first, char* arry[], char buf[], int bufsz, int n)
 }
 
 #ifdef SVGA_SUPPORT
-static char cursor_buf[4096];
+static int8_t cursor_buf[4096];
 #else
-static char cursor_buf[512];
+static int8_t cursor_buf[512];
 #endif
 
-void make_email_cursor(LGCursor* c, grs_bitmap* bm, uchar page, bool init)
+void make_email_cursor(LGCursor* c, grs_bitmap* bm, uint8_t page, bool init)
 {
    grs_canvas gc;
-   short x,y,w,h;
-   int len;
+   int16_t x,y,w,h;
+   int32_t len;
    LGPoint p;
-   char s[BUF_SIZ];
+   int8_t s[BUF_SIZ];
 #ifdef SVGA_SUPPORT
-   short temp;
-   uchar old_over = gr2ss_override;
+   int16_t temp;
+   uint8_t old_over = gr2ss_override;
    gr2ss_override = OVERRIDE_ALL;
    ss_set_hack_mode(2,&temp);
 #endif
@@ -171,7 +171,7 @@ void make_email_cursor(LGCursor* c, grs_bitmap* bm, uchar page, bool init)
    MouseLock++;
    if (sizeof(cursor_buf) < w*h)
       critical_error(CRITERR_MEM|7);
-   bm->bits = (uchar *)cursor_buf;
+   bm->bits = (uint8_t *)cursor_buf;
    gr_make_canvas(bm,&gc);
    gr_push_canvas(&gc);
    gr_clear(0);

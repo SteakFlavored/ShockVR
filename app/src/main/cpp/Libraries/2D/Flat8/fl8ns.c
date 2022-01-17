@@ -38,11 +38,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fl8tf.h"
 
 // prototypes
-int gri_tluc8_scale_umap_loop(grs_tmap_loop_info *tli);
+int32_t gri_tluc8_scale_umap_loop(grs_tmap_loop_info *tli);
 
-int gri_tluc8_scale_umap_loop(grs_tmap_loop_info *tli) {
+int32_t gri_tluc8_scale_umap_loop(grs_tmap_loop_info *tli) {
    fix u,ul,du;
-   uchar *pl,*pr;
+   uint8_t *pl,*pr;
 
    pl=tli->d+fix_cint(tli->left.x);
    pr=tli->d+fix_cint(tli->right.x);
@@ -51,8 +51,8 @@ int gri_tluc8_scale_umap_loop(grs_tmap_loop_info *tli) {
    du=fix_div(tli->right.u-ul,tli->right.x-tli->left.x);
    ul+=fix_mul(du,fix_ceil(tli->left.x)-tli->left.x);
    do {
-      uchar *p_dst,k;
-      uchar *p_src=tli->bm.bits+tli->bm.row*fix_int(tli->left.v);
+      uint8_t *p_dst,k;
+      uint8_t *p_src=tli->bm.bits+tli->bm.row*fix_int(tli->left.v);
       switch (tli->bm.hlog) {
       case GRL_OPAQUE:
          for (p_dst=pl,u=ul; p_dst<pr; p_dst++) {

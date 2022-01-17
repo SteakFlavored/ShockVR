@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "init.h"
 #include "initint.h"
 
-int gr_init(void)
+int32_t gr_init(void)
 {
 // MLA - ditched this, because there is only one mode to detect on the Mac
 //   grd_detect_func=svga_detect;

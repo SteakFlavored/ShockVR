@@ -39,20 +39,20 @@ bool sfx_on = TRUE;
 
 #define NUM_DIGI_FX  114
 
-char volumes[NUM_DIGI_FX];
-char flags[NUM_DIGI_FX];
-char priorities[NUM_DIGI_FX];
+int8_t volumes[NUM_DIGI_FX];
+int8_t flags[NUM_DIGI_FX];
+int8_t priorities[NUM_DIGI_FX];
 
 // This has to be changed if the resource changes location!
 #define SFX_BASE 201
 
-extern uchar curr_alog_vol;
+extern uint8_t curr_alog_vol;
 
 #ifdef NOT_YET
 
 //#define ASYNCH_DIGI
 
-int digi_timer_id;
+int32_t digi_timer_id;
 void start_asynch_digi_fx()
 {
 #ifdef ASYNCH_DIGI
@@ -97,8 +97,8 @@ void clear_digi_fx()
 errtype digifx_init()
 {
 /* KLC - almost none of this is needed now
-   int fp;
-   char fname[80];
+   int32_t fp;
+   int8_t fname[80];
    extern Datapath DataDirPath;
    extern void asynch_digi_fx(void);
 
@@ -134,20 +134,20 @@ errtype digifx_init()
 #define MAX_DIGIFX_DIST fix_make(15,0)
 #define MIN_DIGIFX_DIST fix_make(2,0)
 
-extern int curr_alog;
+extern int32_t curr_alog;
 
 // ------------
 //  PROTOYTPES
 // ------------
-int compute_sfx_vol(ushort x1, ushort y1, ushort x2, ushort y2);
-int compute_sfx_pan(ushort x1, ushort y1, ushort x2, ushort y2, fixang our_ang);
+int32_t compute_sfx_vol(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+int32_t compute_sfx_pan(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, fixang our_ang);
 bool set_sample_pan_gain(snd_digi_parms *sdp);
 
 
-int compute_sfx_vol(ushort x1, ushort y1, ushort x2, ushort y2)
+int32_t compute_sfx_vol(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
    fix dx,dy,dist;
-   int retval;
+   int32_t retval;
 
    dx = fix_from_obj_coord(x1) - fix_from_obj_coord(x2);
    dy = fix_from_obj_coord(y1) - fix_from_obj_coord(y2);
@@ -164,11 +164,11 @@ int compute_sfx_vol(ushort x1, ushort y1, ushort x2, ushort y2)
 }
 
 // i should just fix this....
-int compute_sfx_pan(ushort x1, ushort y1, ushort x2, ushort y2, fixang our_ang)
+int32_t compute_sfx_pan(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, fixang our_ang)
 {
    fixang sfx_ang;
    fix dx,dy;
-   int retval;
+   int32_t retval;
 
    dx = fix_from_obj_coord(x1) - fix_from_obj_coord(x2);
    dy = fix_from_obj_coord(y1) - fix_from_obj_coord(y2);
@@ -186,13 +186,13 @@ int compute_sfx_pan(ushort x1, ushort y1, ushort x2, ushort y2, fixang our_ang)
 // sound system, the sample should be politely obliterated out of existence
 bool set_sample_pan_gain(snd_digi_parms *sdp)
 {
-   uchar temp_vol,vol;
-   uint raw_data = (uint)sdp->data;
-   extern uchar curr_sfx_vol;
+   uint8_t temp_vol,vol;
+   uint32_t raw_data = (uint)sdp->data;
+   extern uint8_t curr_sfx_vol;
 
    if (raw_data & 0x80000000)
    {
-      short x,y,i;
+      int16_t x,y,i;
       extern height_semaphor h_sems[NUM_HEIGHT_SEMAPHORS];
       height_semaphor h;
 
@@ -245,9 +245,9 @@ bool set_sample_pan_gain(snd_digi_parms *sdp)
 #ifdef NOT_YET //¥¥¥
 
 #pragma disable_message(202)
-int digifx_volume_shift(short x, short y, short z, short phi, short theta, int basevol)
+int32_t digifx_volume_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta, int32_t basevol)
 {
-   int retval;
+   int32_t retval;
    // Note that "x" is really the object ID of the thing we care about
    // unless phi is set, in which case phi and theta are a literal location to use
    if (x != OBJ_NULL)
@@ -262,9 +262,9 @@ int digifx_volume_shift(short x, short y, short z, short phi, short theta, int b
    return(retval);
 }
 
-int digifx_pan_shift(short x, short y, short z, short phi, short theta)
+int32_t digifx_pan_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta)
 {
-   int retval;
+   int32_t retval;
    // Note that "x" is really the object ID of the thing we care about
    // unless phi is set, in which case phi and theta are a literal location to use
    if (x != OBJ_NULL)
@@ -281,21 +281,21 @@ int digifx_pan_shift(short x, short y, short z, short phi, short theta)
 
 #endif  // NOT_YET ¥¥¥
 
-uchar sfx_volume_levels[] = {0, 0x9, 0xF};
+uint8_t sfx_volume_levels[] = {0, 0x9, 0xF};
 #define ALWAYS_QUEUE_TOLERANCE   2
 #define NO_GAIN_THRESHOLD     0x6A
 #define HARSH_GAIN_THRESHOLD  0xBA
 
 snd_digi_parms s_dprm;
-char secret_global_pan=SND_DEF_PAN;
+int8_t secret_global_pan=SND_DEF_PAN;
 
-int play_digi_fx_master(int sfx_code, int num_loops, ObjID id, ushort x, ushort y)
+int32_t play_digi_fx_master(int32_t sfx_code, int32_t num_loops, ObjID id, uint16_t x, uint16_t y)
 {
    Id vocRes;
-   int retval, real_code = sfx_code, len;
-   uchar *addr;
+   int32_t retval, real_code = sfx_code, len;
+   uint8_t *addr;
    extern bool sfx_on;
-   extern uchar curr_sfx_vol;
+   extern uint8_t curr_sfx_vol;
 
    if (!sfx_on)
       return -2;
@@ -350,7 +350,7 @@ int play_digi_fx_master(int sfx_code, int num_loops, ObjID id, ushort x, ushort 
    // have to hash x,y no id to a secret ID code, eh?
    s_dprm.flags=0;
    len=ResSize(vocRes);
-   addr=(uchar *)ResLock(vocRes);
+   addr=(uint8_t *)ResLock(vocRes);
    if (addr!=NULL)
 	   retval=snd_sample_play(vocRes,len,addr,&s_dprm);
    else
@@ -364,9 +364,9 @@ int play_digi_fx_master(int sfx_code, int num_loops, ObjID id, ushort x, ushort 
 }
 
 // scan through the whole list
-bool digi_fx_playing(int fx_id, int *handle_ptr)
+bool digi_fx_playing(int32_t fx_id, int32_t *handle_ptr)
 {
-	int 			i;
+	int32_t 			i;
 	SCStatus	stat;
 	snd_digi_parms *sdp;
 
