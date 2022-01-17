@@ -536,7 +536,7 @@ void DbgReportWarning(int8_t *msg, ...)
 //
 //		src = message source
 //
-//	Returns: TRUE if should do spew, FALSE if not
+//	Returns: true if should do spew, false if not
 
 bool DbgSpewTest(uint32_t src)
 {
@@ -545,10 +545,10 @@ bool DbgSpewTest(uint32_t src)
 	bank = DBGBANK(src);
 	if (((dbgBank[bank].gate[DG_MONO] & src) != (src & DBG_SLOT_MASK)) &&
 		((dbgBank[bank].gate[DG_FILE] & src & DBG_SLOT_MASK) != (src & DBG_SLOT_MASK)))
-			return FALSE;
+			return false;
 
 	spewSrc = src;
-	return TRUE;
+	return true;
 }
 
 //	----------------------------------------------------------
@@ -766,7 +766,7 @@ void DbgSetLogPath(int8_t *path)
 //		src  = bank & slots
 //		name = filename, or NULL to remove from file logging
 //
-//	Returns: TRUE if file opened successfully, FALSE if not
+//	Returns: true if file opened successfully, false if not
 
 bool DbgSetLogFile(uint32_t src, int8_t *name)
 {
@@ -811,7 +811,7 @@ bool DbgSetLogFile(uint32_t src, int8_t *name)
 			break;
 		}
 
-//	If not found, try to add new one, if no room return FALSE
+//	If not found, try to add new one, if no room return false
 //	If found empty slot, open file & insert it
 
 	if (index == NUM_DBG_LOGFILES)
@@ -822,10 +822,10 @@ bool DbgSetLogFile(uint32_t src, int8_t *name)
 				break;
 			}
 		if (index == NUM_DBG_LOGFILES)
-			return FALSE;
+			return false;
 		strncpy(dbgLogFile[index].name, name, MAX_DBG_LOGFILENAME);
-		if (DbgOpenLogFile(index) == FALSE)
-			return FALSE;
+		if (DbgOpenLogFile(index) == false)
+			return false;
 		}
 
 //	Got valid index, enter into all slot fields
@@ -845,7 +845,7 @@ INSERT_INDEX:
 	if (index)
 		dbgBank[DBGBANK(src)].gate[DG_FILE] |= src;
 
-	return TRUE;
+	return true;
 }
 
 //	----------------------------------------------------------
@@ -893,10 +893,10 @@ bool DbgOpenLogFile(int32_t index)
 					}
 				}
 			}
-		return FALSE;
+		return false;
 		}
 
-	return(TRUE);
+	return(true);
 }
 
 //	-----------------------------------------------------------
@@ -933,7 +933,7 @@ void DbgCloseLogFiles()
 
 void DbgHandle(int32_t reportType, uint32_t src, int8_t *buff)
 {
-static bool exiting = FALSE;
+static bool exiting = false;
 	int32_t slot,fileIndex;
 	uint8_t *pfi;
 	uint32_t didLogFile;
@@ -993,7 +993,7 @@ static bool exiting = FALSE;
 
 	if ((reportType == DBG_ERROR) && !exiting)
 		{
-		exiting = TRUE;
+		exiting = true;
 		Exit(errErrCode, buff);
 		}
 }

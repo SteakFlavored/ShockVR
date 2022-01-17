@@ -151,7 +151,7 @@ void mfd_gump_expose(MFD* mfd, uint8_t control)
          gr_string_size(s,&x,&y);
          x = (MFD_VIEW_WID - x) /2;
          y = (MFD_VIEW_HGT - y) /2;
-         mfd_draw_string(s,x,y,GREEN_YELLOW_BASE,TRUE);
+         mfd_draw_string(s,x,y,GREEN_YELLOW_BASE,true);
       }
       else
          for (i = 0; i < gump_num_objs; i++)
@@ -205,22 +205,22 @@ bool gump_pickup(int8_t row)
    extern void check_panel_ref(bool puntme);
 
 //KLC   mouse_unconstrain();
-   if (row < 0 || row >= gump_num_objs || gump_idlist[row] == OBJ_NULL) return FALSE;
+   if (row < 0 || row >= gump_num_objs || gump_idlist[row] == OBJ_NULL) return false;
    push_cursor_object(gump_idlist[row]);
    gump_idlist[row] = OBJ_NULL;
    if (row == gump_num_objs-1)
       gump_num_objs--;
    LAST_INPUT_ROW = 0xFF;
-   LAST_DOUBLE = FALSE;
+   LAST_DOUBLE = false;
    // Here's where we update the container object
    is_container(cont,&d1,&d2);
    container_stuff(gump_idlist,gump_num_objs,d1,d2);
 
    if(*d1==0 && (d2==NULL || *d2==0))
-      check_panel_ref(TRUE); // punt empty gump
+      check_panel_ref(true); // punt empty gump
    else
-      mfd_notify_func(MFD_GUMP_FUNC,MFD_ITEM_SLOT,FALSE,MFD_ACTIVE,FALSE);
-   return TRUE;
+      mfd_notify_func(MFD_GUMP_FUNC,MFD_ITEM_SLOT,false,MFD_ACTIVE,false);
+   return true;
 }
 
 bool gump_get_useful(void)
@@ -236,7 +236,7 @@ bool gump_get_useful(void)
          }
       }
    }
-   return FALSE;
+   return false;
 }
 
 bool mfd_gump_handler(MFD* m, uiEvent* uie)
@@ -262,17 +262,17 @@ bool mfd_gump_handler(MFD* m, uiEvent* uie)
    }
 #endif // RIGHT_BUTTON_GUMP_UI
    if (row < 0 || row >= gump_num_objs)
-      return FALSE;
+      return false;
    if (LAST_DOUBLE && (e->action & MOUSE_LUP))
    {
       return gump_pickup(row);
    }
    if (!(e->action & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)))
-      return FALSE;
+      return false;
 #ifdef RIGHT_BUTTON_GUMP_UI
    if (!(e->action & (MOUSE_LDOWN|MOUSE_RDOWN|UI_MOUSE_LDOUBLE))
       && !(e->buttons & (1 << MOUSE_RBUTTON)))
-         return FALSE;
+         return false;
 #endif // RIGHT_BUTTON_GUMP_UI
    // Hey, this is a little extra work, but it gets the job done.
    bm = bitmaps_2d[OPNUM(gump_idlist[row])];
@@ -282,10 +282,10 @@ bool mfd_gump_handler(MFD* m, uiEvent* uie)
    {
       if (e->action == UI_MOUSE_LDOUBLE)
       {
-         LAST_DOUBLE = TRUE;
-         return TRUE;
+         LAST_DOUBLE = true;
+         return true;
       }
-      LAST_DOUBLE = FALSE;
+      LAST_DOUBLE = false;
       if (e->action & MOUSE_LDOWN)
       {
          extern void look_at_object(ObjID);
@@ -297,7 +297,7 @@ bool mfd_gump_handler(MFD* m, uiEvent* uie)
       {
 //KLC         mouse_constrain_xy(m->rect.ul.x,m->rect.ul.y,m->rect.lr.x-1,m->rect.lr.y-1);
          LAST_INPUT_ROW = row;
-         return TRUE;
+         return true;
       }
       if (e->action & MOUSE_RUP)
          return gump_pickup(row);
@@ -307,7 +307,7 @@ bool mfd_gump_handler(MFD* m, uiEvent* uie)
    {
       return gump_pickup(row);
    }
-   LAST_DOUBLE = FALSE;
+   LAST_DOUBLE = false;
 //KLC   mouse_unconstrain();
-   return FALSE;
+   return false;
 }

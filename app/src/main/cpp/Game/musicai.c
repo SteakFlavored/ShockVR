@@ -81,9 +81,9 @@ int8_t tmode_time = 0;
 int32_t actual_score = 0;
 uint8_t decon_count = 0;
 uint8_t decon_time = 8;
-bool in_deconst = FALSE, old_deconst = FALSE;
-bool in_peril = FALSE;
-bool just_started = TRUE;
+bool in_deconst = false, old_deconst = false;
+bool in_peril = false;
+bool just_started = true;
 int32_t score_playing = 0;
 int16_t curr_ramp_time, curr_ramp;
 int8_t curr_prioritize, curr_crossfade;
@@ -113,7 +113,7 @@ int32_t mai_damage_sum = 0;
 // How long an attack keeps us in combat music mode
 int32_t mai_combat_length = 1000;
 
-bool bad_digifx = FALSE;
+bool bad_digifx = false;
 
 //KLC - no longer need this   Datapath music_dpath;
 
@@ -226,7 +226,7 @@ void mlimbs_do_ai()
 			{
 				musicai_shutdown();															// stop playing current tune
 				make_request(0, play_me);												// setup new tune
-				musicai_reset(FALSE);														// reset MLIMBS and
+				musicai_reset(false);														// reset MLIMBS and
 				MacTuneStartCurrentTheme();												// start playing the new tune.
 			}
 			else
@@ -242,13 +242,13 @@ void mlimbs_do_ai()
 		if (gReadyToQueue)
 		{
 			if (!global_fullmap->cyber)
-				check_asynch_ai(TRUE);
+				check_asynch_ai(true);
 			int32_t	pid = current_request[0].pieceID;
 			if (pid != 255)										// If there is a theme to play,
 			{
 				MacTuneQueueTune(pid);						// Queue it up.
 				mlimbs_counter++;							// Tell mlimbs we've queued another tune.
-				gReadyToQueue = FALSE;
+				gReadyToQueue = false;
 			}
 		}
 
@@ -257,7 +257,7 @@ void mlimbs_do_ai()
 		if (gTuneDone)
 		{
 			MacTunePrimeTimer();
-			gTuneDone = FALSE;
+			gTuneDone = false;
 		}
    }
 }
@@ -273,7 +273,7 @@ void mlimbs_do_credits_ai()
       ai_cycle = 0;
       grind_credits_music_ai();
       mlimbs_preload_requested_timbres();
-      mlimbs_semaphore = FALSE;
+      mlimbs_semaphore = false;
    }
 }
 
@@ -338,7 +338,7 @@ errtype mai_player_death()
       mlimbs_combat = 0;
       musicai_shutdown();
       make_request(0, transition_table[TRANS_DEATH]);
-      musicai_reset(FALSE);
+      musicai_reset(false);
       MacTuneStartCurrentTheme();
    }
    return(OK);
@@ -349,7 +349,7 @@ errtype mlimbs_AI_init(void)
    mlimbs_boredom = 0;
    old_bore = 0;
    mlimbs_monster = NO_MONSTER;
-   wait_flag = FALSE;
+   wait_flag = false;
    random_flag = 0;
    boring_count = 0;
    ai_cycle = 0;
@@ -490,8 +490,8 @@ errtype blank_theme_data()
 }
 */
 
-//¥¥¥ don't need?     bool voices_4op = FALSE;
-//¥¥¥ don't need?     bool digi_gain = FALSE;
+//¥¥¥ don't need?     bool voices_4op = false;
+//¥¥¥ don't need?     bool digi_gain = false;
 void load_score_guts(int8_t score_playing)
 {
 	int32_t 		rv;
@@ -513,7 +513,7 @@ message_info(temp);
 	musicai_shutdown();
 	rv = MacTuneLoadTheme(&themeSpec, score_playing);
 	if (rv == 1)
-		musicai_reset(TRUE);
+		musicai_reset(true);
 	else  //¥¥¥ handle this a better way.
 		DebugStr("\pLoad theme failed!");
 }
@@ -602,7 +602,7 @@ static int8_t def_sound_path[]="sound";
 #ifdef SECRET_SUPPORT
 FILE *secret_fp=NULL;
 int8_t secret_dc_buf[10000];
-volatile int8_t secret_update=FALSE;
+volatile int8_t secret_update=false;
 void secret_closedown(void)
 {
    if (secret_fp!=NULL)
@@ -620,7 +620,7 @@ errtype music_init()
 {
 /*¥¥¥ put in later
    int32_t i,j;
-   bool gm=FALSE;
+   bool gm=false;
    int16_t dev_info[DEV_TYPES][DEV_PARMS];
    int8_t s[64],path[64];
    audio_card card_info;
@@ -648,7 +648,7 @@ errtype music_init()
    // can we make this actually know what is going on?
    switch (dev_info[MIDI_CARD])
    {     // probably should be in the library, not here...
-   case GRAVISULTRASTUPID: case MT32: case GENMIDI: case AWE32: case SOUNDSCAPE: case RAP_10: gm=TRUE; break;
+   case GRAVISULTRASTUPID: case MT32: case GENMIDI: case AWE32: case SOUNDSCAPE: case RAP_10: gm=true; break;
    }
 
    // add contents of CFG_SOUNDVAR
@@ -731,7 +731,7 @@ errtype music_init()
       if (snd_start_midi(fill_audio_card(&card_info,dev_info[MIDI_TYPE]))!=SND_OK)
       {
          Warning(("Device %d not loaded for Midi at %x %x %x %x\n",dev_info[MIDI_CARD],dev_info[MIDI_IO],dev_info[MIDI_IRQ],dev_info[MIDI_DMA],dev_info[MIDI_DRQ]));
-         music_card = FALSE;
+         music_card = false;
          curr_vol_lev = 0;
       }
       else
@@ -747,13 +747,13 @@ errtype music_init()
       if (snd_start_digital(fill_audio_card(&card_info,dev_info[DIGI_TYPE]))!=SND_OK)
 	   {
 	      Warning(("Device %d not loaded for DigiFx at %x %x %x %x\n",dev_info[DIGI_CARD],dev_info[DIGI_IO],dev_info[DIGI_IRQ],dev_info[DIGI_DMA],dev_info[DIGI_DRQ]));
-	      sfx_card = FALSE;
+	      sfx_card = false;
          curr_sfx_vol = 0;
 	   }
    	else  // note this use to allocate double buffer space here
       {
          snd_set_digital_channels(cur_digi_channels);
-//¥¥¥         digi_gain = TRUE;             // ie look at detail and stuff
+//¥¥¥         digi_gain = true;             // ie look at detail and stuff
       }
 	}
    else
@@ -761,7 +761,7 @@ errtype music_init()
 
    if (sfx_card)
    {
-      sfx_on=TRUE;
+      sfx_on=true;
 #ifdef AUDIOLOGS
       audiolog_init();
 #endif
@@ -773,20 +773,20 @@ errtype music_init()
 //¥¥¥	{
          		if (MacTuneInit() == 0)						// If no error, go ahead and start up.
          		{
-				music_on = mlimbs_on = TRUE;
+				music_on = mlimbs_on = true;
 				mlimbs_AI_init();
 			}
 			else													// else turn off the music globals and prefs
 			{
-				gShockPrefs.soBackMusic = FALSE;
+				gShockPrefs.soBackMusic = false;
 				SavePrefs(kPrefsResID);
-				music_on = mlimbs_on = FALSE;
+				music_on = mlimbs_on = false;
 			}
 //¥¥¥	}
 		}
 		else
 		{
-			music_on = mlimbs_on = FALSE;
+			music_on = mlimbs_on = false;
 		}
 	return(OK);
 }

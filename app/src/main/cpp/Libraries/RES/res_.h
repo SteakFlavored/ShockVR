@@ -46,8 +46,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //	Checking id's and ref's (resacc.c and refacc.c)
 
-bool ResCheckId(Id id);				// returns TRUE if id ok, else FALSE + warns
-bool RefCheckRef(Ref ref);			// returns TRUE if ref ok, else FALSE & warns
+bool ResCheckId(Id id);				// returns true if id ok, else false + warns
+bool RefCheckRef(Ref ref);			// returns true if ref ok, else false & warns
 */
 
 //	Resource loading (resload.c)

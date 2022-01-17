@@ -61,7 +61,7 @@ void (*cspace_effect_turnoff[])(bool visible,bool real) = { turbo_turnoff, decoy
 
 errtype early_exit_cyberspace_stuff();
 
-bool cyber_nodie = FALSE;
+bool cyber_nodie = false;
 Handle	gCyberHdl;
 
 errtype check_cspace_death()
@@ -83,7 +83,7 @@ errtype check_cspace_death()
             if (!cyber_nodie)
             {
                extern errtype mai_player_death();
-               cyber_nodie = TRUE;
+               cyber_nodie = true;
                mai_player_death();
                time_until_shodan_avatar = player_struct.game_time + (CIT_CYCLE * 8);
             }
@@ -105,7 +105,7 @@ errtype check_cspace_death()
             // boot player out of cspace
             player_struct.cspace_time_base = max(CSPACE_MIN_TIME, player_struct.cspace_time_base - CSPACE_DEATH_PENALTY);
             go_to_different_level(player_struct.realspace_level);
-            obj_move_to(PLAYER_OBJ, &player_struct.realspace_loc, TRUE);
+            obj_move_to(PLAYER_OBJ, &player_struct.realspace_loc, true);
             reset_input_system();
 
             // make him tired & hurt
@@ -132,7 +132,7 @@ extern Handle shock_alloc_ipal();		// KLC - Mac style
 errtype enter_cyberspace_stuff(int8_t dest_lev)
 {
    int32_t i;
-   cyber_nodie = FALSE;
+   cyber_nodie = false;
    old_loop = _current_loop;
 
    // Store away our realspace info
@@ -178,11 +178,11 @@ errtype enter_cyberspace_stuff(int8_t dest_lev)
    player_struct.mfd_slot_status[MFD_TARGET_SLOT] = MFD_UNAVAIL;
 
    inventory_page = INV_SOFTWARE_PAGE;
-   set_inventory_mfd(MFD_INV_SOFT_COMBAT,player_struct.actives[ACTIVE_COMBAT_SOFT],TRUE);
+   set_inventory_mfd(MFD_INV_SOFT_COMBAT,player_struct.actives[ACTIVE_COMBAT_SOFT],true);
    player_struct.current_active = ACTIVE_COMBAT_SOFT;
 
-//   mfd_notify_func(MFD_CSPACE_FUNC, MFD_INFO_SLOT, TRUE, MFD_ACTIVE, TRUE);
-   mfd_notify_func(MFD_EMPTY_FUNC, MFD_INFO_SLOT, TRUE, MFD_ACTIVE, TRUE);
+//   mfd_notify_func(MFD_CSPACE_FUNC, MFD_INFO_SLOT, true, MFD_ACTIVE, true);
+   mfd_notify_func(MFD_EMPTY_FUNC, MFD_INFO_SLOT, true, MFD_ACTIVE, true);
    mfd_change_slot(MFD_LEFT, MFD_INFO_SLOT);
    mfd_change_slot(MFD_RIGHT, MFD_INFO_SLOT);
 
@@ -192,8 +192,8 @@ errtype enter_cyberspace_stuff(int8_t dest_lev)
    else
 #endif
       full_visible |= FULL_R_MFD_MASK | FULL_INVENT_MASK;
-   hardware_closedown(TRUE);
-   drug_closedown(TRUE);
+   hardware_closedown(true);
+   drug_closedown(true);
    change_mode_func(0,0,(void *)FULLSCREEN_LOOP);
 
    // Hud stuff
@@ -221,7 +221,7 @@ errtype exit_cyberspace_stuff()
    int32_t i;
 
    // Blast away the cspace MFD
-   mfd_notify_func(MFD_EMPTY_FUNC, MFD_INFO_SLOT, TRUE, MFD_ACTIVE, TRUE);
+   mfd_notify_func(MFD_EMPTY_FUNC, MFD_INFO_SLOT, true, MFD_ACTIVE, true);
 
    // Restore old MFD button state
    for (i=0; i < MFD_NUM_REAL_SLOTS; i++)
@@ -245,8 +245,8 @@ errtype exit_cyberspace_stuff()
       push_cursor_object(player_struct.save_obj_cursor);
       player_struct.save_obj_cursor = OBJ_NULL;
    }
-   drug_startup(TRUE);
-   hardware_startup(TRUE);
+   drug_startup(true);
+   hardware_startup(true);
    if (old_loop != FULLSCREEN_LOOP)
       change_mode_func(0,0,(void *)old_loop);
    inventory_draw_new_page(0);

@@ -81,7 +81,7 @@ int32_t fr_rend(frc *view)
 
       if ((_fr_curflags&FR_PICKUPM_MASK) || DoubleSize) {
          save_blend_flag=_g3d_enable_blend;
-         _g3d_enable_blend=FALSE;
+         _g3d_enable_blend=false;
       }
 
       // MLA - does nothing!

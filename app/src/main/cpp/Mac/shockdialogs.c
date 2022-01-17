@@ -249,7 +249,7 @@ void DoSoundOptionsDlg(void)
 					if (mlimbs_status == 0)													// If not enough memory
 					{
 						StringAlert(17);														// tell the user
-						gShockPrefs.soBackMusic = FALSE;								// and reset the music back off
+						gShockPrefs.soBackMusic = false;								// and reset the music back off
 					}
 					else
 						MacTuneKillCurrentTheme();										// but don't start playing just yet.
@@ -262,7 +262,7 @@ void DoSoundOptionsDlg(void)
 				if (MacTuneInit() != 0)														// If not enough memory to start music
 				{
 					StringAlert(17);															// tell the user
-					gShockPrefs.soBackMusic = FALSE;									// and reset the music back off
+					gShockPrefs.soBackMusic = false;									// and reset the music back off
 				}
 				MacTuneShutdown();
 			}
@@ -326,7 +326,7 @@ void DoGraphicsOptionsDlg(void)
 	GetDItem(dlog, kPopDetail, &itype, &hand, &r);
 	SetDItem(dlog, kPopDetail, itype, (Handle)popMenuProcPtr, &r);
 
-	gSliderDimmed = FALSE;
+	gSliderDimmed = false;
 	gSliderLastPos = localPrefs.doGamma;
 	SetupSlider();
 	sliderProcPtr = NewUserItemProc(DrawSlider);							// Set up the "Gamma" slider
@@ -365,7 +365,7 @@ void DoGraphicsOptionsDlg(void)
 			GetDItem(dlog, kChkSkipLines, &itype, &hand, &r);					// Adjust "Skip even lines" checkbox
 			if (localPrefs.doResolution == 0 && localPrefs.doUseQD)				// If switched to Hires and skip was on,
 			{
-				localPrefs.doUseQD = FALSE;												// turn skipping off,
+				localPrefs.doUseQD = false;												// turn skipping off,
 				SetCtlValue((ControlHandle)hand, 0);									// and update the checkbox.
 			}
 			HiliteControl((ControlHandle)hand, 											// Enable/disable the checkbox
@@ -451,7 +451,7 @@ bool DoNewGameDlg(void)
 	int16_t					itype, itemhit;
 	Point					tempP;
 	int16_t					sel, cursel;
-	bool				ret = FALSE;
+	bool				ret = false;
 	ModalFilterUPP	stdFilterProcPtr;
 	Str255				name;
 	int32_t					 i;
@@ -535,7 +535,7 @@ bool DoNewGameDlg(void)
 		for (i = 0; i < 4; i++)																// save the difficulty settings,
 			player_struct.difficulty[i] = gNewGameSel[i]-1;
 		strcpy(player_struct.name, p2cstr(name));								// and the player name,
-		ret = TRUE;																			// and tell it's ok to go on.
+		ret = true;																			// and tell it's ok to go on.
 	}
 
 	DisposeRoutineDescriptor(stdFilterProcPtr);								// Dispose of user item UPPs

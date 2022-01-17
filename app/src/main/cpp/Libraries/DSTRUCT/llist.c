@@ -172,7 +172,7 @@ void *LlistAddQueue(LlistHead *plh, int16_t prior)
 //		pnode    = ptr to node to be moved
 //		newprior = new priority value
 //
-//	returns: TRUE if item was actually moved in list, false if newprior
+//	returns: true if item was actually moved in list, false if newprior
 //		didn't cause it to switch places with other nodes.
 
 bool LlistMoveQueue(LlistHead *plh, void *pnode, int16_t newprior)

@@ -92,7 +92,7 @@ uint8_t mouseYshift = 1;
 */
 uint8_t mouseMask = 0xFF; 				// mask of events to put in the queue.
 /*
-bool  mouseLefty = FALSE; 				// is the user left-handed?
+bool  mouseLefty = false; 				// is the user left-handed?
 */
 #define NUM_MOUSE_CALLBACKS 16
 mouse_callfunc mouseCall[NUM_MOUSE_CALLBACKS];
@@ -100,7 +100,7 @@ void* mouseCallData[NUM_MOUSE_CALLBACKS];
 int16_t mouseCalls = 0;  					// current number of mouse calls.
 int16_t mouseCallSize = sizeof(mouse_callfunc);
 /*
-bool mouse_installed = FALSE;					// was mouse found?
+bool mouse_installed = false;					// was mouse found?
 
 uint32_t default_mouse_ticks = 0;
 uint32_t volatile *mouse_ticks = &default_mouse_ticks;  // Place to get mouse timestamps.
@@ -130,7 +130,7 @@ extern uint32_t mouseHandlerSize;
 TimerUPP		pMousePollPtr;
 MouseTask		pMousePollTask;
 extern int16_t	gActiveLeft, gActiveTop;
-bool			gRBtnWasDown = TRUE;
+bool			gRBtnWasDown = true;
 extern uint8_t	pKbdGetKeys[16];
 
 //----------------
@@ -586,13 +586,13 @@ errtype mouse_next(mouse_event *res)
 		if (nowDown)													// and it is down now
 		{
 			rbType = MOUSE_RDOWN;							// trigger a MOUSE_RDOWN event.
-			gRBtnWasDown = TRUE;
+			gRBtnWasDown = true;
 		}
 	}
 	else if (!nowDown)												// If the right button was down but now is up
 	{
 		rbType = MOUSE_RUP;									// trigger a MOUSE_RUP event.
-		gRBtnWasDown = FALSE;
+		gRBtnWasDown = false;
 	}
 	if (rbType)														// Send a right button event
 	{

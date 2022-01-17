@@ -392,7 +392,7 @@ int32_t TrackTitleButton(int32_t btn)
 {
 	PicHandle	phNorm, phClick;
 	Point			currPt;
-	bool		oldState = TRUE;
+	bool		oldState = true;
 	bool		newState;
 	Rect			r = pBtnRect[btn];
 

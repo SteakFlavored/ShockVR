@@ -63,7 +63,7 @@ int32_t res_bm_width(Ref id);
 int32_t res_bm_height(Ref id);
 
 // Draw a Text string to the screen, given a resource font pointer
-#define res_draw_text(font,text,x,y) res_draw_text_shadowed(font,text,x,y,FALSE)
+#define res_draw_text(font,text,x,y) res_draw_text_shadowed(font,text,x,y,false)
 errtype res_draw_text_shadowed(Id id, int8_t *text, int32_t x, int32_t y, bool shadow);
 
 // Like res_draw_text, but takes a string number instead.

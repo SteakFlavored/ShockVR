@@ -267,7 +267,7 @@ void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, Explosion
          current_ref = MAP_GET_XY(cx, cy)->objRef;
          while (current_ref != OBJ_REF_NULL)
          {
-            no_effect = FALSE;
+            no_effect = false;
             affect = 0;
             current_id = objRefs[current_ref].obj;
 
@@ -288,7 +288,7 @@ void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, Explosion
             else if ((OBJ_LOC_BIN_X(objs[objRefs[current_ref].obj].loc) != objRefs[current_ref].state.bin.sq.x) ||
                      (OBJ_LOC_BIN_Y(objs[objRefs[current_ref].obj].loc) != objRefs[current_ref].state.bin.sq.y))
             {
-               no_effect = TRUE;
+               no_effect = true;
             }
             else
             {
@@ -307,11 +307,11 @@ void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, Explosion
                if ((objs[exclusion].obclass != CLASS_GRENADE) && (objs[current_id].obclass != CLASS_CRITTER))
                {
                   if (!RndRange(&grenade_rnd, 0, 1))
-                     no_effect = TRUE;
+                     no_effect = true;
                }
             }
 
-            // only do damage, if no_effect is FALSE, and affect is non-zero
+            // only do damage, if no_effect is false, and affect is non-zero
             if (!no_effect && affect)
             {
                ObjID    affected_object;
@@ -392,7 +392,7 @@ void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, Explosion
                         bool explosion_affected;
                         uint8_t flags;
 
-                        explosion_affected = FALSE;
+                        explosion_affected = false;
                         if (objs[current_id].obclass == CLASS_GRENADE)
                         {
                            uint8_t    chaining;
@@ -406,7 +406,7 @@ void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, Explosion
 
                            if (chaining > 7)
                            {
-                              explosion_affected = TRUE;
+                              explosion_affected = true;
                            }
                         }
 
@@ -441,12 +441,12 @@ void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, Explosion
                         }
                         else
                         {
-                           bool do_effect = FALSE;
+                           bool do_effect = false;
                            uint8_t destroy = ObjProps[OPNUM(current_id)].destroy_effect;
                            if ((objs[current_id].info.current_hp <= damage) && DESTROY_OBJ_EFFECT(destroy))
                            {
                               objs[current_id].info.current_hp=0;
-                              do_effect = TRUE;
+                              do_effect = true;
                            }
                            else if(damage_object(current_id, damage, edata->dtype,flags))
                               do_effect = (EFFECT_VAL(destroy) != 0);
@@ -640,16 +640,16 @@ bool activate_grenade_on_cursor(void)
    ObjID oc=object_on_cursor;
 
    if(oc==NULL || objs[oc].obclass!=CLASS_GRENADE)
-      return FALSE;
+      return false;
 
    if(objGrenades[objs[oc].specID].flags & GREN_ACTIVE_FLAG)
-      return TRUE;
+      return true;
 
    // push and pop object cursor to update its live-ness display
    pop_cursor_object();
    activate_grenade(objs[oc].specID);
    push_cursor_object(oc);
-   return TRUE;
+   return true;
 }
 
 #define PHYSICS_WAIT 3

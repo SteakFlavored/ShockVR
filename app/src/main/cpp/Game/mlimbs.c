@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LOCK_ALL_CHANNELS
 
 
-bool   mlimbs_on=FALSE;
+bool   mlimbs_on=false;
 static   int8_t   mlimbs_status=0;    // could make this one bitfield of status, on/off, enable/not, so on
 static   int32_t    mlimbs_timer_id;    // what our timer handle is
 
@@ -49,7 +49,7 @@ volatile struct mlimbs_piece_info xseq_info[MAX_SEQUENCES];	// Sequence specific
 volatile struct mlimbs_request_info current_request[MLIMBS_MAX_SEQUENCES - 1]; // Request information
 volatile struct mlimbs_channel_info channel_info[MLIMBS_MAX_CHANNELS]; // MIDI channel information
 volatile struct mlimbs_playing_info userID[MLIMBS_MAX_SEQUENCES - 1]; // Sequence instance specific information
-volatile bool   mlimbs_update_requests = FALSE;
+volatile bool   mlimbs_update_requests = false;
 
 volatile uint8_t   num_XMIDI_sequences = 0;
 volatile uint8_t   num_master_measures;
@@ -59,7 +59,7 @@ volatile uint8_t   max_voices = 0;
 volatile void  (*mlimbs_AI)(void) = NULL;
 volatile uint32_t   mlimbs_counter = 0;
 volatile int32_t    mlimbs_error;
-volatile bool    mlimbs_semaphore = FALSE;
+volatile bool    mlimbs_semaphore = false;
 
 int32_t     master_volume = 100;
 
@@ -305,7 +305,7 @@ void _mlimbs_clear_req(int32_t i)
 	current_request[i].priority = 0;
 	current_request[i].loops = -1;
 	current_request[i].pan = -1;
-	current_request[i].channel_prioritize = FALSE;
+	current_request[i].channel_prioritize = false;
 	current_request[i].crossfade = 0;
 }
 
@@ -316,7 +316,7 @@ void _mlimbs_clear_uid(int32_t i)
 	userID[i].current_channel_map = 0;
 	userID[i].seq_id = -1;
 	userID[i].rel_vol = DEFAULT_REL_VOL;
-	userID[i].channel_prioritize = FALSE;
+	userID[i].channel_prioritize = false;
 	userID[i].crossfade_status = 11;
    for (j = 0; j < 7; j++)
       userID[i].sequence_channel_status[j] = SEQUENCE_CHANNEL_UNUSED;
@@ -349,7 +349,7 @@ void mlimbs_stop_theme (void)
 	tm_deactivate_process (mlimbs_timer_id);
 #endif
 
-	mlimbs_update_requests = FALSE;
+	mlimbs_update_requests = false;
 
 	for (i = 0; i < MLIMBS_MAX_SEQUENCES-1; i++)
 	{
@@ -379,7 +379,7 @@ void mlimbs_purge_theme (void)
 {
 	int32_t i;
 
-	mlimbs_update_requests = FALSE;
+	mlimbs_update_requests = false;
 	/* Clear the current_request[] and arrays */
 
 	for (i = 0; i < MLIMBS_MAX_SEQUENCES -1; i++)
@@ -404,7 +404,7 @@ void mlimbs_purge_theme (void)
 	   Free(mlimbs_theme);
    mlimbs_theme=NULL;
 
-	mlimbs_update_requests = FALSE;
+	mlimbs_update_requests = false;
 #ifdef LOCK_ALL_CHANNELS
 	for (i = 0; i < MLIMBS_MAX_CHANNELS; i++)
 		{
@@ -434,7 +434,7 @@ void mlimbs_purge_theme (void)
 //	inputs:
 //		int32_t usernum		// The sequence instance to give up a channel.
 //		int32_t x				// Which channel to relenquish.
-//		bool mute			// If TRUE, mute the channel.  If FALSE merely,
+//		bool mute			// If true, mute the channel.  If false merely,
 //							//	relenquish the channel, and set the sequence channel's
 //							// status to SEQUENCE_CHANNEL_PENDING
 /////////////////////////////////////////////////////////////////
@@ -449,7 +449,7 @@ void mlimbs_mute_sequence_channel (int32_t usernum, int32_t x, bool mute)
 
    //secret_sprint((ss_temp,"want to mute %d's %d, %d\n",usernum,x,mute));
 
-	if (mute == TRUE)
+	if (mute == true)
 	{
 		switch (userID[usernum].sequence_channel_status[x-10])
 		{
@@ -496,7 +496,7 @@ void mlimbs_mute_sequence_channel (int32_t usernum, int32_t x, bool mute)
 	channel_info[phys_ch].usernum = -1;
 	channel_info[phys_ch].sequence_channel = -1;
 	voices_used -= xseq_info[userID[usernum].pieceID].channel_voices[x-10];
-   userID[usernum].sequence_channel_status[x-10] = (mute == TRUE) ? SEQUENCE_CHANNEL_MUTED : SEQUENCE_CHANNEL_PENDING;
+   userID[usernum].sequence_channel_status[x-10] = (mute == true) ? SEQUENCE_CHANNEL_MUTED : SEQUENCE_CHANNEL_PENDING;
 	userID[usernum].current_channel_map &= ~(0x0001 << phys_ch);
    //secret_sprint((ss_temp,"is now free\n"));
 }
@@ -574,7 +574,7 @@ int32_t mlimbs_unmute_sequence_channel (int32_t usernum, int32_t x)
 //	chunk.  The minimum number of voices required is the number of
 //	voices the chunk plays on channel 10.  If not enough voices
 //	can be freed, then nothing	is punted, and the chunk is not played.
-//	If channel_prioritize is set to FALSE, then mlimbs_channel_prioritize
+//	If channel_prioritize is set to false, then mlimbs_channel_prioritize
 //	will attempt to acquire all necessary free channels and voices,else
 //	fail.
 //
@@ -605,7 +605,7 @@ int32_t mlimbs_channel_prioritize (int32_t priority, int32_t pieceID,int32_t voi
 			num_free_channels++;
 
 	/* Count # of channels needed */
-	if (crossfade != TRUE || channel_prioritize == FALSE)
+	if (crossfade != true || channel_prioritize == false)
 	{
 		for (i = 11,channels_needed = 0; i < 16; i++)
 			if ((xseq_info[pieceID].channel_map >> i) & (0x0001))
@@ -620,7 +620,7 @@ int32_t mlimbs_channel_prioritize (int32_t priority, int32_t pieceID,int32_t voi
 	min_voices_needed = xseq_info[pieceID].channel_voices[0] - (max_voices - voices_used);
 
 	// If we're crossfading, we only needed the minimum # of voices.
-	if (crossfade == TRUE && channel_prioritize == TRUE)
+	if (crossfade == true && channel_prioritize == true)
 		voices_needed = min_voices_needed;
 
 	if (voices_needed <= 0)
@@ -647,7 +647,7 @@ int32_t mlimbs_channel_prioritize (int32_t priority, int32_t pieceID,int32_t voi
 
 					// For channel_prioritized chunks, we can steal individual channels and voices.  For non
 					// channel prioritized chunks, you have to punt the entire piece.
-					if (userID[i].channel_prioritize == TRUE)
+					if (userID[i].channel_prioritize == true)
 						{
 							for (j = 16; j > 10 ; j--)
 								{
@@ -678,7 +678,7 @@ int32_t mlimbs_channel_prioritize (int32_t priority, int32_t pieceID,int32_t voi
 
 	// If there aren't enough voices or channels, then
 	// do not punt anything.
-	if (channel_prioritize == TRUE)
+	if (channel_prioritize == true)
 		{
 			if ((voices_punted < min_voices_needed) || (num_free_channels== 0))
 				return -1;
@@ -708,7 +708,7 @@ int32_t mlimbs_channel_prioritize (int32_t priority, int32_t pieceID,int32_t voi
 
 			if (min < 0)
 				{
-					if (channel_prioritize == TRUE)
+					if (channel_prioritize == true)
 						{
 							if (voices_punted < min_voices_needed)
 								return -1;
@@ -721,7 +721,7 @@ int32_t mlimbs_channel_prioritize (int32_t priority, int32_t pieceID,int32_t voi
 
 			// For channel_prioritized chunks, we can steal individual channels and voices.  For non
 			// channel prioritized chunks, you have to punt the entire piece.
-			if (userID[punt_list[min]].channel_prioritize == TRUE)
+			if (userID[punt_list[min]].channel_prioritize == true)
 				{
 					for (j = 16; j > 10; j--)
 						{
@@ -729,7 +729,7 @@ int32_t mlimbs_channel_prioritize (int32_t priority, int32_t pieceID,int32_t voi
 								{
 									num_free_channels++;
 									voices_punted += xseq_info[userID[punt_list[min]].pieceID].channel_voices[j-10];
-									mlimbs_mute_sequence_channel(punt_list[min],j,FALSE);
+									mlimbs_mute_sequence_channel(punt_list[min],j,false);
 								}
 							if ((voices_punted >= voices_needed) && (num_free_channels >= channels_needed))
 								break;
@@ -785,11 +785,11 @@ int32_t mlimbs_channel_prioritize (int32_t priority, int32_t pieceID,int32_t voi
 //		This routine will mark the userID[].sequence_channel_status[] array
 //		according to what sequence channels need to use.  It then maps as
 //		many sequence channels as it can to physical	channels, in order,
-//    from 11 to 16, unless the crossfade argument is TRUE.
+//    from 11 to 16, unless the crossfade argument is true.
 //
 //	inputs:
 //		int32_t usernum
-//		bool	crossfade	// If TRUE, all the sequence channels used by
+//		bool	crossfade	// If true, all the sequence channels used by
 //		      // the sequence are set to SEQUENCE_CHANNEL_MUTED so crossfade
 //          // code can unmute channels as the sequence is crossfaded in.
 //
@@ -809,12 +809,12 @@ int32_t mlimbs_assign_channels (int32_t usernum,bool crossfade)
 		{	// Mark the sequence channel as waiting for a physical channel
 			// unless the sequence is to be crossfaded in, in which
 		 	// case, mute all channels.
-			if (crossfade == FALSE)
+			if (crossfade == false)
 			{
 				userID[usernum].sequence_channel_status[j - 10] = SEQUENCE_CHANNEL_PENDING;
 				if (mlimbs_unmute_sequence_channel(usernum,j) < 0)
 				{
-					if (userID[usernum].channel_prioritize == FALSE)
+					if (userID[usernum].channel_prioritize == false)
 						return -1;
 				}
 			}
@@ -841,9 +841,9 @@ int32_t mlimbs_assign_channels (int32_t usernum,bool crossfade)
 //		int32_t loops			Number of times to play the piece
 //		int32_t rel_vol			Relative volume to start the piece at.  This will
 //								be set to 0 for pieces that will ramp up.
-//		bool channel_prioritize		- if TRUE, then its ok to play the
+//		bool channel_prioritize		- if true, then its ok to play the
 //								chunk even if not enough channels are available,
-//								If FALSE, then only play chunk if all channels can
+//								If false, then only play chunk if all channels can
 //								be played.
 //		bool crossfade
 //
@@ -884,13 +884,13 @@ int32_t mlimbs_play_piece (int32_t pieceID, int32_t priority, int32_t loops, int
 	if (channel_prioritize)
 	{  // Only need to count # of voices needed if we're not crossfading.  since channel 10 voices
 		// are used by mlimbs_channel_prioritize as the # of voices needed if we are crossfading
-		if (crossfade != TRUE)
+		if (crossfade != true)
 		{
 			for (i = 0, voices_needed = 0; i < 7; i++)
 				voices_needed += xseq_info[pieceID].channel_voices[i];
 			voices_needed -= voices_available;
 		}
-		if (mlimbs_channel_prioritize(priority,pieceID,voices_needed,crossfade,TRUE) < 0)
+		if (mlimbs_channel_prioritize(priority,pieceID,voices_needed,crossfade,true) < 0)
 			return -1;
 	}
 	else
@@ -900,7 +900,7 @@ int32_t mlimbs_play_piece (int32_t pieceID, int32_t priority, int32_t loops, int
 #else
 		voices_needed = -(voices_available - xseq_info[pieceID].avg_voices);
 #endif
-		if (mlimbs_channel_prioritize(priority,pieceID,voices_needed,crossfade,FALSE) < 0)
+		if (mlimbs_channel_prioritize(priority,pieceID,voices_needed,crossfade,false) < 0)
 			return -1;
 	}
 
@@ -1027,7 +1027,7 @@ schar mlimbs_get_crossfade_status (int32_t pieceID)
 //	purpose:
 //		This is the routine that gets called by an XMIDI controller
 //		119.  All the mlimbs_callback does is call the mlimbs_AI, and
-//		then set mlimbs_update_requests to TRUE, which tells the mlimbs_timer_callback
+//		then set mlimbs_update_requests to true, which tells the mlimbs_timer_callback
 //		to actual execute its code, when next it is called.
 //
 ////////////////////////////////////////////////////////////////
@@ -1036,7 +1036,7 @@ void cdecl mlimbs_callback (snd_midi_parms *mprm, unsigned trigger_value)
 {
    if (trigger_value)
    {
-      mlimbs_update_requests = TRUE;
+      mlimbs_update_requests = true;
    }
    else
    {
@@ -1166,10 +1166,10 @@ LONG cdecl mlimbs_timbre_callback(MDI_DRIVER *mdi, LONG bank, LONG patch)
 //	XMIDI sequences from within an XMIDI callback is not a good
 //	thing to do.  It is currently called at 100 hz.  Whenever it
 //	is called, it first checks whether mlimbs_update_requests has
-//	been set to TRUE by mlimbs_callback and whether mlimbs_semaphore
-//	is FALSE.  If both the above conditions are met, then mlimbs_timer_callback
+//	been set to true by mlimbs_callback and whether mlimbs_semaphore
+//	is false.  If both the above conditions are met, then mlimbs_timer_callback
 //	executes the main body of its code, then resets mlimbs_update_requests
-//	to FALSE and increments the mlimbs_counter.
+//	to false and increments the mlimbs_counter.
 //
 ////////////////////////////////////////////////////////////////
 void mlimbs_timer_callback (void)
@@ -1177,11 +1177,11 @@ void mlimbs_timer_callback (void)
 	int32_t i,j,k,loop,rvol;
 	int32_t usernum;
 
-	if (mlimbs_update_requests == FALSE)
+	if (mlimbs_update_requests == false)
 	{
 		return;
 	}
-	if (mlimbs_semaphore == TRUE)
+	if (mlimbs_semaphore == true)
 	{
 		return;
 	}
@@ -1234,7 +1234,7 @@ void mlimbs_timer_callback (void)
 						}
    					//	Crossfade out pieces here, so that their channels become
 						//	available to pieces to be crossfaded in, later in the callback.
-						else if (userID[i].channel_prioritize == TRUE)
+						else if (userID[i].channel_prioritize == true)
 						{
 							if (current_request[j].crossfade < 0)
 						   {
@@ -1243,7 +1243,7 @@ void mlimbs_timer_callback (void)
    							{
 									if (userID[i].sequence_channel_status[userID[i].crossfade_status - 10] >= 0)
 									{
-										mlimbs_mute_sequence_channel(i,userID[i].crossfade_status,TRUE);
+										mlimbs_mute_sequence_channel(i,userID[i].crossfade_status,true);
 										userID[i].crossfade_status--;
 										break;
 									}
@@ -1335,7 +1335,7 @@ void mlimbs_timer_callback (void)
 				}
 			}
 		}
-		mlimbs_update_requests = FALSE;
+		mlimbs_update_requests = false;
 		mlimbs_counter++;	// Only update the counter after the pieces playing have been updated
 }
 
@@ -1344,7 +1344,7 @@ SEQUENCE *_mlimbs_get_a_seq(void)
    extern int32_t snd_find_free_sequence(uint8_t smp_pri, bool check_only);
    SEQUENCE *S;
    int32_t seq_id;
-   if ((seq_id=snd_find_free_sequence(1000,FALSE))==SND_PERROR)
+   if ((seq_id=snd_find_free_sequence(1000,false))==SND_PERROR)
       return NULL;
    S=snd_sequence_ptr_from_id(seq_id);
    return S;
@@ -1404,13 +1404,13 @@ void mlimbs_preload_full_timbres_and_go_asynch(void)
 	      AIL_init_sequence(S,mlimbs_theme,piece+1);
    old=AIL_register_timbre_callback((MDI_DRIVER *)snd_midi,mlimbs_timbre_callback);
 //   mprintf("Old is %x, set to mtc\n",old);
-   run_asynch_music_ai=TRUE;
+   run_asynch_music_ai=true;
 }
 
 void mlimbs_return_to_synch(void)
 {
 //   mprintf("return to synch\n");
-   run_asynch_music_ai=FALSE;
+   run_asynch_music_ai=false;
 }
 
 ///////////////////////////////////////////////////////

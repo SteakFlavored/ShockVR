@@ -85,7 +85,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 MFD        mfd[2];                           // Our actual MFD's
-bool       Flash = TRUE;                     // State of blinking buttons
+bool       Flash = true;                     // State of blinking buttons
 LGCursor    mfd_bttn_cursors[NUM_MFDS];
 grs_bitmap  mfd_bttn_bitmaps[NUM_MFDS];
 
@@ -189,7 +189,7 @@ void init_newmfd_button_cursors()
       LGCursor* c = &mfd_bttn_cursors[i];
       grs_bitmap* bm = &mfd_bttn_bitmaps[i];
       LGPoint offset = {0,0};
-      make_popup_cursor(c,bm,cursor_strings[i],i,TRUE, offset);
+      make_popup_cursor(c,bm,cursor_strings[i],i,true, offset);
    }
 }
 
@@ -202,8 +202,8 @@ void init_newmfd_button_cursors()
 
 void screen_init_mfd_draw()
 {
-   mfd_set_slot(MFD_LEFT, mfd_index(MFD_LEFT), TRUE);
-   mfd_set_slot(MFD_RIGHT, mfd_index(MFD_RIGHT), TRUE);
+   mfd_set_slot(MFD_LEFT, mfd_index(MFD_LEFT), true);
+   mfd_set_slot(MFD_RIGHT, mfd_index(MFD_RIGHT), true);
 
    mfd_draw_all_buttons(MFD_LEFT);
    mfd_draw_all_buttons(MFD_RIGHT);
@@ -224,7 +224,7 @@ void screen_init_mfd_draw()
 
 void screen_init_mfd(bool fullscrn)
 {
-   static bool done_init = FALSE;
+   static bool done_init = false;
    FrameDesc *f;
    int32_t id;
    int32_t lval, rval;
@@ -305,7 +305,7 @@ void screen_init_mfd(bool fullscrn)
 
    if (!done_init)
    {
-      done_init = TRUE;
+      done_init = true;
 
       // Pull in the background bitmap
       f = (FrameDesc*)RefLock(REF_IMG_bmBlankMFD);
@@ -469,7 +469,7 @@ void mfd_notify_func(uint8_t fnum, uint8_t snum, bool Grab, MFD_Status stat, boo
    if ((oldf != fnum) && (Grab))
    {
       player_struct.mfd_all_slots[snum] = fnum;
-      Full = TRUE;
+      Full = true;
    }
 
    player_struct.mfd_func_status[fnum]           |= MFD_CHANGEBIT;
@@ -641,10 +641,10 @@ void mfd_change_slot(uint8_t mfd_id, uint8_t new_slot)
 
    // Tell old slot it needs to stop drawing whatever it was in that mfd
    if (new_slot != old)
-      mfd_set_slot(mfd_id, old, FALSE);
+      mfd_set_slot(mfd_id, old, false);
 
    // Set to new slot and draw its graphics if neccessary
-   mfd_set_slot(mfd_id, new_slot, TRUE);
+   mfd_set_slot(mfd_id, new_slot, true);
 
    // Update the buttons
    if (!global_fullmap->cyber)
@@ -749,11 +749,11 @@ int32_t mfd_grab_func(int32_t my_func, int32_t my_slot)
 // -----------------------------------------------------------------------
 // mfd_yield_func()
 //
-//   If no mfd has func as its current function, returns FALSE.  Otherwise,
+//   If no mfd has func as its current function, returns false.  Otherwise,
 // if *mfd_id is NUM_MFDS, sets mfd_id to the lowest mfd id which has func as
-// its function and returns TRUE.  Otherwise, sets mfd_id to the lowest
-// such id which is greater than the one provided and returns TRUE, or
-// returns FALSE if there is no such greater mfd.  Thus acts as an
+// its function and returns true.  Otherwise, sets mfd_id to the lowest
+// such id which is greater than the one provided and returns true, or
+// returns false if there is no such greater mfd.  Thus acts as an
 // iterator on mfd's with the given func.
 //   Why, you may ask?  'Cause it's pretty much exactly as easy as a
 // function which just finds out if some mfd has this current function,
@@ -766,10 +766,10 @@ bool mfd_yield_func(int32_t func, int32_t* mfd_id)
    for( id=(*mfd_id != NUM_MFDS) ?(*mfd_id)+1:0 ; id<NUM_MFDS ; id++) {
       if(mfd_get_active_func(id)==func) {
          *mfd_id=id;
-         return TRUE;
+         return true;
       }
    }
-   return FALSE;
+   return false;
 }
 
 // -----------------------------------------------------------
@@ -800,27 +800,27 @@ void mfd_zoom_rect(LGRect* start, int32_t mfdnum)
 
 
 extern bool inventory_add_object(ObjID,bool);
-bool object_button_down = FALSE;
+bool object_button_down = false;
 
 bool mfd_object_cursor_handler(uiEvent* ev, LGRegion*, int32_t which_mfd)
 {
-   bool retval = FALSE;
+   bool retval = false;
    int32_t trip, mid;
    int32_t new_slot=-1;
    ObjID obj = object_on_cursor;
-   if (ev->type != UI_EVENT_MOUSE) return TRUE;
+   if (ev->type != UI_EVENT_MOUSE) return true;
    if (ev->subtype & (MOUSE_RDOWN|MOUSE_LDOWN))
    {
-      object_button_down = TRUE;
-      retval = TRUE;
+      object_button_down = true;
+      retval = true;
    }
    if ((ev->subtype & (MOUSE_LUP|MOUSE_RUP)) && object_button_down)
    {
       extern uint8_t gump_num_objs;
       bool is_gump = mfd_get_active_func(which_mfd)==MFD_GUMP_FUNC && gump_num_objs!=0;
 
-      object_button_down = FALSE;
-      retval = TRUE;
+      object_button_down = false;
+      retval = true;
       if (inventory_add_object(object_on_cursor,!is_gump))
       {
          if (!is_gump)
@@ -872,7 +872,7 @@ bool mfd_object_cursor_handler(uiEvent* ev, LGRegion*, int32_t which_mfd)
 
 bool mfd_scan_opacity(int32_t mfd_id, LGPoint epos)
 {
-   bool retval = FALSE;
+   bool retval = false;
    LGPoint pos = epos;
    int16_t x,y;
    grs_canvas* cv = ((int32_t)mfd_id == MFD_RIGHT) ?  &_fullscreen_mfd : &_offscreen_mfd;
@@ -883,7 +883,7 @@ bool mfd_scan_opacity(int32_t mfd_id, LGPoint epos)
    for (x = pos.x - SEARCH_MARGIN; x <= pos.x + SEARCH_MARGIN; x++)
       for(y = pos.y - SEARCH_MARGIN; y <= pos.y + SEARCH_MARGIN; y++)
          if (gr_get_pixel(x,y) != 0)
-            retval = TRUE;
+            retval = true;
    gr_pop_canvas();
    return retval;
 }
@@ -892,7 +892,7 @@ bool mfd_scan_opacity(int32_t mfd_id, LGPoint epos)
 
 bool mfd_view_callback_full(uiEvent *e, LGRegion *r, void *udata)
 {
-   bool retval = FALSE;
+   bool retval = false;
    uint8_t mask;
    if ((int32_t)udata == MFD_RIGHT)
       mask = FULL_R_MFD_MASK;
@@ -928,10 +928,10 @@ bool mfd_view_callback(uiEvent *e, LGRegion *r, void *udata)
 
    if (input_cursor_mode == INPUT_OBJECT_CURSOR)
       return mfd_object_cursor_handler(e,r,which_mfd);
-   else object_button_down = FALSE;
+   else object_button_down = false;
    func_id = mfd_get_active_func(which_mfd);
    f = &(mfd_funcs[func_id]);
-   if (f->simp && f->simp(m, e)) return TRUE;
+   if (f->simp && f->simp(m, e)) return true;
    for (i = 0; i < f->handler_count; i++)
    {
       LGPoint pos = e->pos;
@@ -963,10 +963,10 @@ bool mfd_view_callback(uiEvent *e, LGRegion *r, void *udata)
 #endif
       if (RECT_TEST_PT(&f->handlers[i].r,pos))
          if (f->handlers[i].proc(m,e,&f->handlers[i]))
-            return TRUE;
+            return true;
    }
 
-   return FALSE;
+   return false;
 }
 
 
@@ -989,7 +989,7 @@ bool mfd_button_callback(uiEvent *e, LGRegion *r, void *udata)
    if (global_fullmap->cyber)
    {
       uiSetRegionDefaultCursor(r,NULL);
-      return FALSE;
+      return false;
    }
    else
    {
@@ -1016,11 +1016,11 @@ bool mfd_button_callback(uiEvent *e, LGRegion *r, void *udata)
             LGPoint offset = {0,0};
             last_mfd_cnum[which_panel] = cnum;
             DisposePtr((Ptr)mfd_bttn_bitmaps[which_panel].bits);
-            make_popup_cursor(&mfd_bttn_cursors[which_panel],&mfd_bttn_bitmaps[which_panel],cursor_strings[cnum],which_panel,TRUE, offset);
+            make_popup_cursor(&mfd_bttn_cursors[which_panel],&mfd_bttn_bitmaps[which_panel],cursor_strings[cnum],which_panel,true, offset);
             uiSetRegionDefaultCursor(r,&mfd_bttn_cursors[which_panel]);
          }
 
-         if (!(m->action & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE))) return TRUE; // ignore all but left clickdowns
+         if (!(m->action & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE))) return true; // ignore all but left clickdowns
 
          // If things are ok, select button
          if ((result.rem < MFD_BTTN_SZ) && (which_button < MFD_NUM_VIRTUAL_SLOTS))
@@ -1028,7 +1028,7 @@ bool mfd_button_callback(uiEvent *e, LGRegion *r, void *udata)
       }
    }
 
-   return TRUE;
+   return true;
 }
 
 
@@ -1057,7 +1057,7 @@ bool mfd_button_callback_kb(int16_t keycode, uint32_t context, void *data)
       mfd_select_button(which_panel, which_button);
    }
 
-   return TRUE;
+   return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -1105,7 +1105,7 @@ void mfd_select_button(int32_t which_panel, int32_t which_button)
 
 void mfd_update()
 {
-   static bool LastFlash = FALSE;
+   static bool LastFlash = false;
    uint8_t   steps_cache[NUM_MFDS] = { 0, 0};
 
    int32_t    i, j;
@@ -1182,7 +1182,7 @@ void mfd_update()
 // mfd_update_current_slot()
 //
 // See if we need to update anything in the current slot being
-// viewed in an MFD.  Returns TRUE if it updated a function.
+// viewed in an MFD.  Returns true if it updated a function.
 
 bool mfd_update_current_slot(uint8_t mfd_id,uint8_t status,uint8_t num_steps)
 {
@@ -1199,7 +1199,7 @@ bool mfd_update_current_slot(uint8_t mfd_id,uint8_t status,uint8_t num_steps)
    m    = &(mfd[mfd_id]);
    if (player_struct.panel_ref == OBJ_NULL && mfd_distance_remove(f_id))
    {
-      check_panel_ref(TRUE);
+      check_panel_ref(true);
    }
 
    // If the change bit is set, or if the function is incremental
@@ -1234,7 +1234,7 @@ bool mfd_update_current_slot(uint8_t mfd_id,uint8_t status,uint8_t num_steps)
 #endif
 
 
-         return TRUE;
+         return true;
       }
 
 }
@@ -1270,7 +1270,7 @@ void mfd_force_update_single(int32_t which_mfd)
       s_id = player_struct.mfd_virtual_slots[which_mfd][mfd_index(which_mfd)];
       stat = player_struct.mfd_slot_status[s_id];
 
-      mfd_notify_func(f_id, s_id, FALSE, stat, TRUE);
+      mfd_notify_func(f_id, s_id, false, stat, true);
 
    return;
 }
@@ -1350,7 +1350,7 @@ void fullscreen_refresh_mfd(uint8_t mfd_id)
 //
 // Draws a button in a given color code depending on its status.
 
-bool cyber_button_back_door = FALSE;
+bool cyber_button_back_door = false;
 
 void mfd_draw_button(uint8_t mfd_id, uint8_t b)
 {
@@ -1443,7 +1443,7 @@ void mfd_draw_all_buttons(uint8_t mfd_id)
 // to the screen.  Returns a point describing the pixel dimensions of the string
 
 
-bool mfd_string_wrap = TRUE;
+bool mfd_string_wrap = true;
 uint8_t mfd_string_shadow = MFD_SHADOW_FULLSCREEN;
 
 LGPoint mfd_full_draw_string(int8_t *s, int16_t x, int16_t y, int32_t c, int32_t font, bool DrawString, bool transp)
@@ -1495,7 +1495,7 @@ LGPoint mfd_draw_font_string(int8_t *s, int16_t x, int16_t y, int32_t c, int32_t
 {
    // Hey, this used to always specify non-transparent strings,but that just plain
    // seemed wrong, so I switched it.... -- Xemu
-   return mfd_full_draw_string(s, x, y, c, font, DrawString, TRUE);
+   return mfd_full_draw_string(s, x, y, c, font, DrawString, true);
 }
 
 
@@ -1745,7 +1745,7 @@ void set_mfd_from_defaults(int32_t mfd_id, uint8_t func, uint8_t slot)
 	def=0;
 	do
 	{
-		check=FALSE;
+		check=false;
 		for (mid=0;mid<NUM_MFDS;mid++)
 		{
 			if(func==MFD_EMPTY_FUNC || func==mfd_get_func(mid,player_struct.mfd_current_slots[mid]))
@@ -1757,7 +1757,7 @@ void set_mfd_from_defaults(int32_t mfd_id, uint8_t func, uint8_t slot)
 					slot=default_mfds[def].slot;
 				}
 				def++;
-				check=TRUE;
+				check=true;
 				break;
 			}
 		}
@@ -1765,7 +1765,7 @@ void set_mfd_from_defaults(int32_t mfd_id, uint8_t func, uint8_t slot)
 
 	if (func==MFD_EMPTY_FUNC)
 		slot = (global_fullmap->cyber) ? MFD_INFO_SLOT : MFD_ITEM_SLOT;  // failure case
-	mfd_notify_func(func,slot,TRUE,MFD_ACTIVE,TRUE);
+	mfd_notify_func(func,slot,true,MFD_ACTIVE,true);
 	if(!full_game_3d || (full_visible & FULL_MFD_MASK(mfd_id)))
 		mfd_change_slot(mfd_id,slot);
 }

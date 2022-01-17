@@ -138,16 +138,16 @@ int32_t mfd_to_map(int32_t mid)
 
 bool mfd_map_handler(MFD *m, uiEvent *e)
 {
-   bool retval = FALSE;
+   bool retval = false;
    uint8_t map_state;
    uiMouseEvent *mouse;
    int32_t mapid=mfd_to_map(m->id);
 
    // If we don't have an automap, we shouldn't do shit.
-   if (player_struct.hardwarez[HARDWARE_AUTOMAP] == 0) return FALSE;
+   if (player_struct.hardwarez[HARDWARE_AUTOMAP] == 0) return false;
 
    mouse = (uiMouseEvent *) e;
-   if (!(mouse->action & MOUSE_LDOWN)) return FALSE;       // ignore click releases
+   if (!(mouse->action & MOUSE_LDOWN)) return false;       // ignore click releases
 
    if (e->pos.y>m->rect.lr.y-8)     // bottom row
    {
@@ -158,10 +158,10 @@ bool mfd_map_handler(MFD *m, uiEvent *e)
 	      map_state = GetAutomapMode(mapid);
    	   SetAutomapMode(mapid, (map_state+1)%AUTOMAP_STATES);
 	      SetLastAutomapMode(mapid,map_state);
-	      mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, FALSE, MFD_ACTIVE, FALSE);
+	      mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, false, MFD_ACTIVE, false);
 	      last_update=0;
          play_digi_fx(SFX_MAP_ZOOM,1);
-	      return TRUE;
+	      return true;
       }
       else if (xp>OPT_LEFT)
       {
@@ -177,7 +177,7 @@ bool mfd_map_handler(MFD *m, uiEvent *e)
             zfac=1;
          else
             zfac=-1;
-         amap_zoom(oAMap(mapid),FALSE,zfac);
+         amap_zoom(oAMap(mapid),false,zfac);
       }
    }
    else if(GetAutomapMode(mapid)!=AUTOMAP_STATION)
@@ -196,7 +196,7 @@ bool mfd_map_handler(MFD *m, uiEvent *e)
          {
             strtoupper(buf);
 	         message_info(buf);
-            retval = TRUE;
+            retval = true;
          }
 
       }
@@ -257,7 +257,7 @@ void mfd_map_expose(MFD *m, uint8_t control)
 #define WORKING_INC_MFDS
 #ifndef WORKING_INC_MFDS
    	      if (last_update+(CIT_CYCLE>>3)>(*tmd_ticks))
-             { mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, FALSE, MFD_ACTIVE, FALSE); return; }
+             { mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, false, MFD_ACTIVE, false); return; }
 	         else
 #endif
             {
@@ -265,7 +265,7 @@ void mfd_map_expose(MFD *m, uint8_t control)
                {  // we were last done, and both of us need to be done, so give the other guy a chance...
                   AutomapLastUpdated=0xff;      // neither of us, so next time either will work
 #ifndef WORKING_INC_MFDS
-                  mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, FALSE, MFD_ACTIVE, FALSE);
+                  mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, false, MFD_ACTIVE, false);
 #endif
                   return;
                }
@@ -357,7 +357,7 @@ void automap_expose_zoom(MFD *m, uint8_t)
    draw_shadowed_string(FULL_STR,MFD_VIEW_WID-25,BTXT_HGT,full_game_3d);
    ResUnlock(RES_mfdFont);
 #ifndef WORKING_INC_MFDS
-   mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, FALSE, MFD_ACTIVE, FALSE);
+   mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, false, MFD_ACTIVE, false);
 #endif
    return;
 }

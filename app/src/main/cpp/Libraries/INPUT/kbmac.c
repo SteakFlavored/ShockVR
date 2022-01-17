@@ -72,7 +72,7 @@ void kb_set_flags(int32_t flags)
 kbs_event kb_next(void)
 {
 	int32_t				flags = kb_get_flags();
-	bool				gotKey = FALSE;
+	bool				gotKey = false;
 	EventRecord	theEvent;
 	kbs_event		retEvent = { 0xFF, 0x00 };
 
@@ -98,7 +98,7 @@ kbs_event kb_next(void)
 kbs_event kb_look_next(void)
 {
 	int32_t				flags = kb_get_flags();
-	bool				gotKey = FALSE;
+	bool				gotKey = false;
 	EventRecord	theEvent;
 	kbs_event		retEvent = { 0xFF, 0x00 };
 

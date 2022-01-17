@@ -110,8 +110,8 @@ errtype write_id(Id id_num, int16_t index, void *ptr, int32_t sz, int32_t fd, in
 #define SAVE_AUTOMAP_STRINGS
 
 int8_t saveload_string[30];
-bool display_saveload_checkpoints = FALSE;
-bool saveload_static = FALSE;
+bool display_saveload_checkpoints = false;
+bool saveload_static = false;
 uint32_t dynmem_mask = DYNMEM_ALL;
 
 extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
@@ -150,7 +150,7 @@ void store_objects(int8_t** buf, ObjID *obj_array, int8_t obj_count)
       else
       {
 
-         ((Obj*)s)->active = FALSE;
+         ((Obj*)s)->active = false;
          s+= sizeof(Obj);
       }
    }
@@ -200,7 +200,7 @@ bool go_to_different_level(int32_t targlevel)
    extern void update_level_gametime(void);
    extern errtype do_level_entry_triggers();
    bool in_cyber = global_fullmap->cyber;
-   bool retval = FALSE;
+   bool retval = false;
    errtype rv;
 
    dynmem_mask = DYNMEM_ALL;
@@ -209,17 +209,17 @@ bool go_to_different_level(int32_t targlevel)
       if (!in_cyber)
       {
          // indicate static
-         saveload_static = TRUE;
+         saveload_static = true;
 
          // force to fullscreen
 
          enter_cyberspace_stuff(targlevel);
-         retval = TRUE;
+         retval = true;
       }
    }
    else if (in_cyber)
    {
-      saveload_static = TRUE;
+      saveload_static = true;
    }
    if (saveload_static)
    {
@@ -269,14 +269,14 @@ bool go_to_different_level(int32_t targlevel)
       early_exit_cyberspace_stuff();
    }
 
-   rv = write_level_to_disk(ResIdFromLevel(player_struct.level), TRUE);
+   rv = write_level_to_disk(ResIdFromLevel(player_struct.level), true);
    if (rv)
       critical_error(CRITERR_FILE|4);
 
    rv = load_level_from_file(targlevel);
    // Hmm, should we criterr out on this case?
    restore_objects(buf,player_struct.inventory, NUM_GENERAL_SLOTS);
-   obj_load_art(FALSE);
+   obj_load_art(false);
 
    // reset renderer data
    game_fr_reparam(-1,-1,-1);
@@ -302,7 +302,7 @@ bool go_to_different_level(int32_t targlevel)
    {
       extern void clear_digi_fx();
       extern void stop_asynch_digi_fx();
-      saveload_static = FALSE;
+      saveload_static = false;
       fr_global_mod_flag(0,FR_SOLIDFR_MASK);
       if (music_on)
       	start_music();
@@ -314,7 +314,7 @@ bool go_to_different_level(int32_t targlevel)
    {
 		if (MacTuneInit() == 0)
 		{
-			mlimbs_on = TRUE;
+			mlimbs_on = true;
 			mlimbs_AI_init();
 			mlimbs_boredom = TickCount() % 8;
 			load_score_guts(7);
@@ -352,24 +352,24 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    int32_t ovnum = OBJECT_VERSION_NUMBER;
    int32_t mvnum = MISC_SAVELOAD_VERSION_NUMBER;
    ObjLoc plr_loc;
-   bool make_player = FALSE;
+   bool make_player = false;
    State player_edms;
    int32_t verify_cookie = 0;
 
 //KLC - Mac cursor showing at this time   begin_wait();
 
    // make pathfinding state stable by fulfilling PF requests
-   check_requests(FALSE);
+   check_requests(false);
 
 /* KLC - not needed for game
    if (id_num - LEVEL_ID_NUM < ANOTHER_DEFINE_FOR_NUM_LEVELS)
    {  // were in the editor, so clear out game state hack stupid i suck kill me
-      fr_compile_rect(global_fullmap,0,0,MAP_XSIZE,MAP_YSIZE,TRUE);
+      fr_compile_rect(global_fullmap,0,0,MAP_XSIZE,MAP_YSIZE,true);
    }
 */
 
    // do not ecology while player is being destroyed and created.
-   trigger_check=FALSE;
+   trigger_check=false;
 
    // save off physics stuff
    EDMS_get_state(objs[PLAYER_OBJ].info.ph, &player_edms);
@@ -377,7 +377,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    {
       plr_loc = objs[PLAYER_OBJ].loc;
       obj_destroy(PLAYER_OBJ);
-      make_player = TRUE;
+      make_player = true;
    }
 
    // Read appropriate state modifiers
@@ -386,7 +386,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    AdvanceProgress();
 
    // Open the file we're going to save into.
-   fd = ResEditFile(fSpec,TRUE);
+   fd = ResEditFile(fSpec,true);
    if (fd < 0)
    {
 //KLC      end_wait();
@@ -491,7 +491,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
 
    if (make_player)
       obj_create_player(&plr_loc);
-   trigger_check=TRUE;
+   trigger_check=true;
 //¥¥¥   if (flush_mem)
 //¥¥¥      load_dynamic_memory(DYNMEM_PARTIAL);
    EDMS_holistic_teleport(objs[PLAYER_OBJ].info.ph, &player_edms);
@@ -611,7 +611,7 @@ errtype fix_free_chain(int8_t cl, int16_t limit)
    ObjSpec *osp, *next_item, *next_next_item;
    int16_t ss;
    int8_t *data;
-   bool cont = TRUE;
+   bool cont = true;
 
    ss = old_objSpecHeaders[cl].struct_size;
    data = old_objSpecHeaders[cl].data;
@@ -625,7 +625,7 @@ errtype fix_free_chain(int8_t cl, int16_t limit)
          next_item = (ObjSpec *)(data + (osp->next * ss));
          osp->next = next_item->next;
          if (osp->next == OBJ_SPEC_NULL)
-            cont = FALSE;
+            cont = false;
          else
          {
             next_next_item = (ObjSpec *)(data + (osp->next * ss));
@@ -633,7 +633,7 @@ errtype fix_free_chain(int8_t cl, int16_t limit)
          }
       }
       else if (osp->next == OBJ_SPEC_NULL)
-         cont = FALSE;
+         cont = false;
       else
          osp = (ObjSpec *)(data + (osp->next * ss));
    }
@@ -648,7 +648,7 @@ bool one_compression_pass(int8_t cl,int16_t start)
    ObjID fugitive = OBJ_NULL;
    ObjSpec *p1;
    ObjSpecID new_objspec, old_specid;
-   bool cont = TRUE;
+   bool cont = true;
 
    ss = old_objSpecHeaders[cl].struct_size;
    data = old_objSpecHeaders[cl].data;
@@ -659,17 +659,17 @@ bool one_compression_pass(int8_t cl,int16_t start)
       if (objs[osp->id].specID >= start)
       {
          fugitive = osp->id;
-         cont = FALSE;
+         cont = false;
       }
       else if (osp->next == OBJ_SPEC_NULL)
       {
-         cont = FALSE;
+         cont = false;
       }
       else
          osp = (ObjSpec *)(data + (osp->next * ss));
    }
    if (fugitive == OBJ_NULL)
-      return(FALSE);
+      return(false);
 
    // Now that we have a guy who ought to be moved, lets move him
    // Really, I guess we have no particular reason to believe that our new location
@@ -689,12 +689,12 @@ bool one_compression_pass(int8_t cl,int16_t start)
    objs[osp->id].specID = new_objspec;
    HeaderObjSpecFree(cl,old_specid, &old_objSpecHeaders[cl]);
    fix_free_chain(cl,start);
-   return(TRUE);
+   return(true);
 }
 
 errtype compress_old_class(int8_t cl)
 {
-   bool cont = TRUE;
+   bool cont = true;
    fix_free_chain(cl, objSpecHeaders[cl].size);
    while (cont)
       cont = one_compression_pass(cl,objSpecHeaders[cl].size);
@@ -708,7 +708,7 @@ errtype expand_old_class(int8_t cl, int16_t new_start)
    ObjSpecID osid;
    int16_t ss;
    int8_t *data;
-   bool cont = TRUE;
+   bool cont = true;
 
    ss = objSpecHeaders[cl].struct_size;
    data = objSpecHeaders[cl].data;
@@ -724,7 +724,7 @@ errtype expand_old_class(int8_t cl, int16_t new_start)
          Warning(("setting osid %d to %d\n",osid,new_start));
          next_item = (ObjSpec *)(data + osp->next * ss);
          next_item->prev = osid;
-         cont = FALSE;
+         cont = false;
       }
       else
       {
@@ -740,7 +740,7 @@ void load_level_data()
 {
    extern errtype load_small_texturemaps();
 
-//¥¥¥KLC-removed from here	obj_load_art(FALSE);
+//¥¥¥KLC-removed from here	obj_load_art(false);
 	AdvanceProgress();
 	load_small_texturemaps();
 	AdvanceProgress();
@@ -787,25 +787,25 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 	int32_t 			i, idx = 0, fd, version;
 	LGRect 		bounds;
 	errtype 		retval = OK;
-	bool 			make_player = FALSE;
+	bool 			make_player = false;
 	ObjLoc 		plr_loc;
 	ObjID 		oid;
 	int8_t			*schedvec;			//KLC - don't need an array.  Only one in map.
 //	State 			player_edms;
 	curAMap 	saveAMaps[NUM_O_AMAP];
 	uint8_t 		savedMaps;
-	bool 			do_anims = FALSE;
+	bool 			do_anims = false;
 
 //   _MARK_("load_current_map:Start");
 
 //KLC - Mac cursor showing at this time	begin_wait();
 	free_dynamic_memory(dynmem_mask);
-	trigger_check = FALSE;
+	trigger_check = false;
 	if (PLAYER_OBJ != OBJ_NULL)
 	{
 		plr_loc = objs[PLAYER_OBJ].loc;
 		obj_destroy(PLAYER_OBJ);
-		make_player = TRUE;
+		make_player = true;
 	}
 	AdvanceProgress();
 
@@ -821,7 +821,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 		//Warning(("Could not load map file %s (%s) , rv = %d!\n",dpath_fn,fn,retval));
 		if (make_player)
 			obj_create_player(&plr_loc);
-		trigger_check=TRUE;
+		trigger_check=true;
 		load_dynamic_memory(dynmem_mask);
 //KLC		end_wait();
 
@@ -899,7 +899,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 		idx++;
 
 //KLC¥¥¥ Big hack!  Force the schedule to growable.
-global_fullmap->sched[0].queue.grow = TRUE;
+global_fullmap->sched[0].queue.grow = true;
 
 	REF_READ(id_num, idx++, loved_textures);
 /*
@@ -1502,14 +1502,14 @@ obj_out:
 	bounds.lr.x = global_fullmap->x_size;
 	bounds.lr.y = global_fullmap->y_size;
 
-   rendedit_process_tilemap(global_fullmap, &bounds, TRUE);
+   rendedit_process_tilemap(global_fullmap, &bounds, true);
 
    for (i=0;i<MAX_OBJ;i++)
       physics_handle_id[i]=OBJ_NULL;
    physics_handle_max=-1;
 
    if (anim_counter == 0)
-      do_anims = TRUE;
+      do_anims = true;
 
 	FORALLOBJS(oid)
 	{
@@ -1530,14 +1530,14 @@ obj_out:
 					obj_screen_animate(oid);
 					break;
 				default:
-					add_obj_to_animlist(oid, REPEAT_3D(ObjProps[OPNUM(oid)].bitmap_3d),FALSE,FALSE,0,NULL,NULL,0);
+					add_obj_to_animlist(oid, REPEAT_3D(ObjProps[OPNUM(oid)].bitmap_3d),false,false,0,NULL,NULL,0);
 					break;
 			}
 		}
 
 		objs[oid].info.ph = -1;
 		if (objs[oid].loc.x != 0xFFFF)
-			obj_move_to(oid, &objs[oid].loc,TRUE);
+			obj_move_to(oid, &objs[oid].loc,true);
 
 		// sleep the object (this may become "settle" the object)
 		if (objs[oid].info.ph != -1)
@@ -1552,7 +1552,7 @@ obj_out:
    // player_struct.level, which means the wrong shodometer quest
    // variable gets set!!!
    //
-   // compute_shodometer_value(FALSE);
+   // compute_shodometer_value(false);
 
    if (make_player)
    {
@@ -1572,7 +1572,7 @@ out:
 	reset_pathfinding();
 	old_bits = -1;
 
-	trigger_check = TRUE;
+	trigger_check = true;
 
 	load_dynamic_memory(dynmem_mask);
 	load_level_data();

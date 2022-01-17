@@ -113,7 +113,7 @@ bool does_weapon_overload(int32_t type, int32_t )
    switch(type)
    {
       case (GUN_SUBCLASS_BEAM):
-         return(TRUE);
+         return(true);
          break;
       case (GUN_SUBCLASS_PISTOL):
       case (GUN_SUBCLASS_AUTO):
@@ -121,7 +121,7 @@ bool does_weapon_overload(int32_t type, int32_t )
       case (GUN_SUBCLASS_HANDTOHAND):
       case (GUN_SUBCLASS_BEAMPROJ):
       default:
-         return(FALSE);
+         return(false);
          break;
    }
 }
@@ -197,7 +197,7 @@ void set_beam_weapon_max_charge(uint8_t index, uint8_t max_charge)
    if (max_charge < MIN_ENERGY_USE)
       max_charge=MIN_ENERGY_USE;
    player_struct.weapons[index].setting = max_charge;
-   mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,FALSE,MFD_ACTIVE,TRUE);
+   mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,false,MFD_ACTIVE,true);
 
    return;
 }
@@ -231,14 +231,14 @@ ObjID do_wall_hit(Combat_Pt *hit_point, Combat_Pt, int32_t triple, int16_t mouse
 
    // you know this should all be changed, so change it when
    // fr_get_at_raw_real is done
-   id = fr_get_at_raw(_current_fr_context, mouse_x, mouse_y, FALSE, FALSE);
+   id = fr_get_at_raw(_current_fr_context, mouse_x, mouse_y, false, false);
    if (id < 0)
       id = OBJ_NULL;
    else
    {
       ObjID obj_trans;
 
-      obj_trans=fr_get_at_raw(_current_fr_context, mouse_x, mouse_y, FALSE, TRUE);
+      obj_trans=fr_get_at_raw(_current_fr_context, mouse_x, mouse_y, false, true);
 
       if(objs[id].obclass==CLASS_DOOR)
       {
@@ -283,7 +283,7 @@ ObjID do_wall_hit(Combat_Pt *hit_point, Combat_Pt, int32_t triple, int16_t mouse
                extern void hudobj_set_id(int16_t id, bool val);
 
                beam_effect_id = efft;
-               hudobj_set_id(beam_effect_id, TRUE);
+               hudobj_set_id(beam_effect_id, true);
             }
          }
       }
@@ -337,7 +337,7 @@ bool player_fire_handtohand(LGPoint *, uint8_t, ObjID *what_hit,int32_t gun_trip
    extern uint8_t   handart_count;
    int8_t           i;
    bool           dead;
-   bool           hit_wall=FALSE;
+   bool           hit_wall=false;
 
    *what_hit = OBJ_NULL;
 
@@ -376,7 +376,7 @@ bool player_fire_handtohand(LGPoint *, uint8_t, ObjID *what_hit,int32_t gun_trip
       if (DoubleSize)
          hand_pos.y = SCONV_Y(hand_pos.y) >> 1;
       else
-         ss_point_convert(&(hand_pos.x),&(hand_pos.y),FALSE);
+         ss_point_convert(&(hand_pos.x),&(hand_pos.y),false);
       find_fire_vector(&hand_pos, &vector);
 
       // shift the origin point for the last attack which is right
@@ -418,7 +418,7 @@ bool player_fire_handtohand(LGPoint *, uint8_t, ObjID *what_hit,int32_t gun_trip
          if (target != OBJ_NULL)
             break;                  // exit out of loop!
          else
-            hit_wall = TRUE;
+            hit_wall = true;
       }
    }
 
@@ -485,20 +485,20 @@ bool player_fire_handtohand(LGPoint *, uint8_t, ObjID *what_hit,int32_t gun_trip
    }
 
    handart_count &= (~0x80);
-   return(TRUE);
+   return(true);
 }
 
 // -----------------------------------------------------------------
 // decrease_ammo()
 //
-// returns FALSE if we don't have as many shots as we want to remove.
-// else removes them and returns TRUE.
+// returns false if we don't have as many shots as we want to remove.
+// else removes them and returns true.
 
 bool decrease_ammo(uint8_t slot, int32_t shots)
 {
    if(player_struct.weapons[slot].ammo == 0) {
       weapon_mfd_for_reload();
-      return FALSE;
+      return false;
    }
 
    player_struct.weapons[slot].ammo -= shots;
@@ -506,7 +506,7 @@ bool decrease_ammo(uint8_t slot, int32_t shots)
    if(player_struct.weapons[slot].ammo == 0)
       weapon_mfd_for_reload();
 
-   return TRUE;
+   return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -534,7 +534,7 @@ bool player_fire_projectile(LGPoint *pos, LGRegion *r, uint8_t slot, int32_t gun
 
    // decrement the ammo count - unless we're out of ammo
    if(!decrease_ammo(slot,1))
-      return FALSE;
+      return false;
 
    // If we finished a cartridge, throw it away
 //   if (player_struct.weapons[slot].ammo == 0)
@@ -553,7 +553,7 @@ bool player_fire_projectile(LGPoint *pos, LGRegion *r, uint8_t slot, int32_t gun
 
    // check if we hit something on the wall
    if (target == OBJ_NULL)
-      target = do_wall_hit(&origin, vector, ammo_triple,pos->x, pos->y,TRUE);
+      target = do_wall_hit(&origin, vector, ammo_triple,pos->x, pos->y,true);
 
    if (target != OBJ_NULL)
    {
@@ -565,13 +565,13 @@ bool player_fire_projectile(LGPoint *pos, LGRegion *r, uint8_t slot, int32_t gun
    randomize_cursor_pos(pos, r,
       AmmoProps[CPTRIP(ammo_triple)].recoil_force+player_struct.fatigue/FATIGUE_ACCURACY_RATIO);
 
-   mfd_notify_func(MFD_WEAPON_FUNC, MFD_WEAPON_SLOT, FALSE, MFD_ACTIVE, FALSE);
+   mfd_notify_func(MFD_WEAPON_FUNC, MFD_WEAPON_SLOT, false, MFD_ACTIVE, false);
    chg_set_flg(INVENTORY_UPDATE);
-   return TRUE;
+   return true;
 }
 
 uint8_t energy_expulsion = 0;
-bool overload_beam = FALSE;
+bool overload_beam = false;
 
 // ----------------------------------------------------------
 // weapon_energy_drain()
@@ -586,23 +586,23 @@ bool weapon_energy_drain(weapon_slot *ws, uint8_t charge, uint8_t max_charge)
    if (ws->heat >= OVERHEAT_THRESHOLD)
    {
       message_info(get_temp_string(REF_STR_GunTooHot));
-      return(FALSE);
+      return(false);
    }
    if (player_struct.energy < MIN_ENERGY_WPN_THRESHOLD)
    {
       message_info(get_temp_string(REF_STR_NoEnergyFireWeapon));
-      return(FALSE);
+      return(false);
    }
 
    // find out which is smaller, the charge setting, or the amount of "coolness" in the weapon
    charge = min(charge, (MAX_HEAT - ws->heat));
    if (OVERLOAD_VALUE(ws->setting))              // if we are overloaded - double it!
    {
-      overload_beam = TRUE;
+      overload_beam = true;
       charge = (MAX_HEAT * 2);
    }
    else
-      overload_beam = FALSE;
+      overload_beam = false;
 
    energy_used = (uint8_t) ((((int32_t) max_charge) * charge)/100);
 
@@ -621,7 +621,7 @@ bool weapon_energy_drain(weapon_slot *ws, uint8_t charge, uint8_t max_charge)
    else
       ws->heat += (charge/2);
 
-   return(TRUE);
+   return(true);
 }
 
 // -------------------------------------------------------------------------------
@@ -643,7 +643,7 @@ bool player_fire_energy(LGPoint *pos, uint8_t slot, int32_t gun_triple)
    uint8_t          charge = OVERLOAD_VALUE(ws->setting) ? (MAX_HEAT) : ws->setting;
 
    if(!weapon_energy_drain(ws, charge, BeamGunProps[SCTRIP(gun_triple)].max_charge))
-      return FALSE;
+      return false;
 
    chg_set_flg(VITALS_UPDATE);
 
@@ -661,7 +661,7 @@ bool player_fire_energy(LGPoint *pos, uint8_t slot, int32_t gun_triple)
 
    // did we hit something???
    if (target == OBJ_NULL)
-      target = do_wall_hit(&origin, vector, gun_triple, pos->x, pos->y,TRUE);
+      target = do_wall_hit(&origin, vector, gun_triple, pos->x, pos->y,true);
 
    if (target != OBJ_NULL)
    {
@@ -675,7 +675,7 @@ bool player_fire_energy(LGPoint *pos, uint8_t slot, int32_t gun_triple)
    mfd_force_update();  // need to do this because of OVERLOAD
    chg_set_flg(INVENTORY_UPDATE);
 
-   return(TRUE);
+   return(true);
 }
 
 
@@ -803,7 +803,7 @@ bool player_fire_slow_projectile(int32_t proj_triple, int32_t fire_triple,fix pr
    vector.y = (vector.y * proj_speed) + (obj_coord_from_fix(new_state.Y_dot)*PHYSICS_RADIUS_UNIT)*2;
    vector.z = (vector.z * proj_speed) + (obj_height_from_fix(new_state.Z_dot)*PHYSICS_RADIUS_UNIT)*2;
 
-   obj_move_to_vel(proj_id, &loc, TRUE, vector.x, vector.y, vector.z);
+   obj_move_to_vel(proj_id, &loc, true, vector.x, vector.y, vector.z);
    apply_gravity_to_one_object(proj_id, SLOW_PROJECTILE_GRAVITY);
 
    obj_ph = objs[proj_id].info.ph;
@@ -819,7 +819,7 @@ bool player_fire_slow_projectile(int32_t proj_triple, int32_t fire_triple,fix pr
    mfd_force_update(); // due to overload
    chg_set_flg(INVENTORY_UPDATE);
 
-   return TRUE;
+   return true;
 }
 
 
@@ -838,7 +838,7 @@ bool player_fire_energy_proj(LGPoint *pos, uint8_t slot, int32_t gun_triple)
    int32_t            subclass= SCTRIP(gun_triple);
 
    if(!weapon_energy_drain(ws, charge, BeamprojGunProps[SCTRIP(gun_triple)].max_charge))
-      return FALSE;
+      return false;
 
    // the TRIPLE of the projectile will determine the "power"
    player_fire_slow_projectile(BeamprojGunProps[subclass].proj_triple,
@@ -852,7 +852,7 @@ bool player_fire_energy_proj(LGPoint *pos, uint8_t slot, int32_t gun_triple)
    mfd_force_update();
    chg_set_flg(INVENTORY_UPDATE);
 
-   return TRUE;
+   return true;
 }
 
 
@@ -884,9 +884,9 @@ bool fire_player_software(LGPoint *pos, LGRegion *, bool pull)
    int8_t shots = 1;
 
    if (!player_struct.softs.combat[soft])
-      return FALSE;
+      return false;
    if (!pull)
-      return FALSE;
+      return false;
 
    player_struct.last_fire = player_struct.game_time;
 
@@ -906,7 +906,7 @@ bool fire_player_software(LGPoint *pos, LGRegion *, bool pull)
 }
 
 uint32_t weapon_fire_remainder = 0;
-bool handart_flash = FALSE;
+bool handart_flash = false;
 
 // ---------------------------------------------------------------------------
 // fire_player_weapon()
@@ -947,7 +947,7 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
    int32_t      i;
    int32_t      gun_triple = current_weapon_trip();
    int16_t    deltax, deltay;
-   bool     handart_ok = TRUE;
+   bool     handart_ok = true;
    LGPoint    realpos = *pos;
    LGPoint    cp;
    LGRect     rc;
@@ -956,14 +956,14 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
    extern bool time_passes;
 
    if (player_struct.dead || game_paused || !time_passes)
-      return (FALSE);
+      return (false);
 
    region_abs_rect(r,r->r,&rc);
    if (DoubleSize)
       rc.lr.y = SCONV_Y(rc.lr.y) >> 1;
    cp = realpos;
    if (!DoubleSize)
-	   ss_mouse_convert(&(cp.x),&(cp.y),TRUE);
+	   ss_mouse_convert(&(cp.x),&(cp.y),true);
 #ifdef STEREO_SUPPORT
    if (convert_use_mode == 5)
    {
@@ -982,13 +982,13 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
 
 //¥¥¥      ui_mouse_put_xy(realpos.x,realpos.y);
       // Heck we know this is the first time you're firing.
-      pull = TRUE;
+      pull = true;
    }
 
    if (global_fullmap->cyber)
    {
       if ((CYBER_FIRE_WAIT+player_struct.last_fire) > player_struct.game_time)
-         return FALSE;
+         return false;
       player_struct.last_fire = player_struct.game_time;
       return(fire_player_software(&realpos,r,pull));
    }
@@ -1012,9 +1012,9 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
 	         uiPopSlabCursor(&fullscreen_slab);
 	     else
      	    uiPopSlabCursor(&main_slab);
-         fire_slam = FALSE;
+         fire_slam = false;
       }
-      return FALSE;
+      return false;
    }
 
    // Don't fire if we're out of ammo, and we're notfiring a beam weapon or hand-to-hand
@@ -1023,7 +1023,7 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
        (player_struct.weapons[w].type != GUN_SUBCLASS_BEAMPROJ) &&
        (player_struct.weapons[w].ammo == 0)) {
       weapon_mfd_for_reload();
-      return FALSE;
+      return false;
    }
 
    // if the trigger is being held down, fire as many shots
@@ -1037,7 +1037,7 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
          uint32_t    deltat = (player_struct.game_time-player_struct.last_fire) * player_struct.fire_rate + weapon_fire_remainder;
 
          if ((player_struct.auto_fire_click+AUTO_FIRE_CLICK_WAIT) >  player_struct.game_time)
-            return FALSE;
+            return false;
 
          shots = deltat/AUTOFIRE_SPEED;
 
@@ -1050,7 +1050,7 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
       {
          // make sure we're not just clicking very fast
          if ((player_struct.auto_fire_click+AUTO_FIRE_CLICK_WAIT) > player_struct.game_time)
-            return FALSE;
+            return false;
          // clear the weapon remainder - if we just pulled the trigger
          weapon_fire_remainder = 0;
          shots = MIN_AUTO_SHOT;
@@ -1062,14 +1062,14 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
    else
    {
       if (((GunProps[CPTRIP(gun_triple)].fire_rate*10)+player_struct.last_fire) > player_struct.game_time)
-         return FALSE;
+         return false;
       next_fire_time = (GunProps[CPTRIP(gun_triple)].fire_rate*10)+player_struct.game_time;
       gun_fire_offset = 0;
    }
    if (shots)
       player_struct.last_fire = player_struct.game_time;
    else
-      return FALSE;
+      return false;
 
    deltax = mouse_attack_x = realpos.x;  deltay = mouse_attack_y = realpos.y;
    switch(player_struct.weapons[w].type)
@@ -1102,13 +1102,13 @@ bool fire_player_weapon(LGPoint *pos, LGRegion *r, bool pull)
    {
       int32_t trip;
       handart_show = 2;
-      handart_fire = FALSE;
-      handart_flash = TRUE;
+      handart_fire = false;
+      handart_flash = true;
 
       if (_current_loop <= FULLSCREEN_LOOP)
       {
          chg_set_flg(INVENTORY_UPDATE);
-         mfd_notify_func(MFD_WEAPON_FUNC, MFD_WEAPON_SLOT, FALSE, MFD_ACTIVE, FALSE);
+         mfd_notify_func(MFD_WEAPON_FUNC, MFD_WEAPON_SLOT, false, MFD_ACTIVE, false);
       }
 
       player_struct.rounds_fired += shots;
@@ -1156,7 +1156,7 @@ void demo_fire_weapon(int16_t x, int16_t y)
    aimpos.x = x;
    aimpos.y = y;
    ui_mouse_put_xy(x, y);
-   fire_player_weapon(&aimpos,_current_view,TRUE);
+   fire_player_weapon(&aimpos,_current_view,true);
 }
 #endif
 
@@ -1206,7 +1206,7 @@ bool change_ammo_type(uint8_t ammo_type)
    int32_t         subclass;
    int32_t         type;
    int32_t         triple;
-   bool changed = FALSE;
+   bool changed = false;
 
    ws = &player_struct.weapons[player_struct.actives[ACTIVE_WEAPON]];
    triple = MAKETRIP(CLASS_GUN, ws->type, ws->subtype);
@@ -1220,13 +1220,13 @@ bool change_ammo_type(uint8_t ammo_type)
       // Decrement the cartridge count
       player_struct.cartridges[CPTRIP(triple)]--;
       ws->ammo = AmmoProps[CPTRIP(triple)].cartridge_size;
-      changed = TRUE;
+      changed = true;
    }
    else if (player_struct.partial_clip[CPTRIP(triple)] != 0)
    {
       ws->ammo = player_struct.partial_clip[CPTRIP(triple)];
       player_struct.partial_clip[CPTRIP(triple)] = 0;
-      changed = TRUE;
+      changed = true;
    }
    if (changed)
    {
@@ -1244,11 +1244,11 @@ bool change_ammo_type(uint8_t ammo_type)
             play_digi_fx(SFX_RELOAD_1,1);
             break;
       }
-      mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,FALSE,MFD_ACTIVE,TRUE);
-      return TRUE;
+      mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,false,MFD_ACTIVE,true);
+      return true;
    }
    else
-      return FALSE;
+      return false;
 }
 
 //--------------------------------------------------------------------
@@ -1291,7 +1291,7 @@ void unload_current_weapon(void)
 #define WEAPON_COOL_OFF_TIME  25
 #define HEAT_FUDGE            2
 
-bool temp_critical = FALSE;
+bool temp_critical = false;
 
 void check_temperature(weapon_slot *ws, bool clear)
 {
@@ -1299,7 +1299,7 @@ void check_temperature(weapon_slot *ws, bool clear)
    {
       if (temp_critical)
          hud_unset(HUD_BEAMHOT);
-      temp_critical = FALSE;
+      temp_critical = false;
    }
    if ((ws->type != GUN_SUBCLASS_BEAM) &&
        (ws->type != GUN_SUBCLASS_BEAMPROJ))
@@ -1310,13 +1310,13 @@ void check_temperature(weapon_slot *ws, bool clear)
    {
       if (!temp_critical)
          hud_set(HUD_BEAMHOT);
-      temp_critical = TRUE;
+      temp_critical = true;
    }
    else
    {
       if (temp_critical)
          hud_unset(HUD_BEAMHOT);
-      temp_critical = FALSE;
+      temp_critical = false;
    }
 }
 
@@ -1345,8 +1345,8 @@ void cool_off_beam_weapons(void)
                chg_set_flg(INVENTORY_UPDATE);
                if (player_struct.actives[ACTIVE_WEAPON] == i)
                {
-                  mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,FALSE,MFD_ACTIVE,TRUE);
-                  check_temperature(ws, FALSE);
+                  mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,false,MFD_ACTIVE,true);
+                  check_temperature(ws, false);
                }
             }
          }
@@ -1374,8 +1374,8 @@ void randomize_cursor_pos(LGPoint *cpos, LGRegion *reg, uint8_t p)
 
    r = *(reg->r);
 #ifdef SVGA_SUPPORT
-   ss_mouse_convert(&(r.ul.x),&(r.ul.y),FALSE);
-   ss_mouse_convert(&(r.lr.x),&(r.lr.y),FALSE);
+   ss_mouse_convert(&(r.ul.x),&(r.ul.y),false);
+   ss_mouse_convert(&(r.lr.x),&(r.lr.y),false);
 #endif
    cpos->x = max(r.ul.x,(min(newx,r.lr.x)));
    cpos->y = max(r.ul.y,(min(newy,r.lr.y)));
@@ -1495,11 +1495,11 @@ void change_selected_weapon(int32_t new_weapon)
    }
    cursor_color_offset = new_offset;
 */
-   check_temperature(ws, TRUE);
+   check_temperature(ws, true);
    if ((ws->type == GUN_SUBCLASS_BEAM) ||
        (ws->type == GUN_SUBCLASS_BEAMPROJ))
    {
-      check_temperature(ws, FALSE);
+      check_temperature(ws, false);
    }
    player_struct.auto_fire_click = 0;
 
@@ -1527,12 +1527,12 @@ bool reload_current_weapon(void)
 
 //   unload_current_weapon();
 //   if (change_ammo_type(ws->ammo_type))
-//      return TRUE;
+//      return true;
    get_available_ammo_type(ws->type,ws->subtype,&num_types,ammo_types,&ammosc);
    for (i = num_types -1; i >= 0; i--)
       if (change_ammo_type(ammo_types[i]))
-         return TRUE;
-   return FALSE;
+         return true;
+   return false;
 }
 
 
@@ -1549,15 +1549,15 @@ bool reload_weapon_hotkey(int16_t, uint32_t, void* data)
       // attempts to reload the current weapon with the same ammo type it
       // held before, but if that fails will reload with anything available.
       unload_current_weapon();
-      mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,FALSE,MFD_ACTIVE,TRUE);
+      mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,false,MFD_ACTIVE,true);
       if (change_ammo_type(ws->ammo_type)) {
-         return TRUE;
+         return true;
       }
       return(reload_current_weapon());
    }
    else {
       unload_current_weapon();
-      mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,FALSE,MFD_ACTIVE,TRUE);
+      mfd_notify_func(MFD_WEAPON_FUNC,MFD_WEAPON_SLOT,false,MFD_ACTIVE,true);
       get_available_ammo_type(ws->type,ws->subtype,&num_types,ammo_types,&ammosc);
       // find index of current ammo type
       for(cur=0;cur<num_types-1;cur++)
@@ -1569,23 +1569,23 @@ bool reload_weapon_hotkey(int16_t, uint32_t, void* data)
       // in the order 1, ... ,num_types-1,0
       for(i=1;i<num_types;i++) {
          if(change_ammo_type(ammo_types[(cur+i)%num_types])) {
-            return TRUE;
+            return true;
          }
       }
    }
-   return FALSE;
+   return false;
 }
 
 
 bool ready_to_draw_handart(void)
 {
    uint8_t active = player_struct.actives[ACTIVE_WEAPON];
-   bool val = FALSE;
+   bool val = false;
 
    switch (player_struct.weapons[active].type)
    {
       case(GUN_SUBCLASS_HANDTOHAND):
-         val = TRUE;
+         val = true;
          break;
       case(GUN_SUBCLASS_BEAM):
       case(GUN_SUBCLASS_BEAMPROJ):

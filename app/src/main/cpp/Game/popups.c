@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define EMAIL_CURS_MARG 5
 #define EMAIL_CURS_FONT RES_tinyTechFont
 
-bool 				popup_cursors = TRUE;
+bool 				popup_cursors = true;
 grs_bitmap	popup_bitmaps[NUM_POPUPS];
 LGRect			popup_rects[NUM_POPUPS];
 LGPoint			popup_hotspots[NUM_POPUPS] = 	// in 0-16 dimension-independent units
@@ -64,7 +64,7 @@ void init_popups(void)
 		Ref id = MKREF(RES_popups,i);
 		FrameDesc* f = (FrameDesc *)RefGet(id);
 		popup_rects[i] = f->anchorArea;
-		if (load_res_bitmap(&popup_bitmaps[i],id,TRUE) != OK)
+		if (load_res_bitmap(&popup_bitmaps[i],id,true) != OK)
 			critical_error(CRITERR_RES|0xA);
 	}
 	ResUnlock(RES_popups);
@@ -104,10 +104,10 @@ void make_popup_cursor(LGCursor* c, grs_bitmap* bm, int8_t* s, uint32_t tmplt,bo
 	gr_bitmap(pbm,0,0);
 	gr_set_font((grs_font*)ResLock(RES_tinyTechFont));
 	gr_string_size(s,&w,&h);
-	ss_point_convert(&w, &h, FALSE);
+	ss_point_convert(&w, &h, false);
 	x = (r->ul.x + r->lr.x - w)/2 + offset.x;
 	y = (r->ul.y + r->lr.y - h)/2 + offset.y;
-	ss_point_convert(&x, &y, TRUE);
+	ss_point_convert(&x, &y, true);
 	gr_set_fcolor(CURSOR_TEXT_COLOR);
 //	ss_string(s,x,y+1);
 	ss_scale_string(s, SCONV_X(x), SCONV_Y(y)+1);
@@ -159,7 +159,7 @@ void make_email_cursor(LGCursor* c, grs_bitmap* bm, uint8_t page, bool init)
    h+=2;
    w=EMAIL_CURS_WID;
 #ifdef SVGA_SUPPORT
-   ss_point_convert(&w,&h,FALSE);
+   ss_point_convert(&w,&h,false);
 #endif
    if(init)
       gr_init_bm(bm,NULL,BMT_FLAT8,BMF_TRANS,w,h);
@@ -180,7 +180,7 @@ void make_email_cursor(LGCursor* c, grs_bitmap* bm, uint8_t page, bool init)
    x = EMAIL_CURS_MARG;
    y = 1;
    gr_set_fcolor(CURSOR_TEXT_COLOR);
-   draw_shadowed_string(s,x,y,TRUE);
+   draw_shadowed_string(s,x,y,true);
    ResUnlock(RES_tinyTechFont);
    gr_set_fcolor(BLACK+1);
    ss_vline(1,h/2-1,h/2+1);

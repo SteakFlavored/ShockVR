@@ -97,7 +97,7 @@ void strtoupper(int8_t *text)
 }
 
 #ifdef SVGA_SUPPORT
-bool shadow_scale = TRUE;
+bool shadow_scale = true;
 #endif
 void draw_shadowed_string(int8_t* s, int16_t x, int16_t y, uint8_t shadow)
 {
@@ -114,7 +114,7 @@ void draw_shadowed_string(int8_t* s, int16_t x, int16_t y, uint8_t shadow)
       if ((convert_use_mode > 0) && (perform_svga_conversion(OVERRIDE_FONT)))
       {
          if (shadow_scale)
-            ss_point_convert(&(npt.x),&(npt.y),FALSE);
+            ss_point_convert(&(npt.x),&(npt.y),false);
          gr_set_fcolor(shadow);
          ss_scale_string(s,npt.x-1,npt.y-1);
          ss_scale_string(s,npt.x,npt.y-1);
@@ -222,7 +222,7 @@ errtype draw_res_bm_core(Ref id, int32_t x, int32_t y, bool scale)
 
 errtype draw_res_bm(Ref id, int32_t x, int32_t y)
 {
-   return(draw_res_bm_core(id,x,y,TRUE));
+   return(draw_res_bm_core(id,x,y,true));
 }
 
 // Note, does no mouse code!
@@ -391,7 +391,7 @@ bool gifdump_func(int16_t keycode, uint32_t context, void* data)
       strcat(harold," saved");
       message_info(harold);
    }
-   return(TRUE);
+   return(true);
 }
 #pragma enable_message(202)
 
@@ -435,7 +435,7 @@ LGRect msg_rect[2]=
    {FULLSCREEN_MESSAGE_X,FULLSCREEN_MESSAGE_Y,FULLSCREEN_MESSAGE_X+GAME_MESSAGE_W,FULLSCREEN_MESSAGE_Y+GAME_MESSAGE_H}
 };
 
-bool message_resend = FALSE;
+bool message_resend = false;
 extern bool game_paused;
 extern bool view360_message_obscured;
 void strip_newlines(int8_t* buf);
@@ -499,13 +499,13 @@ errtype message_info(int8_t *info_text)
       }
       if (!message_resend && info_text != last_message && strcmp(last_message,info_text) == 0)
       {
-         message_resend = TRUE;
+         message_resend = true;
          message_clear_time = *tmd_ticks + CIT_CYCLE/10;
          hud_unset(HUD_MSGLINE);
       }
       else
       {
-         message_resend = FALSE;
+         message_resend = false;
          if (!full_game_3d  && !view360_message_obscured
             || game_paused)
          {
@@ -534,7 +534,7 @@ errtype message_info(int8_t *info_text)
 }
 
 
-bool message_clear_on = TRUE;
+bool message_clear_on = true;
 
 errtype message_clear_check()
 {
@@ -566,7 +566,7 @@ errtype message_box(int8_t *box_text)
 #pragma disable_message(202)
 bool confirm_box(int8_t *confirm_text)
 {
-   return(TRUE);
+   return(true);
 }
 #pragma enable_message(202)
 

@@ -93,14 +93,14 @@ bool gr_init_blend(int32_t log_blend_levels)
       int32_t fac=GR_BLEND_TABLE_RES>>log_blend_levels;   /* base blend factor*/
       int32_t tab_cnt=(1<<log_blend_levels)-1, i;         /* number of tables, loop control */
 
-      if (grd_blend!=NULL) if (!gr_free_blend()) return FALSE; /* something went horribly wrong */
-//	   if ((grd_blend=(uint8_t *) gr_malloc(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return FALSE; /* x 64k tables */
-	   if ((grd_blend=(uint8_t *) NewPtr(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return FALSE; /* x 64k tables */
+      if (grd_blend!=NULL) if (!gr_free_blend()) return false; /* something went horribly wrong */
+//	   if ((grd_blend=(uint8_t *) gr_malloc(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return false; /* x 64k tables */
+	   if ((grd_blend=(uint8_t *) NewPtr(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return false; /* x 64k tables */
 	   for (i=0; i<tab_cnt; i++)
 	      gri_build_blend(grd_blend+(i*GR_BLEND_TABLE_SIZE),fac*(i+1));
       grd_log_blend_levels=log_blend_levels;
       grd_half_blend=grd_blend+(tab_cnt>>1)*GR_BLEND_TABLE_SIZE;
-      return TRUE;
+      return true;
    }
    else return gr_free_blend();
 }

@@ -167,7 +167,7 @@ static int8_t *tableNames[] = {
 	pmc = (MovieChunk *)malloc(mh.sizeChunks);
 	fread(pmc, mh.sizeChunks, 1, fpi);
   	pmcBase = pmc;
-	while (TRUE)
+	while (true)
 	{
 		uint8_t	s1, s2;
 

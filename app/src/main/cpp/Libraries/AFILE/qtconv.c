@@ -51,34 +51,34 @@ int32_t				gNumFrames;
 int32_t				gFakeIndex;
 QT_ChunkInfo chunkInfo[] =
 {
-	QT_CLIP,FALSE,
-	QT_CRGN,TRUE,
-	QT_DINF,FALSE,
-	QT_DREF,TRUE,
-	QT_EDTS,FALSE,
-	QT_ELST,TRUE,
-	QT_HDLR,TRUE,
-	QT_KMAT,TRUE,
-	QT_MATT,FALSE,
-	QT_MDAT,TRUE,
-	QT_MDIA,FALSE,
-	QT_MDHD,TRUE,
-	QT_MINF,FALSE,
-	QT_MOOV,FALSE,
-	QT_MVHD,TRUE,
-	QT_SMHD,TRUE,
-	QT_STBL,FALSE,
-	QT_STCO,TRUE,
-	QT_STSC,TRUE,
-	QT_STSD,TRUE,
-	QT_STSH,TRUE,
-	QT_STSS,TRUE,
-	QT_STSZ,TRUE,
-	QT_STTS,TRUE,
-	QT_TKHD,TRUE,
-	QT_TRAK,FALSE,
-	QT_UDTA,FALSE,
-	QT_VMHD,TRUE,
+	QT_CLIP,false,
+	QT_CRGN,true,
+	QT_DINF,false,
+	QT_DREF,true,
+	QT_EDTS,false,
+	QT_ELST,true,
+	QT_HDLR,true,
+	QT_KMAT,true,
+	QT_MATT,false,
+	QT_MDAT,true,
+	QT_MDIA,false,
+	QT_MDHD,true,
+	QT_MINF,false,
+	QT_MOOV,false,
+	QT_MVHD,true,
+	QT_SMHD,true,
+	QT_STBL,false,
+	QT_STCO,true,
+	QT_STSC,true,
+	QT_STSD,true,
+	QT_STSH,true,
+	QT_STSS,true,
+	QT_STSZ,true,
+	QT_STTS,true,
+	QT_TKHD,true,
+	QT_TRAK,false,
+	QT_UDTA,false,
+	QT_VMHD,true,
 	0,0
 };
 TrackType currTrackType;
@@ -142,7 +142,7 @@ void main(void)
 	SetupOffscreenBitmaps();
 
 	gr_init();
-	gr_set_mode (GRM_640x480x8, TRUE);
+	gr_set_mode (GRM_640x480x8, true);
 	screen = gr_alloc_screen (grd_cap->w, grd_cap->h);
 	gr_set_screen (screen);
 	gr_clear(0xff);
@@ -243,7 +243,7 @@ void main(void)
 	//-----------------------------------
 	HLock(movieRsrc);
 	Ptr	mp = (Ptr)*movieRsrc;
-	while (TRUE)
+	while (true)
 	{
 		//if (!QuikReadChunkHdr(fp, &chunkHdr))
 		if (!QuikReadChunkHdr(mp, &chunkHdr))
@@ -328,14 +328,14 @@ void main(void)
 			fread(frameBuff, movieRect.right*movieRect.bottom, 1, fp);
 
 			// See if there's an 0xFF anywhere in this screen.
-			subColor = FALSE;
+			subColor = false;
 			pp = (uint8_t *)frameBuff;
 			for (int32_t pix = 0; pix < movieRect.right*movieRect.bottom; pix++)
 			{
 				if (*pp == 0x00)
 				{
 					*pp = 0xFF;
-					subColor = TRUE;
+					subColor = true;
 				}
 				pp++;
 			}
@@ -353,7 +353,7 @@ void main(void)
 			// parameters for the output movie and begin a compression sequence.
 			if (f == 0)
 			{
-				result = SCDefaultPixMapSettings(ci, ((CGrafPort *)(gMainWindow))->portPixMap, TRUE);
+				result = SCDefaultPixMapSettings(ci, ((CGrafPort *)(gMainWindow))->portPixMap, true);
 			 	result = SCRequestSequenceSettings(ci);
 			 	if (result == scUserCancelled)
 			 	{
@@ -457,7 +457,7 @@ void	 CheckError(OSErr error, Str255 displayString)
 
 //	--------------------------------------------------------------
 //
-//	QuikReadChunkHdr() reads in the next chunk header, returns TRUE if ok.
+//	QuikReadChunkHdr() reads in the next chunk header, returns true if ok.
 
 //bool QuikReadChunkHdr(FILE *fp, QT_ChunkHdr *phdr)
 bool QuikReadChunkHdr(Ptr &p, QT_ChunkHdr *phdr)
@@ -482,7 +482,7 @@ bool QuikReadChunkHdr(Ptr &p, QT_ChunkHdr *phdr)
 	}
 
 //	return(feof(fp) == 0);
-	return(TRUE);
+	return(true);
 }
 
 //	--------------------------------------------------------------

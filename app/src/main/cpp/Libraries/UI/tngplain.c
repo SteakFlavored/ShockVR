@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma require_prototypes off
 bool tng_plain_keycooked(TNG *ptng, uint16_t key)
 {
-   bool retval = FALSE;
+   bool retval = false;
    IF_SET_RV(tng_cb_keycooked(ptng, key));
    return(retval);
 }
@@ -30,13 +30,13 @@ bool tng_plain_keycooked(TNG *ptng, uint16_t key)
 bool tng_plain_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 {
    tng_cb_mousebutt(ptng,type,loc);
-   return(TRUE);
+   return(true);
 }
 
 bool tng_plain_signal(TNG *ptng, uint16_t signal)
 {
    tng_cb_signal(ptng,signal);
-   return(TRUE);
+   return(true);
 }
 #pragma require_prototypes on
 

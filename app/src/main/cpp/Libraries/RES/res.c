@@ -76,7 +76,7 @@ void ResInit()
 //	Set memory allocator, init LZW system
 
 	MemPushAllocator(ResMalloc, ResRealloc, ResFree);
-	resPushedAllocators = TRUE;
+	resPushedAllocators = true;
 	LzwInit();
 */
 
@@ -147,7 +147,7 @@ void ResTerm()
 	if (resPushedAllocators)
 		{
 		MemPopAllocator();
-		resPushedAllocators = FALSE;
+		resPushedAllocators = false;
 		}
 
 //	We're outta here

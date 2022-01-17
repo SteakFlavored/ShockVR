@@ -50,7 +50,7 @@ int32_t vxd_maxd;
 // space for the incremental multiplication tables
 // pass it the maximum pixel dimension of any of the
 // voxel objects you anticipate drawing
-// returns TRUE for success, FALSE if unable to allocate
+// returns true for success, false if unable to allocate
 bool vx_init(int32_t max_depth)
 {
    zdxdz = (fix *)NewPtr(2 * max_depth * sizeof(fix));
@@ -60,8 +60,8 @@ bool vx_init(int32_t max_depth)
    vxd_maxd = max_depth;
    #endif
 
-   if (zdxdz == NULL) return FALSE;
-   return TRUE;
+   if (zdxdz == NULL) return false;
+   return true;
 }
 
 void vx_close()

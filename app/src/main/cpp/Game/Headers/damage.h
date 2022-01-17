@@ -98,7 +98,7 @@ extern ObjID destroyed_ids[MAX_DESTROYED_OBJS];
 #define ADD_DESTROYED_OBJECT(X) (destroyed_ids[destroyed_obj_count++] = X)
 
 // is_obj_destroyed()
-// returns TRUE, if object with id, is scheduled for destruction
+// returns true, if object with id, is scheduled for destruction
 bool is_obj_destroyed(ObjID id);
 
 // destroy_destroyed_objects()

@@ -114,11 +114,11 @@ cams player_cam;
 
 uint8_t cam_mode = OBJ_PLAYER_CAMERA;
 cams objmode_cam;
-bool  new_cyber_orient=TRUE;
-bool  ocp_settle_the_player=TRUE;
+bool  new_cyber_orient=true;
+bool  ocp_settle_the_player=true;
 
-bool properties_changed = FALSE;
-bool trigger_check = TRUE;
+bool properties_changed = false;
+bool trigger_check = true;
 ObjID physics_handle_id[MAX_OBJ];
 int32_t physics_handle_max=-1;
 
@@ -271,7 +271,7 @@ Ref ref_from_critter_data(ObjID, int32_t triple, uint8_t posture, uint8_t frame,
    Id our_id;
    RefTable *prt;
    int8_t curr_frames;
-   bool load_all_views = TRUE;
+   bool load_all_views = true;
 //¥¥¥   extern uint32_t page_amount;
 
    // Set mirror pointer
@@ -286,7 +286,7 @@ Ref ref_from_critter_data(ObjID, int32_t triple, uint8_t posture, uint8_t frame,
    }
 
 //¥¥¥   if (page_amount > CRITTER_LOADING_PAGE_LIMIT)
-//¥¥¥      load_all_views = FALSE;
+//¥¥¥      load_all_views = false;
 //¥¥¥   else
    {
       for (p=STANDING_CRITTER_POSTURE; p <= MOVING_CRITTER_POSTURE; p++)
@@ -296,7 +296,7 @@ Ref ref_from_critter_data(ObjID, int32_t triple, uint8_t posture, uint8_t frame,
             Id id;
             id = critter_id_table[CPTRIP(triple)] + v + posture_bases[p];
             if (ResPtr(id))
-               load_all_views = FALSE;
+               load_all_views = false;
          }
       }
    }
@@ -436,28 +436,28 @@ grs_bitmap *bitmap_from_tpoly_data(int32_t tpdata, uint8_t *scale, int32_t *inde
             use_index=((seed*9277+7)%14983)%10;
 		  numtostring((int32_t) use_index, use_buf);
 		  clearwithFF = true;
-            result = get_text_bitmap_from_string(style, 1, use_buf, FALSE, 0);
+            result = get_text_bitmap_from_string(style, 1, use_buf, false, 0);
 		  clearwithFF = false;
 		  return(result);
-//            return(get_text_bitmap_from_string(style, 1, itoa(use_index, use_buf, 10), FALSE, 0));
+//            return(get_text_bitmap_from_string(style, 1, itoa(use_index, use_buf, 10), false, 0));
          }
          else
          {
 		  clearwithFF = true;
-            result = get_text_bitmap(style, *index, 1,FALSE);
+            result = get_text_bitmap(style, *index, 1,false);
 		  clearwithFF = false;
 		  return(result);
-//            return(get_text_bitmap(style, *index, 1,FALSE));
+//            return(get_text_bitmap(style, *index, 1,false));
          }
          break;
       case TPOLY_TYPE_SCROLL_TEXT:
          // style=style?2:3;
 		style=3-style;
 		clearwithFF = true;
-		result = get_text_bitmap(style, *index, 1,TRUE);
+		result = get_text_bitmap(style, *index, 1,true);
 		clearwithFF = false;
 		return (result);
-//         return(get_text_bitmap(style, *index, 1,TRUE));
+//         return(get_text_bitmap(style, *index, 1,true));
          break;
    }
 
@@ -756,7 +756,7 @@ errtype obj_shutdown()
 			DisposePtr((Ptr)text_bitmap_ptrs[i]);
 	}
 
-	obj_load_art(TRUE);
+	obj_load_art(true);
 
 	return(OK);
 }
@@ -774,7 +774,7 @@ void spew_contents(ObjID id, int32_t d1, int32_t d2)
 			newloc = objs[id].loc;
 			newloc.x += rand() & 0x6F;
 			newloc.y += rand() & 0x6F;
-			obj_move_to(id_list[i], &newloc, TRUE);
+			obj_move_to(id_list[i], &newloc, true);
 		}
 	}
 }
@@ -797,7 +797,7 @@ bool obj_is_useless(ObjID oid)
 #define MIN_OBJKILL_DIST 8
 
 // Creates the basic object, but does not place it into the world
-bool obj_autodelete = TRUE;
+bool obj_autodelete = true;
 ObjID obj_create_base(int32_t triple)
 {
    ObjID new_id;
@@ -935,11 +935,11 @@ ObjID obj_create_base(int32_t triple)
             obj_screen_animate(new_id);
             break;
          default:
-            add_obj_to_animlist(new_id, REPEAT_3D(ObjProps[OPTRIP(triple)].bitmap_3d),FALSE,FALSE,0,NULL,NULL,0);
+            add_obj_to_animlist(new_id, REPEAT_3D(ObjProps[OPTRIP(triple)].bitmap_3d),false,false,0,NULL,NULL,0);
             break;
       }
    }
-   increment_shodan_value(new_id,TRUE);
+   increment_shodan_value(new_id,true);
    if (trigger_check)
       do_ecology_triggers();
 
@@ -1251,18 +1251,18 @@ bool obj_destroy(ObjID id)
 	int32_t retval = -1;
 	extern void check_panel_ref(bool puntme);
 	int16_t x,y;
-	bool  terrain_object = FALSE;
+	bool  terrain_object = false;
 
-	decrement_shodan_value(id, TRUE);
+	decrement_shodan_value(id, true);
 	if (id != OBJ_NULL)
 	{
 		if (player_struct.panel_ref==id)
 		{
-			check_panel_ref(TRUE);
+			check_panel_ref(true);
 		}
 		if (objs[id].active)
 		{
-			check_deathwatch_triggers(id,TRUE);
+			check_deathwatch_triggers(id,true);
 			remove_obj_from_animlist(id);
 			switch(objs[id].obclass)
 			{
@@ -1288,7 +1288,7 @@ bool obj_destroy(ObjID id)
 					;  // count down through physics_handles till we find an object
 			}
 			if ((terrain_object) && (x != -1))
-				obj_physics_refresh(x,y,FALSE);
+				obj_physics_refresh(x,y,false);
 		}
 		if (trigger_check)
 		{
@@ -1305,7 +1305,7 @@ bool obj_destroy(ObjID id)
 errtype obj_create_player(ObjLoc *plr_loc)
 {
    State new_state;
-   bool use_new = FALSE;
+   bool use_new = false;
    physics_handle ph;
    Pelvis player_pelvis;
 #ifdef DIRAC_EDMS
@@ -1335,7 +1335,7 @@ errtype obj_create_player(ObjLoc *plr_loc)
       extern void state_to_objloc(State *s, ObjLoc *l);
       memcpy(&new_state, player_struct.edms_state, sizeof(fix)*12);
       state_to_objloc(&new_state,plr_loc);
-      use_new = TRUE;
+      use_new = true;
    }
    else
    {
@@ -1353,7 +1353,7 @@ errtype obj_create_player(ObjLoc *plr_loc)
    {
       instantiate_dirac(PLAYER_TRIP,&player_dirac);
       objs[PLAYER_OBJ].info.ph = ph = EDMS_make_Dirac_frame(&player_dirac, &new_state);
-      new_cyber_orient = TRUE;
+      new_cyber_orient = true;
    }
    else
 #endif
@@ -1387,7 +1387,7 @@ errtype ObjClassInit(ObjID id, ObjSpecID specid, int32_t subclass)
    ObjSpecHeader *spec_hdr = &objSpecHeaders[objs[id].obclass];
 
    objs[id].subclass = subclass;
-   objs[id].active = TRUE;
+   objs[id].active = true;
    if (id != PLAYER_OBJ)
    {
       objs[id].info.current_hp = ObjProps[OPNUM(id)].hit_points;
@@ -2043,8 +2043,8 @@ bool get_obj_radii(Obj *objp, fix *rad)
 
 //   *rad1=fix_make(ObjProps[objtrip].physics_xr,0)/96;
 //   *rad2=fix_make(0,0x4000); // probably should be something else here, eh?
-//   return TRUE;
-   return FALSE;
+//   return true;
+   return false;
 }
 */
 
@@ -2151,7 +2151,7 @@ grs_bitmap *get_text_bitmap_obj(ObjID cobjid, int8_t dest_type, int8_t *pscale)
       *pscale = 0;
    else
       *pscale = sval - MEDIAN_WORD_SCALE;
-   return(get_text_bitmap(objBigstuffs[objs[cobjid].specID].data1, objBigstuffs[objs[cobjid].specID].cosmetic_value, dest_type,FALSE));
+   return(get_text_bitmap(objBigstuffs[objs[cobjid].specID].data1, objBigstuffs[objs[cobjid].specID].cosmetic_value, dest_type,false));
 }
 
 errtype obj_settle_func(ObjID id)
@@ -2163,7 +2163,7 @@ errtype obj_settle_func(ObjID id)
    if (!global_fullmap->cyber)
       retval = EDMS_settle_object(objs[id].info.ph);
    else
-      retval = TRUE;
+      retval = true;
 //   if (retval < 0)
 //      Warning(("EDMS_settle on id %d is unhappy!\n",id));
    return(OK);
@@ -2203,18 +2203,18 @@ bool death_check(ObjID id, bool*)
       damage_sound_fx = -1;
       play_digi_fx_obj(SFX_TELEPORT, 1, id);
       remove_obj_from_animlist(id);
-      add_obj_to_animlist(id,FALSE,FALSE,FALSE,32,1,NULL,ANIMCB_REMOVE);
+      add_obj_to_animlist(id,false,false,false,32,1,NULL,ANIMCB_REMOVE);
    }
-   return FALSE;
+   return false;
 }
 
 
 // An object has been destroyed -- now we must consider doing some
-// special stuff.  Returns TRUE if the regular destruction process
+// special stuff.  Returns true if the regular destruction process
 // should continue.
 bool obj_combat_destroy(ObjID id)
 {
-   bool retval = TRUE;
+   bool retval = true;
    ObjSpecID osid = objs[id].specID;
    int32_t i,*d1,*d2;
    extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
@@ -2243,24 +2243,24 @@ bool obj_combat_destroy(ObjID id)
    switch(objs[id].obclass)
    {
       case CLASS_CRITTER:
-         check_deathwatch_triggers(id,FALSE);
+         check_deathwatch_triggers(id,false);
          mai_monster_defeated();
          if(!global_fullmap->cyber) {
             if ((id == player_struct.curr_target) || (player_struct.curr_target == OBJ_NULL))
             {
                player_struct.curr_target = OBJ_NULL;
-               mfd_notify_func(MFD_TARGET_FUNC, MFD_TARGET_SLOT, FALSE, MFD_ACTIVE, TRUE);
+               mfd_notify_func(MFD_TARGET_FUNC, MFD_TARGET_SLOT, false, MFD_ACTIVE, true);
             }
             player_struct.num_victories++;
          }
          ai_critter_die(osid);
          if(death_check(id,&retval))
             return retval;
-         retval = FALSE;
+         retval = false;
          break;
       case CLASS_GRENADE:
          ADD_DESTROYED_OBJECT(id);
-//         do_grenade_explosion(id,TRUE);
+//         do_grenade_explosion(id,true);
 //         objGrenades[osid].unique_id = 0;
          break;
       case CLASS_SMALLSTUFF:
@@ -2291,7 +2291,7 @@ bool obj_combat_destroy(ObjID id)
                add_obj_to_animlist(id, 0, 0, 0, 0,2, NULL, ANIMCB_REMOVE);
                damage_sound_fx = SFX_MONITOR_EXPLODE;
                damage_sound_id = id;
-               retval = FALSE;
+               retval = false;
                break;
             case CAMERA_TRIPLE:
                damage_sound_fx = SFX_CAMERA_EXPLODE;
@@ -2315,14 +2315,14 @@ bool obj_combat_destroy(ObjID id)
                case RAD_BARREL_TRIPLE:
                   damage_sound_fx = SFX_DESTROY_BARREL;
                   damage_sound_id = id;
-                  me_hazard_rad_set(pme,TRUE);
+                  me_hazard_rad_set(pme,true);
                   break;
                case TOXIC_BARREL_TRIPLE:
                case CHEM_TANK_TRIPLE:
                   damage_sound_fx = SFX_DESTROY_BARREL;
                   damage_sound_id = id;
                   if (!level_gamedata.hazard.zerogbio)
-                     me_hazard_bio_set(pme,TRUE);
+                     me_hazard_bio_set(pme,true);
                   break;
                case SML_CRT_TRIPLE:
                case LG_CRT_TRIPLE:
@@ -2366,9 +2366,9 @@ ObjID object_place(int32_t triple, LGPoint square)
    loc.p = 0;   loc.h = 0;   loc.b = 0;
    loc.x = (square.x << 8) + 0x80;   loc.y = (square.y << 8) + 0x80;
    if (ObjProps[OPNUM(new_id)].flags & EDMS_PRESERVE)
-      retval = obj_move_to(new_id, &loc,TRUE);
+      retval = obj_move_to(new_id, &loc,true);
    else
-      retval = obj_move_to(new_id, &loc,FALSE);    // so that things that don't care about physics don't get physics models
+      retval = obj_move_to(new_id, &loc,false);    // so that things that don't care about physics don't get physics models
    if (retval != OK)
       ObjDel(new_id);
    if (CHECK_OBJ_PH(new_id))
@@ -2424,7 +2424,7 @@ errtype obj_floor_func(ObjID id)
 
    ObjLoc newloc = objs[id].loc;
    newloc.z = obj_floor_height(id);
-   obj_move_to(id, &newloc, TRUE);
+   obj_move_to(id, &newloc, true);
    obj_settle_func(id);
    edms_delete_go();
    return(OK);
@@ -2442,7 +2442,7 @@ bool global_settle_func(int16_t keycode, uint32_t context, void* data)
    {
       obj_settle_func(oid);
    }
-   return(FALSE);
+   return(false);
 }
 
 bool global_floor_func(int16_t keycode, uint32_t context, void* data)
@@ -2453,7 +2453,7 @@ bool global_floor_func(int16_t keycode, uint32_t context, void* data)
    {
       obj_floor_func(oid);
    }
-   return(FALSE);
+   return(false);
 }
 
 bool check_objsys_func(int16_t keycode, uint32_t context, void* data)
@@ -2476,7 +2476,7 @@ bool check_objsys_func(int16_t keycode, uint32_t context, void* data)
       message_info("ObjSys OKAY");
    else
       message_info("ObjSys BAD!");
-   return(FALSE);
+   return(false);
 }
 
 // Just compile in whichever hack it is you want to
@@ -2592,7 +2592,7 @@ errtype obj_level_munge()
 #ifdef TEETH
       Warning(("checking id %x\n",oid));
 #endif
-      found = FALSE;
+      found = false;
       for (x=0; x < MAP_XSIZE; x++)
       {
          for (y=0; y < MAP_YSIZE; y++)
@@ -2603,7 +2603,7 @@ errtype obj_level_munge()
             {
                if (objRefs[oref].obj == oid)
                {
-                  found = TRUE;
+                  found = true;
                   x = MAP_XSIZE;
                   y = MAP_YSIZE;
                   break;
@@ -2627,7 +2627,7 @@ errtype obj_level_munge()
       extern ObjID ObjRefFree (ObjRefID this, bool cleanup);
       oref = objs[exorcism[x]].ref;
       objRefs[oref].next = OBJ_REF_NULL;
-      ObjRefFree(oref,TRUE);
+      ObjRefFree(oref,true);
       Warning(("Hey, deleted the ref (%x) for %x!\n",oref,exorcism[x]));
    }
    for (x = 0; x < exorcise_count; x++)
@@ -2942,16 +2942,16 @@ errtype obj_physics_refresh(int16_t x, int16_t y, bool use_floor)
             if (CHECK_OBJ_PH(id))
             {
                EDMS_get_state(objs[id].info.ph, &goof);
-               obj_move_to_vel(id, &objs[id].loc, TRUE, goof.X_dot, goof.Y_dot, goof.Z_dot);
+               obj_move_to_vel(id, &objs[id].loc, true, goof.X_dot, goof.Y_dot, goof.Z_dot);
                EDMS_crystal_meth(objs[id].info.ph);
             }
             else
             {
                // if we're going to wake it up - make it antisocial
                // cause everybody is antisocial when they wake up!
-               robot_antisocial = TRUE;
-               obj_move_to(id, &objs[id].loc, TRUE);
-               robot_antisocial = FALSE;
+               robot_antisocial = true;
+               obj_move_to(id, &objs[id].loc, true);
+               robot_antisocial = false;
             }
          }
       }
@@ -2972,14 +2972,14 @@ errtype obj_physics_refresh_area(int16_t x, int16_t y, bool use_floor)
 bool obj_is_display(int32_t triple)
 {
    if (ObjProps[OPTRIP(triple)].render_type == FAUBJ_TEXTPOLY)
-      return(TRUE);
+      return(true);
    switch (triple)
    {
       case SCREEN_TRIPLE:
       case SUPERSCREEN_TRIPLE:
       case BIGSCREEN_TRIPLE:
-         return(TRUE);
+         return(true);
    }
-   return(FALSE);
+   return(false);
 }
 

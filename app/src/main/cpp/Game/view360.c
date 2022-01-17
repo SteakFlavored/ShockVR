@@ -65,10 +65,10 @@ bool view360_active_contexts[NUM_360_CONTEXTS]; // which contexts should actuall
 uint8_t view360_context_views[NUM_360_CONTEXTS];  // which view is being shown by a given context
 #define VIEW view360_context_views
 
-bool view360_message_obscured = FALSE;
-bool view360_render_on        = FALSE;
+bool view360_message_obscured = false;
+bool view360_render_on        = false;
 int16_t view360_last_update = 0;
-bool view360_is_rendering = FALSE;
+bool view360_is_rendering = false;
 
 // ---------
 // INTERNALS
@@ -94,10 +94,10 @@ void view360_setup_mode(uint8_t mode)
    if (version > 2 && mode == MODE_360 || mode == MODE_270)
    {
       VIEW[LEFT_CONTEXT] =  CAMANG_LEFT;
-      ACTIVE[LEFT_CONTEXT] = TRUE;
+      ACTIVE[LEFT_CONTEXT] = true;
       VIEW[RIGHT_CONTEXT] = CAMANG_RIGHT;
-      ACTIVE[RIGHT_CONTEXT] = TRUE;
-      mfd_notify_func(MFD_3DVIEW_FUNC,MFD_INFO_SLOT,TRUE,MFD_ACTIVE,FALSE);
+      ACTIVE[RIGHT_CONTEXT] = true;
+      mfd_notify_func(MFD_3DVIEW_FUNC,MFD_INFO_SLOT,true,MFD_ACTIVE,false);
       mfd_change_slot(MFD_LEFT,MFD_INFO_SLOT);
       mfd_change_slot(MFD_RIGHT,MFD_INFO_SLOT);
    }
@@ -105,7 +105,7 @@ void view360_setup_mode(uint8_t mode)
    {
       inventory_clear();
       VIEW[MID_CONTEXT] = CAMANG_BACK;
-      ACTIVE[MID_CONTEXT] = TRUE;
+      ACTIVE[MID_CONTEXT] = true;
       inv_last_page = inventory_page;
       inventory_page = INV_3DVIEW_PAGE;
    }
@@ -120,8 +120,8 @@ void view360_setup_mode(uint8_t mode)
       if (mfd >= NUM_MFDS)
          mfd = mfd_grab();
       VIEW[mfd] = CAMANG_BACK;
-      ACTIVE[mfd] = TRUE;
-      mfd_notify_func(MFD_3DVIEW_FUNC,MFD_INFO_SLOT,TRUE,MFD_ACTIVE,FALSE);
+      ACTIVE[mfd] = true;
+      mfd_notify_func(MFD_3DVIEW_FUNC,MFD_INFO_SLOT,true,MFD_ACTIVE,false);
       mfd_change_slot(mfd,MFD_INFO_SLOT);
    }
 }
@@ -133,24 +133,24 @@ void view360_restore_inventory()
       extern void inv_change_fullscreen(bool on);
       chg_set_flg(INVENTORY_UPDATE);
       inv_change_fullscreen(full_game_3d);
-      view360_message_obscured = FALSE;
+      view360_message_obscured = false;
       inv_last_page = INV_BLANK_PAGE;
       message_info(""); // This should be NULL as soon as the 2d can handle it.
    }
-   ACTIVE[MID_CONTEXT] = FALSE;
+   ACTIVE[MID_CONTEXT] = false;
 }
 
 // what/where are these???
 extern grs_canvas _offscreen_mfd, _fullscreen_mfd, inv_view360_canvas;
 
-static bool rendered_inv_fullscrn = FALSE;
+static bool rendered_inv_fullscrn = false;
 
 extern void shock_hflip_in_place(grs_bitmap* bm);
 
 int32_t view360_fullscrn_draw_callback(void*, void* vbm, int32_t, int32_t, int)
 {
 //KLC   shock_hflip_in_place((grs_bitmap *)vbm);
-   return FALSE;
+   return false;
 }
 
 
@@ -179,8 +179,8 @@ void view360_init(void)
    w = MFD_VIEW_WID;
    h = MFD_VIEW_HGT;
 #ifdef SVGA_SUPPORT
-   ss_point_convert(&x,&y,FALSE);
-   ss_point_convert(&w,&h,FALSE);
+   ss_point_convert(&x,&y,false);
+   ss_point_convert(&w,&h,false);
    h = min(h, 137);
 #endif
    view360_contexts[LEFT_CONTEXT]  = fr_place_view(FR_NEWVIEW,FR_DEFCAM,canv,VIEW360_BASEFR|FR_CURVIEW_LEFT,0,0,x,y,w,h);
@@ -192,8 +192,8 @@ void view360_init(void)
    w = MFD_VIEW_WID;
    h = MFD_VIEW_HGT;
 #ifdef SVGA_SUPPORT
-   ss_point_convert(&x,&y,FALSE);
-   ss_point_convert(&w,&h,FALSE);
+   ss_point_convert(&x,&y,false);
+   ss_point_convert(&w,&h,false);
    h = min(h, 137);
 #endif
    view360_contexts[RIGHT_CONTEXT] = fr_place_view(FR_NEWVIEW,FR_DEFCAM,canv,VIEW360_BASEFR|FR_CURVIEW_RGHT,0,0,x,y,w,h);
@@ -206,8 +206,8 @@ void view360_init(void)
    w = INV_FULL_WD;
    h = INV_FULL_HT;
 #ifdef SVGA_SUPPORT
-   ss_point_convert(&x,&y,FALSE);
-   ss_point_convert(&w,&h,FALSE);
+   ss_point_convert(&x,&y,false);
+   ss_point_convert(&w,&h,false);
 #endif
    canv=inv_view360_canvas.bm.bits;
    view360_contexts[MID_CONTEXT]   = fr_place_view(FR_NEWVIEW,FR_DEFCAM,canv,VIEW360_BASEFR|FR_CURVIEW_BACK,0,REAR_FOV,x,y,w,h);
@@ -236,7 +236,7 @@ int8_t update_string[30] = "";
 
 void view360_render(void)
 {
-   bool on = FALSE;
+   bool on = false;
    int32_t i;
    if (inventory_page != INV_3DVIEW_PAGE && ACTIVE[MID_CONTEXT])
    {
@@ -287,16 +287,16 @@ void view360_render(void)
       }
       update_string[0] = '\0';
       view360_last_update = update;
-      rendered_inv_fullscrn = FALSE;
+      rendered_inv_fullscrn = false;
    }
    if (ACTIVE[MID_CONTEXT])
    {
-      dirty_inv_canvas = TRUE;
+      dirty_inv_canvas = true;
    }
 
 	// Render the 360 view scenes.
 
-	view360_is_rendering = TRUE;
+	view360_is_rendering = true;
 	for (i = 0; i < NUM_360_CONTEXTS; i++)
 	if (ACTIVE[i])
 	{
@@ -310,9 +310,9 @@ void view360_render(void)
 #endif
 			full_visible |= VISIBLE_BIT(i);
 		}
-		on = TRUE;
+		on = true;
 	}
-	view360_is_rendering = FALSE;
+	view360_is_rendering = false;
 	view360_render_on = on;
 
    if (on == !(player_struct.hardwarez_status[HARDWARE_360] & WARE_ON))
@@ -347,7 +347,7 @@ void view360_turnon(bool visible, bool)
       view360_setup_mode(VIEW_MODE(s));
       chg_set_flg(_current_3d_flag);
    }
-   view360_render_on = TRUE;
+   view360_render_on = true;
 
 }
 
@@ -374,22 +374,22 @@ void view360_turnoff(bool visible,bool real_stop)
       }
       // empty the mfd slot
       if (ACTIVE[LEFT_CONTEXT] || ACTIVE[RIGHT_CONTEXT] && real_stop)
-         mfd_notify_func(MFD_EMPTY_FUNC,MFD_INFO_SLOT,TRUE,MFD_EMPTY,FALSE);
+         mfd_notify_func(MFD_EMPTY_FUNC,MFD_INFO_SLOT,true,MFD_EMPTY,false);
       // turn off all views
       for (i = 0; i < NUM_360_CONTEXTS; i++)
       {
-         ACTIVE[i] = FALSE;
+         ACTIVE[i] = false;
       }
       if (real_stop)
          play_digi_fx(SFX_VIDEO_DOWN, 1);
    }
-   view360_render_on = view360_message_obscured   =  FALSE;
+   view360_render_on = view360_message_obscured   =  false;
 }
 
 bool view360_check()
 {
    extern uint8_t hack_takeover;
    if (hack_takeover)
-     return(FALSE);
-   return(TRUE);
+     return(false);
+   return(true);
 }

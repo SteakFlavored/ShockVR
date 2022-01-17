@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //		pr1 = ptr to 1st rectangle
 //		pr2 = ptr to 2nd rectangle
 //
-//	returns: TRUE if rectangles intersect, FALSE if disjoint.
+//	returns: true if rectangles intersect, false if disjoint.
 
 int32_t RectTestSect(LGRect *pr1, LGRect *pr2)
 {
@@ -59,20 +59,20 @@ int32_t RectTestSect(LGRect *pr1, LGRect *pr2)
 //		prsect = ptr to rectangle, filled with intersection of the
 //			two rects (caution: if no intersection, this rect is undefined!)
 //
-//	returns: TRUE IF rectangles intersect, FALSE if disjoint (in this
+//	returns: true IF rectangles intersect, false if disjoint (in this
 //		case, *prsect is undefined)
 
 int32_t RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect)
 {
 	if (!RECT_TEST_SECT(pr1, pr2))
-		return(FALSE);
+		return(false);
 
 	prsect->ul.x = pr1->ul.x > pr2->ul.x ? pr1->ul.x : pr2->ul.x;
 	prsect->lr.x = pr1->lr.x < pr2->lr.x ? pr1->lr.x : pr2->lr.x;
 	prsect->ul.y = pr1->ul.y > pr2->ul.y ? pr1->ul.y : pr2->ul.y;
 	prsect->lr.y = pr1->lr.y < pr2->lr.y ? pr1->lr.y : pr2->lr.y;
 
-	return(TRUE);
+	return(true);
 }
 
 //	---------------------------------------------------------
@@ -95,7 +95,7 @@ void RectUnion(LGRect *pr1, LGRect *pr2, LGRect *prunion)
 //		pr1 = ptr to 1st rectangle
 //		pr2 = ptr to 2nd rectangle
 //
-//	returns: TRUE if *pr1 encloses *pr2, FALSE otherwise
+//	returns: true if *pr1 encloses *pr2, false otherwise
 
 int32_t RectEncloses(LGRect *pr1, LGRect *pr2)
 {
@@ -109,7 +109,7 @@ int32_t RectEncloses(LGRect *pr1, LGRect *pr2)
 //		prect = ptr to rectangle
 //		pt    = point to be tested
 //
-//	returns: TRUE if point is within rectangle, FALSE if outside
+//	returns: true if point is within rectangle, false if outside
 
 int32_t RectTestPt(LGRect *prect, LGPoint pt)
 {

@@ -182,7 +182,7 @@ typedef struct {
 # define OBJ_HASH_HEAD_ENTRIES 256
 # define OBJ_HASH_HEAD_ENTRIES_START (OBJ_HASH_ENTRIES - OBJ_HASH_HEAD_ENTRIES)
 # define OBJ_HASH_FUNC(bin) ((((((bin).sq.x) << 2) + ((bin).sq.y)) & (OBJ_HASH_HEAD_ENTRIES - 1)) + OBJ_HASH_HEAD_ENTRIES_START)
-# define ObjRefHead(bin) (objHashTable[ObjGetHashElem((bin),FALSE)].ref) /* don't change this */
+# define ObjRefHead(bin) (objHashTable[ObjGetHashElem((bin),false)].ref) /* don't change this */
 #else
 # define ObjRefHead(bin) (MAP_GET_XY((bin).sq.x,(bin).sq.y))->objRef
 #endif
@@ -281,8 +281,8 @@ void ObjRefStateBinIteratorInit (void);
 //
 // After ObjRefStateBinIteratorInit () has been called, calling this
 // should put a new valid ObjRefStateBin in bin every time it is called.
-// It returns FALSE if it has already returned all valid bins (in which
-// case the value of bin is undefined); otherwise it returns TRUE, of
+// It returns false if it has already returned all valid bins (in which
+// case the value of bin is undefined); otherwise it returns true, of
 // course.
 //
 // It can use static variables; the iterator is guaranteed to be active

@@ -105,14 +105,14 @@ cams   *fr_camera_getdef (void)
 
 bool    fr_camera_create (cams *cam, int32_t camtype, void *arg1, void *arg2)
 {
-   _cam_top(cam) FALSE;
+   _cam_top(cam) false;
    _cam->type=camtype;
    if (camtype&CAMBIT_OBJ)
       _cam->obj_id=(uint16_t)arg1;
    else
       memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
    memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
-   return TRUE;
+   return true;
 }
 
 uint8_t   fr_camera_modtype(cams *cam, uint8_t type_on, uint8_t type_off)
@@ -128,14 +128,14 @@ uint8_t   fr_camera_modtype(cams *cam, uint8_t type_on, uint8_t type_off)
 // i'll give you fish, i'll give you candy, i'll give you, everything I have in my hand
 int32_t     fr_camera_update (cams *cam, void *arg1, int32_t whicharg, void *arg2)
 {
-   _cam_top(cam) FALSE;
+   _cam_top(cam) false;
    if (arg1!=NULL)
 	   if (_cam->type&CAMBIT_OBJ) _cam->obj_id=(uint16_t)arg1; else memcpy(_cam->coor,arg1,sizeof(fix)*CAM_COOR_CNT);
    if (whicharg==CAM_UPDATE_ALL)
 	   memcpy(_cam->args,arg2,sizeof(fix)*CAM_ARGS_CNT);
    else if (whicharg<CAM_ARGS_CNT)
       _cam->args[whicharg]=(fix)arg2;
-   return TRUE;
+   return true;
 }
 
 void    fr_camera_setone(cams *cam, int32_t which, int32_t newone)
@@ -229,7 +229,7 @@ void    fr_camera_slewcam(cams *cam, int32_t which, int32_t how)
 {
    _cam_top(cam);
    if (_cam->type&CAMBIT_OBJ)
-      fr_objslew_moveone(NULL,_cam->obj_id,which,how,TRUE);
+      fr_objslew_moveone(NULL,_cam->obj_id,which,how,true);
    else
       fr_camera_slewone(_cam,which,how);
 }

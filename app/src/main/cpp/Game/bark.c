@@ -97,7 +97,7 @@ void mfd_bark_expose(MFD* mfd, uint8_t control)
          else
 #endif
             full_visible |= visible_mask(mfd->id);
-         mfd_notify_func(MFD_BARK_FUNC,MFD_INFO_SLOT,FALSE,MFD_ACTIVE,TRUE);
+         mfd_notify_func(MFD_BARK_FUNC,MFD_INFO_SLOT,false,MFD_ACTIVE,true);
       }
 
       if (full && mfd_bark_string != REF_STR_Null)
@@ -163,7 +163,7 @@ void long_bark(ObjID speaker_id, uint8_t mug_id, int32_t string_id, uint8_t colo
    if ((alog_rv != OK) || (audiolog_setting == 2))
 #endif
    {
-      mfd_notify_func(MFD_BARK_FUNC,MFD_INFO_SLOT,TRUE,MFD_ACTIVE,TRUE);
+      mfd_notify_func(MFD_BARK_FUNC,MFD_INFO_SLOT,true,MFD_ACTIVE,true);
       if (speaker_id>0)
       {
          save_mfd_slot(mfd_id);

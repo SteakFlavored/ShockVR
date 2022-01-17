@@ -90,7 +90,7 @@ void ResAddPath(int8_t *path)
 //
 //		fname   = ptr to filename
 //		mode    = ROM_XXX (see res.h)
-//		auxinfo = if TRUE, allocate aux info, including directory
+//		auxinfo = if true, allocate aux info, including directory
 //						(applies to mode 0, other modes automatically get it)
 //
 //	Returns:

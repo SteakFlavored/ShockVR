@@ -139,7 +139,7 @@ static void (*_fr_parse_obj)(void);
 #endif
 extern bool draw_tmap_p(int32_t ptcnt);
 #define quik_draw_tmap_p(ptcnt) ((IsTpropNotStars())||(draw_tmap_p(ptcnt)))
-//#define quik_draw_tmap_p(ptcnt) (TRUE)
+//#define quik_draw_tmap_p(ptcnt) (true)
 
 // lookups into arrays
 #define FDT_LK_FLR   0
@@ -1112,13 +1112,13 @@ int32_t merge_walls(fix *dst_wall,fix *i_wall,int32_t i_cnt,fix *o_wall,int32_t 
    int32_t cur_i=0, cur_o=0, f_cnt=0, tmp1, tmp2;
    int32_t sgn0,sgn1,sgn2,sgn3;
 
-   f_is_i=TRUE;
+   f_is_i=true;
    while (cur_i<i_cnt)
    {
       while (io_wall_cmp(0,<=,3)&&io_wall_cmp(1,<=,2))   // skip to next outer wall, this one is above our gap
        { o_wall+=8; if (++cur_o>=o_cnt) return f_cnt; }
       if (io_wall_cmp(3,>=,0)&&io_wall_cmp(2,>=,1))      // if gap bottom above current outer wall, skip to next gap
-       { i_wall+=8; f_is_i=FALSE; if (++cur_i>=i_cnt) return f_cnt; else continue; }
+       { i_wall+=8; f_is_i=false; if (++cur_i>=i_cnt) return f_cnt; else continue; }
       f_cnt++;
       if ((sgn0=io_wall_sgn(0,0))!=(sgn1=io_wall_sgn(1,1)))   // tmp is gap top below outer wall top
       {
@@ -1450,14 +1450,14 @@ void fr_terr_frame_start(void)
    g3_alloc_list(FDT_TMPPTCNT,_fdt_tmppts);
 
    last_csp_fr=0; // initially no filled mode
-   _fdt_terr=TRUE;
+   _fdt_terr=true;
 }
 
 void fr_terr_frame_end(void)
 {
    void fr_tfunc_grab_start(void);
    fr_tfunc_grab_start();     // set up the physics facelet indirections...
-   _fdt_terr=FALSE;
+   _fdt_terr=false;
    g3_free_list(FDT_TMPPTCNT,_fdt_tmppts);
 }
 
@@ -1774,8 +1774,8 @@ void fr_tfunc_grab_fast(int32_t mask)
 #define CheckRendWallBt(btid) ((me_bits_rend4(c_t)&btid)==0)
 #define CheckRendOthBt(btid)  ((me_bits_rend3(c_t)&btid)==0)
 #else
-#define CheckRendWallBt(btid) (TRUE)
-#define CheckRendOthBt(btid)  (TRUE)
+#define CheckRendWallBt(btid) (true)
+#define CheckRendOthBt(btid)  (true)
 #endif
 
 #endif
@@ -1798,7 +1798,7 @@ bool edge_get_fandc(MapElem *mp, int32_t c_edge, int8_t *e_list)
    {
   	   e_list[0]=e_list[1]=MAX_HGT;
   	   e_list[2]=e_list[3]=MAX_HGT;
-      return FALSE;
+      return false;
    }
    else if (p==0)
    {
@@ -1817,7 +1817,7 @@ bool edge_get_fandc(MapElem *mp, int32_t c_edge, int8_t *e_list)
   	   if (fo&FO_L_PARM) e_list[2]-=p;
       if (fo&FO_R_PARM) e_list[3]-=p;
    }
-   return TRUE;
+   return true;
 }
 
 int8_t edge_vals[3];

@@ -166,18 +166,18 @@ int8_t next_step_on_path(int8_t path_id, LGPoint *next, int8_t *steps_left)
 #define LOOKAHEAD_STEPS 3
 // Checks whether or not we have skipped ahead to some square within LOOKAHEAD_STEPS
 // of the "current" location for the specified path.  If so, jumps the path to that point and
-// returns TRUE.
+// returns true.
 bool check_path_cutting(LGPoint new_sq, int8_t path_id)
 {
    LGPoint pt;
    int8_t count;
    // Hey, first check if we've finished the darn path...
    if ((path_id == -1) || (paths[path_id].num_steps == 0))
-      return(FALSE);
+      return(false);
    if (PointsEqual(new_sq,paths[path_id].dest))
    {
       paths[path_id].num_steps = 0;
-      return(TRUE);
+      return(true);
    }
 
    // Now do the standard lookahead check...
@@ -190,12 +190,12 @@ bool check_path_cutting(LGPoint new_sq, int8_t path_id)
          // hey look, we cut ahead to a more advanced point in our pathfinding...
          paths[path_id].source = new_sq;
          paths[path_id].curr_step += count + 1;
-         return(TRUE);
+         return(true);
       }
    }
 
    // We didn't find anything, how sad.
-   return(FALSE);
+   return(false);
 }
 
 
@@ -432,12 +432,12 @@ bool pf_check_doors(MapElem *pme, int8_t dir, ObjID *open_door)
           ((QUESTBIT_GET(objDoors[objs[which_obj].specID].locked)) ||
            (objDoors[objs[which_obj].specID].access_level)))
       {
-         return(FALSE);
+         return(false);
       }
       else
          *open_door = which_obj;
    }
-   return(TRUE);
+   return(true);
 }
 
 // Returns whether or not the two squares can be freely traveled
@@ -526,10 +526,10 @@ bool map_connectivity(spt sq1, spt sq2, int8_t dir, uint8_t flr1, uint8_t *new_z
 
    pme1 = MAP_GET_XY(SPT_X(sq1),SPT_Y(sq1));
    pme2 = MAP_GET_XY(SPT_X(sq2),SPT_Y(sq2));
-   flr2 = MAPZ_TO_PFEZ(tile_height(pme2, (dir+2)%4, TRUE));
-   ceil2 = MAPZ_TO_PFEZ(tile_height(pme2, (dir+2)%4, FALSE));
+   flr2 = MAPZ_TO_PFEZ(tile_height(pme2, (dir+2)%4, true));
+   ceil2 = MAPZ_TO_PFEZ(tile_height(pme2, (dir+2)%4, false));
    if (flr2 == -1)
-      return(FALSE);
+      return(false);
 
 #ifdef ALLOW_DESTZ_OVERIDE
    // Allow final destination overriding, and downshift z
@@ -539,11 +539,11 @@ bool map_connectivity(spt sq1, spt sq2, int8_t dir, uint8_t flr1, uint8_t *new_z
 
    if ((ceil2 < flr1 + PF_HEIGHT) || (flr2 > flr1 + PF_CLIMB))
    {
-      retval = FALSE;
+      retval = false;
    }
    else
    {
-      retval = TRUE;
+      retval = true;
       *new_z = pf_obj_height(pme2,flr1);
    }
    if (retval)
@@ -583,14 +583,14 @@ bool expand_one_square(spt sq, int8_t path_id)
             dest_z = OBJZ_TO_PFEZ(paths[path_id].dest_z);
          if (map_connectivity(sq,newsq,i,PFE_Z(ppfe2), &new_z, dest_z))
          {
-            PFE_USED_SET(ppfe,TRUE);
+            PFE_USED_SET(ppfe,true);
             // return value from map_conn is already in PFE Z units
             PFE_Z_SET_RAW(ppfe,new_z);
             PFE_DIR_SET(ppfe,i);
             expand_into_list[expand_count++] = newsq;
   //          Spew(DSRC_AI_Pathfind,("can reach %x\n",newsq));
             if (newsq == dest)
-               return(TRUE);
+               return(true);
          }
 //         else
 //            Spew(DSRC_AI_Pathfind, ("%x does not connect\n",newsq));
@@ -598,7 +598,7 @@ bool expand_one_square(spt sq, int8_t path_id)
 //      else
 //         Spew(DSRC_AI_Pathfind, ("%x already used\n",newsq));
    }
-   return(FALSE);
+   return(false);
 }
 
 // Go through the list of last-iteration's reached squares, and
@@ -608,7 +608,7 @@ bool expand_fill_list(int8_t path_id)
 {
    spt s;
    int8_t i;
-   bool done = FALSE;
+   bool done = false;
    expand_count = 0;
    CLEARSPTLIST(expand_into_list,EXPAND_LIST_SIZE);
    FORALLINSPTLIST(expand_from_list, s, i)
@@ -650,7 +650,7 @@ bool expand_fill_list(int8_t path_id)
 #define PATHFIND_WITH_BIG_BUFFER
 errtype find_path(int8_t path_id)
 {
-   bool done = FALSE;
+   bool done = false;
    int8_t i,j,step_count=0;
    uint8_t *ppfe;
 
@@ -668,7 +668,7 @@ errtype find_path(int8_t path_id)
    {
       for (j=0; j < MAP_YSIZE; j++)
       {
-         PFE_USED_SET(PFE_GET_XY(i,j),FALSE);
+         PFE_USED_SET(PFE_GET_XY(i,j),false);
       }
    }
 #endif
@@ -681,7 +681,7 @@ errtype find_path(int8_t path_id)
    expand_from_list[0] = PT2SPT(paths[path_id].source);
    ppfe = PFE_GET_XY(paths[path_id].source.x, paths[path_id].source.y);
    PFE_Z_SET_OBJHT(ppfe, paths[path_id].start_z);
-   PFE_USED_SET(ppfe, TRUE);
+   PFE_USED_SET(ppfe, true);
 
    while (!done && step_count < NUM_PATH_STEPS)
    {

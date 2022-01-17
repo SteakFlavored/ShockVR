@@ -44,7 +44,7 @@ errtype kb_cook(kbs_event ev, uint16_t *cooked, bool *results)
 	// On the Mac, since modifiers by themselves don't produce an event,
 	// you always have a "cooked" result.
 
-	*results = TRUE;
+	*results = true;
 	*cooked = ev.ascii;
 
 	*cooked |= (int16_t)ev.state << KB_DOWN_SHF; // Add in the key-down state.
@@ -85,7 +85,7 @@ errtype kb_cook(kbs_event ev, uint16_t *cooked, bool *results)
    int32_t old_mods = kbd_modifier_state;
 
    *cooked = cnv & (CNV_SPECIAL|CNV_2ND|0xFF)  ;
-   *results = FALSE;
+   *results = false;
 
    // if an up event, use negative logic.  Wacky
    if (ev.state == KBS_UP) kbd_modifier_state = ~kbd_modifier_state;
@@ -123,7 +123,7 @@ errtype kb_cook(kbs_event ev, uint16_t *cooked, bool *results)
       kbd_modifier_state |= KBM_RALT;
       break;
    default:
-      *results = TRUE;  // Not a modifier key, we must translate.
+      *results = true;  // Not a modifier key, we must translate.
       break;
    }
    if (ev.state == KBS_UP) kbd_modifier_state = ~kbd_modifier_state;
@@ -153,7 +153,7 @@ errtype kb_cook(kbs_event ev, uint16_t *cooked, bool *results)
 
 bool kb_get_cooked(uint16_t *key)
 {
-   bool res = FALSE;
+   bool res = false;
    kbs_event ev = kb_next();
    if (ev.code == KBC_NONE) return res;
    kb_cook(ev,key,&res);

@@ -174,7 +174,7 @@ int32_t AmovReadHeader(Afile *paf)
 
 // No new palette
 
-   pmi->newPal = FALSE;
+   pmi->newPal = false;
 
 //	Current chunk is first one
 
@@ -271,7 +271,7 @@ NEXT_CHUNK:
             {
 				fseek(paf->fp, pmi->pcurrChunk->offset, SEEK_SET);
             fread(pmi->pal, 768, 1, paf->fp);
-            pmi->newPal = TRUE;
+            pmi->newPal = true;
             }
          pmi->pcurrChunk++;
          goto NEXT_CHUNK;
@@ -297,11 +297,11 @@ int32_t AmovReadFramePal(Afile *paf, Apalette *ppal)
       {
       ppal->numcols = 256;
       memcpy(ppal->rgb, pmi->pal, 768);
-      pmi->newPal = FALSE;
-      return TRUE;
+      pmi->newPal = false;
+      return true;
       }
 
-	return FALSE;
+	return false;
 }
 
 //	----------------------------------------------------------
@@ -356,7 +356,7 @@ int32_t AmovWriteBegin(Afile *paf)
 
 //	We want rsd!
 
-	paf->writerWantsRsd = TRUE;
+	paf->writerWantsRsd = true;
 
 //	Open temp file
 

@@ -74,7 +74,7 @@ LGRegion *fullroot_region, *fullview_region;
 LGRegion *inventory_region_full;
 LGRegion *pagebutton_region_full;
 frc *full_game_fr_context;
-bool full_game_3d = FALSE;
+bool full_game_3d = false;
 uint8_t full_visible = 0;
 #else
 extern LGRegion *fullroot_region, *fullview_region;

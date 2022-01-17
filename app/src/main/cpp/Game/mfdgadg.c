@@ -74,13 +74,13 @@ bool mfd_buttonarray_handlerproc(MFD* mfd, uiEvent* ev, MFDhandler* h)
    LGPoint bttn;
    LGPoint pos;
    if (ev->type != UI_EVENT_MOUSE || !(ev->subtype & ~MOUSE_MOTION))
-      return FALSE;
+      return false;
    pos.x = ev->pos.x - mfd->rect.ul.x - h->r.ul.x;
    pos.y = ev->pos.y - mfd->rect.ul.y - h->r.ul.y;
    // Make sure its on a button, not a space.
    if (pos.x % (ba->bspace.x + ba->bsize.x) >= ba->bsize.x
     || pos.y % (ba->bspace.y + ba->bsize.y) >= ba->bsize.y)
-      return FALSE;
+      return false;
    bttn.x = min(pos.x / (ba->bspace.x + ba->bsize.x),ba->bdims.x-1);
    bttn.y = min(pos.y / (ba->bspace.y + ba->bsize.y),ba->bdims.y-1);
    return ba->cb(mfd,bttn,ev,ba->cbdata);
@@ -156,17 +156,17 @@ bool mfd_slider_handler(MFD* mfd, uiMouseEvent* ev, MFDhandler* h)
 {
    int16_t x = mfd->rect.ul.x + h->r.ul.x;
    int16_t y = mfd->rect.ul.y + h->r.ul.y;
-   bool retval = TRUE;
+   bool retval = true;
    MFDSlider* sl = (MFDSlider*)(h->data);
    LGPoint pos = ev->pos;
    pos.x -= x;
    pos.y -= y;
    if (ev->type != UI_EVENT_MOUSE && ev->type != UI_EVENT_MOUSE_MOVE)
-      return FALSE;
+      return false;
    if (ev->action & MOUSE_LDOWN)
    {
       mouse_constrain_xy(x,y,x+RectWidth(&h->r)-1,y+RectHeight(&h->r)-1);
-      sl->bttndown = TRUE;
+      sl->bttndown = true;
    }
    if (sl->bttndown)
    {
@@ -174,7 +174,7 @@ bool mfd_slider_handler(MFD* mfd, uiMouseEvent* ev, MFDhandler* h)
    }
    if (!(ev->buttons & (1 << MOUSE_LBUTTON)))
    {
-      sl->bttndown = FALSE;
+      sl->bttndown = false;
       mouse_unconstrain();
    }
    return retval;
@@ -193,6 +193,6 @@ errtype MFDSliderInit(MFDhandler* h, LGRect* r, MFDSliderCallback cb, void* data
    h->proc =(MFD_handlerProc) mfd_slider_handler;
    sl->cb = cb;
    sl->data = data;
-   sl->bttndown = FALSE;
+   sl->bttndown = false;
    return OK;
 }

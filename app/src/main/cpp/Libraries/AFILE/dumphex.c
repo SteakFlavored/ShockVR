@@ -63,7 +63,7 @@ static int8_t *tableNames[] = {
 	int16_t	outResNum;
 	int16_t	resID = 128;
 
-	dumpChunkHdrs = TRUE;
+	dumpChunkHdrs = true;
 
 // Prompt for input file
 
@@ -173,7 +173,7 @@ static int8_t *tableNames[] = {
 		pmc = (MovieChunk *)malloc(mh.sizeChunks);
 		fread(pmc, mh.sizeChunks, 1, fpi);
       	pmcBase = pmc;
-		while (TRUE)
+		while (true)
 		{
 			uint8_t	s1, s2;
 

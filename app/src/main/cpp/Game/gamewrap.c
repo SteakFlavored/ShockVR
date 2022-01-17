@@ -171,7 +171,7 @@ void startup_game(bool visible)
    {
       mfd_force_update();
       side_icon_expose_all();
-      status_vitals_update(TRUE);
+      status_vitals_update(true);
       inventory_page = 0;
       inv_last_page = INV_BLANK_PAGE;
    }
@@ -213,7 +213,7 @@ errtype save_game(FSSpec *saveSpec)
 	int32_t 			idx = SAVE_GAME_ID_BASE;
 
    //KLC - this does nothing now.		check_save_game_wackiness();
-   //¥¥¥ Why is this done???			closedown_game(FALSE);
+   //¥¥¥ Why is this done???			closedown_game(false);
 
    //KLC  do it the Mac way						i = flush_resource_cache();
 	Size	dummy;
@@ -221,7 +221,7 @@ errtype save_game(FSSpec *saveSpec)
 
 	// Open the current game file to save some more resources into it.
 	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
-	filenum = ResEditFile(&currSpec, FALSE);
+	filenum = ResEditFile(&currSpec, false);
 	if (filenum < 0)
 	{
 		DebugStr("\pCouldn't open Current Game\n");
@@ -269,7 +269,7 @@ errtype save_game(FSSpec *saveSpec)
 	AdvanceProgress();
 
 	// Save current level
-	retval = write_level_to_disk(ResIdFromLevel(player_struct.level), TRUE);
+	retval = write_level_to_disk(ResIdFromLevel(player_struct.level), true);
 	if (retval)
 	{
 		DebugStr("\pReturn value from write_level_to_disk is non-zero!\n");//¥¥¥
@@ -277,7 +277,7 @@ errtype save_game(FSSpec *saveSpec)
 	}
 
 	// Copy current game out to save game slot
-	if (copy_file(&currSpec, saveSpec, TRUE) != OK)
+	if (copy_file(&currSpec, saveSpec, true) != OK)
 	{
 		//¥¥¥ Put up some alert here.
 		DebugStr("\pNo good copy, dude!\n");
@@ -286,7 +286,7 @@ errtype save_game(FSSpec *saveSpec)
 //KLC	else
 //KLC		string_message_info(REF_STR_SaveGameSaved);
 	old_ticks = *tmd_ticks;
-	//¥¥¥ do we have to do this?		startup_game(FALSE);
+	//¥¥¥ do we have to do this?		startup_game(false);
 	return(OK);
 }
 
@@ -361,14 +361,14 @@ errtype load_game(FSSpec *loadSpec)
 {
    int32_t 			filenum;
    ObjID 		old_plr;
-   bool 		bad_save = FALSE;
+   bool 		bad_save = false;
    int8_t 		orig_lvl;
    FSSpec	currSpec;
    extern errtype change_detail_level(int8_t new_level);
    extern void player_set_eye_fixang(int32_t ang);
    extern uint32_t dynmem_mask;
 
-   closedown_game(TRUE);
+   closedown_game(true);
 //KLC - don't do this here   stop_music();
 
 // KLC - user will not be able to open current game file in Mac version, so skip this check.
@@ -380,7 +380,7 @@ errtype load_game(FSSpec *loadSpec)
 	 FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 
       // Copy game to load to the current file game.
-      retval = copy_file(loadSpec, &currSpec, FALSE);
+      retval = copy_file(loadSpec, &currSpec, false);
       if (retval != OK)
       {
 		//¥¥¥ bring up an alert here??
@@ -401,9 +401,9 @@ errtype load_game(FSSpec *loadSpec)
    player_struct.rep = old_plr;
    player_set_eye_fixang(player_struct.eye_pos);
    if (!bad_save)
-      obj_move_to(PLAYER_OBJ, &(player_struct.realspace_loc), FALSE);
+      obj_move_to(PLAYER_OBJ, &(player_struct.realspace_loc), false);
    if (load_game_schedules() != OK)
-      bad_save = TRUE;
+      bad_save = true;
    ResCloseFile(filenum);
    if (orig_lvl == player_struct.level)
    {
@@ -411,18 +411,18 @@ errtype load_game(FSSpec *loadSpec)
       dynmem_mask = DYNMEM_PARTIAL;
    }
    load_level_from_file(player_struct.level);
-   obj_load_art(FALSE);							//¥¥¥KLC - added here (removed from load_level_data)
+   obj_load_art(false);							//¥¥¥KLC - added here (removed from load_level_data)
 //KLC   string_message_info(REF_STR_LoadGameLoaded);
    dynmem_mask = DYNMEM_ALL;
    chg_set_flg(_current_3d_flag);
    old_ticks = *tmd_ticks;
    interpret_qvars();
-   startup_game(FALSE);
+   startup_game(false);
 
 //KLC - do following instead     recompute_music_level(QUESTVAR_GET(MUSIC_VOLUME_QVAR));
 	if (music_on)
 	{
-		mlimbs_on = TRUE;
+		mlimbs_on = true;
 		mlimbs_AI_init();
 		mai_intro();																		//KLC - added here
 		load_score_for_location(PLAYER_BIN_X, PLAYER_BIN_Y);		//KLC - added here
@@ -447,7 +447,7 @@ errtype load_level_from_file(int32_t level_num)
 	{
 		player_struct.level = level_num;
 
-		compute_shodometer_value(FALSE);
+		compute_shodometer_value(false);
 
 		// if this is the first time the level is loaded, compute the inital shodan security level
 		if (player_struct.initial_shodan_vals[player_struct.level] == -1)
@@ -505,13 +505,13 @@ bool create_initial_game_func(int16_t , uint32_t , void* )
 	if (err == fnfErr)
 	{
 		load_dynamic_memory(DYNMEM_ALL);
-		return(TRUE);
+		return(true);
 	}
 
 	// Next, copy the archive file to an untitled game.
 	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 
-	if (copy_file(&archiveSpec, &currSpec, FALSE) != OK)
+	if (copy_file(&archiveSpec, &currSpec, false) != OK)
 		critical_error(CRITERR_FILE|7);
 
 /* KLC - I don't think you actually have to load the player in for a new game, since "init_player"
@@ -522,7 +522,7 @@ bool create_initial_game_func(int16_t , uint32_t , void* )
    if (filenum < 0)
    {
       string_message_info(REF_STR_GameInitFail);
-      return(TRUE);
+      return(true);
    }
 */
    plr_obj = PLAYER_OBJ;
@@ -538,7 +538,7 @@ bool create_initial_game_func(int16_t , uint32_t , void* )
    player_struct.rep = OBJ_NULL;
 
    load_level_from_file(player_struct.level);
-   obj_load_art(FALSE);							//¥¥¥KLC - added here (removed from load_level_data)
+   obj_load_art(false);							//¥¥¥KLC - added here (removed from load_level_data)
    amap_reset();
    player_create_initial();
 
@@ -561,7 +561,7 @@ bool create_initial_game_func(int16_t , uint32_t , void* )
 
 	if (music_on)
 	{
-		mlimbs_on = TRUE;
+		mlimbs_on = true;
 		mlimbs_AI_init();
 		mai_intro();																		//KLC - added here
 		load_score_for_location(PLAYER_BIN_X, PLAYER_BIN_Y);		//KLC - added here
@@ -579,11 +579,11 @@ bool create_initial_game_func(int16_t , uint32_t , void* )
       toggle_olh_func(0, 0, NULL);
 
    // turn on help overlay.
-   olh_overlay_on = TRUE;
+   olh_overlay_on = true;
 
    // Plot timers
 
-   return(FALSE);
+   return(false);
 }
 
 errtype write_level_to_disk(int32_t idnum, bool flush_mem)
@@ -595,5 +595,5 @@ errtype write_level_to_disk(int32_t idnum, bool flush_mem)
 
 	FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 
-	return(save_current_map(&currSpec, idnum, flush_mem,TRUE));
+	return(save_current_map(&currSpec, idnum, flush_mem,true));
 }

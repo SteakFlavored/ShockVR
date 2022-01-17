@@ -80,8 +80,8 @@ extern void pop_inventory_cursors(void);
 
 LGCursor email_cursor;
 grs_bitmap email_cursor_bitmap;
-bool email_cursor_currently=FALSE;
-bool shodan_sfx_go = FALSE;
+bool email_cursor_currently=false;
+bool shodan_sfx_go = false;
 
 #define MFD_EMAILMUG_FUNC 14
 #define EMAIL_BASE_ID   RES_email0
@@ -126,7 +126,7 @@ extern grs_canvas *pinv_canvas;
 #define EMAIL_INTERCEPT 0xFE
 #define EMAIL_DONE     0xFF
 
-bool email_big_font=TRUE;
+bool email_big_font=true;
 
 int8_t   email_buffer[256];
 #define EMAIL_BUFSIZ (sizeof(email_buffer))
@@ -335,10 +335,10 @@ void email_intercept(void)
          inventory_clear();
          next_text_line = EMAIL_DONE;
          pop_inventory_cursors();
-         email_cursor_currently=FALSE;
+         email_cursor_currently=false;
 //         Free(email_cursor_bitmap.bits);
          read_email(0,intercept_hack_num);
-         shodan_sfx_go = TRUE;
+         shodan_sfx_go = true;
 #ifdef AUDIOLOGS
          if (!audiolog_setting)
 #endif
@@ -491,7 +491,7 @@ void email_draw_text(int16_t email_id, bool really_an_email)
    if(!email_cursor_currently)
    {
       push_inventory_cursors(&email_cursor);
-      email_cursor_currently=TRUE;
+      email_cursor_currently=true;
    }
    uiShowMouse(NULL);
 
@@ -634,7 +634,7 @@ void email_page_exit(void)
 
    current_email=EMAIL_INACTIVE;
    pop_inventory_cursors();
-   email_cursor_currently=FALSE;
+   email_cursor_currently=false;
 //   Free(email_cursor_bitmap.bits);
    next_text_line = EMAIL_DONE;
    for(mid=0;mid<NUM_MFDS;mid++) {
@@ -646,29 +646,29 @@ void email_page_exit(void)
 
 bool email_invpanel_input_handler(uiEvent* ev, LGRegion*, void*)
 {
-   if (input_cursor_mode == INPUT_OBJECT_CURSOR) return FALSE;
+   if (input_cursor_mode == INPUT_OBJECT_CURSOR) return false;
    if (inventory_page != INV_EMAILTEXT_PAGE)
    {
       if(email_cursor_currently) {
          email_page_exit();
       }
-      return FALSE;
+      return false;
    }
-   if(ev->type==UI_EVENT_MOUSE_MOVE) return TRUE;
-   if (current_email == EMAIL_INACTIVE) return FALSE;
+   if(ev->type==UI_EVENT_MOUSE_MOVE) return true;
+   if (current_email == EMAIL_INACTIVE) return false;
    if (ev->type == UI_EVENT_MOUSE && !(ev->subtype & (MOUSE_LDOWN|MOUSE_RDOWN|MOUSE_CDOWN)))
-      return TRUE;
+      return true;
 //   if (ev->type == UI_EVENT_KBD_COOKED &&  (ev->subtype & BAD_EMAIL_KEYFLAGS))
-//      return FALSE;
+//      return false;
    if (ev->type == UI_EVENT_KBD_COOKED && !((ev->subtype & KB_FLAG_DOWN) != 0 && (ev->subtype & 0xFF) == ' '))
-      return FALSE;
+      return false;
    if (next_text_line == EMAIL_DONE)
    {
       email_page_exit();
       inventory_draw_new_page(old_invent_page);
    }
    else email_draw_text(current_email_base + current_email,current_email_base == EMAIL_BASE_ID);
-   return TRUE;
+   return true;
 }
 
 
@@ -764,7 +764,7 @@ void mfd_emailmug_expose(MFD* mfd, uint8_t control)
       int32_t hnd;
       // Do unexpose stuff here.
       if (shodan_sfx_go)
-         shodan_sfx_go = FALSE;
+         shodan_sfx_go = false;
       if (digi_fx_playing(SFX_SHODAN_STRONG, &hnd))
          snd_end_sample(hnd);
       return;
@@ -775,7 +775,7 @@ void mfd_emailmug_expose(MFD* mfd, uint8_t control)
    }
    if (current_email == EMAIL_INACTIVE)
    {
-      mfd_notify_func(MFD_EMPTY_FUNC,EMAILMUG_SLOT,TRUE,MFD_EMPTY,TRUE);
+      mfd_notify_func(MFD_EMPTY_FUNC,EMAILMUG_SLOT,true,MFD_EMPTY,true);
       return;
    }
    if (control & MFD_EXPOSE) // Time to draw stuff
@@ -786,7 +786,7 @@ void mfd_emailmug_expose(MFD* mfd, uint8_t control)
       int16_t mid = NUM_MFDS;
       int32_t mug;
       uint8_t mcolor=MESSAGE_COLOR;
-      parse_email_mugs((int8_t*)RefGet(MKREF(msg,MUGSHOT_IDX)),&mcolor,mnums,FALSE);
+      parse_email_mugs((int8_t*)RefGet(MKREF(msg,MUGSHOT_IDX)),&mcolor,mnums,false);
       for (mid = 0; mid < NUM_MFDS; mid++)
          if (player_struct.mfd_current_slots[mid] == EMAILMUG_SLOT)
          {
@@ -795,7 +795,7 @@ void mfd_emailmug_expose(MFD* mfd, uint8_t control)
       if (mid > mfd->id) mid = 0;
       mugnum = mnums[mfd->id-mid];
       if (mugnum != LAST_MUG(mfd->id))
-         full = TRUE;
+         full = true;
       LAST_MUG(mfd->id) = mugnum;
       if (!full) goto out;
 
@@ -843,7 +843,7 @@ void mfd_emailmug_expose(MFD* mfd, uint8_t control)
          get_email_title_string(current_email,buf,sizeof(buf));
          strcat(buf,"\n");
          get_email_string(MKREF(msg,SENDER_IDX),buf+strlen(buf),sizeof(buf)-strlen(buf));
-         mfd_full_draw_string(buf,0,0,mcolor,email_font,TRUE,TRUE);
+         mfd_full_draw_string(buf,0,0,mcolor,email_font,true,true);
          get_email_string(REF_STR_MessageSubject,buf,sizeof(buf));
          sub=buf+strlen(buf);
          get_email_string(MKREF(msg,SUBJECT_IDX),sub,sizeof(buf)-strlen(buf));
@@ -852,14 +852,14 @@ void mfd_emailmug_expose(MFD* mfd, uint8_t control)
             wrap_text(buf,MFD_VIEW_WID-1);
             gr_string_size(buf,&w,&h);
             unwrap_text(buf);
-            mfd_full_draw_string(buf,0,EMAIL_SUBJECT_Y-h,mcolor,email_font,TRUE,TRUE);
+            mfd_full_draw_string(buf,0,EMAIL_SUBJECT_Y-h,mcolor,email_font,true,true);
          }
       }
 
       mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
       if (mfd->id == MFD_LEFT && player_struct.mfd_current_slots[MFD_RIGHT] == EMAILMUG_SLOT)
       {
-         mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,FALSE,MFD_ACTIVE,TRUE);
+         mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,false,MFD_ACTIVE,true);
       }
 
 
@@ -878,14 +878,14 @@ void mfd_emailmug_expose(MFD* mfd, uint8_t control)
 bool mfd_emailmug_handler(MFD *, uiEvent *ev)
 {
    if (ev->type != UI_EVENT_MOUSE || !(ev->subtype & (MOUSE_LDOWN|MOUSE_RDOWN|MOUSE_CDOWN)))
-      return FALSE;
+      return false;
    if (player_struct.hardwarez[HARDWARE_EMAIL] == 0)
    {
       string_message_info(REF_STR_NoDataReader);
-      return TRUE;
+      return true;
    }
    read_email(0,current_email);
-   return TRUE;
+   return true;
 }
 
 //==========================================================
@@ -913,7 +913,7 @@ void select_email(int32_t num, bool scr)
    {
       current_email = num;
       next_text_line = EMAIL_DONE;
-      mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,TRUE,MFD_ACTIVE,TRUE);
+      mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,true,MFD_ACTIVE,true);
       if (mug_num < BASE_VMAIL && inventory_page == INV_EMAILTEXT_PAGE)
          read_email(0,num);
    }
@@ -1005,20 +1005,20 @@ void read_email(Id new_base, int32_t num)
       }
       else
       {
-         mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,TRUE,MFD_ACTIVE,TRUE);
+         mfd_notify_func(MFD_EMAILMUG_FUNC,EMAILMUG_SLOT,true,MFD_ACTIVE,true);
          if (current_email != EMAIL_INACTIVE)
          {
             int32_t i;
             uint16_t mnums[NUM_MFDS];
-            bool grab = TRUE;
-            parse_email_mugs((int8_t *)RefGet(MKREF(current_email_base+num,MUGSHOT_IDX)),NULL,mnums,TRUE);
+            bool grab = true;
+            parse_email_mugs((int8_t *)RefGet(MKREF(current_email_base+num,MUGSHOT_IDX)),NULL,mnums,true);
             for (i = 1; i < NUM_MFDS; i++)
             {
                if (mnums[i] != mnums[i-1])
                {
                   save_mfd_slot(i);
                   mfd_change_slot(i,EMAILMUG_SLOT);
-                  grab = FALSE;
+                  grab = false;
                }
             }
             if (grab) {
@@ -1094,7 +1094,7 @@ void mfd_emailware_expose(MFD* mfd, uint8_t control)
       while(mfd_yield_func(MFD_EMAILWARE_FUNC,&mfd_id))
       {
          if (mfd_id != mfd->id)
-            on = TRUE;
+            on = true;
       }
    }
    if (((s & WARE_ON) != 0) != on)
@@ -1110,8 +1110,8 @@ void mfd_emailware_expose(MFD* mfd, uint8_t control)
    ss_safe_set_cliprect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
    // Lay down the "background"
-//KLC - chg for new art   mfd_item_micro_expose(TRUE,VIDTEX_HARD_TRIPLE);
-   mfd_item_micro_hires_expose(TRUE,VIDTEX_HARD_TRIPLE);
+//KLC - chg for new art   mfd_item_micro_expose(true,VIDTEX_HARD_TRIPLE);
+   mfd_item_micro_hires_expose(true,VIDTEX_HARD_TRIPLE);
    if (full)
    {
       uint8_t n = HARDWARE_EMAIL;
@@ -1145,8 +1145,8 @@ bool mfd_email_button_handler(MFD*, LGPoint bttn, uiEvent*, void*)
    current_email_base = EMAIL_BASE_ID;
    old_invent_page = bttn.x;
    inventory_draw_new_page(email_pages[bttn.x]);
-   mfd_notify_func(MFD_EMAILWARE_FUNC, MFD_ITEM_SLOT, FALSE, MFD_ACTIVE, FALSE);
-   return TRUE;
+   mfd_notify_func(MFD_EMAILWARE_FUNC, MFD_ITEM_SLOT, false, MFD_ACTIVE, false);
+   return true;
 }
 
 errtype mfd_emailware_init(MFD_Func* f)
@@ -1183,7 +1183,7 @@ void email_turnon(bool ,bool real_start)
    if (real_start)
    {
       inventory_draw_new_page(email_pages[flash?EMAIL_VER:last_email_taken]);
-      set_inventory_mfd(MFD_INV_HARDWARE,HARDWARE_EMAIL,TRUE);
+      set_inventory_mfd(MFD_INV_HARDWARE,HARDWARE_EMAIL,true);
       mfd_change_slot(mfd_grab_func(MFD_EMAILWARE_FUNC,MFD_ITEM_SLOT),MFD_ITEM_SLOT);
    }
 }
@@ -1243,6 +1243,6 @@ void email_slam_hack(int16_t which)
 {
    void add_email_datamunge(int16_t munge,bool select);
 
-   add_email_datamunge(which,TRUE);
+   add_email_datamunge(which,true);
    read_email(EMAIL_BASE_ID,which);
 }

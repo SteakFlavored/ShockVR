@@ -66,7 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------
 // GLOBALS
 // ----------
-bool redraw_paused=FALSE;
+bool redraw_paused=false;
 
 // ----------
 // PROTOTYPES
@@ -116,7 +116,7 @@ void game_loop(void)
 		if (redraw_paused)
 		{
 			draw_pause_string();
-			redraw_paused=FALSE;
+			redraw_paused=false;
 		}
 //KLC - does nothing!			loopLine(GL|0x1D,synchronous_update());
 		if (music_on)
@@ -141,7 +141,7 @@ void game_loop(void)
 		if (localChanges)
 		{
 			loopLine(GL|0x1A, render_run());
-			loopLine(GL|0x17,if (!full_game_3d) status_vitals_update(FALSE));
+			loopLine(GL|0x17,if (!full_game_3d) status_vitals_update(false));
 /*KLC - no longer needed
 			if (_change_flag&ANIM_UPDATE)
 			{
@@ -170,7 +170,7 @@ void game_loop(void)
 			}
 		}
 		if (!full_game_3d)
-			loopLine(GL|0x19,update_meters(FALSE));
+			loopLine(GL|0x19,update_meters(false));
 		if (!full_game_3d && olh_overlay_on)
 			olh_overlay();
 

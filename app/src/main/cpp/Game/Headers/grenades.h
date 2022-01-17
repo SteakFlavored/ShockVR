@@ -83,7 +83,7 @@ int8_t* get_grenade_name(int32_t gtype, int8_t* buf);
 void activate_grenade(ObjSpecID osid);
 
 // do_explosion()
-// will explode the grenade with id, and it'll show a special effect if arg is TRUE
+// will explode the grenade with id, and it'll show a special effect if arg is true
 void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, ExplosionData *attack_data);
 
 //void do_explosion(ObjLoc loc, ObjID exclusion, uint8_t special_effect, fix radius, fix radius_change, int32_t damage_mod, int32_t damage_change, int32_t dtype, fix knock_mass, fix knock_speed, uint8_t offense,uint8_t penet);/

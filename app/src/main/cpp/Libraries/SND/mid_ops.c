@@ -140,7 +140,7 @@ int32_t snd_sequence_play(int32_t snd_ref, uint8_t *seq_dat, int32_t seq_num, sn
    snd_midi_parms *seq_parm;
    int32_t lpri=SND_DEF_PRI, seq_id, rv;
    if (mparm!=NULL) lpri=mparm->pri;
-   if ((seq_id=snd_find_free_sequence(lpri,FALSE))==SND_PERROR)
+   if ((seq_id=snd_find_free_sequence(lpri,false))==SND_PERROR)
     { snd_error=SND_NO_HANDLE; return SND_PERROR; }
    seq_parm=&_snd_midi_prm[seq_id];
    if (mparm!=NULL)

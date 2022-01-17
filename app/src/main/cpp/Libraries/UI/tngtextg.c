@@ -47,7 +47,7 @@ bool tng_textgadget_hscroll_changed(void *ui_data, void *user_data)
 
    ptng = (TNG *)user_data;
    ptng->signal(ptng, TNG_SIGNAL_CHANGED);
-   return(FALSE);
+   return(false);
 }
 
 bool tng_textgadget_vscroll_changed(void *ui_data, void *user_data)
@@ -58,7 +58,7 @@ bool tng_textgadget_vscroll_changed(void *ui_data, void *user_data)
 
    ptng = (TNG *)user_data;
    ptng->signal(ptng, TNG_SIGNAL_CHANGED);
-   return(FALSE);
+   return(false);
 }
 #pragma require_prototypes on
 
@@ -75,7 +75,7 @@ errtype tng_textgadget_init(void *ui_data, TNG *ptng, TNGStyle *sty, uint32_t op
    extern TTFontInfo TTTNGFontInfo;
    TTState TTs;
    TTRect TTr;
-   static bool inited=FALSE;
+   static bool inited=false;
 
    ptxtng = (TNG_textgadget *)GUI_MALLOC(ptng->ui_data, sizeof(TNG_textgadget));
 
@@ -213,7 +213,7 @@ int32_t tng_textgadget_getvalue(TNG *ptng)
 bool tng_textgadget_keycooked(TNG *ptng, uint16_t key)
 {
    int16_t code;
-   bool retval = FALSE;
+   bool retval = false;
 /*¥¥¥
 
    code = key & 0xff;
@@ -234,7 +234,7 @@ bool tng_textgadget_keycooked(TNG *ptng, uint16_t key)
    }
 //   Spew(DSRC_UI_Textgadget, ("About to tt_parse_char...\n"));
    IF_SET_RV(tng_cb_keycooked(ptng, key));
-   retval = TRUE;
+   retval = true;
 */
    return(retval);
 }
@@ -248,14 +248,14 @@ bool tng_textgadget_mousebutt(TNG *ptng, uint8_t type, LGPoint loc)
 // Handle incoming signals
 bool tng_textgadget_signal(TNG *ptng, uint16_t signal)
 {
-   bool retval = FALSE;
+   bool retval = false;
    //Spew(DSRC_UI_Textgadget, ("Textgadget Received signal: %x\n",signal));
    if (signal & TNG_SIGNAL_CHANGED)
       TNG_DRAWPART(ptng, TNG_ALLPARTS);
    if (signal & TNG_SIGNAL_SCROLL)
       tng_textgadget_scroll(ptng);
    IF_SET_RV(tng_cb_signal(ptng, signal));
-   retval = TRUE;
+   retval = true;
    return(retval);
 }
 // -----------------------------
@@ -275,19 +275,19 @@ errtype tng_textgadget_scroll(TNG *ptng)
    {
       case TNG_TG_SCROLL_UP_KEY:
          which_bar = TNG_TG(ptng)->vscroll_tng;
-         increm = TRUE;
+         increm = true;
          break;
       case TNG_TG_SCROLL_DOWN_KEY:
          which_bar = TNG_TG(ptng)->vscroll_tng;
-         increm = FALSE;
+         increm = false;
          break;
       case TNG_TG_SCROLL_LEFT_KEY:
          which_bar = TNG_TG(ptng)->hscroll_tng;
-         increm = FALSE;
+         increm = false;
          break;
       case TNG_TG_SCROLL_RIGHT_KEY:
          which_bar = TNG_TG(ptng)->hscroll_tng;
-         increm = TRUE;
+         increm = true;
          break;
    }
    if (which_bar != NULL)
@@ -306,6 +306,6 @@ errtype tng_textgadget_addstring(TNG *ptng, int8_t *s)
 {
    region_begin_sequence();
    tt_parse_string(TNG_TG_TT(ptng), s);
-   region_end_sequence(TRUE);
+   region_end_sequence(true);
    return(OK);
 }

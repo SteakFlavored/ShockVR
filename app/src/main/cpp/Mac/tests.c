@@ -363,7 +363,7 @@ void DoClickBrowseImages(Point localPt)
 	{
 		Id 				n;
 		ResDesc		*prd;
-		bool			found = FALSE;
+		bool			found = false;
 
 		if (localPt.v <= pResourceBtns.top+19)		// If in upper button:
 		{
@@ -372,7 +372,7 @@ void DoClickBrowseImages(Point localPt)
 				prd = RESDESC(n);
 				if (prd->filenum == pResNum && prd->type == RTYPE_IMAGE)
 				{
-					found = TRUE;
+					found = true;
 					break;
 				}
 			}
@@ -384,7 +384,7 @@ void DoClickBrowseImages(Point localPt)
 				prd = RESDESC(n);
 				if (prd->filenum == pResNum && prd->type == RTYPE_IMAGE)
 				{
-					found = TRUE;
+					found = true;
 					break;
 				}
 			}
@@ -603,7 +603,7 @@ void SetFont(Ptr p)
 		ShockBitmap	monoMap;
 		Rect	r;
 
-		NewShockBitmap(&monoMap, fd->w, fd->h, FALSE);
+		NewShockBitmap(&monoMap, fd->w, fd->h, false);
 		imgp = (Ptr)fd;
 		imgp += fd->buf;
 		offp = monoMap.Address + (monoMap.RowBytes * 17);
@@ -647,7 +647,7 @@ void DoClickBrowseFonts(Point localPt)
 	{
 		Id 				n;
 		ResDesc		*prd;
-		bool			found = FALSE;
+		bool			found = false;
 
 		if (localPt.v <= pResourceBtns.top+19)		// If in upper button:
 		{
@@ -656,7 +656,7 @@ void DoClickBrowseFonts(Point localPt)
 				prd = RESDESC(n);
 				if (prd->filenum == pResNum && prd->type == RTYPE_FONT)
 				{
-					found = TRUE;
+					found = true;
 					break;
 				}
 			}
@@ -668,7 +668,7 @@ void DoClickBrowseFonts(Point localPt)
 				prd = RESDESC(n);
 				if (prd->filenum == pResNum && prd->type == RTYPE_FONT)
 				{
-					found = TRUE;
+					found = true;
 					break;
 				}
 			}
@@ -778,7 +778,7 @@ void DoClickLoadPalette(Point localPt)
 	{
 		Id 				n;
 		ResDesc		*prd;
-		bool			found = FALSE;
+		bool			found = false;
 
 		if (localPt.v <= pResourceBtns.top+19)		// If in upper button:
 		{
@@ -787,7 +787,7 @@ void DoClickLoadPalette(Point localPt)
 				prd = RESDESC(n);
 				if (prd->filenum == pResNum && prd->type == RTYPE_UNKNOWN)
 				{
-					found = TRUE;
+					found = true;
 					break;
 				}
 			}
@@ -799,7 +799,7 @@ void DoClickLoadPalette(Point localPt)
 				prd = RESDESC(n);
 				if (prd->filenum == pResNum && prd->type == RTYPE_UNKNOWN)
 				{
-					found = TRUE;
+					found = true;
 					break;
 				}
 			}
@@ -864,7 +864,7 @@ void DoTestMoveKeys(void)
 	RndSeed(&rs, 22);										// Start off the random number generator.
 
 //	kb_startup(NULL);
-	done = FALSE;
+	done = false;
 	while (!done)												// Poll the keyboard.
 	{
 		if (kb_state(0x31))								// Spacebar - change color
@@ -883,7 +883,7 @@ void DoTestMoveKeys(void)
 		if (kb_state(0x7E))
 			MoveSquare(0, -1);
 		if (kb_state(0x0C))								// 'Q'
-			done = TRUE;
+			done = true;
 	}
 //	kb_shutdown();
 
@@ -948,7 +948,7 @@ void DoTestMouse(void)
 
 	mouse_init(16,16);
 	mouse_set_callback(show_coords, (void*)0x600F, &callbackid);
-	done = FALSE;
+	done = false;
 	while (!done)												// Check for mouse clicks.
 	{
 		mouse_event e;
@@ -959,7 +959,7 @@ void DoTestMouse(void)
 		if (err == OK)
 		{
 			if (e.type ==2 && (e.modifiers & 0x08))		// If option-click, quit
-				done = TRUE;
+				done = true;
 			else															// If normal click, draw stats.
 			{
 				GetPort(&savePort);
@@ -1044,7 +1044,7 @@ void DoPlayMovie(int16_t cmd)
 	RGBColor				black = {0, 0, 0};
 	RGBColor				white = {0xffff, 0xffff, 0xffff};
 #ifdef PAL_CHG_TEST
-	bool					chgPal = FALSE;
+	bool					chgPal = false;
 #endif
 
 	EnterMovies();
@@ -1223,7 +1223,7 @@ void DoPlayMovie(int16_t cmd)
 
 		StartMovie (aMovie);
 		HideCursor();
-		done = FALSE;
+		done = false;
 		while(!IsMovieDone(aMovie) && !done)
 		{
 			if (WaitNextEvent (everyEvent, &theEvent, 0, nil))
@@ -1244,7 +1244,7 @@ void DoPlayMovie(int16_t cmd)
 					case keyDown:
 					case autoKey:
 					case mouseDown:
-						done = TRUE;
+						done = true;
 						break;
 				}
 			}
@@ -1263,7 +1263,7 @@ void DoPlayMovie(int16_t cmd)
 			if (tv > 3100 && !chgPal)
 			{
 				SetEntries(1, 253, &(**ctab[2]).ctTable[1]);
-				chgPal = TRUE;
+				chgPal = true;
 			}
 #endif
 		}
@@ -1308,15 +1308,15 @@ void DoPlayCutScene(int16_t cmd)
 	{
 		case testPlayIntro:
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pIntro", &fSpec);
-			PlayCutScene(&fSpec, FALSE, TRUE);
+			PlayCutScene(&fSpec, false, true);
 			break;
 		case testPlayDeath:
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pDeath", &fSpec);
-			PlayCutScene(&fSpec, TRUE, TRUE);
+			PlayCutScene(&fSpec, true, true);
 			break;
 		case testPlayEndGame:
 			FSMakeFSSpec(gDataVref, gDataDirID, "\pEndgame", &fSpec);
-			PlayCutScene(&fSpec, TRUE, FALSE);
+			PlayCutScene(&fSpec, true, false);
 			break;
 
 		//------ VMAIL ------
@@ -1413,7 +1413,7 @@ void DoLoadLevelMap(int16_t cmd)
 	}
 
 	load_da_palette();
-	amap_draw(oAMap(MFD_FULLSCR_MAP), TRUE);
+	amap_draw(oAMap(MFD_FULLSCR_MAP), true);
 }
 
 //------------------------------------------------------------------------
@@ -1424,7 +1424,7 @@ void DoZoomCurrMap(int16_t cmd)
 	else
 		level_gamedata.auto_maps[MFD_FULLSCR_MAP].zoom--;
 
-	amap_draw(oAMap(MFD_FULLSCR_MAP), TRUE);
+	amap_draw(oAMap(MFD_FULLSCR_MAP), true);
 }
 
 //------------------------------------------------------------------------
@@ -1446,8 +1446,8 @@ void RenderTest(void)
 	FSSpec					fSpec;
 	cams 						test_cam;
    	fauxrend_context 	*_frc;
-	bool 						_rt_inside=TRUE;
-	bool 						all_axis = FALSE;
+	bool 						_rt_inside=true;
+	bool 						all_axis = false;
 	int32_t						time,detailCheck;
 	Str255					str;
 	int32_t						frames = 0;

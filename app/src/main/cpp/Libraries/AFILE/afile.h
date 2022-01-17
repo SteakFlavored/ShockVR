@@ -85,8 +85,8 @@ struct Amethods_;
 typedef struct Afile_ {
 	FILE *fp;				// file access ptr
 	AfileType type;			// file type
-	bool writing;			// if TRUE, opened for write (FALSE = read)
-	bool writerWantsRsd;	// if TRUE, writer wants rsd frames
+	bool writing;			// if true, opened for write (false = read)
+	bool writerWantsRsd;	// if true, writer wants rsd frames
 	struct Amethods_ *pm; 	// ptr to access method ptrs
 	AvideoInfo v;			// video info
 	AaudioInfo a;			// audio info

@@ -40,12 +40,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int8_t *fix_sprint (int8_t *str, fix x)
 {
 	uint32_t tmp;
-	bool neg = FALSE;
+	bool neg = false;
 
 	if (x < 0)
 	{
 		x = -x;
-		neg = TRUE;
+		neg = true;
 	}
 
 	tmp = x & 0xffff;	tmp *= 10000; tmp /= 0xffff;
@@ -61,12 +61,12 @@ int8_t *fix_sprint (int8_t *str, fix x)
 int8_t *fix24_sprint (int8_t *str, fix24 x)
 {
 	uint32_t tmp;
-	bool neg = FALSE;
+	bool neg = false;
 
 	if (x < 0)
 	{
 		x = -x;
-		neg = TRUE;
+		neg = true;
 	}
 
 	tmp = x & 0xff; tmp *= 1000; tmp /= 0xff;
@@ -84,8 +84,8 @@ int8_t *fix24_sprint (int8_t *str, fix24 x)
 // it might be better to do %d.%4x but im not sure, so for now we will do this
 int8_t *fix_sprint_hex (int8_t *str, fix x)
 {
-	bool neg = FALSE;
-	if (x < 0) { x = -x; neg = TRUE; }
+	bool neg = false;
+	if (x < 0) { x = -x; neg = true; }
 	if (!neg) sprintf (str, "%x.%04lx", x >> 16, x&0xffff);
 	else 		 sprintf (str, "-%x.%04lx", x >> 16, x&0xffff);
    return str;
@@ -93,8 +93,8 @@ int8_t *fix_sprint_hex (int8_t *str, fix x)
 
 int8_t *fix24_sprint_hex (int8_t *str, fix24 x)
 {
-	bool neg = FALSE;
-	if (x < 0) { x = -x; neg = TRUE;	}
+	bool neg = false;
+	if (x < 0) { x = -x; neg = true;	}
 	if (!neg) sprintf (str, "%x.%02lx", x >> 8, x&0xff);
 	else      sprintf (str, "-%x.%02lx", x >> 8, x&0xff);
    return str;

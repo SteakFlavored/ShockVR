@@ -58,10 +58,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <wsample.h>
 */
 // how is the game doing, anyway, set to true at end of time
-bool cit_success=FALSE;
+bool cit_success=false;
 
 // are we "paused"
-bool game_paused = FALSE;
+bool game_paused = false;
 
 void ShockMain(void);
 
@@ -138,7 +138,7 @@ void ShockMain(void)
 		chg_set_flg(_static_change);
 	}
 */
-	cit_success=TRUE;
+	cit_success=true;
 	// hit them atexit's
 }
 

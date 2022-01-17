@@ -395,13 +395,13 @@ void	EDMS_get_Euler_angles( Q &alpha, Q &beta, Q &gamma, int32_t object )
 //      ==========================================
 bool    EDMS_frere_jaques( physics_handle ph )
 {
-   bool    rval = FALSE;
+   bool    rval = false;
 
 // condomate...
 // ------------
    if ( ph > -1 )
    {
-      if ( no_no_not_me[ ph2on[ph] ] == 1 ) rval = TRUE;
+      if ( no_no_not_me[ ph2on[ph] ] == 1 ) rval = true;
    }
 
    return rval;

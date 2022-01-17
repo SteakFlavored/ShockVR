@@ -175,9 +175,9 @@ RefTable *ResReadRefTable(Id id)
 
 	prd = RESDESC(id);
 
-	SetResLoad(FALSE);													// Get resource handle without
+	SetResLoad(false);													// Get resource handle without
 	resHdl = GetResource(resMacTypes[prd->type], id);		// actually loading res into mem
-	SetResLoad(TRUE);
+	SetResLoad(true);
 
 	ReadPartialResource(resHdl, 0, &numRefs, sizeof(RefIndex));	// Get number of refs
 	tableSize = REFTABLESIZE(numRefs);										// to determine table size
@@ -335,9 +335,9 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
 	Handle		resHdl;
 	int16_t			err;
 
-	SetResLoad(FALSE);													// Get resource handle without
+	SetResLoad(false);													// Get resource handle without
 	resHdl = GetResource(resMacTypes[prd->type], REFID(ref));
-	SetResLoad(TRUE);														// actually loading res into mem
+	SetResLoad(true);														// actually loading res into mem
 
 	if (prd->flags & RDF_LZW)
 	{
@@ -506,7 +506,7 @@ int32_t RefInject(RefTable *prt, Ref ref, void *buff)
 //
 //		ref = ref to be checked
 //
-//	Returns: TRUE if ref ok, FALSE if invalid & prints warning
+//	Returns: true if ref ok, false if invalid & prints warning
 
 bool RefCheckRef(Ref ref)
 {
@@ -514,14 +514,14 @@ bool RefCheckRef(Ref ref)
 
 	id = REFID(ref);
 	if (!ResCheckId(id))
-		return FALSE;
+		return false;
 
 	if ((ResFlags(id) & RDF_COMPOUND) == 0)
 		{
 		Warning(("RefCheckRef: id $%x is not a compound resource\n", id));
-		return FALSE;
+		return false;
 		}
 
-	return TRUE;
+	return true;
 }
 */

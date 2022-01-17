@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 
-bool sfx_on = TRUE;
+bool sfx_on = true;
 
 #define NUM_DIGI_FX  114
 
@@ -205,7 +205,7 @@ bool set_sample_pan_gain(snd_digi_parms *sdp)
          if ((h.x == (x >> 8)) && (h.y == (y >> 8)) && (h.inuse == 1))
          {
             h.inuse--;
-            return(TRUE);
+            return(true);
          }
       }
       temp_vol = compute_sfx_vol(x, y, objs[PLAYER_OBJ].loc.x, objs[PLAYER_OBJ].loc.y);
@@ -225,7 +225,7 @@ bool set_sample_pan_gain(snd_digi_parms *sdp)
 // following is temp      sdp->vol=curr_alog_vol;
       sdp->vol = 100;
       snd_sample_reload_parms(sdp);
-      return(FALSE);
+      return(false);
    }
    else
    {
@@ -239,7 +239,7 @@ bool set_sample_pan_gain(snd_digi_parms *sdp)
    sdp->vol = vol * temp_vol / VOL_FULL;
    sdp->vol = 127;  //¥¥¥ for now
    snd_sample_reload_parms(sdp);
-   return(FALSE);
+   return(false);
 }
 
 #ifdef NOT_YET //¥¥¥
@@ -371,7 +371,7 @@ bool digi_fx_playing(int32_t fx_id, int32_t *handle_ptr)
 	snd_digi_parms *sdp;
 
 	if (fx_id == -1)
-		return(FALSE);
+		return(false);
 
 	// should scan all current sfx's for snd_ref=fx_id+SFX_BASE
 	for (i=0; i < _snd_smp_cnt; i++)
@@ -384,9 +384,9 @@ bool digi_fx_playing(int32_t fx_id, int32_t *handle_ptr)
 			{
 				if (handle_ptr != NULL)
 					*handle_ptr = i;
-				return(TRUE);
+				return(true);
 			}
 		}
 	}
-	return FALSE;
+	return false;
 }

@@ -212,7 +212,7 @@ int32_t LzwSetBuffer(void *buff, int32_t buffSize)
 	lzwCodeValue = (int16_t *) (((uint8_t *) lzwDecodeStack) + LZW_FD_WRITE_BUFF_SIZE);
 	lzwPrefixCode = (uint16_t *) (((uint8_t *) lzwCodeValue) + (LZW_TABLE_SIZE * sizeof(uint16_t)));
 	lzwAppendChar = ((uint8_t *) lzwPrefixCode) + (LZW_TABLE_SIZE * sizeof(uint16_t));
-	lzwBufferMalloced = FALSE;
+	lzwBufferMalloced = false;
 	return(0);
 }
 
@@ -238,7 +238,7 @@ int32_t LzwMallocBuffer()
 		else
 			{
 			LzwSetBuffer(buff, LZW_BUFF_SIZE);
-			lzwBufferMalloced = TRUE;
+			lzwBufferMalloced = true;
 			}
 		}
 	return(0);
@@ -255,7 +255,7 @@ void LzwFreeBuffer()
 //		Free(lzwBuffer);
 		DisposePtr((Ptr)lzwBuffer);
 		lzwBuffer = NULL;
-		lzwBufferMalloced = FALSE;
+		lzwBufferMalloced = false;
 		}
 }
 
@@ -354,7 +354,7 @@ int32_t LzwCompress(
 // the input has been exhausted.  Note that it stops adding codes to the
 // table after all of the possible codes have been defined.
 
-	while (TRUE)
+	while (true)
 		{
 
 //	Get next input int8_t, if read all data then exit loop

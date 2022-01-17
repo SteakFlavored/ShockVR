@@ -156,9 +156,9 @@ errtype object_data_load(void);
 int32_t   global_timer_id;
 extern int32_t mlimbs_peril;
 */
-bool init_done = FALSE;
-bool clear_player_data = TRUE;
-bool objdata_loaded = FALSE;
+bool init_done = false;
+bool clear_player_data = true;
+bool objdata_loaded = false;
 grs_screen  *cit_screen;
 /*
 extern void (*enter_modes[])(void);
@@ -188,7 +188,7 @@ MemStack temp_memstack;
 
 bool pause_for_input(uint32_t wait_time)
 {
-	bool	gotInput = FALSE;
+	bool	gotInput = false;
 	while (!gotInput && ((uint32_t)TickCount() < wait_time))
 	{
 		int32_t		theKeys[4];
@@ -199,10 +199,10 @@ bool pause_for_input(uint32_t wait_time)
 #endif
 		for (int32_t i = 0; i < 4; i++)
 			if (theKeys[i] != 0)
-				gotInput = TRUE;
+				gotInput = true;
 
 		if (Button())
-			gotInput = TRUE;
+			gotInput = true;
 	}
 
 	// return if we got input
@@ -241,10 +241,10 @@ void init_all(void)
    extern Datapath savegame_dpath; */
 	uint32_t		pause_time;
 	int32_t		i;
-	bool		speed_splash = FALSE;
+	bool		speed_splash = false;
 /*
 
-   bool        dofault = TRUE;
+   bool        dofault = true;
 	int32_t dummy_count;
    int32_t   data[1];
    int32_t   cnt;
@@ -277,7 +277,7 @@ void init_all(void)
 //   Spew(DSRC_SYSTEM_Memory, ("initial memory: %d\n",start_mem));
 /*
    dofault = !config_get_raw(CFG_NOFAULT_VAR,NULL,0);
-   DBG(DSRC_SYSTEM_FaultDisable,{ dofault = FALSE;});
+   DBG(DSRC_SYSTEM_FaultDisable,{ dofault = false;});
    if (dofault)
       ex_startup(EXM_ALL);
 */
@@ -308,7 +308,7 @@ void init_all(void)
    gr_init();
 //   gr_set_malloc(CitMalloc);		MLA - Don't need these
 //   gr_set_free(CitFree);
-   gr_set_mode(GRM_640x480x8, TRUE);
+   gr_set_mode(GRM_640x480x8, true);
    cit_screen = gr_alloc_screen(grd_cap->w, grd_cap->h);
    gr_set_screen(cit_screen);
 
@@ -385,7 +385,7 @@ void init_all(void)
 
 	// Put up splash screen for US!
 	uiFlush();
-	DrawSplashScreen(9002, TRUE);
+	DrawSplashScreen(9002, true);
 
 	// Set the wait time for our screen
 	pause_time = TickCount();
@@ -403,7 +403,7 @@ void init_all(void)
 
    init_hack_cameras();
 
-	region_end_sequence(FALSE);
+	region_end_sequence(false);
 	Init_Lighting();
 
    // set default difficulty levels for player
@@ -422,7 +422,7 @@ void init_all(void)
 
 	// LG splash screen wait
 	if(pause_for_input(pause_time))
-		speed_splash = TRUE;
+		speed_splash = true;
 
 #ifdef DO_FADES
 	if (pal_fx_on)
@@ -433,7 +433,7 @@ void init_all(void)
 
 	// Put up title screen
 	uiFlush();
-	DrawSplashScreen(9003, TRUE);
+	DrawSplashScreen(9003, true);
 
 	// Preload and lock resources that are used often in the game.
 	PreloadGameResources();
@@ -464,7 +464,7 @@ void init_all(void)
    }
 
 	uiFlush();
-	init_done = TRUE;
+	init_done = true;
 }
 
 //-----------------------------------------------------------
@@ -549,7 +549,7 @@ void object_data_flush(void)
       return;
 
    free_dynamic_memory(DYNMEM_ALL);
-   objdata_loaded = FALSE;
+   objdata_loaded = false;
    obj_shutdown();
 }
 
@@ -582,7 +582,7 @@ errtype object_data_load(void)
    // initialize player struct
 	if (clear_player_data)
 		init_player(&player_struct);
-	clear_player_data = TRUE;
+	clear_player_data = true;
 	AdvanceProgress();
 
 
@@ -599,14 +599,14 @@ errtype object_data_load(void)
    bounds.lr.x = global_fullmap->x_size;
    bounds.lr.y = global_fullmap->y_size;
 
-   rendedit_process_tilemap(global_fullmap,&bounds,TRUE);
+   rendedit_process_tilemap(global_fullmap,&bounds,true);
    AdvanceProgress();
 
    // Make the objmode camera....
    fr_camera_create(&objmode_cam, CAMTYPE_OBJ, (fix *)player_struct.rep, NULL);
    AdvanceProgress();
 
-   objdata_loaded = TRUE;
+   objdata_loaded = true;
    load_dynamic_memory(DYNMEM_ALL);
 
 //KLC   end_wait();

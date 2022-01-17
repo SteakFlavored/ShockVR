@@ -71,7 +71,7 @@ static int8_t *tableNames[] = {
 	int16_t	resID = 128;
 
 	int32_t	frames = 0;
-	dumpChunkHdrs = TRUE;
+	dumpChunkHdrs = true;
 
 	Handle		changesHdl;
 	PalChange	*pcp;
@@ -180,7 +180,7 @@ static int8_t *tableNames[] = {
 		pmc = (MovieChunk *)malloc(mh.sizeChunks);
 		fread(pmc, mh.sizeChunks, 1, fpi);
       	pmcBase = pmc;
-		while (TRUE)
+		while (true)
 		{
 			uint8_t	s1, s2;
 

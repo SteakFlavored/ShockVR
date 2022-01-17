@@ -158,8 +158,8 @@ int32_t mlimbs_boredom;
 int32_t *output_table;
 bool wait_flag;
 int32_t next_mode, ai_cycle;
-bool music_card=FALSE, music_on=FALSE;
-//KLC no sfx_card, sfx_on moved to DIGIFX.C     bool sfx_card=FALSE, sfx_on=FALSE;
+bool music_card=false, music_on=false;
+//KLC no sfx_card, sfx_on moved to DIGIFX.C     bool sfx_card=false, sfx_on=false;
 int32_t cur_digi_channels=4;
 #else
 extern int32_t mlimbs_peril, mlimbs_positive, mlimbs_motion, mlimbs_monster;

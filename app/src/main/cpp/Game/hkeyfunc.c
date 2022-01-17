@@ -83,7 +83,7 @@ int32_t select_object_by_class(int32_t obclass, int32_t num, uint8_t* quantlist)
 
 #define SIGNATURE "giSoink"
 #define CFG_HKEY_GO "cyberia"
-bool yes_3d = TRUE;
+bool yes_3d = true;
 extern bool properties_changed;
 
 #ifdef PLAYTEST
@@ -91,7 +91,7 @@ extern bool properties_changed;
 bool maim_player(int16_t keycode, uint32_t context, void* data)
 {
    player_struct.hit_points = 5;
-   return TRUE;
+   return true;
 }
 #pragma enable_message(202)
 
@@ -105,7 +105,7 @@ bool salt_the_player(int16_t keycode, uint32_t context, void* data)
       memset(player_struct.hit_points_lost,0, NUM_DAMAGE_TYPES);
       player_struct.energy = 255;
       player_struct.fatigue= 0;
-      player_struct.experience = TRUE;
+      player_struct.experience = true;
       chg_set_flg(VITALS_UPDATE);
    }
    else
@@ -113,7 +113,7 @@ bool salt_the_player(int16_t keycode, uint32_t context, void* data)
       message_info("Winners don't use hotkeys");
       damage_player(25, EXPLOSION_FLAG, 0);
    }
-   return TRUE;
+   return true;
 }
 
 bool automap_seen(int16_t keycode, uint32_t context, void* data)
@@ -129,7 +129,7 @@ bool automap_seen(int16_t keycode, uint32_t context, void* data)
          }
       }
    }
-   return TRUE;
+   return true;
 }
 
 extern errtype give_player_loot(Player *pplr);
@@ -142,14 +142,14 @@ bool give_player_hotkey(int16_t keycode, uint32_t context, void *data)
       chg_set_flg(INVENTORY_UPDATE);
       mfd_force_update();
    }
-   return TRUE;
+   return true;
 }
 
 #pragma enable_message(202)
 #endif
 
 #ifdef PLAYTEST
-bool new_cone_clip = TRUE;
+bool new_cone_clip = true;
 
 #pragma disable_message(202)
 bool change_clipper(int16_t keycode, uint32_t context, void *data)
@@ -161,7 +161,7 @@ bool change_clipper(int16_t keycode, uint32_t context, void *data)
    else
       mprintf("OLD CONE CLIP\n");
    render_run();
-   return TRUE;
+   return true;
 }
 #pragma enable_message(202)
 #endif
@@ -180,7 +180,7 @@ bool quit_key_func(int16_t keycode, uint32_t context, void* data)
       _new_mode = -1;
       chg_set_flg(GL_CHG_LOOP);
    }
-   return TRUE;
+   return true;
 }
 
 extern void loopmode_exit(int16_t),loopmode_enter(int16_t);
@@ -207,7 +207,7 @@ bool keyhelp_hotkey_func(int16_t keycode, uint32_t context, void* data)
       if(uiCheckInput()) {
          fake_inp=KEY_PGDN;
       }
-      tight_loop(FALSE);
+      tight_loop(false);
    }
 
    scrntext_free(keyhelp_txtscrn);
@@ -217,10 +217,10 @@ bool keyhelp_hotkey_func(int16_t keycode, uint32_t context, void* data)
 
    uiShowMouse(NULL);
 
-   update_state(FALSE);
+   update_state(false);
    loopmode_enter(_current_loop);
 
-   return TRUE;
+   return true;
 }
 
 
@@ -228,13 +228,13 @@ bool really_quit_key_func(int16_t keycode, uint32_t context, void* data)
 {
    _new_mode = -1;
    chg_set_flg(GL_CHG_LOOP);
-   return TRUE;
+   return true;
 }
 
 bool toggle_bool_func(int16_t keycode, uint32_t context, bool* tgl)
 {
    *tgl = !*tgl;
-   return TRUE;
+   return true;
 }
 
 #endif //¥¥¥ NOT_YET
@@ -246,10 +246,10 @@ bool change_mode_func(int16_t , uint32_t , void* data)
    int32_t newm = (int32_t)data;
 
    if ((newm == AUTOMAP_LOOP) && ((!player_struct.hardwarez[HARDWARE_AUTOMAP]) || (global_fullmap->cyber)))
-      return TRUE;
+      return true;
    _new_mode = newm;
    chg_set_flg(GL_CHG_LOOP);
-   return TRUE;
+   return true;
 }
 
 #ifdef NOT_YET //¥¥¥
@@ -268,7 +268,7 @@ bool move_handart(int16_t keycode, uint32_t context, void *data)
    if (foo & 0x10)
    {
       hdx=hdy=0;
-      return TRUE;
+      return true;
    }
 
    if (foo & 0x08)
@@ -281,13 +281,13 @@ bool move_handart(int16_t keycode, uint32_t context, void *data)
    else
       (*dir)-=amt;
 
-   return TRUE;
+   return true;
 }
 
 bool adv_handart(int16_t keycode, uint32_t context, void* data)
 {
    hcount = (hcount+1)%5;
-   return TRUE;
+   return true;
 }
 
 #endif // HANDART_ADJUST
@@ -309,15 +309,15 @@ void start_music(void)
 //¥¥¥   {
 	if (MacTuneInit() == 0)
 	{
-	    	music_on = TRUE;
-		mlimbs_on = TRUE;
+	    	music_on = true;
+		mlimbs_on = true;
 		mlimbs_AI_init();
 		load_score_for_location(PLAYER_BIN_X, PLAYER_BIN_Y);
 		MacTuneStartCurrentTheme();
 	}
 	else
 	{
-		gShockPrefs.soBackMusic = FALSE;
+		gShockPrefs.soBackMusic = false;
 		SavePrefs(kPrefsResID);
 	}
 //¥¥¥   }
@@ -328,8 +328,8 @@ void stop_music(void)
 	extern bool mlimbs_on;
 
 	MacTuneShutdown();
-	music_on = FALSE;
-	mlimbs_on = FALSE;
+	music_on = false;
+	mlimbs_on = false;
 	mlimbs_peril = DEFAULT_PERIL_MIN;
 	mlimbs_monster = NO_MONSTER;
 }
@@ -353,7 +353,7 @@ bool toggle_music_func(int16_t, uint32_t, void*)
 	gShockPrefs.soBackMusic = music_on;
 	SavePrefs(kPrefsResID);
 
-	return (FALSE);
+	return (false);
 }
 
 
@@ -368,19 +368,19 @@ bool arm_grenade_hotkey(int16_t , uint32_t , void* )
    int32_t i, row, act;
 
    if(!show_all_actives) {
-      show_all_actives=TRUE;
+      show_all_actives=true;
       inv_last_page=-1;
       chg_set_flg(INVENTORY_UPDATE);
       mfd_force_update();
-      return TRUE;
+      return true;
    }
    if(activate_grenade_on_cursor())
-      return TRUE;
+      return true;
    act=player_struct.actives[ACTIVE_GRENADE];
    for(i=row=0;i<act;i++)
       if(player_struct.grenades[i]) row++;
    super_drop_func(ACTIVE_GRENADE,row);
-   return TRUE;
+   return true;
 }
 
 int32_t select_object_by_class(int32_t obclass, int32_t num, uint8_t* quantlist)
@@ -393,7 +393,7 @@ int32_t select_object_by_class(int32_t obclass, int32_t num, uint8_t* quantlist)
    inv_last_page=-1;
    chg_set_flg(INVENTORY_UPDATE);
    if(!show_all_actives) {
-      show_all_actives=TRUE;
+      show_all_actives=true;
       return -1;
    }
    do {
@@ -409,8 +409,8 @@ bool select_grenade_hotkey(int16_t , uint32_t , void* )
    int32_t newobj;
 
    newobj=select_object_by_class(ACTIVE_GRENADE,NUM_GRENADES,player_struct.grenades);
-   set_inventory_mfd(MFD_INV_GRENADE,newobj,TRUE);
-   return TRUE;
+   set_inventory_mfd(MFD_INV_GRENADE,newobj,true);
+   return true;
 }
 
 bool select_drug_hotkey(int16_t , uint32_t , void* )
@@ -418,8 +418,8 @@ bool select_drug_hotkey(int16_t , uint32_t , void* )
    int32_t newobj;
 
    newobj=select_object_by_class(ACTIVE_DRUG,NUM_DRUGS,player_struct.drugs);
-   set_inventory_mfd(MFD_INV_DRUG,newobj,TRUE);
-   return TRUE;
+   set_inventory_mfd(MFD_INV_DRUG,newobj,true);
+   return true;
 }
 
 bool use_drug_hotkey(int16_t , uint32_t , void* )
@@ -432,16 +432,16 @@ bool use_drug_hotkey(int16_t , uint32_t , void* )
    int32_t i, row, act;
 
    if(!show_all_actives) {
-      show_all_actives=TRUE;
+      show_all_actives=true;
       inv_last_page=-1; // to force redraw
       chg_set_flg(INVENTORY_UPDATE);
-      return TRUE;
+      return true;
    }
    act=player_struct.actives[ACTIVE_DRUG];
    for(i=row=0;i<act;i++)
       if(player_struct.drugs[i]) row++;
    super_use_func(ACTIVE_DRUG,row);
-   return TRUE;
+   return true;
 }
 
 bool clear_fullscreen_func(int16_t , uint32_t , void* )
@@ -455,7 +455,7 @@ bool clear_fullscreen_func(int16_t , uint32_t , void* )
    full_visible = 0;
    strcpy(last_message, "");
    chg_unset_sta(FULLSCREEN_UPDATE);
-   return(FALSE);
+   return(false);
 }
 
 #ifdef NOT_YET  //KLC
@@ -472,7 +472,7 @@ bool zoom_func(int16_t keycode, uint32_t context, void* data)
    }
    else zoom = (zoom == 1) ? 1 : zoom-1;
    TileMapSetZoom(NULL,zoom);
-   return TRUE;
+   return true;
 }
 
 bool do_popup_textmenu(int16_t keycode, uint32_t context, void* g)
@@ -480,7 +480,7 @@ bool do_popup_textmenu(int16_t keycode, uint32_t context, void* g)
    extern errtype textmenu_popup(Gadget* parent);
 
    textmenu_popup((Gadget*)g);
-   return TRUE;
+   return true;
 }
 #endif
 
@@ -538,7 +538,7 @@ void edit_load_func(int8_t* fn, uint8_t source, int16_t level_num)
          message_box("bad map version.");
          break;
       case OK:
-         compute_shodometer_value(FALSE);
+         compute_shodometer_value(false);
          config_set_single_value(CFG_LEVEL_VAR,CONFIG_STRING_TYPE,fn);
 #ifndef GAMEONLY
          TileMapRedrawPixels(NULL,NULL);
@@ -563,8 +563,8 @@ bool load_level_func(int16_t keycode, uint32_t context, void* data)
 #ifndef GAMEONLY
    if ((!possible_change) || (confirm_box("Level changed without save!  Load anyways?")))
 #endif
-      level_saveload_box("Load Map",_current_root,1,fn,edit_load_func, TRUE);
-   return(TRUE);
+      level_saveload_box("Load Map",_current_root,1,fn,edit_load_func, true);
+   return(true);
 }
 #endif
 
@@ -593,7 +593,7 @@ void edit_save_func(int8_t* fn, uint8_t source, int16_t level_num)
    }
    strcpy(buf,fn);
    reset_schedules();
-   switch(save_current_map(buf,LEVEL_ID_NUM, TRUE, TRUE))
+   switch(save_current_map(buf,LEVEL_ID_NUM, true, true))
    {
       case ERR_FOPEN:
          lg_sprintf(buf,"Error opening %s",fn);
@@ -603,7 +603,7 @@ void edit_save_func(int8_t* fn, uint8_t source, int16_t level_num)
          message_info("Save complete.");
          config_set_single_value(CFG_LEVEL_VAR,CONFIG_STRING_TYPE,fn);
 #ifndef GAMEONLY
-         possible_change = FALSE;
+         possible_change = false;
 #endif
          break;
    }
@@ -616,13 +616,13 @@ bool save_level_func(int16_t keycode, uint32_t context, void* data)
    if (!saves_allowed)
    {
       message_box("Saves not allowed -- use control panel to change");
-      return(FALSE);
+      return(false);
    }
    if ((default_fname == NULL) && !config_get_raw(CFG_LEVEL_VAR,default_fname,256))
       strcpy(default_fname,MAP_FNAME);
    Spew(DSRC_EDITOR_Restore, ("default_fname = %s\n",default_fname));
-   level_saveload_box("Save Map",_current_root,1,default_fname,edit_save_func,FALSE);
-   return(TRUE);
+   level_saveload_box("Save Map",_current_root,1,default_fname,edit_save_func,false);
+   return(true);
 }
 #endif
 
@@ -657,8 +657,8 @@ bool toggle_3d_func(int16_t keycode, uint32_t context, void* data)
    region_begin_sequence();
    TileEditorResize(te,newsize);
    TileEditorMove(te,newloc,z);
-   region_end_sequence(TRUE);
-   return TRUE;
+   region_end_sequence(true);
+   return true;
 }
 
 bool tilemap_mode_func(int16_t keycode, uint32_t context, void* data)
@@ -696,20 +696,20 @@ bool tilemap_mode_func(int16_t keycode, uint32_t context, void* data)
 
       }
    }
-   return(TRUE);
+   return(true);
 }
 
 bool draw_mode_func(int16_t keycode, uint32_t context, void* data)
 {
    TileEditorSetMode(NULL,(int32_t)data);
-   return(TRUE);
+   return(true);
 }
 
 bool clear_highlight_func(int16_t keycode, uint32_t context, void* data)
 {
    TileMapClearHighlights(NULL);
    TileMapRedrawPixels(NULL,NULL);
-   return TRUE;
+   return true;
 }
 #endif
 
@@ -719,7 +719,7 @@ bool texture_selection_func(int16_t keycode, uint32_t context, void* data)
 #ifdef TEXTURE_SELECTION
    textpal_create_selector();
 #endif
-   return(TRUE);
+   return(true);
 }
 #endif
 
@@ -727,25 +727,25 @@ bool texture_selection_func(int16_t keycode, uint32_t context, void* data)
 bool lighting_func(int16_t keycode, uint32_t context, void* data)
 {
    panel_create_lighting();
-   return(TRUE);
+   return(true);
 }
 
 bool inp6d_panel_func(int16_t keycode, uint32_t context, void* data)
 {
    extern void panel_create_inp6d(void);
    panel_create_inp6d();
-   return(TRUE);
+   return(true);
 }
 
 bool render_panel_func(int16_t keycode, uint32_t context, void* data)
 {
    panel_create_renderer();
-   return(TRUE);
+   return(true);
 }
 
 bool popup_tilemap_func(int16_t keycode, uint32_t context, void* data)
 {
-   return(TRUE);
+   return(true);
 }
 
 #endif
@@ -753,7 +753,7 @@ bool popup_tilemap_func(int16_t keycode, uint32_t context, void* data)
 #ifdef PLAYTEST
 bool bkpt_me(int16_t keycode, uint32_t context, void* data)
 {  // put a break point here, goof
-   return TRUE;
+   return true;
 }
 #endif
 
@@ -762,14 +762,14 @@ bool editor_options_func(int16_t keycode, uint32_t context, void* data)
 {
    editor_options->parent = _current_root;
    gad_menu_popup_at_mouse(editor_options);
-   return(TRUE);
+   return(true);
 }
 
 bool editor_modes_func(int16_t keycode, uint32_t context, void* data)
 {
    editor_modes->parent = _current_root;
    gad_menu_popup_at_mouse(editor_modes);
-   return(TRUE);
+   return(true);
 }
 
 bool misc_menu_func(int16_t keycode, uint32_t context, void* data)
@@ -782,13 +782,13 @@ bool misc_menu_func(int16_t keycode, uint32_t context, void* data)
    misc_misc_menu->parent = _current_root;
    report_sys_menu->parent = _current_root;
    gad_menu_popup_at_mouse(main_misc_menu);
-   return(TRUE);
+   return(true);
 }
 
 bool control_panel_func(int16_t keycode, uint32_t context, void* data)
 {
    panel_create_control();
-   return(TRUE);
+   return(true);
 }
 #endif
 
@@ -821,15 +821,15 @@ bool do_find_func(int16_t keycode, uint32_t context, void* data)
          break;
    }
    TileMapRedrawSquares(NULL,NULL);
-   return(TRUE);
+   return(true);
 }
 #endif
 
 #ifdef PLAYTEST
 #ifndef GAMEONLY
-bool inp6d_kbd=TRUE;
+bool inp6d_kbd=true;
 #else
-bool inp6d_kbd=FALSE;
+bool inp6d_kbd=false;
 #endif
 
 bool stupid_slew_func(int16_t keycode, uint32_t context, void* data)
@@ -839,7 +839,7 @@ bool stupid_slew_func(int16_t keycode, uint32_t context, void* data)
    static int32_t slew_scale=16;
    extern bool inp6d_kbd;
 
-   if (inp6d_kbd==FALSE) return TRUE;
+   if (inp6d_kbd==false) return true;
 
    switch(dir)
    {
@@ -856,8 +856,8 @@ bool stupid_slew_func(int16_t keycode, uint32_t context, void* data)
       case 11:  v1 = EYE_X; v2 = slew_scale; break;
       case 12:  v1 = EYE_X; v2 = -slew_scale; break;
       case 13:  v1 = EYE_RESET; v2 = -slew_scale; break;
-      case 14:  if (slew_scale<256) slew_scale<<=1; return TRUE;
-      case 15:  if (slew_scale>1) slew_scale>>=1; return TRUE;
+      case 14:  if (slew_scale<256) slew_scale<<=1; return true;
+      case 15:  if (slew_scale>1) slew_scale>>=1; return true;
    }
    fr_camera_slewcam(NULL,v1,v2);
    if (_current_loop <= FULLSCREEN_LOOP)
@@ -869,7 +869,7 @@ bool stupid_slew_func(int16_t keycode, uint32_t context, void* data)
       chg_set_flg(EDITVIEW_UPDATE);
    }
 #endif
-   return(TRUE);
+   return(true);
 }
 
 bool zoom_3d_func(int16_t keycode, uint32_t context, void* data)
@@ -881,7 +881,7 @@ bool zoom_3d_func(int16_t keycode, uint32_t context, void* data)
       fr_mod_cams(_current_fr_context,FR_NOCAM,fix_make(0,62500));
    else
       fr_mod_cams(_current_fr_context,FR_NOCAM,fix_make(1,3000));
-   return(TRUE);
+   return(true);
 }
 #endif
 
@@ -896,14 +896,14 @@ bool menu_close_func(int16_t keycode, uint32_t context, void* data)
 bool mono_clear_func(int16_t keycode, uint32_t context, void* data)
 {
    mono_clear();
-   return(FALSE);
+   return(false);
 }
 
 bool mono_toggle_func(int16_t keycode, uint32_t context, void* data)
 {
    mono_setmode(MONO_TOG);
    message_info("Monochrome Toggled.");
-   return(FALSE);
+   return(false);
 }
 #endif
 
@@ -945,7 +945,7 @@ bool edit_flags_close(void *vg, void *ud)
       chg_unset_flg(ML_CHG_BASE<<2);
    }
    gadget_destroy(&edit_flags_gadget);
-   return(FALSE);
+   return(false);
 }
 
 bool edit_flags_func(int16_t keycode, uint32_t context, void* data)
@@ -967,13 +967,13 @@ bool edit_flags_func(int16_t keycode, uint32_t context, void* data)
       gad_qbox_add("Close", QB_PUSHBUTTON_SLOT, edit_flags_close, QB_NO_OPTION);
       gad_qbox_end();
    }
-   return(FALSE);
+   return(false);
 }
 
 bool music_ai_params_func(int16_t keycode, uint32_t context, void* data)
 {
    panel_ai_param_create();
-   return(FALSE);
+   return(false);
 }
 #endif
 
@@ -992,7 +992,7 @@ bool version_spew_func(int16_t keycode, uint32_t context, void* data)
       temp[3] = 'M';
    strcat(temp,SYSTEM_SHOCK_VERSION);
    message_info(temp);
-   return(FALSE);
+   return(false);
 }
 
 #endif //¥¥¥ NOT_YET
@@ -1044,7 +1044,7 @@ bool location_spew_func(int16_t , uint32_t , void* )
    goofy_string[7] = conv_hex( PLAYER_BIN_Y % 16 );
 
    message_info(goofy_string);
-   return(FALSE);
+   return(false);
 }
 */
 
@@ -1058,7 +1058,7 @@ bool toggle_physics_func(int16_t keycode, uint32_t context, void* data)
       message_info("Physics turned on");
    else
       message_info("Physics turned off");
-   return(FALSE);
+   return(false);
 }
 
 #define camera_info message_info
@@ -1069,7 +1069,7 @@ bool reset_camera_func(int16_t keycode, uint32_t context, void* data)
 
    if ((uint8_t *)data)
    {
-      if (cam_mode!=OBJ_STATIC_CAMERA) { camera_info("cant toggle"); return FALSE; }
+      if (cam_mode!=OBJ_STATIC_CAMERA) { camera_info("cant toggle"); return false; }
       if (motion_cam!=NULL)
       {
          motion_cam=NULL;
@@ -1088,7 +1088,7 @@ bool reset_camera_func(int16_t keycode, uint32_t context, void* data)
       fr_camera_setdef(&player_cam);
    }
    chg_set_flg(_current_3d_flag);
-   return(FALSE);
+   return(false);
 }
 
 bool current_camera_func(int16_t keycode, uint32_t context, void* data)
@@ -1102,7 +1102,7 @@ bool current_camera_func(int16_t keycode, uint32_t context, void* data)
    switch ((uint8_t)data)
    {
    case OBJ_STATIC_CAMERA:
-      if (cam_mode==OBJ_DYNAMIC_CAMERA) { camera_info("cant go static"); return FALSE; }
+      if (cam_mode==OBJ_DYNAMIC_CAMERA) { camera_info("cant go static"); return false; }
       motion_cam=fr_camera_getdef();         // note super sneaky fall through hack
       camera_info("camera static");
    case OBJ_DYNAMIC_CAMERA:
@@ -1121,10 +1121,10 @@ bool current_camera_func(int16_t keycode, uint32_t context, void* data)
    cam_mode  = (uint8_t)data;
    fr_camera_setdef(&objmode_cam);
    chg_set_flg(_current_3d_flag);
-   return(FALSE);
+   return(false);
 }
 
-bool mono_log_on = FALSE;
+bool mono_log_on = false;
 
 bool log_mono_func(int16_t keycode, uint32_t context, void* data)
 {
@@ -1132,15 +1132,15 @@ bool log_mono_func(int16_t keycode, uint32_t context, void* data)
    {
       mono_logoff();
       message_info("Mono logging off.");
-      mono_log_on = FALSE;
+      mono_log_on = false;
    }
    else
    {
       mono_logon("monolog.txt", MONO_LOG_NEW, MONO_LOG_ALLWIN);
       message_info("Mono logging on.");
-      mono_log_on = TRUE;
+      mono_log_on = true;
    }
-   return(FALSE);
+   return(false);
 }
 
 bool clear_transient_lighting_func(int16_t keycode, uint32_t context, void* data)
@@ -1157,7 +1157,7 @@ bool clear_transient_lighting_func(int16_t keycode, uint32_t context, void* data
       }
    }
    message_info("Trans. light cleared");
-   return(FALSE);
+   return(false);
 }
 
 bool level_entry_trigger_func(int16_t keycode, uint32_t context, void* data)
@@ -1165,7 +1165,7 @@ bool level_entry_trigger_func(int16_t keycode, uint32_t context, void* data)
    extern errtype do_level_entry_triggers();
    do_level_entry_triggers();
    message_info("Level entry triggered.");
-   return(FALSE);
+   return(false);
 }
 
 bool convert_one_level_func(int16_t keycode, uint32_t context, void* data)
@@ -1177,7 +1177,7 @@ bool convert_one_level_func(int16_t keycode, uint32_t context, void* data)
    texture_crunch_init();
 #endif
    obj_level_munge();
-   return(TRUE);
+   return(true);
 }
 
 //#define CONVERT_FROM_OLD_RESID
@@ -1237,13 +1237,13 @@ bool convert_all_levels_func(int16_t keycode, uint32_t context, void* data)
       // Generate the report
       obj_level_munge();
       Spew(DSRC_EDITOR_Modify, ("convert_all trying to save %s\n",fn));
-      save_current_map(fn, LEVEL_ID_NUM,TRUE,TRUE);
+      save_current_map(fn, LEVEL_ID_NUM,true,true);
    }
 
    // reload original level
    edit_load_func("templevl.dat",0,0);
 
-   return(FALSE);
+   return(false);
 }
 
 bool invulnerable_func(int16_t keycode, uint32_t context, void* data)
@@ -1261,7 +1261,7 @@ bool invulnerable_func(int16_t keycode, uint32_t context, void* data)
       message_info("Winners don't use hotkeys");
       damage_player(50, EXPLOSION_FLAG, 0);
    }
-   return(FALSE);
+   return(false);
 }
 
 bool pacifist_func(int16_t keycode, uint32_t context, void* data)
@@ -1272,22 +1272,22 @@ bool pacifist_func(int16_t keycode, uint32_t context, void* data)
       message_info ("pacifism on");
    else
       message_info ("pacifism off");
-   return(FALSE);
+   return(false);
 }
 
 #endif
 
 int32_t pause_id;
-bool remove_pause_handler = FALSE;
+bool remove_pause_handler = false;
 
 bool pause_callback(uiEvent *, LGRegion *, void *)
 {
-   return(TRUE);
+   return(true);
 }
 
 bool unpause_callback(uiEvent *, LGRegion *, void *)
 {
-   return(TRUE);
+   return(true);
 }
 
 #endif //¥¥¥ NOT_YET
@@ -1297,8 +1297,8 @@ bool pause_game_func(int16_t, uint32_t, void*)
 	extern bool game_paused, redraw_paused;
 	extern LGRegion *inventory_region;
 
-	game_paused = TRUE;
-	redraw_paused=TRUE;
+	game_paused = true;
+	redraw_paused=true;
 /* KLC - not needed for Mac version
 	game_paused = !game_paused;
 	if (game_paused)
@@ -1307,7 +1307,7 @@ bool pause_game_func(int16_t, uint32_t, void*)
 		uiInstallRegionHandler(inventory_region, UI_EVENT_MOUSE_MOVE, pause_callback, NULL, &pause_id);
 		uiGrabFocus(inventory_region, UI_EVENT_MOUSE_MOVE);
 		stop_digi_fx();
-		redraw_paused=TRUE;
+		redraw_paused=true;
 	}
 	else
 	{
@@ -1316,7 +1316,7 @@ bool pause_game_func(int16_t, uint32_t, void*)
 		uiPopGlobalCursor();
 	}
 */
-	return(FALSE);
+	return(false);
 }
 
 /*KLC - not needed for Mac version
@@ -1332,7 +1332,7 @@ bool unpause_game_func(int16_t, uint32_t, void*)
 		uiReleaseFocus(inventory_region, UI_EVENT_MOUSE_MOVE|UI_EVENT_JOY);
 		uiPopGlobalCursor();
 	}
-	return(FALSE);
+	return(false);
 }
 */
 
@@ -1344,7 +1344,7 @@ bool save_hotkey_func(int16_t, uint32_t, void *)
 	if (global_fullmap->cyber)					// Can't save in cyberspace.
 	{
 		message_info("Can't save game in cyberspace.");
-		return TRUE;
+		return true;
 	}
 
 	if (music_on)									// Setup the environment for doing Mac stuff.
@@ -1369,7 +1369,7 @@ bool save_hotkey_func(int16_t, uint32_t, void *)
 	if (music_on)
 		MacTuneStartCurrentTheme();
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1391,10 +1391,10 @@ bool check_state_func(int16_t keycode, uint32_t context, void* data)
    extern int32_t watchcount;
    MemStat pms;
    watchcount = 0;
-   CorvinZilm = TRUE;
+   CorvinZilm = true;
    MemStats(&pms);
 #endif
-   return(TRUE);
+   return(true);
 }
 
 bool diffdump_game_func(int16_t keycode, uint32_t context, void* data)
@@ -1403,7 +1403,7 @@ bool diffdump_game_func(int16_t keycode, uint32_t context, void* data)
    sprintf(goof, "diff=%d,%d,%d,%d\n",player_struct.difficulty[0],player_struct.difficulty[1],player_struct.difficulty[2],
       player_struct.difficulty[3]);
    message_info(goof);
-   return(TRUE);
+   return(true);
 }
 
 bool toggle_difficulty_func(int16_t keycode, uint32_t context, void *data)
@@ -1412,7 +1412,7 @@ bool toggle_difficulty_func(int16_t keycode, uint32_t context, void *data)
 
    player_struct.difficulty[which]++;
    player_struct.difficulty[which] %= 4;
-   return (TRUE);
+   return (true);
 }
 
 bool toggle_ai_func(int16_t keycode, uint32_t context, void* data)
@@ -1423,7 +1423,7 @@ bool toggle_ai_func(int16_t keycode, uint32_t context, void* data)
       message_info("AI state on\n");
    else
       message_info("AI state off\n");
-   return(TRUE);
+   return(true);
 }
 
 bool toggle_safety_net_func(int16_t keycode, uint32_t context, void* data)
@@ -1434,7 +1434,7 @@ bool toggle_safety_net_func(int16_t keycode, uint32_t context, void* data)
       message_info("Safety Net on\n");
    else
       message_info("Safety Net off\n");
-   return(TRUE);
+   return(true);
 }
 #endif
 
@@ -1443,7 +1443,7 @@ bool res_cache_usage_func(int16_t keycode, uint32_t context, void* data)
 {
    extern int32_t ResViewCache(bool only_locks);
    ResViewCache((bool)data);
-   return(TRUE);
+   return(true);
 }
 #endif
 

@@ -306,9 +306,9 @@ typedef struct g3s_point {
 #define LT_SPEC    4
 #define LT_GOUR    128
 
-#define LT_NEAR_LIGHT 16  // TRUE if light is near and has to be evaluated
-#define LT_NEAR_VIEW  8  // TRUE if viewing point is near, and has to be reevaled
-#define LT_LOC_LIGHT  32  // TRUE if light is a local point, not a vector
+#define LT_NEAR_LIGHT 16  // true if light is near and has to be evaluated
+#define LT_NEAR_VIEW  8  // true if viewing point is near, and has to be reevaled
+#define LT_LOC_LIGHT  32  // true if light is a local point, not a vector
 #define LT_TABSIZE 24  // size of the shading table
 #define LT_BASELIT 15  // table entry of normal intensity (before saturating)
 
@@ -505,7 +505,7 @@ void g3_light_list(int32_t n,g3s_phandle *norm,g3s_phandle *pos);
 
 // sets a light vector in source space directly
 // this light vector has to be in user space so we can dot it with
-// other vector.  This is either a point source (LT_LOC_LIGHT == TRUE)
+// other vector.  This is either a point source (LT_LOC_LIGHT == true)
 // or a vector.
 void g3_set_light_src(g3s_vector *l);
 // MLA #pragma aux g3_set_light_src "*" parm [eax] modify [esi edi];

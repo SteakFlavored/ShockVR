@@ -334,7 +334,7 @@ int16_t				gSliderLastPos;
 Handle			gSliderThumbHdl = nil;		// Handle to small icon suite for the slider
 ShockBitmap	gSliderBack;						// Bitmap containing slider background
 ShockBitmap	gSliderAsm;						// Bitmap for assembling slider before blitting to screen
-bool			gSliderDimmed;					// TRUE if the slider should be drawn dimmed (and disabled)
+bool			gSliderDimmed;					// true if the slider should be drawn dimmed (and disabled)
 
 //------------------------------------------------------------------------------------
 //  Allocate all bitmaps and do other initialization for the slider.
@@ -377,7 +377,7 @@ void SetSliderBitmaps(void)
 
 	// Make a handle suite for the thumb icon.
 	if (gSliderThumbHdl)
-		DisposeIconSuite(gSliderThumbHdl, TRUE);
+		DisposeIconSuite(gSliderThumbHdl, true);
 	GetIconSuite(&gSliderThumbHdl, (gSliderDimmed) ? kThumbIconDim : kThumbIcon, svAllAvailableData);
 
 	// To initialize the assembly bitmap, copy the background and place the
@@ -486,7 +486,7 @@ int16_t DoSliderTracking(WindowPtr dlog, int16_t itemNum, SliderCallbackProcPtr 
 //------------------------------------------------------------------------------------
 void FreeSlider(void)
 {
-	DisposeIconSuite(gSliderThumbHdl, TRUE);
+	DisposeIconSuite(gSliderThumbHdl, true);
 	gSliderThumbHdl = NULL;
 	FreeShockBitmap(&gSliderAsm);
 	FreeShockBitmap(&gSliderBack);

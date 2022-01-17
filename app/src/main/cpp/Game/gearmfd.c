@@ -73,7 +73,7 @@ bool gear_active(ObjID obj)
          return (objs[obj].info.inst_flags & CLASS_INST_FLAG) != 0;
          break;
    }
-   return TRUE;
+   return true;
 }
 
 #define GEAR_BUTTON_H 13
@@ -117,14 +117,14 @@ void mfd_gear_expose(MFD* mfd, uint8_t control)
 
       if (active < 0 || active >= NUM_GENERAL_SLOTS)
       {
-         mfd_notify_func(MFD_EMPTY_FUNC,MFD_ITEM_SLOT,TRUE,MFD_EMPTY,FALSE);
+         mfd_notify_func(MFD_EMPTY_FUNC,MFD_ITEM_SLOT,true,MFD_EMPTY,false);
          goto cleanup_et_return;
       }
       obj = player_struct.inventory[active];
 
       if (obj == OBJ_NULL)
       {
-         mfd_notify_func(MFD_EMPTY_FUNC,MFD_ITEM_SLOT,TRUE,MFD_EMPTY,FALSE);
+         mfd_notify_func(MFD_EMPTY_FUNC,MFD_ITEM_SLOT,true,MFD_EMPTY,false);
          goto cleanup_et_return;
       }
       else
@@ -161,12 +161,12 @@ cleanup_et_return:
 
 bool mfd_gear_handler(MFD *m, uiEvent *e)
 {
-   bool retval = FALSE;
+   bool retval = false;
    int32_t active = player_struct.actives[ACTIVE_GENERAL];
    LGRect r = { {0, GEAR_BUTTON_Y},{MFD_VIEW_WID, GEAR_BUTTON_Y+GEAR_BUTTON_H}};
 
    if ((e->subtype & (MOUSE_LDOWN|UI_MOUSE_LDOUBLE)) == 0)
-      return FALSE;
+      return false;
    if (active >= 0 && active < NUM_GENERAL_SLOTS)
    {
       ObjID obj = player_struct.inventory[active];
@@ -177,8 +177,8 @@ bool mfd_gear_handler(MFD *m, uiEvent *e)
       RECT_OFFSETTED_RECT(&r,m->rect.ul,&r);
       if (RECT_TEST_PT(&r,e->pos))
       {
-         object_use(obj,TRUE,OBJ_NULL);
-         retval = TRUE;
+         object_use(obj,true,OBJ_NULL);
+         retval = true;
       }
    }
    return retval;

@@ -38,7 +38,7 @@ extern errtype musicai_reset(bool runai);
 extern errtype musicai_shutdown();
 
 struct mlimbs_request_info default_request =
-   { 0, 0, 4, 100, 0, 64, TRUE, 0, 0 };
+   { 0, 0, 4, 100, 0, 64, true, 0, 0 };
 
 extern int32_t ext_rp ;
 extern int8_t mlimbs_machine;
@@ -130,23 +130,23 @@ extern bool bad_digifx;
 
 extern bool mlimbs_semaphore;
 
-bool run_asynch_music_ai = FALSE;
-bool mai_semaphor = FALSE;
+bool run_asynch_music_ai = false;
+bool mai_semaphor = false;
 
 errtype check_asynch_ai(bool new_score_ok);
 void grind_music_ai(void);
 
 void music_ai()
 {
-//   mlimbs_semaphore = TRUE;
-   ai_cycle = TRUE;
+//   mlimbs_semaphore = true;
+   ai_cycle = true;
 //   if ((run_asynch_music_ai) && (!mai_semaphor))
    if (!mai_semaphor)
    {
-      mai_semaphor = TRUE;
-      check_asynch_ai(FALSE);
-      mai_semaphor = FALSE;
-      ai_cycle = FALSE;
+      mai_semaphor = true;
+      check_asynch_ai(false);
+      mai_semaphor = false;
+      ai_cycle = false;
    }
 }
 
@@ -232,8 +232,8 @@ void grind_music_ai(void)
    if (score_playing == ELEVATOR_ZONE)
    {
       curr_crossfade = 0;
-      in_deconst = FALSE;
-      old_deconst = FALSE;
+      in_deconst = false;
+      old_deconst = false;
       grind_credits_music_ai();
       return;
    }
@@ -380,7 +380,7 @@ void grind_music_ai(void)
    if ((just_started) && (!mai_semaphor))
    {
       make_request(open_track++, PITCHBEND_CHUNK);
-      just_started = FALSE;
+      just_started = false;
    }
 */
 
@@ -406,7 +406,7 @@ void grind_music_ai(void)
          {
             musicai_shutdown();
             make_request(open_track++, play_me);
-            musicai_reset(FALSE);
+            musicai_reset(false);
             MacTuneStartCurrentTheme();
          }
          else
@@ -531,7 +531,7 @@ errtype check_asynch_ai(bool /*new_score_ok*/)
 //¥¥¥      if (!run_asynch_music_ai)
 //¥¥¥         mlimbs_preload_requested_timbres();
 
-//      mlimbs_semaphore = FALSE;
+//      mlimbs_semaphore = false;
 
 /*¥¥¥
       // We need new theme loaded...

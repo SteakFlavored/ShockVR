@@ -246,7 +246,7 @@ void player_dead(void)
 
    change_mode_func(0,0,(void *)SETUP_LOOP);
 
-//   palfx_fade_up(FALSE);
+//   palfx_fade_up(false);
 }
 
 errtype player_tele_to(int32_t x, int32_t y)

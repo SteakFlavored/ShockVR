@@ -186,7 +186,7 @@ void ShowShockHelp(void)
 
 
 //--------------------------------------------------------------------
-//	  Returns TRUE if the Help Manager is installed.
+//	  Returns true if the Help Manager is installed.
 //--------------------------------------------------------------------
 bool GetHelpMgr(void)
  {
@@ -195,10 +195,10 @@ bool GetHelpMgr(void)
 	if (!Gestalt(gestaltHelpMgrAttr, &result))
 	 {
 		if (result & 1L)
-			return (TRUE);
+			return (true);
 	 }
 
-	return(FALSE);
+	return(false);
  }
 
 /*

@@ -58,7 +58,7 @@ int32_t gr_close(void)
 {
    if (grd_active == 0)
       return 0;
-   gr_pop_video_state (TRUE);
+   gr_pop_video_state (true);
    gr_close_device (&grd_info);
    grd_active = 0;
    return 0;

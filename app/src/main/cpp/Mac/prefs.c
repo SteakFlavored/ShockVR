@@ -105,7 +105,7 @@ OSErr LoadPrefs(ResType resID)
 				info.ioParam.ioNamePtr = kPrefsFileName;
 				info.fileParam.ioDirID = prefParID;
 				info.fileParam.ioFDirIndex = -1;
-				err = PBHGetFInfo(&info, FALSE);
+				err = PBHGetFInfo(&info, false);
 				if (err == noErr)
 				{
 					info.fileParam.ioDirID = prefParID;

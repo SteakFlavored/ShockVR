@@ -98,7 +98,7 @@ static QTS_STSD *pStsd;
 
 //	Read chunks till we're exhausted
 
-	while (TRUE)
+	while (true)
 		{
 
 //	Read chunk header, if length is 0 then bail, else look up chunk type
@@ -136,9 +136,9 @@ static QTS_STSD *pStsd;
 					Warning(("QuikReadMovie: Too many tracks in movie!\n"));
 					return;
 					}
-				tkStat.gotTKHD = FALSE;
-				tkStat.gotMDHD = FALSE;
-				tkStat.gotSTBL = FALSE;
+				tkStat.gotTKHD = false;
+				tkStat.gotMDHD = false;
+				tkStat.gotSTBL = false;
 				pqtm->track[itrack].type = TRACK_OTHER;
 				break;
 
@@ -155,7 +155,7 @@ static QTS_STSD *pStsd;
 					{
 					QuikReadChunk(fpi, &chunkHdr, &pqtm->track[itrack].qt_tkhd,
 						sizeof(QTS_TKHD));
-					tkStat.gotTKHD = TRUE;
+					tkStat.gotTKHD = true;
 					}
 				break;
 
@@ -171,7 +171,7 @@ static QTS_STSD *pStsd;
 					{
 					QuikReadChunk(fpi, &chunkHdr, &pqtm->track[itrack].qt_mdhd,
 						sizeof(QTS_MDHD));
-					tkStat.gotMDHD = TRUE;
+					tkStat.gotMDHD = true;
 					}
 				break;
 
@@ -195,7 +195,7 @@ static QTS_STSD *pStsd;
 				if (tkStat.gotSTBL)
 					Warning(("QuikReadMovie: Extra STBL in TRAK!\n"));
 				else
-					tkStat.gotSTBL = TRUE;
+					tkStat.gotSTBL = true;
 				break;
 
 //	STSD: Allocate what is hopefully enough room for this chunk.

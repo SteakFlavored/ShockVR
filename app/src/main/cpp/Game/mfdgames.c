@@ -277,18 +277,18 @@ bool mfd_games_handler(MFD *m, uiEvent *e)
    LGRect r;
 
    // detect if you have games
-   // if (player_struct.hardwarez[HARDWARE_AUTOMAP] == 0) return FALSE;
+   // if (player_struct.hardwarez[HARDWARE_AUTOMAP] == 0) return false;
 
    mouse = (uiMouseEvent *) e;
-   if (!(mouse->action & MOUSE_LDOWN)) return FALSE;       // ignore click releases
+   if (!(mouse->action & MOUSE_LDOWN)) return false;       // ignore click releases
 
    // Did the user click in the "menu" clickbox?
    RECT_OFFSETTED_RECT(&GamesMenu, m->rect.ul, &r);
    if (RECT_TEST_PT(&r, e->pos))
    {
       GAME_MODE=GAME_MODE_MENU;
-      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
-      retval = TRUE;
+      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
+      retval = true;
    }
    return retval;
 }
@@ -467,14 +467,14 @@ bool games_handle_menu(MFD* m, uiEvent* ev)
      ((menu_state *) GAME_DATA)->save_time = 0;
 
    mouse = (uiMouseEvent *) ev;
-   if (!(mouse->action & MOUSE_LDOWN)) return FALSE;       // ignore click releases
+   if (!(mouse->action & MOUSE_LDOWN)) return false;       // ignore click releases
 
-   if(ev->pos.y-m->rect.ul.y < MENU_GAMELIST_Y) return FALSE;
+   if(ev->pos.y-m->rect.ul.y < MENU_GAMELIST_Y) return false;
    game=(((ev->pos.y)-(m->rect.ul.y)-MENU_GAMELIST_Y)/MENU_GAMELIST_DY)*2;
    if((ev->pos.x)-(m->rect.ul.x) > MENU_GAMELIST_X+(MFD_VIEW_WID-10)/2)
       game++;
 
-   if(game>NUM_GAMES || ((1 <<game) & cur_games) == 0) return FALSE;
+   if(game>NUM_GAMES || ((1 <<game) & cur_games) == 0) return false;
 
    COOKIE = GAME_COOK(game);
    memset(GAME_DATA,0,GAME_DATA_SIZE);
@@ -483,8 +483,8 @@ bool games_handle_menu(MFD* m, uiEvent* ev)
 
    string_message_info(REF_STR_GameDescrip0+game);
 
-   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, TRUE);
-   return TRUE;
+   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, true);
+   return true;
 }
 
 void games_init_null(void*)
@@ -506,7 +506,7 @@ void games_expose_null(MFD *, uint8_t )
 
 bool games_handle_null(MFD* , uiEvent* )
 {
-   return FALSE;
+   return false;
 }
 
 // -----------------
@@ -733,7 +733,7 @@ void games_expose_pong(MFD *m, uint8_t tac)
    mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
 
    // autoreexpose
-   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
+   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 
    return;
 }
@@ -753,7 +753,7 @@ bool games_handle_pong(MFD* m, uiEvent* e)
       pos.x>=RECTWID(m->rect)+PONG_FUDGE || pos.y>=RECTHGT(m->rect)+PONG_FUDGE)
    {
       cur_ps->p_spd=0;
-      return TRUE;
+      return true;
    }
    if (cur_ps->p_pos == pos.x)
       cur_ps->p_spd = 0;
@@ -761,7 +761,7 @@ bool games_handle_pong(MFD* m, uiEvent* e)
       cur_ps->p_spd = -spd;
    else
       cur_ps->p_spd = spd;
-   return TRUE;
+   return true;
 }
 
 //----------------------------
@@ -938,7 +938,7 @@ void games_expose_road(MFD *m, uint8_t tac)
 
    mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
    // autoreexpose
-   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
+   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 }
 
 bool games_handle_road(MFD *, uiEvent *e)
@@ -964,7 +964,7 @@ bool games_handle_road(MFD *, uiEvent *e)
 		else if (bt==2)
 			cur_rs->player_move= 1;
 	}
-	return TRUE;
+	return true;
 }
 
 //----------------------------
@@ -1175,7 +1175,7 @@ void games_expose_bots(MFD *m, uint8_t)
      for (i=0; i < BOTS_NUM_COLUMNS; ++i) {
        if (bs->rows[j] & (1 << i)) {
 #ifdef SVGA_SUPPORT
-	 draw_res_bm_core(invader[j]+INVADER_TYPES*convert_use_mode,HPOS + BOT_WIDTH*i,BOT_HEIGHT*j+BOT_TOP - (j==1),FALSE);
+	 draw_res_bm_core(invader[j]+INVADER_TYPES*convert_use_mode,HPOS + BOT_WIDTH*i,BOT_HEIGHT*j+BOT_TOP - (j==1),false);
 #else
 	 draw_res_bm(invader[j],HPOS + BOT_WIDTH*i,BOT_HEIGHT*j+BOT_TOP - (j==1));
 #endif
@@ -1191,7 +1191,7 @@ void games_expose_bots(MFD *m, uint8_t)
 
    mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
    // autoreexpose
-   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
+   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 
    return;
 }
@@ -1399,7 +1399,7 @@ static void make_random_attacker(void)
 static void advance_mcom_state(void)
 {
   int32_t i,j;
-  bool silo=FALSE;
+  bool silo=false;
   mcom_state *ms = (mcom_state *) GAME_DATA;
   uint8_t old_quarter=ms->quarter;
   uint8_t old_bob=ms->bob;
@@ -1463,8 +1463,8 @@ static void advance_mcom_state(void)
 	// blow up the guy that's here!
 	j = (attack[i].x/256);
 	j = (9*j + MFD_VIEW_WID/2)/MFD_VIEW_WID-1;
-	if (j == 2) { ms->lmissiles = 0; silo=TRUE; }
-	if (j == 5) { ms->rmissiles = 0; silo=TRUE; }
+	if (j == 2) { ms->lmissiles = 0; silo=true; }
+	if (j == 5) { ms->rmissiles = 0; silo=true; }
 	if(ms->guys & (1<<j))
 	  play_digi_fx(silo?BOAT_DEATH_NOISE:SWIMMER_DEATH_NOISE,1);
 	else
@@ -1545,7 +1545,7 @@ static bool games_handle_mcom(MFD *m, uiEvent* e)
 		if (right && ms->rmissiles)
 			make_mcom_shot(pos.x, pos.y, MFD_VIEW_WID*2/3), --ms->rmissiles;
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -1738,7 +1738,7 @@ static void games_expose_mcom(MFD *, uint8_t )
 
   mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
   // autoreexpose
-  mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
+  mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 }
 
 
@@ -1783,11 +1783,11 @@ typedef struct {
 } puzz15_style;
 
 static puzz15_style p15_styles[NUM_PUZZ15_STYLES] = {
-   { 0x60, 0xB0 ,REF_IMG_EmailMugShotBase+11, FALSE, 13, FALSE },
-   { 0x60, 0xB0 ,REF_IMG_EmailMugShotBase+23, FALSE, 13, FALSE },
-   { 0xDE, 0x02 ,REF_IMG_TriopLogo15, FALSE, 8, FALSE },
-   { 0xDE, 0x02 ,REF_IMG_DiegoAnim15, FALSE, 8, TRUE },
-   { 0x4C, 0x01 , 0 , TRUE, 13, FALSE},
+   { 0x60, 0xB0 ,REF_IMG_EmailMugShotBase+11, false, 13, false },
+   { 0x60, 0xB0 ,REF_IMG_EmailMugShotBase+23, false, 13, false },
+   { 0xDE, 0x02 ,REF_IMG_TriopLogo15, false, 8, false },
+   { 0xDE, 0x02 ,REF_IMG_DiegoAnim15, false, 8, true },
+   { 0x4C, 0x01 , 0 , true, 13, false},
 };
 
 void games_init_15(void* game_state)
@@ -1811,9 +1811,9 @@ static bool puzz15_won()
 
    for(i=0;i<MFD_PUZZLE_SQ-1;i++) {
       if(st->tilenum[i]!=(i+1))
-	 return(FALSE);
+	 return(false);
    }
-   return(TRUE);
+   return(true);
 }
 
 static void puzz15_xy(int32_t ind, int32_t* x, int32_t* y)
@@ -1837,20 +1837,20 @@ static bool puzz15_move(int32_t x, int32_t y)
    else if(x<MFD_PUZZLE_SIZE-1 && st->tilenum[ind+1]==0) dir=1;
    else if(y<MFD_PUZZLE_SIZE-1 && st->tilenum[ind+MFD_PUZZLE_SIZE]==0) dir=2;
 
-   if(dir==-1) return FALSE;
+   if(dir==-1) return false;
 
    st->anim_source=y*MFD_PUZZLE_SIZE+x;
    st->current_frame=0;
    st->anim_dir=dir;
 
-   return TRUE;
+   return true;
 }
 
 void games_expose_15(MFD *, uint8_t control)
 {
    int32_t i,x,y,t,dx,dy,dt;
    int16_t sw,sh;
-   bool rex=FALSE;
+   bool rex=false;
    puzzle15_state* st=(puzzle15_state*)GAME_DATA;
    int8_t buf[3];
    int32_t cycle=PUZZ15_CYCLE, aframe;
@@ -1873,11 +1873,11 @@ void games_expose_15(MFD *, uint8_t control)
    }
 
    if(p15_styles[st->style].animating) {
-      rex=TRUE;
+      rex=true;
       aframe=(player_struct.game_time/PUZZ15_AFRAME_CYCLE)%4;
       if(aframe!=st->animframe) {
 	 st->animframe=aframe;
-	 full=TRUE;
+	 full=true;
       }
    }
 
@@ -1963,9 +1963,9 @@ void games_expose_15(MFD *, uint8_t control)
 	    st->tilenum[st->movedto]=st->tilenum[st->anim_source];
 	    st->tilenum[st->anim_source]=0;
 	    st->anim_source=MFD_PUZZLE_SQ;
-	    mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, TRUE);
+	    mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, true);
 	    if(puzz15_won()) {
-	       st->pause=TRUE;
+	       st->pause=true;
 	       return;
 	    }
 	 }
@@ -1976,7 +1976,7 @@ void games_expose_15(MFD *, uint8_t control)
 
    // autoreexpose
    if(rex)
-      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
+      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 }
 
 bool games_handle_15(MFD *m, uiEvent *e)
@@ -1986,30 +1986,30 @@ bool games_handle_15(MFD *m, uiEvent *e)
    LGPoint pos = MakePoint(e->pos.x-m->rect.ul.x-PUZZ15_ULX,
 			 e->pos.y-m->rect.ul.y-PUZZ15_ULY);
 
-   if(st->scramble>0) return FALSE;
+   if(st->scramble>0) return false;
 
-   if(!(me->action & MOUSE_LDOWN)) return FALSE;
+   if(!(me->action & MOUSE_LDOWN)) return false;
 
-   if(pos.x<0||pos.y<0) return TRUE;
+   if(pos.x<0||pos.y<0) return true;
 
    pos.x/=PUZZ15_TILE_SIZE;
    pos.y/=PUZZ15_TILE_SIZE;
 
    if(pos.x>=MFD_PUZZLE_SIZE || pos.y>=MFD_PUZZLE_SIZE)
-      return TRUE;
+      return true;
    if(st->pause) {
-      st->pause=FALSE;
+      st->pause=false;
       st->scramble=PUZZ15_INIT_SCRAM;
-      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
-      return TRUE;
+      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
+      return true;
    }
    if(st->anim_source<MFD_PUZZLE_SQ)
-      return TRUE;
+      return true;
 
    if(puzz15_move(pos.x,pos.y))
-      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
+      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 
-   return TRUE;
+   return true;
 }
 
 //----------------------------
@@ -2067,12 +2067,12 @@ static bool tictactoe_over(tictactoe* st)
    int32_t i,val;
 
    val=tictactoe_evaluator(st);
-   if(val==winnerval(X)||val==winnerval(O)) return TRUE;
+   if(val==winnerval(X)||val==winnerval(O)) return true;
 
    for(i=0;i<9;i++) {
-      if(st->owner[i]==NOBODY) return FALSE;
+      if(st->owner[i]==NOBODY) return false;
    }
-   return TRUE;
+   return true;
 }
 
 static int8_t corners_ttt[]={0,2,6,8};
@@ -2206,10 +2206,10 @@ void games_expose_ttt(MFD *, uint8_t control)
       minimax_get_result(&val,&whichmove);
       st->board.owner[move_to_index(whichmove,&(st->board))]=OTHERPLAYER(st->whoplayer);
       st->whomoves=st->whoplayer;
-      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, TRUE);
+      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, true);
    }
    else
-      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
+      mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 }
 
 int32_t tictactoe_evaluator(void* pos)
@@ -2301,27 +2301,27 @@ bool tictactoe_generator(void* pos, int32_t index, bool minimizer_moves)
 {
    int32_t i;
    tictactoe* t = (tictactoe *)pos;
-   bool empty=TRUE;
+   bool empty=true;
    uint8_t mover=minimizer_moves?O:X;
 
    int32_t realindex=index;
 
-   if(tictactoe_evaluator(pos)!=winnerval(NOBODY)) return FALSE;  // already have a winner => no children
+   if(tictactoe_evaluator(pos)!=winnerval(NOBODY)) return false;  // already have a winner => no children
 
 #define NO_SYMMETRIES
 #ifdef NO_SYMMETRIES
    for(i=0;empty && i<9;i++) {
       if(t->owner[i]!=NOBODY)
-	 empty=FALSE;
+	 empty=false;
    }
 
    // don't bother with symmetries of starting moves
    if(empty) {
       switch(index) {
-	 case 0: t->owner[0]=mover; return TRUE;
-	 case 1: t->owner[1]=mover; return TRUE;
-	 case 2: t->owner[4]=mover; return TRUE;
-	 default: return FALSE;
+	 case 0: t->owner[0]=mover; return true;
+	 case 1: t->owner[1]=mover; return true;
+	 case 2: t->owner[4]=mover; return true;
+	 default: return false;
       }
    }
 #endif
@@ -2330,12 +2330,12 @@ bool tictactoe_generator(void* pos, int32_t index, bool minimizer_moves)
       if(t->owner[i]==NOBODY) {
 	 if(index==0) {
 	    t->owner[i]=mover;
-	    return TRUE;
+	    return true;
 	 }
 	 index--;
       }
    }
-   return FALSE;
+   return false;
 }
 
 bool games_handle_ttt(MFD *m, uiEvent *e)
@@ -2345,19 +2345,19 @@ bool games_handle_ttt(MFD *m, uiEvent *e)
    LGPoint pos = MakePoint(e->pos.x-m->rect.ul.x-TTT_ULX,
 			 e->pos.y-m->rect.ul.y-TTT_ULY);
 
-   if(!(me->action & MOUSE_LDOWN)) return FALSE;
-   if(st->whomoves != st->whoplayer) return TRUE;
-   if(tictactoe_over(&(st->board))) return TRUE;
-   if(pos.x<0||pos.y<0) return TRUE;
+   if(!(me->action & MOUSE_LDOWN)) return false;
+   if(st->whomoves != st->whoplayer) return true;
+   if(tictactoe_over(&(st->board))) return true;
+   if(pos.x<0||pos.y<0) return true;
 
    pos.x/=TTT_SQ_WID;
    pos.y/=TTT_SQ_HGT;
 
    if(pos.x>=TTT_PUZ_WID || pos.y>=TTT_PUZ_HGT)
-      return TRUE;
+      return true;
 
    if(st->board.owner[pos.x+3*pos.y] != NOBODY)
-      return TRUE;
+      return true;
 
    st->board.owner[pos.x+3*pos.y]=st->whoplayer;
 
@@ -2368,9 +2368,9 @@ bool games_handle_ttt(MFD *m, uiEvent *e)
 	 tictactoe_evaluator, tictactoe_generator, NULL);
    }
 
-   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, TRUE);
+   mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, true);
 
-   return TRUE;
+   return true;
 }
 
 //
@@ -3487,27 +3487,27 @@ bool games_handle_wing(MFD *m, uiEvent *e)
 
    if (wing_game_mode != WING_PLAY_GAME) {
      if (!(me->action & MOUSE_LDOWN))
-       return FALSE;
+       return false;
      if (wing_game_mode == WING_DEBRIEFING) {
        wing_game_mode = WING_BRIEFING;
        ++wing_level;
-       return TRUE;
+       return true;
      }
      if (wing_game_mode == WING_BRIEFING) {
        if (wing_level == WING_NUM_MISSIONS * WING_PHASES) {
 	 QUESTVAR_SET(WING_QUEST_VAR, 0);
 	 GAME_MODE = GAME_MODE_MENU;
-	 return TRUE;
+	 return true;
        }
        wing_start_major_level();
-       return TRUE;
+       return true;
      }
      if (wing_game_mode == WING_YOUDIED) {
        wing_level = QUESTVAR_GET(WING_QUEST_VAR);
        wing_game_mode = WING_BRIEFING;
-       return TRUE;
+       return true;
      }
-     return FALSE;
+     return false;
    }
 
    x = (pos.x * FIX_UNIT*2) / MFD_VIEW_WID - FIX_UNIT;
@@ -3528,7 +3528,7 @@ bool games_handle_wing(MFD *m, uiEvent *e)
      // right click while left button held
      wing_delete_all_but();
      wing_level |= 3;
-     return TRUE;
+     return true;
    }
 #endif
 
@@ -3537,16 +3537,16 @@ bool games_handle_wing(MFD *m, uiEvent *e)
        // both buttons, assume it's an order
        wingman_order();
        wing_play_fx(WING_SFX_COMM, 0, 0);
-       return TRUE;
+       return true;
      }
      if (!wing_any_enemies()) {
        wing_advance_to_next_level();
-       return TRUE;
+       return true;
      }
      wing_play_fx(WING_SFX_GOODGUY_FIRE, 0, 0);
      wing_fire_shot(wing, -1);
      wing_fire_shot(wing, 1);
-     return TRUE;
+     return true;
    }
 
    switch(me->buttons & 3) {
@@ -3565,7 +3565,7 @@ bool games_handle_wing(MFD *m, uiEvent *e)
        wing_a = wing_b = 0;
    }
 
-   return TRUE;
+   return true;
 }
 
 void games_init_wing(void *)
@@ -3608,7 +3608,7 @@ void games_expose_wing(MFD *, uint8_t)
 
   mfd_add_rect(0,0,MFD_VIEW_WID,MFD_VIEW_HGT);
   // autoreexpose
-  mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
+  mfd_notify_func(MFD_GAMES_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, false);
 }
 
 
@@ -3625,12 +3625,12 @@ bool mfd_games_hack_func(int16_t keycode, uint32_t context, void* data)
 	// give the tester all of the frigging games
    player_struct.softs.misc[MISC_SOFTWARE_GAMES] = 0xff;
    GAME_MODE = GAME_MODE_MENU;
-   mfd_notify_func(MFD_GAMES_FUNC,MFD_INFO_SLOT,TRUE,MFD_ACTIVE,TRUE);
+   mfd_notify_func(MFD_GAMES_FUNC,MFD_INFO_SLOT,true,MFD_ACTIVE,true);
    mfd_change_slot(mfd,MFD_INFO_SLOT);
 #ifdef PLAYTEST
    wing_cheat = 1;
 #endif
-   return FALSE;
+   return false;
 }
 */
 
@@ -3640,7 +3640,7 @@ void mfd_games_turnon(bool, bool real_start)
    {
       int32_t mfd = mfd_grab_func(MFD_GAMES_FUNC,MFD_INFO_SLOT);
       GAME_MODE = GAME_MODE_MENU;
-      mfd_notify_func(MFD_GAMES_FUNC,MFD_INFO_SLOT,TRUE,MFD_ACTIVE,TRUE);
+      mfd_notify_func(MFD_GAMES_FUNC,MFD_INFO_SLOT,true,MFD_ACTIVE,true);
 	   mfd_change_slot(mfd,MFD_INFO_SLOT);
       player_struct.softs_status.misc[CPTRIP(GAMES_TRIPLE)] &= ~WARE_ON;
    }

@@ -204,7 +204,7 @@ static bool shutdown_iter_func(void* elem, void* data)
    int32_t i;
    hotkey_link *chain = (hotkey_link*)(ch->keychain.vec);
 
-   if (ch == NULL) return FALSE;
+   if (ch == NULL) return false;
    for (i = ch->first; i != CHAIN_END; i = chain[i].next)
    {
       DisposePtr(chain[i].help_text);
@@ -215,7 +215,7 @@ static bool shutdown_iter_func(void* elem, void* data)
    data = dummy;
 #endif // NO_DUMMIES
    array_destroy(&ch->keychain);
-   return FALSE;
+   return false;
 }
 
 errtype hotkey_shutdown(void)

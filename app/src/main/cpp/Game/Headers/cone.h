@@ -60,7 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // an array of fix points that represents the view area
 // polygon is in clockwise order
 // x,y order - *count is the number of points in the polygon.
-// return TRUE if it's a valid polygon (not one or two points)
+// return true if it's a valid polygon (not one or two points)
 
 bool find_view_area(fix *cone_list, fix fix_floor, fix fix_roof, int32_t *count, fix radius);
 

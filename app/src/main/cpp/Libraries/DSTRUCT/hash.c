@@ -94,13 +94,13 @@ int32_t expmod(int32_t b, int32_t e, uint32_t m)
 bool is_fermat_prime(uint32_t n, uint32_t numtests)
 {
    int32_t i;
-   if (n < 3) return FALSE;
+   if (n < 3) return false;
    for (i = 0; i < numtests; i++)
    {
       int32_t a = rand()%(n-2) + 2;
-      if (expmod(a,n,n) != a) return FALSE;
+      if (expmod(a,n,n) != a) return false;
    }
-   return TRUE;
+   return true;
 }
 
 errtype hash_init(Hashtable* h, int32_t elemsize, int32_t vecsize, Hashfunc hfunc, Equfunc efunc)
@@ -136,7 +136,7 @@ errtype hash_copy(Hashtable* t, Hashtable* s)
 
 static bool find_elem(Hashtable* h, void* elem, int32_t* idx)
 {
-   bool found = FALSE;
+   bool found = false;
    int32_t hash = h->hfunc(elem);
    int32_t index,j;
    //Spew(DSRC_DSTRUCT_Hash,("find_elem(%x,%x,%x) hash is %d\n",h,elem,idx,hash));
@@ -146,7 +146,7 @@ static bool find_elem(Hashtable* h, void* elem, int32_t* idx)
       void* myelem = (void*) ELEM(h,index);
       if (h->statvec[index] == HASH_FULL && h->efunc(elem,myelem) == 0)
       {
-         found = TRUE;
+         found = true;
          break;
       }
    }

@@ -138,7 +138,7 @@ static uint8_t      bcolor[]={GREEN_8_BASE+7,GREEN_8_BASE+3,GREEN_8_BASE,GREEN_8
 static int32_t        cur_btn_hgt;
 static int8_t      *cur_mapnote_base=NULL;
 static int8_t      *cur_mapnote_ptr=NULL;
-static bool       last_msg_ok=TRUE;
+static bool       last_msg_ok=true;
 static uint32_t      map_scrolltime=0;
 static int32_t      map_scroll_d=0;
 static int8_t       map_scroll_code=0;
@@ -490,9 +490,9 @@ bool pend_check(void)
       fsmap_btn_pending=0;
       chg_set_flg(AMAP_BUTTON_EV);
 //      mprintf("done %x\n",fsmap_buttons);
-      return TRUE;
+      return true;
    }
-   return FALSE;
+   return false;
 }
 
 
@@ -509,7 +509,7 @@ bool amap_scroll_handler(uiEvent* ev, LGRegion *, void* )
    int16_t code;
    curAMap* amptr=oAMap(MFD_FULLSCR_MAP);
 
-   if(map_scroll_code==0) return FALSE;
+   if(map_scroll_code==0) return false;
 
    if(ev->type==UI_EVENT_KBD_POLL) {
       map_scroll_code=0;
@@ -520,20 +520,20 @@ bool amap_scroll_handler(uiEvent* ev, LGRegion *, void* )
          case LEFT_ARROW_CODE: map_scroll_code=AMAP_PAN_W; break;
          case RIGHT_ARROW_CODE: map_scroll_code=AMAP_PAN_E; break;
       }
-      if(map_scroll_code==0) return FALSE;
+      if(map_scroll_code==0) return false;
    }
 
    now=*tmd_ticks;
    elapsed=now-map_scrolltime;
    if(elapsed<(CIT_CYCLE/SCROLL_FRATE))
-      return TRUE;
+      return true;
    map_scrolltime=now;
    map_scroll_d += (elapsed*MAP_SCROLL_SPEED*AMAP_DEF_DST)/CIT_CYCLE;
    amap_pan(amptr,map_scroll_code,&map_scroll_d);
    s_bf(BTN_RECENTER,AMAP_SET);
    pend_check();
    chg_set_flg(AMAP_MAP_EV);
-   return TRUE;
+   return true;
 }
 
 void edit_mapnote(curAMap* amptr)
@@ -563,11 +563,11 @@ bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t 
 			map_scroll_code=0;
 		}
 		pend_check();
-		return TRUE;
+		return true;
 	}
 
 	if (!(action&MOUSE_DOWNS))
-		return FALSE;
+		return false;
 
 	ui_mouse_constrain_xy(x,y,x,y);
 
@@ -621,7 +621,7 @@ bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t 
 			map_scrolltime=*tmd_ticks;
 
 			if ((abs(abs(x)-abs(y)))<3)
-				return TRUE; // null pan area...
+				return true; // null pan area...
 			if (abs(x)>abs(y))   // ew
 				if (x>0)
 					map_scroll_code=AMAP_PAN_E;
@@ -641,7 +641,7 @@ bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t 
 
       scregion=AMAP_MAP_EV;
       x-=AMAP_LFT(grd_bm.w);
-      if ((x<=0)||(y<=0)) return TRUE;  // not really in map
+      if ((x<=0)||(y<=0)) return true;  // not really in map
       prev_note=amptr->note_obj;
       if ((deal_data=amap_deal_with_map_click(amptr,&x,&y))!=NULL)
       {
@@ -656,7 +656,7 @@ bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t 
             }
             clear_cur_mapnote();
          }
-         last_msg_ok=TRUE;
+         last_msg_ok=true;
          chg_set_flg(AMAP_MESSAGE_EV|AMAP_MAP_EV);
          if (deal_data!=AMAP_NOTE_HACK_PTR)
          {
@@ -665,7 +665,7 @@ bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t 
                fsmap_new_msg(amptr);
             else
             {
-               last_msg_ok=FALSE;
+               last_msg_ok=false;
                clear_cur_mapnote();
                Warning(("No more mapnote space\n"));
             }
@@ -677,7 +677,7 @@ bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t 
 //         }
       }
       else {
-         last_msg_ok=FALSE;
+         last_msg_ok=false;
          chg_set_flg(AMAP_MESSAGE_EV);
       }
    }
@@ -692,10 +692,10 @@ bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t 
             amap_str_grab(cur_mapnote_base);
       }
       clear_cur_mapnote();
-      last_msg_ok=TRUE;
+      last_msg_ok=true;
       chg_set_flg(AMAP_MESSAGE_EV);
    }
-   return TRUE;
+   return true;
 }
 
 bool zoom_deal(curAMap *amptr, int32_t btn)
@@ -704,7 +704,7 @@ bool zoom_deal(curAMap *amptr, int32_t btn)
    bool res;
    // now, set up for real
    if (btn==BTN_ZOOMIN) zfac=1; else zfac=-1;
-   res=amap_zoom(amptr,FALSE,zfac);
+   res=amap_zoom(amptr,false,zfac);
    if (res)
    {
       if (amptr->zoom+1>=AMAP_MAX_ZOOM)
@@ -727,7 +727,7 @@ bool flags_deal(curAMap *amptr, int32_t btn, int32_t todo)
    bool res;
 
 //   mprintf("Think deal with %x - %d\n",flgs,todo);
-   if (flgs==0) return FALSE;
+   if (flgs==0) return false;
 
    if (flgs&FSMAP_OPP)
    {
@@ -767,8 +767,8 @@ bool amap_kb_callback(curAMap *amptr, int32_t code)
    {
       codewas=map_scroll_code;
       map_scroll_code=0;
-      if(pend_check()) return TRUE;
-      if(!(codewas==0)) return TRUE;
+      if(pend_check()) return true;
+      if(!(codewas==0)) return true;
    }
 */
 
@@ -776,7 +776,7 @@ bool amap_kb_callback(curAMap *amptr, int32_t code)
 
    if (cur_mapnote_ptr!=NULL)
    {
-//KLC - we'll do keydowns      if ((code&KB_FLAG_DOWN)==KB_FLAG_DOWN) return TRUE;
+//KLC - we'll do keydowns      if ((code&KB_FLAG_DOWN)==KB_FLAG_DOWN) return true;
       code = kb2ascii(code);
 //KLC      if ((code==KEY_ENTER)||(code==KEY_DEL))
       if (code==KEY_ENTER)												// If we've pressed Enter
@@ -817,11 +817,11 @@ bool amap_kb_callback(curAMap *amptr, int32_t code)
          if (cur_mapnote_ptr>cur_mapnote_base)
             *--cur_mapnote_ptr='\0';
       }
-      else return FALSE;
+      else return false;
       chg_set_flg(AMAP_MESSAGE_EV);
       if(amptr->flags & AMAP_FULL_MSG)
          chg_set_flg(AMAP_MAP_EV);
-      return TRUE;
+      return true;
    }
 
    // We're not editing.  Keyboard equivalents for buttons.
@@ -845,7 +845,7 @@ bool amap_kb_callback(curAMap *amptr, int32_t code)
             obj_destroy(amptr->note_obj);		// Delete the map note
             amptr->note_obj=0;
          	   clear_cur_mapnote();
-            last_msg_ok=TRUE;
+            last_msg_ok=true;
             chg_set_flg(AMAP_MESSAGE_EV|AMAP_MAP_EV);
             break;
 //KLC      case DO_FULLMSG:           btn=BTN_FULLMSG; break;
@@ -866,9 +866,9 @@ bool amap_kb_callback(curAMap *amptr, int32_t code)
       if (exp)
       {
          chg_set_flg(AMAP_MAP_EV);
-         return TRUE;
+         return true;
       }
-      return FALSE;
+      return false;
    }
 }
 

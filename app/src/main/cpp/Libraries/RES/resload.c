@@ -207,7 +207,7 @@ void LoadCompressedResource(ResDesc *prd, Id id)
 //		id     = id of resource
 //		buffer = ptr to buffer to load into (must be big enough)
 //
-//	Returns: TRUE if retrieved, FALSE if problem
+//	Returns: true if retrieved, false if problem
 
 bool ResRetrieve(Id id, void *buffer)
 {
@@ -219,12 +219,12 @@ bool ResRetrieve(Id id, void *buffer)
 
 	//	Check id and file number
 
-//	DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return FALSE;});
+//	DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return false;});
 	prd = RESDESC(id);
 //	fd = resFile[prd->filenum].fd;
 //	DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
 //		Warning(("ResRetrieve: id $%x doesn't exist\n", id)); \
-//		return FALSE; \
+//		return false; \
 //		}});
 
 	//	Seek to data, set up
@@ -252,6 +252,6 @@ bool ResRetrieve(Id id, void *buffer)
 	else
 		read(fd, p, size);
 
-	return TRUE;
+	return true;
 }
 */

@@ -72,7 +72,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef __WEAPONS_SRC
 uint8_t handart_show = 0;
 uint8_t handart_remainder = 0;
-bool handart_fire = FALSE;
+bool handart_fire = false;
 #else
 extern uint8_t handart_show;
 extern uint8_t handart_remainder;
@@ -94,7 +94,7 @@ int8_t* get_weapon_long_name(int32_t type, int32_t subtype, int8_t *buf);
 // direction to fire,
 // in units of -100-+100 spanning the view cone.
 // pull is true if the  trigger was just pulled.
-// returns - TRUE if player fired weapon
+// returns - true if player fired weapon
 bool fire_player_weapon(LGPoint *pos,LGRegion *r,bool pull);
 
 // Set the maximum charge on a beam weapon.  index is into player_struct.weapons,

@@ -431,7 +431,7 @@ static void ResCopyBytes(int32_t fd, int32_t writePos, int32_t readPos, int32_t 
 //
 //		id = id of item
 //
-//	Returns: TRUE if found & erased, FALSE otherwise
+//	Returns: true if found & erased, false otherwise
 
 bool ResEraseIfInFile(Id id)
 {
@@ -453,11 +453,11 @@ bool ResEraseIfInFile(Id id)
 			prf->pedit->flags |= RFF_NEEDSPACK;
 			if (prf->pedit->flags & RFF_AUTOPACK)
 				ResPack(prd->filenum);
-			return TRUE;
+			return true;
 			}
 		pDirEntry++;
 		}
 
-	return FALSE;
+	return false;
 }
 */

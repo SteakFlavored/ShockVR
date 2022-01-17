@@ -626,10 +626,10 @@ void show_obj(ObjID cobjid)
 #endif
    int8_t scale = 0;
    uint8_t type = 0xFF;
-   bool use_cache = FALSE;
+   bool use_cache = false;
    Ref ref = 0;
    int32_t obj_type, tluc_val=0xFF, index=0, loc_h;
-   bool light_me = TRUE;
+   bool light_me = true;
    extern cams objmode_cam;
    extern bool obj_too_smart(ObjID id);
    extern void check_up(int32_t num);
@@ -907,7 +907,7 @@ void show_obj(ObjID cobjid)
                      trgp=tpdata->bits+tele_bm.h*tele_bm.w;
                      memcpy(dstp,srcp,trgp-srcp);
 
-                     _fr_draw_bitmap(&tele_bm,_fdt_dist,FALSE,anch.ul.x,anch.ul.y);
+                     _fr_draw_bitmap(&tele_bm,_fdt_dist,false,anch.ul.x,anch.ul.y);
                      release_critter_bitmap_fast(ref);
                      return;
                   }
@@ -980,7 +980,7 @@ void show_obj(ObjID cobjid)
                   default:
          		      tpdata=bitmap_from_tpoly_data(o3drep, (uint8_t *) &scale, &index, &type, &ref);
                      if (ref != 0)
-                        use_cache = TRUE;
+                        use_cache = true;
                      break;
                }
                switch (ID2TRIP(cobjid))
@@ -996,7 +996,7 @@ void show_obj(ObjID cobjid)
                   case SUPERSCREEN_TRIPLE:
                   case BIGSCREEN_TRIPLE:
                      if ((!curr_clut_table) && (objBigstuffs[_fr_cobj->specID].data2 != DESTROYED_SCREEN_ANIM_BASE + 3))
-                        light_me = FALSE;
+                        light_me = false;
                      break;
                }
 	         break;
@@ -1032,7 +1032,7 @@ void show_obj(ObjID cobjid)
 		      if (ref == 0)
                tpdata = bitmaps_3d[o3drep];
             else if (ref != 0xFFFFFFFF)
-               use_cache = TRUE;
+               use_cache = true;
             break;
    	   }
          // scale us

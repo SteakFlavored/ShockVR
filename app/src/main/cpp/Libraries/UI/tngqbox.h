@@ -103,7 +103,7 @@ typedef struct {
 #define QB_SHORT_SLOT      1   // var is a int16_t *
 #define QB_BYTE_SLOT       2   // var is a uint8_t *
 #define QB_TEXT_SLOT       3   // var is a int8_t *
-#define QB_BOOL_SLOT       4   // var is a bool, and should be displayed as TRUE/FALSE
+#define QB_BOOL_SLOT       4   // var is a bool, and should be displayed as true/false
 #define QB_PUSHBUTTON_SLOT 5   // var is a GadgetCallback to be called when the button using the label as text is pressed
                                // requires parameters to be set.  P1 is the user_data for the callback.  If P2 is null,
                                // then the label will be the text of the button.  If P2 is not null, it is taken as a

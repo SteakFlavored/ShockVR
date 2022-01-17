@@ -168,7 +168,7 @@ void mfd_biohelp_expose(MFD* mfd, uint8_t control)
             x += BUTTON_WID + LEFT_MARGIN;
             y += (BUTTON_HGT - TEXT_HGT)/2;
             get_string(REF_STR_BioHelpBase+track,buf,sizeof(buf));
-            mfd_draw_string(buf, x, y, ITEM_COLOR, TRUE);
+            mfd_draw_string(buf, x, y, ITEM_COLOR, true);
          }
    break_out:
       LAST_ACTIVE_BITS(mfd->id) = bits;
@@ -199,12 +199,12 @@ bool mfd_biohelp_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
    int32_t track = -1;
    int32_t i = 0;
    if (!(ev->subtype & MOUSE_LDOWN))
-      return FALSE;
+      return false;
    while (i <= bttn.y+NUM_BUTTONS*BIOHELP_PAGE)
    {
       track++;
       if (track >= NUM_BIO_TRACKS)
-         return FALSE;
+         return false;
       if (!status_track_free(track))
          i++;
    }
@@ -213,26 +213,26 @@ bool mfd_biohelp_button_handler(MFD*, LGPoint bttn, uiEvent* ev, void*)
       player_struct.active_bio_tracks |= 1 << track;
    else
       player_struct.active_bio_tracks &= ~(1 << track);
-   mfd_notify_func(MFD_BIOHELP_FUNC,MFD_INFO_SLOT,FALSE,MFD_ACTIVE,FALSE);
-   return TRUE;
+   mfd_notify_func(MFD_BIOHELP_FUNC,MFD_INFO_SLOT,false,MFD_ACTIVE,false);
+   return true;
 }
 
 
 bool mfd_biohelp_handler(MFD* m, uiEvent* e)
 {
-   bool retval = FALSE;
+   bool retval = false;
    LGPoint pos = e->pos;
    if (NUM_TRACKS <= NUM_BUTTONS)
-      return FALSE;
+      return false;
    if (!(e->subtype & MOUSE_LDOWN))
-      return FALSE;
+      return false;
    pos.x -= m->rect.ul.x;
    pos.y -= m->rect.ul.y;
    if (pos.x > ARROW_X && pos.y > ARROW_Y)
    {
       BIOHELP_PAGE = !BIOHELP_PAGE;
-      mfd_notify_func(MFD_BIOHELP_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, TRUE);
-      retval = TRUE;
+      mfd_notify_func(MFD_BIOHELP_FUNC, MFD_INFO_SLOT, false, MFD_ACTIVE, true);
+      retval = true;
    }
    return retval;
 }
@@ -248,11 +248,11 @@ bool biohelp_region_mouse_handler(uiMouseEvent* ev, LGRegion*, void*)
 	   RECT_MOVE(&start,ev->pos);
       mfd_zoom_rect(&start,mfd);
 
-      mfd_notify_func(MFD_BIOHELP_FUNC,MFD_INFO_SLOT,TRUE,MFD_ACTIVE,TRUE);
+      mfd_notify_func(MFD_BIOHELP_FUNC,MFD_INFO_SLOT,true,MFD_ACTIVE,true);
       mfd_change_slot(mfd,MFD_INFO_SLOT);
-      return TRUE;
+      return true;
    }
-   return FALSE;
+   return false;
 }
 
 
@@ -262,13 +262,13 @@ grs_bitmap biohelp_cursor_bmap;
 errtype biohelp_load_cursor()
 {
    errtype err;
-   static bool cursor_loaded = FALSE;
+   static bool cursor_loaded = false;
    extern errtype simple_load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid);
    if (cursor_loaded)
       DisposePtr((Ptr)biohelp_cursor_bmap.bits);
    err = simple_load_res_bitmap_cursor(&biohelp_cursor,&biohelp_cursor_bmap,REF_IMG_QuestionCursor);
    if (err != OK) return err;
-   cursor_loaded = TRUE;
+   cursor_loaded = true;
    return(err);
 }
 

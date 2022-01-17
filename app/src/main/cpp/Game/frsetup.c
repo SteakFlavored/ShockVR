@@ -260,7 +260,7 @@ grs_bitmap *fr_default_tmap(void)            {return &tmap_bm[fr_default_idx()%F
 #else
 grs_bitmap *fr_default_tmap(void)            {return NULL;}
 #endif
-bool        fr_default_block(void *, uint8_t *, int32_t *) {return FALSE;}
+bool        fr_default_block(void *, uint8_t *, int32_t *) {return false;}
 void        fr_default_clip_start(bool ) {}
 void        fr_default_rend_start(void)      {}
 
@@ -754,21 +754,21 @@ int32_t fr_start_view(void)
 #if _fr_defdbg(ALTCAM)
    _fr_sdbg(ALTCAM,{fr_camera_getpos(_fr->xtracam);_fr_altcamx=coor(EYE_X)>>(16);_fr_altcamy=coor(EYE_Y)>>(16);})
 #endif
-   return TRUE;
+   return true;
 }
 
 //#define JUST_SHOW_THE_THING
 
 /* send the actual frame out a here.... */
 // you're so kind when it serves you well
-bool smooth_double=FALSE;
+bool smooth_double=false;
 g3s_vector zvec = {0,0,0};
 
 extern bool view360_is_rendering;
 
 int32_t fr_send_view (void)
 {
-   bool 	snd_frm=TRUE;
+   bool 	snd_frm=true;
    bool	ok_to_double;
 
    // JAEMZ JAEMZ JAEMZ

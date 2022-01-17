@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#include <mprintf.h>
 //#define LOTS_O_SPEW
-// KLC  bool vmail_wait_for_input = TRUE;
+// KLC  bool vmail_wait_for_input = true;
 
 //#define CONTINUOUS_VMAIL_TEST
 
@@ -77,8 +77,8 @@ errtype play_vmail(int8_t vmail_no)
 		render_run();
 
 	suspend_game_time();
-	time_passes = FALSE;
-	game_paused = TRUE;
+	time_passes = false;
+	game_paused = true;
 
 	// Play the appropriate V-Mail.
 	{
@@ -119,11 +119,11 @@ errtype play_vmail(int8_t vmail_no)
 	inventory_draw_new_page(old_invent_page);
 
 	resume_game_time();
-	game_paused = FALSE;
+	game_paused = false;
 
 	// let the player wait before firing auto fire weapon
 	player_struct.auto_fire_click = player_struct.game_time + 60;
-	time_passes = TRUE;
+	time_passes = true;
 
 	chg_set_flg(DEMOVIEW_UPDATE);
 
@@ -180,7 +180,7 @@ uint8_t vmail_len[NUM_VMAIL] = {
 //
 
 extern grs_canvas *anim_offscreen;
-bool copied_background = FALSE;
+bool copied_background = false;
 grs_bitmap *vmail_background = NULL;
 extern bool uiCheckInput(void);
 
@@ -293,7 +293,7 @@ errtype play_vmail_intro(bool use_texture_buffer)
    while (current_vmail != -1)
    {
       AnimRecur();
-      tight_loop(FALSE);
+      tight_loop(false);
    }
 #ifdef LOTS_O_SPEW
    mprintf("*DONE INTRO*");
@@ -314,9 +314,9 @@ errtype play_vmail(int8_t vmail_no)
    Point    animloc = {VINTRO_X, VINTRO_Y};
    errtype  intro_error;
    int32_t      vmail_animfile_num = 0;
-   bool     early_exit = FALSE;
-   bool     preload_animation= TRUE;
-   bool     use_texture_buffer = FALSE;
+   bool     early_exit = false;
+   bool     preload_animation= true;
+   bool     use_texture_buffer = false;
    int32_t      len = vmail_len[vmail_no];
    int32_t      i;
    MemStat  data;
@@ -342,8 +342,8 @@ errtype play_vmail(int8_t vmail_no)
 
    // spew the appropriate text for vmail - full screen needs a draw!
    suspend_game_time();
-   time_passes = FALSE;
-   checking_mouse_button_emulation = game_paused = TRUE;
+   time_passes = false;
+   checking_mouse_button_emulation = game_paused = true;
 
    // open the res file
    vmail_animfile_num = ResOpenFile("vidmail.res");
@@ -364,11 +364,11 @@ errtype play_vmail(int8_t vmail_no)
    // preload the animations
    if (!use_texture_buffer)
    {
-      bool  cant_preload_all = FALSE;
+      bool  cant_preload_all = false;
 
       // load the intro in first! before checking for preloading
       if (ResLock(RES_FRAMES_vintro) == NULL)
-         use_texture_buffer = TRUE;
+         use_texture_buffer = true;
       else
       {
          for (i=0;i<len && !cant_preload_all;i++)
@@ -377,14 +377,14 @@ errtype play_vmail(int8_t vmail_no)
             MemStats(&data);
             if (data.free.sizeMax < MAX_VMAIL_SIZE)
             {
-               cant_preload_all = TRUE;
+               cant_preload_all = true;
                break;
             }
             // preload vmail frame animation first, and then play intro -> no pause between the two
             // if it fails on the lock - then say you can't preload!
             if(ResLock(vmail_frame_anim[vmail_no]+i) == NULL)
             {
-               cant_preload_all = TRUE;
+               cant_preload_all = true;
                break;
             }
          }
@@ -394,7 +394,7 @@ errtype play_vmail(int8_t vmail_no)
          if (cant_preload_all)
          {
             int32_t   j;
-            preload_animation = FALSE;
+            preload_animation = false;
             for (j=0; j<i;j++)
             {
                ResUnlock(vmail_frame_anim[vmail_no]+j);
@@ -402,7 +402,7 @@ errtype play_vmail(int8_t vmail_no)
             }
             ResUnlock(RES_FRAMES_vintro);
             ResDrop(RES_FRAMES_vintro);
-            use_texture_buffer = TRUE;
+            use_texture_buffer = true;
 #ifdef LOTS_O_SPEW
             mprintf("**TRIED TO PRELOAD-CAN'T PRELOAD**\n");
 #endif
@@ -410,7 +410,7 @@ errtype play_vmail(int8_t vmail_no)
       }
    }
    else
-      preload_animation = FALSE;
+      preload_animation = false;
 
 #ifdef LOTS_O_SPEW
    mprintf("**PREL:(%d) INTRO:(%d)**", preload_animation, use_texture_buffer);
@@ -443,7 +443,7 @@ errtype play_vmail(int8_t vmail_no)
       main_anim = AnimPlayRegion(vmail_ref,mainview_region,animloc, 0, NULL);
       if (main_anim == NULL)
       {
-         early_exit = TRUE;
+         early_exit = true;
          break;
       }
       if(use_texture_buffer)
@@ -466,13 +466,13 @@ errtype play_vmail(int8_t vmail_no)
 #endif
          if(citadel_check_input())
          {
-            early_exit = TRUE;
+            early_exit = true;
 #ifdef LOTS_O_SPEW
             mprintf("Early Exit\n");
 #endif
             AnimKill(main_anim);
          }
-         tight_loop(FALSE);
+         tight_loop(false);
       }
    }
 
@@ -514,11 +514,11 @@ errtype play_vmail(int8_t vmail_no)
    inventory_draw_new_page(old_invent_page);
 
    resume_game_time();
-   checking_mouse_button_emulation = game_paused = FALSE;
+   checking_mouse_button_emulation = game_paused = false;
 
    // let the player wait before firing auto fire weapon
    player_struct.auto_fire_click = player_struct.game_time + 60;
-   time_passes = TRUE;
+   time_passes = true;
 
 #ifdef LOTS_O_SPEW
       mprintf("X");
@@ -539,14 +539,14 @@ int8_t test_vmail = 0;
 bool shield_test_func(int16_t keycode, uint32_t context, void* data)
 {
    int32_t   i;
-   vmail_wait_for_input = FALSE;
+   vmail_wait_for_input = false;
    for (i=0;i<5; i++)
    {
       play_vmail(test_vmail);
       test_vmail = (test_vmail+1)%NUM_VMAIL;
    }
-   vmail_wait_for_input = TRUE;
-   return(TRUE);
+   vmail_wait_for_input = true;
+   return(true);
 }
 #pragma enable_message(202)
 
@@ -554,7 +554,7 @@ bool shield_test_func(int16_t keycode, uint32_t context, void* data)
 #pragma disable_message(202)
 bool shield_off_func(int16_t keycode, uint32_t context, void* data)
 {
-   return(TRUE);
+   return(true);
 }
 #pragma enable_message(202)
 

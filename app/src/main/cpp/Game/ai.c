@@ -103,12 +103,12 @@ void ai_find_player(ObjID id)
       last_known_loc = objs[PLAYER_OBJ].loc;
    else
    {
-      bool slow_proj = FALSE;
+      bool slow_proj = false;
       CritterProp cp = CritterProps[CPNUM(id)];
       // Some of the time they shoot at yer head, the other times at yer body.
       // Unless they have a slow projectile, in which case they always shoot at yer head.
       if ((cp.attacks[0].slow_proj != 0) || ((cp.alt_perc > 0) && (cp.attacks[1].slow_proj)))
-         slow_proj = TRUE;
+         slow_proj = true;
       if ((slow_proj) || ((rand() & 0xFF) < AI_HEAD_HIT_CHANCE) || (global_fullmap->cyber))
          get_phys_state(objs[PLAYER_OBJ].info.ph, &st, PLAYER_OBJ);
 //         EDMS_get_pelvic_viewpoint(objs[PLAYER_OBJ].info.ph, &st);
@@ -253,7 +253,7 @@ errtype ai_critter_hit(ObjSpecID osid, int16_t damage, bool tranq, bool stun)
          {
             extern uint8_t *shodan_bitmask;
             extern void shodan_phase_in(uint8_t *bitmask, int16_t x, int16_t y, int16_t w, int16_t h, int16_t num, bool dir);
-            shodan_phase_in(shodan_bitmask, 0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT, damage << 4 , FALSE);
+            shodan_phase_in(shodan_bitmask, 0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT, damage << 4 , false);
          }
          break;
    }
@@ -502,22 +502,22 @@ errtype roll_on_dnd_treasure_tables(int32_t *pcont, int8_t treasure_type)
 {
    int8_t perc;
    int8_t count = 0;
-   bool give, done = FALSE;
+   bool give, done = false;
    int32_t chance, trip;
 
    perc = rand()%100;
    while (!done && (count < NUM_TREASURE_SLOTS))
    {
-      give=FALSE;
+      give=false;
       chance=treasure_table[treasure_type][count][0];
       trip=treasure_table[treasure_type][count][1];
       if (chance == 0)
-         done = TRUE;
+         done = true;
       else
       {
          if(TRIP2CL(trip)==CLASS_AMMO) {
             if(!player_struct.cartridges[get_nth_from_triple(trip)])
-               give=TRUE;
+               give=true;
          }
          if (give || perc < chance)
          {
@@ -526,7 +526,7 @@ errtype roll_on_dnd_treasure_tables(int32_t *pcont, int8_t treasure_type)
                if ((QUESTVAR_GET(COMBAT_DIFF_QVAR) <= 2) || ((rand() & 0xFF) < 0x80))
                   *pcont = obj_create_base(trip);
             }
-            done = TRUE;
+            done = true;
          }
          else
             perc -= chance;
@@ -642,7 +642,7 @@ errtype ai_critter_really_dead(ObjSpecID osid)
             objs[new_obj].info.current_frame = rand()%(f+1);
          else
             objs[new_obj].info.current_frame = 0;
-         obj_move_to(new_obj, &objs[objCritters[osid].id].loc, TRUE);
+         obj_move_to(new_obj, &objs[objCritters[osid].id].loc, true);
 //         obj_floor_func(new_obj);
 
          if (objCritters[osid].flags & AI_FLAG_NOLOOT)
@@ -699,7 +699,7 @@ errtype ai_autobomb_explode(ObjID id, ObjSpecID osid)
    edata.penet = ca.penetration;
 
    // Do an explosion!
-   do_explosion(objs[id].loc, id, FALSE, &edata);
+   do_explosion(objs[id].loc, id, false, &edata);
    play_digi_fx_obj(SFX_EXPLOSION_1,1,id);
 
    // Make us dying....
@@ -772,7 +772,7 @@ errtype ai_attack_player(ObjSpecID osid, int8_t a)
       {
 #ifdef PLAYTEST
          extern bool prevent_ray_spew;
-         prevent_ray_spew = FALSE;
+         prevent_ray_spew = false;
 #endif
 		   hit_obj = ray_cast_attack(objCritters[osid].id,
 			   dest_loc,
@@ -780,7 +780,7 @@ errtype ai_attack_player(ObjSpecID osid, int8_t a)
 			   fix_make(CritterProps[cp_num].attacks[a].attack_velocity,0),
 			   fix_make(CritterProps[cp_num].attacks[a].att_range,0));
 #ifdef PLAYTEST
-         prevent_ray_spew = TRUE;
+         prevent_ray_spew = true;
 #endif
          if (hit_obj != NULL)
          {
@@ -893,7 +893,7 @@ errtype ai_fire_special(ObjID src, ObjID target, int32_t proj_triple, ObjLoc src
    else
       zvel = (zdiff < fix_make(0,0x4000)) ? fix_mul(fix_make(0,0x3800), dist) : fix_mul(zdiff, fix_make(4,0));
 
-   obj_move_to_vel(proj_id, &src_loc, TRUE, xvel, yvel, zvel);
+   obj_move_to_vel(proj_id, &src_loc, true, xvel, yvel, zvel);
    EDMS_ignore_collisions(objs[src].info.ph, objs[proj_id].info.ph);
    if (TRIP2CL(proj_triple) == CLASS_PHYSICS)
       apply_gravity_to_one_object(proj_id, SLOW_PROJECTILE_GRAVITY);

@@ -76,7 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Prototypes
 
-// Update the HUD.  If redraw_whole is TRUE, better draw the
+// Update the HUD.  If redraw_whole is true, better draw the
 // whole durned thing.
 errtype hud_update(bool redraw_whole,frc* context);
 errtype cyber_hud_update(bool redraw_whole);

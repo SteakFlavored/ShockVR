@@ -230,8 +230,8 @@ void audiolog_stop()
 	if (secret_pending_hack)
 	{
 		secret_pending_hack = 0;
-     	gDeadPlayerQuit = TRUE;					// The player is dead.
-		gPlayingGame = FALSE;					// Hop out of the game loop.
+     	gDeadPlayerQuit = true;					// The player is dead.
+		gPlayingGame = false;					// Hop out of the game loop.
 	}
 }
 
@@ -303,5 +303,5 @@ errtype audiolog_bark_play(int32_t bark_id)
 bool audiolog_cancel_func(int16_t , uint32_t , void* )
 {
 	audiolog_stop();
-	return(TRUE);
+	return(true);
 }

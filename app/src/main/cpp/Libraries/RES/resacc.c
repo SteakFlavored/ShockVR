@@ -324,20 +324,20 @@ void ResDelete(Id id)
 //
 //		id = id to be checked
 //
-//	Returns: TRUE if id ok, FALSE if invalid & prints warning
+//	Returns: true if id ok, false if invalid & prints warning
 
 bool ResCheckId(Id id)
 {
 	if (id < ID_MIN)
 		{
 		Warning(("ResCheckId: id $%x invalid\n", id));
-		return FALSE;
+		return false;
 		}
 	if (id > resDescMax)
 		{
 		Warning(("ResCheckId: id $%x exceeds table\n", id));
-		return FALSE;
+		return false;
 		}
-	return TRUE;
+	return true;
 }
 */

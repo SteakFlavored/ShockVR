@@ -82,7 +82,7 @@ int32_t gri_cpoly_loop (grs_tmap_loop_info *ti)
             break;
          }
       } else if (d<0) {
-         return TRUE;
+         return true;
       }
       /* update span extrema and destination. */
       ti->left.x+=ti->left.dx;
@@ -95,7 +95,7 @@ int32_t gri_cpoly_loop (grs_tmap_loop_info *ti)
       ti->right.i+=ti->right.di;
       ti->d+=grd_bm.row;
    } while ((--(ti->n))>0);
-   return FALSE;
+   return false;
 }
 
 void gri_cpoly_init (grs_tmap_loop_info *ti)

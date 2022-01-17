@@ -294,7 +294,7 @@ Skip2:
 
 		bgt+     L_OuterLoop			; is r10 > 0? (yes, most of the time)
 
-		; return FALSE
+		; return false
 		li       r3,0
 L_Done:
 		lwz      r0,136(SP)
@@ -307,7 +307,7 @@ L_CheckDMinus:
 		cmpwi    r16,0
 		bge+     L_LoopSkip
 
-		; return TRUE
+		; return true
 		li       r3,1
 		b        L_Done
 

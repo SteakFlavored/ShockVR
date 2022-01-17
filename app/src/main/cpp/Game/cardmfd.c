@@ -88,7 +88,7 @@ void mfd_accesscard_expose(MFD* mfd, uint8_t control)
          gr_bitmap(&mfd_background, 0, 0);
       if (full)
       {
-         mfd_draw_string(get_object_long_name(GENCARDS_TRIPLE,NULL,0),1,1,GREEN_YELLOW_BASE,TRUE);
+         mfd_draw_string(get_object_long_name(GENCARDS_TRIPLE,NULL,0),1,1,GREEN_YELLOW_BASE,true);
       }
       i = mfd_bmap_id(GENCARDS_TRIPLE);
       draw_raw_resource_bm(i,(MFD_VIEW_WID-res_bm_width(i))/2,
@@ -128,12 +128,12 @@ void mfd_accesscard_expose(MFD* mfd, uint8_t control)
          }
          *s = '\0';
          gr_set_font((grs_font*)ResLock(MFD_FONT));
-         mfd_string_wrap = FALSE;
+         mfd_string_wrap = false;
          wrap_text(buf,CODES_WID);
          gr_string_size(buf,&w,&h);
          x += (CODES_WID - w)/2;
          y += (MFD_VIEW_HGT - h)/2 - Y_STEP;
-         mfd_full_draw_string(buf,x,y,ITEM_COLOR,MFD_FONT,TRUE,TRUE);
+         mfd_full_draw_string(buf,x,y,ITEM_COLOR,MFD_FONT,true,true);
          mfd_string_wrap = old_wrap;
          ResUnlock(MFD_FONT);
          LAST_BITS(mfd->id) = bits;

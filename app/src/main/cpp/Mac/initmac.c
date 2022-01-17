@@ -173,7 +173,7 @@ void InitMac(void)
 	EnterMovies();
 	InstallShockTimers();
 
-	gMenusHid = FALSE;
+	gMenusHid = false;
  }
 
 //------------------------------------------------------------------------------------
@@ -338,14 +338,14 @@ void GetFolders(void)
 
 	// Check for the CD-ROM volume, and look for sub-folders there.
 
-	bool	foundCD = FALSE;
+	bool	foundCD = false;
 	int32_t		volIndex = 1;
 	do
 	{
 		hpb.volumeParam.ioCompletion = NULL;
 		hpb.volumeParam.ioVolIndex = volIndex;		// look for volume based on volume index.
 		hpb.volumeParam.ioNamePtr = volName;
-		verr = PBHGetVInfo(&hpb, FALSE);				// Get the volume info.
+		verr = PBHGetVInfo(&hpb, false);				// Get the volume info.
 
 		if (verr == noErr)										// See if there's a folder called "System Shock Data"
 		{
@@ -357,7 +357,7 @@ void GetFolders(void)
 			{
 				gCDDataVref = hpb.fileParam.ioVRefNum;
 				gCDDataDirID = hpb.fileParam.ioDirID;
-				foundCD = TRUE;
+				foundCD = true;
 				break;
 			}
 		}
@@ -502,7 +502,7 @@ void HideMenuBar(void)
  		{
 	 		PaintRect(&r);
 	 	}
-	 	gMenusHid = TRUE;
+	 	gMenusHid = true;
 	 }
  }
 
@@ -521,7 +521,7 @@ void ShowMenuBar(void)
 	 	RectRgn(gMainWindow->visRgn, &r);
 
 		// Show the menu bar.
-	 	gMenusHid = FALSE;
+	 	gMenusHid = false;
 	 	DrawMenuBar();
 	 }
  }

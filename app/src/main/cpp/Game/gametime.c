@@ -47,7 +47,7 @@ void update_level_gametime(void);
 
 errtype update_state(bool time_running)
 {
-   bool update = TRUE;
+   bool update = true;
    if (time_running)
    {
       uint32_t deltat;
@@ -65,7 +65,7 @@ errtype update_state(bool time_running)
       if (deltat < MIN_DELTAT)
       {
          deltat = 0;
-         update = FALSE;
+         update = false;
       }
       // update game time.
       player_struct.deltat =  deltat;

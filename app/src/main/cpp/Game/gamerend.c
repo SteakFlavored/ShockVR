@@ -185,15 +185,15 @@ void do_secret_fx(void)
    {
    case DYING_REND_SFX:          // chevron drain, perhaps dim out, view rock at end.....
       secret_render_fx++;
-      flatline_heart=TRUE;
+      flatline_heart=true;
       chi_amp=STATUS_CHI_AMP*(DYING_FRAMES-c_val)/DYING_FRAMES;
       if (c_val==DYING_FRAMES)
       {
          if (kill_player())
          {
             secret_render_fx=0;
-            player_struct.dead = FALSE;
-            flatline_heart=FALSE;
+            player_struct.dead = false;
+            flatline_heart=false;
             chi_amp=STATUS_CHI_AMP;
          }
          else
@@ -223,7 +223,7 @@ void do_secret_fx(void)
          ss_string(get_string(str=(SYSTEM_BASE + i), line_buf, LINE_BUF_SIZE),56,build_systems_y_coor(i));
       }
       if(str==REF_STR_StartHeartString)
-         flatline_heart=FALSE;
+         flatline_heart=false;
       else if(str==REF_STR_StartBrainString)
          chi_amp=STATUS_CHI_AMP;
       if (c_val<REBORN_VISION_TICK)
@@ -244,7 +244,7 @@ void do_secret_fx(void)
             secret_render_fx=0;
 
             // look - we should say the player is no longer dead!
-            player_struct.dead = FALSE;
+            player_struct.dead = false;
             uiFlush();
 //KLC           spoof_mouse_event();
             if (music_on)
@@ -271,7 +271,7 @@ void do_secret_fx(void)
       if(stage<0 || stage>99) stage=0;
       tmp_buf[0]='0'+stage/10;
       tmp_buf[1]='0'+stage%10;
-      draw_shadowed_string(tmp_buf, (CURRENT_VIEW_W-w)/2, (CURRENT_VIEW_H-h)/2, TRUE);
+      draw_shadowed_string(tmp_buf, (CURRENT_VIEW_W-w)/2, (CURRENT_VIEW_H-h)/2, true);
       ResUnlock(FAKEWIN_NUM_FONT);
       break;
    }
@@ -312,7 +312,7 @@ void do_secret_fx(void)
                long_bark(OBJ_NULL, FIRST_SHODAN_MUG + 3, REF_STR_Null, 0);
                mfd_change_slot(MFD_LEFT, MFD_INFO_SLOT);
                mfd_change_slot(MFD_RIGHT, MFD_INFO_SLOT);
-//KLC-duplicate mail               add_email_datamunge(FAKEWIN_EMAIL_MUNGE, FALSE);
+//KLC-duplicate mail               add_email_datamunge(FAKEWIN_EMAIL_MUNGE, false);
 #ifdef AUDIOLOGS
                if (audiolog_setting)
                   audiolog_play(FAKEWIN_EMAIL_MUNGE);
@@ -348,7 +348,7 @@ int8_t beam_offset[NUM_BEAM_GUN]={-12,-8,-4};
 #define DRAW_BEAM_LINE(c1,c2,c3,c4) { \
      a = mx+(c1);\
      b = my+(c2);\
-     ss_point_convert(&a,&b,TRUE);\
+     ss_point_convert(&a,&b,true);\
      ss_thick_fix_line(fix_make(a,0),fix_make(b,0),fix_make(deltax+(c3)+boff,0),fix_make(deltay+(c4)+boff,0));\
 }
 
@@ -360,7 +360,7 @@ int8_t beam_offset[NUM_BEAM_GUN]={-12,-8,-4};
         gr_fix_line(fix_make(a,0),fix_make(b,0),fix_make(deltax+(c3)+boff,0), fix_make(deltay+22,0));\
      else \
      { \
-        ss_point_convert(&a,&b,TRUE);\
+        ss_point_convert(&a,&b,true);\
         ss_thick_fix_line(fix_make(a,0),fix_make(b,0),fix_make(deltax+(c3)+boff,0),fix_make(deltay+(c4)+boff,0));\
      } \
 }
@@ -387,14 +387,14 @@ void gamesys_render_effects(void)
 			{
 				mx = (SCREEN_VIEW_WIDTH/2)+SCREEN_VIEW_X;
 				my = (SCREEN_VIEW_Y);
-				ss_point_convert(&mx,&my,TRUE);
+				ss_point_convert(&mx,&my,true);
 			}
 			else if (handart_show != 1)					// Use mouse position for other weapons
 			{
 				mx = mouse_attack_x;
 				my = mouse_attack_y;
 				if (!DoubleSize)
-					ss_point_convert(&mx,&my,TRUE);
+					ss_point_convert(&mx,&my,true);
 				else
 					ui_mouse_get_xy(&mx,&my);
 			}
@@ -419,7 +419,7 @@ void gamesys_render_effects(void)
 						if (beam_effect_id)
 						{
 							int32_t i;
-							bool draw_beam=FALSE;
+							bool draw_beam=false;
 
 							for (i=0;i<current_num_hudobjs;i++)
 							{
@@ -433,7 +433,7 @@ void gamesys_render_effects(void)
 										mx *= 2;
 										my *= 2;
 									}
-									draw_beam = TRUE;
+									draw_beam = true;
 								}
  							}
 							if (draw_beam)
@@ -474,7 +474,7 @@ void gamesys_render_effects(void)
    // Redraw hud displays as appropriate
    // HOW ABOUT A FLAG HERE, NOT HARDCODED LOOP NUMBERS
    if (!secret_render_fx && _current_loop <= FULLSCREEN_LOOP) {
-         hud_update(FALSE,_current_fr_context);
+         hud_update(false,_current_fr_context);
    }
 
    if (secret_render_fx)
@@ -642,7 +642,7 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int32_t x, in
 						vhold_shift = 0;
 				}
  				(*fr_mouse_show)();
-				return FALSE;
+				return false;
          case FR_SFX_STATIC:
             draw_line_static(dest_bm, dmg_percentage, fr_sfx_color);
             dmg_percentage>>=2;
@@ -761,7 +761,7 @@ bool gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int32_t x, in
       }
    }
 
-   return TRUE;         // let the renderer do the blit
+   return true;         // let the renderer do the blit
 }
 
 void gamesys_render_func(void *fake_dest_bitmap, int32_t flags)

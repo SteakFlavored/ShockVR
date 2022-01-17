@@ -54,10 +54,10 @@ uint8_t		TYPEDEF		BYTE
 
 NULL		EQU		0t
 ;  !NULL
-TRUE		EQU		1t
-;  !TRUE
-FALSE		EQU		0t
-;  !FALSE
+true		EQU		1t
+;  !true
+false		EQU		0t
+;  !false
 ;  !__TYPES_H
 ; End of file types.h
 

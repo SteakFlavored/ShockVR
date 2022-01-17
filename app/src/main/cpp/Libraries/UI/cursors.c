@@ -199,8 +199,8 @@ bool cursor_get_callback(LGRegion* reg, LGRect*, void *vp)
 {
 	 cstate *s = (cstate *)vp;
    cursor_stack* cs = (cursor_stack*)(reg->cursors);
-   bool anal = FALSE;
-   //DBG(DSRC_UI_Anal, { anal = TRUE;});
+   bool anal = false;
+   //DBG(DSRC_UI_Anal, { anal = true;});
    //if (anal) SPEW_ANAL(DSRC_UI_Cursor_Stack,("cursor_get_callback(%x,%x,%x)\n",reg,rect,s));
    if (cs == NULL) *(s->out) = NULL;
    else
@@ -435,14 +435,14 @@ errtype ui_shutdown_cursors(void)
 bool ui_set_current_cursor(LGPoint pos)
 {
    cstate s;
-   bool result = FALSE;
+   bool result = false;
 
-   ui_mouse_do_conversion(&(pos.x),&(pos.y),TRUE);
+   ui_mouse_do_conversion(&(pos.x),&(pos.y),true);
    // Spew(DSRC_UI_Cursors,("ui_set_current_cursor(<%d,%d>)\n",pos.x,pos.y));
    if (uiCurrentSlab == NULL)
    {
       //SPEW_ANAL(DSRC_UI_Cursors,("ui_set_current_cursor(): no current slab\n"));
-      result = FALSE;
+      result = false;
       goto out;
    }
    if (uiCurrentSlab->cstack.fullness > 1)
@@ -455,7 +455,7 @@ bool ui_set_current_cursor(LGPoint pos)
    if (RootCursorRegion == NULL)
    {
       //SPEW_ANAL(DSRC_UI_Cursors,("ui_set_current_cursor(): no root region\n"));
-      result = FALSE;
+      result = false;
       goto out;
    }
    s.out = &CurrentCursor;
@@ -470,7 +470,7 @@ bool ui_set_current_cursor(LGPoint pos)
 void ui_update_cursor(LGPoint pos)
 {
    bool show = ui_set_current_cursor(pos);
-//   ui_mouse_do_conversion(&(pos.x),&(pos.y),FALSE);
+//   ui_mouse_do_conversion(&(pos.x),&(pos.y),false);
    if (show && LastCursor != NULL && !PointsEqual(pos,LastCursorPos))
    {
       MouseLock++;
@@ -650,12 +650,12 @@ errtype uiHideMouse(LGRect* r)
    if (!hide)
    {
       mr.ul = LastCursorPos;
-      ui_mouse_do_conversion(&(mr.ul.x),&(mr.ul.y),TRUE);
+      ui_mouse_do_conversion(&(mr.ul.x),&(mr.ul.y),true);
       if (LastCursor != NULL)
       {
          mr.lr.x = LastCursorPos.x + LastCursor->w;
          mr.lr.y = LastCursorPos.y + LastCursor->h;
-         ui_mouse_do_conversion(&mr.lr.x,&mr.lr.y,TRUE);
+         ui_mouse_do_conversion(&mr.lr.x,&mr.lr.y,true);
       }
       else mr.lr = mr.ul;
       curhiderect++;
@@ -701,12 +701,12 @@ errtype uiShowMouse(LGRect* r)
    if (!show)
    {
       mr.ul = LastCursorPos;
-      ui_mouse_do_conversion(&(mr.ul.x),&(mr.ul.y),TRUE);
+      ui_mouse_do_conversion(&(mr.ul.x),&(mr.ul.y),true);
       if (LastCursor != NULL)
       {
          mr.lr.x = LastCursorPos.x + LastCursor->w;
          mr.lr.y = LastCursorPos.y + LastCursor->h;
-         ui_mouse_do_conversion(&mr.lr.x,&mr.lr.y,TRUE);
+         ui_mouse_do_conversion(&mr.lr.x,&mr.lr.y,true);
       }
       else mr.lr = mr.ul;
       show = RECT_TEST_SECT(r,&mr);

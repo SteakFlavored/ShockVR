@@ -87,7 +87,7 @@ void PlayCutScene(FSSpec *movieSpec, bool showSubs, bool allowHalt)
 
 	// Turn off sound if soundFX is off.
 	if (!gShockPrefs.soSoundFX)
-		showSubs = TRUE;
+		showSubs = true;
 
 	// Initialize the palette change times array and color handles array.
 	for (i=0; i < 16; i++)
@@ -125,7 +125,7 @@ void PlayCutScene(FSSpec *movieSpec, bool showSubs, bool allowHalt)
 			GetNextSubtitle();
 		}
 		else
-			showSubs = FALSE;
+			showSubs = false;
 		gShowSubs = showSubs;
 
 		qpalHdl = GetResource('qpal', 128);					// Load the palette change times resource
@@ -413,7 +413,7 @@ void PlayIntroCutScene()
 	HideMenuBar();
 
 	FSMakeFSSpec(gCDDataVref, gCDDataDirID, "\pIntro", &fSpec);
-	PlayCutScene(&fSpec, FALSE, TRUE);
+	PlayCutScene(&fSpec, false, true);
 	PaintRect(&gMainWindow->portRect);
 
 	SetEntries(0, 255, (**(gMainColorHand)).ctTable);

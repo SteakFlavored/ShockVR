@@ -77,7 +77,7 @@ ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
 uint8_t hack_cameras_needed = 0;
 int8_t curr_hack_cam = 0;
 uint32_t hack_cam_fr_count = 0;
-bool screen_static_drawn = FALSE;
+bool screen_static_drawn = false;
 
 // -----------
 // PROTOTYPES
@@ -92,7 +92,7 @@ int32_t hack_camera_draw_callback(grs_canvas*, grs_bitmap*, int32_t, int32_t, in
 //   gr_push_canvas(&hack_cam_canvases[curr_hack_cam]);
 //   gr_bitmap(bm,0,0);
 //   gr_pop_canvas();
-   return(FALSE);
+   return(false);
 }
 
 typedef int32_t (*frdraw)(void *dstc, void *dstbm, int32_t x, int32_t y, int32_t flg);
@@ -220,7 +220,7 @@ errtype hack_camera_takeover(int32_t hack_cam)
    // do a wacky zoom thing
    ucp = use_cursor_pos;
    if (!DoubleSize)
-	   ss_point_convert(&(ucp.x),&(ucp.y),TRUE);
+	   ss_point_convert(&(ucp.x),&(ucp.y),true);
    RECT_MOVE(&start, ucp);
    zoom_rect(&start, (full_game_3d) ? &fscrn_rect : &mainview_rect);
 
@@ -340,7 +340,7 @@ errtype render_run(void)
    if (region_obscured(mainview_region,mainview_region->r) == UNOBSCURED)
 #endif
    {
-      screen_static_drawn = FALSE;
+      screen_static_drawn = false;
       current_num_hudobjs =0; //clear the hud objects
       rendrect = mainview_region->r;
       fr_rend(NULL);

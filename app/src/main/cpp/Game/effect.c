@@ -142,7 +142,7 @@ ObjID do_special_effect_location(ObjID owner, uint8_t effect, uint8_t start, Obj
          return(OBJ_NULL);
       }
       osid = objs[new_id].specID;
-	   obj_move_to(new_id, loc, TRUE);
+	   obj_move_to(new_id, loc, true);
 	   if (start == 0xFF)
 	      start = START_FRAME(objAnimatings[osid].start_frame);
       objAnimatings[osid].owner = owner;
@@ -393,7 +393,7 @@ errtype increment_anim(uint32_t num_units)
          }
          lamp_change_setting(light_val);
          _frp_light_bits_set(LIGHT_BITS_CAM);
-         handart_flash = FALSE;
+         handart_flash = false;
       }
    }
 
@@ -470,7 +470,7 @@ errtype increment_anim(uint32_t num_units)
 	               ADD_DESTROYED_OBJECT(id);
                     if (id == beam_effect_id)
                     {
-                       hudobj_set_id(id,FALSE);
+                       hudobj_set_id(id,false);
                        beam_effect_id = OBJ_NULL;
                     }
 	               break;
@@ -500,7 +500,7 @@ errtype increment_anim(uint32_t num_units)
             case CLASS_DOOR:
                if ((objs[id].info.current_frame - interval < DOOR_OPEN_FRAME) && (objs[id].info.current_frame >= DOOR_OPEN_FRAME))
                {
-                  obj_physics_refresh_area(OBJ_LOC_BIN_X(objs[id].loc), OBJ_LOC_BIN_Y(objs[id].loc),TRUE);
+                  obj_physics_refresh_area(OBJ_LOC_BIN_X(objs[id].loc), OBJ_LOC_BIN_Y(objs[id].loc),true);
                }
                break;
          }
@@ -546,7 +546,7 @@ errtype increment_anim(uint32_t num_units)
                if (((objs[id].loc.p != 0) || (objs[id].loc.b != 0)) &&
                   (objs[id].info.current_frame < DOOR_OPEN_FRAME) && (objs[id].info.current_frame + interval >= DOOR_OPEN_FRAME))
                {
-                  obj_physics_refresh_area(OBJ_LOC_BIN_X(objs[id].loc), OBJ_LOC_BIN_Y(objs[id].loc),TRUE);
+                  obj_physics_refresh_area(OBJ_LOC_BIN_X(objs[id].loc), OBJ_LOC_BIN_Y(objs[id].loc),true);
                }
                break;
          }
@@ -769,7 +769,7 @@ void advance_animations(void)
 }
 
 // fills in requested types of information about an animating object,
-// returning FALSE iff that object is not in the anim list.  Pass a
+// returning false iff that object is not in the anim list.  Pass a
 // NULL pointer about a piece of data if you don't want it.
 bool anim_data_from_id(ObjID id, bool* reverse, bool* cycle)
 {
@@ -781,17 +781,17 @@ bool anim_data_from_id(ObjID id, bool* reverse, bool* cycle)
             *reverse=(animlist[i].flags & ANIMFLAG_REVERSE)!=0;
          if(cycle)
             *cycle=(animlist[i].flags & ANIMFLAG_CYCLE)!=0;
-         return TRUE;
+         return true;
       }
    }
-   return FALSE;
+   return false;
 }
 
 #define CHECK_ANIM_SPEED
 errtype add_obj_to_animlist(ObjID id, bool repeat, bool reverse, bool cycle, int16_t speed, int32_t cb_id, void *user_data, int16_t cbtype)
 {
    int32_t i=0;
-   bool replace_me = FALSE;
+   bool replace_me = false;
    int32_t use_counter = anim_counter;
 #ifdef CHECK_ANIM_SPEED
    int8_t count=0;
@@ -807,7 +807,7 @@ errtype add_obj_to_animlist(ObjID id, bool repeat, bool reverse, bool cycle, int
    {
       if (animlist[i].id == id)
       {
-   	   replace_me = TRUE;
+   	   replace_me = true;
    	   use_counter = i;
       }
    }

@@ -110,8 +110,8 @@ int8_t energy_hand_info[NUM_ENERGY_GUN][NUM_FRAMES] =
 uint8_t handart_count = 2;
 uint8_t hand_bobbing = HAND_BOB;
 uint8_t hand_bobx = HAND_BOBX;
-bool bob_up = TRUE;
-bool bob_left = TRUE;
+bool bob_up = true;
+bool bob_left = true;
 void reset_handart_count(int32_t wpn_num);
 
 
@@ -166,7 +166,7 @@ Ref get_handart(int32_t *x_offset, int32_t *y_offset, int16_t mouse_x, int16_t m
                {
                   if (hand_bobbing >= BOB_MAX)
                   {
-                     bob_up = FALSE;
+                     bob_up = false;
                      hand_bobbing --;
                   }
                   else
@@ -176,7 +176,7 @@ Ref get_handart(int32_t *x_offset, int32_t *y_offset, int16_t mouse_x, int16_t m
                {
                   if (hand_bobbing <= BOB_MIN)
                   {
-                     bob_up = TRUE;
+                     bob_up = true;
                      hand_bobbing ++;
                   }
                   else
@@ -186,7 +186,7 @@ Ref get_handart(int32_t *x_offset, int32_t *y_offset, int16_t mouse_x, int16_t m
                {
                   if (hand_bobx <= BOBX_MIN)
                   {
-                     bob_left = FALSE;
+                     bob_left = false;
                      hand_bobx++;
                   }
                   else hand_bobx--;
@@ -195,7 +195,7 @@ Ref get_handart(int32_t *x_offset, int32_t *y_offset, int16_t mouse_x, int16_t m
                {
                   if (hand_bobx >= BOBX_MAX)
                   {
-                     bob_left = TRUE;
+                     bob_left = true;
                      hand_bobx--;
                   }
                   else hand_bobx++;
@@ -279,10 +279,10 @@ Ref get_handart(int32_t *x_offset, int32_t *y_offset, int16_t mouse_x, int16_t m
 
 void notify_draw_handart(void)
 {
-   // once a fire frame has been shown, set handart_fire to TRUE
+   // once a fire frame has been shown, set handart_fire to true
    // - this is so we definitely show the fire frame, otherwise it would looooook very goooooofy - minman
 
-   handart_fire = TRUE;
+   handart_fire = true;
 }
 
 void reset_handart_count(int32_t wpn_num)

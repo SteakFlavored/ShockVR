@@ -415,12 +415,12 @@ void DoCommand(uint32_t mResult)
 					 else
 					 	savedOK = DoSaveGame();
 					 if (savedOK)
-						game_paused = FALSE;
+						game_paused = false;
 			 		break;
 
 			 	case fileSaveGameAs:
 				 	if (DoSaveGameAs())
-						game_paused = FALSE;
+						game_paused = false;
 			 		break;
 
 				case filePlayIntro:
@@ -434,7 +434,7 @@ void DoCommand(uint32_t mResult)
 						do
 							GetKeys((UInt32 *)keys);
 						while ((keys[0] | keys[1]) != 0);
-						game_paused = FALSE;
+						game_paused = false;
 					}
 					break;
 
@@ -453,8 +453,8 @@ void DoCommand(uint32_t mResult)
 							{													// or just keep playing.
 								if (btn == 1)
 								{
-									gPlayingGame = FALSE;
-									game_paused = FALSE;
+									gPlayingGame = false;
+									game_paused = false;
 									if (theItem == fileQuit)
 										DoQuit();
 								}
@@ -471,8 +471,8 @@ void DoCommand(uint32_t mResult)
 										 if (!savedOK)
 										 	break;
 						 			case 2:									// No, don't save it
-										gPlayingGame = FALSE;
-										game_paused = FALSE;
+										gPlayingGame = false;
+										game_paused = false;
 										if (theItem == fileQuit)
 											DoQuit();
 						 				break;
@@ -481,8 +481,8 @@ void DoCommand(uint32_t mResult)
 					 	}
 					 	else
 					 	{
-							gPlayingGame = FALSE;
-							game_paused = FALSE;
+							gPlayingGame = false;
+							game_paused = false;
 							if (theItem == fileQuit)
 								DoQuit();
 						}
@@ -634,7 +634,7 @@ void HandleNewGame()
 		UpdateWindow(gMainWindow);
 		EndUpdate(gMainWindow);
 
-		gIsNewGame = TRUE;									// It's a whole new ballgame.
+		gIsNewGame = true;									// It's a whole new ballgame.
 		gGameSavedTime = *tmd_ticks;
 
 		GetIndString(titleStr, kProgressTitles, 1);	// Get appropriate title string
@@ -679,7 +679,7 @@ void HandleOpenGame(void)
 		if (gPlayingGame)										// If we were in the middle of playing a game,
 		{																// shutdown the game before loading new one.
 			loopmode_exit(_current_loop);
-	     	closedown_game(TRUE);
+	     	closedown_game(true);
 			StopShockTimer();
 		}
 
@@ -704,13 +704,13 @@ void HandleOpenGame(void)
 		}
 		EndProgressDlg();
 
-		gIsNewGame = FALSE;									// Nope, it's not a new game.
+		gIsNewGame = false;									// Nope, it's not a new game.
 		gSavedGameFile = reply.sfFile;
 		gGameSavedTime = *tmd_ticks;
 
 		HideCursor();
 		HideMenuBar();
-		game_paused = FALSE;
+		game_paused = false;
 
 		ShockGameLoop();										// Play the game!!!
 
@@ -746,13 +746,13 @@ void HandleAEOpenGame(FSSpec *openSpec)
 	}
 	EndProgressDlg();
 
-	gIsNewGame = FALSE;									// Nope, it's not a new game.
+	gIsNewGame = false;									// Nope, it's not a new game.
 	gSavedGameFile = *openSpec;
 	gGameSavedTime = *tmd_ticks;
 
 	HideCursor();
 	HideMenuBar();
-	game_paused = FALSE;
+	game_paused = false;
 
 	ShockGameLoop();										// Play the game!!!
 
@@ -772,9 +772,9 @@ void ShockGameLoop(void)
 	Size		dummy;
 	FSSpec	fSpec;
 
-	gPlayingGame = TRUE;
-	gDeadPlayerQuit = FALSE;
-	gGameCompletedQuit = FALSE;
+	gPlayingGame = true;
+	gDeadPlayerQuit = false;
+	gGameCompletedQuit = false;
 
 	MaxMem(&dummy);							// Compact heap before starting the game.
 
@@ -848,22 +848,22 @@ void ShockGameLoop(void)
 	if (gDeadPlayerQuit)									// If we quit because the player was killed, show
 	{																// the death movie.
 		FSMakeFSSpec(gCDDataVref, gCDDataDirID, "\pDeath", &fSpec);
-		PlayCutScene(&fSpec, TRUE, TRUE);
-		gDeadPlayerQuit = FALSE;
+		PlayCutScene(&fSpec, true, true);
+		gDeadPlayerQuit = false;
 	}
 
 	if (gGameCompletedQuit)								// If we quit because the game was completed, show
 	{																// the endgame movie.
 		FSMakeFSSpec(gCDDataVref, gCDDataDirID, "\pEndgame", &fSpec);
-		PlayCutScene(&fSpec, TRUE, TRUE);
-		gGameCompletedQuit = FALSE;
+		PlayCutScene(&fSpec, true, true);
+		gGameCompletedQuit = false;
 
 		PaintRect(&gMainWindow->portRect);
 		ShowCursor();
 		DoEndgameDlg();
 	}
 
-     closedown_game(TRUE);
+     closedown_game(true);
 
 	MaxMem(&dummy);									// Compact heap after quitting the game.
 
@@ -944,7 +944,7 @@ void HandlePausedEvents(void)
 				else if (theKey == 5)						// Help key
 					ShowShockHelp();
 				else if (theKey == 27)					// Esc key (resume if paused)
-					game_paused = FALSE;
+					game_paused = false;
 			  	break;
 
 			case updateEvt:
@@ -1037,12 +1037,12 @@ bool DoSaveGameAs(void)
 	EndUpdate(gMainWindow);
 
 	if (!reply.sfGood)
-		return (FALSE);
+		return (false);
 
 	if (CheckFreeSpace(reply.sfFile.vRefNum) == ERR_NOMEM)
 	{
 		// ¥¥¥Put up alert saying "not enough disk space".
-		return (FALSE);
+		return (false);
 	}
 
 	GetIndString(titleStr, kProgressTitles, 4);	// Get string that says "Saving "
@@ -1056,11 +1056,11 @@ bool DoSaveGameAs(void)
 	EndProgressDlg();
 	// Show arrow cursor.
 
-	gIsNewGame = FALSE;									// It's no longer a new game.
+	gIsNewGame = false;									// It's no longer a new game.
 	gSavedGameFile = reply.sfFile;
 	gGameSavedTime = *tmd_ticks;
 
-	return (TRUE);
+	return (true);
 }
 
 
@@ -1074,7 +1074,7 @@ bool DoSaveGame(void)
 	if (CheckFreeSpace(gSavedGameFile.vRefNum) == ERR_NOMEM)
 	{
 		// ¥¥¥Put up alert saying "not enough disk space".
-		return (FALSE);
+		return (false);
 	}
 
 	GetIndString(titleStr, kProgressTitles, 4);	// Get string that says "Saving "
@@ -1090,7 +1090,7 @@ bool DoSaveGame(void)
 
 	gGameSavedTime = *tmd_ticks;
 
-	return (TRUE);
+	return (true);
 }
 
 
@@ -1108,7 +1108,7 @@ errtype CheckFreeSpace(int16_t	checkRefNum)
 	pbRec.volumeParam.ioNamePtr = NULL;
 	pbRec.volumeParam.ioVRefNum = checkRefNum;
 
-	err = PBHGetVInfo(&pbRec, FALSE);							// Get the volume info.
+	err = PBHGetVInfo(&pbRec, false);							// Get the volume info.
 	if (err == noErr)
 	{
 		if ((uint32_t)(pbRec.volumeParam.ioVAlBlkSiz * pbRec.volumeParam.ioVFrBlk) < NEEDED_DISKSPACE)

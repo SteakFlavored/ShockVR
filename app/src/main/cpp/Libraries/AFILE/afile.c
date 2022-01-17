@@ -141,7 +141,7 @@ int32_t AfileOpen(Afile *paf, int8_t *filename)
 	memset(paf, 0, sizeof(Afile));
 	paf->fp = fp;
 	paf->type = aftype;
-	paf->writing = FALSE;
+	paf->writing = false;
 	paf->pm = methods[paf->type];
 	paf->currFrame = 0;
 
@@ -336,14 +336,14 @@ int32_t AfileReadDiffFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
 //		paf  = ptr to animfile struct
 //		ppal = ptr to palette struct
 //
-//	Returns: TRUE if palette for this frame, FALSE if none
+//	Returns: true if palette for this frame, false if none
 
 bool AfileGetFramePal(Afile *paf, Apalette *ppal)
 {
 //	Spew(DSRC_2D_Afile, ("AfileGetFramePal: getting pal\n"));
 
 	if (paf->pm->f_ReadFramePal == NULL)
-		return FALSE;
+		return false;
 
 	(*paf->pm->f_ReadFramePal)(paf, ppal);
 	return(ppal->numcols != 0);
@@ -524,7 +524,7 @@ int32_t AfileCreate(Afile *paf, int8_t *filename, fix frameRate)
 	memset(paf, 0, sizeof(Afile));
 	paf->fp = fp;
 	paf->type = aftype;
-	paf->writing = TRUE;
+	paf->writing = true;
 	paf->pm = methods[paf->type];
 
 	paf->v.frameRate = frameRate;

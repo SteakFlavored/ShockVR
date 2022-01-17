@@ -36,7 +36,7 @@ typedef struct {
 // space for the incremental multiplication tables
 // pass it the maximum pixel dimension of any of the
 // voxel objects you anticipate drawing
-// returns TRUE for success, FALSE if unable to allocate
+// returns true for success, false if unable to allocate
 bool vx_init(int32_t max_depth);
 
 // Close the voxel system

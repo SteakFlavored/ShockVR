@@ -218,10 +218,10 @@ void ResAddPath(int8_t *path);		// add search path for resfiles
 int16_t ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool auxinfo);
 void ResCloseFile(int16_t filenum);	// close res file
 
-#define ResOpenFile(specPtr) ResOpenResFile(specPtr, ROM_READ, FALSE)
+#define ResOpenFile(specPtr) ResOpenResFile(specPtr, ROM_READ, false)
 #define ResEditFile(specPtr,creat) ResOpenResFile(specPtr, \
-	(creat) ? ROM_EDITCREATE : ROM_EDIT, TRUE)
-#define ResCreateFile(specPtr) ResOpenResFile(specPtr, ROM_CREATE, TRUE)
+	(creat) ? ROM_EDITCREATE : ROM_EDIT, true)
+#define ResCreateFile(specPtr) ResOpenResFile(specPtr, ROM_CREATE, true)
 
 //#define MAX_RESFILENUM 15			// maximum file number
 
@@ -321,7 +321,7 @@ typedef struct {
 } ResFile;
 
 #define RFF_NEEDSPACK	0x0001			// resfile has holes, needs packing
-#define RFF_AUTOPACK		0x0002			// resfile auto-packs (default TRUE)
+#define RFF_AUTOPACK		0x0002			// resfile auto-packs (default true)
 
 extern ResFile resFile[MAX_RESFILENUM+1];
 

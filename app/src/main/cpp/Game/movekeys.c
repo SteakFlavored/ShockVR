@@ -305,27 +305,27 @@ bool parse_motion_key(uint16_t keycode, int16_t* cnum, int16_t* cval)
    LEANUP_CASES
       *cnum = LEAN_CONTROL_NUM;
       *cval = 0;
-      physics_set_relax(*cnum,TRUE);
+      physics_set_relax(*cnum,true);
       break;
    LEANL_CASES
       *cval = -CONTROL_MAX_VAL;
       *cnum = LEAN_CONTROL_NUM;
-      physics_set_relax(*cnum,TRUE);
+      physics_set_relax(*cnum,true);
       break;
    LEANR_CASES
 	   *cval = CONTROL_MAX_VAL;
       *cnum = LEAN_CONTROL_NUM;
-      physics_set_relax(*cnum,TRUE);
+      physics_set_relax(*cnum,true);
    	break;
    EYEUP_CASES
       *cnum = EYE_CONTROL_NUM;
       *cval = CONTROL_MAX_VAL;
-//      physics_setq_relax(*cnum,TRUE);
+//      physics_setq_relax(*cnum,true);
       break;
    EYEDOWN_CASES
       *cnum = EYE_CONTROL_NUM;
       *cval = -CONTROL_MAX_VAL;
-//      physics_set_relax(*cnum,TRUE);
+//      physics_set_relax(*cnum,true);
       break;
    FORW_L_CASES
       *cnum = CONTROL_YVEL;
@@ -453,7 +453,7 @@ bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 
 	int16_t cnum,cval;
 
-	int32_t	moveOK = TRUE;
+	int32_t	moveOK = true;
 
 /* KLC - this doesn't appear to help any
 	// Check for firing weapon first (if it hasn't fired already).
@@ -465,7 +465,7 @@ bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 			LGPoint pos;
 			ui_mouse_get_xy(&pos.x,&pos.y);
 	         fire_player_weapon(&pos, _current_view, !fire_slam);
-	      	fire_slam = TRUE;
+	      	fire_slam = true;
 	    }
 	}
 
@@ -475,7 +475,7 @@ bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 	if (gKeypadOverride)														// if a keypad is showing
 	{
 		if (ke->scancode >= 0x52 && ke->scancode <= 0x5C)		// and a keypad number was entered,
-			moveOK = FALSE;													// don't move.
+			moveOK = false;													// don't move.
 	}
 
 	if (moveOK)
@@ -487,7 +487,7 @@ bool motion_keycheck_handler(uiEvent* ev, LGRegion*, void*)
 				poll_controls[cnum] = cval;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 

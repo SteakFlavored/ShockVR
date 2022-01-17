@@ -148,14 +148,14 @@ bool register_h_event(uint8_t x, uint8_t y, bool floor, int8_t* sem, int8_t* key
          }
          else
             h_sems[i].inuse = 1;
-         return(TRUE);
+         return(true);
       }
    }
    // no conflict.  Allocate new semaphor.
    if(fr<0)
    {
       // no free semaphor.  Fail.
-      return(FALSE);
+      return(false);
    }
    else {
       h_sems[fr].x=x;
@@ -172,7 +172,7 @@ bool register_h_event(uint8_t x, uint8_t y, bool floor, int8_t* sem, int8_t* key
       }
       else
          h_sems[fr].inuse=1;
-      return(TRUE);
+      return(true);
    }
 }
 
@@ -251,7 +251,7 @@ void height_event_handler(Schedule*, SchedEvent *ev)
             {
                newloc = objs[id].loc;
                newloc.z = obj_floor_compute(id, ht+sign);
-               obj_move_to(id, &newloc, TRUE);
+               obj_move_to(id, &newloc, true);
             }
          }
          // iterate
@@ -275,7 +275,7 @@ void height_event_handler(Schedule*, SchedEvent *ev)
    {
       bounds.ul.x = bounds.lr.x = x;
       bounds.ul.y = bounds.lr.y = y;
-      rendedit_process_tilemap(global_fullmap, &bounds, FALSE);
+      rendedit_process_tilemap(global_fullmap, &bounds, false);
    }
 }
 
@@ -303,9 +303,9 @@ void door_event_handler(Schedule*,SchedEvent *ev)
       {
          // note the secret dont-autoclose-me-even-if-I-already-
          // have-an-autoclose-scheduled cookie.
-         if (!(DOOR_REALLY_CLOSED(id) || door_moving(id,TRUE)
+         if (!(DOOR_REALLY_CLOSED(id) || door_moving(id,true)
                || objDoors[objs[id].specID].autoclose_time==NEVER_AUTOCLOSE_COOKIE))
-            object_use(id, FALSE, OBJ_NULL);
+            object_use(id, false, OBJ_NULL);
       }
    }
    else if (ID2TRIP(id) == PLAS_ANTENNA_TRIPLE)
@@ -350,7 +350,7 @@ void door_event_handler(Schedule*,SchedEvent *ev)
       fr_global_mod_flag(FR_SFX_SHAKE, FR_SFX_MASK);
       fr_sfx_time = CIT_CYCLE << 1;
       play_digi_fx_obj(SFX_EXPLOSION_1,1,id);
-      mfd_notify_func(MFD_PLOTWARE_FUNC,MFD_ITEM_SLOT,FALSE,MFD_ACTIVE,TRUE);
+      mfd_notify_func(MFD_PLOTWARE_FUNC,MFD_ITEM_SLOT,false,MFD_ACTIVE,true);
    }
 }
 
@@ -370,7 +370,7 @@ void grenade_event_handler(Schedule*,SchedEvent *ev)
    {
       if (GrenadeProps[CPNUM(id)].flags & GREN_TIMING_TYPE)
          ADD_DESTROYED_OBJECT(id);
-//         do_grenade_explosion(id, TRUE);
+//         do_grenade_explosion(id, true);
       else
          EDMS_obey_collisions(objs[id].info.ph);
    }
@@ -409,14 +409,14 @@ extern void lamp_turnoff(bool visible, bool real);
 
 void light_event_handler(Schedule*, SchedEvent *)
 {
-   muzzle_fire_light = FALSE;
+   muzzle_fire_light = false;
 
    // is the player's lantern on - if not turn our faux lantern off, otherwise
    // just turn the lantern on - to reset its values
    if (!(player_struct.hardwarez_status[CPTRIP(LANTERN_HARD_TRIPLE)] & WARE_ON))
-      lamp_turnoff(TRUE,FALSE);
+      lamp_turnoff(true,false);
    else
-      lamp_turnon(TRUE,FALSE);
+      lamp_turnon(true,false);
 }
 
 void bark_event_handler(Schedule*, SchedEvent *)
@@ -428,7 +428,7 @@ void bark_event_handler(Schedule*, SchedEvent *)
    // timeout bark, if it's still there at all.
    for(mfd_id=0;mfd_id<NUM_MFDS;mfd_id++) {
       if (mfd_get_func(mfd_id,MFD_INFO_SLOT)==MFD_BARK_FUNC) {
-         check_panel_ref(TRUE);
+         check_panel_ref(true);
          break;
       }
    }
@@ -438,7 +438,7 @@ void email_event_handler(Schedule*, SchedEvent* ev)
 {
    extern void add_email_datamunge(int16_t mung, bool select);
    EmailSchedEvent *e = (EmailSchedEvent*)ev;
-   add_email_datamunge(e->datamunge,TRUE);
+   add_email_datamunge(e->datamunge,true);
 }
 
 
@@ -544,6 +544,6 @@ bool schedule_test_hotkey(int16_t keycode, uint32_t context, void* data)
    e.timestamp = player_struct.game_time/CIT_CYCLE + 100;
    e.type = 0;
    schedule_event(&game_seconds_schedule,&e);
-   return TRUE;
+   return true;
 }
 */

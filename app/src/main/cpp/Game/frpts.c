@@ -109,7 +109,7 @@ int32_t fr_pts_resize(int32_t , int32_t )					// x, y
 void dumb_hack_for_now(int32_t x, int32_t y);
 void dumb_hack_for_now(int32_t x, int32_t y)
 {
-   bool tran_sv=FALSE, d=TRUE;
+   bool tran_sv=false, d=true;
    uint16_t *_cur_rowv, *_nxt_rowv;
    g3s_phandle *_cur_pt, *_fr_curb, *_fr_curn;
    g3s_vector   _pt_vec;
@@ -117,11 +117,11 @@ void dumb_hack_for_now(int32_t x, int32_t y)
    _fr_sdbg(NEW_PTS,mprintf("dhon %d %d...",x,y));
 
    if (pt_rowv[0][x]==y) // go from [0]
-      tran_sv=TRUE;
+      tran_sv=true;
    else if (pt_rowv[1][x]==y)
    {
-      tran_sv=TRUE;
-      d=FALSE;
+      tran_sv=true;
+      d=false;
    }
    else
    {

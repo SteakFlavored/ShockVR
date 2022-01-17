@@ -34,16 +34,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdbool.h>
 #include <stdint.h>
-
-#ifndef __TYPES_H
-#define __TYPES_H
-
-#ifndef TRUE
-#define TRUE 1
-#endif /* !TRUE */
-
-#ifndef FALSE
-#define FALSE 0
-#endif /* !FALSE */
-
-#endif /* !__TYPES_H */

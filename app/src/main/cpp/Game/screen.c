@@ -132,7 +132,7 @@ errtype screen_init(void)
 
    // Create all the appropriate regions for to make input happen
    // Root LGRegion
-   generic_reg_init(TRUE ,root_region,NULL,NULL,NULL,NULL);
+   generic_reg_init(true ,root_region,NULL,NULL,NULL,NULL);
 
    // Main view LGRegion
    mainview_rect.ul.x = SCREEN_VIEW_X;   mainview_rect.ul.y = SCREEN_VIEW_Y;
@@ -142,7 +142,7 @@ errtype screen_init(void)
    region_create(root_region, mainview_region, &mainview_rect, 0, 0, REG_USER_CONTROLLED|AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
 
    // Initialize da mousie
-   _screen_init_mouse(root_region, &main_slab, TRUE);	// KLC - moved here
+   _screen_init_mouse(root_region, &main_slab, true);	// KLC - moved here
 
    install_motion_mouse_handler(mainview_region, NULL);
 
@@ -173,7 +173,7 @@ errtype screen_init(void)
 
    // Inventory LGRegion
    create_invent_region(root_region, &pagebutton_region_game, &inventory_region_game);
-   screen_init_mfd(FALSE);        // sets up regions + mouse callbacks
+   screen_init_mfd(false);        // sets up regions + mouse callbacks
    screen_init_side_icons(root_region);
 
 
@@ -195,7 +195,7 @@ errtype screen_init(void)
    status_bio_init();
 
    // lean-o-meter
-   init_posture_meters(root_region,FALSE);
+   init_posture_meters(root_region,false);
 
 /* KLC
    // option LGCursor LGRegion
@@ -225,7 +225,7 @@ void screen_start()
 
 /* ¥¥¥ Not yet
    // Check the config system to see if time should automatically be running
-   if (config_get_raw(CFG_TIME_VAR, NULL, 0)) time_passes = TRUE;
+   if (config_get_raw(CFG_TIME_VAR, NULL, 0)) time_passes = true;
 */
 
 	HotkeyContext = DEMO_CONTEXT;
@@ -244,10 +244,10 @@ void screen_start()
    chg_set_flg(MFD_UPDATE);
    chg_set_flg(VITALS_UPDATE);
    status_bio_start();
-   status_vitals_update(TRUE);
+   status_vitals_update(true);
 // KLC - not needed anymore   mouse_unconstrain();
 #ifdef PALFX_FADES
-//¥¥¥ later   if (pal_fx_on) palfx_fade_up(FALSE);
+//¥¥¥ later   if (pal_fx_on) palfx_fade_up(false);
 #endif
    return;
 }
@@ -324,8 +324,8 @@ errtype screen_draw(void)
    inventory_draw();
    status_bio_draw();
    status_vitals_init();
-   status_vitals_update(TRUE);
-   update_meters(TRUE);
+   status_vitals_update(true);
+   update_meters(true);
    uiShowMouse(NULL);
 
    return(OK);
@@ -342,9 +342,9 @@ errtype _screen_background(void)
 // Stop doing graphics things
 errtype screen_shutdown(void)
 {
-   region_destroy(status_region, FALSE);
-   region_destroy(msg_region, FALSE);
-   region_destroy(mainview_region, FALSE);
+   region_destroy(status_region, false);
+   region_destroy(msg_region, false);
+   region_destroy(mainview_region, false);
 
 //   Free(status_rect); umm, see, now we point at it, so dont free it
    return(OK);
@@ -359,7 +359,7 @@ extern LGCursor slider_cursor;
 
 errtype load_misc_cursors(void)
 {
-   static bool misc_cursors_loaded = FALSE;
+   static bool misc_cursors_loaded = false;
 
    if (misc_cursors_loaded)
    {
@@ -369,12 +369,12 @@ errtype load_misc_cursors(void)
 //      if (_vmailbm.bits != NULL)  DisposPtr((Ptr) _vmailbm.bits);
       if (slider_cursor_bmap.bits != NULL)  DisposPtr((Ptr) slider_cursor_bmap.bits);
    }
-   load_hires_bitmap_cursor(&globcursor,   &_targbm,  REF_IMG_bmTargetCursor, TRUE);
-   load_hires_bitmap_cursor(&wait_cursor,  &_waitbm,  REF_IMG_bmWaitCursor, TRUE);
-   load_hires_bitmap_cursor(&fire_cursor,  &_firebm,  REF_IMG_bmFireCursor, TRUE);
-//   load_hires_bitmap_cursor(&vmail_cursor, &_vmailbm, REF_IMG_bmVmailCursor, TRUE);
-   load_hires_bitmap_cursor(&slider_cursor, &slider_cursor_bmap, REF_IMG_bmMfdPhaserCursor, TRUE);
-   misc_cursors_loaded = TRUE;
+   load_hires_bitmap_cursor(&globcursor,   &_targbm,  REF_IMG_bmTargetCursor, true);
+   load_hires_bitmap_cursor(&wait_cursor,  &_waitbm,  REF_IMG_bmWaitCursor, true);
+   load_hires_bitmap_cursor(&fire_cursor,  &_firebm,  REF_IMG_bmFireCursor, true);
+//   load_hires_bitmap_cursor(&vmail_cursor, &_vmailbm, REF_IMG_bmVmailCursor, true);
+   load_hires_bitmap_cursor(&slider_cursor, &slider_cursor_bmap, REF_IMG_bmMfdPhaserCursor, true);
+   misc_cursors_loaded = true;
    return(OK);
 }
 

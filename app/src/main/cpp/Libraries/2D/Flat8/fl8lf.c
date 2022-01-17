@@ -126,7 +126,7 @@ int32_t HandleFloorLoop_C(grs_tmap_loop_info *tli,
 	       	 *(p_dest++) = g_ltab[t_bits[((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask]+fix_light(i)];
 	       	 u+=du; v+=dv; i+=di;
 	        }
-      } else if (x<0) return TRUE; // punt this tmap
+      } else if (x<0) return true; // punt this tmap
 
       tli->w+=tli->dw;
 
@@ -147,7 +147,7 @@ int32_t HandleFloorLoop_C(grs_tmap_loop_info *tli,
       tli->y++;
    } while (--(tli->n) > 0);
 
-   return FALSE; // tmap OK
+   return false; // tmap OK
  }
  */
 
@@ -249,7 +249,7 @@ int32_t gri_lit_floor_umap_loop(grs_tmap_loop_info *tli) {
             }
             break;
          }
-      } else if (d<0) return TRUE; /* punt this tmap */
+      } else if (d<0) return true; /* punt this tmap */
 
       tli->w+=tli->dw;
 
@@ -281,7 +281,7 @@ int32_t gri_lit_floor_umap_loop(grs_tmap_loop_info *tli) {
       dx=tli->right.x-tli->left.x;
       tli->y++;
    } while (--(tli->n) > 0);
-   return FALSE; /* tmap OK */
+   return false; /* tmap OK */
 
 // handle 68K loops
 #else
@@ -466,11 +466,11 @@ asm int32_t Handle_Floor_Lit_68K_Loop(fix u, fix v, fix du, fix dv, fix dx,
 
 @Done:
   movem.l	(sp)+,d0-d7/a0-a6
-	moveq		#FALSE,d0
+	moveq		#false,d0
   rts
 
 @Err:
-	moveq		#TRUE,d0
+	moveq		#true,d0
   movem.l	(sp)+,d0-d7/a0-a6
   rts
  }

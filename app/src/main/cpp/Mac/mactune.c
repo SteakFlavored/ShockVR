@@ -32,14 +32,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------
 //  GLOBALS
 //-----------------
-bool		mlimbs_on = FALSE;
+bool		mlimbs_on = false;
 int8_t		mlimbs_status = 0;
 
 struct	mlimbs_request_info current_request[MLIMBS_MAX_SEQUENCES - 1]; // Request information
 
 uint32_t		mlimbs_counter = 0;
 int32_t		mlimbs_error;
-bool		mlimbs_semaphore = FALSE;
+bool		mlimbs_semaphore = false;
 
 Handle			gHeaderHdl, gTuneHdl, gOfsHdl;			// Holds the tune-related data for the current theme file.
 int32_t				*gOffsets;										// Array of offsets for the beginning of each tune.
@@ -82,7 +82,7 @@ pascal void CalcTuneProc(void)
 	int32_t					curA5 = SetA5(tmTaskPtr->appA5);		// save and set value of A5
 #endif
 
-	gReadyToQueue = TRUE;								// It's time to queue up another tune.
+	gReadyToQueue = true;								// It's time to queue up another tune.
 
 #ifndef __powerc
 	SetA5(curA5);											// restore A5
@@ -164,7 +164,7 @@ void MacTuneShutdown(void)
 //--------------------------------------------------------------------------
 pascal void TuneEndCB(const TuneStatus *, int32_t)
 {
-	gTuneDone = TRUE;
+	gTuneDone = true;
 }
 
 //------------------------------------------------------------------------------
@@ -253,8 +253,8 @@ Debugger();	//¥¥¥
 	gOffsets = (int32_t *)*gOfsHdl;
 
 	// Initialize our playtime globals.
-	gTuneDone = FALSE;
-	gReadyToQueue = FALSE;
+	gTuneDone = false;
+	gReadyToQueue = false;
 
 	// Here's a big hack.  If we're loading theme 0 (machine sounds only), then don't do an
 	// intro transition.
@@ -277,7 +277,7 @@ void MacTuneStartCurrentTheme(void)
 			MacTunePlayTune(pid);						// play it right now.
 		}
 		else
-			gTuneDone = TRUE;								// else make sure we check again soon.
+			gTuneDone = true;								// else make sure we check again soon.
 
 	}
 }
@@ -295,7 +295,7 @@ void MacTuneKillCurrentTheme(void)
 		TuneStop(gPlayer, kStopTuneFade);				// Stop the current tune (if any).
 		TuneFlush(gPlayer);									// Flush the queue.
 
-		gReadyToQueue = FALSE;
+		gReadyToQueue = false;
 	}
 }
 
@@ -361,7 +361,7 @@ if (tune == 255 || tune == -1)
 
 	// If there was no tune to play this time, set a flag so it will prime the timer again.
 	else
-		gTuneDone = TRUE;
+		gTuneDone = true;
 }
 
 //------------------------------------------------------------------------------
@@ -388,7 +388,7 @@ if (tune == 255 || tune == -1)
 
 	// If there was no tune to queue this time, set a flag so it will prime the timer again.
 	else
-		gTuneDone = TRUE;
+		gTuneDone = true;
 }
 
 //------------------------------------------------------------------------------
