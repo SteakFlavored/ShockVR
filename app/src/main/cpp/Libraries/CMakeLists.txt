@@ -5,12 +5,9 @@ include_directories(
 )
 
 set(FIX_LIBRARY_SRC
-    FIX/atofix.c
     FIX/f_exp.c
-    FIX/fix_pow.c
     FIX/fix_sqrt.c
     FIX/fix.c
-    FIX/fix24.c
     FIX/fixsprnt.c
     FIX/maketables.c
 )

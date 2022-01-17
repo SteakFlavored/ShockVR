@@ -507,3 +507,14 @@ fix fix_pow(fix x,fix y)
     }
     return ans;
 }
+
+//-----------------------------------------------------------------
+//  Calculate the square root of a fixed-point number.
+//-----------------------------------------------------------------
+fix fix_sqrt(fix num)
+{
+    fix    res = long_sqrt(num);
+
+    // Make the number a fix and return it
+    return res << 8;
+}

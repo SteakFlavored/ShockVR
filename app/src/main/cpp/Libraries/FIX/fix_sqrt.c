@@ -38,5 +38,5 @@ fix fix_sqrt(fix num)
     fix    res = long_sqrt(num);
 
     // Make the number a fix and return it
-    return (res << 8);
+    return res << 8;
 }

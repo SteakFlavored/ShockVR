@@ -173,8 +173,6 @@ extern int32_t    gOVResult;
 //
 
 int32_t long_fast_pyth_dist (int32_t a, int32_t b);
-int32_t long_safe_pyth_dist (int32_t a, int32_t b);
-
 
 //========================================
 //
@@ -278,6 +276,9 @@ fix fix_mul_div (fix m0, fix m1, fix d);
 fix fast_fix_mul_int(fix a, fix b);
 #define fast_fix_mul fix_mul
 
+/* fixpoint x ^ y */
+extern fix fix_pow (fix x, fix y);
+
 //========================================
 //
 //  Square rooty kind of stuff.
@@ -338,15 +339,8 @@ fixang fix_atan2 (fix y, fix x);
 //
 //========================================
 
-//    Converts string into fixed-point
-fix atofix(char *p);
-
 // Puts a decimal representation of x into str
 char *fix_sprint (char *str, fix x);
-char *fix_sprint_hex (char *str, fix x);
-
-/* fixpoint x ^ y */
-extern fix fix_pow (fix x, fix y);
 
 //////////////////////////////
 //
@@ -383,25 +377,5 @@ typedef int32_t fix24;
 
 fix24 fix24_mul(fix24 a, fix24 b);
 fix24 fix24_div(fix24 a, fix24 b);
-
-fix24 fix24_pyth_dist (fix24 a, fix24 b);
-fix24 fix24_fast_pyth_dist (fix24 a, fix24 b);
-fix24 fix24_safe_pyth_dist (fix24 a, fix24 b);
-/*  Fix this
-fix24 fix24_sqrt (fix24 x);
-#pragma aux fix24_sqrt parm [eax] value [eax] modify [eax ebx ecx edx esi edi]
-*/
-void fix24_sincos (fixang theta, fix24 *sin, fix24 *cos);
-fix24 fix24_sin (fixang theta);
-fix24 fix24_cos (fixang theta);
-void fix24_fastsincos (fixang theta, fix24 *sin, fix24 *cos);
-fix24 fix24_fastsin (fixang theta);
-fix24 fix24_fastcos (fixang theta);
-fixang fix24_asin (fix24 x);
-fixang fix24_acos (fix24 x);
-fixang fix24_atan2 (fix24 y, fix24 x);
-fix24 atofix24(char *p);
-char *fix24_sprint (char *str, fix24 x);
-char *fix24_sprint_hex (char *str, fix24 x);
 
 #endif /* !__fix24_H */
