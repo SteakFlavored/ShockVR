@@ -5,6 +5,7 @@ include_directories(
     ${LIBRARIES_DIR}/FIXPP
     ${LIBRARIES_DIR}/H
     ${LIBRARIES_DIR}/LG
+    ${LIBRARIES_DIR}/RES
 )
 
 set(DSTRUCT_LIBRARY_SRC
@@ -38,3 +39,16 @@ set(LG_LIBRARY_SRC
     LG/tmpalloc.c
 )
 add_library(LG_LIB ${LG_LIBRARY_SRC})
+
+set (RES_LIBRARY_SRC
+    RES/lzw.c
+    RES/refacc.c
+    RES/res.c
+    RES/resacc.c
+    RES/resbuild.c
+    RES/resfile.c
+    RES/resload.c
+    RES/resmake.c
+    RES/restypes.c
+)
+add_library(RES_LIB ${RES_LIBRARY_SRC})
