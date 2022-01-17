@@ -730,7 +730,7 @@ errtype music_init()
     {
         if (snd_start_midi(fill_audio_card(&card_info,dev_info[MIDI_TYPE]))!=SND_OK)
         {
-            Warning(("Device %d not loaded for Midi at %x %x %x %x\n",dev_info[MIDI_CARD],dev_info[MIDI_IO],dev_info[MIDI_IRQ],dev_info[MIDI_DMA],dev_info[MIDI_DRQ]));
+            Warning("Device %d not loaded for Midi at %x %x %x %x\n",dev_info[MIDI_CARD],dev_info[MIDI_IO],dev_info[MIDI_IRQ],dev_info[MIDI_DMA],dev_info[MIDI_DRQ]);
             music_card = false;
             curr_vol_lev = 0;
         }
@@ -746,7 +746,7 @@ errtype music_init()
     {
         if (snd_start_digital(fill_audio_card(&card_info,dev_info[DIGI_TYPE]))!=SND_OK)
         {
-            Warning(("Device %d not loaded for DigiFx at %x %x %x %x\n",dev_info[DIGI_CARD],dev_info[DIGI_IO],dev_info[DIGI_IRQ],dev_info[DIGI_DMA],dev_info[DIGI_DRQ]));
+            Warning("Device %d not loaded for DigiFx at %x %x %x %x\n",dev_info[DIGI_CARD],dev_info[DIGI_IO],dev_info[DIGI_IRQ],dev_info[DIGI_DMA],dev_info[DIGI_DRQ]);
             sfx_card = false;
             curr_sfx_vol = 0;
         }

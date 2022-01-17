@@ -872,7 +872,7 @@ int32_t mlimbs_play_piece (int32_t pieceID, int32_t priority, int32_t loops, int
             }
     }
     else
-        Warning(("BADNESS!  cpl_num = %d!\n"));
+        Warning("BADNESS!  cpl_num = %d!\n");
 
     if (priority < 0)
         priority = xseq_info[pieceID].priority;
@@ -1361,7 +1361,7 @@ void mlimbs_preload_requested_timbres(void)
 //    mprintf("preload requested, stat %d them %x\n",mlimbs_status,mlimbs_theme);
     if ((mlimbs_status==0)||(mlimbs_theme==NULL)) return;
     if ((S=_mlimbs_get_a_seq())==NULL)
-        Warning(("No Seq for preload\n"));
+        Warning("No Seq for preload\n");
     old=AIL_register_timbre_callback((MDI_DRIVER *)snd_midi,NULL);
 //    mprintf("Old is %x, set to null\n",old);
     for (i = 0; i < MLIMBS_MAX_SEQUENCES - 1; i++)
@@ -1396,7 +1396,7 @@ void mlimbs_preload_full_timbres_and_go_asynch(void)
 //    mprintf("preload full go asynch, stat %d them %x\n",mlimbs_status,mlimbs_theme);
     if ((mlimbs_status==0)||(mlimbs_theme==NULL)) return;
     if ((S=_mlimbs_get_a_seq())==NULL)
-        Warning(("No Seq for full preload\n"));
+        Warning("No Seq for full preload\n");
     old=AIL_register_timbre_callback((MDI_DRIVER *)snd_midi,NULL);
 //    mprintf("Old is %x, set to null\n",old);
     for (piece=0; piece<num_XMIDI_sequences; piece++)

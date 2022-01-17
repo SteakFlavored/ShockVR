@@ -494,7 +494,7 @@ void draw_inventory_string(int8_t* s, int32_t x, int32_t y, bool clear)
     gr_string_size(s,&w,&h);
     if (w <= 0 || h <= 0 || strlen(s) == 0) return;
     STORE_CLIP(a,b,c,d);
-//    Warning(("draw_string clip %d %d %d %d\n",x-1,y-1,x+w,y+h));
+//    Warning("draw_string clip %d %d %d %d\n",x-1,y-1,x+w,y+h);
     ss_safe_set_cliprect(x-1,y-1,x+w,y+h);
     if (!full_game_3d)
     {
@@ -695,7 +695,7 @@ int32_t get_item_at_pixrow(inv_display *dp, int32_t row)
     r2 = row;
     row /= y_step;
     if (row >= dp->pgsize) return -1;
-//    Warning(("row = %d = (%d - %d + %d + %d) = %d / %d\n",row,r1,ipanel_y,dp->top,y_step,r2,y_step));
+//    Warning("row = %d = (%d - %d + %d + %d) = %d / %d\n",row,r1,ipanel_y,dp->top,y_step,r2,y_step);
 
     return linenum+row;
 }

@@ -891,7 +891,7 @@ errtype region_add_sequence_expose(LGRegion *reg, LGRect exp_rect)
     rse = get_rse_from_pool();
     if (rse == NULL)
     {
-        Warning(("No available RSE's in pool!\n"));
+        Warning("No available RSE's in pool!\n");
         return(ERR_NOMEM);
     }
     rse->reg = reg;

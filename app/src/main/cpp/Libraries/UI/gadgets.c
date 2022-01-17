@@ -382,7 +382,7 @@ errtype gadget_destroy(Gadget **pvic)
     {
          Spew(DSRC_UI_Gadget, ("Destroying %s!\n",GD_NAME(victim->rep)));
         if (victim->rep->user_data == NULL)
-            Warning(("Attempting to destroy gadget with no user_data!\n"));
+            Warning("Attempting to destroy gadget with no user_data!\n");
     }
     else
          Spew(DSRC_UI_Gadget, ("rep is NULL!\n"));

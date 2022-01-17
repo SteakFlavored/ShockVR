@@ -280,7 +280,7 @@ void ResCloseFile(int16_t filenum)
 
     if (resFile[filenum].fd < 0)
         {
-        Warning(("ResCloseFile: filenum %d not in use\n"));
+        Warning("ResCloseFile: filenum %d not in use\n");
         return;
         }
 
@@ -453,7 +453,7 @@ void ResProcDirEntry(ResDirEntry *pDirEntry, int32_t filenum, int32_t dataOffset
     prd = RESDESC(pDirEntry->id);
     if (prd->ptr)
         {
-        Warning(("RESOURCE ID COLLISION AT ID %x!!\n",pDirEntry->id));
+        Warning("RESOURCE ID COLLISION AT ID %x!!\n",pDirEntry->id);
         CUMSTATS(pDirEntry->id,numOverwrites);
         ResDelete(pDirEntry->id);
         }
@@ -597,7 +597,7 @@ void ResWriteDir(int32_t filenum)
     ResFile *prf;
 
     DBG(DSRC_RES_ChkIdRef, {if (resFile[filenum].pedit == NULL) { \
-        Warning(("ResWriteDir: file %d not open for writing\n", filenum)); \
+        Warning("ResWriteDir: file %d not open for writing\n", filenum); \
         return;}});
 
     Spew(DSRC_RES_Write, ("ResWriteDir: writing directory for filenum %d\n",
@@ -618,7 +618,7 @@ void ResWriteHeader(int32_t filenum)
     ResFile *prf;
 
     DBG(DSRC_RES_ChkIdRef, {if (resFile[filenum].pedit == NULL) { \
-        Warning(("ResWriteHeader: file %d not open for writing\n", filenum)); \
+        Warning("ResWriteHeader: file %d not open for writing\n", filenum); \
         return;}});
 
     Spew(DSRC_RES_Write, ("ResWriteHeader: writing header for filenum %d\n",

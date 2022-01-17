@@ -147,7 +147,7 @@ int16_t num_types(uint8_t obclass, uint8_t subclass)
 {
     if (obclass>=NUM_CLASSES || subclass>=num_subclasses[obclass])
     {
-//        Warning(("Class and subclass given isn't a valid pair. Class - %d Subclass - %d.\n", obclass, subclass));
+//        Warning("Class and subclass given isn't a valid pair. Class - %d Subclass - %d.\n", obclass, subclass);
         return(0);
     }
 
@@ -185,8 +185,8 @@ int32_t get_triple_from_class_nth_item(uint8_t obclass, uint8_t n)
 
     // We've gone through all subclasses, and still haven't found what we're looking
     // for.  Ah well...
-//    Warning(("Invalid obclass and n given to get_triple_from_class_nth_item"));
-//    Warning(("Class - %d N - %d\n", obclass, n));
+//    Warning("Invalid obclass and n given to get_triple_from_class_nth_item");
+//    Warning("Class - %d N - %d\n", obclass, n);
     return -1;
 }
 

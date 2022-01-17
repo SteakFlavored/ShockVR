@@ -78,7 +78,7 @@ void *MemStackRealloc (MemStack *ms, void *ptr, int32_t newsize)
 
     if (newptr > (int8_t *)ms->baseptr + ms->sz)
     {
-        Warning(("MemStackRealloc: can't realloc\n"));
+        Warning("MemStackRealloc: can't realloc\n");
         return NULL;
     }
     ms->topptr = (int8_t *)ptr + newsize;

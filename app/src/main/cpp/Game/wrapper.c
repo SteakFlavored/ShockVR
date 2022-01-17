@@ -1713,7 +1713,7 @@ void headset_stereo_dealfunc(bool st_on)
         {
             if (i6_video(I6VID_STR_START,NULL))
             {
-                Warning(("Headset stereo startup failed!\n"));
+                Warning("Headset stereo startup failed!\n");
                 return;
             }
         }
@@ -1722,14 +1722,14 @@ void headset_stereo_dealfunc(bool st_on)
 
 void headset_tracking_dealfunc(bool tr_on)
 {
-    Warning(("tracking now %d!\n",tr_on));
+    Warning("tracking now %d!\n",tr_on);
     return;
 }
 
 void headset_fov_dealfunc(int32_t hackval)
 {
     inp6d_curr_fov = hack_headset_fov + HEADSET_FOV_MIN;
-    Warning(("FOV now %d!\n",inp6d_curr_fov));
+    Warning("FOV now %d!\n",inp6d_curr_fov);
     return;
 }
 #pragma enable_message(202)
@@ -2076,7 +2076,7 @@ void load_dealfunc(uint8_t butid,uint8_t index)
     Poke_SaveName(index);
     Spew(DSRC_EDITOR_Save,("attempting to load from %s\n",save_game_name));
     if(load_game(save_game_name)!=OK) {
-        Warning(("Load game failed!\n"));
+        Warning("Load game failed!\n");
     }
     else {
         Spew(DSRC_EDITOR_Restore,("Game %d loaded!\n",index));

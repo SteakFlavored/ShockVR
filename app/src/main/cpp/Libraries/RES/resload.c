@@ -223,7 +223,7 @@ bool ResRetrieve(Id id, void *buffer)
     prd = RESDESC(id);
 //    fd = resFile[prd->filenum].fd;
 //    DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
-//        Warning(("ResRetrieve: id $%x doesn't exist\n", id)); \
+//        Warning("ResRetrieve: id $%x doesn't exist\n", id); \
 //        return false; \
 //        }});
 

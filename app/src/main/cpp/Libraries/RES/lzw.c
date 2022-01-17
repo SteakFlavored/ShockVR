@@ -195,7 +195,7 @@ int32_t LzwSetBuffer(void *buff, int32_t buffSize)
 
     if (buffSize < LZW_BUFF_SIZE)
         {
-        Warning(("LzwSetBuffer: buffer too small!\n"));
+        Warning("LzwSetBuffer: buffer too small!\n");
         return(-1);
         }
 
@@ -232,7 +232,7 @@ int32_t LzwMallocBuffer()
         buff = NewPtr(LZW_BUFF_SIZE);
         if (buff == NULL)
             {
-            Warning(("LzwMallocBuffer: failed to allocate buffers\n"));
+            Warning("LzwMallocBuffer: failed to allocate buffers\n");
             return(-1);
             }
         else
@@ -805,7 +805,7 @@ uint8_t *LzwDecodeString(uint8_t *buffer, uint32_t code)
         code = lzwPrefixCode[code];
 
         if (i++ >= 4094)
-            Warning(("LzwDecodeString: Fatal error during code expansion\n"));
+            Warning("LzwDecodeString: Fatal error during code expansion\n");
         }
 
     *buffer = code;

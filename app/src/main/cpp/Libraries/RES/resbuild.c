@@ -59,7 +59,7 @@ void ResSetComment(int32_t /*filenum*/, int8_t* /*comment*/)
     ResFileHeader *phead;
 
     DBG(DSRC_RES_ChkIdRef, {if (resFile[filenum].pedit == NULL) { \
-        Warning(("ResSetComment: file %d not open for writing\n", filenum)); \
+        Warning("ResSetComment: file %d not open for writing\n", filenum); \
         return;}});
 
     Spew(DSRC_RES_General,
@@ -170,7 +170,7 @@ static uint8_t pad[] = {0,0,0,0,0,0,0,0};
     prf = &resFile[prd->filenum];
 
     DBG(DSRC_RES_Write, {if (prf->pedit == NULL) { \
-        Warning(("ResWrite: file %d not open for writing\n", prd->filenum)); \
+        Warning("ResWrite: file %d not open for writing\n", prd->filenum); \
         return;}});
 
 //    Check if item already in directory, if so erase it
@@ -252,7 +252,7 @@ static uint8_t pad[] = {0,0,0,0,0,0,0,0};
         write(prf->fd, pad, padBytes);
 
 if (tell(prf->fd) & 3)
-    Warning(("ResWrite: misaligned writing!\n"));
+    Warning("ResWrite: misaligned writing!\n");
 
 //    Advance dir num entries, current data offset
 
@@ -302,7 +302,7 @@ void ResKill(Id id)
 
     prd = RESDESC(id);
     DBG(DSRC_RES_Write, {if (resFile[prd->filenum].pedit == NULL) { \
-        Warning(("ResKill: file %d not open for writing\n", prd->filenum)); \
+        Warning("ResKill: file %d not open for writing\n", prd->filenum); \
         return;}});
 
     //    If so, erase it
@@ -334,7 +334,7 @@ int32_t ResPack(int32_t filenum)
     prf = &resFile[filenum];
     if (prf->pedit == NULL)
         {
-        Warning(("ResPack: filenum %d not open for editing\n"));
+        Warning("ResPack: filenum %d not open for editing\n");
         return(0);
         }
 

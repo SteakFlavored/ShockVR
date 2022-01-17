@@ -232,7 +232,7 @@ void ss_bitmap(grs_bitmap *bmp, int16_t x, int16_t y)
         else
 #endif
             gr_scale_bitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h));
-//        Warning(("scaling %d x %d to %d x %d\n",bmp->w,bmp->h,SCONV_X(bmp->w),SCONV_Y(bmp->h)));
+//        Warning("scaling %d x %d to %d x %d\n",bmp->w,bmp->h,SCONV_X(bmp->w),SCONV_Y(bmp->h));
     }
     else
         gr_bitmap(bmp, x, y);
@@ -342,7 +342,7 @@ void ss_safe_set_cliprect(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
     if (perform_svga_conversion(OVERRIDE_CLIP))
     {
-//        Warning(("setting rect (%d, %d) (%d,%d)!\n",SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2)));
+//        Warning("setting rect (%d, %d) (%d,%d)!\n",SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
         safe_set_cliprect(SCONV_X(x1),SCONV_Y(y1),SCONV_X(x2),SCONV_Y(y2));
     }
     else
@@ -353,7 +353,7 @@ void ss_cset_cliprect(grs_canvas *pcanv, int16_t x, int16_t y, int16_t w, int16_
 {
     if (perform_svga_conversion(OVERRIDE_CLIP))
     {
-//        Warning(("cset to %d,%d    %d, %d!\n",SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h)));
+//        Warning("cset to %d,%d    %d, %d!\n",SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h));
         gr_cset_cliprect(pcanv, SCONV_X(x), SCONV_Y(y), SCONV_X(w), SCONV_Y(h));
     }
     else
@@ -535,7 +535,7 @@ void ss_point_convert(int16_t *px, int16_t *py, bool down)
             *px = SCONV_X(*px);
             *py = SCONV_Y(*py);
         }
-//        Warning(("%d >> %d %d --> %d %d\n",down,ox,oy,*px,*py));
+//        Warning("%d >> %d %d --> %d %d\n",down,ox,oy,*px,*py);
     }
 #endif
 }

@@ -115,7 +115,7 @@ void ai_find_player(ObjID id)
         else
             EDMS_get_state(objs[PLAYER_OBJ].info.ph, &st);
         state_to_objloc(&st, &last_known_loc);
-//        Warning(("player loc = %x, %x, %x\n",last_known_loc.x,last_known_loc.y,last_known_loc.z));
+//        Warning("player loc = %x, %x, %x\n",last_known_loc.x,last_known_loc.y,last_known_loc.z);
     }
 }
 
@@ -836,7 +836,7 @@ errtype ai_fire_special(ObjID src, ObjID target, int32_t proj_triple, ObjLoc src
     proj_id = obj_create_base(proj_triple);
     if (proj_id == OBJ_NULL)
     {
-        Warning(("Could not create slow projectile!\n"));
+        Warning("Could not create slow projectile!\n");
         return(OK);
     }
 

@@ -152,14 +152,14 @@ void ComposeFlat24Add(grs_bitmap *pcompose, grs_bitmap *pbm)
     if ((pcompose->w != pbm->w) || (pcompose->h != pbm->h) ||
         (pcompose->row != pbm->row))
         {
-        Warning(("ComposeFlat24Add: not same size bitmaps!\n"));
+        Warning("ComposeFlat24Add: not same size bitmaps!\n");
         return;
         }
 
     switch (pbm->type)
         {
         case BMT_RSD24:
-            Warning(("ComposeFlat24Add: can't add RSD24 to compose buffer!\n"));
+            Warning("ComposeFlat24Add: can't add RSD24 to compose buffer!\n");
             break;
 
         case BMT_FLAT24:
@@ -257,7 +257,7 @@ int32_t ComposeFlat24Diff(grs_bitmap *pcompose, grs_bitmap *pbmNew,
 
     if (pbmNew->type != BMT_FLAT24)
         {
-        Warning(("ComposeFlat8Diff: new bitmap wrong type: %d\n", pbmNew->type));
+        Warning("ComposeFlat8Diff: new bitmap wrong type: %d\n", pbmNew->type);
         return(-1);
         }
 
@@ -375,7 +375,7 @@ int32_t ComposeFlat24Convert(grs_bitmap *pcompose, grs_bitmap *pbm)
     if ((pcompose->w != pbm->w) || (pcompose->h != pbm->h) ||
         (pcompose->row != pbm->row))
         {
-        Warning(("ComposeFlat24Convert: not same size bitmaps!\n"));
+        Warning("ComposeFlat24Convert: not same size bitmaps!\n");
         return(0);
         }
 

@@ -948,7 +948,7 @@ bool mfd_view_callback(uiEvent *e, LGRegion *r, void *udata)
                         pos.x -= (m->rect.ul.x << 1);
                     break;
                 case I6D_VFX1:
-                    Warning(("original pos.x = %d, m->rect.ul.x = %d!\n",pos.x,m->rect.ul.x));
+                    Warning("original pos.x = %d, m->rect.ul.x = %d!\n",pos.x,m->rect.ul.x);
                     pos.x -= (m->rect.ul.x);
                     break;
             }

@@ -155,7 +155,7 @@ errtype screen_init(void)
 #ifdef STEREO_SUPPORT
     if (i6d_device == I6D_VFX1)
     {
-      Warning(("size = %d, %d!\n",i6d_ss->scr_w,i6d_ss->scr_h));
+      Warning("size = %d, %d!\n",i6d_ss->scr_w,i6d_ss->scr_h);
       gr2ss_register_mode(0,320,240);
       gr2ss_register_mode(0,640,240);      // VFX Hack Mode
      }

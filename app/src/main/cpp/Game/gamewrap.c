@@ -192,9 +192,9 @@ void check_save_game_wackiness(void)
         if (cur_test!=OBJ_NULL)
         {
             if ((ObjProps[OPNUM(cur_test)].flags & INVENTORY_GENERAL)==0)
-                Warning(("You have obj %d a %d as the %d element of geninv, BADNESS\n",cur_test,OPNUM(cur_test),i));
+                Warning("You have obj %d a %d as the %d element of geninv, BADNESS\n",cur_test,OPNUM(cur_test),i);
 //            else
-//                Warning(("You have obj %d a %d as the %d element of geninv ok %x\n",cur_test,OPNUM(cur_test),i,ObjProps[OPNUM(cur_test)].flags));
+//                Warning("You have obj %d a %d as the %d element of geninv ok %x\n",cur_test,OPNUM(cur_test),i,ObjProps[OPNUM(cur_test)].flags);
         }
 #endif
     }
@@ -407,7 +407,7 @@ errtype load_game(FSSpec *loadSpec)
     ResCloseFile(filenum);
     if (orig_lvl == player_struct.level)
     {
-//        Warning(("HEY, trying to be clever about loading the game! %d vs %d\n",orig_lvl,player_struct.level));
+//        Warning("HEY, trying to be clever about loading the game! %d vs %d\n",orig_lvl,player_struct.level);
         dynmem_mask = DYNMEM_PARTIAL;
     }
     load_level_from_file(player_struct.level);

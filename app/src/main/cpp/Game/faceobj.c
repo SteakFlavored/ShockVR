@@ -118,12 +118,12 @@ bool _axial_relativize(fix *src_pts, fix *targ_pts, bool vec) // (fixang l_h, fi
             _1d_relativize(l_p,src_pts,targ_pts,1,2,0);
         else if ((l_b)==0)
         {  // 2d transform, just pitch and heading..
-//            Warning(("Obj with pitch and heading changed\n"));
+//            Warning("Obj with pitch and heading changed\n");
             return false;
         }
         else
         {      // unsupported case for now
-//            Warning(("Obj w/all 3 axis changed\n"));
+//            Warning("Obj w/all 3 axis changed\n");
             return false;
         }
     }

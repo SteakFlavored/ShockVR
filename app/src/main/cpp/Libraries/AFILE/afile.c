@@ -290,7 +290,7 @@ int32_t AfileReadDiffFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
         *ptime = time;
     if (len <= 0)
         {
-        Warning(("AfileReadDiffFrame: problem reading frame\n"));
+        Warning("AfileReadDiffFrame: problem reading frame\n");
         return(len);
         }
     Spew(DSRC_2D_Afile, ("AfileReadDiffFrame: read frame, len: %d\n", len));
@@ -312,7 +312,7 @@ int32_t AfileReadDiffFrame(Afile *paf, grs_bitmap *pbm, fix *ptime)
         pbm->bits = Malloc(paf->frameLen);
         if (pbm->bits == NULL)
             {
-            Warning(("AfileReadDiffFrame: can't find memory for bitmap\n"));
+            Warning("AfileReadDiffFrame: can't find memory for bitmap\n");
             return(0);
             }
         }

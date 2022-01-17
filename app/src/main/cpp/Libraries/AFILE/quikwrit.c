@@ -597,7 +597,7 @@ int32_t QuikSampleLenMsec(fix t, fix tlast)
     msec = ((fixtime * 15) + 0x4000) >> 15;
 #else
     msec = 0;
-    Warning(("QuikSampleLenMsec: invalid MDHD_TIMESCALE\n"));
+    Warning("QuikSampleLenMsec: invalid MDHD_TIMESCALE\n");
 #endif
     return(msec);
 }
@@ -618,7 +618,7 @@ fix QuikSampleLenMsecBackToFix(int32_t msec)
     tfix = (msec << 15) / 15;
 #else
     tfix = 0;
-    Warning(("QuikSampleLenMsecBackToFix: invalid MDHD_TIMESCALE\n"));
+    Warning("QuikSampleLenMsecBackToFix: invalid MDHD_TIMESCALE\n");
 #endif
     return(tfix);
 }

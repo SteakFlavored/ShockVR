@@ -567,7 +567,7 @@ errtype object_data_load(void)
 
 //    if(MemStats(&data))
 //  {
-//        Warning(("Heap is bad before starting object_data_load\n"));
+//        Warning("Heap is bad before starting object_data_load\n");
 //        critical_error(CRITERR_MEM|7);
 //    }
 //    mprintf("Hey we have %d memory avail before object data load\n", data.free.sizeTot);

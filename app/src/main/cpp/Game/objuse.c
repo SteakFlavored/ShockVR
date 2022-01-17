@@ -439,7 +439,7 @@ void container_check(ObjID obj, int8_t* count, ObjID* pidlist)
         if(USE_MODE(obj)==PICKUP_USE_MODE)
             pidlist[(*count)++] = obj;
 //        else
-//            Warning(("Non-pickup: trip %#x (%#x) in container!!\n",ID2TRIP(obj),obj));
+//            Warning("Non-pickup: trip %#x (%#x) in container!!\n",ID2TRIP(obj),obj);
     }
 }
 

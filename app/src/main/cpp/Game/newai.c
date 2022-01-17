@@ -224,7 +224,7 @@ errtype run_evil_otto(ObjID id, int32_t dist)
         newloc.x = obj_coord_from_fix(xvec + fix_from_obj_coord(newloc.x));
         newloc.y = obj_coord_from_fix(yvec + fix_from_obj_coord(newloc.y));
         newloc.z = objs[PLAYER_OBJ].loc.z;
-//        Warning(("AVATAR_SHODAN at 0x%x, 0x%x (dist = 0x%x)\n",newloc.x,newloc.y,dist));
+//        Warning("AVATAR_SHODAN at 0x%x, 0x%x (dist = 0x%x)\n",newloc.x,newloc.y,dist);
         obj_move_to(id,&newloc,false);
     }
     return(OK);
@@ -268,7 +268,7 @@ bool do_physics_stupidity(ObjID id, int32_t big_dist)
         if (CHECK_OBJ_PH(id))
             safe_EDMS_ai_control_robot(objs[id].info.ph,0,0,0,0,&there_yet,0);
 //        else if (!(get_crit_posture(osid) == DEATH_CRITTER_POSTURE))
-//            Warning(("hey, trying to sleep id %x without no physics handle (ph = %x)!\n",id,objs[id].info.ph));
+//            Warning("hey, trying to sleep id %x without no physics handle (ph = %x)!\n",id,objs[id].info.ph);
 //        if (EDMS_frere_jaques(objs[id].info.ph))
 //            Spew(DSRC_PHYSICS_Sleeper, ("obj id %x, ph = %d(0x%x) is too far but awake!\n",id,objs[id].info.ph,objs[id].info.ph));
         return(false);
@@ -532,7 +532,7 @@ errtype follow_pathfinding(ObjID id, ObjSpecID osid)
         if (paths[path_id].num_steps < 2)
         {
             objCritters[osid].des_speed = DEFAULT_SPEED >> 3;
-            Warning(("speed slowing due to distance!\n"));
+            Warning("speed slowing due to distance!\n");
         }
         else
 #endif

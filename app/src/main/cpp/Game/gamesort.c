@@ -175,7 +175,7 @@ void score_objs(int32_t o_num)
                     if (partition_loc[i]==draw_last_cnt)
                      { partition_loc[i]=o_num; break; }
                 if (i==partition_cnt)
-                    Warning(("lost my partition"));
+                    Warning("lost my partition");
             }
             score_list[draw_last_cnt]=tmp;
         }
@@ -219,7 +219,7 @@ int32_t do_part_sort(int32_t ptype, int32_t lo, int32_t hi, int32_t ploc)
             score_list[ploc]=score_list[hi];
     }
     else
-        Warning(("Partition not in list"));
+        Warning("Partition not in list");
 
     if (near_f)
      { ptptr[0] = hi-1; ptdelta[0] = -1; ptptr[1] =    lo;    ptdelta[1] =  1; loidx=1; hiidx=0; }
@@ -272,7 +272,7 @@ done_psort:
 void partition_sort(void)
 {
     if ((partition_cnt>1)||(partition_type==PRT_BOTH))
-;//KLC        Warning(("Dual partitions\n"));
+;//KLC        Warning("Dual partitions\n");
     else
     {
         int32_t mloc;

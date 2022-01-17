@@ -120,7 +120,7 @@ int16_t decrement_shodan_value(ObjID oid, bool game_stuff)
         }
         if (curr_shodan_val < 0)
         {
-//          Warning(("SHODOMETER negative after decrementing of id = 0x%x\n",oid));
+//          Warning("SHODOMETER negative after decrementing of id = 0x%x\n",oid);
             curr_shodan_val = 0;
         }
         if (curr_shodan_val != QUESTVAR_GET(SHODAN_QV))

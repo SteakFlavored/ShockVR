@@ -225,7 +225,7 @@ void ResGrowResDescTable(Id id)
                 pCumStatId = Realloc(pCumStatId, newAmt * sizeof(ResCumStat));
                 if (pCumStatId == NULL)
                     {
-                    Warning(("ResGrowDescTable: RES CUMSTAT TABLE BAD!!!\n"));
+                    Warning("ResGrowDescTable: RES CUMSTAT TABLE BAD!!!\n");
                     return;
                     }
                 memset(pCumStatId + currAmt, 0, (newAmt - currAmt) *
@@ -270,7 +270,7 @@ void ResShrinkResDescTable()
         SetPtrSize(gResDesc, newAmt * sizeof(ResDesc));
         if (MemError() != noErr)
         {
-//            Warning(("ResGrowDescTable: RES DESCRIPTOR TABLE BAD!!!\n"));
+//            Warning("ResGrowDescTable: RES DESCRIPTOR TABLE BAD!!!\n");
             return;
         }
         resDescMax = newAmt - 1;

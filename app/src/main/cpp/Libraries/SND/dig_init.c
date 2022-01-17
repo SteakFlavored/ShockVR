@@ -80,7 +80,7 @@ int32_t snd_set_digital_channels(int32_t chan_cnt)
                 break;
             case SMP_FREE:
 #ifdef SND_ANAL_DEBUG
-                Warning(("Hey, why do we have a handle for a FREE sample\n"));
+                Warning("Hey, why do we have a handle for a FREE sample\n");
 #endif
                 break;
             case SMP_DONE:

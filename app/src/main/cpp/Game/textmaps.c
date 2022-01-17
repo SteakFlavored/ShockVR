@@ -234,7 +234,7 @@ void load_textures(void)
         i = loved_textures[c];
         if (!ResInUse(TEXTURE_64_ID + i))
         {
-            //Warning(("Hey, invalid texture in palette! slot %d = %d\n",c,i));
+            //Warning("Hey, invalid texture in palette! slot %d = %d\n",c,i);
             i = 0;
         }  // Set local properties
         for (n = SMALLEST_SIZE_INDEX; n<NUM_TEXTURE_SIZES; n++)
@@ -257,7 +257,7 @@ void load_textures(void)
                     }
                     else
                     {
-                        //Warning(("Hey, ResInUse failed in tmap_load and i'm so blue (%d,%d,%x)\n",n,i,tmap_ids[n]+i));
+                        //Warning("Hey, ResInUse failed in tmap_load and i'm so blue (%d,%d,%x)\n",n,i,tmap_ids[n]+i);
                         // should abort !!!
                     }
                 }
@@ -351,19 +351,19 @@ errtype Init_Lighting(void)
     // Read in the standard shading table
     if (!DatapathFind(&DataDirPath,SHADING_TABLE_FNAME,shad_path))
     {
-        //Warning(("Could not find lighting table(%s)!!\n",SHADING_TABLE_FNAME));
+        //Warning("Could not find lighting table(%s)!!\n",SHADING_TABLE_FNAME);
         return(ERR_FOPEN);
     }
     fd = open(shad_path, O_RDONLY|O_BINARY);
     if (fd < 0)
     {
-        //Warning(("Could not load lighting table(%s)!!\n",shad_path));
+        //Warning("Could not load lighting table(%s)!!\n",shad_path);
         return(ERR_FREAD);
     }
     num_shad = read(fd,shading_table,(256 * 16));
     if (num_shad < (256 * 16))
     {
-        //Warning(("Read only %d values from shading_table\n"));
+        //Warning("Read only %d values from shading_table\n");
     }
     close(fd);*/
 
@@ -385,13 +385,13 @@ errtype Init_Lighting(void)
 // MLA- changed this to use resources
 /*    if (!DatapathFind(&DataDirPath,SHADING_TABLE_BW_FNAME,shad_path))
     {
-        //Warning(("Could not find lighting table(%s)!!\n",SHADING_TABLE_BW_FNAME));
+        //Warning("Could not find lighting table(%s)!!\n",SHADING_TABLE_BW_FNAME);
         return(ERR_FOPEN);
     }
     fd = open(shad_path, O_RDONLY|O_BINARY);
     if (fd < 0)
     {
-        //Warning(("Could not load lighting table(%s)!!\n",shad_path));
+        //Warning("Could not load lighting table(%s)!!\n",shad_path);
         return(ERR_FREAD);
     }
     // how about loading these into an array, not separate symbols?
@@ -399,7 +399,7 @@ errtype Init_Lighting(void)
     num_shad = read(fd,bw_shading_table,(256 * 16));
     if (num_shad < (256 * 16))
     {
-        //Warning(("Read only %d values from bw_shading_table\n"));
+        //Warning("Read only %d values from bw_shading_table\n");
     }
     close(fd);
     */
@@ -454,7 +454,7 @@ errtype load_master_texture_properties(void)
                 sz += read(fd, texture_properties, GAME_TEXTURES * 10);
             }
 //            else
-//                Warning(("Bad Texture Properties version number (%d).  Current = %d.\n",version,TEXTPROP_VERSION_NUMBER));
+//                Warning("Bad Texture Properties version number (%d).  Current = %d.\n",version,TEXTPROP_VERSION_NUMBER);
             close(fd);
         }
      }*/
@@ -614,7 +614,7 @@ errtype texture_crunch_go(void)
 
     for (i=0; i < NUM_LOADED_TEXTURES; i++)
     {
-        //Warning(("%d=%d->%d->%d\n",i,loved_textures[i],tmap_convert[loved_textures[i]],tmap_crunch[tmap_convert[loved_textures[i]]]));
+        //Warning("%d=%d->%d->%d\n",i,loved_textures[i],tmap_convert[loved_textures[i]],tmap_crunch[tmap_convert[loved_textures[i]]]);
         loved_textures[i] = tmap_crunch[tmap_convert[loved_textures[i]]];
     }
     load_textures();
@@ -638,7 +638,7 @@ bool texture_annihilate_func(int16_t keycode, uint32_t context, void* data)
     mprintf("texture_fnum = %d\n",texture_fnum);
     if (texture_fnum == 0)
     {
-        //Warning(("HEY, TEXTURE_FNUM is %d!\n",texture_fnum));
+        //Warning("HEY, TEXTURE_FNUM is %d!\n",texture_fnum);
         return(true);
     }
 

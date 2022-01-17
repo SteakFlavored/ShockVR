@@ -151,7 +151,7 @@ void compute_complex_loadage(uint8_t *loadme)
 //            1 for 3d bitmaps
 grs_bitmap *get_objbitmap_from_pool(int32_t i, bool t)
 {
-//    Warning(("objbitmap_from_pool (%d, %d, %d vs %d)\n",i,t,(t*NUM_OBJECT) + i,OBJ_BITMAP_POOL_SIZE));
+//    Warning("objbitmap_from_pool (%d, %d, %d vs %d)\n",i,t,(t*NUM_OBJECT) + i,OBJ_BITMAP_POOL_SIZE);
     if (((t * NUM_OBJECT) + i) > OBJ_BITMAP_POOL_SIZE)
     {
         return(NULL);

@@ -117,8 +117,8 @@ errtype init_hack_cameras()
 //        hack_cam_frcs[i] = fr_place_view(FR_NEWVIEW, &hack_cam, &hack_cam_canvases[i],
 //        hack_cam_frcs[i] = fr_place_view(FR_NEWVIEW, &hack_cam, &hack_cam_bitmaps[i],
 
-//        Warning(("start_mem = %d, BIG_HACKCAM = %d!\n",start_mem,BIG_HACKCAM_THRESHOLD));
-//        Warning(("HACK_CAMERA_WID = %d!\n",HACK_CAMERA_WIDTH));
+//        Warning("start_mem = %d, BIG_HACKCAM = %d!\n",start_mem,BIG_HACKCAM_THRESHOLD);
+//        Warning("HACK_CAMERA_WID = %d!\n",HACK_CAMERA_WIDTH);
         tmp_mem = (uint8_t *)NewPtr(HACK_CAMERA_WIDTH*HACK_CAMERA_HEIGHT);
         hack_cam_frcs[i] = fr_place_view(FR_NEWVIEW, &hack_cam, tmp_mem, FR_DOUBLEB_MASK|FR_HACKCAM_FLAG,
                                                       0, 0, HACK_CAMERA_X, HACK_CAMERA_Y, HACK_CAMERA_WIDTH, HACK_CAMERA_HEIGHT);

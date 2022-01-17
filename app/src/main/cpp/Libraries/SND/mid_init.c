@@ -92,7 +92,7 @@ int32_t snd_set_midi_sequences(int32_t seq_cnt)
                 break;
 #ifdef SND_ANAL_DEBUG
             case SMP_FREE:
-                Warning(("Hey, why do we have a handle for a FREE sample\n")); break;
+                Warning("Hey, why do we have a handle for a FREE sample\n"); break;
 #endif
             default:
                 i++; break;

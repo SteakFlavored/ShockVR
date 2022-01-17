@@ -41,7 +41,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
 //    extern int32_t memcount;
 
     if(!RefIndexValid(rt,i)) {
-//        Warning(("Bitmap index %i invalid!\n",i));
+//        Warning("Bitmap index %i invalid!\n",i);
         return(ERR_FREAD);
     }
 
@@ -49,7 +49,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
     if (uiResTempBuffer.mem == NULL || RefSize(rt,i) > uiResTempBuffer.size)
     {
 
-//        Warning(("damn, we have to malloc...need %d, buffer = %d\n",RefSize(rt,i),uiResTempBuffer.size));
+//        Warning("damn, we have to malloc...need %d, buffer = %d\n",RefSize(rt,i),uiResTempBuffer.size);
         f = (FrameDesc *)NewPtr(RefSize(rt,i));
         alloced_fdesc = true;
     }
@@ -60,7 +60,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
 //    memcount += RefSize(rt,i);
     if (f == NULL)
     {
-//        Warning(("Could not load bitmap from resource #%d!\n",id_num));
+//        Warning("Could not load bitmap from resource #%d!\n",id_num);
         return(ERR_FREAD);
     }
     RefExtract(rt,rid,f);

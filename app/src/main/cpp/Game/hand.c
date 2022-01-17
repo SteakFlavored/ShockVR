@@ -266,7 +266,7 @@ Ref get_handart(int32_t *x_offset, int32_t *y_offset, int16_t mouse_x, int16_t m
     if (!(RefIndexValid(prt,frame)))
     {
         frame = prt->numRefs - 1;
-        Warning(("ACK PAIN HATE!\n"));
+        Warning("ACK PAIN HATE!\n");
     }
     ResFreeRefTable(prt);
 */

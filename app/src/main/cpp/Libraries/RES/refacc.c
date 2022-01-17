@@ -91,7 +91,7 @@ void *RefLock(Ref ref)
     prt = (RefTable *)*prd->hdl;
     index = REFINDEX(ref);
 //    DBG(DSRC_RES_ChkIdRef, {if (!RefIndexValid(prt,index)) \
-//        Warning(("RefLock: reference: $%x bad, index out of range\n", ref));});
+//        Warning("RefLock: reference: $%x bad, index out of range\n", ref);});
 
     //    Return ptr
 
@@ -143,7 +143,7 @@ void *RefGet(Ref ref)
     prt = (RefTable *)*prd->hdl;
     index = REFINDEX(ref);
 //    DBG(DSRC_RES_ChkIdRef, {if (!RefIndexValid(prt,index)) \
-//        Warning(("RefGet: reference: $%x bad, index out of range\n", ref));});
+//        Warning("RefGet: reference: $%x bad, index out of range\n", ref);});
 
 //    Return ptr
 
@@ -206,13 +206,13 @@ RefTable *ResReadRefTable(Id id)
     prd = RESDESC(id);
     fd = resFile[prd->filenum].fd;
     DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
-        Warning(("ResReadRefTable: id $%x doesn't exist\n", id)); \
+        Warning("ResReadRefTable: id $%x doesn't exist\n", id); \
         return(NULL); \
         }});
     if ((ResFlags(id) & RDF_COMPOUND) == 0)
         {
         DBG(DSRC_RES_ChkIdRef, { \
-            Warning(("ResReadRefTable: id $%x is not compound\n", id)); \
+            Warning("ResReadRefTable: id $%x is not compound\n", id); \
             });
         return(NULL);
         }
@@ -251,13 +251,13 @@ int32_t ResExtractRefTable(Id id, RefTable *prt, int32_t size)
     prd = RESDESC(id);
     fd = resFile[prd->filenum].fd;
     DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
-        Warning(("ResExtractRefTable: id $%x doesn't exist\n", id)); \
+        Warning("ResExtractRefTable: id $%x doesn't exist\n", id); \
         return(-1); \
         }});
     if ((ResFlags(id) & RDF_COMPOUND) == 0)
         {
         DBG(DSRC_RES_ChkIdRef, { \
-            Warning(("ResExtractRefTable: id $%x is not compound\n", id)); \
+            Warning("ResExtractRefTable: id $%x is not compound\n", id); \
             });
         return(-1);
         }
@@ -268,7 +268,7 @@ int32_t ResExtractRefTable(Id id, RefTable *prt, int32_t size)
     read(fd, &prt->numRefs, sizeof(RefIndex));
     if (REFTABLESIZE(prt->numRefs) > size)
         {
-        Warning(("ResExtractRefTable: ref table too large for buffer\n"));
+        Warning("ResExtractRefTable: ref table too large for buffer\n");
         return(-1);
         }
     read(fd, &prt->offset[0], sizeof(int32_t) * (prt->numRefs + 1));
@@ -291,7 +291,7 @@ int32_t ResNumRefs(Id id)
     if ((ResFlags(id) & RDF_COMPOUND) == 0)
         {
         DBG(DSRC_RES_ChkIdRef, { \
-            Warning(("ResNumRefs: id $%x is not compound\n", id)); \
+            Warning("ResNumRefs: id $%x is not compound\n", id); \
             });
         return(-1);
         }
@@ -305,7 +305,7 @@ int32_t ResNumRefs(Id id)
         int32_t fd = resFile[prd->filenum].fd;
         RefIndex result;
         DBG(DSRC_RES_ChkIdRef, {if (fd < 0) { \
-            Warning(("ResNumRefs: id $%x doesn't exist\n", id)); \
+            Warning("ResNumRefs: id $%x doesn't exist\n", id); \
             return(-1); \
             }});
         lseek(fd, RES_OFFSET_DESC2REAL(prd->offset), SEEK_SET);
@@ -346,7 +346,7 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
         compPtr = NewPtr(rs + 100);                                // Just to be safe.
         if (compPtr == NULL)
         {
-            Warning(("RefExtract: Can't allocate ptr for compressed ref.\n"));
+            Warning("RefExtract: Can't allocate ptr for compressed ref.\n");
             return (NULL);
         }
         ReadPartialResource(resHdl, prt->offset[index], buff, RefSize(prt, index));
@@ -398,11 +398,11 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
         read(fd,&offset,sizeof(int32_t));
         read(fd,&refsize,sizeof(int32_t));
         refsize -= offset;
-        Warning(("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs));
+        Warning("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs);
     }
     DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return(NULL);});
     DBG(DSRC_RES_ChkIdRef, {if (index >= prt->numRefs) { \
-        Warning(("RefExtract: ref $%x index too large\n", ref)); \
+        Warning("RefExtract: ref $%x index too large\n", ref); \
         return(NULL); \
         }});
     prd = RESDESC(REFID(ref));
@@ -473,11 +473,11 @@ int32_t RefInject(RefTable *prt, Ref ref, void *buff)
         read(fd,&offset,sizeof(int32_t));
         read(fd,&refsize,sizeof(int32_t));
         refsize -= offset;
-        Warning(("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs));
+        Warning("Null reftable size = %d offset = %d numrefs = %d\n",refsize,offset,numrefs);
     }
     DBG(DSRC_RES_ChkIdRef, {if (!RefCheckRef(ref)) return(NULL);});
     DBG(DSRC_RES_ChkIdRef, {if (index >= numrefs) { \
-        Warning(("RefExtract: ref $%x index too large\n", ref)); \
+        Warning("RefExtract: ref $%x index too large\n", ref); \
         return(NULL); \
         }});
 
@@ -518,7 +518,7 @@ bool RefCheckRef(Ref ref)
 
     if ((ResFlags(id) & RDF_COMPOUND) == 0)
         {
-        Warning(("RefCheckRef: id $%x is not a compound resource\n", id));
+        Warning("RefCheckRef: id $%x is not a compound resource\n", id);
         return false;
         }
 

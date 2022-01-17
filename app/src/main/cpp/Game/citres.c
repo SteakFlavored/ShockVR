@@ -43,7 +43,7 @@ grs_bitmap *lock_bitmap_from_ref_anchor(Ref r, LGRect *anchor)
     f = (FrameDesc *)RefLock(r);
     if (f == NULL)
     {
-//        Warning(("Could not lock bitmap %d!",r));
+//        Warning("Could not lock bitmap %d!",r);
         return(NULL);
     }
     f->bm.bits = (uint8_t *)(f + 1);
@@ -78,14 +78,14 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
 
     if(!RefIndexValid(rt,i))
     {
-//        Warning(("Bitmap index %i invalid!\n",i));
+//        Warning("Bitmap index %i invalid!\n",i);
         return(ERR_FREAD);
     }
 
     rid = MKREF(id_num,i);
     if (RefSize(rt,i) > FRAME_BUFFER_SIZE)
     {
-//        Warning(("damn, we have to malloc...need %d, buffer = %d\n",RefSize(rt,i),FRAME_BUFFER_SIZE));
+//        Warning("damn, we have to malloc...need %d, buffer = %d\n",RefSize(rt,i),FRAME_BUFFER_SIZE);
         f = (FrameDesc *)NewPtr(RefSize(rt,i));
         alloced_fdesc = true;
     }
@@ -97,7 +97,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
     memcount += RefSize(rt,i);
     if (f == NULL)
     {
-//        Warning(("Could not load bitmap from resource #%d!\n",id_num));
+//        Warning("Could not load bitmap from resource #%d!\n",id_num);
         return(ERR_FREAD);
     }
     RefExtract(rt,rid,f);

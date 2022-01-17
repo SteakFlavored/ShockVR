@@ -363,7 +363,7 @@ int32_t AmovWriteBegin(Afile *paf)
     pmi->fpTemp = fopen(MOV_TEMP_FILENAME, "wb");
     if (pmi->fpTemp == NULL)
         {
-        Warning(("AmovWriteBegin: can't open temp file\n"));
+        Warning("AmovWriteBegin: can't open temp file\n");
         return(-1);
         }
 
@@ -390,7 +390,7 @@ int32_t AmovWriteFrame(Afile *paf, grs_bitmap *pbm, int32_t bmlength, fix time)
 
     if (paf->currFrame >= MAX_MOV_FRAMES)
         {
-        Warning(("AmovWriteFrame: exceeded max # frames\n"));
+        Warning("AmovWriteFrame: exceeded max # frames\n");
         return(-1);
         }
 
@@ -486,7 +486,7 @@ int32_t AmovWriteClose(Afile *paf)
     fclose(pmi->fpTemp);
     pmi->fpTemp = fopen(MOV_TEMP_FILENAME, "rb");
     if (pmi->fpTemp == NULL)
-        Warning(("AmovWriteClose: can't reopen temp file\n"));
+        Warning("AmovWriteClose: can't reopen temp file\n");
     else
         {
         fwrite(&pmi->movieHdr, sizeof(MovieHeader), 1, paf->fp);

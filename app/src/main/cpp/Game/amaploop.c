@@ -667,7 +667,7 @@ bool amap_ms_callback(curAMap *amptr,int32_t x,int32_t y,int16_t action,uint8_t 
                 {
                     last_msg_ok=false;
                     clear_cur_mapnote();
-                    Warning(("No more mapnote space\n"));
+                    Warning("No more mapnote space\n");
                 }
             }
 // if we want to do things when you click on old map notes...

@@ -163,7 +163,7 @@ bool QuikReadChunk(FILE *fp, QT_ChunkHdr *phdr, void *buff, uint32_t bufflen)
 
     if ((phdr->length - sizeof(QT_ChunkHdr)) > bufflen)
         {
-        Warning(("QuikReadChunk: chunk too big!\n"));
+        Warning("QuikReadChunk: chunk too big!\n");
         return false;
         }
 

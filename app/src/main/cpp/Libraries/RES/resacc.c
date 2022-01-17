@@ -128,7 +128,7 @@ void ResUnlock(Id id)
 
     prd = RESDESC(id);
 //    DBG(DSRC_RES_ChkLock, {if (prd->lock == 0) { \
-//        Warning(("ResUnlock: id $%x already unlocked\n", id)); return;} });
+//        Warning("ResUnlock: id $%x already unlocked\n", id); return;} });
 
     //    Else decrement lock, if 0 move to tail and tally stats
 
@@ -238,9 +238,9 @@ void ResDrop(Id id)
 
     prd = RESDESC(id);
 //    DBG(DSRC_RES_ChkLock, {if (prd->lock) \
-//        Warning(("ResDrop: Block $%x is locked, dropping anyway\n", id));});
+//        Warning("ResDrop: Block $%x is locked, dropping anyway\n", id);});
 //    DBG(DSRC_RES_ChkLock, {if (prd->flags & RDF_NODROP) \
-//        Warning(("ResDrop: Block $%x has NODROP flag set, dropping anyway\n", id));});
+//        Warning("ResDrop: Block $%x has NODROP flag set, dropping anyway\n", id);});
 
 //    Spew(DSRC_RES_DelDrop, ("ResDrop: dropping $%x\n", id));
 
@@ -283,7 +283,7 @@ void ResDelete(Id id)
 
     prd = RESDESC(id);
 //    DBG(DSRC_RES_ChkLock, {if (prd->lock) \
-//        Warning(("ResDelete: Block $%x is locked!\n", id));});
+//        Warning("ResDelete: Block $%x is locked!\n", id);});
 
     //    If in use: if in ram, free memory & LRU, then in any case zap entry
 
@@ -330,12 +330,12 @@ bool ResCheckId(Id id)
 {
     if (id < ID_MIN)
         {
-        Warning(("ResCheckId: id $%x invalid\n", id));
+        Warning("ResCheckId: id $%x invalid\n", id);
         return false;
         }
     if (id > resDescMax)
         {
-        Warning(("ResCheckId: id $%x exceeds table\n", id));
+        Warning("ResCheckId: id $%x exceeds table\n", id);
         return false;
         }
     return true;

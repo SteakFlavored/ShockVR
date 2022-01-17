@@ -1922,7 +1922,7 @@ void instantiate_dirac(int32_t triple, Dirac_frame* new_dirac)
             new_dirac->gravity = fix_div(standard_dirac.gravity, fix_make(3,0));
             break;
         case LEVEL_GRAV_ZERO:
-            Warning(("Zero gravity level!\n"));
+            Warning("Zero gravity level!\n");
             new_dirac->gravity = 0;
             break;
         default:

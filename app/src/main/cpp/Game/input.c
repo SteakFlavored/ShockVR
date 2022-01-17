@@ -315,7 +315,7 @@ void view3d_constrain_mouse(LGRegion* view, int32_t mouse_bit)
         {
             fauxrend_context *cc = (fauxrend_context *)_current_fr_context;
             mouse_constrain_xy(cc->xtop,cc->ytop,cc->xtop+cc->xwid-1,cc->ytop+cc->ywid-1);
-            Warning(("cc->ytop = %d!  view->abs_y = %d!\n",cc->ytop,view->abs_y));
+            Warning("cc->ytop = %d!  view->abs_y = %d!\n",cc->ytop,view->abs_y);
         }
 #else
         ui_mouse_constrain_xy(view->abs_x,view->abs_y,view->abs_x+RectWidth(view->r)-1,view->abs_y+RectHeight(view->r)-1);
@@ -1383,7 +1383,7 @@ void init_input(void)
     if (kbdt!=kb_get_country())
     {
         kb_set_country(kbdt);
-        Warning(("Setting kb country to %d\n",kbdt));
+        Warning("Setting kb country to %d\n",kbdt);
     }
 */
     init_motion_polling();
@@ -1580,12 +1580,12 @@ void init_input(void)
                 tracker_initial_pos[2]=-inp6d_geth->rz;
                 fullscrn_vitals=fullscrn_icons=false;
                 if (i6_video(I6VID_STARTUP,NULL))
-                    Warning(("Headset video startup failed\n"));
+                    Warning("Headset video startup failed\n");
                 if ((config_get_raw("inp6d_stereo",NULL,0))&&(i6d_device!=I6D_ALLPRO))
                 {
                     int32_t cnt=1, rval[1];
                     if (i6_video(I6VID_STR_START,NULL))
-                        Warning(("Headset stereo startup failed\n"));
+                        Warning("Headset stereo startup failed\n");
                     else
                      { inp6d_stereo=true; inp6d_stereo_active=false; }
                     config_get_value("inp6d_stereo",CONFIG_INT_TYPE,rval,&cnt);
@@ -1845,7 +1845,7 @@ int32_t view3d_mouse_input(LGPoint pos, LGRegion* reg,bool move,int32_t* lastsec
     {
         extern LGRegion* fullview_region;
         LGCursor*  c = &motion_cursors[cnum];
-//        Warning(("hey, cursor num = %d!\n",cnum));
+//        Warning("hey, cursor num = %d!\n",cnum);
 
         if (reg == fullview_region)
             uiSetGlobalDefaultCursor(c);

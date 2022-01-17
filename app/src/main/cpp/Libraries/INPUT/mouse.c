@@ -283,7 +283,7 @@ errtype mouse_init(int16_t , int16_t )
 
     DBG(DSRC_MOUSE_Init,
     { if (!mouse_installed)
-        Warning(("mouse_init(): Mouse not installed\n"));
+        Warning("mouse_init(): Mouse not installed\n");
     })
 */
     //    Initialize mouse state variables
@@ -399,7 +399,7 @@ errtype mouse_get_xy(int16_t* x, int16_t* y)
 
 /*    if (!mouse_installed)
     {
-        Warning(("mouse_get_xy(): mouse not installed.\n"));
+        Warning("mouse_get_xy(): mouse not installed.\n");
         return ERR_NODEV;
     }
     _mouse_update_vel();
@@ -445,7 +445,7 @@ errtype mouse_put_xy(int16_t x, int16_t y)
     Spew(DSRC_MOUSE_PutXY,("mouse_put_xy(%d,%d)\n",x,y));
     if (!mouse_installed)
     {
-        Warning(("mouse_put_xy(): mouse not installed.\n"));
+        Warning("mouse_put_xy(): mouse not installed.\n");
         return ERR_NODEV;
     }
     regs.x.eax = 0x0004;
@@ -481,7 +481,7 @@ errtype mouse_check_btn(int16_t /*button*/, bool* res)
     *res = Button();
 /*    if (!mouse_installed)
     {
-        Warning(("mouse_get_xy(): mouse not installed.\n"));
+        Warning("mouse_get_xy(): mouse not installed.\n");
         return ERR_NODEV;
     }
     *res = (mouseInstantButts >> button) & 1;
@@ -803,7 +803,7 @@ errtype mouse_constrain_xy(int16_t xl, int16_t yl, int16_t xh, int16_t yh)
     Spew(DSRC_MOUSE_ConstrainXY,("mouse_constrain_xy(%d,%d,%d,%d)\n",xl,yl,xh,yh));
     if (!mouse_installed)
     {
-        Warning(("mouse_constrain_xy(): mouse not installed.\n"));
+        Warning("mouse_constrain_xy(): mouse not installed.\n");
         return ERR_NODEV;
     }
     regs.x.eax = 0x0007;
@@ -829,7 +829,7 @@ errtype mouse_set_rate(int16_t xr, int16_t yr, int16_t thold)
     Spew(DSRC_MOUSE_SetRate,("mouse_set_rate(%d,%d,%d)\n",xr,yr,thold));
     if (!mouse_installed)
     {
-        Warning(("mouse_set_rate(): mouse not installed.\n"));
+        Warning("mouse_set_rate(): mouse not installed.\n");
         return ERR_NODEV;
     }
 //    if (mouseXshift > 0) xr = xr / mouseXshift;  // why are we dividing?  Because shifting is too extreme

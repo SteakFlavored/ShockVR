@@ -163,7 +163,7 @@ void store_x_span(int32_t y, int32_t lx, int32_t rx)
     c_span= span_count(y)++;
     if (c_span>=MAX_SPANS)
     {
-//        Warning(("HEY too many spans!!! y %d from %d to %d\n",y,lx,rx));  // should probably solve the problem
+//        Warning("HEY too many spans!!! y %d from %d to %d\n",y,lx,rx);  // should probably solve the problem
         span_count(y)--; c_span--;
         span_right(y,c_span)=rx;                    // just add a new right edge
     }
@@ -275,7 +275,7 @@ void span_fixup(void)
         span_right(_fr_y_cen,0)=max(span_right(_fr_y_cen,0),span_right(_fr_y_cen,1));
     }
     else
-        Warning(("Only one span at y center\n"));
+        Warning("Only one span at y center\n");
     fr_span_parse();
 #if _fr_defdbg(VECSPEW)
     if (_fr_dbgflg_chk(VECSPEW))

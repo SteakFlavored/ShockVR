@@ -431,7 +431,7 @@ void grind_music_ai(void)
                 {
                     make_request(open_track++,layering_table[DECONSTRUCT_LAYER][current_key]);
 //                    if (layering_table[DECONSTRUCT_LAYER][current_key] == 0xFF)
-//                        Warning(("playing decon layer, %d!\n",layering_table[DECONSTRUCT_LAYER][current_key]));
+//                        Warning("playing decon layer, %d!\n",layering_table[DECONSTRUCT_LAYER][current_key]);
                 }
                 else
                 {
@@ -448,7 +448,7 @@ void grind_music_ai(void)
 
                     // Object-based "machine" layers
 //                    if (mlimbs_machine != 0)
-//                        Warning(("mlimbs_machine = %d  table = %d!\n",mlimbs_machine,layering_table[mlimbs_machine][current_key]));
+//                        Warning("mlimbs_machine = %d  table = %d!\n",mlimbs_machine,layering_table[mlimbs_machine][current_key]);
                     if ((mlimbs_machine != 0) && (layering_table[mlimbs_machine][current_key] != 255))
                     {
                         //KLC - no layering, force to track 0.

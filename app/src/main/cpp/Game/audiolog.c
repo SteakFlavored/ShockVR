@@ -172,7 +172,7 @@ errtype audiolog_play(int32_t email_id)
     // check failure
     if (palog == NULL)
     {
-        Warning(("MoviePrepareRes returned NULL! email_id = %x\n",email_id));
+        Warning("MoviePrepareRes returned NULL! email_id = %x\n",email_id);
         end_wait();
         return(ERR_NOMEM);
     }

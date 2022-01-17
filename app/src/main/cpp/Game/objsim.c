@@ -379,7 +379,7 @@ grs_bitmap *bitmap_from_tpoly_data(int32_t tpdata, uint8_t *scale, int32_t *inde
         case TPOLY_TYPE_ALT_TMAP:
             if (!ResInUse(TEXTURE_SMALL_ID + *index))
             {
-                Warning(("Invalid tpoly alt texture type request!"));
+                Warning("Invalid tpoly alt texture type request!");
                 useme = 0;
             }
             else
@@ -414,7 +414,7 @@ grs_bitmap *bitmap_from_tpoly_data(int32_t tpdata, uint8_t *scale, int32_t *inde
 
             if (!ResInUse(CUSTOM_MATERIAL_BASE + *index))
             {
-//                Warning(("Invalid custom material request (%d)!\n",*index));
+//                Warning("Invalid custom material request (%d)!\n",*index);
                 do_screen_static();
                 return(static_bitmap);
             }
@@ -554,7 +554,7 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
 
     if (!objs[id].active)
     {
-        Warning(("Attempted to get model params from invalid object!\n"));
+        Warning("Attempted to get model params from invalid object!\n");
         return(NULL);
     }
     switch (objs[id].obclass)
@@ -583,7 +583,7 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
             p5 = (objContainers[objs[id].specID].data1 & 0xFF00) >> 8;
             break;
         default:
-//            Warning(("Object %d not of correct class (class = %d) to extract model data!\n",id, objs[id].obclass));
+//            Warning("Object %d not of correct class (class = %d) to extract model data!\n",id, objs[id].obclass);
             return(NULL);
     }
 
@@ -689,7 +689,7 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
     if (p5 & 0x80)
     {
         if ((p5 & 0x7F) >= NUM_LOADED_TEXTURES)
-            { temp_bm=SAFE_TEXTURE; *bm2 = *temp_bm; Warning(("Bogus Tmap")); } // doofy you screwed up thing
+            { temp_bm=SAFE_TEXTURE; *bm2 = *temp_bm; Warning("Bogus Tmap"); } // doofy you screwed up thing
         else
         {
             temp_bm = get_texture_map(p5 & 0x7F,TEXTURE_64_INDEX);
@@ -708,7 +708,7 @@ grs_bitmap *obj_get_model_data(ObjID id, fix *x, fix *y, fix *z, grs_bitmap *bm2
 
     if (p4 & 0x80)
     {
-    if ((p4 & 0x7F) >= NUM_LOADED_TEXTURES)  { retval=SAFE_TEXTURE; Warning(("Bogus Tmap")); } else // doofy you screwed up thing
+    if ((p4 & 0x7F) >= NUM_LOADED_TEXTURES)  { retval=SAFE_TEXTURE; Warning("Bogus Tmap"); } else // doofy you screwed up thing
         retval = get_texture_map(p4 & 0x7F, TEXTURE_64_INDEX);
     }
     else
@@ -816,7 +816,7 @@ ObjID obj_create_base(int32_t triple)
             ObjLoc killobjloc;
             int32_t *d1, *d2, content, dist, obclass, maxdist = 0;
 
-//            Warning(("ObjAndSpecGrab could not find ObjSpec for this class: %d.\n", TRIP2CL(triple)));
+//            Warning("ObjAndSpecGrab could not find ObjSpec for this class: %d.\n", TRIP2CL(triple));
 
             FORALLOBJS(oid)
             {
@@ -866,7 +866,7 @@ ObjID obj_create_base(int32_t triple)
                 }
             }
             if(maxdist<MIN_OBJKILL_DIST) kill_obj=OBJ_NULL;
- //          Warning(("Destroying remote instance to accomodate...obj ID 0x%x\n",kill_obj));
+ //          Warning("Destroying remote instance to accomodate...obj ID 0x%x\n",kill_obj);
             if (kill_obj != OBJ_NULL) {
                 if(kill_container != OBJ_NULL) {
                     is_container(kill_container,&d1,&d2);
@@ -886,7 +886,7 @@ ObjID obj_create_base(int32_t triple)
     }
     else if (!ObjAndSpecGrab(TRIP2CL(triple), &new_id, &new_specid))
     {
- //          Warning(("ObjAndSpecGrab could not find ObjSpec for this obclass: %d.\n", TRIP2CL(triple)));
+ //          Warning("ObjAndSpecGrab could not find ObjSpec for this obclass: %d.\n", TRIP2CL(triple));
             return(OBJ_NULL);
     }
 
@@ -1011,7 +1011,7 @@ void place_obj_at_objloc(ObjID id, ObjLoc *newloc, uint16_t xsize, uint16_t ysiz
 
     if ((xsize > MAX_PLACE_SIZE) || (ysize > MAX_PLACE_SIZE))
     {
-//        Warning(("place_obj_at_objloc: obj %d size too large!! (xsize = 0x%x  ysize = 0x%x)\n",id,xsize,ysize));
+//        Warning("place_obj_at_objloc: obj %d size too large!! (xsize = 0x%x  ysize = 0x%x)\n",id,xsize,ysize);
         xsize = min(0x200,xsize);
         ysize = min(0x200,ysize);
     }
@@ -1316,7 +1316,7 @@ errtype obj_create_player(ObjLoc *plr_loc)
     player_struct.rep = obj_create_base(PLAYER_TRIP);
     if (player_struct.rep == OBJ_NULL)
     {
-        Warning(("MAJOR BADNESS!! Could not create player!\n"));
+        Warning("MAJOR BADNESS!! Could not create player!\n");
         return(ERR_NOEFFECT);
     }
     player_dos_obj = &(objs[PLAYER_OBJ]);
@@ -1447,7 +1447,7 @@ errtype obj_load_properties()
 #ifndef PLAYTEST
          critical_error(CRITERR_MISC|0);
 #else // !PLAYTEST
-         Warning(("Bad Object Properties version number.\n"));
+         Warning("Bad Object Properties version number.\n");
 #endif
      }
 */
@@ -1944,7 +1944,7 @@ errtype obj_set_secondary_properties()
     fn2 = ResOpenFile(&fSpec);
     if ((fn < 0) || (fn2 < 0))
     {
-//        Warning(("Problem opening object art cache!\n"));
+//        Warning("Problem opening object art cache!\n");
         return(ERR_NOEFFECT);
     }
 
@@ -2165,7 +2165,7 @@ errtype obj_settle_func(ObjID id)
     else
         retval = true;
 //    if (retval < 0)
-//        Warning(("EDMS_settle on id %d is unhappy!\n",id));
+//        Warning("EDMS_settle on id %d is unhappy!\n",id);
     return(OK);
 }
 
@@ -2461,15 +2461,15 @@ bool check_objsys_func(int16_t keycode, uint32_t context, void* data)
     int32_t i;
     int8_t buf[64];
     extern int8_t *get_object_lookname(ObjID id,int8_t use_string[], int32_t sz);
-    Warning(("Checking objsys, looking for bad geninv\n"));
+    Warning("Checking objsys, looking for bad geninv\n");
     for (i=0; i < NUM_GENERAL_SLOTS; i++)
     {
         if (player_struct.inventory[i] != OBJ_NULL)
         {
             if (!objs[player_struct.inventory[i]].active)
-                Warning(("HEY, geninv %d, id 0x%x, is not active!  Ack!!!\n",i,player_struct.inventory[i]));
+                Warning("HEY, geninv %d, id 0x%x, is not active!  Ack!!!\n",i,player_struct.inventory[i]);
             else
-                Warning(("%d: %s\n",i, get_object_lookname(player_struct.inventory[i],buf,64)));
+                Warning("%d: %s\n",i, get_object_lookname(player_struct.inventory[i],buf,64));
         }
     }
     if (ObjSysOkay())
@@ -2590,7 +2590,7 @@ errtype obj_level_munge()
     FORALLOBJS(oid)
     {
 #ifdef TEETH
-        Warning(("checking id %x\n",oid));
+        Warning("checking id %x\n",oid);
 #endif
         found = false;
         for (x=0; x < MAP_XSIZE; x++)
@@ -2615,12 +2615,12 @@ errtype obj_level_munge()
         if (!found)
         {
             extern int8_t *get_object_lookname(ObjID id,int8_t use_string[], int32_t sz);
-            Warning(("HEY, id %x, a %s, may have the taint of Shadow!\n",oid, get_object_lookname(oid,buf,128)));
-            Warning(("id %x, ref = %x\n",oid,objs[oid].ref));
+            Warning("HEY, id %x, a %s, may have the taint of Shadow!\n",oid, get_object_lookname(oid,buf,128));
+            Warning("id %x, ref = %x\n",oid,objs[oid].ref);
             exorcism[exorcise_count++] = oid;
         }
     }
-    Warning(("done scanning...\n"));
+    Warning("done scanning...\n");
 #ifdef TEETH
     for (x = 0; x < exorcise_count; x++)
     {
@@ -2628,17 +2628,17 @@ errtype obj_level_munge()
         oref = objs[exorcism[x]].ref;
         objRefs[oref].next = OBJ_REF_NULL;
         ObjRefFree(oref,true);
-        Warning(("Hey, deleted the ref (%x) for %x!\n",oref,exorcism[x]));
+        Warning("Hey, deleted the ref (%x) for %x!\n",oref,exorcism[x]);
     }
     for (x = 0; x < exorcise_count; x++)
     {
         objs[exorcism[x]].ref = OBJ_REF_NULL;
         obj_destroy(exorcism[x]);
 //        ObjDel(exorcism[x]);
-        Warning(("deleted object %x!\n",exorcism[x]));
+        Warning("deleted object %x!\n",exorcism[x]);
     }
 #endif
-    Warning(("done with ritual (ok = %d)!\n",ObjSysOkay()));
+    Warning("done with ritual (ok = %d)!\n",ObjSysOkay());
 #endif
 
 #ifdef REFLOOR_CRATES_HACK
@@ -2669,7 +2669,7 @@ errtype obj_level_munge()
                 nextref = objRefs[orefid].next;
                 if (objRefs[orefid].obj == OBJ_NULL)
                 {
-                    Warning(("****** Deleting objref %d!\n",orefid));
+                    Warning("****** Deleting objref %d!\n",orefid);
                     me_objref_set(MAP_GET_XY(x,y),OBJ_REF_NULL);
                     oref2 = objRefs[0].next;
                     while (objRefs[oref2].next != OBJ_REF_NULL)
@@ -2677,9 +2677,9 @@ errtype obj_level_munge()
                         mprintf(".");
                         oref2 = objRefs[oref2].next;
                     }
-                    Warning(("objRefs[%d].next = %d\n",oref2,objRefs[oref2].next));
+                    Warning("objRefs[%d].next = %d\n",oref2,objRefs[oref2].next);
                     objRefs[oref2].next = orefid;
-                    Warning(("after: objRefs[%d].next = %d\n",oref2,objRefs[oref2].next));
+                    Warning("after: objRefs[%d].next = %d\n",oref2,objRefs[oref2].next);
                     objRefs[orefid].next = OBJ_REF_NULL;
                 }
                 orefid = nextref;

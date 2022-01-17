@@ -551,7 +551,7 @@ uint8_t *get_free_frame_buffer_bits(int32_t size)
         uint8_t *tmp=frameBufferFreePtr;
         if (frameBufferFreePtr-frameBuffer+size>FRAME_BUFFER_SIZE)
         {
-//     Warning(("Mini Frame Buffers Too Big %d\n",size));
+//     Warning("Mini Frame Buffers Too Big %d\n",size);
      return NULL;
         }
         frameBufferFreePtr+=size;

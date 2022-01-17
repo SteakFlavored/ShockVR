@@ -431,7 +431,7 @@ void fullscreen_start()
             i6_video(I6VID_SET_MODE,i6d_ss);
             if (i6_video(I6VID_STR_SETUP,i6d_ss))
             {
-                Warning(("Stereo setup failed"));
+                Warning("Stereo setup failed");
                 i6_video(I6VID_CLEAR_MODE,i6d_ss);
                 inp6d_stereo_active=false;
             }

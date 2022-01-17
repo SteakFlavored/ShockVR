@@ -172,7 +172,7 @@ void     fr_camera_slewone(cams *cam, int32_t which, int32_t how)
         {
             _cammul=fix_sqrt(fix_mul(tot,tot)-(fix_mul(v[cv[which]].gY,v[cv[which]].gY)));
             _cammul=fix_div(abs(tot),_cammul);
-//         Warning(("mul %x from %x and %x\n",_cammul,tot,v[cv[which]]));
+//         Warning("mul %x from %x and %x\n",_cammul,tot,v[cv[which]]);
         }
         else
          { _cam->coor[2]-=fix_int((v[cv[which]].gY))<<8; _cammul=fix_make(1,0); }

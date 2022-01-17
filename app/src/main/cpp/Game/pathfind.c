@@ -401,7 +401,7 @@ bool pf_check_doors(MapElem *pme, int8_t dir, ObjID *open_door)
         id = objRefs[curr].obj;
         if (objs[id].obclass == CLASS_DOOR)
         {
-//            Warning(("contemplating id %x, loc = %x, %x, dir = %d\n",id,objs[id].loc.x,objs[id].loc.y,dir));
+//            Warning("contemplating id %x, loc = %x, %x, dir = %d\n",id,objs[id].loc.x,objs[id].loc.y,dir);
             switch(dir)
             {
                 case 0: // N
@@ -445,13 +445,13 @@ bool pf_check_doors(MapElem *pme, int8_t dir, ObjID *open_door)
 bool pf_obj_doors(MapElem *pme1, MapElem *pme2, int8_t dir, ObjID *open_door)
 {
     bool retval;
-//    Warning(("Top of pf_obj_door!\n"));
+//    Warning("Top of pf_obj_door!\n");
     retval = pf_check_doors(pme1, dir, open_door);
-//    Warning(("A: *open_door = %x\n",*open_door));
+//    Warning("A: *open_door = %x\n",*open_door);
     if (retval && (*open_door == OBJ_NULL))
     {
         retval = pf_check_doors(pme2, (dir + 2) % 4, open_door);
-//        Warning(("B: *open_door = %x\n",*open_door));
+//        Warning("B: *open_door = %x\n",*open_door);
     }
     return(retval);
 }
@@ -693,7 +693,7 @@ errtype find_path(int8_t path_id)
         {
             if (expand_count == 0)
             {
-//                Warning(("expand_count = 0!\n"));
+//                Warning("expand_count = 0!\n");
                 step_count = NUM_PATH_STEPS;
             }
             if (expand_into_list == exp_l1)

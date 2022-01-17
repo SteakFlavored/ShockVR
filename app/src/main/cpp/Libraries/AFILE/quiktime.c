@@ -128,12 +128,12 @@ static QTS_STSD *pStsd;
                 if ((itrack >= 0) &&
                     (!tkStat.gotTKHD || !tkStat.gotMDHD || !tkStat.gotSTBL))
                         {
-                        Warning(("QuikReadMovie: Track with missing TKHD or MDHD or STBL!\n"));
+                        Warning("QuikReadMovie: Track with missing TKHD or MDHD or STBL!\n");
                         return;
                         }
                 if (++itrack >= QTM_MAX_TRACKS)
                     {
-                    Warning(("QuikReadMovie: Too many tracks in movie!\n"));
+                    Warning("QuikReadMovie: Too many tracks in movie!\n");
                     return;
                     }
                 tkStat.gotTKHD = false;
@@ -148,7 +148,7 @@ static QTS_STSD *pStsd;
             case QT_TKHD:
                 if (tkStat.gotTKHD)
                     {
-                    Warning(("QuikReadMovie: Extra TKHD in TRAK!\n"));
+                    Warning("QuikReadMovie: Extra TKHD in TRAK!\n");
                     QuikSkipChunk(fpi, &chunkHdr);
                     }
                 else
@@ -164,7 +164,7 @@ static QTS_STSD *pStsd;
             case QT_MDHD:
                 if (tkStat.gotMDHD)
                     {
-                    Warning(("QuikReadMovie: Extra MDHD in TRAK!\n"));
+                    Warning("QuikReadMovie: Extra MDHD in TRAK!\n");
                     QuikSkipChunk(fpi, &chunkHdr);
                     }
                 else
@@ -193,7 +193,7 @@ static QTS_STSD *pStsd;
 
             case QT_STBL:
                 if (tkStat.gotSTBL)
-                    Warning(("QuikReadMovie: Extra STBL in TRAK!\n"));
+                    Warning("QuikReadMovie: Extra STBL in TRAK!\n");
                 else
                     tkStat.gotSTBL = true;
                 break;
@@ -242,7 +242,7 @@ static QTS_STSD *pStsd;
                                 }
                             }
                         else
-                            Warning(("QuikReadMovie: Video track not 8-bit or 24-bit!\n"));
+                            Warning("QuikReadMovie: Video track not 8-bit or 24-bit!\n");
                         break;
 
                     case TRACK_AUDIO:
@@ -256,7 +256,7 @@ static QTS_STSD *pStsd;
                         break;
                     }
                 if (pqtm->track[itrack].qt_stsd.base.numEntries > 1)
-                    Warning(("QuikReadMovie: STSD chunk with more than 1 entry!\n"));
+                    Warning("QuikReadMovie: STSD chunk with more than 1 entry!\n");
                 break;
 
 //    STTS: Grab time->sample table chunk.
@@ -302,13 +302,13 @@ static QTS_STSD *pStsd;
         if (pqtm->track[itrack].type == TRACK_VIDEO)
             {
             if (pqtm->pVideoTrack)
-                Warning(("QuikReadMovie: More than 1 VIDEO track in movie!\n"));
+                Warning("QuikReadMovie: More than 1 VIDEO track in movie!\n");
             pqtm->pVideoTrack = &pqtm->track[itrack];
             }
         else if (pqtm->track[itrack].type == TRACK_AUDIO)
             {
             if (pqtm->pAudioTrack)
-                Warning(("QuikReadMovie: More than 1 AUDIO track in movie!\n"));
+                Warning("QuikReadMovie: More than 1 AUDIO track in movie!\n");
             pqtm->pAudioTrack = &pqtm->track[itrack];
             if (pqtm->pAudioTrack->qt_stsd.sdesc.sampRate == SAMPRATE_11KHZ)
                 pqtm->numAudioSamplesPerBlock = 4096;
@@ -316,7 +316,7 @@ static QTS_STSD *pStsd;
                 pqtm->numAudioSamplesPerBlock = 8192;
             else
                 {
-                Warning(("QuikReadMovie: Unknown audio sampling rate! (using 4K blocks)\n"));
+                Warning("QuikReadMovie: Unknown audio sampling rate! (using 4K blocks)\n");
                 pqtm->numAudioSamplesPerBlock = 4096;
                 }
             }
@@ -324,7 +324,7 @@ static QTS_STSD *pStsd;
 
     if ((pqtm->pVideoTrack == NULL) && (pqtm->pAudioTrack == NULL))
         {
-        Warning(("QuikReadMovie: No VIDEO or AUDIO tracks in movie!\n"));
+        Warning("QuikReadMovie: No VIDEO or AUDIO tracks in movie!\n");
         return;
         }
 
@@ -713,7 +713,7 @@ static void ReadAudioSamples(MovieTrack *ptrack, FILE *fpi)
 
     if (ptrack->qt_stts->numEntries > 1)
         {
-        Warning(("Can't handle audio track with > 1 time2samp table!\n"));
+        Warning("Can't handle audio track with > 1 time2samp table!\n");
         return;
         }
 
@@ -895,7 +895,7 @@ static void DecompressRaw(QTM *pqtm, uint8_t *pd, uint8_t *ps, int32_t csize,
         widthSrc = ((pqtm->frameWidth + 3) & 0xFFFC) * numBytesPix;
         if ((widthSrc * pqtm->frameHeight) != csize)
             {
-            Warning(("Raw video data frame does not seem to be proper size!\n"));
+            Warning("Raw video data frame does not seem to be proper size!\n");
             return;
             }
         for (y = 0; y < pqtm->frameHeight; y++)
@@ -948,7 +948,7 @@ static void DecompressRle(QTM *pqtm, uint8_t *pd, uint8_t *ps, int32_t csize)
                 {
                 if (width_count != pqtm->frameWidth)
                     {
-                    Warning(("Error in decompressing rle, width mismatch"));
+                    Warning("Error in decompressing rle, width mismatch");
                     return;
                     }
                 width_count = 0;
@@ -961,7 +961,7 @@ static void DecompressRle(QTM *pqtm, uint8_t *pd, uint8_t *ps, int32_t csize)
             {
             if (width_count >= pqtm->frameWidth)
                 {
-                Warning(("Error in decompressing rle, width mismatch"));
+                Warning("Error in decompressing rle, width mismatch");
                 return;
                 }
             for (i = command; i < 0; i++)
@@ -974,7 +974,7 @@ static void DecompressRle(QTM *pqtm, uint8_t *pd, uint8_t *ps, int32_t csize)
             {
             if (width_count >= pqtm->frameWidth)
                 {
-                Warning(("Error in decompressing rle, width mismatch"));
+                Warning("Error in decompressing rle, width mismatch");
                 return;
                 }
             for (i = 0; i < (command * 4); i++)
@@ -991,7 +991,7 @@ static void DecompressRle(QTM *pqtm, uint8_t *pd, uint8_t *ps, int32_t csize)
 
     if (height_count != (pqtm->frameHeight - 1))
         {
-        Warning(("Error in decompressing rle, height mismatch"));
+        Warning("Error in decompressing rle, height mismatch");
         return;
         }
 }

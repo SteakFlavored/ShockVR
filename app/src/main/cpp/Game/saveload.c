@@ -480,7 +480,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
         int32_t reclaim;
         reclaim = ResPack(fd);
         if (reclaim == 0)
-            Warning(("%d bytes reclaimed from ResPack!\n",reclaim));
+            Warning("%d bytes reclaimed from ResPack!\n",reclaim);
     }
 */
     verify_cookie = VERIFY_COOKIE_VALID;
@@ -523,7 +523,7 @@ void convert_map_element_9_10(oMapElem *ome, MapElem *me, int32_t x, int32_t y)
             if (ome->ceil_height<ome->param)
             {
                 me->ceil_height=0;
-                Warning(("Bad input Map Format at %d,%d, param %d and ceil %d, mirror %d\n",x,y,ome->param,ome->ceil_height,tmp));
+                Warning("Bad input Map Format at %d,%d, param %d and ceil %d, mirror %d\n",x,y,ome->param,ome->ceil_height,tmp);
             }
             else
                 me->ceil_height=ome->ceil_height-ome->param; // since this is negative
@@ -678,7 +678,7 @@ bool one_compression_pass(int8_t cl,int16_t start)
     p1 = (ObjSpec *)(data + new_objspec * ss);
     if (new_objspec == OBJ_SPEC_NULL)
     {
-        Warning(("we have a problem here folks.  Can't complete HeaderObjSpecGrab!\n"));
+        Warning("we have a problem here folks.  Can't complete HeaderObjSpecGrab!\n");
         critical_error(22);
     }
     // copy in the data...
@@ -721,7 +721,7 @@ errtype expand_old_class(int8_t cl, int16_t new_start)
         if (osp->next == OBJ_SPEC_NULL)
         {
             osp->next = new_start;
-            Warning(("setting osid %d to %d\n",osid,new_start));
+            Warning("setting osid %d to %d\n",osid,new_start);
             next_item = (ObjSpec *)(data + osp->next * ss);
             next_item->prev = osid;
             cont = false;
@@ -818,7 +818,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
     fd = ResOpenFile(spec);
     if (fd < 0)
     {
-        //Warning(("Could not load map file %s (%s) , rv = %d!\n",dpath_fn,fn,retval));
+        //Warning("Could not load map file %s (%s) , rv = %d!\n",dpath_fn,fn,retval);
         if (make_player)
             obj_create_player(&plr_loc);
         trigger_check=true;
@@ -846,7 +846,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
     SwapLongBytes(&version);                                // Mac
     if (version != MAP_VERSION_NUMBER)
     {
-        //Warning(("Old Map Version Number (%d)!!  Current V. Num = %d\n",version,MAP_VERSION_NUMBER));
+        //Warning("Old Map Version Number (%d)!!  Current V. Num = %d\n",version,MAP_VERSION_NUMBER);
 
         if (version != OLD_MAP_VERSION_NUMBER)
         {
@@ -857,7 +857,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
         }
         else
         {
-            //Warning(("Auto-converting map to v.%d from %d!\n",MAP_VERSION_NUMBER,version));
+            //Warning("Auto-converting map to v.%d from %d!\n",MAP_VERSION_NUMBER,version);
             // do auto_conversion
             convert_from = version;
         }
@@ -918,10 +918,10 @@ global_fullmap->sched[0].queue.grow = true;
     if (version != OBJECT_VERSION_NUMBER)
     {
         retval = ERR_NOEFFECT;
-        Warning(("Old Object Version Number (%d)!!  Current V. Num = %d\n",version,OBJECT_VERSION_NUMBER));
+        Warning("Old Object Version Number (%d)!!  Current V. Num = %d\n",version,OBJECT_VERSION_NUMBER);
         if (version >= 17)
         {
-            Warning(("Auto-converting objects to v. %d from %d\n", OBJECT_VERSION_NUMBER,version));
+            Warning("Auto-converting objects to v. %d from %d\n", OBJECT_VERSION_NUMBER,version);
             convert_from = version;
         }
         else

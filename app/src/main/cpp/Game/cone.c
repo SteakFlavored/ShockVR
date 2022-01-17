@@ -179,7 +179,7 @@ bool clockwise_poly(int32_t index, fix *poly_pts)
             cross_prd = FIX_CROSS_DIRECTION(poly_line, point);
             if (cross_prd == FIX_ZERO)
             {
-                // Warning(("We've got a problem: Four colinear points.\n"));
+                // Warning("We've got a problem: Four colinear points.\n");
                 clockwise = true;
             }
             else
@@ -314,16 +314,16 @@ int32_t insert_viewer_position(int32_t index, fix *new_pts, fix_point viewer_poi
             {
                 if (local_inside)
                 {
-//                    Warning(("Outside two vectors of polygon: Insert - %d. Index - %d.\n", insert, i));
-//                    Warning(("vpoint:\n"));
+//                    Warning("Outside two vectors of polygon: Insert - %d. Index - %d.\n", insert, i);
+//                    Warning("vpoint:\n");
 //                    warning_fix_point(vpoint.x, vpoint.y);
-//                    Warning(("Modified Poly List:\n"));
+//                    Warning("Modified Poly List:\n");
  //                  warning_poly_list(index, temp_pts);
-//                    Warning(("Viewer Point:\n"));
+//                    Warning("Viewer Point:\n");
 //                    warning_fix_point(viewer_point.x, viewer_point.gY);
-//                    Warning(("Original Poly List:\n"));
+//                    Warning("Original Poly List:\n");
 //                    warning_poly_list(index, new_pts);
-//                    Warning(("Finding Art would probably be a very good thing!!!!\n"));
+//                    Warning("Finding Art would probably be a very good thing!!!!\n");
 //                    mprintf(("View vectors:\n"));
 //                    print_view_vectors(0, 0, 0L);
                 }
@@ -374,7 +374,7 @@ int32_t radius_fix(int32_t index, fix *new_pts, fix_point viewer)
     fix            cross_prd;
 
     if (index > 4)
-        ; // Warning(("Too many verticies\n"));
+        ; // Warning("Too many verticies\n");
     if (index < 3)
         return(index);
 
@@ -759,9 +759,9 @@ bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int32_t *count,
                     if ((viewer_position.gX < MAP_X) && (viewer_position.gX > FIX_ZERO)
                         && (viewer_position.gZ < MAP_Y) && (viewer_position.gZ > FIX_ZERO))
                     {
-                        // Warning(("Negative Ratios for cone clip - inside the map!!!!\n"));
+                        // Warning("Negative Ratios for cone clip - inside the map!!!!\n");
                         // print_view_vectors(0, 0L, 0);
-                        // Warning(("Go Find Art!\n"));
+                        // Warning("Go Find Art!\n");
                     }
                     index--;
                     continue;
@@ -793,7 +793,7 @@ bool find_view_area(fix *cone_list, fix floor_val, fix roof_val, int32_t *count,
         }
 
         if (index < 2)
-            ; // Warning(("HEY - Only one point for cone - this is bad....\n"));
+            ; // Warning("HEY - Only one point for cone - this is bad....\n");
 
         index = radius_fix(index, new_pts, viewer_point);
         reverse_poly_list(index, new_pts);
@@ -977,7 +977,7 @@ void simple_cone_clip_pass(void)
         if ((viewer_position.gX < MAP_X) && (viewer_position.gX > FIX_ZERO)
             && (viewer_position.gZ < MAP_Y) && (viewer_position.gZ > FIX_ZERO))
         {
-            // Warning(("Not a valid cone found and we're inside the map!\n"));
+            // Warning("Not a valid cone found and we're inside the map!\n");
         }
         return;
     }

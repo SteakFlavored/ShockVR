@@ -1100,7 +1100,7 @@ void show_obj(ObjID cobjid)
                     for (foog = 0; foog < NUM_SMALLSTUFF_VCOLORS; foog++)
                     {
                         g3_set_vcolor(foog+1,CyberSmallstuffProps[SCNUM(cobjid)].vcolors[foog]);
-//                        Warning(("setting vcolor %d to 0x%x!\n",foog+1,CyberSmallstuffProps[SCNUM(cobjid)].vcolors[foog]));
+//                        Warning("setting vcolor %d to 0x%x!\n",foog+1,CyberSmallstuffProps[SCNUM(cobjid)].vcolors[foog]);
                     }
 //                        g3_set_vcolor(foog+1,0x33 + objSmallstuffs[_fr_cobj->specID].cosmetic_value + (foog << 2));
                     break;

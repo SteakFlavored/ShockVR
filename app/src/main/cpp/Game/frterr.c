@@ -216,7 +216,7 @@ void _fr_figure_pt(g3s_phandle tmp, int32_t pt_code)
     case 2: core=_fr_ptnext+1; break;
     case 3: core=_fr_ptbase+1; break;
 //#ifndef SHIP
-//    default: Warning(("_fr_terr_poly_wall: bad point base code %x gives %d\n",pt_code,ptm->base)); break;
+//    default: Warning("_fr_terr_poly_wall: bad point base code %x gives %d\n",pt_code,ptm->base); break;
 //#endif
     }
     core+=_fdt_x;
@@ -1126,7 +1126,7 @@ int32_t merge_walls(fix *dst_wall,fix *i_wall,int32_t i_cnt,fix *o_wall,int32_t 
             else if (sgn1==0) tmp1=(sgn0<=0);
             else
             {
-//                Warning(("top crossing case\n")); // crossing case sucks rocks
+//                Warning("top crossing case\n"); // crossing case sucks rocks
                 tmp1=0;
             }
         }
@@ -1141,7 +1141,7 @@ int32_t merge_walls(fix *dst_wall,fix *i_wall,int32_t i_cnt,fix *o_wall,int32_t 
             else if (sgn3==0) tmp2=(sgn2>=0);
             else
             {
-//                Warning(("bottom crossing case\n"));
+//                Warning("bottom crossing case\n");
                 tmp2=0;
             }
         }

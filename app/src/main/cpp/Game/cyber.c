@@ -150,7 +150,7 @@ errtype enter_cyberspace_stuff(int8_t dest_lev)
 
 
     // Set timer for Avatar O'SHODAN
-//    Warning(("player_struct.csp_time_base = %d\n",player_struct.cspace_time_base));
+//    Warning("player_struct.csp_time_base = %d\n",player_struct.cspace_time_base);
 #ifdef STUPID_HACK
     player_struct.cspace_time_base = CIT_CYCLE * 3;
 #else

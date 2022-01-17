@@ -212,7 +212,7 @@ bool keyhelp_hotkey_func(int16_t keycode, uint32_t context, void* data)
 
     scrntext_free(keyhelp_txtscrn);
 #else
-    Warning(("Ce n'est pas RES_keyhelp\n"));
+    Warning("Ce n'est pas RES_keyhelp\n");
 #endif
 
     uiShowMouse(NULL);
