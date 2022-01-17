@@ -49,6 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef RECT_H
 #define RECT_H
 
+#include "lg_types.h"
+
 //    Here are the Point and LGRect structs
 
 typedef struct {

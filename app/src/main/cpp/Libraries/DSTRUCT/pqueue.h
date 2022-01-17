@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Includes
-#include "lg.h"  // every file should have this
+#include "lg_types.h"
 #include "error.h"
 
 // Defines

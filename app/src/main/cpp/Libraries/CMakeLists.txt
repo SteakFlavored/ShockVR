@@ -5,6 +5,16 @@ include_directories(
     ${LIBRARIES_DIR}/H
 )
 
+set(DSTRUCT_LIBRARY_SRC
+    DSTRUCT/array.c
+    DSTRUCT/hash.c
+    DSTRUCT/llist.c
+    DSTRUCT/lllist.c
+    DSTRUCT/pqueue.c
+    DSTRUCT/rect.c
+)
+add_library(DSTRUCT_LIB ${DSTRUCT_LIBRARY_SRC})
+
 set(FIX_LIBRARY_SRC
     FIX/f_exp.c
     FIX/fix_sqrt.c

@@ -16,18 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+#include <stdlib.h>
 #include <string.h>
-#include "lg.h"
+
 #include "array.h"
 
 //---------
 // Prototypes
 //---------
 errtype array_grow(Array *a, int32_t size);
-
-
-//------------------------------------------------------
-//  For Mac version:  Use NewPtr and DisposePtr.
 
 #define FREELIST_EMPTY    -1
 #define FREELIST_NOTFREE -2
@@ -39,9 +36,9 @@ errtype array_init(Array* initme, int32_t elemsize, int32_t vecsize)
     initme->vecsize = vecsize;
     initme->fullness = 0;
     initme->freehead = FREELIST_EMPTY;
-    initme->freevec = (int32_t*)NewPtr(vecsize*sizeof(int32_t));
+    initme->freevec = (int32_t*)malloc(vecsize*sizeof(int32_t));
     if (initme->freevec == NULL) return ERR_NOMEM;
-    initme->vec = (int8_t*) NewPtr(elemsize*vecsize);
+    initme->vec = (int8_t*) malloc(elemsize*vecsize);
     if (initme->vec == NULL) return ERR_NOMEM;
     return OK;
 }
@@ -51,14 +48,14 @@ errtype array_grow(Array *a, int32_t size)
     int8_t* tmpvec;
     int32_t* tmplist;
     if (size <= a->vecsize) return OK;
-    tmpvec = (int8_t *)NewPtr(a->elemsize*size);
+    tmpvec = (int8_t *)malloc(a->elemsize*size);
     if (tmpvec == NULL) return ERR_NOMEM;
     memcpy(tmpvec,a->vec,a->vecsize*a->elemsize);
-    tmplist = (int32_t *)NewPtr(size*sizeof(int32_t));
+    tmplist = (int32_t *)malloc(size*sizeof(int32_t));
     if (tmplist == NULL) return ERR_NOMEM;
     memcpy(tmplist,a->vec,a->vecsize*sizeof(int32_t));
-    DisposePtr((Ptr)a->vec);
-    DisposePtr((Ptr)a->freevec);
+    free(a->vec);
+    free(a->freevec);
     a->vecsize = size;
     a->vec = tmpvec;
     a->freevec = tmplist;
@@ -98,7 +95,7 @@ errtype array_destroy(Array* a)
     a->elemsize = 0;
     a->vecsize = 0;
     a->freehead = FREELIST_EMPTY;
-    DisposePtr((Ptr)a->freevec);
-    DisposePtr((Ptr)a->vec);
+    free(a->freevec);
+    free(a->vec);
     return OK;
 }

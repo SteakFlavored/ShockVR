@@ -34,8 +34,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * $log$
 */
 
+#include <stdlib.h>
 #include <string.h>
-#include "lg.h"
+
 #include "llist.h"
 //#include "memall.h"
 
@@ -243,7 +244,7 @@ void LlistDestroy(LlistHead *plh)
     while (pnb)
     {
         pnbNext = pnb->pnext;
-        DisposePtr((Ptr)pnb);
+        free(pnb);
         pnb = pnbNext;
     }
 
@@ -262,7 +263,6 @@ void LlistDestroy(LlistHead *plh)
 //
 //        plh = ptr to list or queue header
 //    --------------------------------------------------------
-//  For Mac version:  Use NewPtr instead of Malloc.
 
 void LlistGrowList(LlistHead *plh)
 {
@@ -272,7 +272,7 @@ void LlistGrowList(LlistHead *plh)
 //    Allocate new storage block
 
     blockSize = plh->nodeSize * plh->numNodesPerBlock;
-    pNewStore = (llist *)NewPtr(sizeof(llist) + blockSize);
+    pNewStore = (llist *)malloc(sizeof(llist) + blockSize);
 
 //    Link it in to the node store list
 

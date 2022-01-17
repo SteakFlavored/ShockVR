@@ -28,11 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *
  */
- //---------------------------------------------------
- //  For Mac version:  Uses NewPtr and DisposePtr.
 
-//#include <io.h>
+#include <stdlib.h>
 #include <string.h>
+
 #include "pqueue.h"
 
 // -------
@@ -80,15 +79,13 @@ void re_heapify(PQueue *q)
             minchild = lchild;
         if (lchild >= q->fullness)
             minchild = rchild;
-        if (minchild == NULL_CHILD)
-            if (LESS(q,lchild,rchild))
-            {
+        if (minchild == NULL_CHILD) {
+            if (LESS(q, lchild, rchild)) {
                 minchild = lchild;
-            }
-            else
-            {
+            } else {
                 minchild = rchild;
             }
+        }
         if (minchild < q->fullness && LESS(q,minchild,head))
         {
             swapelems(q,head,minchild);
@@ -109,17 +106,15 @@ void double_re_heapify(PQueue *q, int32_t head)
         minchild = lchild;
     if (lchild >= q->fullness)
         minchild = rchild;
-    if (minchild == NULL_CHILD)
-        if (LESS(q,lchild,rchild))
-        {
+    if (minchild == NULL_CHILD) {
+        if (LESS(q, lchild, rchild)) {
             minchild = lchild;
             maxchild = rchild;
-        }
-        else
-        {
+        } else {
             minchild = rchild;
             maxchild = lchild;
         }
+    }
     if (minchild < q->fullness && LESS(q,minchild,head))
     {
         swapelems(q,head,minchild);
@@ -136,19 +131,19 @@ void double_re_heapify(PQueue *q, int32_t head)
 errtype pqueue_init(PQueue* q, int32_t size, int32_t elemsize, QueueCompare comp, bool grow)
 {
     if (size < 1) return ERR_RANGE;
-    q->vec = NewPtr(elemsize*size);
+    q->vec = malloc(elemsize*size);
     if (q->vec == NULL) return ERR_NOMEM;
     if (elemsize > swap_bufsize)
     {
         if (swap_buffer == NULL)
-            swap_buffer = NewPtr(elemsize);
+            swap_buffer = malloc(elemsize);
         else
         {
-            DisposePtr(swap_buffer);
-            swap_buffer = NewPtr(elemsize);
+            free(swap_buffer);
+            swap_buffer = malloc(elemsize);
         }
         swap_bufsize = elemsize;
-        if (MemError()) return ERR_NOMEM;
+        if (swap_buffer == NULL) return ERR_NOMEM;
     }
     q->size = size;
     q->fullness = 0;
@@ -165,11 +160,11 @@ errtype pqueue_insert(PQueue* q, void* elem)
         return ERR_DOVERFLOW;
     while (q->fullness >= q->size)
     {
-        Ptr newp = NewPtr(q->elemsize * q->size*2);
-        if (MemError())
+        int8_t *newp = malloc(q->elemsize * q->size*2);
+        if (newp == NULL)
             return ERR_NOMEM;
-        BlockMoveData(q->vec, newp, q->size * q->elemsize);
-        DisposePtr(q->vec);
+        memmove(newp, q->vec, q->size * q->elemsize);
+        free(q->vec);
         q->vec = newp;
         q->size*=2;
     }
@@ -220,7 +215,7 @@ errtype pqueue_read(PQueue* q, int32_t fd, void (*readfunc)(int32_t fd, void* el
     int32_t i;
     read(fd,(int8_t*)q,sizeof(PQueue));
     if (q->grow) q->size = q->fullness;
-    q->vec = NewPtr(q->size*q->elemsize);
+    q->vec = malloc(q->size*q->elemsize);
     if (q->vec == NULL) return ERR_NOMEM;
     for(i = 0; i < q->fullness; i++)
     {
@@ -233,7 +228,7 @@ errtype pqueue_read(PQueue* q, int32_t fd, void (*readfunc)(int32_t fd, void* el
 */
 errtype pqueue_destroy(PQueue* q)
 {
-    DisposePtr(q->vec);
+    free(q->vec);
     q->fullness = 0;
     return OK;
 }
