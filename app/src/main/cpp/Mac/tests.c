@@ -215,7 +215,7 @@ void DoTestBrowseImages(void)
                 pRefId = MKREF(id, 0);
                     pRefTbl = ResReadRefTable(REFID(pRefId));
                     rfs = RefSize(pRefTbl,REFINDEX(pRefId));
-                    p = NewPtrClear(rfs);
+                    p = calloc(rfs);
                   RefExtract(pRefTbl, pRefId, p);
 //                    ResFreeRefTable(rt);
                     break;
@@ -239,7 +239,7 @@ void DoTestBrowseImages(void)
     SetPort(savePort);
 
     SetImage(p);                                                // Set the initial bitmap
-    DisposePtr(p);
+    free(p);
 
     gCurrTest = 0;
     InvalRect(&gMainWindow->portRect);
@@ -395,10 +395,10 @@ void DoClickBrowseImages(Point localPt)
 
             pRefId = MKREF(n, 0);
              pRefTbl = ResReadRefTable(REFID(pRefId));
-            p = NewPtrClear(RefSize(pRefTbl,REFINDEX(pRefId)));
+            p = calloc(RefSize(pRefTbl,REFINDEX(pRefId)));
               RefExtract(pRefTbl, pRefId, p);
             SetImage(p);
-            DisposePtr(p);
+            free(p);
         }
         else SysBeep(0);
         return;
@@ -416,10 +416,10 @@ void DoClickBrowseImages(Point localPt)
             {
                 pRefId = MKREF(id, ind);
 
-                p = NewPtrClear(RefSize(pRefTbl,REFINDEX(pRefId)));
+                p = calloc(RefSize(pRefTbl,REFINDEX(pRefId)));
                 RefExtract(pRefTbl, pRefId, p);
                 SetImage(p);
-                DisposePtr(p);
+                free(p);
             }
             else
                 SysBeep(0);
@@ -434,10 +434,10 @@ void DoClickBrowseImages(Point localPt)
             {
                 pRefId = MKREF(id, ind);
 
-                p = NewPtrClear(RefSize(pRefTbl,REFINDEX(pRefId)));
+                p = calloc(RefSize(pRefTbl,REFINDEX(pRefId)));
                 RefExtract(pRefTbl, pRefId, p);
                 SetImage(p);
-                DisposePtr(p);
+                free(p);
             }
             else
                 SysBeep(0);
@@ -486,7 +486,7 @@ void DoTestBrowseFonts(void)
             {
                 ResLock(id);
                 rfs = ResSize(id);
-                    p = NewPtrClear(rfs);
+                    p = calloc(rfs);
                 ResExtract(id, p);
                 ResUnlock(id);
                 pResId = id;
@@ -505,7 +505,7 @@ void DoTestBrowseFonts(void)
     DisableItem(mh, 0);
 
     SetFont(p);                                                // Set the initial bitmap
-    DisposePtr(p);
+    free(p);
 
     gCurrTest = 1;
     InvalRect(&gMainWindow->portRect);
@@ -677,11 +677,11 @@ void DoClickBrowseFonts(Point localPt)
         {
             pResId = n;
             ResLock(n);
-                p = NewPtrClear(ResSize(n));
+                p = calloc(ResSize(n));
             ResExtract(n, p);
             ResUnlock(n);
             SetFont(p);
-            DisposePtr(p);
+            free(p);
         }
         else SysBeep(0);
         return;
@@ -728,7 +728,7 @@ void DoTestLoadPalette(void)
             {
                 ResLock(id);
                 rfs = ResSize(id);
-                    p = NewPtrClear(rfs);
+                    p = calloc(rfs);
                 ResExtract(id, p);
                 ResUnlock(id);
                 pResId = id;
@@ -747,7 +747,7 @@ void DoTestLoadPalette(void)
     DisableItem(mh, 0);
 
      gr_set_pal(0, 256, (uint8_t *)p);
-    DisposePtr(p);
+    free(p);
 
     gCurrTest = 2;
     InvalRect(&gMainWindow->portRect);
@@ -808,11 +808,11 @@ void DoClickLoadPalette(Point localPt)
         {
             pResId = n;
             ResLock(n);
-                p = NewPtrClear(ResSize(n));
+                p = calloc(ResSize(n));
             ResExtract(n, p);
             ResUnlock(n);
              gr_set_pal(0, 256, (uint8_t *)p);
-            DisposePtr(p);
+            free(p);
         }
         else SysBeep(0);
         return;

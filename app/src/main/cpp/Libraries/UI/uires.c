@@ -50,7 +50,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
     {
 
 //        Warning("damn, we have to malloc...need %d, buffer = %d\n",RefSize(rt,i),uiResTempBuffer.size);
-        f = (FrameDesc *)NewPtr(RefSize(rt,i));
+        f = (FrameDesc *)malloc(RefSize(rt,i));
         alloced_fdesc = true;
     }
     else
@@ -67,7 +67,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
     if (anchor != NULL)
         *anchor = f->anchorArea;
     if (!tmp_mem && p == NULL)
-        p = (uint8_t *)NewPtr(f->bm.w * f->bm.h * sizeof(uint8_t));
+        p = (uint8_t *)malloc(f->bm.w * f->bm.h * sizeof(uint8_t));
     if (tmp_mem)
         p = (uint8_t*)(f+1);
 
@@ -76,7 +76,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
     *bmp = f->bm;
     bmp->bits = p;
     if (alloced_fdesc)
-        DisposePtr((Ptr)f);
+        free(f);
     return(OK);
 }
 

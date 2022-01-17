@@ -62,8 +62,8 @@ extern int32_t gr_dump_tluc8_table(uint8_t *buf, int32_t nlit);
 extern void gr_read_tluc8_table(uint8_t *buf);
 
 #define gr_alloc_translucency_table(n) \
-    ((uint8_t *)NewPtr(n*256))
-#define gr_free_translucency_table(tab) (DisposePtr((Ptr) tab))
+    ((uint8_t *)malloc(n*256))
+#define gr_free_translucency_table(tab) (free( tab))
 
 #define gr_make_translucency_table(op, pu, co) \
   (gr_init_translucency_table(gr_alloc_translucency_table(1), op, pu, co))

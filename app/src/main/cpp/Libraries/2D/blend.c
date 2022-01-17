@@ -79,7 +79,7 @@ int32_t gr_free_blend(void)
 {
     if (grd_blend==NULL)
         return 1;
-    DisposePtr((Ptr) grd_blend);    // was gr_free
+    free( grd_blend);    // was gr_free
     grd_blend=NULL;
     grd_log_blend_levels=0;
     return 0;
@@ -95,7 +95,7 @@ bool gr_init_blend(int32_t log_blend_levels)
 
         if (grd_blend!=NULL) if (!gr_free_blend()) return false; /* something went horribly wrong */
 //        if ((grd_blend=(uint8_t *) gr_malloc(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return false; /* x 64k tables */
-        if ((grd_blend=(uint8_t *) NewPtr(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return false; /* x 64k tables */
+        if ((grd_blend=(uint8_t *) malloc(tab_cnt*GR_BLEND_TABLE_SIZE))==NULL) return false; /* x 64k tables */
         for (i=0; i<tab_cnt; i++)
             gri_build_blend(grd_blend+(i*GR_BLEND_TABLE_SIZE),fac*(i+1));
         grd_log_blend_levels=log_blend_levels;

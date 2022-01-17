@@ -138,12 +138,12 @@ grs_canvas *gr_alloc_canvas (int32_t type, int16_t w, int16_t h)
     grs_canvas *c;
     uint8_t *p;
 
-    if ((c=(grs_canvas *)NewPtr (sizeof (*c))) == NULL)    // was Malloc
+    if ((c=(grs_canvas *)malloc (sizeof (*c))) == NULL)    // was Malloc
         return NULL;
     if (type == BMT_DEVICE)
         p = valloc (w,h);
     else
-        p = (uint8_t *)NewPtr (w*h);// was Malloc
+        p = (uint8_t *)malloc (w*h);// was Malloc
     gr_init_canvas (c, p, type, w, h);
 
     return c;
@@ -163,7 +163,7 @@ grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, int16_t x, int16_t y,
 {
     grs_canvas *c_new;
 
-    c_new = (grs_canvas *)NewPtr (sizeof (*c_new));// was Malloc
+    c_new = (grs_canvas *)malloc (sizeof (*c_new));// was Malloc
     if (c_new != NULL)
         gr_init_sub_canvas (c, c_new, x, y, w, h);
     return c_new;

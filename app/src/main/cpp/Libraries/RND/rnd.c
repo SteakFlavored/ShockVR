@@ -271,7 +271,7 @@ void RndGauss16FastSeed(RndStream *prs, uint32_t seed)
 
     if (gaussTable == NULL)
     {
-        pg = gaussTable = (uint16_t *)NewPtr(SIZE_GAUSSTABLE * sizeof(int16_t));
+        pg = gaussTable = (uint16_t *)malloc(SIZE_GAUSSTABLE * sizeof(int16_t));
         for (i = 0; i < SIZE_GAUSSTABLE; i++)
         {
             prs->curr = i;

@@ -136,7 +136,7 @@ int16_t g3_init(int16_t max_points,int32_t user_x_axis,int32_t user_y_axis,int32
       allocSize<<=1;
 #endif
 
-  point_list = (g3s_point *) NewPtr(allocSize);
+  point_list = (g3s_point *) malloc(allocSize);
   if (!point_list) return(0);
 
 // MLA - all divide overflow/divide by zero errors are handled around the individual divide

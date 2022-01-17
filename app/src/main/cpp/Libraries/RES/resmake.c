@@ -129,7 +129,7 @@ void ResMakeCompound(Id id, uint8_t type, int16_t filenum, uint8_t flags)
 //    Spew(DSRC_RES_Make, ("ResMake: making compound resource $%x\n", id));
 
     sizeTable = REFTABLESIZE(0);
-    prt = (RefTable *)NewPtrClear(sizeTable);
+    prt = (RefTable *)calloc(sizeTable);
     prt->numRefs = 0;
     prt->offset[0] = sizeTable;
 

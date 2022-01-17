@@ -324,7 +324,7 @@ void main(void)
                     QTS_STTS    *p = (QTS_STTS *)dbuff;
                     int16_t        i, j, si;
 
-                    gSampleTimes = (uint32_t *)NewPtr(1200 * sizeof(uint32_t));
+                    gSampleTimes = (uint32_t *)malloc(1200 * sizeof(uint32_t));
                     si = 0;
                     for (i = 0; i < p->numEntries; i++)
                         for (j = 0; j < p->time2samp[i].count; j++)
@@ -337,7 +337,7 @@ void main(void)
                     QTS_STCO     *p = (QTS_STCO *)dbuff;
 
                     gNumFrames = p->numEntries;
-                    gChunkOffsets = (uint32_t *)NewPtr(p->numEntries * sizeof(uint32_t));
+                    gChunkOffsets = (uint32_t *)malloc(p->numEntries * sizeof(uint32_t));
                     BlockMove(p->offset, gChunkOffsets, p->numEntries * sizeof(uint32_t));
                 }
             }
@@ -366,7 +366,7 @@ void main(void)
          int32_t            compSize;
          int16_t        notSyncFlag;
 
-        frameBuff = NewPtr(600 * 300);
+        frameBuff = malloc(600 * 300);
         CheckError(MemError(), "\pCan't allocate a frame buffer for input movie.");
 
         SetRect(&r, 0, -17, 300, 0);

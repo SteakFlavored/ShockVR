@@ -89,7 +89,7 @@ void make_popup_cursor(LGCursor* c, grs_bitmap* bm, int8_t* s, uint32_t tmplt,bo
 
     if (allocate)
     {
-        bptr = (uint8_t *)NewPtr(bm->w*bm->h);
+        bptr = (uint8_t *)malloc(bm->w*bm->h);
         if (bptr == NULL)
             critical_error(CRITERR_MEM|4);
     }

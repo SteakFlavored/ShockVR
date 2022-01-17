@@ -86,7 +86,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
     if (RefSize(rt,i) > FRAME_BUFFER_SIZE)
     {
 //        Warning("damn, we have to malloc...need %d, buffer = %d\n",RefSize(rt,i),FRAME_BUFFER_SIZE);
-        f = (FrameDesc *)NewPtr(RefSize(rt,i));
+        f = (FrameDesc *)malloc(RefSize(rt,i));
         alloced_fdesc = true;
     }
     else
@@ -104,7 +104,7 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
     if (anchor != NULL)
         *anchor = f->anchorArea;
     if (!tmp_mem && p == NULL)
-        p = (uint8_t *)NewPtr(f->bm.w * f->bm.h * sizeof(uint8_t));
+        p = (uint8_t *)malloc(f->bm.w * f->bm.h * sizeof(uint8_t));
     if (tmp_mem)
         p = (uint8_t *)(f+1);
 
@@ -117,7 +117,7 @@ if (bmp == NULL)
     *bmp = f->bm;
     bmp->bits = p;
     if (alloced_fdesc)
-        DisposePtr((Ptr)f);
+        free(f);
     return(OK);
 }
 
@@ -207,7 +207,7 @@ errtype load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc
     h = temp_bmp.h;
     ss_point_convert(&w,&h,false);
     if (alloc)
-        bits = (uint8_t *)NewPtr(sizeof(int8_t)*w*h);
+        bits = (uint8_t *)malloc(sizeof(int8_t)*w*h);
     else
         bits = bmp->bits;
     if (temp_bmp.bits == NULL)
@@ -217,7 +217,7 @@ errtype load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc
     gr_push_canvas(&temp_canv);
     gr_clear(0);
     ss_bitmap(&temp_bmp,0,0);
-    DisposePtr((Ptr)temp_bmp.bits);
+    free(temp_bmp.bits);
     ResFreeRefTable(rt);
     if (convert_use_mode)
     {

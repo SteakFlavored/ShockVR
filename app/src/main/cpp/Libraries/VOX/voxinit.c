@@ -53,7 +53,7 @@ int32_t vxd_maxd;
 // returns true for success, false if unable to allocate
 bool vx_init(int32_t max_depth)
 {
-    zdxdz = (fix *)NewPtr(2 * max_depth * sizeof(fix));
+    zdxdz = (fix *)malloc(2 * max_depth * sizeof(fix));
     zdydz = zdxdz + max_depth;
 
     #ifdef DBG_ON
@@ -66,7 +66,7 @@ bool vx_init(int32_t max_depth)
 
 void vx_close()
 {
-    DisposePtr((Ptr)zdxdz);
+    free(zdxdz);
 }
 
 // Der, this could be a macro, and

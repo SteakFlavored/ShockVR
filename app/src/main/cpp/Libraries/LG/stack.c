@@ -54,16 +54,16 @@ void MemStackInit (MemStack *ms)
 //
 void *MemStackAlloc (MemStack *ms, int32_t size)
 {
-    int8_t *newptr = (int8_t *) ms->topptr + size;
+    int8_t *malloc = (int8_t *) ms->topptr + size;
     int8_t *oldptr = (int8_t *) ms->topptr;
 
-    if (newptr > (int8_t *) ms->baseptr + ms->sz)
+    if (malloc > (int8_t *) ms->baseptr + ms->sz)
     {
         Warning (("MemStackAlloc: can't alloc\n"));
         return NULL;
     }
 
-    ms->topptr = (void *) newptr;
+    ms->topptr = (void *) malloc;
     return oldptr;
 }
 
@@ -74,9 +74,9 @@ void *MemStackAlloc (MemStack *ms, int32_t size)
 //
 void *MemStackRealloc (MemStack *ms, void *ptr, int32_t newsize)
 {
-    int8_t *newptr = (int8_t *)ptr + newsize;
+    int8_t *malloc = (int8_t *)ptr + newsize;
 
-    if (newptr > (int8_t *)ms->baseptr + ms->sz)
+    if (malloc > (int8_t *)ms->baseptr + ms->sz)
     {
         Warning("MemStackRealloc: can't realloc\n");
         return NULL;

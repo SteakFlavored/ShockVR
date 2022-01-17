@@ -81,7 +81,7 @@ errtype _map_init_elem(FullMap *fmap, int32_t i, int32_t j)
 FullMap* map_create(int32_t xshf, int32_t yshf,int32_t zshf, bool cyb)
 {
     int32_t i,j;
-    FullMap* fmap = (FullMap *)NewPtr(sizeof(FullMap));
+    FullMap* fmap = (FullMap *)malloc(sizeof(FullMap));
     fmap->x_shft = xshf;
     fmap->y_shft = yshf;
     fmap->z_shft = zshf;
@@ -121,6 +121,6 @@ void map_free(void)
 
     for (int32_t i = 0; i < NUM_MAP_SCHEDULES; i++)
         schedule_free(&global_fullmap->sched[i]);
-    DisposePtr((Ptr)fm_map(global_fullmap));
-    DisposePtr((Ptr)global_fullmap);
+    free(fm_map(global_fullmap));
+    free(global_fullmap);
 }

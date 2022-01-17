@@ -103,7 +103,7 @@ void star_set(int32_t n,sts_vec *vlist,uint8_t *clist)
 // allocates the necessary space for stars using alloc
 int32_t star_alloc(int32_t n)
 {
-    std_vec = (sts_vec *) NewPtr(n*sizeof(sts_vec)+n);
+    std_vec = (sts_vec *) malloc(n*sizeof(sts_vec)+n);
     if (std_vec == NULL) return -1;
     std_col = (uint8_t *)(std_vec + n);
     std_num = n;

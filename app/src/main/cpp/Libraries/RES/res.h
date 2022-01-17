@@ -125,7 +125,7 @@ void *RefLock(Ref ref);                                // lock compound res, get
 void *RefGet(Ref ref);                                    // get ptr to item in comp. res (dangerous!)
 
 RefTable *ResReadRefTable(Id id);                                    // alloc & read ref table
-#define ResFreeRefTable(prt) (DisposePtr((Ptr)prt))        // free ref table
+#define ResFreeRefTable(prt) (free(prt))        // free ref table
 //int ResExtractRefTable(Id id, RefTable *prt, int32_t size);     // extract reftable
 void *RefExtract(RefTable *prt, Ref ref, void *buff);            // extract ref
 

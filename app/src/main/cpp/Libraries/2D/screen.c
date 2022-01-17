@@ -66,7 +66,7 @@ grs_screen *gr_alloc_screen (int16_t w, int16_t h)
 
   /* get memory for screen structure itself and 2 system canvases,
           and video ram for the screen itself. */
-  if ((p=(uint8_t *)NewPtr (sizeof (*s)+2*sizeof (*c))) == NULL)    // was gr_malloc
+  if ((p=(uint8_t *)malloc (sizeof (*s)+2*sizeof (*c))) == NULL)    // was gr_malloc
       goto bailout2;
   if ((b = valloc (w, h)) == (uint8_t *)-1)
       goto bailout1;

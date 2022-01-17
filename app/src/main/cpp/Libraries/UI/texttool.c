@@ -93,7 +93,7 @@ TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_
     int8_t *dummy;
     dummy = keymap;
 
-    new_tt=(TextTool *)NewPtr(sizeof(TextTool));
+    new_tt=(TextTool *)malloc(sizeof(TextTool));
     _tt_top(new_tt);
     _tt->max_w=_tt->max_h=_tt->cur_w=_tt->cur_h=0;
     if (pos!=NULL) _tt->scr_loc=*pos;
@@ -103,8 +103,8 @@ TextTool *tt_full_build(TTRect *pos, TTState *es, TTFontInfo *ttf, void *output_
     else              _tt->lfont=&TTDefFont;
     _tt->output_data = output_data;
     _tt->display_func = d_func;
-    _tt->lines=(int8_t **)NewPtr(1);
-    _tt->line_info=(TTCheats *)NewPtr(1);
+    _tt->lines=(int8_t **)malloc(1);
+    _tt->line_info=(TTCheats *)malloc(1);
     _tt->disp_rows=(_tt->scr_loc.h+_tt->lfont->height-1)/_tt->lfont->height;
     _tt_new_line(0);
     if (es!=NULL)  _tt->es=*es;
@@ -116,9 +116,9 @@ bool tt_toast(TextTool *old_tt)
 {
     int32_t i;
     for (i=0; i<old_tt->max_h; i++)
-        DisposePtr((Ptr)old_tt->lines[i]);
-    DisposePtr((Ptr)*(old_tt->lines));
-    DisposePtr((Ptr)old_tt->line_info);
+        free(old_tt->lines[i]);
+    free(*(old_tt->lines));
+    free(old_tt->line_info);
     return true;
 }
 
@@ -185,10 +185,10 @@ void _tt_new_line(int32_t line_num)
     _tt->max_h++;
 //    _tt->lines=(int8_t **)Realloc(_tt->lines,sizeof(int8_t *)*_tt->max_h);
 //    _tt->line_info=(TTCheats *)Realloc(_tt->line_info,sizeof(TTCheats)*_tt->max_h);
-    DisposePtr((Ptr)_tt->lines);
-    _tt->lines = (int8_t **)NewPtr(sizeof(int8_t *)*_tt->max_h);
-    DisposePtr((Ptr)_tt->line_info);
-    _tt->line_info = (TTCheats *)NewPtr(sizeof(TTCheats)*_tt->max_h);
+    free(_tt->lines);
+    _tt->lines = (int8_t **)malloc(sizeof(int8_t *)*_tt->max_h);
+    free(_tt->line_info);
+    _tt->line_info = (TTCheats *)malloc(sizeof(TTCheats)*_tt->max_h);
     if (line_num<_tt->max_h-1)                      /* insert case */
     {
         memmove(&_tt->line_info[line_num+1],&_tt->line_info[line_num],sizeof(TTCheats)*(_tt->max_h-line_num-1));
@@ -196,7 +196,7 @@ void _tt_new_line(int32_t line_num)
     }
     _tt->line_info[line_num].wid=TTL_INIT;              /* totally empty at first */
     _tt->line_info[line_num].flg|=TTC_FLG_RET;         /* should be a return there */
-    _tt->lines[line_num]=(int8_t *)NewPtr(TTL_INIT);    /* and it is empty (\0) */
+    _tt->lines[line_num]=(int8_t *)malloc(TTL_INIT);    /* and it is empty (\0) */
     _tt->lines[line_num][0]='\0';
     _tt_build_cheat(line_num);                      /* so we need a cheat for it */
 }

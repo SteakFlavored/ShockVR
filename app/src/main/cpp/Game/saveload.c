@@ -123,7 +123,7 @@ extern bool trigger_check;
 //-------------------------------------------------------
 void store_objects(int8_t** buf, ObjID *obj_array, int8_t obj_count)
 {
-    int8_t*    s = (int8_t *)NewPtr(obj_count * sizeof(Obj) * 3);
+    int8_t*    s = (int8_t *)malloc(obj_count * sizeof(Obj) * 3);
     int32_t         i;
     if (s == NULL)
         critical_error(CRITERR_MEM|3);
@@ -186,7 +186,7 @@ void restore_objects(int8_t* buf, ObjID *obj_array, int8_t obj_count)
             s+=sh->struct_size;
         }
     }
-    DisposePtr((Ptr)buf);
+    free(buf);
 }
 
 

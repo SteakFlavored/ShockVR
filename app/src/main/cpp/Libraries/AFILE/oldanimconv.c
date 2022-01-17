@@ -150,7 +150,7 @@ void main(void)
     gr_set_mode (GRM_640x480x8, true);
     screen = gr_alloc_screen (grd_cap->w, grd_cap->h);
     gr_set_screen (screen);
-    gr_set_unpack_buf((uint8_t *)NewPtr(640 * 480));
+    gr_set_unpack_buf((uint8_t *)malloc(640 * 480));
 
     LoadShockPalette();
     LoadAnimRes();
@@ -246,7 +246,7 @@ void main(void)
     //---------------------
     // Convert the movies.
     //---------------------
-    p = NewPtrClear(320 * 200);
+    p = calloc(320 * 200);
 
 //    for (int16_t r = 2624; r <= 2635; r++)
 //    {
@@ -429,7 +429,7 @@ void LoadShockPalette(void)
         int32_t        rfs;
         ResLock(id);
         rfs = ResSize(id);
-        p = NewPtrClear(rfs);
+        p = calloc(rfs);
         ResExtract(id, p);
         ResUnlock(id);
     }
@@ -442,7 +442,7 @@ void LoadShockPalette(void)
 
 
      gr_set_pal(0, 256, (uint8_t *)p);
-    DisposePtr(p);
+    free(p);
 
     ResCloseFile(resNum);
 }
