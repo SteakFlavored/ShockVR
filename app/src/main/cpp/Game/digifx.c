@@ -235,14 +235,14 @@ bool set_sample_pan_gain(snd_digi_parms *sdp)
    vol = volumes[sdp->snd_ref - SFX_BASE];
    if (vol == -1)
       vol = 127;
-//¥¥¥   vol = vol  * curr_sfx_vol / 100;
+//   vol = vol  * curr_sfx_vol / 100;
    sdp->vol = vol * temp_vol / VOL_FULL;
-   sdp->vol = 127;  //¥¥¥ for now
+   sdp->vol = 127;  // for now
    snd_sample_reload_parms(sdp);
    return(false);
 }
 
-#ifdef NOT_YET //¥¥¥
+#ifdef NOT_YET //
 
 #pragma disable_message(202)
 int32_t digifx_volume_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t theta, int32_t basevol)
@@ -279,7 +279,7 @@ int32_t digifx_pan_shift(int16_t x, int16_t y, int16_t z, int16_t phi, int16_t t
 }
 #pragma enable_message(202)
 
-#endif  // NOT_YET ¥¥¥
+#endif  // NOT_YET
 
 uint8_t sfx_volume_levels[] = {0, 0x9, 0xF};
 #define ALWAYS_QUEUE_TOLERANCE   2
@@ -332,7 +332,7 @@ int32_t play_digi_fx_master(int32_t sfx_code, int32_t num_loops, ObjID id, uint1
    if (sfx_code != real_code)
    {
       s_dprm.data = NULL;
-      s_dprm.vol  = volumes[sfx_code]; //¥¥¥* curr_sfx_vol / 100;
+      s_dprm.vol  = volumes[sfx_code]; //* curr_sfx_vol / 100;
    }
    else
 #endif

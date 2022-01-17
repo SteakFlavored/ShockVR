@@ -113,7 +113,7 @@ errtype play_vmail(int8_t vmail_no)
 
 	uiFlush();
 
-	//¥¥¥ Need to pause here for click if not clicked to stop vmail already.
+	// Need to pause here for click if not clicked to stop vmail already.
 
 	email_page_exit();
 	inventory_draw_new_page(old_invent_page);

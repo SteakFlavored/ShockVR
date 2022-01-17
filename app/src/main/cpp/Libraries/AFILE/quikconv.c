@@ -488,7 +488,7 @@ void ConvertVMHD(void *data, uint32_t length, bool read)
 
 void Flip4Func(uint32_t *pval4)
 {
-//¥¥¥ For mac version
+// For mac version
 //	*pval4 = MAKE4(*pval4 & 0xFF,
 //		(*pval4 >> 8) & 0xFF,
 //		(*pval4 >> 16) & 0xFF,
@@ -497,7 +497,7 @@ void Flip4Func(uint32_t *pval4)
 
 void Flip2Func(uint16_t *pval2)
 {
-//¥¥¥ For mac version
+// For mac version
 //	*pval2 = ((*pval2 & 0xFF) << 8) | ((*pval2 >> 8) & 0xFF);
 }
 

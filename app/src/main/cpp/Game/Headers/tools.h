@@ -89,10 +89,10 @@ errtype message_clear_check();
 bool confirm_box(int8_t *box_text);
 
 // From the short-lived util.c
-// ¥¥¥FILE *fopen_gen(int8_t *fname, const int8_t *how);
+// FILE *fopen_gen(int8_t *fname, const int8_t *how);
 int32_t open_gen(int8_t *fname, int32_t access1, int32_t access2);
 int8_t *next_number_fname(int8_t *fname);
-//¥¥¥Êchar *next_number_dpath_fname(Datapath *dpath, int8_t *fname);
+//Êchar *next_number_dpath_fname(Datapath *dpath, int8_t *fname);
 
 // Execute a tight loop, doing appropriate music/palette things
 errtype tight_loop(bool check_input);

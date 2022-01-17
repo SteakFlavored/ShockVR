@@ -310,7 +310,7 @@ void SetUpMenus(MenuHandle *theMenus, int16_t numMenus)
 //------------------------------------------------------------------------------------
 //  Get the dirID and Vref for any folders Shock uses.
 //------------------------------------------------------------------------------------
-//#define PLAY_FROM_CD				//¥¥¥ Make sure this is defined for shipping version.
+//#define PLAY_FROM_CD				// Make sure this is defined for shipping version.
 void GetFolders(void)
 {
 	int32_t						temp;

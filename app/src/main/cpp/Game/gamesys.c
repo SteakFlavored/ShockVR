@@ -333,7 +333,7 @@ void check_nearby_objects()
    }
 }
 
-/*¥¥¥
+/*
 #define CFG_FATIGUE_VAR "fatigue"
 extern uint8_t fatigue_threshold;
 void reload_fatigue_parms()
@@ -512,7 +512,7 @@ errtype gamesys_run(void)
    }
 #endif
 
-//¥¥¥   page_amount = 0;
+//   page_amount = 0;
 
    if (!gamesys_on)
       return(OK);

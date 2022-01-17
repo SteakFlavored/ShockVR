@@ -89,7 +89,7 @@ const Q	one_sixth = .1666666666667,      //Overboard?
 			point_one_two_five = .125,
 			two = 2.,
 			point_1 = 0.1,
-			min_scale_slice = .03;	// ¥¥¥¥Ê.03
+			min_scale_slice = .03;	// ¥Ê.03
 
 //      Sleeping...
 //      -----------

@@ -59,7 +59,7 @@ uint8_t perform_svga_conversion(uint8_t mask)
 
 	if (gr2ss_override & OVERRIDE_FAIL)
 		return(SVGA_CONV_NONE);
-	//¥¥¥ for now -   if ((convert_use_mode == 0) && (!inp6d_stereo_active))
+	// for now -   if ((convert_use_mode == 0) && (!inp6d_stereo_active))
 	if (convert_use_mode == 0)
 		return(SVGA_CONV_NONE);
 	if (_fr->draw_canvas.bm.bits == grd_canvas->bm.bits)
@@ -653,7 +653,7 @@ void ss_mouse_convert_round(int16_t *px, int16_t *py, bool down)
 
 void mouse_unconstrain(void)
 {
-/* ¥¥¥ for now
+/*  for now
 #ifdef SVGA_SUPPORT
    if (convert_use_mode == 5)
    {

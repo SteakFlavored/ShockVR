@@ -99,7 +99,7 @@ int32_t MacTuneInit(void)
 	if (mlimbs_status != 0)								// If already inited, return
 		return 0;
 
-//¥¥¥   if (!music_card) return -1;
+//   if (!music_card) return -1;
 // Put something here to check for the existence of the QuickTime Musical Instruments.  Or maybe
 // in music_init.
 
@@ -114,7 +114,7 @@ int32_t MacTuneInit(void)
 	gPlayer = OpenDefaultComponent(kTunePlayerType, 0);
 	if (!gPlayer)
 	{
-		DebugStr("\pError:  Could not open a tune player.");		//¥¥¥ Handle this!
+		DebugStr("\pError:  Could not open a tune player.");		// Handle this!
 		return 2;
 	}
 
@@ -197,7 +197,7 @@ int32_t MacTuneLoadTheme(FSSpec *themeSpec, int32_t themeID)
 	if (binHdl == NULL)
 	{
 		CloseResFile(filenum);
-Debugger();	//¥¥¥
+Debugger();	//
 		return (-3);
 	}
 	HLock(binHdl);
@@ -331,7 +331,7 @@ void MacTunePurgeCurrentTheme()
 	CloseComponent(gPlayer);
 	gPlayer = OpenDefaultComponent(kTunePlayerType, 0);
 	if (!gPlayer)
-		DebugStr("\pError:  Could not open a tune player.");		//¥¥¥ Handle this!
+		DebugStr("\pError:  Could not open a tune player.");		// Handle this!
 
 	// Clear our the current request array.
 	for (int32_t i = 0; i < MLIMBS_MAX_SEQUENCES -1; i++)
@@ -347,14 +347,14 @@ void MacTunePurgeCurrentTheme()
 void MacTunePlayTune(int32_t tune)
 {
 if (tune == 255 || tune == -1)
-	DebugStr("\pEep Eep Invalid tune!");  //¥¥¥
+	DebugStr("\pEep Eep Invalid tune!");  //
 
 	if (gOffsets[tune] != -1)							// If there really is a tune there, play it now.
 	{
 		TuneQueue(gPlayer, (uint32_t *)(*gTuneHdl + gOffsets[tune]), 0x10000,
 						0, 0x7FFFFFFF, kTuneStartNow, gTuneCBProc, 0);
 		PrimeTime((QElemPtr)&gCalcTuneTask, gOverlayTime + gQueueTime);
-//¥¥¥ temp
+// temp
 // the above amount for PrimeTime is temporary because we're not doing overlays yet.
 //  so just queue up the next tune at queue time.
 	}
@@ -370,7 +370,7 @@ if (tune == 255 || tune == -1)
 void MacTuneQueueTune(int32_t tune)
 {
 if (tune == 255 || tune == -1)
-	DebugStr("\pEep Eep Invalid tune!");  //¥¥¥
+	DebugStr("\pEep Eep Invalid tune!");  //
 
 	if (gOffsets[tune] != -1)							// If there really is a tune there, queue it up.
 	{
@@ -397,7 +397,7 @@ if (tune == 255 || tune == -1)
 void MacTunePrimeTimer(void)
 {
 	PrimeTime((QElemPtr)&gCalcTuneTask, gOverlayTime + gQueueTime);
-//¥¥¥ temp
+// temp
 // the above amount for PrimeTime is temporary because we're not doing overlays yet.
 //  so just queue up the next tune at queue time.
 }

@@ -70,7 +70,7 @@ RgnHandle			gCursorRgn;
 int16_t					gCursorSet;
 bool				gDone = false;
 bool				gInForeground = true;
-bool				gPlayingGame;		//¥¥¥ Temp
+bool				gPlayingGame;		// Temp
 bool				gIsNewGame;
 FSSpec				gSavedGameFile;
 int32_t					gGameSavedTime;
@@ -317,7 +317,7 @@ void UpdateWindow(WindowPtr wind)
  	 	PaintRect(&r);
 	}
 
-	//¥¥¥ For now, just copy from main offscreen bitmap
+	// For now, just copy from main offscreen bitmap
 
  	ResetCTSeed();		// make sure all color table seeds match
 	RGBForeColor(&black);
@@ -1041,7 +1041,7 @@ bool DoSaveGameAs(void)
 
 	if (CheckFreeSpace(reply.sfFile.vRefNum) == ERR_NOMEM)
 	{
-		// ¥¥¥Put up alert saying "not enough disk space".
+		// Put up alert saying "not enough disk space".
 		return (false);
 	}
 
@@ -1073,7 +1073,7 @@ bool DoSaveGame(void)
 
 	if (CheckFreeSpace(gSavedGameFile.vRefNum) == ERR_NOMEM)
 	{
-		// ¥¥¥Put up alert saying "not enough disk space".
+		// Put up alert saying "not enough disk space".
 		return (false);
 	}
 

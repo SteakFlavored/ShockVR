@@ -110,10 +110,10 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTa
 
    memcount += f->bm.w * f->bm.h * sizeof(uint8_t);
    if (!tmp_mem) memcpy(p,f+1,f->bm.w * f->bm.h * sizeof(uint8_t));
-//¥¥¥
+//
 if (bmp == NULL)
 	DebugStr("\pTrying to assign to a null bmp pointer!");
-//¥¥¥
+//
    *bmp = f->bm;
    bmp->bits = p;
    if (alloced_fdesc)

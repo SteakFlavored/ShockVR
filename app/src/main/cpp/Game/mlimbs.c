@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 #include <timer.h>
 
-//¥¥¥#include <ail.h>
+//#include <ail.h>
 #include "mlimbs.h"
 #include "musicai.h"
 
@@ -76,7 +76,7 @@ int32_t mlimbs_priority[MLIMBS_MAX_SEQUENCES];
 
 
 
-//¥¥¥LONG mlimbs_timbre_callback(MDI_DRIVER *mdi, LONG bank, LONG patch);
+//LONG mlimbs_timbre_callback(MDI_DRIVER *mdi, LONG bank, LONG patch);
 
 /////////////////////////////////////////////////////////////////
 //	mlimbs_init (void)
@@ -92,7 +92,7 @@ int32_t mlimbs_init (void)
 {
 	int32_t i;
 
-//¥¥¥   if (!music_card) return -1;
+//   if (!music_card) return -1;
 
 	if (mlimbs_status!=0) return 1;
 	for (i=0; i < 10; i++)
@@ -102,7 +102,7 @@ int32_t mlimbs_init (void)
 	}
 	cpl_num = 0;
 
-/*¥¥¥ What is max_voices???
+/* What is max_voices???
 	// Determine maximum number of voices
 #ifdef AIL_2
 			case SOUNDBLASTER:
@@ -154,7 +154,7 @@ int32_t mlimbs_init (void)
 		channel_info[i].status = MLIMBS_STOPPED;	// Current status of the channel.
 	}
 #endif
-¥¥¥*/
+*/
 	mlimbs_status=1;
 	return 1;
 
@@ -175,7 +175,7 @@ void mlimbs_shutdown(void)
 {
    if (mlimbs_status==0) return;
 
-/*¥¥¥ later, man
+/* later, man
 	mlimbs_purge_theme();
 
 #ifdef CALLBACK_ON
@@ -201,7 +201,7 @@ void mlimbs_shutdown(void)
    mlimbs_status=0;
 }
 
-#ifdef NOT_YET //¥¥¥
+#ifdef NOT_YET //
 
 /////////////////////////////////////////////////////////////////
 // int32_t mlimbs_load_theme
@@ -1453,4 +1453,4 @@ void mlimbs_change_master_volume (int32_t vol)
 	}
 }
 
-#endif //NOT_YET¥¥¥
+#endif //NOT_YET

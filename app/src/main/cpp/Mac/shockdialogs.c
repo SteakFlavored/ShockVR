@@ -469,7 +469,7 @@ bool DoNewGameDlg(void)
 	gPopupMenuHdl = GetMenu(8301);												// Get the menu used in popups
 	InsertMenu(gPopupMenuHdl, -1);
 	for (i = 0; i < 4; i++)
-		gNewGameSel[i] = 3;																// Default all to "Normal" ¥¥¥ right?
+		gNewGameSel[i] = 3;																// Default all to "Normal"  right?
 
 	popMenuProcPtr = NewUserItemProc(PopupMenuUserNG);
 	GetDItem(dlog, kPopCombat, &itype, &hand, &r);

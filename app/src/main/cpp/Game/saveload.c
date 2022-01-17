@@ -381,8 +381,8 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    }
 
    // Read appropriate state modifiers
-//¥¥¥   if (flush_mem)
-//¥¥¥      free_dynamic_memory(DYNMEM_PARTIAL);
+//   if (flush_mem)
+//      free_dynamic_memory(DYNMEM_PARTIAL);
    AdvanceProgress();
 
    // Open the file we're going to save into.
@@ -460,7 +460,7 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    REF_WRITE(id_num, idx++, level_gamedata);
 #ifdef SAVE_AUTOMAP_STRINGS
 //   REF_WRITE(id_num, idx++, amap_str_reref(0));
-//¥¥¥ LZW later   ResMake(id_num + (idx++), &(amap_str_reref(0)), AMAP_STRING_SIZE, RTYPE_APP, fd,  RDF_LZW);
+// LZW later   ResMake(id_num + (idx++), &(amap_str_reref(0)), AMAP_STRING_SIZE, RTYPE_APP, fd,  RDF_LZW);
    ResMake(id_num + (idx++), (amap_str_reref(0)), AMAP_STRING_SIZE, RTYPE_APP, fd,  0);
    ResWrite(id_num + (idx - 1));
    ResUnmake(id_num + (idx - 1));
@@ -492,14 +492,14 @@ errtype save_current_map(FSSpec* fSpec, Id id_num, bool /*flush_mem*/, bool )
    if (make_player)
       obj_create_player(&plr_loc);
    trigger_check=true;
-//¥¥¥   if (flush_mem)
-//¥¥¥      load_dynamic_memory(DYNMEM_PARTIAL);
+//   if (flush_mem)
+//      load_dynamic_memory(DYNMEM_PARTIAL);
    EDMS_holistic_teleport(objs[PLAYER_OBJ].info.ph, &player_edms);
 
 //KLC   end_wait();
    {
       extern void spoof_mouse_event();
-//¥¥¥what does this do???      spoof_mouse_event();
+//what does this do???      spoof_mouse_event();
    }
    return OK;
 }
@@ -740,7 +740,7 @@ void load_level_data()
 {
    extern errtype load_small_texturemaps();
 
-//¥¥¥KLC-removed from here	obj_load_art(false);
+//KLC-removed from here	obj_load_art(false);
 	AdvanceProgress();
 	load_small_texturemaps();
 	AdvanceProgress();
@@ -751,7 +751,7 @@ void SwapShortBytes(void *pval2);
 #define MAKE4(c0,c1,c2,c3) ((((uint32_t)c0)<<24)|(((uint32_t)c1)<<16)|(((uint32_t)c2)<<8)|((uint32_t)c3))
 
 //	---------------------------------------------------------
-// ¥¥¥¥ Put this in some more appropriate, global place.
+// ¥ Put this in some more appropriate, global place.
 void SwapLongBytes(void *pval4)
 {
 	int32_t	*temp = (int32_t *)pval4;
@@ -898,7 +898,7 @@ errtype load_current_map(Id id_num, FSSpec* spec)
 	else
 		idx++;
 
-//KLC¥¥¥ Big hack!  Force the schedule to growable.
+//KLC Big hack!  Force the schedule to growable.
 global_fullmap->sched[0].queue.grow = true;
 
 	REF_READ(id_num, idx++, loved_textures);
@@ -910,7 +910,7 @@ global_fullmap->sched[0].queue.grow = true;
 */
 	map_set_default(global_fullmap);
 
-/*¥¥¥  Leave conversion from old objects out for now
+/*  Leave conversion from old objects out for now
 
    // Now set up for object conversion if necessary
    convert_from = -1;
@@ -1562,8 +1562,8 @@ obj_out:
       {
          // Regenerate physics state from player_state here
       }
-//¥¥¥      if (music_on && (score_playing != ELEVATOR_ZONE))
-//¥¥¥        load_score_for_location(PLAYER_BIN_X,PLAYER_BIN_Y);
+//      if (music_on && (score_playing != ELEVATOR_ZONE))
+//        load_score_for_location(PLAYER_BIN_X,PLAYER_BIN_Y);
    }
 
 out:
@@ -1590,7 +1590,7 @@ out:
 //KLC   physics_warmup();
 
 //KLC   end_wait();
-/*¥¥¥   {
+/*   {
       extern void spoof_mouse_event();
       spoof_mouse_event();
    }

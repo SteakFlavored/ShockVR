@@ -534,7 +534,7 @@ void run_schedules(void)
    schedule_run(&game_seconds_schedule,TICKS2TSTAMP(player_struct.game_time));
 }
 
-/*¥¥¥
+/*
 bool schedule_test_hotkey(int16_t keycode, uint32_t context, void* data)
 {
    SchedEvent e;

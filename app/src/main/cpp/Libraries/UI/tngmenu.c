@@ -121,7 +121,7 @@ errtype tng_menu_2d_draw(TNG *ptng, uint16_t partmask, LGPoint loc)
             strcat(lstring, "C-");
          if (kb_isupper(curp->keycode))
             strcat(lstring, "S-");
-  /*¥¥¥  Put function key support back in, if we just gotta have 'em.
+  /*  Put function key support back in, if we just gotta have 'em.
          else
             switch (curp->keycode & 0xFF)
             {

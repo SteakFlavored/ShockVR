@@ -1123,7 +1123,7 @@ void DoPlayMovie(int16_t cmd)
 		SetEntries(1, 253, &(**ctab[0]).ctTable[1]);
 		ResetCTSeed();
 
-		//¥¥¥ Load movie into RAM
+		// Load movie into RAM
 //		err = LoadMovieIntoRam(aMovie, 0, GetMovieDuration(aMovie), keepInRam);
 		GoToBeginningOfMovie(aMovie);
 

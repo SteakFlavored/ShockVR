@@ -410,7 +410,7 @@ void mfd_weapon_expose(MFD *m, uint8_t control)
          int32_t id = mfd_bmap_id(triple);
 //KLC - chg for new art         draw_res_bm(id,(MFD_VIEW_WID-res_bm_width(id))/2, WEAPON_ART_Y);
          draw_hires_resource_bm(id,
-         		(SCONV_X(MFD_VIEW_WID)-res_bm_width(id))/2, SCONV_Y(WEAPON_ART_Y));  //¥¥¥ is this right?
+         		(SCONV_X(MFD_VIEW_WID)-res_bm_width(id))/2, SCONV_Y(WEAPON_ART_Y));  // is this right?
       }
 
       // This is all stuff that should be drawn for a full expose of
@@ -2880,7 +2880,7 @@ void mfd_keypad_expose(MFD* mfd, uint8_t control)
    mfd_update_rects(mfd);
 }
 
-/*¥¥¥
+/*
 // --------------------
 //   HUD WARE MFD
 // --------------------

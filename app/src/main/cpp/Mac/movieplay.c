@@ -313,7 +313,7 @@ void DrawSubtitle(int8_t *title)
 //------------------------------------------------------------------------
 void GetNextSubtitle(void)
 {
-	while (gCurrSub->language != 0 && gCurrSub->language != -1)	//¥¥¥ Fix this!
+	while (gCurrSub->language != 0 && gCurrSub->language != -1)	// Fix this!
 		gCurrSub++;
 }
 

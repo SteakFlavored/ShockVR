@@ -410,13 +410,13 @@ bool eye_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
             return false;
       if (eye_fine_mode) theta = -2*MAX_EYE_ANGLE*(y)/(EYEMETER_H-1) + MAX_EYE_ANGLE;
       else theta = -FIXANG_PI/6*(y*DISCRETE_EYE_POSITIONS/EYEMETER_H-1);
-//¥¥¥      ui_mouse_constrain_xy(ev->pos.x,r->abs_y,ev->pos.x,r->abs_y+EYEMETER_H-1);
+//      ui_mouse_constrain_xy(ev->pos.x,r->abs_y,ev->pos.x,r->abs_y+EYEMETER_H-1);
       player_set_eye_fixang(theta);
       physics_set_relax(CONTROL_YZROT,false);
    }
    if (ev->buttons == 0)
    {
-//¥¥¥      mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
+//      mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
    }
    return true;
 }
@@ -439,12 +439,12 @@ bool lean_mouse_handler(uiMouseEvent* ev, LGRegion* r, void *)
          player_set_posture(posture);
       player_set_lean(xlean,player_struct.leany);
       physics_set_relax(CONTROL_XZROT,false);
-//¥¥¥     ui_mouse_constrain_xy(LEANOMETER_X(),LEANOMETER_Y()+posture*LEANOMETER_H/3+1,LEANOMETER_X()+LEANOMETER_W-1,LEANOMETER_Y()+(posture+1)*LEANOMETER_H/3-1);
+//     ui_mouse_constrain_xy(LEANOMETER_X(),LEANOMETER_Y()+posture*LEANOMETER_H/3+1,LEANOMETER_X()+LEANOMETER_W-1,LEANOMETER_Y()+(posture+1)*LEANOMETER_H/3-1);
    }
    if (ev->buttons == 0)
    {
       extern void mouse_unconstrain(void);
-//¥¥¥      mouse_unconstrain();
+//      mouse_unconstrain();
    }
    return true;
 }

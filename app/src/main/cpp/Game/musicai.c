@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 #include "sfxlist.h"
 #include "tools.h"
-/*¥¥¥
+/*
 #include <mainloop.h>
 #include <_audio.h>
 #include <_testing.h>
@@ -55,7 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "audiolog.h"
 #endif
 
-//¥¥¥#include <ail.h>
+//#include <ail.h>
 
 extern void grind_music_ai();
 
@@ -162,7 +162,7 @@ void mlimbs_do_ai()
    extern ObjID damage_sound_id;
    extern int8_t damage_sound_fx;
 
-/*¥¥¥ Is this really necessary?  It's already called twice in fr_rend().
+/* Is this really necessary?  It's already called twice in fr_rend().
 #ifdef AUDIOLOGS
 	audiolog_loop_callback();
 #endif
@@ -238,7 +238,7 @@ void mlimbs_do_ai()
 		// If the gReadyToQueue flag is set, that means the 6-second timer has
 		// fired.  So we call check_asynch_ai() to determine the next tune to play
 		// then queue it up.
-		// ¥¥¥ Does not handle layering.  Just one music track!
+		//  Does not handle layering.  Just one music track!
 		if (gReadyToQueue)
 		{
 			if (!global_fullmap->cyber)
@@ -263,7 +263,7 @@ void mlimbs_do_ai()
 }
 
 
-#ifdef NOT_YET  //¥¥¥
+#ifdef NOT_YET  //
 
 void mlimbs_do_credits_ai()
 {
@@ -277,7 +277,7 @@ void mlimbs_do_credits_ai()
    }
 }
 
-#endif //NOT_YET  ¥¥¥
+#endif //NOT_YET
 
 errtype mai_attack()
 {
@@ -379,10 +379,10 @@ errtype mai_transition(int32_t new_trans)
    else if ((transition_count == 0) && (layering_table[TRANSITION_LAYER_BASE + new_trans][0] != 255))
    {
       current_transition = new_trans;
-//¥¥¥For now, let's not do any layered transitions.
-//¥¥¥      transition_count = 1;		//KLC - was 2
+//For now, let's not do any layered transitions.
+//      transition_count = 1;		//KLC - was 2
    }
-//¥¥¥ temp
+// temp
 /*
 int8_t	msg[30];
 lg_sprintf(msg, "Transitioning:%d, mode:%d, count:%d", new_trans, next_mode, transition_count);
@@ -469,7 +469,7 @@ errtype fade_into_location(int32_t x, int32_t y)
 			new_theme = 0;
 		}
 	}
-	else	//¥¥¥ for now, we're not going to do any cross-fading.  Just load the new score.
+	else	// for now, we're not going to do any cross-fading.  Just load the new score.
 	{
 //		message_info("Sould be fading into new location.");
 		load_score_for_location(new_x,new_y);
@@ -490,8 +490,8 @@ errtype blank_theme_data()
 }
 */
 
-//¥¥¥ don't need?     bool voices_4op = false;
-//¥¥¥ don't need?     bool digi_gain = false;
+// don't need?     bool voices_4op = false;
+// don't need?     bool digi_gain = false;
 void load_score_guts(int8_t score_playing)
 {
 	int32_t 		rv;
@@ -502,7 +502,7 @@ void load_score_guts(int8_t score_playing)
 	numtostring(score_playing, temp);
 	strcat(base, temp);
 
-//¥¥¥ temp
+// temp
 /*
 strcpy(temp, "Loading: ");
 strcat(temp, base);
@@ -514,7 +514,7 @@ message_info(temp);
 	rv = MacTuneLoadTheme(&themeSpec, score_playing);
 	if (rv == 1)
 		musicai_reset(true);
-	else  //¥¥¥ handle this a better way.
+	else  // handle this a better way.
 		DebugStr("\pLoad theme failed!");
 }
 
@@ -538,7 +538,7 @@ errtype load_score_for_location(int32_t x, int32_t y)
    return(OK);
 }
 
-#ifdef NOT_YET  //¥¥¥
+#ifdef NOT_YET  //
 
 // 16384
 // 8192
@@ -610,7 +610,7 @@ void secret_closedown(void)
 }
 #endif
 
-#endif //NOT_YET¥¥¥
+#endif //NOT_YET
 
 //----------------------------------------------------------------------
 //  For Mac version, the vast majority of the config mess just goes away.  But we do check for
@@ -618,7 +618,7 @@ void secret_closedown(void)
 //----------------------------------------------------------------------
 errtype music_init()
 {
-/*¥¥¥ put in later
+/* put in later
    int32_t i,j;
    bool gm=false;
    int16_t dev_info[DEV_TYPES][DEV_PARMS];
@@ -753,7 +753,7 @@ errtype music_init()
    	else  // note this use to allocate double buffer space here
       {
          snd_set_digital_channels(cur_digi_channels);
-//¥¥¥         digi_gain = true;             // ie look at detail and stuff
+//         digi_gain = true;             // ie look at detail and stuff
       }
 	}
    else
@@ -769,8 +769,8 @@ errtype music_init()
 */
 		if (gShockPrefs.soBackMusic)
 		{
-//¥¥¥	if (music_card)
-//¥¥¥	{
+//	if (music_card)
+//	{
          		if (MacTuneInit() == 0)						// If no error, go ahead and start up.
          		{
 				music_on = mlimbs_on = true;
@@ -782,7 +782,7 @@ errtype music_init()
 				SavePrefs(kPrefsResID);
 				music_on = mlimbs_on = false;
 			}
-//¥¥¥	}
+//	}
 		}
 		else
 		{

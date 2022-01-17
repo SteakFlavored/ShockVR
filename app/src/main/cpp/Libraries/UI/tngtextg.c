@@ -214,7 +214,7 @@ bool tng_textgadget_keycooked(TNG *ptng, uint16_t key)
 {
    int16_t code;
    bool retval = false;
-/*¥¥¥
+/*
 
    code = key & 0xff;
    //Spew(DSRC_UI_Textgadget, ("%x was typed!\n",code));
@@ -265,7 +265,7 @@ bool tng_textgadget_signal(TNG *ptng, uint16_t signal)
 // appropriate kind of scroll key.
 errtype tng_textgadget_scroll(TNG *ptng)
 {
-/*¥¥¥
+/*
    int16_t code;
    TNG *which_bar;
    bool increm;

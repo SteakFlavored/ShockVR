@@ -37,7 +37,7 @@ TunePlayer snd_get_sequence(int32_t seq_id)
    return (_snd_seq_player[seq_id]);
 }
 
-/*¥¥¥
+/*
 snd_midi_parms *snd_sequence_parms(int32_t hnd_id)
 {
    return &_snd_midi_prm[hnd_id];
@@ -97,7 +97,7 @@ void cdecl seq_mtrig_callback(SEQUENCE *S, int32_t channel, int32_t value)
 //---------------------------------------------------------
 void snd_end_sequence(int32_t seq_id)
 {
-//¥¥¥ later	seq_EOS_callback(_snd_seq_hnd[seq_id]);
+// later	seq_EOS_callback(_snd_seq_hnd[seq_id]);
 	TuneStop(_snd_seq_player[seq_id], kStopTuneFade);
 	TuneFlush(_snd_seq_player[seq_id]);
 }

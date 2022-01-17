@@ -106,7 +106,7 @@ int32_t snd_set_midi_sequences(int32_t seq_cnt)
 		{
 			if ((_snd_seq_player[_snd_seq_cnt] = OpenDefaultComponent(kTunePlayerType, 0))==NULL)
 				return SND_OUT_OF_MEMORY;
-//¥¥¥ Should we do something here?
+// Should we do something here?
 //			else
 //				AIL_set_sequence_user_data(_snd_seq_hnd[_snd_seq_cnt],0,_snd_seq_cnt);
 		}

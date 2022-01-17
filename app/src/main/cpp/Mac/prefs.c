@@ -68,7 +68,7 @@ void SetDefaultPrefs(void)
 
 	gShockPrefs.soBackMusic = true;
 	gShockPrefs.soSoundFX = true;
-	gShockPrefs.soMusicVolume = 33;			// ¥¥¥ Figure out when sound is put in.
+	gShockPrefs.soMusicVolume = 33;			//  Figure out when sound is put in.
 
 	gShockPrefs.doResolution = 0;					// High-res.
 	gShockPrefs.doDetail = 2;						// High detail.

@@ -715,7 +715,7 @@ void ui_poll_keyboard(void)
 
 void ui_pop_up_keys(void)
 {
-/*¥¥¥ serve any purpose now?
+/* serve any purpose now?
    if (ui_poll_keys != NULL)
    {
       uint8_t* key;

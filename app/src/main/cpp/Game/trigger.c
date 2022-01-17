@@ -1520,7 +1520,7 @@ void hack_armageddon_func(int32_t otrip, int32_t x0, int32_t y0, int32_t r)
    }
 }
 
-/*¥¥¥
+/*
 void hack_area_spew(int32_t p2,int32_t p3,int32_t p4)
 {
    int32_t ulx,uly,lrx,lry;
@@ -1810,7 +1810,7 @@ errtype trap_hack_func(int32_t p1, int32_t p2, int32_t p3, int32_t p4)
         plotware_showpage(p2);
          break;
       case AREASPEW_HACK:
-//¥¥¥         hack_area_spew(p2,p3,p4);
+//         hack_area_spew(p2,p3,p4);
          break;
       case DIEGO_HACK:
          hack_taunt_diego(p2,p3);

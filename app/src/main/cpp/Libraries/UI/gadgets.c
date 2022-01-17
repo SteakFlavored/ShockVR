@@ -207,7 +207,7 @@ errtype draw_resource_bm(Ref id, int32_t x, int32_t y)
    f = (FrameDesc *)RefLock(id);
 
    // Set the palette right
-   /*¥¥¥ Ignore for now
+   /* Ignore for now
    if (f->pallOff)
    {
       ppall = (int16_t *) (((uint8_t *) RefGet(id)) + f->pallOff);

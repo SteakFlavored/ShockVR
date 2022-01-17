@@ -1425,10 +1425,10 @@ errtype compute_elev_objs(ObjID *objlist)
 
 #endif
 
-//¥¥¥ uncomment the next 2 lines for playable demo only!!!
+// uncomment the next 2 lines for playable demo only!!!
 //#define MAC_DEMO
 //extern bool	gPlayingGame;
-//¥¥¥
+//
 
 // Eventually, this code will also go and do some nice level-changing
 // animation.  For now, we just telemaport you.
