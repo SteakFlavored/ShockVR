@@ -53,7 +53,7 @@ bool ResEraseIfInFile(Id id);                // erase item from file
 //    For Mac version:  Does nothing.  May go back later and add comment via the
 // desktop database, maybe.
 
-void ResSetComment(int32_t /*filenum*/, int8_t* /*comment*/)
+void ResSetComment(int32_t /* fd */, const char * /* comment */)
 {
 /*
     ResFileHeader *phead;

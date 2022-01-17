@@ -76,7 +76,7 @@ void ResWriteHeader(int32_t filenum);
 //
 //        path = name of directory to add
 /*
-void ResAddPath(int8_t *path)
+void ResAddPath(const char *path)
 {
     DatapathAdd(&gDatapath, path);
 
@@ -103,7 +103,7 @@ void ResAddPath(int8_t *path)
 //  For Mac version:  Use the ResourceMgr routines to open and create Res files.
 //  Skip all the EditInfo and Dir stuff.
 
-int16_t ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool /*auxinfo*/)
+int32_t ResOpenResFile(const char *filename, ResOpenMode mode, bool /*auxinfo*/)
 {
     int16_t          filenum, fd;
     FInfo            fi;
@@ -258,7 +258,7 @@ void AddResDesc(Handle resHdl, int16_t resID, ResType macResType, int16_t filenu
 //    ---------------------------------------------------------
 //  For Mac version:  Real simple.  See notes in code.
 
-void ResCloseFile(int16_t filenum)
+void ResCloseFile(int32_t fd)
 {
     Id             id;
     ResDesc    *prd;

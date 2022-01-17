@@ -61,7 +61,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // For now
 //#define DBG_ON        1
 
-#include <Files.h>
 #include "lg.h"
 
 //#ifndef DATAPATH_H
@@ -154,18 +153,15 @@ void RefExtractInBlocks(RefTable *prt, Ref ref, void *buff, int32_t blockSize,
 //    -----------------------------------------------------------
 //        IN-MEMORY RESOURCE DESCRIPTORS, AND INFORMATION ROUTINES
 //    -----------------------------------------------------------
-//  For Mac version, keep a handle (rather than ptr).  Most ResDesc info not needed
-//  because the Mac Resource Mgr takes care of it.
-
 //    Each resource id gets one of these resource descriptors
 
 typedef struct
 {
-    Handle    hdl;            // Mac resource handle.  NULL if not in memory (on disk)
-    int16_t         filenum;    // Mac resource file number
-    uint8_t     lock;            // lock count
-    uint8_t    flags;            // misc flags (RDF_XXX, see below)
-    uint8_t     type;            // resource type (RTYPE_XXX, see restypes.h)
+    void *ptr;     // Pointer to entry in RAM.  NULL if not in memory (on disk)
+    int32_t fd;    // File descriptor
+    uint8_t lock;  // lock count
+    uint8_t flags; // misc flags (RDF_XXX, see below)
+    uint8_t type;  // resource type (RTYPE_XXX, see restypes.h)
 } ResDesc;
 
 #define RESDESC(id) (&gResDesc[id])                    // convert id to resource desc ptr
@@ -184,8 +180,8 @@ extern Id resDescMax;                        // max id in res desc
 
 //    Information about resources
 
-#define ResInUse(id) (gResDesc[id].hdl)
-#define ResPtr(id) (*(gResDesc[id].hdl))
+#define ResInUse(id) (gResDesc[id].ptr != NULL)
+#define ResPtr(id) (gResDesc[id].ptr)
 int32_t ResSize(Id id);                                        // It's a function now, in res.c
 //#define ResSize(id) (MaxSizeRsrc(gResDesc[id].hdl))
 #define ResLocked(id) (gResDesc[id].lock)
@@ -214,14 +210,14 @@ typedef enum
     ROM_CREATE            // open for creation (deletes existing)
 } ResOpenMode;
 
-void ResAddPath(int8_t *path);        // add search path for resfiles
-int16_t ResOpenResFile(FSSpec *specPtr, ResOpenMode mode, bool auxinfo);
-void ResCloseFile(int16_t filenum);    // close res file
+void ResAddPath(const char *path);        // add search path for resfiles
+int32_t ResOpenResFile(const char *filename, ResOpenMode mode, bool auxinfo);
+void ResCloseFile(int32_t fd);    // close res file
 
-#define ResOpenFile(specPtr) ResOpenResFile(specPtr, ROM_READ, false)
-#define ResEditFile(specPtr,creat) ResOpenResFile(specPtr, \
+#define ResOpenFile(filename) ResOpenResFile(filename, ROM_READ, false)
+#define ResEditFile(filename,creat) ResOpenResFile(filename, \
     (creat) ? ROM_EDITCREATE : ROM_EDIT, true)
-#define ResCreateFile(specPtr) ResOpenResFile(specPtr, ROM_CREATE, true)
+#define ResCreateFile(filename) ResOpenResFile(filename, ROM_CREATE, true)
 
 //#define MAX_RESFILENUM 15            // maximum file number
 
@@ -259,9 +255,9 @@ extern ResStat resStat;                // stats computed if proper DBG bit set
 //        RESOURCE MAKING  (resmake.c)
 //    ----------------------------------------------------------
 
-void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int16_t filenum,
+void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int32_t fd,
     uint8_t flags);                                        // make resource from data block
-void ResMakeCompound(Id id, uint8_t type, int16_t filenum,
+void ResMakeCompound(Id id, uint8_t type, int32_t fd,
     uint8_t flags);                                        // make empty compound resource
 void ResAddRef(Ref ref, void *pitem, int32_t itemSize);    // add item to compound
 void ResUnmake(Id id);                                            // unmake a resource
@@ -340,7 +336,7 @@ extern int8_t resFileSignature[16];        // magic header
 //        RESOURCE FILE BUILDING  (resbuild.c)
 //    --------------------------------------------------------
 
-void ResSetComment(int32_t filenum, int8_t *comment);    // set comment
+void ResSetComment(int32_t fd, const char *comment);    // set comment
 int32_t ResWrite(Id id);                                                // write resource to file
 void ResKill(Id id);                                                    // delete resource & remove from file
 //int32_t ResPack(int32_t filenum);                                    // remove empty entries

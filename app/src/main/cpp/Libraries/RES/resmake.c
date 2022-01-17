@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //    --------------------------------------------------------
 //  For Mac version, use Resource Manager to add the resource to indicated res file.
 
-void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int16_t filenum, uint8_t flags)
+void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int32_t fd, uint8_t flags)
 {
     Handle        resHdl;
     ResDesc     *prd;
@@ -119,7 +119,7 @@ void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int16_t filenum, uint
 //        filenum = file number
 //        flags    = flags (RDF_XXX, RDF_COMPOUND automatically added)
 
-void ResMakeCompound(Id id, uint8_t type, int16_t filenum, uint8_t flags)
+void ResMakeCompound(Id id, uint8_t type, int32_t fd, uint8_t flags)
 {
     RefTable *prt;
     int32_t sizeTable;
