@@ -157,7 +157,7 @@ uint8_t *lzwFdWriteBuff;                // buffer for file descriptor dest
 //    Prototypes of internal routines
 
 int32_t LzwFindMatch(int32_t hash_prefix, uint32_t hash_character);
-uint8_t *LzwDecodeString(uint8_t *buffer,uint32_t code);
+uint8_t *LzwDecodeString(uint8_t *buffer, uint32_t code);
 
 //    --------------------------------------------------------
 //        INITIALIZATION AND TERMINATION
@@ -291,7 +291,7 @@ typedef struct {
     uint32_t string_code;    // current string compress code
     uint32_t index;            // index into string table
     int32_t lzwInputCharCount;        // input character count
-    int32_t lzwOutputSize;            // current size of output
+    size_t lzwOutputSize;            // current size of output
     int32_t lzwOutputBitCount;        // current bit location in output
     uint32_t lzwOutputBitBuffer;    // 32-bit buffer holding output bits
 } LzwC;
@@ -316,14 +316,14 @@ LzwC lzwc;        // current compress state
 }
 
 int32_t LzwCompress(
-    void (*f_SrcCtrl)(int32_t srcLoc, LzwCtrl ctrl),    // func to control source
+    void (*f_SrcCtrl)(uintptr_t srcLoc, LzwCtrl ctrl),    // func to control source
     uint8_t (*f_SrcGet)(),                        // func to get bytes from source
-    int32_t srcLoc,                                // source "location" (ptr, FILE *, etc.)
-    int32_t srcSize,                                // size of source in bytes
-    void (*f_DestCtrl)(int32_t destLoc, LzwCtrl ctrl),    // func to control dest
+    uintptr_t srcLoc,                                // source "location" (ptr, FILE *, etc.)
+    size_t srcSize,                                // size of source in bytes
+    void (*f_DestCtrl)(uintptr_t destLoc, LzwCtrl ctrl),    // func to control dest
     void (*f_DestPut)(uint8_t byte),        // func to put bytes to dest
-    int32_t destLoc,                                // dest "location" (ptr, FILE *, etc.)
-    int32_t destSizeMax                            // max size of dest (or LZW_MAXSIZE)
+    uintptr_t destLoc,                                // dest "location" (ptr, FILE *, etc.)
+    size_t destSizeMax                            // max size of dest (or LZW_MAXSIZE)
 )
 {
 
@@ -475,14 +475,14 @@ static uint32_t LzwInputCode(uint8_t (*f_SrcGet)())
 
 
 int32_t LzwExpand(
-    void (*f_SrcCtrl)(int32_t srcLoc, LzwCtrl ctrl),    // func to control source
+    void (*f_SrcCtrl)(uintptr_t srcLoc, LzwCtrl ctrl),    // func to control source
     uint8_t (*f_SrcGet)(),                        // func to get bytes from source
-    int32_t srcLoc,                                // source "location" (ptr, FILE *, etc.)
-    void (*f_DestCtrl)(int32_t destLoc, LzwCtrl ctrl),    // func to control dest
+    uintptr_t srcLoc,                                // source "location" (ptr, FILE *, etc.)
+    void (*f_DestCtrl)(uintptr_t destLoc, LzwCtrl ctrl),    // func to control dest
     void (*f_DestPut)(uint8_t byte),        // func to put bytes to dest
-    int32_t destLoc,                                // dest "location" (ptr, FILE *, etc.)
-    int32_t destSkip,                                // # dest bytes to skip over (or 0)
-    int32_t destSize                                // # dest bytes to capture (if 0, all)
+    uintptr_t destLoc,                                // dest "location" (ptr, FILE *, etc.)
+    size_t destSkip,                                // # dest bytes to skip over (or 0)
+    size_t destSize                                // # dest bytes to capture (if 0, all)
 )
 {
 
@@ -601,7 +601,7 @@ DONE_EXPAND:
 
 static uint8_t *lzwBuffSrcPtr;
 
-void LzwBuffSrcCtrl(int32_t srcLoc, LzwCtrl ctrl)
+void LzwBuffSrcCtrl(uintptr_t srcLoc, LzwCtrl ctrl)
 {
     if (ctrl == BEGIN)
         lzwBuffSrcPtr = (uint8_t *) srcLoc;
@@ -668,7 +668,7 @@ uint8_t LzwFpSrcGet()
 
 static uint8_t *lzwBuffDestPtr;
 
-void LzwBuffDestCtrl(int32_t destLoc, LzwCtrl ctrl)
+void LzwBuffDestCtrl(uintptr_t destLoc, LzwCtrl ctrl)
 {
     if (ctrl == BEGIN)
         lzwBuffDestPtr = (uint8_t *) destLoc;
@@ -739,11 +739,11 @@ void LzwFpDestPut(uint8_t byte)
 
 //#pragma off(unreferenced);
 
-void LzwNullDestCtrl(int32_t /*destLoc*/, LzwCtrl /*ctrl*/)
+void LzwNullDestCtrl(uintptr_t destLoc, LzwCtrl ctrl)
 {
 }
 
-void LzwNullDestPut(uint8_t /*byte*/)
+void LzwNullDestPut(uint8_t byte)
 {
 }
 

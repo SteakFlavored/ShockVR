@@ -89,27 +89,27 @@ typedef enum {BEGIN,END} LzwCtrl;    // LzwCtrl's used to start/stop lzw
 //    The Ginzo compression knife
 
 int32_t LzwCompress(
-    void (*f_SrcCtrl)(int32_t srcLoc, LzwCtrl ctrl),    // func to control source
+    void (*f_SrcCtrl)(uintptr_t srcLoc, LzwCtrl ctrl),    // func to control source
     uint8_t (*f_SrcGet)(),                        // func to get bytes from source
-    int32_t srcLoc,                                // source "location" (ptr, FILE *, etc.)
-    int32_t srcSize,                                // size of source in bytes
-    void (*f_DestCtrl)(int32_t destLoc, LzwCtrl ctrl),    // func to control dest
+    uintptr_t srcLoc,                                // source "location" (ptr, FILE *, etc.)
+    size_t srcSize,                                // size of source in bytes
+    void (*f_DestCtrl)(uintptr_t destLoc, LzwCtrl ctrl),    // func to control dest
     void (*f_DestPut)(uint8_t byte),        // func to put bytes to dest
-    int32_t destLoc,                                // dest "location" (ptr, FILE *, etc.)
-    int32_t destSizeMax                            // max size of dest (or LZW_MAXSIZE)
+    uintptr_t destLoc,                                // dest "location" (ptr, FILE *, etc.)
+    size_t destSizeMax                            // max size of dest (or LZW_MAXSIZE)
     );
 
 //    And its expansion counterpart, both for $19.95 while supplies last
 
 int32_t LzwExpand(
-    void (*f_SrcCtrl)(int32_t srcLoc, LzwCtrl ctrl),    // func to control source
+    void (*f_SrcCtrl)(uintptr_t srcLoc, LzwCtrl ctrl),    // func to control source
     uint8_t (*f_SrcGet)(),                        // func to get bytes from source
-    int32_t srcLoc,                                // source "location" (ptr, FILE *, etc.)
-    void (*f_DestCtrl)(int32_t destLoc, LzwCtrl ctrl),    // func to control dest
+    uintptr_t srcLoc,                                // source "location" (ptr, FILE *, etc.)
+    void (*f_DestCtrl)(uintptr_t destLoc, LzwCtrl ctrl),    // func to control dest
     void (*f_DestPut)(uint8_t byte),        // func to put bytes to dest
-    int32_t destLoc,                                // dest "location" (ptr, FILE *, etc.)
-    int32_t destSkip,                                // # dest bytes to skip over (or 0)
-    int32_t destSize                                // # dest bytes to capture (if 0, all)
+    uintptr_t destLoc,                                // dest "location" (ptr, FILE *, etc.)
+    size_t destSkip,                                // # dest bytes to skip over (or 0)
+    size_t destSize                                // # dest bytes to capture (if 0, all)
     );
 
 //    Macros which implement all the varied compression forms, using the
@@ -321,22 +321,22 @@ int32_t LzwExpand(
 
 //    Prototypes of standard sources
 
-void LzwBuffSrcCtrl(int32_t srcLoc, LzwCtrl ctrl);
+void LzwBuffSrcCtrl(uintptr_t srcLoc, LzwCtrl ctrl);
 uint8_t LzwBuffSrcGet();
-void LzwFdSrcCtrl(int32_t srcLoc, LzwCtrl ctrl);
+void LzwFdSrcCtrl(uintptr_t srcLoc, LzwCtrl ctrl);
 uint8_t LzwFdSrcGet();
-void LzwFpSrcCtrl(int32_t srcLoc, LzwCtrl ctrl);
+void LzwFpSrcCtrl(uintptr_t srcLoc, LzwCtrl ctrl);
 uint8_t LzwFpSrcGet();
 
 //    Prototypes of standard destinations
 
-void LzwBuffDestCtrl(int32_t destLoc, LzwCtrl ctrl);
+void LzwBuffDestCtrl(uintptr_t destLoc, LzwCtrl ctrl);
 void LzwBuffDestPut(uint8_t byte);
-void LzwFdDestCtrl(int32_t destLoc, LzwCtrl ctrl);
+void LzwFdDestCtrl(uintptr_t destLoc, LzwCtrl ctrl);
 void LzwFdDestPut(uint8_t byte);
-void LzwFpDestCtrl(int32_t destLoc, LzwCtrl ctrl);
+void LzwFpDestCtrl(uintptr_t destLoc, LzwCtrl ctrl);
 void LzwFpDestPut(uint8_t byte);
-void LzwNullDestCtrl(int32_t destLoc, LzwCtrl ctrl);
+void LzwNullDestCtrl(uintptr_t destLoc, LzwCtrl ctrl);
 void LzwNullDestPut(uint8_t byte);
 
 #endif
