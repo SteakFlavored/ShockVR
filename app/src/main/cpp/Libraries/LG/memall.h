@@ -130,25 +130,6 @@ int32_t MemGrowHeap(int32_t wantK);
 void MemLockHeap();
 void MemUnlockHeap();
 
-//    Calling previous (underlying) allocators (only from top level!)
-
-#define MallocPrev(size) (memIndexAllocStack >= 0 ? (*memAllocStack[memIndexAllocStack-1].func_malloc)(size) : NULL)
-#define ReallocPrev(p,size) (memIndexAllocStack >= 0 ? (*memAllocStack[memIndexAllocStack-1].func_realloc)(p,size) : NULL)
-#define FreePrev(p) (if (memIndexAllocStack >= 0) (*memAllocStack[memIndexAllocStack-1].func_free)(p))
-
-//    Allocating conventional memory
-//    Caveat: since Malloc() can grab conventional memory, necessary
-//    conventional memory blocks should be grabbed early in program.
-
-typedef struct {
-    uint16_t realSeg;        // real mode segment to conventional mem block
-    uint16_t protSel;        // protected mode selector for conv mem block
-    void far *protPtr;    // protected mode ptr to mem block
-} ConvMemBlock;
-
-void far *MallocConvMemBlock(uint16_t size, ConvMemBlock *pcmb);        // alloc
-void far *ReallocConvMemBlock(ConvMemBlock *pcmb, uint16_t newsize); // resize
-int32_t FreeConvMemBlock(ConvMemBlock *pcmb);        // free low memory block
 */
 
 //////////////////////////////

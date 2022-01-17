@@ -39,6 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg_types.h"
 #include <stdarg.h>
 
-int32_t lg_sprintf(int8_t *buf, const int8_t *format, ...);
-int32_t lg_vsprintf(int8_t *buf, const int8_t *format, va_list arglist);
-void lg_sprintf_install_stringfunc(int8_t *(*func)(uint32_t strnum));
+int32_t lg_sprintf(char *buf, const char *format, ...);
+int32_t lg_vsprintf(char *buf, const char *format, va_list arglist);
+void lg_sprintf_install_stringfunc(char *(*func)(uint32_t strnum));

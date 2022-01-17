@@ -28,3 +28,11 @@ set(FIXPP_LIBRARY_SRC
     FIXPP/fixpp.cpp
 )
 add_library(FIXPP_LIB ${FIXPP_LIBRARY_SRC})
+
+set(LG_LIBRARY_SRC
+    LG/lgsprntf.c
+    LG/memall.c
+    LG/stack.c
+    LG/tmpalloc.c
+)
+add_library(LG_LIB ${LG_LIBRARY_SRC})

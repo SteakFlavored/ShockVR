@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * This file is part of the 2d library.
  */
 
+#include <stdlib.h>
+
 #include "dbg.h"
 #include "memall.h"
 #include "tmpalloc.h"
@@ -58,7 +60,7 @@ int32_t temp_mem_init(MemStack *ms)
 //              ("TempMemInit: dynamically allocating stack of %d bytes\n",
 //                TEMP_BUF_SIZE));
 //        if ((ms=(MemStack *)Malloc(sizeof(MemStack)+TEMP_BUF_SIZE))==NULL) {
-        if ((ms=(MemStack *)NewPtr(sizeof(MemStack)+TEMP_BUF_SIZE))==NULL) {
+        if ((ms=(MemStack *)malloc(sizeof(MemStack)+TEMP_BUF_SIZE))==NULL) {
             Warning(("TempMemInit: can't allocate dynamic buffer.\n"));
             return -1;
         }
@@ -83,7 +85,7 @@ int32_t temp_mem_uninit(void)
 //        Spew(DSRC_LG_Tempmem,
 //              ("TempMemUninit: freeing dynamically allocated stack\n"));
 //        free(temp_mem_stack);
-        DisposePtr((Ptr)temp_mem_stack);
+        free(temp_mem_stack);
         stack_dynamic=false;
     }
     temp_mem_stack=NULL;

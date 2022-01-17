@@ -109,18 +109,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
 */
 
+#include <android/log.h>
 
-// Define the only warning I want to do right now - KC
-/*
-#ifdef DBG_ON
-#define Warning(msg) DoWarningMsg msg
-void DoWarningMsg(int8_t *msg);
-#else
-#define Warning(msg) do {} while (0)
-#endif
-*/
-#define Warning(msg) DoWarningMsg msg
-void DoWarningMsg(int8_t *msg);
+#define Warning(...) ((void)__android_log_print(ANDROID_LOG_WARN, "ShockVR", __VA_ARGS__))
 
 /*
 #include <stdio.h>
