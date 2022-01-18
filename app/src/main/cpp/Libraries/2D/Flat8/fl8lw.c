@@ -299,7 +299,6 @@ int32_t gri_lit_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
     fix u,v,i,dv,di,dy;
 
      // locals used to store copies of tli-> stuff, so its in registers on the PPC
-     int32_t        k,y;
      uint32_t    t_mask;
      uint32_t    t_wlog;
      int32_t        gr_row;

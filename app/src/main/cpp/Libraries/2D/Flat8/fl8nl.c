@@ -51,7 +51,6 @@ int32_t gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
     int32_t    *t_vtab;
     uint8_t *t_bits;
     uint8_t *t_clut;
-    uint8_t temp_pix;
     uint8_t    t_wlog;
     uint32_t    t_mask;
     int32_t        k;

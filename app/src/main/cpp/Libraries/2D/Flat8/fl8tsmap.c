@@ -47,7 +47,6 @@ int32_t gri_trans_solid_lin_umap_loop(grs_tmap_loop_info *tli) {
     uint8_t *p_dest;
     int32_t    *t_vtab;
     uint8_t *t_bits;
-    uint8_t *t_clut;
     uint8_t    t_wlog;
     uint32_t    t_mask;
     int32_t    gr_row;
@@ -136,7 +135,6 @@ int32_t gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli) {
     int32_t    *t_vtab;
     uint8_t *t_bits;
     uint8_t *p_dest;
-    uint8_t temp_pix;
     uint8_t    t_wlog;
     uint32_t    t_mask;
 
@@ -220,7 +218,6 @@ int32_t gri_solid_wall_umap_loop(grs_tmap_loop_info *tli) {
      int32_t        *t_vtab;
      uint8_t     *t_bits;
      uint8_t     *p_dest;
-     uint8_t *t_clut;
      uint8_t    t_wlog;
      uint32_t    t_mask;
      int32_t        gr_row;

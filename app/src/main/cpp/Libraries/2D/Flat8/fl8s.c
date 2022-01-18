@@ -62,7 +62,7 @@ int32_t gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **
      info->bm.hlog = 0;
      info->bm.bits = info->clut;
      info->loop_func = (void (*)()) gri_poly_loop;
-     info->d = ((uint8_t *) ((int32_t) grd_canvas->bm.row * (int32_t) info->y));
+     info->d = ((uint8_t *) ((uintptr_t)grd_canvas->bm.row * (uintptr_t)info->y));
      info->d += (int32_t)grd_canvas->bm.bits;
   return(0);
  }

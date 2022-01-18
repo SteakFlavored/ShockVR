@@ -324,17 +324,14 @@ int32_t HandleWallLoop1D_C(grs_tmap_loop_info *tli,
 // ==================================================================
 // 1D versions
 int32_t gri_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
-    fix u,v,dv,dy,d;
+    fix u,v,dv,dy;
 
      // locals used to store copies of tli-> stuff, so its in registers on the PPC
-     int32_t        k,y;
      uint8_t    t_wlog;
      uint32_t    t_mask;
      int32_t        *t_vtab;
-     uint8_t     *t_bits,*o_bits;
-     uint8_t     *p_dest;
+     uint8_t     *o_bits;
      fix        inv_dy;
-     uint8_t    temp_pix;
      uint8_t *t_clut;
      int32_t        gr_row;
 

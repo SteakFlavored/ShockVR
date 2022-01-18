@@ -107,7 +107,6 @@ int32_t gri_lin_umap_loop(grs_tmap_loop_info *tli) {
     uint32_t    t_mask;
     int32_t    gr_row;
     uint8_t *start_pdest;
-    int32_t    inv;
 
     u=tli->left.u;
     du=tli->right.u-u;
