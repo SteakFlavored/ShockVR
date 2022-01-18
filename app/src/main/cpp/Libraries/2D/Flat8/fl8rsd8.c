@@ -68,9 +68,9 @@ void gr_rsd8_blit (uint8_t *rsd_src, uint8_t *dst, int32_t grd_bm_row, int32_t b
 
 //### MLA- not supposed to be used (PC code is in RSDBLT.ASM)
 void gr_rsd8_blit (uint8_t *rsd_src, uint8_t *dst, int32_t grd_bm_row, int32_t bm_w)
- {
-    DebugStr("\pask mark");
- }
+{
+    Warning("ask mark");
+}
 
 
 void gri_flat8_rsd8_ubitmap(grs_bitmap *bm, int16_t x, int16_t y)

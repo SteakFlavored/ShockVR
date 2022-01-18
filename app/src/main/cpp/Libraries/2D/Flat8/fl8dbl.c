@@ -35,8 +35,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ------------------------------------------------------------------------
 // ========================================================================
 void flat8_flat8_h_double_ubitmap(grs_bitmap *bm)
- {
-DebugStr("\pcall mark");
+{
+    Warning("call mark");
 /*     int32_t        h,v,endh,endv;
      uint8_t *src=bm->bits, *dst=grd_bm.bits;
      int32_t    srcAdd,dstAdd;
@@ -59,7 +59,7 @@ DebugStr("\pcall mark");
           src+=srcAdd;
           dst+=dstAdd;
       }*/
- }
+}
 
 
 // ========================================================================

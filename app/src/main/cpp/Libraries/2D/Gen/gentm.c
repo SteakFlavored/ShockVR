@@ -62,12 +62,6 @@ void h_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti)
 
 
     info.n=(bm->flags&BMF_TRANS) + ti->tmap_type + GRD_FUNCS*bm->type;
-/*{
- Str255 s;
- NumToString(info.n,s);
- DebugStr(s);
-}*/
-
 
     if (grd_gc.fill_type!=FILL_NORM)
         info.clut=(uint8_t *)grd_gc.fill_parm;
