@@ -36,9 +36,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* fill type functions living in the table -- wrappers around gr_set_upixel */
 
-extern void gri_pixel_ns (int32_t color, int32_t fill_parm, int32_t x, int32_t y);
-extern void gri_pixel_clut (int32_t color, int32_t fill_parm, int32_t x, int32_t y);
-extern void gri_pixel_xor (int32_t color, int32_t fill_parm, int32_t x, int32_t y);
-extern void gri_pixel_blend (int32_t color, int32_t fill_parm, int32_t x, int32_t y);
+extern void gri_pixel_ns (int32_t color, uintptr_t fill_parm, int32_t x, int32_t y);
+extern void gri_pixel_clut (int32_t color, uintptr_t fill_parm, int32_t x, int32_t y);
+extern void gri_pixel_xor (int32_t color, uintptr_t fill_parm, int32_t x, int32_t y);
+extern void gri_pixel_blend (int32_t color, uintptr_t fill_parm, int32_t x, int32_t y);
 
 #endif
