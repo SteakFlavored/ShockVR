@@ -86,16 +86,19 @@ void gr_init_bm (grs_bitmap *bm, uint8_t *p, uint8_t type, uint16_t flags,
                       int16_t w, int16_t h)
  {
     int32_t row;
-  int32_t v;
+    int32_t v;
 
-  /* calculate row from type and w. */
-  switch (type) {
+    /* calculate row from type and w. */
+    switch (type) {
         case BMT_DEVICE: row = gScreenRowbytes; break;     // row = gr_calc_row (w); break;
         case BMT_MONO: row = (w+7)/8; break;
-      case BMT_FLAT8: case BMT_TLUC8: row = w; break;
+        case BMT_FLAT8: case BMT_TLUC8: row = w; break;
         case BMT_FLAT24: row = 3*w; break;
         case BMT_RSD8: row = 0; break;
-        default: break;
+        default: {
+            Warning("Invalid type %d selected for gr_init_bm", type);
+            return;
+        }
     }
 
     bm->bits = p;
