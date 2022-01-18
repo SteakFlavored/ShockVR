@@ -125,7 +125,7 @@ do { \
 
 /* norm */
 
-void  gri_flat8_uline_ns (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void  gri_flat8_uline_ns (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8lin.h"
 }
@@ -139,7 +139,7 @@ do { \
     c = (int32_t) (((uint8_t*)parm)[c]); \
 } while (0)
 
-void  gri_flat8_uline_clut (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void  gri_flat8_uline_clut (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8lin.h"
 }
@@ -167,7 +167,7 @@ do { \
     } \
 } while (0)
 
-void  gri_flat8_uline_xor (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void  gri_flat8_uline_xor (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8lin.h"
 }
@@ -242,7 +242,7 @@ do { \
     ; \
 } while (0)
 
-void  gri_flat8_uline_blend (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void  gri_flat8_uline_blend (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8lin.h"
 }

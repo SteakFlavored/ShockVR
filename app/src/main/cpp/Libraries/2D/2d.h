@@ -89,7 +89,7 @@ typedef struct {
     grs_font *font;
     int32_t text_attr;
     int32_t fill_type;
-    int32_t fill_parm;
+    uintptr_t fill_parm;
     grs_clip clip;
 } grs_context;
 typedef struct {
@@ -131,7 +131,7 @@ typedef struct {
 typedef struct {
     void (*scanline_func)();
     void (*shell_func)();
-    union {uint8_t *clut; int32_t fill_parm;};
+    union {uint8_t *clut; uintptr_t fill_parm;};
     fix scan_slope;
     int32_t dp;
     fix alpha_u;
@@ -150,7 +150,7 @@ typedef struct {
     union {fix y_fix,x_fix;};
     fix u,du,v,dv,i,di;
     fix u0,v0;
-    union {uint8_t *clut; int32_t fill_parm;};
+    union {uint8_t *clut; uintptr_t fill_parm;};
     fix unum,vnum,dunum,dvnum,denom;
     fix dxl,dyl,dtl,dxr,dyr,dtr;
     fix cl,cr;
@@ -324,13 +324,13 @@ enum {
 typedef
     void *grt_uline_fill;
 typedef
-    void (*grt_uline_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_uline_fill_v) (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
 typedef
-    void (*grt_uline_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
+    void (*grt_uline_fill_xy) (int16_t, int16_t, int16_t, int32_t, uintptr_t);
 typedef
-    void (*grt_wire_poly_uline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_wire_poly_uline) (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
 typedef
-    void (*grt_wire_poly_ucline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_wire_poly_ucline) (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
 typedef
      grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES];
 #define grt_wire_poly_usline grt_wire_poly_ucline;
@@ -562,9 +562,9 @@ extern void gr_set_screen (grs_screen *s);
 typedef
     void *grt_line_clip_fill;
 typedef
-    int32_t (*grt_line_clip_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    int32_t (*grt_line_clip_fill_v) (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
 typedef
-    int32_t (*grt_line_clip_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
+    int32_t (*grt_line_clip_fill_xy) (int16_t, int16_t, int16_t, int32_t, uintptr_t);
 extern grt_line_clip_fill *grd_line_clip_fill_vector;
 #define grd_uline_fill  ((grt_uline_fill_v)  (grd_uline_fill_vector[GR_LINE]))
 #define grd_uiline_fill ((grt_uline_fill_v)  (grd_uline_fill_vector[GR_ILINE]))

@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Bitmap doubling primitives.
 //
 
+#include "dbg.h"
 #include "grs.h"
 #include "cnvdat.h"
 #include "flat8.h"

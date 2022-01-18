@@ -66,7 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* clut should be in _ns everywhere, it doesn't need its own function */
 
-void gri_flat8_uhline_ns (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
+void gri_flat8_uhline_ns (int16_t x0, int16_t y0, int16_t x1, int32_t c, uintptr_t parm)
 {
     uint8_t *p;
     int16_t  t;
@@ -80,7 +80,7 @@ void gri_flat8_uhline_ns (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t
     memset (p, c, x1-x0+1);
  }
 
-void gri_flat8_uhline_clut (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
+void gri_flat8_uhline_clut (int16_t x0, int16_t y0, int16_t x1, int32_t c, uintptr_t parm)
 {
     uint8_t *p;
     int16_t  t;
@@ -94,7 +94,7 @@ void gri_flat8_uhline_clut (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32
     memset (p, c, x1-x0+1);
  }
 
-void gri_flat8_uhline_xor (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
+void gri_flat8_uhline_xor (int16_t x0, int16_t y0, int16_t x1, int32_t c, uintptr_t parm)
 {
     uint8_t *p;
     int16_t  t;
@@ -108,7 +108,7 @@ void gri_flat8_uhline_xor (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_
  }
 
 /* punt */
-void gri_flat8_uhline_blend (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
+void gri_flat8_uhline_blend (int16_t x0, int16_t y0, int16_t x1, int32_t c, uintptr_t parm)
 {
     uint8_t *p;
     int16_t  t;

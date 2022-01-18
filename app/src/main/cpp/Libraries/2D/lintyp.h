@@ -55,16 +55,16 @@ typedef
     void *grt_uline_fill;
 
 typedef
-    void (*grt_uline_fill_v) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_uline_fill_v) (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
 
 typedef
-    void (*grt_uline_fill_xy) (int16_t, int16_t, int16_t, int32_t, int32_t);
+    void (*grt_uline_fill_xy) (int16_t, int16_t, int16_t, int32_t, uintptr_t);
 
 typedef
-    void (*grt_wire_poly_uline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_wire_poly_uline) (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
 
 typedef
-    void (*grt_wire_poly_ucline) (int32_t, int32_t, grs_vertex *, grs_vertex *);
+    void (*grt_wire_poly_ucline) (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
 
 typedef
      grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES];

@@ -47,7 +47,6 @@ void flat8_clut_hflip_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y,uint8_
     int16_t h;                         /* height */
     uint8_t *src;                     /* pointer into source bitmap */
     uint8_t *dst;                     /* pointer into canvas memory */
-    uint16_t    row;
 
     if (cl == NULL) cl=gr_get_clut();
     h = bm->h;

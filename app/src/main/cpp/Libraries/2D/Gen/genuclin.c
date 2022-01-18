@@ -51,7 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // MLA #pragma off (unreferenced)
 #define macro_plot_rgb(x,y,i)      grd_pixel_fill(grd_ipal[i],parm,x,y)
 
-void gri_gen_ucline_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void gri_gen_ucline_fill (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
     fix x0, y0, x1, y1;
     fix dx, dy;            /* deltas in x and y */

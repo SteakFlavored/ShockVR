@@ -46,16 +46,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* functions living in the vector */
 
-extern int32_t gri_line_clip_fill (int32_t, int32_t, grs_vertex *, grs_vertex *);
-extern int32_t gri_iline_clip_fill (int32_t, int32_t, grs_vertex *, grs_vertex *);
-extern int32_t gri_cline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
-extern int32_t gri_sline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
-extern int32_t gri_hline_clip_fill (int16_t, int16_t, int16_t, int32_t, int32_t);
-extern int32_t gri_vline_clip_fill (int16_t, int16_t, int16_t, int32_t, int32_t);
+extern int32_t gri_line_clip_fill (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
+extern int32_t gri_iline_clip_fill (int32_t, uintptr_t, grs_vertex *, grs_vertex *);
+extern int32_t gri_cline_clip_fill (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_sline_clip_fill (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_hline_clip_fill (int16_t, int16_t, int16_t, int32_t, uintptr_t);
+extern int32_t gri_vline_clip_fill (int16_t, int16_t, int16_t, int32_t, uintptr_t);
 
-extern int32_t gri_wire_poly_line_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
-extern int32_t gri_wire_poly_sline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
-extern int32_t gri_wire_poly_cline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_wire_poly_line_clip_fill (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_wire_poly_sline_clip_fill (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1);
+extern int32_t gri_wire_poly_cline_clip_fill (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1);
 
 /* actual clippers */
 extern int32_t gri_line_clip (grs_vertex *, grs_vertex *);

@@ -329,8 +329,7 @@ int32_t gri_lit_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
      o_bits = tli->bm.bits;
      gr_row = grd_bm.row;
 
-    return HandleWallLitLoop1D_C(tli, u, v, i, dv, di, dy, g_ltab, NULL, o_bits,
-                                                                  gr_row, t_mask, t_wlog);
+    return HandleWallLitLoop1D_C(tli, u, v, i, dv, di, dy, g_ltab, o_bits, gr_row, t_mask, t_wlog);
 }
 
 void gri_opaque_lit_wall1d_umap_init(grs_tmap_loop_info *tli)

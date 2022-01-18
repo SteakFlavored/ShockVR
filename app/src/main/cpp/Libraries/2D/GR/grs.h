@@ -198,7 +198,7 @@ typedef struct {
     grs_font *font;    /* font id */
     int32_t text_attr;    /* attributes for text */
     int32_t fill_type;    /* how to fill primitives */
-    int32_t fill_parm;    /* parameter for fill */
+    uintptr_t fill_parm;    /* parameter for fill */
     grs_clip clip;     /* clipping region */
 } grs_context;
 

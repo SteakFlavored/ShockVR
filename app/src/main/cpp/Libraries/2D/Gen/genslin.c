@@ -87,7 +87,7 @@ int32_t gen_fix_sline (fix x0, fix y0, fix i0, fix x1, fix y1, fix i1)
 }
 
 
-int32_t gri_sline_clip_fill (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+int32_t gri_sline_clip_fill (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
     int32_t r;
     grs_vertex u0, u1;

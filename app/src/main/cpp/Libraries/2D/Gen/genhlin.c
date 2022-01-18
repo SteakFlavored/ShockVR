@@ -68,7 +68,7 @@ int32_t gen_hline (int16_t x0, int16_t y0, int16_t x1)
     return r;
 }
 
-int32_t gri_hline_clip_fill (int16_t x0, int16_t y0, int16_t x1, int32_t c, int32_t parm)
+int32_t gri_hline_clip_fill (int16_t x0, int16_t y0, int16_t x1, int32_t c, uintptr_t parm)
 {
     int32_t r = CLIP_NONE;
     int16_t t;

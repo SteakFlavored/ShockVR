@@ -73,7 +73,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         p[x] = grd_ipal[i];\
     } while (0)
 
-void gri_flat8_ucline_norm (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void gri_flat8_ucline_norm (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8clin.h"
 }
@@ -85,7 +85,7 @@ void gri_flat8_ucline_norm (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex 
         p[x] = (int32_t) (((uint8_t*) parm)[(grd_ipal[i])]); \
     } while (0)
 
-void gri_flat8_ucline_clut (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void gri_flat8_ucline_clut (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8clin.h"
 }
@@ -96,7 +96,7 @@ void gri_flat8_ucline_clut (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex 
         p[x] = p[x] ^ (grd_ipal[i]); \
     } while (0)
 
-void gri_flat8_ucline_xor (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void gri_flat8_ucline_xor (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8clin.h"
 }
@@ -109,7 +109,7 @@ void gri_flat8_ucline_xor (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *
         p[x] = (int32_t) (((uint8_t*) parm)[(grd_ipal[i])]); \
     } while (0)
 
-void gri_flat8_ucline_blend (int32_t c, int32_t parm, grs_vertex *v0, grs_vertex *v1)
+void gri_flat8_ucline_blend (int32_t c, uintptr_t parm, grs_vertex *v0, grs_vertex *v1)
 {
 #include "fl8clin.h"
 }
