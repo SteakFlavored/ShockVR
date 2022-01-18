@@ -45,9 +45,9 @@ int32_t Handle_LinClut_Loop_C(fix u, fix v, fix du, fix dv, fix dx,
                                                     grs_tmap_loop_info *tli, uint8_t *start_pdest, uint8_t *t_bits, int32_t gr_row, uint8_t *t_clut,
                                                     uint8_t    t_wlog, uint32_t t_mask)
  {
-    register int32_t     x,k;
+    int32_t     x,k;
     uint8_t                 *p_dest;
-    register fix    rx,lx;
+    fix    rx,lx;
 
     rx = tli->right.x;
     lx = tli->left.x;
@@ -98,7 +98,7 @@ int32_t gri_lin_umap_loop(grs_tmap_loop_info *tli) {
     fix u,v,du,dv,dx,d;
 
     // locals used to store copies of tli-> stuff, so its in registers on the PPC
-    register int32_t     x,k;
+    int32_t     x,k;
     uint8_t *p_dest;
     uint8_t temp_pix;
     int32_t    *t_vtab;

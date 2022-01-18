@@ -262,10 +262,10 @@ int32_t HandleWallLoop1D_C(grs_tmap_loop_info *tli,
         uint8_t *t_clut, int32_t *t_vtab, uint8_t *o_bits,
         int32_t gr_row, uint32_t t_mask, uint32_t t_wlog)
 {
-    register int32_t        k,y;
-    register fix        inv_dy;
-    register uint8_t  *grd_bits,*p_dest,*t_bits;
-    register fix        ry,ly;
+    int32_t        k,y;
+    fix        inv_dy;
+    uint8_t  *grd_bits,*p_dest,*t_bits;
+    fix        ry,ly;
 
     ry = tli->right.y;
     ly = tli->left.y;

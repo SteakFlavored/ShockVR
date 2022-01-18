@@ -40,7 +40,7 @@ void gri_opaque_clut_per_umap_hscan_init(grs_bitmap *bm, grs_per_setup *ps);
 void gri_opaque_clut_per_umap_vscan_init(grs_bitmap *bm, grs_per_setup *ps);
 
 void gri_opaque_clut_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-    register int32_t k,y_cint;
+    int32_t k,y_cint;
     uint8_t *p;
 
      // locals used to speed PPC code
@@ -162,7 +162,7 @@ void gri_opaque_clut_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 }
 
 void gri_opaque_clut_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-    register int32_t k,x_cint;
+    int32_t k,x_cint;
 
      // locals used to speed PPC code
      fix    l_dxr,l_x_fix,l_u,l_v,l_du,l_dv,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;

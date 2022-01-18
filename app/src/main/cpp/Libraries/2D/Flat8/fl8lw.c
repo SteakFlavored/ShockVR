@@ -219,7 +219,7 @@ int32_t HandleWallLitLoop1D_C(grs_tmap_loop_info *tli,
                                                     int32_t gr_row, uint32_t t_mask, uint32_t t_wlog)
  {
       fix         d, inv_dy;
-      register fix lefty, righty;
+      fix lefty, righty;
      int32_t         k,y;
      uint8_t     *t_bits;
      uint8_t     *p_dest;

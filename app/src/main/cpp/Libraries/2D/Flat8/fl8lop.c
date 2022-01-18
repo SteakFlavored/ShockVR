@@ -83,11 +83,11 @@ void opaque_lit_per_hscan_Loop_C(int32_t dx, fix l_du, fix l_dv, fix *pl_u, fix 
  }
 
 void gri_opaque_lit_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-    register uint8_t *ltab=grd_screen->ltab;
-    register int32_t     l_x,y_cint,l_u_mask,l_v_mask,l_v_shift;
-    register fix     k,l_u,l_v,l_du,l_dv,l_i,l_di,l_y_fix,l_scan_slope;
-     register int32_t        gr_row;
-    register uint8_t *bm_bits,*p;
+    uint8_t *ltab=grd_screen->ltab;
+    int32_t     l_x,y_cint,l_u_mask,l_v_mask,l_v_shift;
+    fix     k,l_u,l_v,l_du,l_dv,l_i,l_di,l_y_fix,l_scan_slope;
+     int32_t        gr_row;
+    uint8_t *bm_bits,*p;
 
      // locals used to speed PPC code
      fix    test,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
@@ -250,8 +250,8 @@ void opaque_lit_per_vscan_Loop_C(int32_t dy, fix l_du, fix l_dv, fix *pl_u, fix 
  }
 
 void gri_opaque_lit_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
-     register int32_t      k,x_cint;
-    register uint8_t *ltab=grd_screen->ltab;
+     int32_t      k,x_cint;
+    uint8_t *ltab=grd_screen->ltab;
 
      // locals used to speed PPC code
      fix    l_dxr,l_x_fix,l_u,l_v,l_du,l_dv,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr,l_i,l_di;

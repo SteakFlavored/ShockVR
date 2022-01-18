@@ -41,12 +41,12 @@ void gri_opaque_per_umap_vscan_init(grs_bitmap *bm, grs_per_setup *ps);
 void gri_opaque_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 
     // make SURE these come out in registers
-    register int32_t         x,k,y_cint;
-    register uint8_t     *p;
-     register int32_t            gr_row,l_u_mask,l_v_mask,l_v_shift;
-     register fix            l_du,l_dv,l_y_fix,l_scan_slope,test,l_u,l_v;
-     register uint8_t     *bm_bits;
-     register fix            l_dl,l_dt;
+    int32_t         x,k,y_cint;
+    uint8_t     *p;
+     int32_t            gr_row,l_u_mask,l_v_mask,l_v_shift;
+     fix            l_du,l_dv,l_y_fix,l_scan_slope,test,l_u,l_v;
+     uint8_t     *bm_bits;
+     fix            l_dl,l_dt;
 
      int32_t    l_x;
 
