@@ -40,18 +40,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "res.h"
 #include "res_.h"
 
-//#include <_res.h>
-/*
 //    Resource files start with this signature
-
 int8_t resFileSignature[16] = {
     'L','G',' ','R','e','s',' ','F','i','l','e',' ','v','2',13,10};
 
 //    The active resource file info table
-
 ResFile resFile[MAX_RESFILENUM+1];
 
-*/
 //    Internal prototypes
 
 void AddResDesc(Handle resHdl, int16_t resID, ResType macResType, int16_t filenum, int8_t cFlag);
