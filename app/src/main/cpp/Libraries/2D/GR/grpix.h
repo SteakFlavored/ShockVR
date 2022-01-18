@@ -51,6 +51,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __GRPIX_H
 #define __GRPIX_H
+#include <stdint.h>
+
 #include "icanvas.h"
 #include "ifcn.h"
 #include "tabdat.h"
