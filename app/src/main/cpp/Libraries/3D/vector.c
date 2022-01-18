@@ -124,7 +124,7 @@ void g3_vec_normalize(g3s_vector *v)
 // the quick version does not normalize
 void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_vector *v2)
 {
-    int64_t       temp, gX, gY, gZ;
+    int64_t       temp, x, y, z;
     g3s_vector    temp_v0;
     g3s_vector    temp_v1;
     int32_t       temp_long;
@@ -134,37 +134,37 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_ve
     g3_vec_sub(&temp_v1,v2,v1);
 
 // dest->x = v1z * v0y - v1y * v0z;
-    gX = (int64_t)temp_v1.gZ * (int64_t)temp_v0.gY -
+    x = (int64_t)temp_v1.gZ * (int64_t)temp_v0.gY -
             (int64_t)temp_v1.gY * (int64_t)temp_v0.gZ;
 
 // dest->y = v1x * v0z - v1z * v0x;
-    gY = (int64_t)temp_v1.gX * (int64_t)temp_v0.gZ -
+    y = (int64_t)temp_v1.gX * (int64_t)temp_v0.gZ -
             (int64_t)temp_v1.gZ * (int64_t)temp_v0.gX;
 
 // dest->z = v1y * v0x - v1x * v0y;
-    gZ = (int64_t)temp_v1.gY * (int64_t)temp_v0.gX -
+    z = (int64_t)temp_v1.gY * (int64_t)temp_v0.gX -
             (int64_t)temp_v1.gX * (int64_t)temp_v0.gY;
 
 // see if fit into a longword
-    temp = gX;
+    temp = x;
     if (temp < 0)
         temp = -temp;
     temp_long = (int32_t)(((uint64_t)temp * 2) >> 32UL);
 
-    temp = gY;
+    temp = y;
     if (temp < 0)
         temp = -temp;
     temp_long |= (int32_t)(((uint64_t)temp * 2) >> 32UL);
 
-    temp = gZ;
+    temp = z;
     if (temp < 0)
         temp = -temp;
     temp_long |= (int32_t)(((uint64_t)temp * 2) >> 32UL);
 
     if (!temp_long) {
-        v->gX = fix_from_int64_lo(gX);
-        v->gY = fix_from_int64_lo(gY);
-        v->gZ = fix_from_int64_lo(gZ);
+        v->gX = fix_from_int64_lo(x);
+        v->gY = fix_from_int64_lo(y);
+        v->gZ = fix_from_int64_lo(z);
         return; // everything fits in the low longword. hurrah. see ya.
     }
 
@@ -177,7 +177,7 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0,g3s_vector *v1,g3s_ve
     shiftcount += shift_table[temp_long];
 
 // now get the results
-    v->gX = fix_from_int64_lo(gX >> shiftcount);
-    v->gY = fix_from_int64_lo(gY >> shiftcount);
-    v->gZ = fix_from_int64_lo(gZ >> shiftcount);
+    v->gX = fix_from_int64_lo(x >> shiftcount);
+    v->gY = fix_from_int64_lo(y >> shiftcount);
+    v->gZ = fix_from_int64_lo(z >> shiftcount);
  }

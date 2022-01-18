@@ -37,11 +37,8 @@ fix light_diff_raw(g3s_phandle src, g3s_phandle dest);
 fix light_spec_raw(g3s_phandle src, g3s_phandle dest);
 fix light_dands_raw(g3s_phandle src, g3s_phandle dest);
 
-// look ma, a zero vector
 g3s_phandle tmp1;
 g3s_phandle tmp2;
-g3s_vector  zero_vec ={0,0,0};
-
 
 // sets a light vector in source space directly
 // this light vector has to be in user space so we can dot it with
@@ -243,7 +240,7 @@ void g3_eval_view_ahead(void)
 // takes args in tmp1,tmp2
 void check_for_near(void)
  {
-     if ((_g3d_light_type & (LT_NEAR_VIEW | LT_NEAR_LIGHT) == 0))
+     if ((_g3d_light_type & (LT_NEAR_VIEW | LT_NEAR_LIGHT)) == 0)
           return;
 
   // if light near, evaluate
@@ -364,7 +361,7 @@ fix light_spec_raw(g3s_phandle src, g3s_phandle dest)
 
   // check to see if its greater than the max row
   // and truncate if it is
-  if (temp >= (LT_TABSIZE << 12));
+  if (temp >= (LT_TABSIZE << 12))
       temp = (LT_TABSIZE << 12) - 1;    // if its over the max, set it to just under max
 
     dest->i = temp>>4;     //convert to sfix, consider row 16 normal

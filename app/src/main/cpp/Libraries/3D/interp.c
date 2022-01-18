@@ -267,11 +267,11 @@ void g3_interpret_object(uint8_t *object_ptr,...)
               scale = -scale;
 
               temp = (((uint32_t) _view_position.gX)>>16);    // get high 16 bits
-              if (((temp<<scale) && 0xffff0000)!=0) goto Exit; // overflow
+              if (((temp<<scale) & 0xffff0000)!=0) goto Exit; // overflow
               temp = (((uint32_t) _view_position.gY)>>16);    // get high 16 bits
-              if (((temp<<scale) && 0xffff0000)!=0) goto Exit; // overflow
+              if (((temp<<scale) & 0xffff0000)!=0) goto Exit; // overflow
               temp = (((uint32_t) _view_position.gZ)>>16);    // get high 16 bits
-              if (((temp<<scale) && 0xffff0000)!=0) goto Exit; // overflow
+              if (((temp<<scale) & 0xffff0000)!=0) goto Exit; // overflow
 
               _view_position.gX <<= scale;
               _view_position.gY <<= scale;

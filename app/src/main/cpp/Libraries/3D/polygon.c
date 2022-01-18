@@ -351,7 +351,7 @@ int32_t g3_draw_line(g3s_phandle p0,g3s_phandle p1)
 int32_t draw_line_common(g3s_phandle p0,g3s_phandle p1)
  {
      int8_t                code0,code1;
-    int32_t                    result;
+    int32_t result = CLIP_NONE;
     grs_vertex    v0,v1;
 
     vbuf[0] = p0;
