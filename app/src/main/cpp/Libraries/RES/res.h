@@ -180,8 +180,7 @@ extern Id resDescMax; // max id in res desc
 
 #define ResInUse(id) (gResDesc[id].ptr != NULL)
 #define ResPtr(id) (gResDesc[id].ptr)
-int32_t ResSize(Id id);                                        // It's a function now, in res.c
-//#define ResSize(id) (MaxSizeRsrc(gResDesc[id].hdl))
+#define ResSize(id) (gResDesc[id].size)
 #define ResLocked(id) (gResDesc[id].lock)
 //#define ResType(id) (gResDesc[id].type)
 //#define ResFilenum(id) (gResDesc[id].filenum)
@@ -297,7 +296,6 @@ extern int8_t resFileSignature[16];        // magic header
 
 void ResSetComment(int32_t fd, const char *comment);    // set comment
 int32_t ResWrite(Id id);                                                // write resource to file
-void ResKill(Id id);                                                    // delete resource & remove from file
 //int32_t ResPack(int32_t filenum);                                    // remove empty entries
 #define ResPack(filenum)
 

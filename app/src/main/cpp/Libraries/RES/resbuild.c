@@ -261,56 +261,6 @@ if (tell(prf->fd) & 3)
         RES_OFFSET_ALIGN(prf->pedit->currDataOffset + pDirEntry->csize);
 */
 }
-
-//    -------------------------------------------------------------
-//
-//    ResKill() not only deletes a resource from memory, it removes it
-//    from the file too.
-//    -------------------------------------------------------------
-//  For Mac version:  Use Resource Manager to remove resource from file.  Have to do
-//  our own thing (instead of calling ResDelete()) because RmveResource turns the
-//  resource handle into a normal handle.
-
-void ResKill(Id id)
-{
-    Handle    resHdl;
-    ResDesc *prd = RESDESC(id);
-
-    if (prd->hdl)
-    {
-        resHdl = prd->hdl;
-
-        RmveResource(resHdl);                            // RmveResource turns it into a normal handle.
-        DisposeHandle(resHdl);                            // that we can dispose of.
-
-//        if (prd->lock == 0)
-//            ResRemoveFromLRU(prd);
-    }
-    memset(prd, 0, sizeof(ResDesc));
-
-/*
-    //    Check for valid id
-
-    DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return;});
-    Spew(DSRC_RES_Write, ("ResKill: killing $%x\n", id));
-
-    //    Delete it
-
-    ResDelete(id);
-
-    //    Make sure file is writeable
-
-    prd = RESDESC(id);
-    DBG(DSRC_RES_Write, {if (resFile[prd->filenum].pedit == NULL) { \
-        Warning("ResKill: file %d not open for writing\n", prd->filenum); \
-        return;}});
-
-    //    If so, erase it
-
-    ResEraseIfInFile(id);
-*/
-}
-
 /*
 //    -------------------------------------------------------------
 //
