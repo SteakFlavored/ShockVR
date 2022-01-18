@@ -87,7 +87,7 @@ grs_screen *gr_alloc_screen (int16_t w, int16_t h)
   return s;
 
 bailout1:
-  DisposePtr ((Ptr) s);    // was gr_free
+  free(s);    // was gr_free
 bailout2:
   return NULL;
 }
@@ -97,9 +97,9 @@ void gr_free_screen (grs_screen *s)
 {
     vfree (s->bm.bits);
     if (s->c->ytab)
-      DisposePtr ((Ptr) s->c->ytab);    // was gr_free
+      free(s->c->ytab);    // was gr_free
   if ((s->c+1)->ytab)
-      DisposePtr ((Ptr) (s->c+1)->ytab);    // was gr_free
-  DisposePtr ((Ptr) s->c);    // was gr_free
-  DisposePtr ((Ptr) s);    // was gr_free
+      free((s->c+1)->ytab);    // was gr_free
+  free(s->c);    // was gr_free
+  free(s);    // was gr_free
 }

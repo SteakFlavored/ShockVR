@@ -154,8 +154,8 @@ void gr_free_canvas (grs_canvas *c)
     if (c->bm.type == BMT_DEVICE)
         vfree (c->bm.bits);
     else
-        DisposePtr ((Ptr) c->bm.bits);    // was gr_free
-    DisposePtr ((Ptr) c);    // was gr_free
+        free(c->bm.bits);    // was gr_free
+    free(c);    // was gr_free
 }
 
 grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, int16_t x, int16_t y,
@@ -171,5 +171,5 @@ grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, int16_t x, int16_t y,
 
 void gr_free_sub_canvas (grs_canvas *c)
 {
-    DisposePtr ((Ptr) c);    // was gr_free
+    free(c);    // was gr_free
 }
