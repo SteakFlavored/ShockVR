@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include <stdlib.h>
+
 #include "cnvdrv.h"
 
 void (**grd_canvas_table_list[])() = {
