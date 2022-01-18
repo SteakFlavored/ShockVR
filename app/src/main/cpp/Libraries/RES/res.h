@@ -218,31 +218,6 @@ void ResCloseFile(int32_t fd);    // close res file
 
 #define MAX_RESFILENUM 63            // maximum file number
 
-/*
-//    ---------------------------------------------------------
-//        RESOURCE MEMORY MANAGMENT ROUTINES  (resmem.c)
-//    ---------------------------------------------------------
-
-void *ResMalloc(size_t size);
-void *ResRealloc(void *p, size_t newsize);
-void ResFree(void *p);
-void *ResPage(int32_t size);
-
-void ResInstallPager(void *f(int32_t size));
-
-//    ---------------------------------------------------------
-//        RESOURCE STATS - ACCESSIBLE AT ANY TIME
-//    ---------------------------------------------------------
-
-typedef struct {
-    uint16_t numLoaded;                    // # resources loaded in ram
-    uint16_t numLocked;                    // # resources locked
-    int32_t totMemAlloc;                    // total memory alloted to resources
-} ResStat;
-
-extern ResStat resStat;                // stats computed if proper DBG bit set
-*/
-
 //    ----------------------------------------------------------
 //        PUBLIC INTERFACE FOR CREATORS OF RESOURCES
 //    ----------------------------------------------------------

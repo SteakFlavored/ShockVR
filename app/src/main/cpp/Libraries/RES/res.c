@@ -34,29 +34,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
 */
 
-//#include <io.h>
-//#include <stdlib.h>
+#include <stdlib.h>
 #include <string.h>
 
-//#include <lg.h>
 #include "res.h"
 #include "res_.h"
-//#include <lzw.h>
-//#include <memall.h>
-//#include <_res.h>
+#include "lzw.h"
 
-//    The resource descriptor table
-
-ResDesc *gResDesc;                                // ptr to array of resource descriptors
-Id resDescMax;                                    // max id in res desc
-#define DEFAULT_RESMAX 1023            // default max resource id
-#define DEFAULT_RESGROW 1024        // grow by blocks of 1024 resources
-                                                        // must be power of 2!
-//    Some variables
-/*
-ResStat resStat;                        // stats held here
-static bool resPushedAllocators;    // did we push our allocators?
-*/
+// The resource descriptor table
+ResDesc *gResDesc; // ptr to array of resource descriptors
+Id resDescMax; // max id in res desc
+#define DEFAULT_RESMAX 1023 // default max resource id
+#define DEFAULT_RESGROW 1024 // grow by blocks of 1024 resources (must be power of 2!)
 
 //    ---------------------------------------------------------
 //        INITIALIZATION AND TERMINATION
@@ -66,44 +55,30 @@ static bool resPushedAllocators;    // did we push our allocators?
 
 void ResInit()
 {
-//    int8_t *p;
-//    int32_t i;
-/*
-//    We must exit cleanly
+    int32_t i;
 
-    AtExit(ResTerm);
+    // We must exit cleanly
+    atexit(ResTerm);
 
-//    Set memory allocator, init LZW system
-
-    MemPushAllocator(ResMalloc, ResRealloc, ResFree);
-    resPushedAllocators = true;
+    // Init LZW system
     LzwInit();
-*/
 
-//    Allocate initial resource descriptor table, default size (can't fail)
-
+    // Allocate initial resource descriptor table, default size (can't fail)
     resDescMax = DEFAULT_RESMAX;
-    gResDesc = (ResDesc *)calloc( (DEFAULT_RESMAX + 1) * sizeof(ResDesc) );
-    if (MemError())
-        DebugStr("\pResInit: Can't allocate the global resource descriptor table.\n");
+    gResDesc = (ResDesc *)calloc(DEFAULT_RESMAX + 1, sizeof(ResDesc));
+    if (gResDesc == NULL) {
+        Warning("ResInit: Can't allocate the global resource descriptor table.");
+        exit(1);
+    }
 
-//    gResDesc[ID_HEAD].prev = 0;
-//    gResDesc[ID_HEAD].next = ID_TAIL;
-//    gResDesc[ID_TAIL].prev = ID_HEAD;
-//    gResDesc[ID_TAIL].next = 0;
+    gResDesc[ID_HEAD].prev = 0;
+    gResDesc[ID_HEAD].next = ID_TAIL;
+    gResDesc[ID_TAIL].prev = ID_HEAD;
+    gResDesc[ID_TAIL].next = 0;
 
-/*
-//    Clear file descriptor array
-
+    // Clear file descriptor array
     for (i = 0; i <= MAX_RESFILENUM; i++)
         resFile[i].fd = -1;
-
-    Spew(DSRC_RES_General, ("ResInit: res system initialized\n"));
-
-//    Install default pager
-
-    ResInstallPager(ResDefaultPager);
-*/
 }
 
 //    ---------------------------------------------------------
@@ -112,62 +87,21 @@ void ResInit()
 
 void ResTerm()
 {
-//    int32_t i;
-/*
-//    Close all open resource files
+    int32_t i;
 
-    for (i = 0; i <= MAX_RESFILENUM; i++)
-        {
+    // Close all open resource files
+    for (i = 0; i <= MAX_RESFILENUM; i++) {
         if (resFile[i].fd >= 0)
             ResCloseFile(i);
-        }
+    }
 
-//    Spew out cumulative stats if want them
-
-    DBG(DSRC_RES_CumStat, {ResSpewCumStats();});
-*/
-
-//    Free up resource descriptor table
-
-    if (gResDesc)
-    {
+    // Free up resource descriptor table
+    if (gResDesc) {
         free(gResDesc);
         gResDesc = NULL;
         resDescMax = 0;
     }
-/*
-//    Pop allocators
-
-    if (resPushedAllocators)
-        {
-        MemPopAllocator();
-        resPushedAllocators = false;
-        }
-
-//    We're outta here
-
-    Spew(DSRC_RES_General, ("ResTerm: res system terminated\n"));
-*/
 }
-
-//    ---------------------------------------------------------
-//  For Mac version:  This is now a function, because we have to check a few things
-//  before returning the size.
-//    ---------------------------------------------------------
-int32_t ResSize(Id id)
-{
-    ResDesc *prd = RESDESC(id);
-
-    if (prd->flags & RDF_LZW)                            // If it's compressed...
-    {
-        if (*prd->hdl)                                        // if it's a real handle
-            return(GetHandleSize(prd->hdl));        // return the handle size
-        else
-            return (MaxSizeRsrc(prd->hdl));        // else return the res map size.
-    }
-    else
-        return (MaxSizeRsrc(prd->hdl));            // For normal resources,
-}                                                                    // return the res map size.
 
 //    ---------------------------------------------------------
 //
@@ -181,93 +115,24 @@ int32_t ResSize(Id id)
 
 void ResGrowResDescTable(Id id)
 {
-    int32_t    newAmt, currAmt;
-    Ptr    growPtr;
+    int32_t newAmt, currAmt;
+    ResDesc *growPtr;
 
-//    Calculate size of new table and size of current
-
+    // Calculate size of new table and size of current
     newAmt = (id + DEFAULT_RESGROW) & ~(DEFAULT_RESGROW - 1);
     currAmt = resDescMax + 1;
 
-//    If need to grow, do it, clearing new entries
-
-    if (newAmt > currAmt)
-    {
-//        Spew(DSRC_RES_General,
-//            ("ResGrowResDescTable: extending to $%x entries\n", newAmt));
-
-//        SetPtrSize((Ptr)gResDesc, newAmt * sizeof(ResDesc));
-        growPtr = malloc(newAmt * sizeof(ResDesc));
-        if (MemError() != noErr)
-        {
-            DebugStr("\pResGrowDescTable: CANT GROW DESCRIPTOR TABLE!!!\n");
+    // If need to grow, do it, clearing new entries
+    if (newAmt > currAmt) {
+        growPtr = (ResDesc *)calloc(newAmt, sizeof(ResDesc));
+        if (growPtr == NULL) {
+            Warning("ResGrowDescTable: CANT GROW DESCRIPTOR TABLE!!!\n");
             return;
         }
-        BlockMove(gResDesc, growPtr, currAmt * sizeof(ResDesc));
-        free(gResDesc);
-        gResDesc = (ResDesc *)growPtr;
-        memset(gResDesc + currAmt, 0, (newAmt - currAmt) * sizeof(ResDesc));
-        resDescMax = newAmt - 1;
 
-//    Grow cumulative stats table too
-/*
-        DBG(DSRC_RES_CumStat, {
-            if (pCumStatId == NULL)
-                ResAllocCumStatTable();
-            else
-                {
-                pCumStatId = Realloc(pCumStatId, newAmt * sizeof(ResCumStat));
-                if (pCumStatId == NULL)
-                    {
-                    Warning("ResGrowDescTable: RES CUMSTAT TABLE BAD!!!\n");
-                    return;
-                    }
-                memset(pCumStatId + currAmt, 0, (newAmt - currAmt) *
-                    sizeof(ResCumStat));
-                }
-            });
-*/
+        memmove(growPtr, gResDesc, currAmt * sizeof(ResDesc));
+        free(gResDesc);
+        gResDesc = growPtr;
+        resDescMax = newAmt - 1;
     }
 }
-
-//    ---------------------------------------------------------
-//
-//    ResShrinkResDescTable() resizes the descriptor table to be
-//    the minimum allowable size with the currently in-use resources.
-//
-/*
-void ResShrinkResDescTable()
-{
-    int32_t newAmt,currAmt;
-    // id is the largest used ID
-    Id id;
-
-// Calculate largest used ID
-    id = resDescMax;
-    while ((id > ID_MIN) && (!ResInUse(id)))
-        id--;
-//    Spew(DSRC_RES_General, ("largest ID in use is %x.\n",id));
-
-//    Calculate size of new table and size of current
-
-    newAmt = (id + DEFAULT_RESGROW) & ~(DEFAULT_RESGROW - 1);
-    currAmt = resDescMax + 1;
-
-//    If need to shrink do it
-// note that we don't increase the stat table
-
-    if (currAmt > newAmt)
-    {
-//        Spew(DSRC_RES_General,
-//            ("ResGrowResDescTable: extending to $%x entries\n", newAmt));
-
-        SetPtrSize(gResDesc, newAmt * sizeof(ResDesc));
-        if (MemError() != noErr)
-        {
-//            Warning("ResGrowDescTable: RES DESCRIPTOR TABLE BAD!!!\n");
-            return;
-        }
-        resDescMax = newAmt - 1;
-        }
-}
-*/

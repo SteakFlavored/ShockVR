@@ -144,7 +144,7 @@ void *ResGet(Id id)
 //    ResExtract() extracts a resource from an open resource file.
 //
 //        id    = id
-//        buff = ptr to buffer (use ResSize() to compute needed buffer size)
+//        buff = ptr to buffer
 //
 //    Returns: ptr to supplied buffer, or NULL if problem
 //    ---------------------------------------------------------
