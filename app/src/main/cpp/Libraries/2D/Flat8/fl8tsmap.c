@@ -29,7 +29,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "vtab.h"
 #include "fl8tf.h"
 #include "cnvdat.h"
-#include "2ddiv.h"
 
 // prototypes
 int32_t gri_trans_solid_lin_umap_loop(grs_tmap_loop_info *tli);
