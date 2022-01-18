@@ -227,9 +227,6 @@ void ResCloseFile(int32_t fd);    // close res file
 
 void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int32_t fd,
     uint8_t flags);                                        // make resource from data block
-void ResMakeCompound(Id id, uint8_t type, int32_t fd,
-    uint8_t flags);                                        // make empty compound resource
-void ResAddRef(Ref ref, void *pitem, int32_t itemSize);    // add item to compound
 void ResUnmake(Id id);                                            // unmake a resource
 
 //    ----------------------------------------------------------
