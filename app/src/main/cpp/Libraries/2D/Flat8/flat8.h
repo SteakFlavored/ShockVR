@@ -199,11 +199,7 @@ extern int32_t flat8_get_upixel24 (int16_t x, int16_t y);
 extern int32_t flat8_get_pixel24 (int16_t x, int16_t y);
 
 /* straight, rectangular-type primitives. */
-#if (defined(powerc) || defined(__powerc))
 extern void flat8_clear (int32_t color);
-#else
-extern asm void flat8_clear (int32_t color);
-#endif
 extern void flat8_upoint (int16_t x, int16_t y);
 extern int32_t flat8_point (int16_t x, int16_t y);
 extern void flat8_uhline (int16_t x0, int16_t y0, int16_t x1);

@@ -30,15 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "flat8.h"
 #include "blndat.h"
 
-#if !(defined(powerc) || defined(__powerc))
-asm void Handle_Smooth_H_Asm(int32_t    endh, int32_t endv, int32_t srcAdd, int32_t dstAdd,
-                                                            uint8_t *src, uint8_t *dst, uint8_t *local_grd_half_blend);
-asm void Handle_Smooth_HV_Asm(int32_t tempH, int32_t tempW, int32_t temp,
-                                                            uint8_t    *shvd_read_row1, uint8_t *shvd_write,
-                                                            uint8_t *shvd_read_row2, uint8_t *shvd_read_blend,
-                                                            uint8_t *dstPtr);
-#endif
-
 // ------------------------------------------------------------------------
 // PowerPC routines
 // ------------------------------------------------------------------------
@@ -88,7 +79,6 @@ void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb)
      endh = srcb->w-1;
      endv = srcb->h;
 
-#if defined(powerc) || defined(__powerc)
      for (v=0; v<endv; v++)
       {
           curpix = * (int16_t *) src;
@@ -110,53 +100,7 @@ void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb)
           src+=srcAdd;
           dst+=dstAdd;
       }
-#else
-    Handle_Smooth_H_Asm(endh,endv,srcAdd,dstAdd,src,dst,local_grd_half_blend);
-#endif
  }
-
-#if !(defined(powerc) || defined(__powerc))
-asm void Handle_Smooth_H_Asm(int32_t    endh, int32_t endv, int32_t srcAdd, int32_t dstAdd,
-                                                            uint8_t *src, uint8_t *dst, uint8_t *local_grd_half_blend)
- {
-     movem.l    d2-d7/a2-a4,-(sp)
-
-     movem.l    40(sp),d2-d5/a0-a2    // load up parms
-
-     subq.w    #1,d2
-     beq.s        @Done
-     subq.w    #1,d3        // for dbra
-     beq.s        @Done
-    move.w    d2,d7
-     moveq        #0,d0
-
-@OLoop:
-    move.w    (a0)+,d0                            // curpix = * (int16_t *) src;  src+=2;
-    move.w    d7,d2        // restore h
-@ILoop:
-    move.w    d0,d1
-    andi.w    #0xff00,d1        // curpix & 0xff00
-    move.b    (a2,d0.l),d1    // |= local_grd_half_blend[curpix];
-    move.w    d1,(a1)+
-    lsl.w        #8,d0
-    move.b    (a0)+,d0
-    dbra        d2,@ILoop        // h loop
-
-    lsr.w        #8,d0
-    move.b    d0,(a1)+
-    move.b    d0,(a1)+
-
-    add.l        d4,a0                // src+=srcAdd
-    add.l        d5,a1                // dst+=dstAdd
-
-     dbra        d3,@OLoop        // v loop
-
-@Done:
-     movem.l    (sp)+,d2-d7/a2-a4
-     rts
- }
-#endif
-
 
 // ========================================================================
 // src = eax, dest = edx
@@ -187,7 +131,6 @@ void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst)
     shvd_read_blend = grd_half_blend;
     savetemp = temp;
 
-#if defined(powerc) || defined(__powerc)
     do
      {
         do
@@ -218,61 +161,4 @@ void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst)
 
     for (;savetemp>0; savetemp--)
       *(dstPtr++) = *(srcPtr++);
-#else
-    Handle_Smooth_HV_Asm(tempH,tempW,temp,
-                                             shvd_read_row1, shvd_write,
-                                             shvd_read_row2, shvd_read_blend,
-                                             dstPtr);
-#endif
  }
-
-#if !(defined(powerc) || defined(__powerc))
-asm void Handle_Smooth_HV_Asm(int32_t tempH, int32_t tempW, int32_t temp,
-                                                            uint8_t    *shvd_read_row1, uint8_t *shvd_write,
-                                                            uint8_t *shvd_read_row2, uint8_t *shvd_read_blend,
-                                                            uint8_t *dstPtr)
- {
-     movem.l    d2-d7/a2-a4,-(sp)
-     movem.l    40(sp),d2-d4/a0-a4    // load up parms
-     moveq        #0,d0
-     move.l    d4,d7
-
-@ILoop:
-     move.b    (a2,d4.l),d0
-     lsl.w        #8,d0
-     move.b    (a0,d4.l),d0
-     move.b    (a3,d0.l),1(a1,d4.l)
-     addq.l    #1,d4
-     bne.s        @ILoop
-
-    subq.l    #1,d2
-    beq.s        @Out
-
-    move.l    a4,a0
-    add.w        d3,a4
-    move.l    a4,a1
-    subq.l    #1,a1
-    add.w        d3,a4
-    move.l    a4,a2
-    move.l    d7,d4
-    bra.s        @ILoop
-
-// do last row
-@Out:
-    move.l    a4,a0
-    add.l        d7,a0        // srcPtr = dstPtr + savetemp;
-    add.l        d3,a4
-    add.l        d7,a4        // dstPtr += tempW + savetemp;
-
-    neg.l        d7            // savetemp = -savetemp;
-    beq.s        @Done
-
-@LastLoop:
-    move.b    (a0)+,(a4)+
-    dbra        d7,@LastLoop
-
-@Done:
-     movem.l    (sp)+,d2-d7/a2-a4
-     rts
- }
-#endif

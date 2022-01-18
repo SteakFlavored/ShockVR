@@ -40,12 +40,7 @@ extern void flat8_blend_set_upixel (int32_t color, int16_t x, int16_t y);
 extern void flat8_solid_set_upixel (int32_t color, int16_t x, int16_t y);
 
 /* blit primitives */
-#if (defined(powerc) || defined(__powerc))
 extern void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
-#else
-extern asm void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
-#endif
-
 extern void flat8_tluc8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
 extern int32_t gri_flat8_mask_bitmap(grs_bitmap *bm, int16_t x, int16_t y, grs_stencil *sten);
 extern void gri_flat8_clut_ubitmap (grs_bitmap *bm, int16_t x, int16_t y, uint8_t *cl);
