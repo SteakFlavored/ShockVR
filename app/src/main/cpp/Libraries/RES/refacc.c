@@ -35,9 +35,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
 */
 
-#include <fcntl.h>
-#include <unistd.h>
-
 #include "res.h"
 #include "res_.h"
 #include "lzw.h"

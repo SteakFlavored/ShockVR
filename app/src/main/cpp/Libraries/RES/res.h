@@ -58,14 +58,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __RES_H
 #define __RES_H
 
-// For now
-//#define DBG_ON        1
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "lg.h"
-
-//#ifndef DATAPATH_H
-//#include <datapath.h>
-//#endif
 
 #ifndef __TYPES_H
 #include "lg_types.h"
@@ -158,6 +154,7 @@ typedef struct
 {
     void *ptr;       // Pointer to entry in RAM.  NULL if not in memory (on disk)
     int32_t offset;  // Offset to the start of resource data in the file
+    int32_t size;    // Size of the resource data
     int16_t filenum; // Resource file number
     uint8_t lock;    // lock count
     uint8_t flags;   // misc flags (RDF_XXX, see below)

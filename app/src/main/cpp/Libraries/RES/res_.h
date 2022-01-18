@@ -50,15 +50,6 @@ bool RefCheckRef(Ref ref);            // returns true if ref ok, else false & wa
 void *ResLoadResource(Id id);
 bool ResRetrieve(Id id, void *buffer);
 
-/*
-//    Resource paging (resmem.c)
-
-void *ResDefaultPager(int32_t size);
-extern void *(*f_pager)(int32_t size);
-extern Id idBeingLoaded;
-#define RES_PAGER(size) (*f_pager)(size)
-*/
-
 //    Grow descriptor table (res.c)
 
 void ResGrowResDescTable(Id id);
