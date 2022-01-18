@@ -155,7 +155,7 @@ typedef struct
     void *ptr;       // Pointer to entry in RAM.  NULL if not in memory (on disk)
     int32_t offset;  // Offset to the start of resource data in the file
     int32_t size;    // Size of the resource data
-    int16_t filenum; // Resource file number
+    int32_t filenum; // Resource file number
     uint8_t lock;    // lock count
     uint8_t flags;   // misc flags (RDF_XXX, see below)
     uint8_t type;    // resource type (RTYPE_XXX, see restypes.h)
@@ -182,8 +182,8 @@ extern Id resDescMax; // max id in res desc
 #define ResPtr(id) (gResDesc[id].ptr)
 #define ResSize(id) (gResDesc[id].size)
 #define ResLocked(id) (gResDesc[id].lock)
-//#define ResType(id) (gResDesc[id].type)
-//#define ResFilenum(id) (gResDesc[id].filenum)
+#define ResType(id) (gResDesc[id].type)
+#define ResFilenum(id) (gResDesc[id].filenum)
 #define ResFlags(id) (gResDesc[id].flags)
 #define ResCompressed(id) (gResDesc[id].flags & RDF_LZW)
 #define ResIsCompound(id) (gResDesc[id].flags & RDF_COMPOUND)
@@ -208,7 +208,7 @@ typedef enum
 } ResOpenMode;
 
 int32_t ResOpenResFile(const char *filename, ResOpenMode mode, bool auxinfo);
-void ResCloseFile(int32_t fd);    // close res file
+void ResCloseFile(int32_t filenum);    // close res file
 
 #define ResOpenFile(filename) ResOpenResFile(filename, ROM_READ, false)
 #define ResEditFile(filename,creat) ResOpenResFile(filename, \
@@ -234,21 +234,21 @@ void ResUnmake(Id id);                                            // unmake a re
 //    ----------------------------------------------------------
 //    Resource-file disk format:  header, data, dir
 
-typedef struct {
+typedef struct __attribute__((packed)) {
     int8_t signature[16];        // "LG ResFile v2.0\n",
     char comment[96];            // user comment, terminated with '\z'
     uint8_t reserved[12];        // reserved for future use, must be 0
     int32_t dirOffset;            // file offset of directory
 } ResFileHeader;                // total 128 bytes (why not?)
 
-typedef struct {
+typedef struct __attribute__((packed)) {
     uint16_t numEntries;        // # items referred to by directory
     int32_t dataOffset;            // file offset at which data resides
                                     // directory entries follow immediately
                                     // (numEntries of them)
 } ResDirHeader;
 
-typedef struct {
+typedef struct __attribute__((packed)) {
     Id id;                        // resource id (if 0, entry is deleted)
     int32_t size: 24;                // uncompressed size (size in ram)
     int32_t flags: 8;                // resource flags (RDF_XXX)
@@ -291,7 +291,7 @@ extern int8_t resFileSignature[16];        // magic header
 //        RESOURCE FILE BUILDING  (resbuild.c)
 //    --------------------------------------------------------
 
-void ResSetComment(int16_t filenum, const char *comment); // set comment
+void ResSetComment(int32_t filenum, const char *comment); // set comment
 int32_t ResWrite(Id id); // write resource to file
 int32_t ResPack(int32_t filenum); // remove empty entries
 
