@@ -97,13 +97,8 @@ grs_tmap_info tmap_info;
 int8_t     _g3d_enable_blend = 0;
 
 // prototypes
-#if (defined(powerc) || defined(__powerc))
 int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
 int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
-#else
-asm int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
-asm int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
-#endif
 
 grs_vertex **do_bitmap(grs_bitmap *bm, g3s_phandle p);
 grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p);
@@ -191,26 +186,6 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p)
     int32_t    rm1;
     int32_t    rm2;
     int32_t    rm3;
-
-#ifdef stereo_on
-    if (_g3d_stereo & 1)
-     {
-
-          ; edi is point handle
-          pushm    edi,esi
-          call g3_bitmap_common_raw
-          set_rt_canv
-
-          popm     edi,esi
-          add      edi,_g3d_stereo_base
-          call g3_bitmap_common_raw
-          set_lt_canv
-
-          ret
-
-g3_bitmap_common_raw:
-     }
-#endif
 
     if ((p->p3_flags & PF_PROJECTED)==0)
          if (g3_project_point(p)==0) p->codes |= CC_CLIP_OVERFLOW;
@@ -403,7 +378,6 @@ NoBlend:
      return(_g3d_bitmap_poly);
  }
 
-#if (defined(powerc) || defined(__powerc))
 // subtract two longs, put the result in result, and return true if overflow
 // result = src-dest;
 int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest)
@@ -431,36 +405,3 @@ int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest)
      else
          return false;
  }
-#else
-asm int8_t SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest)
- {
-     move.l    8(a7),d0
-     sub.l        12(a7),d0
-     bvs.s        @overflow
-
-     move.l    4(a7),a0
-     move.l    d0,(a0)
-     moveq        #0,d0
-     rts
-
-@overflow:
-     moveq        #-1,d0
-    rts
- }
-
-asm int8_t AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest)
- {
-     move.l    8(a7),d0
-     add.l        12(a7),d0
-     bvs.s        @overflow
-
-     move.l    4(a7),a0
-     move.l    d0,(a0)
-     moveq        #0,d0
-     rts
-
-@overflow:
-     moveq        #-1,d0
-    rts
- }
-#endif

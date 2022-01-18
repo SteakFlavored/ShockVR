@@ -32,12 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // prototypes
 void rotate_norm(g3s_vector *v, fix *x, fix *y, fix *z);
 void do_norm_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz);
-
-#if (defined(powerc) || defined(__powerc))
 void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz);
-#else
-asm void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz);
-#endif
 
 //void xlate_rotate_point(g3s_vector *v, fix *x, fix *y, fix *z);
 #define xlate_rotate_point(v,x,y,z) do_rotate(v->gX-_view_position.gX, v->gY-_view_position.gY, v->gZ-_view_position.gZ,x,y,z)
@@ -100,61 +95,9 @@ g3s_phandle g3_transform_point(g3s_vector *v)
 // takes edi = ptr to point. projects, fills in sx,sy, sets flag.
 // returns 0 if z<=0, 1 if z>0.
 // trashes eax,ecx,edx.
-#if (defined(powerc) || defined(__powerc))
 int32_t g3_project_point(g3s_phandle p)
  {
      fix        x,y,z,res;
-
-#ifdef stereo_on
-          test     _g3d_stereo,1
-          jz        no_stereo1
-          // is this a sister point?
-          cmp      edi,_g3d_stereo_list
-          jl        not_sister
-
-          // debug_brk 'yo, found projecting sister'
-
-          // copy the point and add
-    mov      esi,edi
-    sub      esi,_g3d_stereo_base
-    mov      ecx,(size g3s_point)/4
-    rep movsd
-
-          mov      eax,_g3d_eyesep
-          sub      edi,(size g3s_point)     //restore edi
-          add      [edi].x,eax
-
-          // call clip encoder on this point
-          mov      ecx,ebx
-          call     code_point
-          mov      ebx,ecx
-
-          // project point like a normal point
-          mov      _g3d_stereo,0
-          pop      esi
-          call     g3_project_point
-          mov      _g3d_stereo,1
-
-          ret
-
-          not_sister:
-          // copy the point
-    mov      esi,edi
-    add      edi,_g3d_stereo_base
-    mov      ecx,(size g3s_point)/4
-    rep movsd
-          mov      eax,_g3d_eyesep
-          sub      edi,(size g3s_point)     //restore edi
-          add      [edi].x,eax
-
-          // call clip encoder
-          mov      ecx,ebx
-          call     code_point
-          mov      ebx,ecx
-
-          sub      edi,_g3d_stereo_base
-no_stereo1:
-#endif
 
     // check if this point is in front of the back plane.
     z = p->gZ;
@@ -179,90 +122,9 @@ no_stereo1:
     // modify point flags to indicate projection.
     p->p3_flags |= PF_PROJECTED;
 
-#ifdef stereo_on
-          test     _g3d_stereo,1
-          jz        no_stereo2
-          mov      eax,[edi].sy                //copy over old sy
-          add      edi,_g3d_stereo_base      //load twin address
-          mov      [edi].sy,eax                //make new sy, could add the .5 addition here too
-
-    mov      eax,[edi].x
-    // reproject the x coord
-    imul     _scrw                         //* screen width
-proj_div_2:
-    idiv     ecx                            /// z
-    add      eax,_biasx                  //+center
-    mov      [edi].sx,eax                //save
-
-          // indicate projection
-    or        [edi].p3_flags,PF_PROJECTED
-
-    // restore edi
-    sub      edi,_g3d_stereo_base
-no_stereo2:
-#endif
-
     // point has been projected.
     return 1;
  }
-#else
-// 68K g3_project_point
-asm int32_t g3_project_point(g3s_phandle p)
- {
-    move.l    d3,a1        // save d3
-
-     move.l    4(a7),a0
-
-    // check if this point is in front of the back plane.
-    move.l    8(a0),d2            // mov      ecx,[edi].z                 //get z
-                                                // or        ecx,ecx                      //check neg z
-    ble.s        no_proj                // jle      no_proj
-
-    // point is in front of back plane---do projection.
-
-    // project y coordinate.
-    move.l    4(a0),d0            // mov      eax,[edi].y                 //get y
-    move.l    _scrh,d3
-    dc.l        0x4C030C01        // muls.l    d3,d1:d0        // imul     _scrh         //* screen height
-proj_div_1:
-    dc.l        0x4C420C01        // divs.l    d2,d1:d0            // idiv     ecx                            /// z
-    bvs.s        project_overflow
-@divback1:
-    neg.l        d0                        // neg      eax                            //convert to screen convention ARGHHH!! LAMEASS SONUFABITCH
-    add.l        _biasy,d0            // add      eax,_biasy                  //+center
-    bvs.s        project_overflow        // jo        project_overflow
-    move.l    d0,16(a0)    // mov      [edi].sy,eax                //save
-
-          // now project x point
-    move.l    (a0),d0                // mov      eax,[edi].x                 //get x
-    move.l    _scrw,d3
-    dc.l        0x4C030C01        // muls.l    d3,d1:d0        // imul     _scrw                         //* screen width
-proj_div_0:
-    dc.l        0x4C420C01        // divs.l    d2,d1:d0            // idiv     ecx                            /// z
-    bvs.s        project_overflow
-@divback0:
-    add.l        _biasx,d0            // add      eax,_biasx                  //+center
-    bvs.s        project_overflow        // jo        project_overflow
-    move.l    d0,12(a0)    // mov      [edi].sx,eax                //save
-
-    // modify point flags to indicate projection.
-    or.b        #PF_PROJECTED,21(a0)    // or        [edi].p3_flags,PF_PROJECTED
-    moveq        #1,d0                    // mov      eax,1  //return true when z>0
-    move.l    a1,d3
-     rts
-
-no_proj:
-    move        #0,d0
-    move.l    a1,d3
-    rts
-
-project_overflow:
-    or.b        #CC_CLIP_OVERFLOW,20(a0)
-    moveq        #1,d0                    // mov      eax,1  //return true when z>0
-    move.l    a1,d3
-    rts
- }
-#endif
 
 // MLA - all the divide exception handler overflow stuff was removed, and checked before
 // each divide.  So all of this stuf isn't needed
