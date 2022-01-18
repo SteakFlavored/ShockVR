@@ -6,6 +6,7 @@ include_directories(
     ${LIBRARIES_DIR}/2D/Gen
     ${LIBRARIES_DIR}/2D/GR
     ${LIBRARIES_DIR}/2D/RSD
+    ${LIBRARIES_DIR}/3D
     ${LIBRARIES_DIR}/DSTRUCT
     ${LIBRARIES_DIR}/FIX
     ${LIBRARIES_DIR}/FIXPP
@@ -171,6 +172,26 @@ set(2D_LIBRARY_SRC
 )
 add_library(2D_LIB ${2D_LIBRARY_SRC})
 target_link_libraries(2D_LIB FIX_LIB LG_LIB)
+
+set(3D_LIBRARY_SRC
+    3D/alloc.c
+    3D/bitmap.c
+    3D/clip.c
+    3D/detail.c
+    3D/fov.c
+    3D/globalv.c
+    3D/instance.c
+    3D/interp.c
+    3D/light.c
+    3D/matrix.c
+    3D/points.c
+    3D/polygon.c
+    3D/slew.c
+    3D/tmap.c
+    3D/vector.c
+)
+add_library(3D_LIB ${3D_LIBRARY_SRC})
+target_link_libraries(3D_LIB FIX_LIB LG_LIB)
 
 set(DSTRUCT_LIBRARY_SRC
     DSTRUCT/array.c

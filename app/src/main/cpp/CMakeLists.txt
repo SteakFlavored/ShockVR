@@ -28,7 +28,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/Libraries/)
 
 add_library(shockvr SHARED shockvr.cpp)
 
-target_link_libraries(shockvr 2D_LIB DSTRUCT_LIB FIX_LIB FIXPP_LIB LG_LIB RES_LIB)
+target_link_libraries(shockvr 2D_LIB 3D_LIB DSTRUCT_LIB FIX_LIB FIXPP_LIB LG_LIB RES_LIB)
 
 # Link in the native app glue
 target_link_libraries(shockvr android native_app_glue)
