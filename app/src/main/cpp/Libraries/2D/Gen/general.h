@@ -295,16 +295,16 @@ extern void temp_rsd8_ubitmap (grs_bitmap *bm, int32_t x, int32_t y);
 
 extern void temp_tluc8_ubitmap (grs_bitmap *bm, int32_t x, int32_t y);
 
-extern int32_t temp_poly (int32_t c, int32_t n, grs_vertex **vpl);
-extern void temp_upoly (int32_t c, int32_t n, grs_vertex **vpl);
-extern int32_t temp_spoly (int32_t c, int32_t n, grs_vertex **vpl);
-extern void temp_uspoly (int32_t c, int32_t n, grs_vertex **vpl);
-extern int32_t temp_cpoly (int32_t c, int32_t n, grs_vertex **vpl);
-extern void temp_ucpoly (int32_t c, int32_t n, grs_vertex **vpl);
-extern int32_t temp_tpoly (int32_t c, int32_t n, grs_vertex **vpl);
-extern void temp_utpoly (int32_t c, int32_t n, grs_vertex **vpl);
-extern int32_t temp_stpoly (int32_t c, int32_t n, grs_vertex **vpl);
-extern void temp_ustpoly (int32_t c, int32_t n, grs_vertex **vpl);
+extern int32_t temp_poly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern void temp_upoly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern int32_t temp_spoly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern void temp_uspoly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern int32_t temp_cpoly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern void temp_ucpoly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern int32_t temp_tpoly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern void temp_utpoly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern int32_t temp_stpoly (uintptr_t c, int32_t n, grs_vertex **vpl);
+extern void temp_ustpoly (uintptr_t c, int32_t n, grs_vertex **vpl);
 
 
 extern void temp_lin_umap

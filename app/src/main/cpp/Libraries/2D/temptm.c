@@ -118,7 +118,7 @@ void temp_tluc8_ubitmap (grs_bitmap *bm, int32_t x, int32_t y)
         grd_function_table[GRC_BITMAP+BMT_TLUC8*GRD_FUNCS])(bm, x, y);
 }
 
-int32_t temp_poly (int32_t c, int32_t n, grs_vertex **vpl)
+int32_t temp_poly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -131,7 +131,7 @@ int32_t temp_poly (int32_t c, int32_t n, grs_vertex **vpl)
     return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_upoly (int32_t c, int32_t n, grs_vertex **vpl)
+void temp_upoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -144,7 +144,7 @@ void temp_upoly (int32_t c, int32_t n, grs_vertex **vpl)
     h_umap(&bm,n,vpl,&ti);
 }
 
-int32_t temp_spoly (int32_t c, int32_t n, grs_vertex **vpl)
+int32_t temp_spoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -157,7 +157,7 @@ int32_t temp_spoly (int32_t c, int32_t n, grs_vertex **vpl)
     return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_uspoly (int32_t c, int32_t n, grs_vertex **vpl)
+void temp_uspoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -170,7 +170,7 @@ void temp_uspoly (int32_t c, int32_t n, grs_vertex **vpl)
     h_umap(&bm,n,vpl,&ti);
 }
 
-int32_t temp_cpoly (int32_t c, int32_t n, grs_vertex **vpl)
+int32_t temp_cpoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -183,7 +183,7 @@ int32_t temp_cpoly (int32_t c, int32_t n, grs_vertex **vpl)
     return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_ucpoly (int32_t c, int32_t n, grs_vertex **vpl)
+void temp_ucpoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -196,7 +196,7 @@ void temp_ucpoly (int32_t c, int32_t n, grs_vertex **vpl)
     h_umap(&bm,n,vpl,&ti);
 }
 
-int32_t temp_tpoly (int32_t c, int32_t n, grs_vertex **vpl)
+int32_t temp_tpoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -210,7 +210,7 @@ int32_t temp_tpoly (int32_t c, int32_t n, grs_vertex **vpl)
     return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_utpoly (int32_t c, int32_t n, grs_vertex **vpl)
+void temp_utpoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -223,7 +223,7 @@ void temp_utpoly (int32_t c, int32_t n, grs_vertex **vpl)
     h_umap(&bm,n,vpl,&ti);
 }
 
-int32_t temp_stpoly (int32_t c, int32_t n, grs_vertex **vpl)
+int32_t temp_stpoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -236,7 +236,7 @@ int32_t temp_stpoly (int32_t c, int32_t n, grs_vertex **vpl)
     return h_map(&bm,n,vpl,&ti);
 }
 
-void temp_ustpoly (int32_t c, int32_t n, grs_vertex **vpl)
+void temp_ustpoly (uintptr_t c, int32_t n, grs_vertex **vpl)
 {
     grs_tmap_info ti;
     grs_bitmap bm;
