@@ -35,11 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __RES_H
 #include "res.h"
 #endif
-//#ifndef ___RES_H
-//#include <_res.h>
-//#endif
 
-/*
 //    ----------------------------------------------------------
 //        FOR RESOURCE SYSTEM INTERNAL USE - DON'T BE BAD!
 //    ----------------------------------------------------------
@@ -48,7 +44,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 bool ResCheckId(Id id);                // returns true if id ok, else false + warns
 bool RefCheckRef(Ref ref);            // returns true if ref ok, else false & warns
-*/
 
 //    Resource loading (resload.c)
 
@@ -72,7 +67,6 @@ void ResGrowResDescTable(Id id);
 
 #define DEFAULT_RES_GROWDIRENTRIES 128        // must be power of 2
 
-/*
 //    Data alignment aids
 
 #define RES_OFFSET_ALIGN(offset) (((offset)+3)&0xFFFFFFFCL)
@@ -81,7 +75,6 @@ void ResGrowResDescTable(Id id);
 #define RES_OFFSET_DESC2REAL(offset) ((offset)<<2)
 
 #define RES_OFFSET_PENDING 1    // offset of resource not yet written
-
 
 //    LRU chain link management macros
 
@@ -102,51 +95,6 @@ void ResGrowResDescTable(Id id);
         ResAddToTail(prd); \
         } \
     }
-
-
-//    Statistics tables
-
-#ifdef DBG_ON
-
-typedef struct {
-    uint32_t numGets;                // # ResGet()'s or RefGet()'s
-    uint32_t numLocks;            // # ResLock()'s or RefLock()'s
-    uint16_t numExtracts;        // # ResExtract()'s or RefExtract()'s
-    uint16_t numLoads;            // # ResLoad()'s
-    uint16_t numOverwrites;    // # times resource overwritten by one in new file
-    uint16_t numPageouts;        // # times paged out of ram
-} ResCumStat;
-
-extern ResCumStat *pCumStatId;                        // ptr to cumulative stats by id
-extern ResCumStat cumStatType[NUM_RESTYPENAMES]; // table of cum. stats by type
-
-#define CUMSTATS(id,field) DBG(DSRC_RES_CumStat, { \
-    ResCumStat *prcs;                \
-    if (pCumStatId == NULL)        \
-        ResAllocCumStatTable();    \
-    prcs = pCumStatId + (id);    \
-    prcs->field++;                    \
-    prcs = &cumStatType[RESDESC(id)->type]; \
-    prcs->field++;                    \
-    })
-
-typedef struct {
-    uint16_t numPageouts;            // # times ResPageOut() called
-    uint32_t totSizeNeeded;            // total # bytes asked for across calls
-    uint32_t totSizeGotten;            // total # bytes paged out across calls
-} ResPageStats;
-
-extern ResPageStats resPageStats;    // paging statistics
-
-void ResAllocCumStatTable();            // internal stat routine prototypes
-void ResSpewCumStats();                    // these are in rescum.c
-
-#else
-
-#define CUMSTATS(id,field)
-
-#endif
-*/
 
 #endif
 

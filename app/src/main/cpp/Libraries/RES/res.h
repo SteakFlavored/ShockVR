@@ -119,14 +119,14 @@ typedef struct {
     int32_t offset[1];                                        // offset to each item (numRefs + 1 of them)
 } RefTable;
 
-void *RefLock(Ref ref);                                // lock compound res, get ptr to item
-#define RefUnlock(ref) ResUnlock(REFID(ref))    // unlock compound res item
-void *RefGet(Ref ref);                                    // get ptr to item in comp. res (dangerous!)
+void *RefLock(Ref ref); // lock compound res, get ptr to item
+#define RefUnlock(ref) ResUnlock(REFID(ref)) // unlock compound res item
+void *RefGet(Ref ref); // get ptr to item in comp. res (dangerous!)
 
-RefTable *ResReadRefTable(Id id);                                    // alloc & read ref table
-#define ResFreeRefTable(prt) (free(prt))        // free ref table
-//int ResExtractRefTable(Id id, RefTable *prt, int32_t size);     // extract reftable
-void *RefExtract(RefTable *prt, Ref ref, void *buff);            // extract ref
+RefTable *ResReadRefTable(Id id); // alloc & read ref table
+#define ResFreeRefTable(prt) (free(prt)) // free ref table
+int ResExtractRefTable(Id id, RefTable *prt, int32_t size); // extract reftable
+void *RefExtract(RefTable *prt, Ref ref, void *buff); // extract ref
 
 #define RefIndexValid(prt,index) ((index) < (prt)->numRefs)
 #define RefSize(prt,index) (prt->offset[(index)+1]-prt->offset[index])
@@ -157,26 +157,28 @@ void RefExtractInBlocks(RefTable *prt, Ref ref, void *buff, int32_t blockSize,
 
 typedef struct
 {
-    void *ptr;     // Pointer to entry in RAM.  NULL if not in memory (on disk)
-    int32_t fd;    // File descriptor
-    uint8_t lock;  // lock count
-    uint8_t flags; // misc flags (RDF_XXX, see below)
-    uint8_t type;  // resource type (RTYPE_XXX, see restypes.h)
+    void *ptr;       // Pointer to entry in RAM.  NULL if not in memory (on disk)
+    int32_t offset;  // Offset to the start of resource data in the file
+    int16_t filenum; // Resource file number
+    uint8_t lock;    // lock count
+    uint8_t flags;   // misc flags (RDF_XXX, see below)
+    uint8_t type;    // resource type (RTYPE_XXX, see restypes.h)
+    Id next;         // ID of next element in LRU
+    Id prev;         // ID of previous element in LRU
 } ResDesc;
 
-#define RESDESC(id) (&gResDesc[id])                    // convert id to resource desc ptr
-#define RESDESC_ID(prd) ((prd)-gResDesc)        // convert resdesc ptr to id
+#define RESDESC(id) (&gResDesc[id]) // convert id to resource desc ptr
+#define RESDESC_ID(prd) ((prd)-gResDesc) // convert resdesc ptr to id
 
-#define RDF_LZW                0x01        // if 1, LZW compressed
-#define RDF_COMPOUND        0x02        // if 1, compound resource
-#define RDF_RESERVED        0x04        // reserved
-#define RDF_LOADONOPEN    0x08        // if 1, load block when open file
+#define RDF_LZW 0x01        // if 1, LZW compressed
+#define RDF_COMPOUND 0x02   // if 1, compound resource
+#define RDF_RESERVED 0x04   // reserved
+#define RDF_LOADONOPEN 0x08 // if 1, load block when open file
 
-#define RES_MAXLOCK 255                // max locks on a resource
+#define RES_MAXLOCK ((uint8_t)-1) // max locks on a resource
 
-extern ResDesc *gResDesc;                // ptr to big array of ResDesc's
-extern Id resDescMax;                        // max id in res desc
-
+extern ResDesc *gResDesc; // ptr to big array of ResDesc's
+extern Id resDescMax; // max id in res desc
 
 //    Information about resources
 
@@ -219,7 +221,7 @@ void ResCloseFile(int32_t fd);    // close res file
     (creat) ? ROM_EDITCREATE : ROM_EDIT, true)
 #define ResCreateFile(filename) ResOpenResFile(filename, ROM_CREATE, true)
 
-//#define MAX_RESFILENUM 15            // maximum file number
+#define MAX_RESFILENUM 63            // maximum file number
 
 //extern Datapath gDatapath;            // res system's datapath (others may use)
 /*
@@ -265,17 +267,6 @@ void ResUnmake(Id id);                                            // unmake a re
 //    ----------------------------------------------------------
 //        RESOURCE FILE LAYOUT
 //    ----------------------------------------------------------
-/*
-typedef struct                    // For Mac version, an array of these are saved in the
-{                                    // file's 'hTbl' 128 resource.
-    Id             id;                    // resource id
-    uint8_t     flags;                // resource flags (RDF_XXX)
-    uint8_t    type;                // resource type
-} ResDirEntry;
-
-void ResWriteDir(int16_t filenum);    // Mac version: Write out a resource table for the file.
-*/
-/*
 //    Resource-file disk format:  header, data, dir
 
 typedef struct {
@@ -330,7 +321,6 @@ extern ResFile resFile[MAX_RESFILENUM+1];
     pde < RESFILE_DIRENTRY(pdir,pdir->numEntries); pde++)
 
 extern int8_t resFileSignature[16];        // magic header
-*/
 
 //    --------------------------------------------------------
 //        RESOURCE FILE BUILDING  (resbuild.c)
