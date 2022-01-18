@@ -179,7 +179,7 @@ g3s_point *_vpoint_tab[N_VPOINT_ENTRIES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 grs_bitmap *_vtext_tab[N_VTEXT_ENTRIES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 // ptr to stack parms
-char *parm_ptr;
+uint8_t *parm_ptr;
 
 // space for parms to objects
 int8_t    parm_data[PARM_DATA_SIZE];
@@ -239,7 +239,8 @@ void g3_interpret_object(uint8_t *object_ptr,...)
               opcode_table[OP_JNORM] = &do_ljnorm;
      }
 
-    va_start(parm_ptr, object_ptr);    // get addr of stack parms
+    // get addr of stack parms
+    parm_ptr = (uint8_t*)((uintptr_t)&object_ptr + sizeof(uint8_t*));
 
 // MLA- not used ever?
 /*
@@ -431,7 +432,7 @@ uint8_t *do_vpnt_p(uint8_t *opcode)
      FlipShort((int16_t *) (opcode+2));
      FlipShort((int16_t *) (opcode+4));
 
-     resbuf[* (int16_t *) (opcode+4)] = (g3s_point *) (* (int32_t *) (parm_data + (* (uint16_t *) (opcode+2))));
+     resbuf[* (int16_t *) (opcode+4)] = (g3s_point *) (* (uintptr_t *) (parm_data + (* (uint16_t *) (opcode+2))));
      return opcode+6;
  }
 
@@ -786,7 +787,7 @@ uint8_t *do_icall_p(uint8_t *opcode)
   FlipLong((int32_t *) (opcode+2));
 
      g3_start_object_angles_x((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (uint16_t *) (opcode+18))));
-    interpreter_loop((uint8_t *) (* (int32_t *) (opcode+2)));
+    interpreter_loop((uint8_t *) (* (uintptr_t *) (opcode+2)));
     g3_end_object();
 
     return opcode+20;
@@ -800,7 +801,7 @@ uint8_t *do_icall_h(uint8_t *opcode)
   FlipLong((int32_t *) (opcode+2));
 
      g3_start_object_angles_y((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (uint16_t *) (opcode+18))));
-    interpreter_loop((uint8_t *) (* (int32_t *) (opcode+2)));
+    interpreter_loop((uint8_t *) (* (uintptr_t *) (opcode+2)));
     g3_end_object();
 
     return opcode+20;
@@ -813,7 +814,7 @@ uint8_t *do_icall_b(uint8_t *opcode)
   FlipLong((int32_t *) (opcode+2));
 
      g3_start_object_angles_z((g3s_vector *) (opcode+6), * (fixang *) (parm_data+(* (uint16_t *) (opcode+18))));
-    interpreter_loop((uint8_t *) (* (int32_t *) (opcode+2)));
+    interpreter_loop((uint8_t *) (* (uintptr_t *) (opcode+2)));
     g3_end_object();
 
     return opcode+20;
