@@ -301,11 +301,7 @@ int32_t gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli);
 
 /* bitmap drawing functions. */
 extern void flat8_mono_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
-#if (defined(powerc) || defined(__powerc))
 extern void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
-#else
-extern asm void flat8_flat8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
-#endif
 extern void flat8_rsd8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
 extern void flat8_tluc8_ubitmap (grs_bitmap *bm, int16_t x, int16_t y);
 extern int32_t flat8_rsd8_bitmap (grs_bitmap *bm, int16_t x, int16_t y);
