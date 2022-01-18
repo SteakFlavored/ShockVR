@@ -45,65 +45,21 @@ aint32_t with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* clear a flat8 canvas. */
 void flat8_clear (int32_t color)
 {
-    uint8_t     *p;
-    int32_t         h;
-     int32_t        w;
-     int32_t      row;
-    uint16_t    short_val;
-     double    double_stack,doub_vl;
-     uint32_t     firstbytes,middoubles,lastbytes,fb,md,lb;
-     uint8_t     *dst;
-    double *dst_doub;
-    uint        temp;
+    uint8_t *p;
+    int32_t h;
+    int32_t w;
+    int32_t row;
 
-     color &= 0x00ff;
+    color &= 0x00ff;
     p = grd_bm.bits;
     h = grd_bm.h;
-     w = grd_bm.w;
-     row = grd_bm.row;
-     if (w>=16)    // only do doubles if at least two of them (16 bytes)
-      {
-              // get a 64 bit version of color in doub_vl
-              short_val = (uint8_t) color | color<<8;
-              color = (int32_t) short_val |  ((int32_t) short_val)<<16;
-              * (int32_t *) (&double_stack) = color;
-              * ((int32_t *) (&double_stack)+1) = color;
-              doub_vl = double_stack;
+    w = grd_bm.w;
+    row = grd_bm.row;
 
-            lastbytes = w;
-             if (firstbytes = (int32_t) p & 3) // check for boundary problems
-                 lastbytes -= firstbytes;
+    while (h--) {
+        // MLA - inlined this code
+        memset (p, color, w);
 
-             middoubles = lastbytes>>3;
-             lastbytes -= middoubles<<3;
-      }
-     else
-         {lastbytes = w; middoubles = 0;}
-
-     fb = firstbytes,md = middoubles,lb = lastbytes;
-    while (h--)
-    {
-// MLA - inlined this code
-//        memset (p, color, w);
-      {
-          firstbytes = fb,middoubles = md,lastbytes = lb;
-             dst = p;
-
-             if (middoubles)
-              {
-                  // first get to a 4 byte boundary
-                 while (firstbytes--) *(dst++) = color;
-                  dst_doub = (double *) dst;
-
-                  // now do doubles
-                  while (middoubles--) *(dst_doub++) = doub_vl;
-                  dst = (uint8_t *) dst_doub;
-              }
-
-             // do remaining bytes
-             while (lastbytes--) *(dst++) = color;
-      }
-
-     p += row;
+        p += row;
     }
 }
