@@ -170,7 +170,7 @@ uint8_t *LzwDecodeString(uint8_t *buffer, uint32_t code);
 
 void LzwInit( void )
 {
-//    AtExit(LzwTerm);
+    atexit(LzwTerm);
 }
 
 //    ------------------------------------------------------------
