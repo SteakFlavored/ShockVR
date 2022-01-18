@@ -98,7 +98,7 @@ int32_t gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
             case GRL_TRANS:
                 for (;p < p_final; p++) {
                     k=t_vtab[fix_fint(v)]+fix_fint(u);
-                    if (k = t_bits[k]) {
+                    if ((k = t_bits[k]) != 0) {
                         if (tluc8tab[k]!=NULL) *p=tluc8tab[k][*p];
                         else *p=k;
                     }
@@ -117,7 +117,7 @@ int32_t gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
             case GRL_TRANS|GRL_LOG2:
                 for (;p < p_final; p++) {
                     k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
-                    if (k = t_bits[k]) {
+                    if ((k = t_bits[k]) != 0) {
                         if (tluc8tab[k]!=NULL) *p=tluc8tab[k][*p];
                         else *p=k;
                     }
@@ -136,7 +136,7 @@ int32_t gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
             case GRL_TRANS|GRL_CLUT:
                 for (;p < p_final; p++) {
                     k=t_vtab[fix_fint(v)]+fix_fint(u);
-                    if (k = t_bits[k]) {
+                    if ((k = t_bits[k]) != 0) {
                         if (tluc8tab[k]!=NULL) *p=t_clut[tluc8tab[k][*p]];
                         else *p=t_clut[k];
                     }
@@ -156,7 +156,7 @@ int32_t gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
                 for (;p < p_final; p++) {
                     k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
                     u+=du; v+=dv;
-                    if (k = t_bits[k]) {
+                    if ((k = t_bits[k]) != 0) {
                         if (tluc8tab[k]!=NULL) *p=t_clut[tluc8tab[k][*p]];
                         else *p=t_clut[k];
                     }

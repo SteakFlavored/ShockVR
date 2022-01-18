@@ -101,7 +101,7 @@ void gri_trans_clut_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
             if (test<=0) {
                 k=(l_u>>16)&l_u_mask;
                 k+=(l_v>>l_v_shift)&l_v_mask;
-                if (temp_pix = bm_bits[k]) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],l_x,y_cint);
+                if ((temp_pix = bm_bits[k]) != 0) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],l_x,y_cint);
             }
             temp_y = y_cint;
             y_cint = fix_int(l_y_fix+=l_scan_slope);
@@ -120,7 +120,7 @@ void gri_trans_clut_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
     for (;l_x<l_xr0;l_x++) {
         k=(l_u>>16)&l_u_mask;
         k+=(l_v>>l_v_shift)&l_v_mask;
-        if (temp_pix = bm_bits[k]) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],l_x,y_cint);
+        if ((temp_pix = bm_bits[k]) != 0) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],l_x,y_cint);
         temp_y = y_cint;
         y_cint = fix_int(l_y_fix+=l_scan_slope);
           if (temp_y!=y_cint)
@@ -138,7 +138,7 @@ void gri_trans_clut_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
             if (test>=0) {
                 k=(l_u>>16)&l_u_mask;
                 k+=(l_v>>l_v_shift)&l_v_mask;
-                if (temp_pix = bm_bits[k]) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],l_x,y_cint);
+                if ((temp_pix = bm_bits[k]) != 0) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],l_x,y_cint);
             }
             temp_y = y_cint;
             y_cint = fix_int(l_y_fix+=l_scan_slope);
@@ -222,7 +222,7 @@ void gri_trans_clut_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
             if (test<=0) {
                 k=(l_u>>16)&l_u_mask;
                 k+=(l_v>>l_v_shift)&l_v_mask;
-                if (temp_pix=bm_bits[k]) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],x_cint,l_y);
+                if ((temp_pix=bm_bits[k]) != 0) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],x_cint,l_y);
             }
             temp_x = x_cint;
             x_cint = fix_int(l_x_fix+=l_scan_slope);
@@ -243,7 +243,7 @@ void gri_trans_clut_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
     for (;l_y<l_yr0;l_y++) {
         k=(l_u>>16)&l_u_mask;
         k+=(l_v>>l_v_shift)&l_v_mask;
-        if (temp_pix=bm_bits[k]) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],x_cint,l_y);
+        if ((temp_pix=bm_bits[k]) != 0) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],x_cint,l_y);
 
         temp_x = x_cint;
         x_cint=fix_int(l_x_fix+=l_scan_slope);
@@ -262,7 +262,7 @@ void gri_trans_clut_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
             if (test>=0) {
                 k=(l_u>>16)&l_u_mask;
                 k+=(l_v>>l_v_shift)&l_v_mask;
-                if (temp_pix=bm_bits[k]) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],x_cint,l_y);
+                if ((temp_pix=bm_bits[k]) != 0) *p=t_clut[temp_pix];        // gr_fill_upixel(t_clut[bm_bits[k]],x_cint,l_y);
             }
 
             temp_x = x_cint;

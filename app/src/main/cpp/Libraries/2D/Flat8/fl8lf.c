@@ -68,7 +68,7 @@ int32_t HandleFloorLoop_C(grs_tmap_loop_info *tli,
                  p_dest = grd_bm.bits + (grd_bm.row*tli->y) + fix_cint(tli->left.x);
                 x = fix_cint(tli->right.x) - fix_cint(tli->left.x);
 
-                    while ((int32_t) p_dest & 3 != 0)
+                    while (((int32_t)p_dest & 3) != 0)
                      {
                      *(p_dest++) = g_ltab[t_bits[((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask]+fix_light(i)];
                      u+=du; v+=dv; i+=di;
@@ -163,7 +163,7 @@ int32_t gri_lit_floor_umap_loop(grs_tmap_loop_info *tli) {
     t_bits = tli->bm.bits;
 
     if (tli->bm.hlog==(GRL_OPAQUE|GRL_LOG2))
-      return HandleFloorLoop_C(tli, u, v, du, dv, dx, i, di, t_wlog, t_mask, t_bits, g_ltab);
+        return HandleFloorLoop_C(tli, u, v, du, dv, dx, i, di, t_wlog, t_mask, t_bits, g_ltab);
 
     do {
         if ((d = fix_ceil(tli->right.x)-fix_ceil(tli->left.x)) > 0) {
@@ -198,7 +198,7 @@ int32_t gri_lit_floor_umap_loop(grs_tmap_loop_info *tli) {
             case GRL_TRANS:
                 for (; x>0; x--) {
                     k=t_vtab[fix_fint(v)]+fix_fint(u);
-                    if (k=t_bits[k]) *p_dest = g_ltab[k+fix_light(i)];        // gr_fill_upixel(g_ltab[k+fix_light(i)],x,t_y);
+                    if ((k=t_bits[k]) != 0) *p_dest = g_ltab[k+fix_light(i)];        // gr_fill_upixel(g_ltab[k+fix_light(i)],x,t_y);
                     p_dest++; u+=du; v+=dv; i+=di;
                 }
                 break;
@@ -213,7 +213,7 @@ int32_t gri_lit_floor_umap_loop(grs_tmap_loop_info *tli) {
             case GRL_TRANS|GRL_LOG2:
                 for (; x>0; x--) {
                     k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
-                    if (k=t_bits[k]) *p_dest = g_ltab[k+fix_light(i)];        // gr_fill_upixel(g_ltab[k+fix_light(i)],x,t_y);
+                    if ((k=t_bits[k]) != 0) *p_dest = g_ltab[k+fix_light(i)];        // gr_fill_upixel(g_ltab[k+fix_light(i)],x,t_y);
                     p_dest++; u+=du; v+=dv; i+=di;
                 }
                 break;

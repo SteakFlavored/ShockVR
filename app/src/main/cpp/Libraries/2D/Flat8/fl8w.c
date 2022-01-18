@@ -106,7 +106,7 @@ int32_t gri_wall_umap_loop(grs_tmap_loop_info *tli) {
                 break;
             case GRL_TRANS:
                 for (; y>0; y--) {
-                    if (temp_pix = t_bits[t_vtab[fix_fint(v)]+fix_fint(u)])
+                    if ((temp_pix = t_bits[t_vtab[fix_fint(v)]+fix_fint(u)]) != 0)
                       *p_dest = temp_pix;            // gr_fill_upixel(t_bits[k],t_x,y);
                     p_dest += gr_row; u+=du; v+=dv;
                 }
@@ -119,7 +119,7 @@ int32_t gri_wall_umap_loop(grs_tmap_loop_info *tli) {
                 break;
             case GRL_TRANS|GRL_LOG2:
                 for (; y>0; y--) {
-                    if (temp_pix = t_bits[((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask])
+                    if ((temp_pix = t_bits[((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask]) != 0)
                       *p_dest = temp_pix;        // gr_fill_upixel(t_bits[k],t_x,y);
                     p_dest += gr_row; u+=du; v+=dv;
                 }
@@ -133,7 +133,7 @@ int32_t gri_wall_umap_loop(grs_tmap_loop_info *tli) {
             case GRL_TRANS|GRL_CLUT:
                 for (; y>0; y--) {
                     k=t_vtab[fix_fint(v)]+fix_fint(u);
-                    if (k=t_bits[k])
+                    if ((k=t_bits[k]) != 0)
                       *p_dest = t_clut[k];    // gr_fill_upixel(t_clut[k],t_x,y);
                     p_dest += gr_row; u+=du; v+=dv;
                 }
@@ -147,7 +147,7 @@ int32_t gri_wall_umap_loop(grs_tmap_loop_info *tli) {
             case GRL_TRANS|GRL_LOG2|GRL_CLUT:
                 for (; y>0; y--) {
                     k=((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
-                    if (k=t_bits[k])
+                    if ((k=t_bits[k]) != 0)
                       *p_dest = t_clut[k];    // gr_fill_upixel(t_clut[k],t_x,y);
                     p_dest += gr_row; u+=du; v+=dv;
                 }
