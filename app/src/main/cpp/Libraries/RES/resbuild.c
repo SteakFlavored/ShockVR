@@ -29,20 +29,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
 */
 
-//#include <io.h>
-//#include <stdlib.h>
 #include <string.h>
 
 #include "res.h"
 #include "res_.h"
 #include "lzw.h"
-//#include <_res.h>
 
-/*
 #define CTRL_Z 26        // make sure comment ends with one, so can type a file
 
+/*
 //    Internal prototypes
-
 bool ResEraseIfInFile(Id id);                // erase item from file
 */
 
@@ -53,24 +49,19 @@ bool ResEraseIfInFile(Id id);                // erase item from file
 //    For Mac version:  Does nothing.  May go back later and add comment via the
 // desktop database, maybe.
 
-void ResSetComment(int32_t /* fd */, const char * /* comment */)
+void ResSetComment(int16_t filenum, const char *comment)
 {
-/*
     ResFileHeader *phead;
 
-    DBG(DSRC_RES_ChkIdRef, {if (resFile[filenum].pedit == NULL) { \
-        Warning("ResSetComment: file %d not open for writing\n", filenum); \
-        return;}});
-
-    Spew(DSRC_RES_General,
-        ("ResSetComment: setting comment for filenum %d to:\n%s\n",
-        filenum, comment));
+    if (resFile[filenum].pedit == NULL) {
+        Warning("ResSetComment: file %d not open for writing\n", filenum);
+        return;
+    }
 
     phead = &resFile[filenum].pedit->hdr;
     memset(phead->comment, 0, sizeof(phead->comment));
     strncpy(phead->comment, comment, sizeof(phead->comment) - 2);
     phead->comment[strlen(phead->comment)] = CTRL_Z;
-*/
 }
 
 //    -------------------------------------------------------

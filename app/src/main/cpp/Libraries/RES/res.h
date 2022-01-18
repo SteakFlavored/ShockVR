@@ -239,7 +239,7 @@ void ResUnmake(Id id);                                            // unmake a re
 
 typedef struct {
     int8_t signature[16];        // "LG ResFile v2.0\n",
-    int8_t comment[96];            // user comment, terminated with '\z'
+    char comment[96];            // user comment, terminated with '\z'
     uint8_t reserved[12];        // reserved for future use, must be 0
     int32_t dirOffset;            // file offset of directory
 } ResFileHeader;                // total 128 bytes (why not?)
@@ -294,7 +294,7 @@ extern int8_t resFileSignature[16];        // magic header
 //        RESOURCE FILE BUILDING  (resbuild.c)
 //    --------------------------------------------------------
 
-void ResSetComment(int32_t fd, const char *comment);    // set comment
+void ResSetComment(int16_t filenum, const char *comment);    // set comment
 int32_t ResWrite(Id id);                                                // write resource to file
 //int32_t ResPack(int32_t filenum);                                    // remove empty entries
 #define ResPack(filenum)
