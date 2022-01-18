@@ -294,10 +294,9 @@ extern int8_t resFileSignature[16];        // magic header
 //        RESOURCE FILE BUILDING  (resbuild.c)
 //    --------------------------------------------------------
 
-void ResSetComment(int16_t filenum, const char *comment);    // set comment
-int32_t ResWrite(Id id);                                                // write resource to file
-//int32_t ResPack(int32_t filenum);                                    // remove empty entries
-#define ResPack(filenum)
+void ResSetComment(int16_t filenum, const char *comment); // set comment
+int32_t ResWrite(Id id); // write resource to file
+int32_t ResPack(int32_t filenum); // remove empty entries
 
 //#define ResAutoPackOn(filenum) (resFile[filenum].pedit->flags |= RFF_AUTOPACK)
 //#define ResAutoPackOff(filenum) (resFile[filenum].pedit->flags &= ~RFF_AUTOPACK)
