@@ -47,12 +47,7 @@ extern uint8_t *grd_unpack_buf;
 extern int32_t gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm);
 // #endif
 
-#if defined(powerc) || defined(__powerc)
 uint8_t *gr_rsd8_unpack(uint8_t* src, uint8_t *dst);
-#else
-asm uint8_t *gr_rsd8_unpack(uint8_t* src, uint8_t *dst);
-#endif
-//#pragma aux gr_rsd8_unpack parm [esi] [edi] value [edi] modify [eax ecx edx esi edi]
 
 #define gr_set_unpack_buf(buf) grd_unpack_buf=buf
 #define gr_get_unpack_buf() grd_unpack_buf
