@@ -273,6 +273,7 @@ void *RefExtract(RefTable *prt, Ref ref, void *buff)
     int32_t fd;
     int32_t refsize;
     int32_t offset;
+    int32_t index;
 
     if (!RefCheckRef(ref))
         return NULL;
