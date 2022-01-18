@@ -74,6 +74,9 @@ int32_t gri_wall_umap_loop(grs_tmap_loop_info *tli) {
 
     t_vtab = tli->vtab;
     t_bits = tli->bm.bits;
+    t_clut = tli->clut;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
 
     gr_row = grd_bm.row;
 
@@ -349,6 +352,9 @@ int32_t gri_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
     dy=tli->right.y-tli->left.y;
 
     t_vtab = tli->vtab;
+    t_clut = tli->clut;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
     o_bits = tli->bm.bits;
 
     gr_row = grd_bm.row;

@@ -58,7 +58,11 @@ int32_t gri_trans_solid_lin_umap_loop(grs_tmap_loop_info *tli) {
     dv=tli->right.v-v;
     dx=tli->right.x-tli->left.x;
 
+    solid_color = tli->solid;
+    t_vtab = tli->vtab;
     t_bits = tli->bm.bits;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
     gr_row = grd_bm.row;
     start_pdest = grd_bm.bits + (gr_row*(tli->y));
 
@@ -128,8 +132,8 @@ void gri_trans_solid_lin_umap_init(grs_tmap_loop_info *tli) {
 
 int32_t gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli) {
     fix u,v,du,dv,dx,d;
-     uint8_t    solid_color;
-     int32_t        x;
+    uint8_t    solid_color;
+    int32_t        x;
     // locals used to store copies of tli-> stuff, so its in registers on the PPC
     int32_t        t_xl,t_xr,t_y,gr_row;
     int32_t    *t_vtab;
@@ -144,7 +148,11 @@ int32_t gri_trans_solid_floor_umap_loop(grs_tmap_loop_info *tli) {
     dv=fix_div(tli->right.v,tli->w)-v;
     dx=tli->right.x-tli->left.x;
 
+    solid_color = tli->solid;
+    t_vtab = tli->vtab;
     t_bits = tli->bm.bits;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
     gr_row = grd_bm.row;
 
     do {
@@ -211,17 +219,17 @@ void gri_trans_solid_floor_umap_init(grs_tmap_loop_info *tli) {
 
 int32_t gri_solid_wall_umap_loop(grs_tmap_loop_info *tli) {
     fix u,v,du,dv,dy,d;
-     uint8_t    solid_color;
+    uint8_t    solid_color;
 
-     // locals used to store copies of tli-> stuff, so its in registers on the PPC
-     int32_t        t_yl,t_yr;
-     int32_t        *t_vtab;
-     uint8_t     *t_bits;
-     uint8_t     *p_dest;
-     uint8_t    t_wlog;
-     uint32_t    t_mask;
-     int32_t        gr_row;
-     int32_t        y;
+    // locals used to store copies of tli-> stuff, so its in registers on the PPC
+    int32_t        t_yl,t_yr;
+    int32_t        *t_vtab;
+    uint8_t     *t_bits;
+    uint8_t     *p_dest;
+    uint8_t    t_wlog;
+    uint32_t    t_mask;
+    int32_t        gr_row;
+    int32_t        y;
 
     u=fix_div(tli->left.u,tli->w);
     du=fix_div(tli->right.u,tli->w)-u;
@@ -229,8 +237,12 @@ int32_t gri_solid_wall_umap_loop(grs_tmap_loop_info *tli) {
     dv=fix_div(tli->right.v,tli->w)-v;
     dy=tli->right.y-tli->left.y;
 
-     t_bits = tli->bm.bits;
-     gr_row = grd_bm.row;
+    solid_color = tli->solid;
+    t_vtab = tli->vtab;
+    t_bits = tli->bm.bits;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
+    gr_row = grd_bm.row;
 
     do {
         if ((d = fix_ceil(tli->right.y)-fix_ceil(tli->left.y)) > 0) {
@@ -300,30 +312,31 @@ void gri_trans_solid_wall_umap_init(grs_tmap_loop_info *tli) {
 void gri_trans_solid_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
     int32_t y_cint;
     uint8_t *p;
-     uint8_t    solid_color;
+    uint8_t    solid_color;
 
-     // locals used to speed PPC code
-     fix    l_u,l_v,l_du,l_dv,l_y_fix,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
-     int32_t    l_x,l_xl,l_xr,l_xr0,l_u_mask,l_v_mask,l_v_shift;
-     int32_t    gr_row,temp_y;
-     uint8_t *bm_bits;
+    // locals used to speed PPC code
+    fix    l_u,l_v,l_du,l_dv,l_y_fix,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
+    int32_t    l_x,l_xl,l_xr,l_xr0,l_u_mask,l_v_mask,l_v_shift;
+    int32_t    gr_row,temp_y;
+    uint8_t *bm_bits;
 
-     gr_row = grd_bm.row;
-     bm_bits = bm->bits;
-     l_dyr = pi->dyr;
-     l_dtr = pi->dtr;
-     l_dyl = pi->dyl;
-     l_dxl = pi->dxl;
-     l_dtl = pi->dtl;
-     l_scan_slope = pi->scan_slope;
-     l_y_fix = pi->y_fix;
-     l_v_shift = pi->v_shift;
-     l_v_mask = pi->v_mask;
-     l_u_mask = pi->u_mask;
-     l_xr0 = pi->xr0;
-     l_x = pi->x;
-     l_xl = pi->xl;
-     l_xr = pi->xr;
+    solid_color = (uint8_t)pi->fill_parm;
+    gr_row = grd_bm.row;
+    bm_bits = bm->bits;
+    l_dyr = pi->dyr;
+    l_dtr = pi->dtr;
+    l_dyl = pi->dyl;
+    l_dxl = pi->dxl;
+    l_dtl = pi->dtl;
+    l_scan_slope = pi->scan_slope;
+    l_y_fix = pi->y_fix;
+    l_v_shift = pi->v_shift;
+    l_v_mask = pi->v_mask;
+    l_u_mask = pi->u_mask;
+    l_xr0 = pi->xr0;
+    l_x = pi->x;
+    l_xl = pi->xl;
+    l_xr = pi->xr;
     l_u = pi->u;
     l_v = pi->v;
     l_du = pi->du;
@@ -417,32 +430,33 @@ void gri_trans_solid_per_umap_hscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
 
 void gri_trans_solid_per_umap_vscan_scanline(grs_per_info *pi, grs_bitmap *bm) {
     int32_t x_cint;
-     uint8_t    solid_color;
+    uint8_t    solid_color;
 
-     // locals used to speed PPC code
-     fix    l_dxr,l_x_fix,l_u,l_v,l_du,l_dv,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
-     int32_t    l_yl,l_yr0,l_yr,l_y,l_u_mask,l_v_mask,l_v_shift;
-     int32_t    gr_row,temp_x;
-     uint8_t *bm_bits;
-     uint8_t *p;
+    // locals used to speed PPC code
+    fix    l_dxr,l_x_fix,l_u,l_v,l_du,l_dv,l_scan_slope,l_dtl,l_dxl,l_dyl,l_dtr,l_dyr;
+    int32_t    l_yl,l_yr0,l_yr,l_y,l_u_mask,l_v_mask,l_v_shift;
+    int32_t    gr_row,temp_x;
+    uint8_t *bm_bits;
+    uint8_t *p;
 
-     gr_row = grd_bm.row;
-     bm_bits = bm->bits;
+    solid_color = (uint8_t)pi->fill_parm;
+    gr_row = grd_bm.row;
+    bm_bits = bm->bits;
     l_dxr = pi->dxr;
     l_x_fix = pi->x_fix;
-     l_y = pi->y;
-     l_yr = pi->yr;
-     l_yr0 = pi->yr0;
-     l_yl = pi->yl;
-     l_dyr = pi->dyr;
-     l_dtr = pi->dtr;
-     l_dyl = pi->dyl;
-     l_dxl = pi->dxl;
-     l_dtl = pi->dtl;
-     l_scan_slope = pi->scan_slope;
-     l_v_shift = pi->v_shift;
-     l_v_mask = pi->v_mask;
-     l_u_mask = pi->u_mask;
+    l_y = pi->y;
+    l_yr = pi->yr;
+    l_yr0 = pi->yr0;
+    l_yl = pi->yl;
+    l_dyr = pi->dyr;
+    l_dtr = pi->dtr;
+    l_dyl = pi->dyl;
+    l_dxl = pi->dxl;
+    l_dtl = pi->dtl;
+    l_scan_slope = pi->scan_slope;
+    l_v_shift = pi->v_shift;
+    l_v_mask = pi->v_mask;
+    l_u_mask = pi->u_mask;
     l_u = pi->u;
     l_v = pi->v;
     l_du = pi->du;

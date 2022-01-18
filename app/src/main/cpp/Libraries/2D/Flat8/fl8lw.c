@@ -76,9 +76,12 @@ int32_t gri_lit_wall_umap_loop(grs_tmap_loop_info *tli) {
 
     dy=tli->right.y-tli->left.y;
 
-     t_vtab = tli->vtab;
-     t_bits = tli->bm.bits;
-     gr_row = grd_bm.row;
+    g_ltab = grd_screen->ltab;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
+    t_vtab = tli->vtab;
+    t_bits = tli->bm.bits;
+    gr_row = grd_bm.row;
 
     do {
         if ((d = fix_ceil(tli->right.y)-fix_ceil(tli->left.y)) > 0) {
@@ -325,8 +328,11 @@ int32_t gri_lit_wall_umap_loop_1D(grs_tmap_loop_info *tli) {
 
     dy=tli->right.y-tli->left.y;
 
-     o_bits = tli->bm.bits;
-     gr_row = grd_bm.row;
+    g_ltab = grd_screen->ltab;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
+    o_bits = tli->bm.bits;
+    gr_row = grd_bm.row;
 
     return HandleWallLitLoop1D_C(tli, u, v, i, dv, di, dy, g_ltab, o_bits, gr_row, t_mask, t_wlog);
 }

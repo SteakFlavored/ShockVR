@@ -137,7 +137,7 @@ int32_t gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm)
         }
     }
 rsd_done:
-    if (over_run=(dbm->bits+dbm->row*dbm->h)-p_dst)
+    if ((over_run=(dbm->bits+dbm->row*dbm->h)-p_dst) != 0)
         memset (p_dst, kSkipColor, over_run);
     return GR_UNPACK_RSD8_OK;
 }

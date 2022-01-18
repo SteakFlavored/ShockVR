@@ -159,8 +159,11 @@ int32_t gri_lit_floor_umap_loop(grs_tmap_loop_info *tli) {
 
     dx=tli->right.x-tli->left.x;
 
+    g_ltab = grd_screen->ltab;
     t_vtab = tli->vtab;
     t_bits = tli->bm.bits;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
 
     if (tli->bm.hlog==(GRL_OPAQUE|GRL_LOG2))
         return HandleFloorLoop_C(tli, u, v, du, dv, dx, i, di, t_wlog, t_mask, t_bits, g_ltab);

@@ -164,14 +164,14 @@ int32_t gri_lit_lin_umap_loop(grs_tmap_loop_info *tli) {
     fix u,v,i,du,dv,di,dx,d;
 
     // locals used to store copies of tli-> stuff, so its in registers on the PPC
-  int32_t x,k;
+    int32_t x,k;
     int32_t        t_xl,t_xr;
     int32_t    *t_vtab;
     uint8_t *t_bits;
     uint8_t *p_dest;
     uint8_t    t_wlog;
     uint32_t    t_mask;
-  uint8_t *g_ltab;
+    uint8_t *g_ltab;
     int32_t    gr_row;
     uint8_t *start_pdest;
 
@@ -183,7 +183,11 @@ int32_t gri_lit_lin_umap_loop(grs_tmap_loop_info *tli) {
     di=tli->right.i-i;
     dx=tli->right.x-tli->left.x;
 
+    g_ltab = grd_screen->ltab;
+    t_vtab = tli->vtab;
     t_bits = tli->bm.bits;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
     gr_row = grd_bm.row;
     start_pdest = grd_bm.bits + (gr_row*(tli->y));
 

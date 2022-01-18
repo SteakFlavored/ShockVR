@@ -114,7 +114,11 @@ int32_t gri_lin_umap_loop(grs_tmap_loop_info *tli) {
     dv=tli->right.v-v;
     dx=tli->right.x-tli->left.x;
 
+    t_vtab = tli->vtab;
     t_bits = tli->bm.bits;
+    t_clut = tli->clut;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
     gr_row = grd_bm.row;
     start_pdest = grd_bm.bits + (gr_row*(tli->y));
 

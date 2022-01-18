@@ -69,6 +69,9 @@ int32_t gri_floor_umap_loop(grs_tmap_loop_info *tli) {
 
     dx=tli->right.x-tli->left.x;
 
+    t_clut = tli->clut;
+    t_mask = tli->mask;
+    t_wlog = tli->bm.wlog;
     t_vtab = tli->vtab;
     t_bits = tli->bm.bits;
 
