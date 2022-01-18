@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lg.h"
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 
 // prototypes
 int32_t check_and_draw_common(int32_t c,int32_t n_verts,g3s_phandle *p);

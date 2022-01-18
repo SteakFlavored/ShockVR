@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lg.h"
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 
 //----------------------------------------------------------------------------
 // Function: int16_t g3_init(int16_t max_points,int32_t user_x_axis,int32_t user_y_axis,int32_t user_z_axis)

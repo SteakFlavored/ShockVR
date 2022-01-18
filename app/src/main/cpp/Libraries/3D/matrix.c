@@ -81,11 +81,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 //
 
-
-#include <FixMath.h>
 #include "lg.h"
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 
 /*#define f1_0     fixmake(1)
 #define f0_5     fixmake(0,8000h)

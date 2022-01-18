@@ -125,7 +125,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lg.h"
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 
 extern void per_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
 extern void h_umap(grs_bitmap *bm, int32_t n, grs_vertex **vpl, grs_tmap_info *ti);
