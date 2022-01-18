@@ -46,5 +46,5 @@ grs_context grd_defgc = {
     0,                     /* how to fill primitives */
     0,                     /* parameter for fill */
     /* clipping region. */
-    { NULL, 0, 0, 0, 0 }
+    { {NULL, 0, 0, 0, 0} }
 };
