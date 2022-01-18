@@ -172,12 +172,10 @@ grs_vertex **do_bitmap(grs_bitmap *bm, g3s_phandle p)
 
 grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p)
  {
-     fix                    tempF,tempF2;
+     fix                    tempF;
      int32_t                tempL,tempL2;
-     int16_t                tempS,tempS2;
   fix                    sintemp,costemp;
     grs_vertex    *tempG1,*tempG2;
-    fix                    tempResult;
     int32_t                bm_w,bm_h;
     fix                   dx,dy;
 

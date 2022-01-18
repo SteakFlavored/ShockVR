@@ -181,7 +181,7 @@ void angles_2_matrix(g3s_angvec *angles, g3s_matrix *view_matrix, int32_t rotati
 // compute a matrix with the given order.  takes sin & cos vars set, edi=dest
 void compute_XYZ(g3s_matrix *view_matrix)
  {
-     fix     cbsp,cbspsh,cpsb,cpshsb,spsb,cpshcb,spshcb,spshsb,cpcb;
+     fix     cbsp,cpsb,cpshsb,spsb,cpshcb,spshcb,spshsb,cpcb;
 
      view_matrix->m1 = fix_mul(cosh_s,cosb);         // m1 = chcb
      view_matrix->m2 = -fix_mul(cosh_s,sinb);         // m2 = -chsb
@@ -275,8 +275,6 @@ void compute_invalid(g3s_matrix *view_matrix)
 // scale, fix, etc, the view matrix
 void process_view_matrix(void)
  {
-     fix        temp_fix;
-
 // adjust matrix for user's coordinate system
     if ((axis_swap_flag & 1)!=0)
      {
@@ -512,7 +510,7 @@ static int64_t do_cross_nofixup(fix v1, fix v2, fix v3, fix v4)
 void get_pyr_vector(g3s_vector *corners)
 {
     fix            den;
-    int64_t        wide_den,wide2;
+    int64_t        wide_den;
 
     // try assuming z==1
     den = do_cross(d13,d56,d23,d46);

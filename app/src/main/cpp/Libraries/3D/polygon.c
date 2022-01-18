@@ -218,39 +218,6 @@ int32_t draw_poly_common(int32_t c,int32_t n_verts,g3s_phandle *p)
     grs_vertex        *dest;
     int32_t                     rgb;
 
-#ifdef stereo_on
-          test     _g3d_stereo,1
-          jz        draw_poly_common_raw
-
-          pushm eax,ecx,esi
-
-          call draw_poly_common_raw
-          set_rt_canv
-
-          popm eax,ecx,esi
-          pushm eax,ecx
-
-          // moves list at esi to temp and repoints esi
-          test gour_flag,6
-          jnz  do_uvi_copy2
-          move_to_stereo
-          jmp      raw_poly_continue2
-do_uvi_copy2:
-          mov      edx,esi
-          mov      eax,ecx
-          move_to_stereo_and_uvi
-          mov      esi,edx
-raw_poly_continue2:
-
-          popm eax,ecx
-          call draw_poly_common_raw
-
-          set_lt_canv
-          ret
-
-draw_poly_common_raw:
-#endif
-
     poly_color = c;
 
 // first, go through points and get codes
@@ -270,7 +237,7 @@ draw_poly_common_raw:
     p = old_p;
 
 // copy to temp buffer for clipping
-    BlockMove(p,vbuf,n_verts<<2);
+    memmove(vbuf,p,n_verts<<2);
 
     n_verts = g3_clip_polygon(n_verts,vbuf,_vbuf2);
     if (!n_verts)

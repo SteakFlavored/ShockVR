@@ -552,7 +552,7 @@ int32_t draw_tmap_common(int32_t n, g3s_phandle *vp, grs_bitmap *bm)
 
     // always clip for now
     // copy to temp buffer for clipping
-    BlockMove(vp,vbuf,n*4);
+    memmove(vbuf,vp,n*4);
 
     _n_verts = n = g3_clip_polygon(n,vbuf,_vbuf2);
     if (n==0) return CLIP_ALL;

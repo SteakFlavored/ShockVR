@@ -206,7 +206,7 @@ void g3_start_frame(void)
 void g3_shutdown(void)
  {
      if (point_list)
-         DisposPtr((Ptr) point_list);
+         free(point_list);
 
     n_points = 0;
     first_free = 0;
@@ -297,7 +297,7 @@ void g3_free_list(int32_t n_points, g3s_phandle *p)     //adds to free list
 // make a duplicate of a point. takes esi, returns edi. trashes ebx,ecx
 g3s_phandle g3_dup_point(g3s_phandle p)                     //makes copy of a point
  {
-     g3s_point     *tempPtr,*destPtr;
+     g3s_point     *destPtr;
 
      destPtr = first_free;
      first_free = destPtr->next;

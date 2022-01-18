@@ -179,7 +179,7 @@ g3s_point *_vpoint_tab[N_VPOINT_ENTRIES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 grs_bitmap *_vtext_tab[N_VTEXT_ENTRIES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 // ptr to stack parms
-int8_t *parm_ptr;
+char *parm_ptr;
 
 // space for parms to objects
 int8_t    parm_data[PARM_DATA_SIZE];
@@ -225,7 +225,7 @@ void g3_interpret_object(uint8_t *object_ptr,...)
      size = * (int16_t *) (object_ptr-4);
      size -= 10;    // skip the first 10 bytes
 
-     BlockMove(object_ptr-2,obj_space,size);
+     memmove(obj_space,object_ptr-2,size);
 
   // lighting stuff, params are on the stack
   // so don't sweat it
@@ -238,86 +238,6 @@ void g3_interpret_object(uint8_t *object_ptr,...)
          else
               opcode_table[OP_JNORM] = &do_ljnorm;
      }
-
-#ifdef stereo_on
-          test     _g3d_stereo,1
-          jz        g3_interpret_object_raw
-          //         call normally if eyesep/distance is small enough (angular change is small)
-          //         transform 0,0,0 to get the z distance
-          mov      eax,_view_position.x
-          fixmul  view_matrix.m3
-          mov      ecx,eax
-
-          mov      eax,_view_position.y
-          fixmul  view_matrix.m6
-          add      ecx,eax
-
-          mov      eax,_view_position.z
-          fixmul  view_matrix.m9
-          add      ecx,eax
-          neg      ecx
-
-          mov      eax,_g3d_eyesep_raw
-          fixmul  _matrix_scale.z
-          fixdiv  ecx
-
-          cmp      eax,STEREO_DIST_LIM
-          jl        g3_interpret_object_raw
-
-          mov      _g3d_stereo,0     // kill stereo
-          pop      eax      // grab real return address
-          mov      tmp_address,eax            // save it for later
-
-          push     ret1     // fake out the poor thing so it jumps back here
-          jmp  g3_interpret_object_raw
-
-          // shift view_position
-          ret1:
-          // save the current position
-          lea      edi,temp_vector
-          lea      esi,_view_position
-          movsd
-          movsd
-          movsd
-
-          mov      eax,_g3d_eyesep_raw
-          mov      ebx,_matrix_scale.x
-          fixdiv  ebx      // make ebx the scaled down eyesep
-          mov      ebx,eax
-
-          // get x slewed over (top row of current vector and scale)
-          mov      eax,view_matrix.m1
-          fixmul  ebx
-          add      _view_position.x,eax
-
-          mov      eax,view_matrix.m4
-          fixmul  ebx
-          add      _view_position.y,eax
-
-          mov      eax,view_matrix.m7
-          fixmul  ebx
-          add      _view_position.z,eax
-
-          set_rt_canv                 // install rt canvas
-          // this time when you call it, its still all set
-          call     g3_interpret_object_raw
-          mov      _g3d_stereo,1     // restore stereo
-          set_lt_canv                 // restore left canvas
-
-          // restore view position
-          lea      esi,temp_vector
-          lea      edi,_view_position
-          movsd
-          movsd
-          movsd
-
-          // weeee, pretend we were here all along, but I suppose we
-          // could just jmp there
-          push     tmp_address
-
-          ret
-g3_interpret_object_raw:
-#endif
 
     va_start(parm_ptr, object_ptr);    // get addr of stack parms
 
@@ -374,7 +294,7 @@ g3_interpret_object_raw:
     }
 
 Exit:
-     BlockMove(obj_space,object_ptr-2,size);
+     memmove(object_ptr-2,obj_space,size);
  }
 
 // interpret the object
@@ -618,8 +538,6 @@ uint8_t *do_gour_p(uint8_t *opcode)
 
 uint8_t *do_gour_vc(uint8_t *opcode)
  {
-     int32_t     temp;
-
      FlipShort((int16_t *) (opcode+2));
 
      gouraud_base = ((int32_t) _vcolor_tab[* (uint16_t *) (opcode+2)]) << 8;
