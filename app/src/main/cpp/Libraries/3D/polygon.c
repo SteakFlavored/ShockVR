@@ -438,7 +438,7 @@ int32_t draw_line_common(g3s_phandle p0,g3s_phandle p1)
                                 (gr_get_fcolor(),gr_get_fill_parm(),&v0,&v1);
 
             result = CLIP_NONE;
-//          DebugStr("\pimplement me?");
+//          Warning("implement me?");
 /*
 //          mov      edx,ebx                      // dl=clip codes
 
@@ -462,7 +462,7 @@ int32_t draw_line_common(g3s_phandle p0,g3s_phandle p1)
       }
      else    // sline
       {
-          DebugStr("\pimplement me?");
+          Warning("implement me?");
 // we have to do this annoyingly because i is an sfix,
 // and 2d takes a fix, so we dump things in eax and munge
 /*

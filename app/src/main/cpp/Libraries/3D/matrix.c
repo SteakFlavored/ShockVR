@@ -246,25 +246,25 @@ void compute_YXZ(g3s_matrix *view_matrix)
 
 void compute_YZX(g3s_matrix *view_matrix)
  {
-     DebugStr("\pcompute_YZX needs to be implemented");
+     Warning("compute_YZX needs to be implemented");
  }
 
 
 void compute_XZY(g3s_matrix *view_matrix)
  {
-     DebugStr("\pcompute_XZY needs to be implemented");
+     Warning("compute_XZY needs to be implemented");
  }
 
 
 void compute_ZXY(g3s_matrix *view_matrix)
  {
-     DebugStr("\pcompute_ZXY needs to be implemented");
+     Warning("compute_ZXY needs to be implemented");
  }
 
 
 void compute_ZYX(g3s_matrix *view_matrix)
  {
-     DebugStr("\pcompute_ZYX needs to be implemented");
+     Warning("compute_ZYX needs to be implemented");
  }
 
 // invalid does nothing (and does it well!)

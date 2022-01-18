@@ -446,7 +446,7 @@ uint8_t *do_multires(uint8_t *opcode)
 uint8_t *do_scaleres(uint8_t *opcode)
  {
      // MLA - this routine appears to be buggy and can't possibly work, so I'm not doing it yet.
-     DebugStr("\pCall Mark!");
+     Warning("Call Mark!");
 
 /*     int32_t                    count,scale;
     int32_t                temp_pnt[3];
