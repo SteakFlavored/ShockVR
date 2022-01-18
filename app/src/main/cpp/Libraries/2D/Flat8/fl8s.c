@@ -51,7 +51,7 @@ int32_t    JMP_LOOP_MIDDLE_OFF;
 extern int32_t gri_poly_loop (grs_tmap_loop_info *ti);
 
 // internal prototypes
-int32_t gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli);
+int32_t gri_scale_umap_loop_C(grs_tmap_loop_info *tli);
 
 // ========================================================================
 // opaque solid polygon scaler
@@ -72,7 +72,7 @@ int32_t gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **
 int32_t gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
     tli->bm.hlog=GRL_TRANS|GRL_SOLID;
-    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_C;
     tli->right_edge_func=gr_null;
     tli->left_edge_func=(void (*)()) gri_scale_edge;
      return(0);
@@ -83,7 +83,7 @@ int32_t gri_trans_solid_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **ve
 int32_t gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
  {
     tli->bm.hlog=GRL_TRANS;
-    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_C;
     tli->right_edge_func=gr_null;
     tli->left_edge_func=(void (*)()) gri_scale_edge;
      return(0);
@@ -94,7 +94,7 @@ int32_t gri_trans_scale_umap_init(grs_tmap_loop_info *tli, grs_vertex **vert)
 int32_t gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
  {
     tli->bm.hlog=GRL_OPAQUE;
-    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_C;
     tli->right_edge_func=gr_null;
     tli->left_edge_func=(void (*)()) gri_scale_edge;
      return(0);
@@ -105,7 +105,7 @@ int32_t gri_opaque_scale_umap_init(grs_tmap_loop_info *tli)
 int32_t gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
     tli->bm.hlog=GRL_TRANS|GRL_CLUT;
-    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_C;
     tli->right_edge_func=gr_null;
     tli->left_edge_func=(void (*)()) gri_scale_edge;
      return(0);
@@ -116,7 +116,7 @@ int32_t gri_trans_clut_scale_umap_init(grs_tmap_loop_info *tli)
 int32_t gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
  {
     tli->bm.hlog=GRL_OPAQUE|GRL_CLUT;
-    tli->loop_func=(void (*)()) gri_scale_umap_loop_PPC;
+    tli->loop_func=(void (*)()) gri_scale_umap_loop_C;
     tli->right_edge_func=gr_null;
     tli->left_edge_func=(void (*)()) gri_scale_edge;
      return(0);
@@ -124,7 +124,7 @@ int32_t gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli)
 
 // ========================================================================
 // main inside loop for PPC scalers
-int32_t gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli) {
+int32_t gri_scale_umap_loop_C(grs_tmap_loop_info *tli) {
     fix u,ul,du;
     int32_t x;
     uint8_t k;
