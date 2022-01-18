@@ -110,7 +110,7 @@ void gri_poly_init (grs_tmap_loop_info *ti)
 
 void gri_clut_poly_init (grs_tmap_loop_info *ti)
 {
-    ti->bm.bits=(uint8_t *)(ti->clut[(int32_t )(ti->bm.bits)]);
+    ti->bm.bits=(uint8_t *)(ti->clut[(uintptr_t)(ti->bm.bits)]);
     ti->bm.hlog=GRL_OPAQUE;
     ti->d=ti->y*grd_bm.row+grd_bm.bits;
     ti->loop_func= (void (*)()) gri_poly_loop;
@@ -121,7 +121,7 @@ void gri_clut_poly_init (grs_tmap_loop_info *ti)
 void gri_tpoly_init (grs_tmap_loop_info *ti)
 {
     if (tluc8tab[(uint8_t )(ti->bm.bits)]!=NULL) {
-        ti->bm.bits=tluc8tab[(uint8_t )(ti->bm.bits)];
+        ti->bm.bits=tluc8tab[(uintptr_t)(ti->bm.bits)];
         ti->bm.hlog=GRL_TLUC8;
     } else {
         ti->bm.hlog=GRL_OPAQUE;
