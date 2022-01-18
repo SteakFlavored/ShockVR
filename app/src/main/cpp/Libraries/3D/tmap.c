@@ -218,7 +218,7 @@ int32_t do_tmap_tile(g3s_phandle upperleft,g3s_vector *u_vec,g3s_vector *v_vec,i
     andcode = 0xff;
     orcode = 0;
     src = vp;
-    for (i=nverts; i--; i>0)
+    for (i=nverts; i>0; i--)
      {
          tempHand = *(src++);
          andcode &= tempHand->codes;
@@ -244,7 +244,7 @@ int32_t do_tmap_tile(g3s_phandle upperleft,g3s_vector *u_vec,g3s_vector *v_vec,i
     calc_warp_matrix2(upperleft,x10,x20,y10,y20,z10,z20,bm);
 
     src = vp;
-    for (i=nverts; i--; i>0)
+    for (i=nverts; i>0; i--)
      {
          fix            a,b;
         fix            blah1;
@@ -446,7 +446,7 @@ no_stereo1:
     andcode = 0xff;
     orcode = 0;
     src = vp;
-    for (i=n; i--; i>0)
+    for (i=n; i>0; i--)
      {
          tempHand = *(src++);
          andcode &= tempHand->codes;
@@ -529,7 +529,7 @@ int32_t do_tmap_quad_tile(g3s_phandle *vp, grs_bitmap *bm,int32_t width_count,in
     andcode = 0xff;
     orcode = 0;
     src = vp;
-    for (i=4; i--; i>0)
+    for (i=4; i>0; i--)
      {
          tempHand = *(src++);
          andcode &= tempHand->codes;

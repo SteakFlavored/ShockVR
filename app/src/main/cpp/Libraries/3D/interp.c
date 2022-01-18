@@ -362,7 +362,7 @@ g3_interpret_object_raw:
     interpreter_loop(object_ptr);
 
     // free res points
-    for (i=N_RES_POINTS-1; i--; i>=0)
+    for (i=N_RES_POINTS-1; i>=0; i--)
          if (resbuf[i])
              freepnt(resbuf[i]);
 

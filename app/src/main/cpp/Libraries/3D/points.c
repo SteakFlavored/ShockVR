@@ -167,7 +167,7 @@ g3s_codes g3_transform_list(int16_t n, g3s_phandle *dest_list, g3s_vector *v)
      g_codes.or = 0;
      g_codes.and = 0xff;
 
-     for (i = n; i--; i>0)
+     for (i = n; i>0; i--)
       {
           temphand = g3_transform_point(v++);
           g_codes.or |= temphand->codes;
@@ -188,7 +188,7 @@ g3s_codes g3_rotate_list(int16_t n,g3s_phandle *dest_list,g3s_vector *v)
      g_codes.or = 0;
      g_codes.and = 0xff;
 
-     for (i = n; i--; i>0)
+     for (i = n; i>0; i--)
       {
           temphand = g3_rotate_point(v++);
           g_codes.or |= temphand->codes;
@@ -209,7 +209,7 @@ g3s_codes g3_project_list(int16_t n,g3s_phandle *point_list)
      g_codes.or = 0;
      g_codes.and = 0xff;
 
-     for (i = n; i--; i>0)
+     for (i = n; i>0; i--)
       {
         temphand = *(point_list++);
         g_codes.or |= temphand->codes;
