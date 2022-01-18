@@ -95,9 +95,6 @@ grs_canvas *gr_pop_canvas (void)
     return c;
 }
 
-#pragma scheduling off
-#pragma global_optimizer off
-
 void gr_init_canvas (grs_canvas *c, uint8_t *p, int32_t type, int16_t w, int16_t h)
 {
 #ifdef GR_DOUBLE_CANVAS
@@ -115,9 +112,6 @@ void gr_init_canvas (grs_canvas *c, uint8_t *p, int32_t type, int16_t w, int16_t
     }
     c->ytab = NULL;
 }
-
-#pragma scheduling reset
-#pragma global_optimizer reset
 
 void gr_init_sub_canvas (grs_canvas *sc, grs_canvas *dc, int16_t x, int16_t y,
                                  int16_t w, int16_t h)
