@@ -53,7 +53,7 @@ int32_t gri_init(void)
         return 0;
     tmp=temp_mem_get_stack();
     if (tmp==NULL)
-        if (err=temp_mem_init(NULL))
+        if ((err=temp_mem_init(NULL)) != 0)
             return err;
     if ((err=gr_detect (&grd_info)) != 0)
         return err;
