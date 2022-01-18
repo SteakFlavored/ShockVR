@@ -208,7 +208,6 @@ typedef enum
     ROM_CREATE            // open for creation (deletes existing)
 } ResOpenMode;
 
-void ResAddPath(const char *path);        // add search path for resfiles
 int32_t ResOpenResFile(const char *filename, ResOpenMode mode, bool auxinfo);
 void ResCloseFile(int32_t fd);    // close res file
 
@@ -219,7 +218,6 @@ void ResCloseFile(int32_t fd);    // close res file
 
 #define MAX_RESFILENUM 63            // maximum file number
 
-//extern Datapath gDatapath;            // res system's datapath (others may use)
 /*
 //    ---------------------------------------------------------
 //        RESOURCE MEMORY MANAGMENT ROUTINES  (resmem.c)

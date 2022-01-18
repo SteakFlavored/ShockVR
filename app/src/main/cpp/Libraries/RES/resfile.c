@@ -51,9 +51,6 @@ int8_t resFileSignature[16] = {
 
 ResFile resFile[MAX_RESFILENUM+1];
 
-//    Global datapath for res files, other data modules may piggyback
-
-Datapath gDatapath;
 */
 //    Internal prototypes
 
@@ -68,20 +65,6 @@ void ResCreateEditInfo(ResFile *prf, int32_t filenum);
 void ResCreateDir(ResFile *prf);
 void ResWriteDir(int32_t filenum);
 void ResWriteHeader(int32_t filenum);
-*/
-
-//    ---------------------------------------------------------
-//
-//    ResAddPath() adds a path to the resource manager's list.
-//
-//        path = name of directory to add
-/*
-void ResAddPath(const char *path)
-{
-    DatapathAdd(&gDatapath, path);
-
-    Spew(DSRC_RES_General, ("ResAddPath: added %s\n", path));
-}
 */
 
 //    ---------------------------------------------------------

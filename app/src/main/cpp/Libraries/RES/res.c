@@ -98,12 +98,6 @@ void ResInit()
     for (i = 0; i <= MAX_RESFILENUM; i++)
         resFile[i].fd = -1;
 
-//    Add directory pointed to by RES env var to search path
-
-    p = getenv("RES");
-    if (p)
-        ResAddPath(p);
-
     Spew(DSRC_RES_General, ("ResInit: res system initialized\n"));
 
 //    Install default pager
