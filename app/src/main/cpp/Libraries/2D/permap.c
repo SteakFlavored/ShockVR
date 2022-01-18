@@ -47,78 +47,29 @@ fix fix_div_16_16_3(fix a, fix b)
     return fix_from_int64_lo(result);
 }
 
-// PowerPC math routines used by permap stuff
-#if defined(powerc) || defined(__powerc)
-#else
-asm fix fix_div_16_16_3 (fix a, fix b)
- {
-     tst.l        8(a7)
-    beq.s        @DivZero
+fix fix_mul_3_3_3(fix a, fix b)
+{
+    int64_t result = ((int64_t)a * (int64_t)b) >> 29;
+    return fix_from_int64_lo(result);
+}
 
-     move.l    4(a7),d0
-     move.l    d0,d1
-     asr.l        #3,d1
-     moveq        #29,d2
-     lsl.l        d2,d0
-    dc.w        0x4C6F,0x0C01,0x0008        //     divs.l    8(a7),d1:d0
-    bvs.s        @DivZero
-     rts
+fix fix_mul_3_32_16(fix a, fix b)
+{
+    int64_t result = ((int64_t)a * (int64_t)b) >> 13;
+    return fix_from_int64_lo(result);
+}
 
-@DivZero:
-    move.l    #0x7FFFFFFF,d0
-    tst.b        4(a7)
-    bpl.s        @noNeg
-    neg.l        d0
-@noNeg:
-    rts
- }
+fix fix_mul_3_16_20(fix a, fix b)
+{
+    int64_t result = ((int64_t)a * (int64_t)b) >> 33;
+    return fix_from_int64_lo(result);
+}
 
-asm fix fix_mul_3_3_3 (fix a, fix b)
- {
-     move.l    4(A7),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(A7),d1:d0
-    moveq        #29,d2
-    lsr.l        d2,d0
-    lsl.l        #3,d1
-    or.l        d1,d0
-    rts
- }
-
-
-asm fix fix_mul_3_32_16 (fix a, fix b)
- {
-     move.l    4(A7),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(A7),d1:d0
-    moveq        #13,d2
-    lsr.l        d2,d0
-    moveq        #19,d2
-    lsl.l        d2,d1
-    or.l        d1,d0
-    rts
- }
-
-
-asm fix fix_mul_3_16_20 (fix a, fix b)
- {
-     move.l    4(A7),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(A7),d1:d0
-    asr.l        #1,d1
-    move.l    d1,d0
-    rts
- }
-
-
-asm fix fix_mul_16_32_20 (fix a, fix b)
- {
-     move.l    4(A7),d0
-    dc.w        0x4c2f,0x0c01,0x0008        //     muls.l    8(A7),d1:d0
-    lsr.l        #4,d0
-    moveq        #28,d2
-    lsl.l        d2,d1
-    or.l        d1,d0
-    rts
- }
-#endif
+fix fix_mul_16_32_20(fix a, fix b)
+{
+    int64_t result = ((int64_t)a * (int64_t)b) >> 4;
+    return fix_from_int64_lo(result);
+}
 
 extern int32_t gri_per_umap_setup(int32_t n, grs_vertex **vpl, grs_per_setup *ps);
 
