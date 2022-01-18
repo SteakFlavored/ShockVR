@@ -225,6 +225,9 @@ set(LG_LIBRARY_SRC
 )
 add_library(LG_LIB ${LG_LIBRARY_SRC})
 
+set(PALETTE_LIBRARY_SRC PALETTE/palette.c)
+add_library(PALETTE_LIB ${PALETTE_LIBRARY_SRC})
+
 set (RES_LIBRARY_SRC
     RES/lzw.c
     RES/refacc.c
