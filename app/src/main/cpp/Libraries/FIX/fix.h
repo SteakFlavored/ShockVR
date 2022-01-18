@@ -271,6 +271,7 @@ typedef uint16_t fixang;
 //========================================
 
 fix fix_mul(fix a, fix b);
+fix fix_mul_asm_safe(fix a, fix b);
 fix fix_div(fix a, fix b);
 fix fix_mul_div (fix m0, fix m1, fix d);
 fix fast_fix_mul_int(fix a, fix b);
