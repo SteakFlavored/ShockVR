@@ -225,9 +225,8 @@ void ResCloseFile(int32_t filenum);    // close res file
 //        RESOURCE MAKING  (resmake.c)
 //    ----------------------------------------------------------
 
-void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int32_t fd,
-    uint8_t flags);                                        // make resource from data block
-void ResUnmake(Id id);                                            // unmake a resource
+void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int32_t filenum, uint8_t flags);
+void ResUnmake(Id id);
 
 //    ----------------------------------------------------------
 //        RESOURCE FILE LAYOUT

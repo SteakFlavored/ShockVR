@@ -49,64 +49,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //    --------------------------------------------------------
 //  For Mac version, use Resource Manager to add the resource to indicated res file.
 
-void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int32_t fd, uint8_t flags)
+void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int32_t filenum, uint8_t flags)
 {
-    Handle        resHdl;
-    ResDesc     *prd;
-    Str255        resName;
+    ResDesc *prd;
+
+    ResExtendDesc(id);
 
     // Check for resource at that id.  If the handle exists, then just change the
     // handle (adjusting for size if needed, of course).
-
     prd = RESDESC(id);
-    if (prd->hdl)
-    {
-        ResLoadResource(id);
-        if (GetHandleSize(prd->hdl) != size)
-        {
-            SetHandleSize(prd->hdl, size);
-        }
-        BlockMoveData(ptr, *prd->hdl, size);
-    }
-    else
-    {
-        // Make a handle out of the data and add the resource.
+    if (prd->offset)
+        ResDelete(id);
 
-        UseResFile(filenum);                            // Use the res file indicated.
-
-        PtrToHand(ptr, &resHdl, size);            // Turn the pointer into a handle.
-
-        resName[0] = 1;
-        if ((flags & RDF_LZW) == 0)                // Figure out the resource name.
-        {
-            if (flags & RDF_COMPOUND)
-                resName[1] = 'c';
-            else
-                resName[1] = 'n';
-        }
-        else
-        {
-            if (flags & RDF_COMPOUND)
-                resName[1] = 'x';
-            else
-                resName[1] = 'z';
-        }
-        AddResource(resHdl, resMacTypes[type], id, resName);
-        if (ResError())
-            DebugStr("\pResMake: Can't add a resource.\n");
-
-        ResExtendDesc(id);                                //    Extend res desc table if need to
-
-    //    Spew(DSRC_RES_Make, ("ResMake: making resource $%x\n", id));
-
-        //    Add us to the soup, set lock so doesn't get swapped out
-
-        prd->hdl = resHdl;
-        prd->filenum = filenum;
-        prd->lock = 1;
-        prd->flags = flags;
-        prd->type = type;
-    }
+    // Add us to the soup, set lock so doesn't get swapped out
+    prd->ptr = ptr;
+    prd->offset = RES_OFFSET_PENDING;
+    prd->size = size;
+    prd->filenum = filenum;
+    prd->lock = 1;
+    prd->flags = flags;
+    prd->type = type;
 }
 
 //    -------------------------------------------------------------
@@ -124,14 +86,6 @@ void ResMake(Id id, void *ptr, int32_t size, uint8_t type, int32_t fd, uint8_t f
 
 void ResUnmake(Id id)
 {
-    ResDesc *prd;
-
-    prd = RESDESC(id);
-    if (prd->hdl)
-    {
-        ReleaseResource(prd->hdl);
-//        prd->hdl = NULL;
-//        memset(prd, 0, sizeof(ResDesc));
-    }
+    memset(RESDESC(id), 0, sizeof(ResDesc));
 }
 
