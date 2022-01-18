@@ -170,7 +170,7 @@ set(2D_LIBRARY_SRC
     2D/RSD/rsdunpack.c
 )
 add_library(2D_LIB ${2D_LIBRARY_SRC})
-target_link_libraries(2D_LIB LG_LIB)
+target_link_libraries(2D_LIB FIX_LIB LG_LIB)
 
 set(DSTRUCT_LIBRARY_SRC
     DSTRUCT/array.c
