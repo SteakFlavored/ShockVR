@@ -54,11 +54,9 @@ void *ResLock(Id id)
 {
     ResDesc *prd;
 
-    //    Check if valid id
-//    DBG(DSRC_RES_ChkIdRef, {if (!ResCheckId(id)) return NULL;});
-
-    //    Add to cumulative stats
-//    CUMSTATS(id,numLocks);
+    // Check if valid id
+    if (!ResCheckId(id))
+        return NULL;
 
     //    If resource not loaded, load it
 
@@ -81,31 +79,6 @@ void *ResLock(Id id)
 
     if (prd->lock == 1)
         HLock(prd->hdl);
-    return(*prd->hdl);
-}
-
-//    ---------------------------------------------------------
-//
-//    ResLockHi() Mac only!  Locks a resource, moves hi, and returns ptr.
-//
-//        id = resource id
-//
-//    Returns: ptr to locked resource
-//    ---------------------------------------------------------
-void *ResLockHi(Id id)
-{
-    ResDesc *prd;
-
-    //    If resource not loaded, load it.
-    prd = RESDESC(id);
-    if (ResLoadResource(id) == nil)
-        return(nil);
-
-    // Lock the handle.
-    prd->lock++;
-    if (prd->lock == 1)
-        HLockHi(prd->hdl);
-
     return(*prd->hdl);
 }
 

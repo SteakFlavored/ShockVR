@@ -101,7 +101,6 @@ typedef uint16_t RefIndex;    // index part of ref
 //    ---------------------------------------------------------
 
 void *ResLock(Id id);                                // lock resource & get ptr
-void *ResLockHi(Id id);                            // lock resource hi (Mac only)
 void ResUnlock(Id id);                                // unlock resource
 void *ResGet(Id id);                                // get ptr to resource (dangerous!)
 void *ResExtract(Id id, void *buffer);        // extract resource into buffer
