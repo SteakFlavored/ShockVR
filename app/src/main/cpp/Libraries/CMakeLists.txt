@@ -1,4 +1,3 @@
-set(LIBRARIES_DIR ${PROJECT_SOURCE_DIR}/Libraries)
 include_directories(
     ${LIBRARIES_DIR}/2D
     ${LIBRARIES_DIR}/2D/Clip

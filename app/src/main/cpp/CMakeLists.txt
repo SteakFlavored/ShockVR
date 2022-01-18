@@ -24,9 +24,28 @@ set(CMAKE_SHARED_LINKER_FLAGS
         "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate")
 
 # Split out building game libraries separately
-add_subdirectory(${PROJECT_SOURCE_DIR}/Libraries/)
+set(LIBRARIES_DIR ${PROJECT_SOURCE_DIR}/Libraries)
+add_subdirectory(${LIBRARIES_DIR})
+include_directories(
+    ${LIBRARIES_DIR}/2D
+    ${LIBRARIES_DIR}/2D/Clip
+    ${LIBRARIES_DIR}/2D/Flat8
+    ${LIBRARIES_DIR}/2D/Gen
+    ${LIBRARIES_DIR}/2D/GR
+    ${LIBRARIES_DIR}/2D/RSD
+    ${LIBRARIES_DIR}/3D
+    ${LIBRARIES_DIR}/DSTRUCT
+    ${LIBRARIES_DIR}/FIX
+    ${LIBRARIES_DIR}/FIXPP
+    ${LIBRARIES_DIR}/H
+    ${LIBRARIES_DIR}/LG
+    ${LIBRARIES_DIR}/RES
+)
 
-add_library(shockvr SHARED shockvr.cpp)
+add_library(shockvr SHARED
+    Quest/shockvr.cpp
+    android_main.cpp
+)
 
 target_link_libraries(shockvr 2D_LIB 3D_LIB DSTRUCT_LIB FIX_LIB FIXPP_LIB LG_LIB PALETTE_LIB RES_LIB)
 
