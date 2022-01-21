@@ -1,6 +1,6 @@
 /*
 
-Core header for the ShockVR project
+Filesystem abstraction for the ShockVR project
 Copyright 2022 Matt Fulghum <mfulghum@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
@@ -18,22 +18,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include <android/log.h>
-#include <android_native_app_glue.h>
+#include "filesystem.h"
+#include "shockvr.h"
 
-#include <string>
-
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "ShockVR", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "ShockVR", __VA_ARGS__))
-
-// Big gross shared state, but this makes it easier to deal with C/C++ interop.
+// The System Shock source code is (almost) all C, so it must be wrapped in
+// extern "C" or else the compiler will complain about undefined references.
 extern "C" {
-struct ShockState {
-    std::string ResourceFolder;
-    bool Resumed = false;
-};
-
-extern ShockState shockState;
+#include "res.h"
 }
 
-int ShockVrMain(struct android_app *app);
+extern "C" {
+
+int32_t LoadResourceFileRO(const char *filename) {
+    const std::string resourcePath(shockState.ResourceFolder + filename);
+
+    return ResOpenFile(resourcePath.c_str());
+}
+
+int32_t LoadResourceFileRW(const char *filename, const bool create) {
+    const std::string resourcePath(shockState.ResourceFolder + filename);
+
+    return ResEditFile(resourcePath.c_str(), create);
+}
+
+}
