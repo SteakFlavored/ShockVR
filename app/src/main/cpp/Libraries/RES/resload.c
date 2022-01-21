@@ -65,10 +65,10 @@ void *ResLoadResource(Id id)
     // Allocate memory, setting magic id so pager can tell who it is if need be.
     prd->ptr = malloc(prd->size);
     if (prd->ptr == NULL)
-        return(NULL);
+        return NULL;
 
     // Load from disk
-    ResRetrieve(id, NULL);
+    ResRetrieve(id, prd->ptr);
 
     // Return pointer to data
     return prd->ptr;

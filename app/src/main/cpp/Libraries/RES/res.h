@@ -178,7 +178,7 @@ extern Id resDescMax; // max id in res desc
 
 //    Information about resources
 
-#define ResInUse(id) (gResDesc[id].ptr != NULL)
+#define ResInUse(id) (gResDesc[id].offset)
 #define ResPtr(id) (gResDesc[id].ptr)
 #define ResSize(id) (gResDesc[id].size)
 #define ResLocked(id) (gResDesc[id].lock)
@@ -213,7 +213,6 @@ void ResCloseFile(int32_t filenum);    // close res file
 #define ResOpenFile(filename) ResOpenResFile(filename, ROM_READ, false)
 #define ResEditFile(filename,creat) ResOpenResFile(filename, \
     (creat) ? ROM_EDITCREATE : ROM_EDIT, true)
-#define ResCreateFile(filename) ResOpenResFile(filename, ROM_CREATE, true)
 
 #define MAX_RESFILENUM 63            // maximum file number
 
