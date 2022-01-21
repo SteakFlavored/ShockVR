@@ -109,7 +109,7 @@ void ResDelete(Id id);                                // delete resource forever
 
 //    Each compound resource starts with a Ref Table
 
-typedef struct {
+typedef struct __attribute__((packed)) {
     RefIndex numRefs;                                    // # items in compound resource
     int32_t offset[1];                                        // offset to each item (numRefs + 1 of them)
 } RefTable;
