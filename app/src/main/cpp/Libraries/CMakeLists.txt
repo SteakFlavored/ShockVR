@@ -12,6 +12,7 @@ include_directories(
     ${LIBRARIES_DIR}/H
     ${LIBRARIES_DIR}/LG
     ${LIBRARIES_DIR}/RES
+    ${LIBRARIES_DIR}/RND
 )
 
 set(2D_LIBRARY_SRC
@@ -239,3 +240,6 @@ set (RES_LIBRARY_SRC
     RES/restypes.c
 )
 add_library(RES_LIB ${RES_LIBRARY_SRC})
+
+set(RND_LIBRARY_SRC RND/rnd.c)
+add_library(RND_LIB ${RND_LIBRARY_SRC})

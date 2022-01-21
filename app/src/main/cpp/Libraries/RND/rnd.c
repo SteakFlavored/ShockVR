@@ -119,11 +119,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg.h"
 #include "rnd.h"
 
-//    For gruesome interrupt routines, let 'em have their way:
-
-//#pragma off(check_stack);
-
-
 //    ---------------------------------------------------------------
 //  Get the high 32-bit result of the unsigned multiply of 2 32-bit numbers.
 //    ---------------------------------------------------------------
@@ -134,20 +129,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     parm [eax] [edx]  \
     modify [eax edx];
 */
-#if defined(powerc) || defined(__powerc)
-
-uint32_t high_umpy(uint32_t a, uint32_t b);                    //  Code in RndAsm.s
-
-#else
-uint32_t high_umpy(uint32_t a, uint32_t b);                    // Proto
-uint32_t asm high_umpy(uint32_t a, uint32_t b)
- {
-     move.l    4(A7), d0
-    dc.w        0x4C2F,0x0401,0x0008        //     mulu.l    8(A7),d1:d0
-    move.l    d1,d0
-     rts
- }
-#endif
+uint32_t high_umpy(uint32_t a, uint32_t b)
+{
+    return (uint32_t)(((uint64_t)a * (uint64_t)b) >> 32ULL);
+}
 
 //    ---------------------------------------------------------------
 //        ROUTINES WHICH SCALE RNUMS INTO RANGE
