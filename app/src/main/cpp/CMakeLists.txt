@@ -45,6 +45,7 @@ include_directories(
 
 add_library(shockvr SHARED
     Quest/filesystem.cpp
+    Quest/framebuffer.cpp
     Quest/openxr.cpp
     Quest/shockvr.cpp
     android_main.cpp

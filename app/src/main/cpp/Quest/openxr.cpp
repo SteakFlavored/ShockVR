@@ -40,7 +40,8 @@ int InitOpenXR(android_app *app) {
     xrInitializeLoaderKHR((XrLoaderInitInfoBaseHeaderKHR*)&loaderInitializeInfoAndroid);
 
     const char* const requiredExtensionNames[] = {
-            XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME};
+            XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME,
+            XR_KHR_ANDROID_SURFACE_SWAPCHAIN_EXTENSION_NAME};
     const uint32_t numRequiredExtensions = sizeof(requiredExtensionNames) / sizeof(requiredExtensionNames[0]);
 
     // Check the list of required extensions against what is supported by the runtime.

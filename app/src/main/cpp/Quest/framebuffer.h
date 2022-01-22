@@ -1,6 +1,6 @@
 /*
 
-`android_main` wrapper for the ShockVR project
+Framebuffer handling for the ShockVR project
 Copyright 2022 Matt Fulghum <mfulghum@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
@@ -18,26 +18,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include "Quest/shockvr.h"
+#pragma once
 
-#include <sys/prctl.h>
+#include <android/native_window.h>
+#include <stdint.h>
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
-/**
- * This is the main entry point of a native application that is using
- * android_native_app_glue.  It runs in its own thread, with its own
- * event loop for receiving input events and doing other things.
- */
-void android_main(struct android_app* app) {
-    app->activity->vm->AttachCurrentThread(&shockState.Env, nullptr);
+ANativeWindow *CreateSwapchain(const uint32_t width, const uint32_t height);
+void DestroySwapchain(ANativeWindow *swapchainWindow);
 
-    // Note that AttachCurrentThread will reset the thread name.
-    prctl(PR_SET_NAME, (long)"ShockVR", 0, 0, 0);
-
-    ShockVrMain(app);
-
-    app->activity->vm->DetachCurrentThread();
-}
-
-}
+#ifdef __cplusplus
+} // extern "C"
+#endif

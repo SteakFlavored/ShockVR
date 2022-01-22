@@ -39,6 +39,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Big gross shared state, but this makes it easier to deal with C/C++ interop.
 extern "C" {
 struct ShockState {
+    // Note this JNI environment is *only* valid from the main thread!
+    JNIEnv *Env;
+
     XrInstance Instance;
     XrSystemId SystemId;
     XrSession Session;
