@@ -72,6 +72,12 @@ int ShockVrMain(struct android_app* app) {
     app->userData = &shockState;
     app->onAppCmd = app_handle_cmd;
 
+    int ret = InitOpenXR(app);
+    if (ret != 0) {
+        // Bail out if we failed to set up OpenXR.
+        return ret;
+    }
+
     // Set the global pointing to the resource folder for filesystem ops.
     shockState.ResourceFolder = app->activity->externalDataPath;
     shockState.ResourceFolder += "/res/";
@@ -98,6 +104,8 @@ int ShockVrMain(struct android_app* app) {
             }
         }
     }
+
+    ShutdownOpenXR();
 
     return 0;
 }

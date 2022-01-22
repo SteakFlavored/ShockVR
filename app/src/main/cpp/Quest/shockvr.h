@@ -23,12 +23,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <GLES3/gl3.h>
+#include <GLES3/gl3ext.h>
+
+#define XR_USE_GRAPHICS_API_OPENGL_ES 1
+#define XR_USE_PLATFORM_ANDROID 1
+#include <openxr/openxr.h>
+#include <openxr/openxr_platform.h>
+
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "ShockVR", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "ShockVR", __VA_ARGS__))
 
 // Big gross shared state, but this makes it easier to deal with C/C++ interop.
 extern "C" {
 struct ShockState {
+    XrInstance Instance;
+    XrSystemId SystemId;
+    XrSession Session;
+    XrViewConfigurationProperties ViewportConfig;
+    XrViewConfigurationView ViewConfigurationView[2];
+
+    EGLDisplay EglDisplay;
+    EGLConfig EglConfig;
+    EGLContext EglContext;
+
     std::string ResourceFolder;
     bool Resumed = false;
 };
@@ -37,3 +57,6 @@ extern ShockState shockState;
 }
 
 int ShockVrMain(struct android_app *app);
+
+int InitOpenXR(struct android_app *app);
+void ShutdownOpenXR();

@@ -45,20 +45,23 @@ include_directories(
 
 add_library(shockvr SHARED
     Quest/filesystem.cpp
+    Quest/openxr.cpp
     Quest/shockvr.cpp
     android_main.cpp
 )
 
 target_link_libraries(shockvr
-        2D_LIB
-        3D_LIB
-        DSTRUCT_LIB
-        FIX_LIB
-        FIXPP_LIB
-        LG_LIB
-        PALETTE_LIB
-        RES_LIB
-        RND_LIB
+    EGL
+    GLESv3
+    2D_LIB
+    3D_LIB
+    DSTRUCT_LIB
+    FIX_LIB
+    FIXPP_LIB
+    LG_LIB
+    PALETTE_LIB
+    RES_LIB
+    RND_LIB
 )
 
 # Link in the native app glue
