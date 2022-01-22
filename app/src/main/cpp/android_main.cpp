@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Quest/shockvr.h"
 
+#include <sys/prctl.h>
+
 extern "C" {
 
 /**
@@ -30,6 +32,9 @@ extern "C" {
 void android_main(struct android_app* app) {
     JNIEnv* Env;
     app->activity->vm->AttachCurrentThread(&Env, nullptr);
+
+    // Note that AttachCurrentThread will reset the thread name.
+    prctl(PR_SET_NAME, (long)"ShockVR", 0, 0, 0);
 
     ShockVrMain(app);
 
