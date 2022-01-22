@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <android/native_window_jni.h>
 
-struct Swapchain {
+struct SwapchainInternals {
     XrSwapchain Handle;
     ANativeWindow *Window;
     uint32_t Width;
@@ -32,7 +32,7 @@ struct Swapchain {
 
 extern "C" {
 
-ANativeWindow *CreateSwapchain(const uint32_t width, const uint32_t height) {
+Swapchain *CreateSwapchain(const uint32_t width, const uint32_t height) {
     XrSwapchainCreateInfo swapchainCreateInfo;
     memset(&swapchainCreateInfo, 0, sizeof(swapchainCreateInfo));
     swapchainCreateInfo.type = XR_TYPE_SWAPCHAIN_CREATE_INFO;
@@ -63,30 +63,37 @@ ANativeWindow *CreateSwapchain(const uint32_t width, const uint32_t height) {
         return nullptr;
     }
 
-    Swapchain *swapchain = new Swapchain;
-    swapchain->Handle = handle;
-    swapchain->Window = ANativeWindow_fromSurface(shockState.Env, surface);
-    swapchain->Width = width;
-    swapchain->Height = height;
+    SwapchainInternals *swapchainInternals = new SwapchainInternals;
+    swapchainInternals->Handle = handle;
+    swapchainInternals->Window = ANativeWindow_fromSurface(shockState.Env, surface);
+    swapchainInternals->Width = width;
+    swapchainInternals->Height = height;
 
-    return swapchain->Window;
+    return &swapchainInternals->Window;
 }
 
 // Horrific looking function to retrieve the Swapchain that "owns" an ANW, a la Linux's 'container_of'.
-Swapchain *SwapchainFromWindow(ANativeWindow *window) {
-    return reinterpret_cast<Swapchain*>(reinterpret_cast<intptr_t>(window) -
-            reinterpret_cast<ssize_t>(&(static_cast<Swapchain*>(nullptr)->Window)));
+SwapchainInternals *SwapchainInternalsFromSwapchain(Swapchain *swapchain) {
+    return reinterpret_cast<SwapchainInternals*>(reinterpret_cast<intptr_t>(swapchain) -
+            reinterpret_cast<ssize_t>(&(static_cast<SwapchainInternals*>(nullptr)->Window)));
 }
 
-void DestroySwapchain(ANativeWindow *swapchainWindow) {
+void DestroySwapchain(Swapchain *swapchain) {
 
-    Swapchain *swapchain = SwapchainFromWindow(swapchainWindow);
+    SwapchainInternals *swapchainInternals = SwapchainInternalsFromSwapchain(swapchain);
 
-    if (swapchain->Handle != XR_NULL_HANDLE) {
-        xrDestroySwapchain(swapchain->Handle);
+    if (swapchainInternals->Handle != XR_NULL_HANDLE) {
+        xrDestroySwapchain(swapchainInternals->Handle);
     }
 
-    delete swapchain;
+    delete swapchainInternals;
+}
+
+void GetSwapchainDimensions(Swapchain *swapchain, uint32_t &width, uint32_t &height) {
+    SwapchainInternals *swapchainInternals = SwapchainInternalsFromSwapchain(swapchain);
+
+    width = swapchainInternals->Width;
+    height = swapchainInternals->Height;
 }
 
 }
