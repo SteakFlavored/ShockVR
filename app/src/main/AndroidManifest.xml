@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.steakflavored.shockvr">
 
+    <!-- Tell the system this app requires OpenGL ES 3.1. -->
+	<uses-feature android:glEsVersion="0x00030001" android:required="true"/>
+    <uses-feature android:name="android.hardware.vr.headtracking" android:required="true"/>
+    <meta-data android:name="com.oculus.supportedDevices" android:value="all"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,15 +16,19 @@
          This will take care of integrating with our NDK code. -->
         <activity android:name="android.app.NativeActivity"
             android:label="@string/app_name"
-            android:configChanges="orientation|keyboardHidden">
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:resizeableActivity="false"
+            android:configChanges="screenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode">
             <!-- Tell NativeActivity the name of our .so -->
             <meta-data android:name="android.app.lib_name"
                 android:value="shockvr" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+				<category android:name="com.oculus.intent.category.VR" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
