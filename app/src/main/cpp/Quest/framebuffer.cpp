@@ -75,7 +75,7 @@ ANativeWindow *CreateSwapchain(const uint32_t width, const uint32_t height) {
 // Horrific looking function to retrieve the Swapchain that "owns" an ANW, a la Linux's 'container_of'.
 Swapchain *SwapchainFromWindow(ANativeWindow *window) {
     return reinterpret_cast<Swapchain*>(reinterpret_cast<intptr_t>(window) -
-            reinterpret_cast<ssize_t>(&(static_cast<Swapchain*>(0)->Window)));
+            reinterpret_cast<ssize_t>(&(static_cast<Swapchain*>(nullptr)->Window)));
 }
 
 void DestroySwapchain(ANativeWindow *swapchainWindow) {
