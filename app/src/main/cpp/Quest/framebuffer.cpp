@@ -96,4 +96,10 @@ void GetSwapchainDimensions(Swapchain *swapchain, uint32_t &width, uint32_t &hei
     height = swapchainInternals->Height;
 }
 
+void *GetSwapchainHandle(Swapchain *swapchain) {
+    SwapchainInternals *swapchainInternals = SwapchainInternalsFromSwapchain(swapchain);
+
+    return static_cast<void*>(swapchainInternals->Handle);
+}
+
 }

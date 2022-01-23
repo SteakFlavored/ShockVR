@@ -32,6 +32,7 @@ typedef ANativeWindow* Swapchain;
 Swapchain *CreateSwapchain(const uint32_t width, const uint32_t height);
 void DestroySwapchain(Swapchain *swapchain);
 void GetSwapchainDimensions(Swapchain *swapchain, uint32_t &width, uint32_t &height);
+void *GetSwapchainHandle(Swapchain *swapchain);
 
 #ifdef __cplusplus
 } // extern "C"
