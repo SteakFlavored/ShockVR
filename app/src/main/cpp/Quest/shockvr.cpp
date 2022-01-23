@@ -103,6 +103,11 @@ int ShockVrMain(struct android_app* app) {
                 source->process(app, source);
             }
         }
+
+        HandleXrEvents();
+        if (!shockState.SessionActive) {
+            continue;
+        }
     }
 
     ShutdownOpenXR();

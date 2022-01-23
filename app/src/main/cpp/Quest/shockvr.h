@@ -50,6 +50,8 @@ struct ShockState {
     XrSpace HeadSpace;
     XrSpace LocalSpace;
     XrSpace StageSpace;
+    bool SessionActive;
+    bool Focused;
 
     EGLDisplay EglDisplay;
     EGLConfig EglConfig;
@@ -66,3 +68,5 @@ int ShockVrMain(struct android_app *app);
 
 int InitOpenXR(struct android_app *app);
 void ShutdownOpenXR();
+
+void HandleXrEvents();

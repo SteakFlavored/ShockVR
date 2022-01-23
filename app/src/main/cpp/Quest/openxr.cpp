@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int InitOpenXR(android_app *app) {
     XrResult xrResult;
 
+    shockState.SessionActive = false;
+
     PFN_xrInitializeLoaderKHR xrInitializeLoaderKHR;
     xrResult = xrGetInstanceProcAddr(XR_NULL_HANDLE, "xrInitializeLoaderKHR",
             (PFN_xrVoidFunction*)&xrInitializeLoaderKHR);
@@ -327,4 +329,52 @@ void ShutdownOpenXR() {
 
     xrDestroySession(shockState.Session);
     xrDestroyInstance(shockState.Instance);
+}
+
+void HandleXrEvents() {
+    XrEventDataBuffer eventDataBuffer = {};
+
+    for (;;) {
+        XrEventDataBaseHeader* baseEventHeader = (XrEventDataBaseHeader*)(&eventDataBuffer);
+        baseEventHeader->type = XR_TYPE_EVENT_DATA_BUFFER;
+        baseEventHeader->next = NULL;
+
+        XrResult xrResult;
+        xrResult = xrPollEvent(shockState.Instance, &eventDataBuffer);
+        if (xrResult != XR_SUCCESS) {
+            break;
+        }
+
+        switch (baseEventHeader->type) {
+            case XR_TYPE_EVENT_DATA_SESSION_STATE_CHANGED: {
+                const XrEventDataSessionStateChanged* session_state_changed_event =
+                        (XrEventDataSessionStateChanged*)(baseEventHeader);
+                switch (session_state_changed_event->state) {
+                    case XR_SESSION_STATE_FOCUSED:
+                        shockState.Focused = true;
+                        break;
+                    case XR_SESSION_STATE_VISIBLE:
+                        shockState.Focused = false;
+                        break;
+                    case XR_SESSION_STATE_READY: {
+                        XrSessionBeginInfo sessionBeginInfo = {};
+                        sessionBeginInfo.type = XR_TYPE_SESSION_BEGIN_INFO;
+                        sessionBeginInfo.next = nullptr;
+                        sessionBeginInfo.primaryViewConfigurationType = shockState.ViewportConfig.viewConfigurationType;
+
+                        XrResult xrResult = xrBeginSession(shockState.Session, &sessionBeginInfo);
+                        shockState.SessionActive = (xrResult == XR_SUCCESS);
+                    } break;
+                    case XR_SESSION_STATE_STOPPING: {
+                        xrEndSession(shockState.Session);
+                        shockState.SessionActive = false;
+                    } break;
+                    default:
+                        break;
+                }
+            } break;
+            default:
+                break;
+        }
+    }
 }
