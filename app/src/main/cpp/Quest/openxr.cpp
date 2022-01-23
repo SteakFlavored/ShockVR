@@ -321,6 +321,10 @@ void ShutdownOpenXR() {
     eglDestroyContext(shockState.EglDisplay, shockState.EglContext);
     eglTerminate(shockState.EglDisplay);
 
+    xrDestroySpace(shockState.HeadSpace);
+    xrDestroySpace(shockState.LocalSpace);
+    xrDestroySpace(shockState.StageSpace);
+
     xrDestroySession(shockState.Session);
     xrDestroyInstance(shockState.Instance);
 }
