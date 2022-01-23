@@ -47,6 +47,9 @@ struct ShockState {
     XrSession Session;
     XrViewConfigurationProperties ViewportConfig;
     XrViewConfigurationView ViewConfigurationView[2];
+    XrSpace HeadSpace;
+    XrSpace LocalSpace;
+    XrSpace StageSpace;
 
     EGLDisplay EglDisplay;
     EGLConfig EglConfig;

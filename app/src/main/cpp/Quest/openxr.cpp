@@ -280,6 +280,39 @@ int InitOpenXR(android_app *app) {
     xrGetViewConfigurationProperties(shockState.Instance, shockState.SystemId, supportedViewConfigType,
             &shockState.ViewportConfig);
 
+    bool stageSupported = false;
+    uint32_t numOutputSpaces = 0;
+    xrEnumerateReferenceSpaces(shockState.Session, 0, &numOutputSpaces, NULL);
+
+    XrReferenceSpaceType* referenceSpaces = new XrReferenceSpaceType[numOutputSpaces];
+    xrEnumerateReferenceSpaces(shockState.Session, numOutputSpaces, &numOutputSpaces, referenceSpaces);
+    for (uint32_t i = 0; i < numOutputSpaces; i++) {
+        if (referenceSpaces[i] == XR_REFERENCE_SPACE_TYPE_STAGE) {
+            stageSupported = true;
+            break;
+        }
+    }
+    delete[] referenceSpaces;
+
+    // Create a space to the first path
+    XrReferenceSpaceCreateInfo spaceCreateInfo = {};
+    spaceCreateInfo.type = XR_TYPE_REFERENCE_SPACE_CREATE_INFO;
+    spaceCreateInfo.referenceSpaceType = XR_REFERENCE_SPACE_TYPE_VIEW;
+    spaceCreateInfo.poseInReferenceSpace.orientation.w = 1.0f;
+    xrCreateReferenceSpace(shockState.Session, &spaceCreateInfo, &shockState.HeadSpace);
+
+    spaceCreateInfo.referenceSpaceType = XR_REFERENCE_SPACE_TYPE_LOCAL;
+    xrCreateReferenceSpace(shockState.Session, &spaceCreateInfo, &shockState.LocalSpace);
+
+    if (stageSupported) {
+        spaceCreateInfo.referenceSpaceType = XR_REFERENCE_SPACE_TYPE_STAGE;
+        spaceCreateInfo.poseInReferenceSpace.position.y = 0.0f;
+    } else {
+        spaceCreateInfo.referenceSpaceType = XR_REFERENCE_SPACE_TYPE_LOCAL;
+        spaceCreateInfo.poseInReferenceSpace.position.y = -1.75f;
+    }
+    xrCreateReferenceSpace(shockState.Session, &spaceCreateInfo, &shockState.StageSpace);
+
     return 0;
 }
 
