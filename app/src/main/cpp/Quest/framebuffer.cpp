@@ -69,6 +69,8 @@ Swapchain *CreateSwapchain(const uint32_t width, const uint32_t height) {
     swapchainInternals->Width = width;
     swapchainInternals->Height = height;
 
+    ANativeWindow_setBuffersGeometry(swapchainInternals->Window, width, height, WINDOW_FORMAT_RGBA_8888);
+
     return &swapchainInternals->Window;
 }
 
