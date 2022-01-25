@@ -43,6 +43,7 @@ int InitOpenXR(android_app *app) {
 
     const char* const requiredExtensionNames[] = {
             XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME,
+            XR_KHR_COMPOSITION_LAYER_CYLINDER_EXTENSION_NAME,
             XR_KHR_ANDROID_SURFACE_SWAPCHAIN_EXTENSION_NAME};
     const uint32_t numRequiredExtensions = sizeof(requiredExtensionNames) / sizeof(requiredExtensionNames[0]);
 
