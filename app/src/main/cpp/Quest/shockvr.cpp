@@ -20,6 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "shockvr.h"
 #include "filesystem.h"
+#include "framebuffer.h"
+
+#include <openxr/openxr_oculus_helpers.h>
 
 // The System Shock source code is (almost) all C, so it must be wrapped in
 // extern "C" or else the compiler will complain about undefined references.
@@ -108,6 +111,33 @@ int ShockVrMain(struct android_app* app) {
         if (!shockState.SessionActive) {
             continue;
         }
+
+        XrFrameWaitInfo waitFrameInfo = {};
+        waitFrameInfo.type = XR_TYPE_FRAME_WAIT_INFO;
+        waitFrameInfo.next = NULL;
+
+        XrFrameState frameState = {};
+        frameState.type = XR_TYPE_FRAME_STATE;
+        frameState.next = NULL;
+
+        xrWaitFrame(shockState.Session, &waitFrameInfo, &frameState);
+
+        XrFrameBeginInfo beginFrameDesc = {};
+        beginFrameDesc.type = XR_TYPE_FRAME_BEGIN_INFO;
+        beginFrameDesc.next = NULL;
+        xrBeginFrame(shockState.Session, &beginFrameDesc);
+
+        XrSpaceLocation loc = {};
+        loc.type = XR_TYPE_SPACE_LOCATION;
+        xrLocateSpace(shockState.HeadSpace, shockState.LocalSpace, frameState.predictedDisplayTime, &loc);
+
+        XrFrameEndInfo endFrameInfo = {};
+        endFrameInfo.type = XR_TYPE_FRAME_END_INFO;
+        endFrameInfo.displayTime = frameState.predictedDisplayTime;
+        endFrameInfo.environmentBlendMode = XR_ENVIRONMENT_BLEND_MODE_OPAQUE;
+        endFrameInfo.layerCount = 0;
+        endFrameInfo.layers = nullptr;
+        xrEndFrame(shockState.Session, &endFrameInfo);
     }
 
     ShutdownOpenXR();
