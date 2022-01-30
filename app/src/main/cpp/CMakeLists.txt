@@ -43,6 +43,13 @@ include_directories(
     ${LIBRARIES_DIR}/RND
 )
 
+# Build game code
+include_directories(${PROJECT_SOURCE_DIR}/Game/Headers)
+set(GAME_SRC
+    Game/gamestrn.c
+)
+add_library(GAME_LIB ${GAME_SRC})
+
 add_library(shockvr SHARED
     Quest/filesystem.cpp
     Quest/framebuffer.cpp
@@ -63,6 +70,7 @@ target_link_libraries(shockvr
     PALETTE_LIB
     RES_LIB
     RND_LIB
+    GAME_LIB
 )
 
 # Link in the native app glue
