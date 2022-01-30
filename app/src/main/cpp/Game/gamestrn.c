@@ -42,19 +42,22 @@ int32_t string_res_file;                             // string res filenum
 // EXTERNALS
 // ---------
 
-const char *language_files[] = { "cybstrng.res", "frnstrng.res", "gerstrng.res" } ;
-int8_t which_lang;
+const char *language_files[] = { "cybstrng.res", "frnstrng.res", "gerstrng.res" };
+int8_t which_lang = 0;
 
 void init_strings(void)
 {
-    /*FSSpec    fSpec;
+    // If 'which_lang' is out-of-range for some reason fall back on English.
+    if ((uint8_t)which_lang > sizeof(language_files) / sizeof(*language_files))
+        which_lang = 0;
 
-    // Open the string resource file, Mac style.
-    FSMakeFSSpec(gDataVref, gDataDirID, "\pcybstrng.rsrc", &fSpec);
-    string_res_file = ResOpenFile(&fSpec);
-
-    if (string_res_file < 0)
-        critical_error(CRITERR_RES|0);*/
+    const char *language_filename = language_files[which_lang];
+    string_res_file = LoadResourceFileRO(language_filename);
+    if (string_res_file < 0) {
+        // LOGE("Could not open string resource '%s': %d", language_filename, string_res_file);
+        // critical_error(CRITERR_RES|0);
+        exit(1);
+    }
 
     lg_sprintf_install_stringfunc((char*(*)(uint32_t))RefGet);
 }
