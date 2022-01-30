@@ -49,6 +49,7 @@ include_directories(Quest)
 # Build game code
 include_directories(${PROJECT_SOURCE_DIR}/Game/Headers)
 set(GAME_SRC
+    Game/criterr.c
     Game/gamestrn.c
 )
 add_library(GAME_LIB ${GAME_SRC})

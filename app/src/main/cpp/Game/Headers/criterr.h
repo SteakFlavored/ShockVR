@@ -42,8 +42,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NO_CRITICAL_ERROR    0x0000
 
 // Prototypes
-void criterr_init(void);
-// Initializes critical error system.
 
 void critical_error(int16_t code);
 // Exits the program with error status, printing

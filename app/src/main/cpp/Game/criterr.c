@@ -16,12 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+#include <android/log.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "Shock.h"
-#include "InitMac.h"
 #include "criterr.h"
 
 /*
@@ -36,7 +36,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------
 // DEFINES
 // -------
-#define GAME_NAME "System Shock"
 #define CLASS(x) ((x) >> 12)
 #define TYPE(x) ((x) & 0xFFF)
 
@@ -45,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ------------------------------
 
 
-static int8_t* criterr_type_messages[CRITERR_CLASSES] =
+static const char* criterr_type_messages[CRITERR_CLASSES] =
     {
         "Test",
         "Configuration error",
@@ -67,11 +66,11 @@ static int8_t* criterr_type_messages[CRITERR_CLASSES] =
 
 typedef struct _code_string
 {
-    int16_t code;
-    int8_t* message;
+    uint16_t code;
+    const char* message;
 } _code_string;
 
-static _code_string code_messages[] =
+static const _code_string code_messages[] =
 {
     { CRITERR_TEST|1, ":  There is no cause for alarm, return to your homes."},
     { CRITERR_CFG|0, ":  Mouse driver not installed."},
@@ -110,99 +109,29 @@ static _code_string code_messages[] =
 };
 
 #define NUM_CODE_MESSAGES  (sizeof(code_messages) / sizeof(_code_string))
-/*
-int8_t *help_messages[] = {
-"",
-"Common problem solutions:",
-"* Increase FILES in config.sys to 30 or more.",
-"* Disable SMARTDRV write caching",
-"* Use a minimal config.sys and autoexec.bat",
-"",
-"If none of these work, call Origin Tech Support",
-"(512) 335-0440"
-};
 
-#define NUM_HELP_MESSAGES    8
-
-// --------------------------------
-// THE GLOBAL ERROR STATUS VARIABLE
-// --------------------------------
-
-static int32_t error_status = NO_CRITICAL_ERROR;
-
-// ---------
-// INTERNALS
-// ---------
-
-void handle_critical_error(void)
-{
-    int32_t i;
-    int8_t* s;
-    int8_t buf[256];
-    if (error_status == NO_CRITICAL_ERROR) return;
-    strcpy(buf,GAME_NAME);
-    strcat(buf," can no longer run due to a fatal error.");
-    puts(buf);
-    strcpy(buf,"Error code "); itoa(error_status,buf+strlen(buf),16);
-    puts(buf);
-    s = criterr_type_messages[CLASS(error_status)];
-    if (s != NULL) { puts(s);};
-    for (i = 0; i < NUM_CODE_MESSAGES; i++)
-    {
-        if (code_messages[i].code == error_status)
-        {
-            puts(code_messages[i].message);
-        }
-    }
-    for (i=0; i < NUM_HELP_MESSAGES; i++)
-        puts(help_messages[i]);
-}
-*/
 // ---------
 // EXTERNALS
 // ---------
 
-/* KLC - Not needed for Mac
-void criterr_init(void)
-{
-    error_status = NO_CRITICAL_ERROR;
-    atexit(handle_critical_error);
-}
-*/
+#define LOGF(...) ((void)__android_log_print(ANDROID_LOG_FATAL, "ShockVR", __VA_ARGS__))
 
 void critical_error(int16_t code)
 {
-    int8_t        buf[256];
-    int8_t        explain[256];
-    int8_t        *s;
-    int32_t        i, len;
+    char explain[256];
+    const char *s;
+    int32_t i;
 
     if (code == NO_CRITICAL_ERROR)
         return;
 
-    if (gExtraMemory)
-        DisposHandle(gExtraMemory);            // free our extra space
-
-    sprintf(buf, "A fatal error has occurred in System Shock.  Error code %d.", code);
-    len = strlen(buf);                                                                    // Convert to p-string.
-    BlockMove(buf, buf+1, 255);
-    buf[0] = len;
-
-    s = criterr_type_messages[CLASS(code)];                                    // Specific error message.
+    s = criterr_type_messages[CLASS(code)]; // Specific error message.
     if (s != NULL)
         strcpy(explain, s);
     for (i = 0; i < NUM_CODE_MESSAGES; i++)
         if (code_messages[i].code == code)
             strcat(explain, code_messages[i].message);
-    len = strlen(explain);                                                                // Convert to p-string.
-    BlockMove(explain, explain+1, 255);
-    explain[0] = len;
 
-    ParamText((uint8_t *)buf, (uint8_t *)explain, "\p", "\p");            // Show the error.
-    if (len > 0)
-        StopAlert(1001, nil);
-    else
-        StopAlert(1000, nil);
-
-    CleanupAndExit();                                                                    // Get out of here.
+    LOGF("Fatal error code %d - %s", code, explain);
+    exit(1); // Get out of here.
 }
