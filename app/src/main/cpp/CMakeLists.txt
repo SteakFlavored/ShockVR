@@ -47,14 +47,15 @@ include_directories(
 include_directories(Quest)
 
 # Build game code
-include_directories(${PROJECT_SOURCE_DIR}/Game/Headers)
+set(GAME_DIR ${PROJECT_SOURCE_DIR}/Game)
+include_directories(${GAME_DIR}/Headers)
 set(GAME_SRC
-    Game/criterr.c
-    Game/gamestrn.c
+    ${GAME_DIR}/criterr.c
+    ${GAME_DIR}/gamestrn.c
 )
-add_library(GAME_LIB ${GAME_SRC})
 
 add_library(shockvr SHARED
+    ${GAME_SRC}
     Quest/filesystem.cpp
     Quest/framebuffer.cpp
     Quest/openxr.cpp
@@ -74,7 +75,6 @@ target_link_libraries(shockvr
     PALETTE_LIB
     RES_LIB
     RND_LIB
-    GAME_LIB
 )
 
 # Link in the native app glue
