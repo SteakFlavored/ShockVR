@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "criterr.h"
 #include "cybstrng.h"
 #include "filesystem.h"
 #include "gamestrn.h"
@@ -53,11 +54,8 @@ void init_strings(void)
 
     const char *language_filename = language_files[which_lang];
     string_res_file = LoadResourceFileRO(language_filename);
-    if (string_res_file < 0) {
-        // LOGE("Could not open string resource '%s': %d", language_filename, string_res_file);
-        // critical_error(CRITERR_RES|0);
-        exit(1);
-    }
+    if (string_res_file < 0)
+        critical_error(CRITERR_RES|0);
 
     lg_sprintf_install_stringfunc((char*(*)(uint32_t))RefGet);
 }
