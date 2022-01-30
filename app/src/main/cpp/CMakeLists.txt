@@ -43,6 +43,9 @@ include_directories(
     ${LIBRARIES_DIR}/RND
 )
 
+# We need some of the headers from the Quest directory for the game build
+include_directories(Quest)
+
 # Build game code
 include_directories(${PROJECT_SOURCE_DIR}/Game/Headers)
 set(GAME_SRC
