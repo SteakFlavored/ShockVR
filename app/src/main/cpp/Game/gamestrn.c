@@ -26,21 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
-#include "Shock.h"
-#include "gamestrn.h"
-#include "criterr.h"
-#include "objsim.h"
-#include "objprop.h"
 #include "cybstrng.h"
-
-// -------------------
-// FILE NAMES AND VARS
-// -------------------
-
-#define FILENAME_LEN                         14
-#define CONFIG_STRING_RES_FILE        "cfgstrn.res"
-#define DEFAULT_STRING_RES_FILE    "cybstrng.rsrc"
-#define STRING_RES_VAR                    "strings"
+#include "filesystem.h"
+#include "gamestrn.h"
+#include "lgsprntf.h"
+#include "res.h"
 
 // -------
 // GLOBALS
@@ -52,24 +42,24 @@ int32_t string_res_file;                             // string res filenum
 // EXTERNALS
 // ---------
 
-//uint8_t *language_files[] = { "\pcybstrng.rsrc", "\pfrnstrng.rsrc", "\pgerstrng.rsrc" } ;
+const char *language_files[] = { "cybstrng.res", "frnstrng.res", "gerstrng.res" } ;
 int8_t which_lang;
 
 void init_strings(void)
 {
-    FSSpec    fSpec;
+    /*FSSpec    fSpec;
 
     // Open the string resource file, Mac style.
     FSMakeFSSpec(gDataVref, gDataDirID, "\pcybstrng.rsrc", &fSpec);
     string_res_file = ResOpenFile(&fSpec);
 
     if (string_res_file < 0)
-        critical_error(CRITERR_RES|0);
+        critical_error(CRITERR_RES|0);*/
 
-    lg_sprintf_install_stringfunc((int8_t*(*)(uint32_t))RefGet);
+    lg_sprintf_install_stringfunc((char*(*)(uint32_t))RefGet);
 }
 
-int8_t* get_string(int32_t num, int8_t* buf, int32_t bufsize)
+char* get_string(int32_t num, char* buf, int32_t bufsize)
 {
     if (!ResInUse(REFID(num)) ||
          !RefIndexValid((RefTable*)ResGet(REFID(num)),REFINDEX(num)))
@@ -83,7 +73,7 @@ int8_t* get_string(int32_t num, int8_t* buf, int32_t bufsize)
     }
     if (buf != NULL)
     {
-        int8_t* s = (int8_t *)RefLock(num);
+        char* s = (char *)RefLock(num);
         if (s != NULL)
         {
             strncpy(buf,s,bufsize);
@@ -95,19 +85,19 @@ int8_t* get_string(int32_t num, int8_t* buf, int32_t bufsize)
     else return get_temp_string(num);
 }
 
-int8_t* get_temp_string(int32_t num)
+char* get_temp_string(int32_t num)
 {
-    return (int8_t*)RefGet(num);
+    return (char*)RefGet(num);
 }
 
-int8_t* get_object_short_name(int32_t trip, int8_t* buf, int32_t bufsize)
+char* get_object_short_name(int32_t trip, char* buf, int32_t bufsize)
 {
-    return get_string(MKREF(RES_objshortnames,OPTRIP(trip)),buf,bufsize);
+    return NULL; //get_string(MKREF(RES_objshortnames,OPTRIP(trip)),buf,bufsize);
 }
 
-int8_t* get_object_long_name(int32_t trip, int8_t* buf, int32_t bufsize)
+char* get_object_long_name(int32_t trip, char* buf, int32_t bufsize)
 {
-    return get_string(MKREF(RES_objlongnames,OPTRIP(trip)),buf,bufsize);
+    return NULL; // get_string(MKREF(RES_objlongnames,OPTRIP(trip)),buf,bufsize);
 }
 
 void shutdown_strings(void)
@@ -115,13 +105,13 @@ void shutdown_strings(void)
     ResCloseFile(string_res_file);
 }
 
-int8_t* get_texture_name(int32_t abs_texture,int8_t* buf, int32_t bufsiz)
+char* get_texture_name(int32_t abs_texture, char* buf, int32_t bufsiz)
 {
     return get_string(MKREF(RES_texnames,abs_texture),buf,bufsiz);
 }
 
 
-int8_t* get_texture_use_string(int32_t abs_texture, int8_t* buf, int32_t bufsiz)
+char* get_texture_use_string(int32_t abs_texture, char* buf, int32_t bufsiz)
 {
     return get_string(MKREF(RES_texuse,abs_texture), buf, bufsiz);
 }
