@@ -75,7 +75,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grs.h"
 #include "bitmap.h"
 #include "grbm.h"
-#include "grmalloc.h"
 
 extern int32_t        gScreenRowbytes;
 
@@ -159,7 +158,6 @@ grs_bitmap *gr_alloc_bitmap (uint8_t type, uint16_t flags, int16_t w, int16_t h)
     uint8_t *p;                 /* pointer to allocated buffer */
 
     gr_init_bitmap(&tmp_bm, NULL, type, flags, w, h);
-//    p=(uint8_t *)gr_malloc(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
     p=(uint8_t *) malloc(sizeof(tmp_bm)+(tmp_bm.row*tmp_bm.h));
     if (p)
      {

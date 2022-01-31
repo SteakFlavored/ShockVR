@@ -36,7 +36,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctxmac.h"
 #include "fcntab.h"
 #include "fill.h"
-#include "grmalloc.h"
 #include "lintab.h"
 #include "tabdat.h"
 #include "valloc.h"
@@ -148,8 +147,8 @@ void gr_free_canvas (grs_canvas *c)
     if (c->bm.type == BMT_DEVICE)
         vfree (c->bm.bits);
     else
-        free(c->bm.bits);    // was gr_free
-    free(c);    // was gr_free
+        free(c->bm.bits);
+    free(c);
 }
 
 grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, int16_t x, int16_t y,
@@ -165,5 +164,5 @@ grs_canvas *gr_alloc_sub_canvas (grs_canvas *c, int16_t x, int16_t y,
 
 void gr_free_sub_canvas (grs_canvas *c)
 {
-    free(c);    // was gr_free
+    free(c);
 }

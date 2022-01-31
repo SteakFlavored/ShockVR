@@ -58,7 +58,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "chain.h"
 #include "chnfuncs.h"
-#include "grmalloc.h"
 #include "tabdat.h"
 #include "bitmap.h"
 #include "cnvtab.h"
@@ -70,11 +69,11 @@ grs_func_chain *grd_chain_table[GRD_CANVAS_FUNCS];
 
 grs_func_chain *gr_chain_add_over(int32_t n, void (*f)())
 {
-    grs_func_chain *p = (grs_func_chain *)(malloc(sizeof(grs_func_chain)));    // was gr_malloc
+    grs_func_chain *p = (grs_func_chain *)(malloc(sizeof(grs_func_chain)));
     if (grd_chain_table[n] == NULL) {
         /* First time: stash and replace primitives */
         int32_t k;
-        chn_primitives[n] = (void (**)())(malloc(BMT_TYPES*sizeof(void (*)())));    // was gr_malloc
+        chn_primitives[n] = (void (**)())(malloc(BMT_TYPES*sizeof(void (*)())));
         for (k=0; k<BMT_TYPES; k++)
              if (grd_canvas_table_list[k] != NULL)
                 chn_primitives[n][k] = grd_canvas_table_list[k][n];
@@ -103,14 +102,14 @@ grs_func_chain *gr_chain_add_before(int32_t n, void (*f)(void))
 
 grs_func_chain *gr_chain_add_after(int32_t n, void (*f)(void))
 {
-    grs_func_chain *p = (grs_func_chain *)(malloc(sizeof(grs_func_chain)));    // was gr_malloc
+    grs_func_chain *p = (grs_func_chain *)(malloc(sizeof(grs_func_chain)));
     p->f = f;
     p->next = NULL;
     p->flags = CHNF_VOID | CHNF_AFTER;
     if (grd_chain_table[n] == NULL) {
         /* First time: stash and replace primitives */
         int32_t k;
-        chn_primitives[n] = (void (**)())(malloc(BMT_TYPES*sizeof(void (*)())));    // was gr_malloc
+        chn_primitives[n] = (void (**)())(malloc(BMT_TYPES*sizeof(void (*)())));
         for (k=0; k<BMT_TYPES; k++)
              if (grd_canvas_table_list[k] != NULL)
                 chn_primitives[n][k] = grd_canvas_table_list[k][n];

@@ -164,7 +164,6 @@ set(2D_LIBRARY_SRC
     2D/Gen/genwlin.c
     2D/GR/grd.c
     2D/GR/grilin.c
-    2D/GR/grmalloc.c
     2D/GR/grnull.c
     2D/GR/gruilin.c
     2D/RSD/rsdcvt.c

@@ -756,10 +756,6 @@ extern void gr_hflip_in_place(grs_bitmap *bm);
 #define gr_mask_rsd8_bitmap \
     ((int32_t (*)(grs_bitmap *bm,int16_t x,int16_t y)) \
     grd_canvas_table[MASK_RSD8_BITMAP])
-extern void gr_set_malloc (void *(*malloc_func)(int32_t bytes));
-extern void gr_set_free (void (*free_func)(void *mem));
-extern void *(*gr_malloc)(int32_t n);
-extern void (*gr_free)(void *p);
 extern int32_t gr_int_line (int16_t x0, int16_t y0, int16_t x1, int16_t y1);
 #define gr_int_uline (x0,y0,x1,y1) \
 do {\
@@ -1713,8 +1709,8 @@ extern uint8_t *gr_init_lit_translucency_tables(uint8_t *p, fix opacity, fix pur
 extern int32_t gr_dump_tluc8_table(uint8_t *buf, int32_t nlit);
 extern void gr_read_tluc8_table(uint8_t *buf);
 #define gr_alloc_translucency_table(n) \
-    ((uint8_t *)gr_malloc(n*256))
-#define gr_free_translucency_table(tab) (gr_free(tab))
+    ((uint8_t *)malloc(n*256))
+#define gr_free_translucency_table(tab) (free(tab))
 #define gr_make_translucency_table(op, pu, co) \
   (gr_init_translucency_table(gr_alloc_translucency_table(1), op, pu, co))
 #define gr_make_lit_translucency_table(op, pu, co, li) \

@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "grs.h"
-#include "grmalloc.h"
 #include "rgb.h"
 #include "scrdat.h"
 
@@ -76,7 +75,7 @@ int32_t gr_alloc_ipal(void)
         if ((err = gr_free_ipal())<0) return err;
     }
 
-    if ((grd_ipal = (uint8_t *) malloc(32768))==NULL) return RGB_OUT_OF_MEMORY;        // was gr_malloc
+    if ((grd_ipal = (uint8_t *) malloc(32768))==NULL) return RGB_OUT_OF_MEMORY;
 
     if ((err = gr_init_ipal())<0) return err;
     return RGB_OK;
@@ -85,7 +84,7 @@ int32_t gr_alloc_ipal(void)
 int32_t gr_free_ipal(void)
 {
     if (grd_ipal==NULL) return RGB_CANT_DEALLOCATE;
-    free( grd_ipal);    // was gr_free
+    free(grd_ipal);
     grd_ipal=NULL;
     return RGB_OK;
 }
@@ -102,7 +101,7 @@ int32_t gr_init_ipal(void)
 
     if (grd_ipal == NULL) return RGB_IPAL_NOT_ALLOCATED;
 
-  if ((data = (uint8_t *) malloc(3*256)) == NULL) return RGB_OUT_OF_MEMORY;    // was gr_malloc
+  if ((data = (uint8_t *) malloc(3*256)) == NULL) return RGB_OUT_OF_MEMORY;
     /* needs to be split up into r,g,b planes */
     colormap[0] = data;
     colormap[1] = data + 256;
@@ -115,12 +114,12 @@ int32_t gr_init_ipal(void)
         colormap[0][i] = b;
     }
 
-    if ((dist_buf = (uint32_t *) malloc(sizeof(uint32_t) * 32768))==NULL) return RGB_OUT_OF_MEMORY;    // was gr_malloc
+    if ((dist_buf = (uint32_t *) malloc(sizeof(uint32_t) * 32768))==NULL) return RGB_OUT_OF_MEMORY;
 
     inv_cmap_2(256,colormap,5,dist_buf,grd_ipal);
 
-     free( dist_buf);    // was gr_free
-     free( data);    // was gr_free
+     free(dist_buf);
+     free(data);
 
     return RGB_OK;
 }

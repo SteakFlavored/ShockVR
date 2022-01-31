@@ -45,7 +45,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "grs.h"
 #include "grd.h"
-#include "grmalloc.h"
 #include "bitmap.h"
 #include "canvas.h"
 #include "rgb.h"
@@ -66,7 +65,7 @@ grs_screen *gr_alloc_screen (int16_t w, int16_t h)
 
   /* get memory for screen structure itself and 2 system canvases,
           and video ram for the screen itself. */
-  if ((p=(uint8_t *)malloc (sizeof (*s)+2*sizeof (*c))) == NULL)    // was gr_malloc
+  if ((p=(uint8_t *)malloc (sizeof (*s)+2*sizeof (*c))) == NULL)
       goto bailout2;
   if ((b = valloc (w, h)) == (uint8_t *)-1)
       goto bailout1;
@@ -87,7 +86,7 @@ grs_screen *gr_alloc_screen (int16_t w, int16_t h)
   return s;
 
 bailout1:
-  free(s);    // was gr_free
+  free(s);
 bailout2:
   return NULL;
 }
@@ -97,9 +96,9 @@ void gr_free_screen (grs_screen *s)
 {
     vfree (s->bm.bits);
     if (s->c->ytab)
-      free(s->c->ytab);    // was gr_free
+      free(s->c->ytab);
   if ((s->c+1)->ytab)
-      free((s->c+1)->ytab);    // was gr_free
-  free(s->c);    // was gr_free
-  free(s);    // was gr_free
+      free((s->c+1)->ytab);
+  free(s->c);
+  free(s);
 }
