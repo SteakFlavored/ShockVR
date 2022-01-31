@@ -50,18 +50,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "cybrnd.h"
 
+#include <time.h>
+
 RNDSTREAM_STD(start_rnd);
 
 void rnd_init(void)
 {
-    int32_t  random_seed;
-    int32_t  seed;
+    struct timespec ts;
+    int32_t random_seed;
+    int32_t seed;
 
     // try to get a completely random value - take the bottom two bytes to be
     // the random seed
-//    _bios_timeofday(0, &random_seed);
-    random_seed = TickCount();
-    RndSeed(&start_rnd, (random_seed & 0x0000FFFF));
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    random_seed = (int32_t)(ts.tv_nsec & 0x0000FFFFL);
+    RndSeed(&start_rnd, random_seed);
 
     // use config seed - otherwise use a random seed
     //KLC - For Mac, just hard-code values from the config file.
