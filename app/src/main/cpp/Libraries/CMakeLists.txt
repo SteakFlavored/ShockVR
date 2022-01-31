@@ -243,3 +243,4 @@ add_library(RES_LIB ${RES_LIBRARY_SRC})
 
 set(RND_LIBRARY_SRC RND/rnd.c)
 add_library(RND_LIB ${RND_LIBRARY_SRC})
+target_link_libraries(RND_LIB FIX_LIB)
