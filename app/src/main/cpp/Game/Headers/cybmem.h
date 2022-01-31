@@ -27,15 +27,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "error.h"
+#include "lzw.h"
+
 // Defines
 
 // Typedefs
 
 // Prototypes
+int32_t flush_resource_cache(void);
 errtype load_dynamic_memory(int32_t mask);
 errtype free_dynamic_memory(int32_t mask);
-int32_t avail_memory(int32_t debug_src);
-void Memory_Check();
 int32_t slorkatron_memory_check();
 
 // If LZW stuff ever gets lots more efficient, may need to raise this up some.

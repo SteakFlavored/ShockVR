@@ -27,9 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Memory management and manipulation functions
 // for Cyberia
 #define __CYBMEM_SRC
-#include "ShockDialogs.h"
 
 #include "cybmem.h"
+/*#include "criterr.h"
 #include "tools.h"
 #include "objsim.h"
 #include "objclass.h"
@@ -37,25 +37,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "textmaps.h"
 #include "objcrit.h"
 #include "dynmem.h"
-#include "Shock.h"
-#include "sideicon.h"
-#include "criterr.h"
+#include "sideicon.h"*/
+#include "res.h"
 
-/*
-#include <memstat.h>
-#include <ckpoint.h>
-#include <keydefs.h>
-#include <musicai.h>         // for stop_digi_fx()
-*/
-int32_t loadcount = 0;
+//int32_t loadcount = 0;
 
-extern Id critter_id_table[NUM_CRITTER][NUM_CRITTER_POSTURES];
-extern Id posture_bases[];
+//extern void free_textures(void);
 
-extern void free_textures(void);
-int32_t flush_resource_cache(void);
-
-int32_t hand_fnum, digi_fnum, critter_fnum, critter_fnum2,texture_fnum;
+//int32_t hand_fnum, digi_fnum, critter_fnum, critter_fnum2, texture_fnum;
 
 int32_t flush_resource_cache(void)
 {
@@ -70,11 +59,12 @@ int32_t flush_resource_cache(void)
         }
         curr_id++;
     }
-    return(count);
+    return count;
 }
 
 errtype free_dynamic_memory(int32_t mask)
 {
+/*
     // Release textures
     if (loadcount & DYNMEM_TEXTURES & mask)
     {
@@ -104,11 +94,13 @@ errtype free_dynamic_memory(int32_t mask)
     }
 
     loadcount &= ~mask;
-    return(OK);
+*/
+    return OK;
 }
 
 errtype load_dynamic_memory(int32_t mask)
 {
+/*
     FSSpec    fSpec;
     extern int16_t _new_mode;
 
@@ -159,18 +151,19 @@ errtype load_dynamic_memory(int32_t mask)
 
         loadcount |= mask;
     }
-    return(OK);
+*/
+    return OK;
 }
 
-#define LARGEST_GUESS                 8000000
-#define DECREMENT_INTERVAL     10000
-#define MAX_PTRS                          25
-#define MINIMUM_SLORK_SIZE     100000
+#define LARGEST_GUESS 8000000
+#define DECREMENT_INTERVAL 10000
+#define MAX_PTRS 25
+#define MINIMUM_SLORK_SIZE 100000
 
 int32_t slorkatron_memory_check()
 {
-    int32_t retval,size;
-    int32_t ptr_count,i;
+    int32_t retval, size;
+    int32_t ptr_count, i;
     uint8_t *mem_ptrs[MAX_PTRS];
 
     for (ptr_count = 0; ptr_count < MAX_PTRS; ptr_count++)
@@ -183,7 +176,7 @@ int32_t slorkatron_memory_check()
 
     while ((size > MINIMUM_SLORK_SIZE) && (ptr_count < MAX_PTRS))
     {
-        mem_ptrs[ptr_count] = (uint8_t *)malloc(size);        //  mem_ptrs[ptr_count] = Malloc(size);
+        mem_ptrs[ptr_count] = (uint8_t *)malloc(size);
         if (mem_ptrs[ptr_count] == NULL)
             size -= DECREMENT_INTERVAL;
         else
@@ -192,9 +185,9 @@ int32_t slorkatron_memory_check()
             ptr_count++;
         }
     }
-    for (i=ptr_count - 1; i >= 0; i--)
+    for (i = ptr_count - 1; i >= 0; i--)
         if (mem_ptrs[i] != NULL)
-            free(mem_ptrs[i]);        //  Free(mem_ptrs[i]);
+            free(mem_ptrs[i]);
 
-    return(retval);
+    return retval;
 }

@@ -51,6 +51,7 @@ set(GAME_DIR ${PROJECT_SOURCE_DIR}/Game)
 include_directories(${GAME_DIR}/Headers)
 set(GAME_SRC
     ${GAME_DIR}/criterr.c
+    ${GAME_DIR}/cybmem.c
     ${GAME_DIR}/gamestrn.c
 )
 
