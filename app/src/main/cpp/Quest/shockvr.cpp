@@ -27,6 +27,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // The System Shock source code is (almost) all C, so it must be wrapped in
 // extern "C" or else the compiler will complain about undefined references.
 extern "C" {
+#include "2d.h"
+#include "criterr.h"
+#include "cybmem.h"
+#include "cybrnd.h"
+#include "gamestrn.h"
+#include "memall.h"
+#include "tmpalloc.h"
 #include "res.h"
 }
 
@@ -71,6 +78,9 @@ static void app_handle_cmd(struct android_app* app, int32_t cmd) {
     }
 }
 
+MemStack temp_memstack;
+#define TEMP_STACK_SIZE (16 * 1024)
+
 int ShockVrMain(struct android_app* app) {
     app->userData = &shockState;
     app->onAppCmd = app_handle_cmd;
@@ -85,8 +95,30 @@ int ShockVrMain(struct android_app* app) {
     shockState.ResourceFolder = app->activity->externalDataPath;
     shockState.ResourceFolder += "/res/";
 
+    start_mem = slorkatron_memory_check();
+    if (start_mem < MINIMUM_GAME_THRESHOLD)
+        critical_error(CRITERR_MEM|1);
+
     // Initialize the resource manager
     ResInit();
+
+    // Use our own buffer for LZW
+    LzwSetBuffer((void *)big_buffer, BIG_BUFFER_SIZE);
+
+    // use it for rsd unpacking too....this might be fill'd with danger
+    gr_set_unpack_buf(big_buffer);
+
+    // set up temporary memory stuff
+    temp_memstack.baseptr = big_buffer + sizeof(big_buffer) - TEMP_STACK_SIZE;
+    temp_memstack.sz = TEMP_STACK_SIZE;
+    MemStackInit(&temp_memstack);
+    TempMemInit(&temp_memstack);
+
+    // initialize random seeds
+    rnd_init();
+
+    // initialize strings
+    init_strings();
 
     while (app->destroyRequested == 0) {
         // Read all pending events.
@@ -139,6 +171,8 @@ int ShockVrMain(struct android_app* app) {
         endFrameInfo.layers = nullptr;
         xrEndFrame(shockState.Session, &endFrameInfo);
     }
+
+    shutdown_strings();
 
     ShutdownOpenXR();
 
