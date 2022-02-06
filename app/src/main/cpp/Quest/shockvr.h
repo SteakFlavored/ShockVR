@@ -23,12 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-#include <GLES3/gl3.h>
-#include <GLES3/gl3ext.h>
+#include <vulkan/vulkan.h>
 
-#define XR_USE_GRAPHICS_API_OPENGL_ES 1
+#define XR_USE_GRAPHICS_API_VULKAN 1
 #define XR_USE_PLATFORM_ANDROID 1
 #include <openxr/openxr.h>
 #include <openxr/openxr_platform.h>
@@ -53,9 +50,16 @@ struct ShockState {
     bool SessionActive;
     bool Focused;
 
-    EGLDisplay EglDisplay;
-    EGLConfig EglConfig;
-    EGLContext EglContext;
+    VkInstance VkInstance;
+    VkPhysicalDevice PhysicalDevice;
+    VkDevice Device;
+    VkQueue Queue;
+    VkCommandPool CommandPool;
+    VkPipelineCache PipelineCache;
+
+    VkPhysicalDeviceFeatures PhysicalDeviceFeatures;
+    VkPhysicalDeviceProperties PhysicalDeviceProperties;
+    VkPhysicalDeviceMemoryProperties PhysicalDeviceMemoryProperties;
 
     std::string ResourceFolder;
     bool Resumed = false;

@@ -66,8 +66,7 @@ add_library(shockvr SHARED
 )
 
 target_link_libraries(shockvr
-    EGL
-    GLESv3
+    vulkan
     2D_LIB
     3D_LIB
     DSTRUCT_LIB

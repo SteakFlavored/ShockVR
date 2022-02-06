@@ -20,6 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "shockvr.h"
 
+#include <cstring>
+#include <vector>
+
 int InitOpenXR(android_app *app) {
     XrResult xrResult;
 
@@ -42,7 +45,7 @@ int InitOpenXR(android_app *app) {
     xrInitializeLoaderKHR((XrLoaderInitInfoBaseHeaderKHR*)&loaderInitializeInfoAndroid);
 
     const char* const requiredExtensionNames[] = {
-            XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME,
+            XR_KHR_VULKAN_ENABLE_EXTENSION_NAME,
             XR_KHR_COMPOSITION_LAYER_CYLINDER_EXTENSION_NAME,
             XR_KHR_ANDROID_SURFACE_SWAPCHAIN_EXTENSION_NAME};
     const uint32_t numRequiredExtensions = sizeof(requiredExtensionNames) / sizeof(requiredExtensionNames[0]);
@@ -128,105 +131,185 @@ int InitOpenXR(android_app *app) {
     }
 
     // Get the graphics requirements.
-    PFN_xrGetOpenGLESGraphicsRequirementsKHR pfnGetOpenGLESGraphicsRequirementsKHR = NULL;
-    xrGetInstanceProcAddr(shockState.Instance, "xrGetOpenGLESGraphicsRequirementsKHR",
-        (PFN_xrVoidFunction*)(&pfnGetOpenGLESGraphicsRequirementsKHR));
-
-    XrGraphicsRequirementsOpenGLESKHR graphicsRequirements = {};
-    graphicsRequirements.type = XR_TYPE_GRAPHICS_REQUIREMENTS_OPENGL_ES_KHR;
-    pfnGetOpenGLESGraphicsRequirementsKHR(shockState.Instance, shockState.SystemId, &graphicsRequirements);
-
-    // Configure EGL
-    shockState.EglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-
-    EGLint majorVersion;
-    EGLint minorVersion;
-    eglInitialize(shockState.EglDisplay, &majorVersion, &minorVersion);
-
-    const int MAX_CONFIGS = 1024;
-    EGLConfig configs[MAX_CONFIGS];
-    EGLint numConfigs = 0;
-    if (eglGetConfigs(shockState.EglDisplay, configs, MAX_CONFIGS, &numConfigs) == EGL_FALSE) {
-        LOGE("eglGetConfigs() failed: %d", eglGetError());
+    PFN_xrGetVulkanGraphicsRequirementsKHR pfnGetVulkanGraphicsRequirementsKHR = nullptr;
+    xrResult = xrGetInstanceProcAddr(shockState.Instance, "xrGetVulkanGraphicsRequirementsKHR",
+            (PFN_xrVoidFunction*)(&pfnGetVulkanGraphicsRequirementsKHR));
+    if (xrResult != XR_SUCCESS) {
+        LOGE("Failed to get xrGetVulkanGraphicsRequirementsKHR function pointer.");
         return 1;
     }
 
-    const EGLint configAttribs[] = {
-        EGL_RED_SIZE,
-        8,
-        EGL_GREEN_SIZE,
-        8,
-        EGL_BLUE_SIZE,
-        8,
-        EGL_ALPHA_SIZE,
-        8,
-        EGL_DEPTH_SIZE,
-        0,
-        EGL_STENCIL_SIZE,
-        0,
-        EGL_SAMPLES,
-        0,
-        EGL_NONE};
+    XrGraphicsRequirementsVulkanKHR graphicsRequirements = {};
+    graphicsRequirements.type = XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN_KHR;
+    pfnGetVulkanGraphicsRequirementsKHR(shockState.Instance, shockState.SystemId, &graphicsRequirements);
 
-    shockState.EglConfig = 0;
-    for (int i = 0; i < numConfigs; i++) {
-        EGLint value = 0;
+    // Get the list of required Vulkan extensions
+    PFN_xrGetVulkanInstanceExtensionsKHR pfnGetVulkanInstanceExtensionsKHR = nullptr;
+    xrGetInstanceProcAddr(shockState.Instance, "xrGetVulkanInstanceExtensionsKHR",
+            (PFN_xrVoidFunction*)&pfnGetVulkanInstanceExtensionsKHR);
 
-        eglGetConfigAttrib(shockState.EglDisplay, configs[i], EGL_RENDERABLE_TYPE, &value);
-        if ((value & EGL_OPENGL_ES3_BIT_KHR) != EGL_OPENGL_ES3_BIT_KHR) {
-            continue;
-        }
+    uint32_t namesCapacity = 0;
+    xrResult = pfnGetVulkanInstanceExtensionsKHR(shockState.Instance, shockState.SystemId, 0, &namesCapacity, nullptr);
+    if (xrResult != XR_SUCCESS) {
+        LOGE("Failed to get required Vulkan extensions: %d.", xrResult);
+        return 1;
+    }
 
-        // The pbuffer config also needs to be compatible with normal window rendering
-        // so it can share textures with the window context.
-        eglGetConfigAttrib(shockState.EglDisplay, configs[i], EGL_SURFACE_TYPE, &value);
-        if ((value & (EGL_WINDOW_BIT | EGL_PBUFFER_BIT)) != (EGL_WINDOW_BIT | EGL_PBUFFER_BIT)) {
-            continue;
-        }
+    char* instanceExtensionNames = new char[namesCapacity];
+    xrResult = pfnGetVulkanInstanceExtensionsKHR(shockState.Instance, shockState.SystemId, namesCapacity,
+            &namesCapacity, instanceExtensionNames);
+    if (xrResult != XR_SUCCESS) {
+        LOGE("Failed to get required Vulkan extensions: %d.", xrResult);
+        return 1;
+    }
 
-        int j = 0;
-        for (; configAttribs[j] != EGL_NONE; j += 2) {
-            eglGetConfigAttrib(shockState.EglDisplay, configs[i], configAttribs[j], &value);
-            if (value != configAttribs[j + 1]) {
-                break;
-            }
-        }
-        if (configAttribs[j] == EGL_NONE) {
-            shockState.EglConfig = configs[i];
+    std::vector<const char *> requiredInstanceExtensions;
+    char *token = std::strtok(instanceExtensionNames, " ");
+    while (token != nullptr) {
+        requiredInstanceExtensions.push_back(token);
+        token = std::strtok(nullptr, " ");
+    }
+
+    // Create a Vulkan instance.
+    VkApplicationInfo vkAppInfo{};
+    vkAppInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    vkAppInfo.pApplicationName = "ShockVR";
+    vkAppInfo.applicationVersion = 1;
+    vkAppInfo.pEngineName = "System Shock VR";
+    vkAppInfo.engineVersion = 1;
+    vkAppInfo.apiVersion = VK_API_VERSION_1_0;
+
+    VkInstanceCreateInfo vkInstanceCreateInfo{};
+    vkInstanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    vkInstanceCreateInfo.pApplicationInfo = &vkAppInfo;
+    vkInstanceCreateInfo.enabledExtensionCount = requiredInstanceExtensions.size();
+    vkInstanceCreateInfo.ppEnabledExtensionNames = requiredInstanceExtensions.data();
+
+    VkResult vkResult = vkCreateInstance(&vkInstanceCreateInfo, nullptr, &shockState.VkInstance);
+    delete[] instanceExtensionNames;
+
+    if (vkResult != VK_SUCCESS) {
+        LOGE("Failed to create Vulkan instance: %d", vkResult);
+        return 1;
+    }
+
+    // Get the physical device for the Vulkan instance.
+    PFN_xrGetVulkanGraphicsDeviceKHR pfnGetVulkanGraphicsDeviceKHR = nullptr;
+    xrResult = xrGetInstanceProcAddr(shockState.Instance, "xrGetVulkanGraphicsDeviceKHR",
+            (PFN_xrVoidFunction*)&pfnGetVulkanGraphicsDeviceKHR);
+    if (xrResult != XR_SUCCESS) {
+        LOGE("Failed to get xrGetVulkanGraphicsDeviceKHR function pointer: %d", xrResult);
+        return 1;
+    }
+
+    pfnGetVulkanGraphicsDeviceKHR(shockState.Instance, shockState.SystemId, shockState.VkInstance,
+            &shockState.PhysicalDevice);
+    if (shockState.PhysicalDevice == VK_NULL_HANDLE) {
+        LOGE("Failed to get Vulkan physical device.");
+        return 1;
+    }
+
+    vkGetPhysicalDeviceFeatures(shockState.PhysicalDevice, &shockState.PhysicalDeviceFeatures);
+    vkGetPhysicalDeviceProperties(shockState.PhysicalDevice, &shockState.PhysicalDeviceProperties);
+    vkGetPhysicalDeviceMemoryProperties(shockState.PhysicalDevice, &shockState.PhysicalDeviceMemoryProperties);
+
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(shockState.PhysicalDevice, &queueFamilyCount, nullptr);
+
+    std::vector<VkQueueFamilyProperties> queueFamilyProperties(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(shockState.PhysicalDevice, &queueFamilyCount, queueFamilyProperties.data());
+
+    uint32_t queueFamilyIndex;
+    for (queueFamilyIndex = 0; queueFamilyIndex < queueFamilyCount; queueFamilyIndex++) {
+        if (queueFamilyProperties[queueFamilyIndex].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
             break;
         }
     }
-    if (shockState.EglConfig == 0) {
-        LOGE("eglChooseConfig() failed: %d", eglGetError());
+
+    PFN_xrGetVulkanDeviceExtensionsKHR pfnGetVulkanDeviceExtensionsKHR = nullptr;
+    xrResult = xrGetInstanceProcAddr(shockState.Instance, "xrGetVulkanDeviceExtensionsKHR",
+            (PFN_xrVoidFunction*)&pfnGetVulkanDeviceExtensionsKHR);
+    if (xrResult != XR_SUCCESS) {
+        LOGE("Failed to get xrGetVulkanDeviceExtensionsKHR function pointer: %d", xrResult);
         return 1;
     }
 
-    EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE};
-    shockState.EglContext = eglCreateContext(shockState.EglDisplay, shockState.EglConfig, EGL_NO_CONTEXT, contextAttribs);
-    if (shockState.EglContext == EGL_NO_CONTEXT) {
-        LOGE("eglCreateContext() failed: %d", eglGetError());
+    namesCapacity = 0;
+    pfnGetVulkanDeviceExtensionsKHR(shockState.Instance, shockState.SystemId, 0, &namesCapacity, nullptr);
+
+    char* deviceExtensionNames = new char[namesCapacity];
+    xrResult = pfnGetVulkanDeviceExtensionsKHR(shockState.Instance, shockState.SystemId, namesCapacity,
+            &namesCapacity, deviceExtensionNames);
+    if (xrResult != XR_SUCCESS) {
+        LOGE("Failed to get required Vulkan device extensions: %d.", xrResult);
         return 1;
     }
 
-    if (eglMakeCurrent(shockState.EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, shockState.EglContext) == EGL_FALSE) {
-        LOGE("eglMakeCurrent() failed: %d", eglGetError());
-        eglDestroyContext(shockState.EglDisplay, shockState.EglContext);
-        shockState.EglContext = EGL_NO_CONTEXT;
+    std::vector<const char *> requiredDeviceExtensions;
+    token = std::strtok(deviceExtensionNames, " ");
+    while (token != nullptr) {
+        requiredDeviceExtensions.push_back(token);
+        token = std::strtok(nullptr, " ");
+    }
+
+    // Create the device.
+    VkDeviceQueueCreateInfo deviceQueueCreateInfo{};
+    deviceQueueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    deviceQueueCreateInfo.queueFamilyIndex = queueFamilyIndex;
+    deviceQueueCreateInfo.queueCount = 1;
+    const float queuePriority = 1.0f;
+    deviceQueueCreateInfo.pQueuePriorities = &queuePriority;
+
+    VkDeviceCreateInfo deviceCreateInfo{};
+    deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    deviceCreateInfo.queueCreateInfoCount = 1;
+    deviceCreateInfo.pQueueCreateInfos = &deviceQueueCreateInfo;
+    deviceCreateInfo.enabledExtensionCount = requiredDeviceExtensions.size();
+    deviceCreateInfo.ppEnabledExtensionNames = requiredDeviceExtensions.data();
+
+    vkResult = vkCreateDevice(shockState.PhysicalDevice, &deviceCreateInfo, nullptr, &shockState.Device);
+    delete[] deviceExtensionNames;
+
+    if (vkResult != VK_SUCCESS) {
+        LOGE("Failed to create Vulkan device: %d", vkResult);
+        return 1;
+    }
+
+    // Finish assembling the Vulkan context.
+    vkGetDeviceQueue(shockState.Device, queueFamilyIndex, 0, &shockState.Queue);
+
+    VkCommandPoolCreateInfo commandPoolCreateInfo{};
+    commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    commandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    commandPoolCreateInfo.queueFamilyIndex = queueFamilyIndex;
+
+    vkResult = vkCreateCommandPool(shockState.Device, &commandPoolCreateInfo, nullptr, &shockState.CommandPool);
+    if (vkResult != VK_SUCCESS) {
+        LOGE("Failed to create Vulkan command pool: %d", vkResult);
+        return 1;
+    }
+
+    VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
+    pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+
+    vkResult = vkCreatePipelineCache(shockState.Device, &pipelineCacheCreateInfo, nullptr, &shockState.PipelineCache);
+    if (vkResult != VK_SUCCESS) {
+        LOGE("Failed to create Vulkan pipeline cache: %d", vkResult);
         return 1;
     }
 
     // Create the OpenXR Session.
-    XrGraphicsBindingOpenGLESAndroidKHR graphicsBindingAndroidGLES = {};
-    graphicsBindingAndroidGLES.type = XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR;
-    graphicsBindingAndroidGLES.next = NULL;
-    graphicsBindingAndroidGLES.display = shockState.EglDisplay;
-    graphicsBindingAndroidGLES.config = shockState.EglConfig;
-    graphicsBindingAndroidGLES.context = shockState.EglContext;
+    XrGraphicsBindingVulkanKHR graphicsBindingVulkan{};
+    graphicsBindingVulkan.type = XR_TYPE_GRAPHICS_BINDING_VULKAN_KHR;
+    graphicsBindingVulkan.instance = shockState.VkInstance;
+    graphicsBindingVulkan.physicalDevice = shockState.PhysicalDevice;
+    graphicsBindingVulkan.device = shockState.Device;
+    graphicsBindingVulkan.queueFamilyIndex = queueFamilyIndex;
+    graphicsBindingVulkan.queueIndex = 0;
 
-    XrSessionCreateInfo sessionCreateInfo = {};
-    memset(&sessionCreateInfo, 0, sizeof(sessionCreateInfo));
+    XrSessionCreateInfo sessionCreateInfo{};
     sessionCreateInfo.type = XR_TYPE_SESSION_CREATE_INFO;
-    sessionCreateInfo.next = &graphicsBindingAndroidGLES;
+    sessionCreateInfo.next = &graphicsBindingVulkan;
     sessionCreateInfo.createFlags = 0;
     sessionCreateInfo.systemId = shockState.SystemId;
 
@@ -320,13 +403,14 @@ int InitOpenXR(android_app *app) {
 }
 
 void ShutdownOpenXR() {
-    eglMakeCurrent(shockState.EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-    eglDestroyContext(shockState.EglDisplay, shockState.EglContext);
-    eglTerminate(shockState.EglDisplay);
-
     xrDestroySpace(shockState.HeadSpace);
     xrDestroySpace(shockState.LocalSpace);
     xrDestroySpace(shockState.StageSpace);
+
+    vkDestroyCommandPool(shockState.Device, shockState.CommandPool, nullptr);
+    vkDestroyPipelineCache(shockState.Device, shockState.PipelineCache, nullptr);
+    vkDestroyDevice(shockState.Device, nullptr);
+    vkDestroyInstance(shockState.VkInstance, nullptr);
 
     xrDestroySession(shockState.Session);
     xrDestroyInstance(shockState.Instance);
