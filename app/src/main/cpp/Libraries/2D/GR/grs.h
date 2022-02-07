@@ -127,7 +127,7 @@ typedef uint32_t grs_rgb;
 /* structure for bitmaps to be drawn from and to.  if a bitmap is contained
     within a larger bitmap, the row field tells how wide the containing bitmap
     is. */
-typedef struct {
+typedef struct __attribute__((packed)) {
     uint8_t *bits;        /* ptr to data */
     uint8_t type;         /* type of data in bitmap, 1-bit, 8-bit, etc */
     uint8_t align;        /* where data really starts */
