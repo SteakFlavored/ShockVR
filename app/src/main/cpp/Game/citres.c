@@ -253,16 +253,3 @@ errtype load_hires_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool all
     ResFreeRefTable(rt);
     retval = uiMakeBitmapCursor(c,bmp,anchor.ul);
 }
-
-/*
-void *CitMalloc(int32_t n)
-{
-    return(Malloc(n));
-}
-
-void CitFree(void *p)
-{
-    Free(p);
-}
-
-*/

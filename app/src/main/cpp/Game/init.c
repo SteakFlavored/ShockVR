@@ -217,11 +217,6 @@ int32_t mfdart_res_file;
 //uint8_t *mfdart_files[] = { "\pmfdart.rsrc", "\pmfdfrn.rsrc", "\pmfdger.rsrc" };
 //#endif
 
-/* MLA - don't need these
-extern void *CitMalloc(int32_t n);
-extern void CitFree(void *p);
-*/
-
 #define PALETTE_SIZE 768
 uint8_t ppall[PALETTE_SIZE];
 
@@ -306,8 +301,6 @@ void init_all(void)
 //    AnimInit();
 
     gr_init();
-//    gr_set_malloc(CitMalloc);        MLA - Don't need these
-//    gr_set_free(CitFree);
     gr_set_mode(GRM_640x480x8, true);
     cit_screen = gr_alloc_screen(grd_cap->w, grd_cap->h);
     gr_set_screen(cit_screen);
