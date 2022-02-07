@@ -132,8 +132,6 @@ errtype load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTable *rt
     return master_load_bitmap_from_res(bmp,id_num,i,rt,false,anchor,p);
 }
 
-
-
 errtype load_res_bitmap(grs_bitmap* bmp, Ref rid,bool alloc)
 {
     errtype retval;
@@ -151,32 +149,6 @@ errtype extract_temp_res_bitmap(grs_bitmap* bmp, Ref rid)
     ResFreeRefTable(rt);
     return(retval);
 }
-
-
-#ifdef SIMPLER_NONEXTRACTING_WAY
-errtype load_res_bitmap(grs_bitmap* bmp, Ref rid,bool alloc)
-{
-    errtype retval = OK;
-    int8_t* bits = bmp->bits;
-    FrameDesc* f;
-    int32_t sz;
-    extern int32_t memcount;
-
-    f = RefLock(rid);
-    sz = f->bm.w *f->bm.h;
-    if (alloc)
-    {
-        bits = Malloc(sz);
-        if (bits == NULL) { retval = ERR_NOMEM; goto out; }
-    }
-    memcpy(bits,(int8_t*)(f+1),sz);
-    *bmp = f->bm;
-    bmp->bits = bits;
-out:
-    RefUnlock(rid);
-    return retval;
-}
-#endif
 
 errtype simple_load_res_bitmap(grs_bitmap* bmp, Ref rid)
 {
