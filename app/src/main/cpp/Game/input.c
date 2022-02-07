@@ -1074,7 +1074,6 @@ static uint16_t eye_lvl_keys[] =
 // -------------------------------------
 // INITIALIZATION
 extern bool reload_weapon_hotkey(int16_t keycode, uint32_t context, void* data);
-extern errtype simple_load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid);
 extern bool unpause_game_func(int16_t keycode, uint32_t context, void* data);
 extern bool saveload_hotkey_func(int16_t keycode, uint32_t context, void* data);
 #ifdef AUDIOLOGS

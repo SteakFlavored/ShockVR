@@ -209,11 +209,6 @@ errtype load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc
     return retval;
 }
 
-errtype simple_load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid)
-{
-    return load_res_bitmap_cursor(c,bmp,rid,true);
-}
-
 errtype load_hires_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid, bool alloc)
 {
     errtype retval = OK;

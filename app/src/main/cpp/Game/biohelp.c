@@ -263,10 +263,9 @@ errtype biohelp_load_cursor()
 {
     errtype err;
     static bool cursor_loaded = false;
-    extern errtype simple_load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid);
     if (cursor_loaded)
         free(biohelp_cursor_bmap.bits);
-    err = simple_load_res_bitmap_cursor(&biohelp_cursor,&biohelp_cursor_bmap,REF_IMG_QuestionCursor);
+    err = load_res_bitmap_cursor(&biohelp_cursor, &biohelp_cursor_bmap, REF_IMG_QuestionCursor, true);
     if (err != OK) return err;
     cursor_loaded = true;
     return(err);

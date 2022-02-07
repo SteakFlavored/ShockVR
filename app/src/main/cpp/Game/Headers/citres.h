@@ -43,7 +43,6 @@ errtype load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int32_t i, RefTable *rt
 // loads in a bitmap or a bitmap cursor, malloc'ing the bits
 // field.
 errtype simple_load_res_bitmap(grs_bitmap* bmp, Ref rid);
-errtype simple_load_res_bitmap_cursor(LGCursor* c, grs_bitmap* bmp, Ref rid);
 
 // loads a bitmap, specifying whether to malloc the bits or not.
 errtype load_res_bitmap(grs_bitmap* bmp, Ref rid, bool alloc);
